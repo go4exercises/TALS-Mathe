@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Ansatz finden: Zins mit einer Unbekannten</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;gap:14px;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · Textaufgaben</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>08.10.2026</span></div>
+<div class="l m" data-at="0.05" data-out="14.76" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   <span class="dim">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l hand mitte" data-at="0.05" data-out="14.76" data-anim="rise" style="left:150px;top:300px;font-size:80px;font-weight:600;color:var(--tinte)">Aufgabe 1</div>
+<div class="l hand" data-at="0.40" data-out="14.76" data-anim="rise" style="left:150px;top:420px;font-size:46px;color:var(--blau)">Zins</div>
+<div class="l m" data-at="0.05" data-out="14.76" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Lea teilt 12 000 CHF auf. Einen Teil legt sie<br>ein ganzes Jahr zu 1.5 % an, den Rest nur ein<br>halbes Jahr zu 2 %. Zusammen erhält sie<br>160 CHF Zins. Wie viel legt sie zu 1.5 % an?</div>
+<div class="l m" data-at="14.81" data-out="22.93" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   <span class="f1">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="14.81" data-out="22.93" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Lea teilt 12 000 CHF auf. Einen Teil legt sie<br>ein ganzes Jahr zu 1.5 % an, den Rest nur ein<br>halbes Jahr zu 2 %. Zusammen erhält sie<br>160 CHF Zins. Wie viel legt sie zu 1.5 % an?</div>
+<div class="l m" data-at="14.81" data-out="15.66" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> x: Kapital zu 1.5 % in CHF; Rest 12 000 − x</div>
+<div class="l m" data-at="14.81" data-out="15.66" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> x: Zins in CHF</div>
+<div class="l m" data-at="14.81" data-out="15.66" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> x: Zinssatz des Rests</div>
+<div class="l m" data-at="15.78" data-out="22.93" data-anim="rise" style="left:1000px;top:520px;font-size:40px">\(\fa{x}\): Kapital zu 1.5 % in CHF</div>
+<div class="l m" data-at="18.44" data-out="22.93" data-anim="rise" style="left:1000px;top:600px;font-size:40px">Rest: \(12\,000 - x\)</div>
+<div class="l m" data-at="22.98" data-out="34.08" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   <span class="f1">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="22.98" data-out="34.08" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Lea teilt 12 000 CHF auf. Einen Teil legt sie<br>ein ganzes Jahr zu 1.5 % an, den Rest nur ein<br>halbes Jahr zu 2 %. Zusammen erhält sie<br>160 CHF Zins. Wie viel legt sie zu 1.5 % an?</div>
+<div class="l m" data-at="22.98" data-out="23.83" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> \(1.5 \cdot x + 2 \cdot \tfrac{1}{2} \cdot (12\,000 - x) = 160\)</div>
+<div class="l m" data-at="22.98" data-out="23.83" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> \(0.015 \cdot x + 0.02 \cdot \tfrac{1}{2} \cdot (12\,000 - x) = 160\)</div>
+<div class="l m" data-at="22.98" data-out="23.83" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> \(0.015 \cdot x + 0.02 \cdot (12\,000 - x) = 160\)</div>
+<div class="l m" data-at="22.98" data-out="34.08" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Kapital zu 1.5 % in CHF; Rest \(12\,000 - x\)</div>
+<div class="l m row" data-at="23.98" data-out="34.08" data-anim="rise" style="left:1000px;top:520px;font-size:38px"><span>\(0.015 \cdot 1 \cdot x + 0.02 \cdot \tfrac{1}{2} \cdot (12\,000 - x) = 160\)</span></div>
+<div class="l hand" data-at="29.32" data-out="34.08" data-anim="rise" style="left:1000px;top:610px;font-size:38px;color:var(--blau)">Zeitanteil: \(t = \tfrac{1}{2}\)</div>
+<div class="l m" data-at="34.13" data-out="50.65" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   ② Ansatz   <span class="f1">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="34.13" data-out="50.65" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Lea teilt 12 000 CHF auf. Einen Teil legt sie<br>ein ganzes Jahr zu 1.5 % an, den Rest nur ein<br>halbes Jahr zu 2 %. Zusammen erhält sie<br>160 CHF Zins. Wie viel legt sie zu 1.5 % an?</div>
+<div class="l m" data-at="34.13" data-out="50.65" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Kapital zu 1.5 % in CHF; Rest \(12\,000 - x\)</div>
+<div class="l m row" data-at="34.13" data-out="50.65" data-anim="rise" style="left:150px;top:269px;font-size:36px"><span>\(0.015 \cdot x + 0.01 \cdot (12\,000 - x) = 160\)</span></div>
+<div class="l m row" data-at="39.44" data-out="50.65" data-anim="rise" style="left:1000px;top:520px;font-size:42px"><span>\(0.015 \cdot x + 120 - 0.01 \cdot x = 160\)</span></div>
+<div class="l m row" data-at="46.18" data-out="50.65" data-anim="rise" style="left:1000px;top:610px;font-size:44px"><span>\(0.005 \cdot x = 40\)</span></div>
+<div class="l m" data-at="50.70" data-out="58.25" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   ② Ansatz   ③ Grundform   <span class="f1">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="50.70" data-out="58.25" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Lea teilt 12 000 CHF auf. Einen Teil legt sie<br>ein ganzes Jahr zu 1.5 % an, den Rest nur ein<br>halbes Jahr zu 2 %. Zusammen erhält sie<br>160 CHF Zins. Wie viel legt sie zu 1.5 % an?</div>
+<div class="l m" data-at="50.70" data-out="51.55" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> quadratisch: poly-solv</div>
+<div class="l m" data-at="50.70" data-out="51.55" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> linear: x = 40 : 0.005 = 8000</div>
+<div class="l m" data-at="50.70" data-out="51.55" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> linear: x = 40 · 0.005 = 0.2</div>
+<div class="l m" data-at="50.70" data-out="58.25" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Kapital zu 1.5 % in CHF; Rest \(12\,000 - x\)</div>
+<div class="l m row" data-at="50.70" data-out="58.25" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(0.005 \cdot x = 40\)</span></div>
+<div class="l hand" data-at="53.12" data-out="58.25" data-anim="rise" style="left:1000px;top:520px;font-size:40px;color:var(--blau)">linear: von Hand lösen</div>
+<div class="l m row" data-at="54.62" data-out="58.25" data-anim="rise" style="left:1000px;top:610px;font-size:48px"><span>\(x = 40 : 0.005 = \fc{8000}\)</span></div>
+<div class="l m" data-at="58.30" data-out="70.22" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   ② Ansatz   ③ Grundform   ④ Lösen   <span class="f1">⑤ Antwort</span></div>
+<div class="l m" data-at="58.30" data-out="70.22" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Lea teilt 12 000 CHF auf. Einen Teil legt sie<br>ein ganzes Jahr zu 1.5 % an, den Rest nur ein<br>halbes Jahr zu 2 %. Zusammen erhält sie<br>160 CHF Zins. Wie viel legt sie zu 1.5 % an?</div>
+<div class="l m" data-at="58.30" data-out="59.15" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> 4000 CHF zu 1.5 %</div>
+<div class="l m" data-at="58.30" data-out="59.15" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> 8000 CHF zu 1.5 %, 4000 CHF zu 2 %</div>
+<div class="l m" data-at="58.30" data-out="59.15" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> 8000 CHF Zins</div>
+<div class="l m" data-at="58.30" data-out="70.22" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Kapital zu 1.5 % in CHF; Rest \(12\,000 - x\)</div>
+<div class="l m row" data-at="58.30" data-out="70.22" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(x = 8000\)</span></div>
+<div class="l m" data-at="59.25" data-out="70.22" data-anim="rise" style="left:1000px;top:520px;font-size:40px">\(\fc{8000}\) CHF zu 1.5 %, \(4000\) CHF zu 2 %</div>
+<div class="l m row" data-at="63.88" data-out="70.22" data-anim="rise" style="left:1000px;top:610px;font-size:36px"><span>\(0.015 \cdot 8000 + 0.02 \cdot \tfrac{1}{2} \cdot 4000 = 120 + 40 = 160 \;\checkmark\)</span></div>
+<div class="l m" data-at="70.27" data-out="87.35" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   <span class="dim">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l hand mitte" data-at="70.27" data-out="87.35" data-anim="rise" style="left:150px;top:300px;font-size:80px;font-weight:600;color:var(--tinte)">Aufgabe 2</div>
+<div class="l hand" data-at="70.62" data-out="87.35" data-anim="rise" style="left:150px;top:420px;font-size:46px;color:var(--blau)">Zins</div>
+<div class="l m" data-at="70.27" data-out="87.35" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Mia zahlt 5000 CHF auf ein Konto ein und nach<br>einem Jahr nochmals 2000 CHF. Der Zins wird<br>jährlich gutgeschrieben und mitverzinst; der<br>Zinssatz bleibt gleich. Nach zwei Jahren sind es<br>7242 CHF. Wie hoch ist der Zinssatz?</div>
+<div class="l m" data-at="87.40" data-out="96.68" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   <span class="f1">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="87.40" data-out="96.68" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Mia zahlt 5000 CHF auf ein Konto ein und nach<br>einem Jahr nochmals 2000 CHF. Der Zins wird<br>jährlich gutgeschrieben und mitverzinst; der<br>Zinssatz bleibt gleich. Nach zwei Jahren sind es<br>7242 CHF. Wie hoch ist der Zinssatz?</div>
+<div class="l m" data-at="87.40" data-out="88.25" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> p: Jahreszinssatz als Dezimalzahl</div>
+<div class="l m" data-at="87.40" data-out="88.25" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> p: Zins nach zwei Jahren in CHF</div>
+<div class="l m" data-at="87.40" data-out="88.25" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> p: Kapital nach einem Jahr in CHF</div>
+<div class="l m" data-at="88.38" data-out="96.68" data-anim="rise" style="left:1000px;top:520px;font-size:40px">\(\fb{p}\): Jahreszinssatz als Dezimalzahl</div>
+<div class="l hand" data-at="93.38" data-out="96.68" data-anim="rise" style="left:1000px;top:610px;font-size:38px;color:var(--blau)">pro Jahr: Faktor \(1 + p\)</div>
+<div class="l m" data-at="96.73" data-out="109.13" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   <span class="f1">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="96.73" data-out="109.13" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Mia zahlt 5000 CHF auf ein Konto ein und nach<br>einem Jahr nochmals 2000 CHF. Der Zins wird<br>jährlich gutgeschrieben und mitverzinst; der<br>Zinssatz bleibt gleich. Nach zwei Jahren sind es<br>7242 CHF. Wie hoch ist der Zinssatz?</div>
+<div class="l m" data-at="96.73" data-out="97.58" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> \(7000 \cdot (1 + p)^2 = 7242\)</div>
+<div class="l m" data-at="96.73" data-out="97.58" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> \(5000 \cdot (1 + 2 \cdot p) + 2000 \cdot (1 + p) = 7242\)</div>
+<div class="l m" data-at="96.73" data-out="97.58" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> \(5000 \cdot (1 + p)^2 + 2000 \cdot (1 + p) = 7242\)</div>
+<div class="l m" data-at="96.73" data-out="109.13" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fb{p}\): Jahreszinssatz als Dezimalzahl</div>
+<div class="l m row" data-at="98.10" data-out="109.13" data-anim="rise" style="left:1000px;top:520px;font-size:40px"><span>\(5000 \cdot (1 + p)^2 + 2000 \cdot (1 + p) = 7242\)</span></div>
+<div class="l hand" data-at="99.96" data-out="109.13" data-anim="rise" style="left:1000px;top:610px;font-size:38px;color:var(--blau)">5000 zwei Jahre, 2000 ein Jahr</div>
+<div class="l m" data-at="109.18" data-out="127.34" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   ② Ansatz   <span class="f1">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="109.18" data-out="127.34" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Mia zahlt 5000 CHF auf ein Konto ein und nach<br>einem Jahr nochmals 2000 CHF. Der Zins wird<br>jährlich gutgeschrieben und mitverzinst; der<br>Zinssatz bleibt gleich. Nach zwei Jahren sind es<br>7242 CHF. Wie hoch ist der Zinssatz?</div>
+<div class="l m" data-at="109.18" data-out="110.03" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> \(a = 5000, b = 12\,000, c = 7242\)</div>
+<div class="l m" data-at="109.18" data-out="110.03" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> \(a = 5000, b = 12\,000, c = -242\)</div>
+<div class="l m" data-at="109.18" data-out="110.03" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> \(a = 5000, b = 10\,000, c = -242\)</div>
+<div class="l m" data-at="109.18" data-out="127.34" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fb{p}\): Jahreszinssatz als Dezimalzahl</div>
+<div class="l m row" data-at="109.18" data-out="127.34" data-anim="rise" style="left:150px;top:269px;font-size:36px"><span>\(5000 \cdot (1 + p)^2 + 2000 \cdot (1 + p) = 7242\)</span></div>
+<div class="l m row" data-at="110.13" data-out="127.34" data-anim="rise" style="left:1000px;top:520px;font-size:34px"><span>\(5000 \cdot p^2 + 10\,000 \cdot p + 5000 + 2000 \cdot p + 2000 = 7242\)</span></div>
+<div class="l m row" data-at="121.50" data-out="127.34" data-anim="rise" style="left:1000px;top:610px;font-size:42px"><span>\(5000 \cdot p^2 + 12\,000 \cdot p - 242 = 0\)</span></div>
+<div class="l graf" data-at="122.50" data-out="127.34" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">POLY SOLVER</text><text x="30.0" y="116.7" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">1:ax²+bx+c=0</text><text x="30.0" y="169.9" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">2:ax³+bx²+cx+d=0</text><rect x="115.5" y="217.6" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="157.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="207.5" y="217.6" width="197.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="306.0" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >poly-solv</text></svg></div>
+<div class="l graf" data-at="123.80" data-out="127.34" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">a=5000</text><rect x="144.0" y="217.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="204.5" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="274.0" y="217.6" width="102.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="325.0" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >5000</text></svg></div>
+<div class="l graf" data-at="125.10" data-out="127.34" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">b=12000</text><rect x="134.5" y="217.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="195.0" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="264.5" y="217.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="325.0" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >12000</text></svg></div>
+<div class="l graf" data-at="126.40" data-out="127.34" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">c=⁻242</text><rect x="107.5" y="217.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="168.0" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="237.5" y="217.6" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="279.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">(−)</text><rect x="329.5" y="217.6" width="83.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="371.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >242</text></svg></div>
+<div class="l m" data-at="127.39" data-out="141.60" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   ② Ansatz   ③ Grundform   <span class="f1">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="127.39" data-out="141.60" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Mia zahlt 5000 CHF auf ein Konto ein und nach<br>einem Jahr nochmals 2000 CHF. Der Zins wird<br>jährlich gutgeschrieben und mitverzinst; der<br>Zinssatz bleibt gleich. Nach zwei Jahren sind es<br>7242 CHF. Wie hoch ist der Zinssatz?</div>
+<div class="l m" data-at="127.39" data-out="141.60" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fb{p}\): Jahreszinssatz als Dezimalzahl</div>
+<div class="l m row" data-at="127.39" data-out="141.60" data-anim="rise" style="left:150px;top:269px;font-size:38px"><span>\(5000 \cdot p^2 + 12\,000 \cdot p - 242 = 0\)</span></div>
+<div class="l graf" data-at="127.39" data-out="141.60" data-anim="fade" style="left:1000px;top:515px"><svg width="400" height="241" viewBox="0 0 400 241"><rect x="0" y="0" width="400" height="241" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="168" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="136" rx="5" fill="#c9d4c4"/><text x="30.0" y="69.5" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">x1=</text><text x="115.0" y="53.2" font-family="monospace" font-size="26.6" text-anchor="middle" fill="#1c1a17">1</text><line x1="93.8" y1="57.8" x2="136.2" y2="57.8" stroke="#1c1a17" stroke-width="2.5"/><text x="115.0" y="82.3" font-family="monospace" font-size="26.6" text-anchor="middle" fill="#1c1a17">50</text><rect x="139.5" y="179.9" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="215.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="127.39" data-out="141.60" data-anim="fade" style="left:1420px;top:515px"><svg width="400" height="241" viewBox="0 0 400 241"><rect x="0" y="0" width="400" height="241" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="168" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="136" rx="5" fill="#c9d4c4"/><text x="30.0" y="69.5" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">x2=⁻</text><text x="146.9" y="53.2" font-family="monospace" font-size="26.6" text-anchor="middle" fill="#1c1a17">121</text><line x1="115.0" y1="57.8" x2="178.8" y2="57.8" stroke="#1c1a17" stroke-width="2.5"/><text x="146.9" y="82.3" font-family="monospace" font-size="26.6" text-anchor="middle" fill="#1c1a17">50</text><rect x="139.5" y="179.9" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="215.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="128.34" data-out="141.60" data-anim="fade" style="left:1000px;top:515px"><svg width="400" height="237" viewBox="0 0 400 237"><rect x="0" y="0" width="400" height="237" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="164" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="132" rx="5" fill="#c9d4c4"/><text x="30.0" y="52.7" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">x1=0.02</text><rect x="170.0" y="175.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="211.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >↔</text></svg></div>
+<div class="l graf" data-at="128.64" data-out="141.60" data-anim="fade" style="left:1420px;top:515px"><svg width="400" height="237" viewBox="0 0 400 237"><rect x="0" y="0" width="400" height="237" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="164" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="132" rx="5" fill="#c9d4c4"/><text x="30.0" y="52.7" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">x2=⁻2.42</text><rect x="170.0" y="175.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="211.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >↔</text></svg></div>
+<div class="l m" data-at="136.86" data-out="141.60" data-anim="rise" style="left:1000px;top:760px;font-size:36px">\(\fd{p = -2.42}\): kein Zinssatz</div>
+<div class="l m row" data-at="137.74" data-out="141.60" data-anim="rise" style="left:1000px;top:850px;font-size:46px"><span>\(p = \fc{0.02} = 2\,\%\)</span></div>
+<div class="l m" data-at="141.65" data-out="156.07" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   ② Ansatz   ③ Grundform   ④ Lösen   <span class="f1">⑤ Antwort</span></div>
+<div class="l m" data-at="141.65" data-out="156.07" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Mia zahlt 5000 CHF auf ein Konto ein und nach<br>einem Jahr nochmals 2000 CHF. Der Zins wird<br>jährlich gutgeschrieben und mitverzinst; der<br>Zinssatz bleibt gleich. Nach zwei Jahren sind es<br>7242 CHF. Wie hoch ist der Zinssatz?</div>
+<div class="l m" data-at="141.65" data-out="142.50" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> \(5000  \cdot  1.02 = 5100\)</div>
+<div class="l m" data-at="141.65" data-out="142.50" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> \(2000  \cdot  1.02 = 2040\)</div>
+<div class="l m" data-at="141.65" data-out="142.50" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> 5000 → 5100; + 2000 → 7100 → 7242</div>
+<div class="l m" data-at="141.65" data-out="156.07" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fb{p}\): Jahreszinssatz als Dezimalzahl</div>
+<div class="l m row" data-at="141.65" data-out="156.07" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(p = 0.02\)</span></div>
+<div class="l m row" data-at="142.60" data-out="156.07" data-anim="rise" style="left:1000px;top:520px;font-size:40px"><span>\(5000 \cdot 1.02 = 5100;\quad 7100 \cdot 1.02 = 7242 \;\checkmark\)</span></div>
+<div class="l m" data-at="153.86" data-out="156.07" data-anim="rise" style="left:1000px;top:610px;font-size:40px">Der Zinssatz beträgt \(\fc{2\,\%}\).</div>
+<div class="l hand mitte" data-at="156.12" data-out="174.27" data-anim="rise" style="left:150px;top:250px;font-size:76px;font-weight:600;color:var(--tinte)">Zum Mitnehmen</div>
+<div class="l hand" data-at="157.27" data-out="174.27" data-anim="rise" style="left:150px;top:390px;font-size:46px;color:var(--blau)">Rest als Term<br>Zinseszins, \(p\) gesucht: quadratisch<br>Umschalttaste ↔: Bruch oder Dezimalzahl</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-M-lp-kontrolle-zins-1.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 174.27;
+const SPRECHER = [{"bei": 0.4, "text": "Lea teilt zwölftausend Franken auf. Einen Teil legt sie ein ganzes Jahr zu eins Komma fünf Prozent an, den Rest nur ein halbes Jahr zu zwei Prozent. Zusammen erhält sie hundertsechzig Franken Zins. Wie viel legt sie zu eins Komma fünf Prozent an?"}, {"bei": 15.16, "text": "x ist das Kapital zu eins Komma fünf Prozent in Franken. Der Rest, zwölftausend minus x, liegt zu zwei Prozent."}, {"bei": 23.33, "text": "Zins gleich Zinssatz mal Zeit mal Kapital. Das erste Kapital ein Jahr zu null Komma null eins fünf, der Rest ein halbes Jahr zu null Komma null zwei. Zusammen hundertsechzig Franken."}, {"bei": 34.48, "text": "Der Faktor des Rests: null Komma null zwei mal ein halb gleich null Komma null eins. Ausmultipliziert null Komma null eins fünf x plus hundertzwanzig minus null Komma null eins x gleich hundertsechzig. Also null Komma null null fünf x gleich vierzig."}, {"bei": 51.05, "text": "Eine Unbekannte und kein Quadrat: linear. Durch null Komma null null fünf teilen: x gleich achttausend."}, {"bei": 58.65, "text": "Lea legt achttausend Franken zu eins Komma fünf Prozent an und viertausend zu zwei Prozent. Probe am Text: hundertzwanzig Franken plus vierzig Franken für das halbe Jahr gibt hundertsechzig Franken."}, {"bei": 70.62, "text": "Mia zahlt fünftausend Franken auf ein Konto ein und nach einem Jahr nochmals zweitausend Franken. Der Zins wird jährlich gutgeschrieben und mitverzinst, der Zinssatz bleibt gleich. Nach zwei Jahren sind es siebentausendzweihundertzweiundvierzig Franken. Wie hoch ist der Zinssatz?"}, {"bei": 87.75, "text": "p ist der Jahreszinssatz als Dezimalzahl. Mit Zinseszins wächst jedes Kapital pro Jahr mit dem Faktor eins plus p."}, {"bei": 97.08, "text": "Die fünftausend Franken wachsen zwei Jahre lang, die zweitausend nur ein Jahr: fünftausend mal Klammer eins plus p im Quadrat plus zweitausend mal Klammer eins plus p gleich siebentausendzweihundertzweiundvierzig."}, {"bei": 109.53, "text": "Ausmultipliziert: fünftausend p Quadrat plus zehntausend p plus fünftausend, dazu zweitausend p plus zweitausend. Zusammen fünftausend p Quadrat plus zwölftausend p plus siebentausend. Minus siebentausendzweihundertzweiundvierzig: c gleich minus zweihundertzweiundvierzig."}, {"bei": 127.74, "text": "Mit der Umschalttaste zeigt der Rechner Dezimalzahlen: null Komma null zwei und minus zwei Komma vier zwei. Ein Zinssatz von minus zweihundertzweiundvierzig Prozent passt nicht. Also p gleich null Komma null zwei: zwei Prozent."}, {"bei": 142.0, "text": "Probe am Text: Nach einem Jahr sind es fünftausendeinhundert Franken, mit der Einzahlung siebentausendeinhundert. Im zweiten Jahr kommen zwei Prozent dazu: siebentausendzweihundertzweiundvierzig. Der Zinssatz beträgt zwei Prozent."}, {"bei": 156.47, "text": "Zum Mitnehmen: Mit einer Unbekannten steht der Rest als Term, etwa zwölftausend minus x. Zinssatz als Dezimalzahl, Zeit in Jahren. Mit Zinseszins wächst jedes Kapital mit dem Faktor eins plus p pro Jahr; ist p gesucht, wird die Gleichung quadratisch. Die Umschalttaste zeigt Brüche als Dezimalzahl."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
+}
+const FRAGEN = [{"typ": "wahl", "kopf": "Schritt ① Deklaration", "text": "Mit einer Unbekannten: Welche Deklaration?", "optionen": ["A", "B", "C"], "richtig": 0, "rueck": {"1": "Der Zins ist gegeben: 160 CHF.", "2": "Die Zinssätze sind gegeben."}, "t": 15.06, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f0-frage.mp3", "r1": "ton/g2-M-lp-kontrolle-zins-1-f0-r1.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f0-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ② Ansatz", "text": "Welche Zinsgleichung stimmt?", "optionen": ["A", "B", "C"], "richtig": 1, "rueck": {"0": "Zinssätze als Dezimalzahl: 1.5 % sind 0.015.", "2": "Der Rest liegt nur ein halbes Jahr. Was fehlt?"}, "t": 23.23, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f1-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-zins-1-f1-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f1-r2.mp3"}}, {"typ": "wahl", "text": "Ausmultipliziert und geordnet: Was bleibt?", "optionen": ["0.005·x = 40", "0.005·x = 160", "0.025·x = 40"], "richtig": 0, "rueck": {"1": "Was ist mit 0.01 · 12 000 = 120 passiert?", "2": "Das Minus vor 0.01·x: 0.015·x − 0.01·x = ?"}, "kopf": "Schritt ③ Grundform", "t": 34.38, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f2-frage.mp3", "r1": "ton/g2-M-lp-kontrolle-zins-1-f2-r1.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f2-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ④ Lösen", "text": "Welcher Typ, und was ergibt sich daraus?", "optionen": ["A", "B", "C"], "richtig": 1, "rueck": {"0": "Kommt x im Quadrat vor?", "2": "Damit x allein steht: mal 0.005 oder durch 0.005?"}, "t": 50.95, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f3-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-zins-1-f3-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f3-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ⑤ Antwort", "text": "Wie lautet die Antwort mit Probe?", "optionen": ["A", "B", "C"], "richtig": 1, "rueck": {"0": "4000 ist der Rest.", "2": "x ist ein Kapital, kein Zins."}, "t": 58.55, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f4-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-zins-1-f4-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f4-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ① Deklaration", "text": "Was ist hier die Unbekannte?", "optionen": ["A", "B", "C"], "richtig": 0, "rueck": {"1": "Gefragt ist der Zinssatz, nicht der Zins.", "2": "Das Kapital nach einem Jahr ist ein Zwischenwert. Gefragt ist der Zinssatz."}, "t": 87.65, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f5-frage.mp3", "r1": "ton/g2-M-lp-kontrolle-zins-1-f5-r1.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f5-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ② Ansatz", "text": "Welche Gleichung beschreibt das Konto?", "optionen": ["A", "B", "C"], "richtig": 2, "rueck": {"0": "Die 2000 CHF liegen nur ein Jahr auf dem Konto.", "1": "Der Zins wird mitverzinst: Zinseszins, nicht einfacher Zins."}, "t": 96.98, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f6-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-zins-1-f6-r0.mp3", "r1": "ton/g2-M-lp-kontrolle-zins-1-f6-r1.mp3"}}, {"typ": "wahl", "kopf": "Schritt ③ Grundform", "text": "Ausmultipliziert, auf null: Was tippst du ein?", "optionen": ["A", "B", "C"], "richtig": 1, "rueck": {"0": "Die 7242 kommt nach links, zusammen mit 5000 + 2000.", "2": "Auch 2000·(1 + p) liefert ein Glied mit p."}, "t": 109.43, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f7-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-zins-1-f7-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f7-r2.mp3"}}, {"typ": "wahl", "text": "poly-solv zeigt x1 = 1/50 und x2 = −121/50. Was gilt?", "optionen": ["p = 0.02, also 2 %", "p = 0.02 %", "p = −2.42"], "richtig": 0, "rueck": {"1": "0.02 als Prozent: mal 100.", "2": "Ein Zinssatz von −242 % würde das Konto mehr als leeren."}, "kopf": "Schritt ④ Lösen", "t": 127.64, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f8-frage.mp3", "r1": "ton/g2-M-lp-kontrolle-zins-1-f8-r1.mp3", "r2": "ton/g2-M-lp-kontrolle-zins-1-f8-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ⑤ Antwort", "text": "Welche Probe am Text stimmt?", "optionen": ["A", "B", "C"], "richtig": 2, "rueck": {"0": "Das ist erst das erste Jahr.", "1": "Das ist nur die zweite Einzahlung."}, "t": 141.9, "ton": {"frage": "ton/g2-M-lp-kontrolle-zins-1-f9-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-zins-1-f9-r0.mp3", "r1": "ton/g2-M-lp-kontrolle-zins-1-f9-r1.mp3"}}];
+(() => {
+  if (location.search.includes('render')) return;
+  const pp = document.getElementById('pp');
+  const css = document.createElement('style');
+  css.textContent = `
+    #frage{position:absolute;left:110px;top:560px;width:820px;z-index:50;display:none;
+      background:rgba(255,255,255,.97);border:3px solid var(--f2);border-radius:22px;
+      padding:28px 34px;box-shadow:0 10px 40px rgba(0,0,0,.18);font-family:inherit;color:inherit}
+    #frage .fr-kopf{font-size:26px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--f2);margin-bottom:10px}
+    #frage .fr-text{font-size:38px;line-height:1.3;margin-bottom:22px}
+    #frage .fr-knoepfe{display:flex;flex-wrap:wrap;gap:14px}
+    #frage button{font:inherit;font-size:32px;padding:10px 26px;border-radius:999px;cursor:pointer;
+      border:2.5px solid var(--f2);background:var(--f2w);color:inherit}
+    #frage button.ok{border-color:var(--f3);background:var(--f3w)}
+    #frage button.nein{border-color:var(--f4);background:var(--f4w)}
+    #frage .fr-rueck{font-size:32px;line-height:1.35;margin-top:20px}
+    #frage .fr-weiter{margin-top:20px}
+    #frage .fr-eingabe{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:30px;margin-top:14px;width:100%}
+    #frage .fr-eingabe input{font:inherit;font-size:30px;width:4.2em;padding:4px 10px;border:2.5px solid var(--f2);border-radius:12px}
+    .fr-tippbar, .fr-tippbar svg{pointer-events:auto !important;cursor:crosshair}`;
+  document.head.appendChild(css);
+  const box = document.createElement('div'); box.id = 'frage'; stage.appendChild(box);
+  let letzt = 0, offen = null, tippen = null, stimme = null, sprung = false;
+  // Vorlesen mit derselben Stimme wie der Clip — nur wenn dessen Ton an ist.
+  const hauptton = document.getElementById('ton');
+  const vorlesen = src => {
+    if (stimme) { stimme.pause(); stimme = null; }
+    if (!src || !hauptton || hauptton.muted) return;
+    stimme = new Audio(src); stimme.play().catch(() => {});
+  };
+  const erledigt = new Set();     // beantwortete Fragen
+  const pause = () => { if (pp.textContent === 'Pause') pp.click(); };
+  const weiter = () => { if (pp.textContent === 'Play') pp.click(); };
+  function schliessen() {
+    vorlesen(null);
+    // Fokus zurueck auf Play/Pause — auch wenn er mit dem gesperrten Antwortknopf
+    // schon auf <body> gefallen ist
+    const fo = document.activeElement;
+    if (!fo || fo === document.body || box.contains(fo)) pp.focus({ preventScroll: true });
+    box.style.display = 'none'; box.innerHTML = '';
+    document.querySelectorAll('.fr-marke').forEach(m => m.remove());
+    document.querySelectorAll('.fr-tippbar').forEach(l => l.classList.remove('fr-tippbar'));
+    if (tippen) { stage.removeEventListener('click', tippen); tippen = null; }
+    offen = null;
+  }
+  function antwort(F, ok, text, schl) {
+    const o = offen; erledigt.add(o.i);
+    box.dataset.fertig = '1';
+    vorlesen((F.ton || {})[schl]);
+    if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
+    const r = box.querySelector('.fr-rueck');
+    r.innerHTML = (ok ? '✓ ' : '') + text;
+    r.style.color = ok ? 'var(--f3)' : '';
+    if (ok) {                      // richtig: kurz bestaetigen, dann von selbst weiter
+      setTimeout(() => { if (offen === o) { schliessen(); weiter(); } }, 1300);
+      return;
+    }
+    const w = document.createElement('button'); w.className = 'fr-weiter'; w.textContent = 'Weiter ▶';
+    w.onclick = () => { schliessen(); weiter(); };
+    box.appendChild(w); w.focus();
+  }
+  function zeigen(i, F) {
+    offen = { i, t: F.t }; pause(); delete box.dataset.fertig;
+    box.innerHTML = '<div class="fr-kopf"></div><div class="fr-text"></div>'
+      + '<div class="fr-knoepfe"></div><div class="fr-rueck"></div>';
+    box.querySelector('.fr-kopf').textContent = F.kopf || 'Deine Vorhersage';  // "kopf": z. B. «Dein Vorgehen»
+    box.querySelector('.fr-text').textContent = F.text;
+    const kn = box.querySelector('.fr-knoepfe');
+    if (F.typ === 'wahl') {
+      F.optionen.forEach((o, j) => {
+        const b = document.createElement('button'); b.textContent = o;
+        b.onclick = () => {
+          kn.querySelectorAll('button').forEach(x => x.disabled = true);
+          b.classList.add(j === F.richtig ? 'ok' : 'nein');
+          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'), 'r' + j);
+        };
+        kn.appendChild(b);
+      });
+    } else if (F.typ === 'klick') {
+      const L = [...document.querySelectorAll('.l')].find(l => +l.style.opacity > 0.5 && l.querySelector('[data-fenster]'));
+      if (!L) { schliessen(); weiter(); return; }
+      const svg = L.querySelector('svg'), fe = L.querySelector('[data-fenster]').dataset.fenster.split(',').map(Number);
+      const [x0, x1, y0, y1, b, h, rd] = fe;
+      L.classList.add('fr-tippbar');
+      // Toleranz: eine Zahl (Abstand in Dateneinheiten) oder [dx, dy] je Achse —
+      // Letzteres, wenn die Achsen verschiedene Grössen tragen (s und C).
+      const tol = F.toleranz || 0.5;
+      // Ziel und Fallen sind ein Punkt [x, y] oder eine Strecke [[x1, y1], [x2, y2]] (seit 08.10.2026):
+      // Bei einer Strecke zaehlt ihr naechster Punkt — gerechnet in Toleranz-Einheiten, wenn die Achsen
+      // verschiedene Toleranzen tragen.
+      const tx_ = Array.isArray(tol) ? tol[0] : 1, ty_ = Array.isArray(tol) ? tol[1] : 1;
+      const fuss = (x, y, z) => {
+        if (!Array.isArray(z[0])) return z;
+        const [[ax, ay], [bx, by]] = z, dx = (bx - ax) / tx_, dy = (by - ay) / ty_, l2 = dx * dx + dy * dy;
+        const q = l2 ? Math.max(0, Math.min(1, ((x - ax) / tx_ * dx + (y - ay) / ty_ * dy) / l2)) : 0;
+        return [ax + (bx - ax) * q, ay + (by - ay) * q];
+      };
+      const nah = (x, y, z) => { z = fuss(x, y, z);
+        return Array.isArray(tol) ? Math.abs(x - z[0]) <= tol[0] && Math.abs(y - z[1]) <= tol[1]
+                                  : Math.hypot(x - z[0], y - z[1]) <= tol; };
+      // Wie weit weg, in Toleranzen — liegt ein Tipp in zwei Fallen, gewinnt die naechste (seit 08.10.2026)
+      const weit = (x, y, z) => { z = fuss(x, y, z);
+        return Array.isArray(tol) ? Math.max(Math.abs(x - z[0]) / tol[0], Math.abs(y - z[1]) / tol[1])
+                                  : Math.hypot(x - z[0], y - z[1]) / tol; };
+      const px = (x, y) => [rd + (x - x0) / (x1 - x0) * (b - 2 * rd), h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd)];
+      const mk = (cx, cy, farbe) => { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', 16); c.setAttribute('class', 'fr-marke');
+        c.setAttribute('fill', 'none'); c.setAttribute('stroke', farbe); c.setAttribute('stroke-width', 6); svg.appendChild(c); };
+      const pruefePunkt = (x, y) => {
+        mk(...px(x, y), 'var(--f2)');
+        if (nah(x, y, F.ziel)) return antwort(F, true, F.richtig_text || 'Getroffen.', 'ok');
+        if (Array.isArray(F.ziel[0])) {        // Strecke als Ziel: grün nachgezogen
+          const [a, e] = [px(...F.ziel[0]), px(...F.ziel[1])], l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          l.setAttribute('x1', a[0]); l.setAttribute('y1', a[1]); l.setAttribute('x2', e[0]); l.setAttribute('y2', e[1]);
+          l.setAttribute('class', 'fr-marke'); l.setAttribute('stroke', 'var(--f3)'); l.setAttribute('stroke-width', 14);
+          l.setAttribute('stroke-linecap', 'round'); l.setAttribute('stroke-opacity', '.6'); svg.appendChild(l);
+        } else mk(...px(F.ziel[0], F.ziel[1]), 'var(--f3)');
+        let fk = -1;
+        (F.fallen || []).forEach((f, k) => { if (nah(x, y, f.bei) && (fk < 0 || weit(x, y, f.bei) < weit(x, y, F.fallen[fk].bei))) fk = k; });
+        antwort(F, false, fk >= 0 ? F.fallen[fk].text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'),
+                fk >= 0 ? 'fall' + fk : 'falsch');
+      };
+      // Am Stage horchen, nicht am Layer: unsichtbare spaetere Layer (Deckkraft 0)
+      // liegen obenauf und wuerden den Tipp abfangen.
+      tippen = ev => {
+        if (!offen || box.dataset.fertig || box.contains(ev.target)) return;
+        const r = svg.getBoundingClientRect();
+        if (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom) return;
+        const sx = (ev.clientX - r.left) / r.width * b, sy = (ev.clientY - r.top) / r.height * h;
+        pruefePunkt(x0 + (sx - rd) / (b - 2 * rd) * (x1 - x0), y0 + (h - rd - sy) / (h - 2 * rd) * (y1 - y0));
+      };
+      stage.addEventListener('click', tippen);
+      kn.innerHTML = '<span style="font-size:30px;color:var(--f2)">👉 Tipp ins Bild rechts.</span>';
+      // Ohne Zeigegeraet: dieselbe Antwort als zwei Zahlen ("eingabe": [Name x, Name y])
+      if (F.eingabe) {
+        const f = document.createElement('form'); f.className = 'fr-eingabe';
+        f.innerHTML = '<span>oder eingeben:</span>' + F.eingabe.map((n, k) =>
+          '<label>' + n + ' <input inputmode="decimal" autocomplete="off" data-k="' + k + '"></label>').join('')
+          + '<button type="submit">Prüfen</button>';
+        f.onsubmit = ev => {
+          ev.preventDefault();
+          if (box.dataset.fertig) return;
+          const w = [...f.querySelectorAll('input')].map(i => parseFloat(i.value.replace(',', '.')));
+          if (w.some(isNaN)) { f.querySelector('input').focus(); return; }
+          pruefePunkt(w[0], w[1]);
+        };
+        kn.appendChild(f);
+      }
+    }
+    box.style.display = 'block';
+    // Fokus auf die erste Antwort: Tab, Enter und Leertaste reichen dann
+    const erst = box.querySelector('.fr-knoepfe button, .fr-eingabe input');
+    if (erst) erst.focus({ preventScroll: true });
+    vorlesen((F.ton || {}).frage);
+  }
+  // Spulen wird ausdruecklich erkannt: Pfeiltasten und ein Klick auf die
+  // Zeitleiste setzen ein Zeichen, das das naechste Bild auswertet. Ein
+  // spaetes Bild (langsames Laden, Hintergrund-Tab) ist kein Spulen.
+  // Neustart (R) und ein Sprung vor die erste Frage stellen alle Fragen neu;
+  // nach R laeuft der Clip ab 0 wie beim ersten Abspielen.
+  document.addEventListener('keydown', e => {
+    if (e.target && e.target.closest && e.target.closest('input, select, textarea')) return;
+    if ((e.key || '').toLowerCase() === 'r') { schliessen(); erledigt.clear(); letzt = 0; }
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') sprung = true;
+  });
+  const bar = document.getElementById('bar');
+  bar.addEventListener('click', () => { sprung = true; });
+  // Die Abspielzeit ist im Abspieler lokal; zurueckgestellt wird sie ueber
+  // dessen Zeitleiste.
+  const zurueck = s => {
+    const r = bar.getBoundingClientRect();
+    if (r.width > 0 && bar.onclick) bar.onclick({ currentTarget: bar, clientX: r.left + s / DUR * r.width });
+  };
+  const vorFragen = seek;
+  seek = function (t) {
+    vorFragen(t);
+    if (sprung) {
+      // gespult: eine uebersprungene Frage wird nicht gestellt, eine
+      // beantwortete kommt nicht wieder — ausser zurueck an den Anfang
+      sprung = false;
+      if (FRAGEN.length && t < Math.min(...FRAGEN.map(F => F.t))) { schliessen(); erledigt.clear(); }
+    } else if (!offen && pp.textContent === 'Pause') {
+      // gewoehnliches Abspielen, auch wenn ein Bild weit springt: die erste
+      // ueberschrittene Frage wird gestellt, der Clip geht an ihre Stelle zurueck
+      let i = -1;
+      FRAGEN.forEach((F, j) => {
+        if (!erledigt.has(j) && letzt < F.t && t >= F.t && (i < 0 || F.t < FRAGEN[i].t)) i = j;
+      });
+      if (i >= 0) {
+        zeigen(i, FRAGEN[i]);
+        if (offen && t - offen.t > 0.1) { t = offen.t; zurueck(t); vorFragen(t); }
+      }
+    }
+    if (offen && Math.abs(t - offen.t) > 1.0) schliessen();
+    letzt = t;
+  };
+})();
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
+  document.addEventListener('keydown', e => {
+    const ziel = e.target && e.target.closest ? e.target : null;
+    if (ziel && ziel.closest('input, select, textarea')) return;
+    if (e.code === 'Space' && ziel && ziel.closest('button, a, summary')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

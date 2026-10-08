@@ -1,0 +1,1569 @@
+{
+ "titel": "Ansatz finden: Zins mit zwei Unbekannten",
+ "dateiname": "g2-M-lp-kontrolle-zins-2",
+ "kurzbeschrieb": "Zwei Zinsaufgaben Schritt für Schritt: vertauschte Zinssätze (lineares System, sys-solv) und Kapital und Zinssatz zugleich unbekannt (quadratisches System, poly-solv).",
+ "schlagworte": [
+  "Zinsaufgabe",
+  "lineares Gleichungssystem",
+  "quadratisches Gleichungssystem",
+  "sys-solv",
+  "poly-solv",
+  "Kontrollfragen"
+ ],
+ "themenbereich": "Algebra · Textaufgaben",
+ "fach": "Grundlagenfach",
+ "lerngebiet": "2 · Gleichungen, Ungleichungen und Gleichungssysteme",
+ "lektion": [
+  "g2-M"
+ ],
+ "stufe": [
+  "BM1",
+  "BM2"
+ ],
+ "datum": "2026-10-08",
+ "theme": "begreifbar-schlicht",
+ "latex": true,
+ "reihe": "Ansatz finden",
+ "nachlauf": 2.6,
+ "probe": true,
+ "_probe": "Kontrollclip des Leitprogramms modellieren; gehoert dorthin, nicht in die Clip-Bibliothek.",
+ "szenen": [
+  {
+   "name": "A1 Text",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Zwei Kapitalien bringen in einem Jahr zu zwei Prozent und zu drei Prozent zusammen fünfhundertvierzig Franken Zins. Wären die Zinssätze vertauscht, gäbe es fünfhundertzehn Franken Zins. Wie gross sind die beiden Kapitalien?",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 1   ~① Deklaration~   ~② Ansatz~   ~③ Grundform~   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "titel",
+     "text": "Aufgabe 1",
+     "x": 150,
+     "y": 300,
+     "groesse": 80,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "notiz",
+     "text": "Zins",
+     "x": 150,
+     "y": 420,
+     "groesse": 46,
+     "farbe": "blau",
+     "ein": 0.4,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Zwei Kapitalien bringen in einem Jahr zu 2 %|und zu 3 % zusammen 540 CHF Zins. Wären die|Zinssätze vertauscht, gäbe es 510 CHF Zins.|Wie gross sind die beiden Kapitalien?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    }
+   ],
+   "dauer": 13.34
+  },
+  {
+   "name": "A1 Deklaration",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "x ist das Kapital, das zu zwei Prozent angelegt ist, y das Kapital zu drei Prozent, beide in Franken.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 1   {1:① Deklaration}   ~② Ansatz~   ~③ Grundform~   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Zwei Kapitalien bringen in einem Jahr zu 2 %|und zu 3 % zusammen 540 CHF Zins. Wären die|Zinssätze vertauscht, gäbe es 510 CHF Zins.|Wie gross sind die beiden Kapitalien?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} x: Kapital, y: Zinssatz",
+     "x": 1000,
+     "y": 540,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} x: Kapital zu 2 %, y: Kapital zu 3 % (CHF)",
+     "x": 1000,
+     "y": 624,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} x: Zins zu 2 %, y: Zins zu 3 %",
+     "x": 1000,
+     "y": 708,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{x}@: Kapital zu 2 % in CHF",
+     "x": 1000,
+     "y": 520,
+     "groesse": 40,
+     "ein": 1.0,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{y}@: Kapital zu 3 % in CHF",
+     "x": 1000,
+     "y": 590,
+     "groesse": 40,
+     "ein": 4.4,
+     "abstand": 0
+    }
+   ],
+   "dauer": 7.77
+  },
+  {
+   "name": "A1 Ansatz",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Die erste Aussage steht schon da. Vertauscht bekommt x drei Prozent und y zwei Prozent: null Komma null drei x plus null Komma null zwei y gleich fünfhundertzehn. Zwei Zinsgleichungen, keine Kapitalgleichung.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 1   ① Deklaration   {1:② Ansatz}   ~③ Grundform~   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Zwei Kapitalien bringen in einem Jahr zu 2 %|und zu 3 % zusammen 540 CHF Zins. Wären die|Zinssätze vertauscht, gäbe es 510 CHF Zins.|Wie gross sind die beiden Kapitalien?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} @0.02 \\cdot x + 0.03 \\cdot y = 510@",
+     "x": 1000,
+     "y": 540,
+     "groesse": 38,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} @0.03 \\cdot y + 0.02 \\cdot x = 510@",
+     "x": 1000,
+     "y": 624,
+     "groesse": 38,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} @0.03 \\cdot x + 0.02 \\cdot y = 510@",
+     "x": 1000,
+     "y": 708,
+     "groesse": 38,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{x}@: Kapital zu 2 % in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{y}@: Kapital zu 3 % in CHF",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "0.02 \\cdot x + 0.03 \\cdot y = 540",
+     "x": 150,
+     "y": 328,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "\\begin{cases} 0.02 \\cdot x + 0.03 \\cdot y = 540 \\\\ 0.03 \\cdot x + 0.02 \\cdot y = 510 \\end{cases}",
+     "x": 1000,
+     "y": 520,
+     "groesse": 40,
+     "ein": 2.39,
+     "abstand": 0
+    },
+    {
+     "typ": "notiz",
+     "text": "zwei Zinsgleichungen",
+     "x": 1000,
+     "y": 700,
+     "groesse": 38,
+     "farbe": "blau",
+     "ein": 11.41,
+     "abstand": 0
+    }
+   ],
+   "dauer": 14.62
+  },
+  {
+   "name": "A1 Grundform",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Beide Gleichungen mal hundert: zwei x plus drei y gleich vierundfünfzigtausend, drei x plus zwei y gleich einundfünfzigtausend. Ganze Zahlen tippen sich sicherer.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 1   ① Deklaration   ② Ansatz   {1:③ Grundform}   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Zwei Kapitalien bringen in einem Jahr zu 2 %|und zu 3 % zusammen 540 CHF Zins. Wären die|Zinssätze vertauscht, gäbe es 510 CHF Zins.|Wie gross sind die beiden Kapitalien?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} 2, 3, 54 000 und 3, 2, 51 000",
+     "x": 1000,
+     "y": 540,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} 2, 3, 540 und 3, 2, 510",
+     "x": 1000,
+     "y": 624,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} 200, 300, 540 und 300, 200, 510",
+     "x": 1000,
+     "y": 708,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{x}@: Kapital zu 2 % in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{y}@: Kapital zu 3 % in CHF",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "\\begin{cases} 0.02 \\cdot x + 0.03 \\cdot y = 540 \\\\ 0.03 \\cdot x + 0.02 \\cdot y = 510 \\end{cases}",
+     "x": 150,
+     "y": 328,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "\\begin{cases} 2 \\cdot x + 3 \\cdot y = 54\\,000 \\\\ 3 \\cdot x + 2 \\cdot y = 51\\,000 \\end{cases}",
+     "x": 1000,
+     "y": 520,
+     "groesse": 44,
+     "ein": 1.37,
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 520,
+     "zeilen": [
+      "SYSTEM SOLVER",
+      "1:2x2 Linear EQs",
+      "2:3x3 Linear Sys"
+     ],
+     "tasten": [
+      "2nd",
+      "sys-solv"
+     ],
+     "x": 150,
+     "y": 640,
+     "ein": 8.45,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 520,
+     "zeilen": [
+      "(2)x+(3)y=54000",
+      "",
+      ""
+     ],
+     "tasten": [
+      "enter",
+      "2",
+      "enter",
+      "3",
+      "enter",
+      "54000"
+     ],
+     "x": 150,
+     "y": 640,
+     "ein": 10.25,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 520,
+     "zeilen": [
+      "(2)x+(3)y=54000",
+      "(3)x+(2)y=51000",
+      ""
+     ],
+     "tasten": [
+      "enter",
+      "3",
+      "enter",
+      "2",
+      "enter",
+      "51000"
+     ],
+     "x": 150,
+     "y": 640,
+     "ein": 12.05,
+     "anim": "fade",
+     "abstand": 0
+    }
+   ],
+   "dauer": 13.87
+  },
+  {
+   "name": "A1 Lösen",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "x ist das Kapital zu zwei Prozent: neuntausend Franken. y, das Kapital zu drei Prozent, beträgt zwölftausend Franken.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 1   ① Deklaration   ② Ansatz   ③ Grundform   {1:④ Lösen}   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Zwei Kapitalien bringen in einem Jahr zu 2 %|und zu 3 % zusammen 540 CHF Zins. Wären die|Zinssätze vertauscht, gäbe es 510 CHF Zins.|Wie gross sind die beiden Kapitalien?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} 12 000 CHF zu 2 %, 9000 CHF zu 3 %",
+     "x": 1000,
+     "y": 770,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} 9000 CHF und 12 000 CHF Zins",
+     "x": 1000,
+     "y": 854,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} 9000 CHF zu 2 %, 12 000 CHF zu 3 %",
+     "x": 1000,
+     "y": 938,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{x}@: Kapital zu 2 % in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{y}@: Kapital zu 3 % in CHF",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "\\begin{cases} 2 \\cdot x + 3 \\cdot y = 54\\,000 \\\\ 3 \\cdot x + 2 \\cdot y = 51\\,000 \\end{cases}",
+     "x": 150,
+     "y": 328,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 400,
+     "zeilen": [
+      "x=9000",
+      ""
+     ],
+     "tasten": [
+      "enter"
+     ],
+     "x": 1000,
+     "y": 515,
+     "ein": 0.05,
+     "anim": "fade",
+     "abstand": 0,
+     "_gegeben": true
+    },
+    {
+     "typ": "rechner",
+     "breite": 400,
+     "zeilen": [
+      "y=12000",
+      ""
+     ],
+     "tasten": [
+      "enter"
+     ],
+     "x": 1420,
+     "y": 515,
+     "ein": 0.05,
+     "anim": "fade",
+     "abstand": 0,
+     "_gegeben": true
+    },
+    {
+     "typ": "text",
+     "text": "@\\fc{9000}@ CHF zu 2 %, @\\fc{12\\,000}@ CHF zu 3 %",
+     "x": 1000,
+     "y": 760,
+     "groesse": 38,
+     "ein": 2.42,
+     "abstand": 0
+    }
+   ],
+   "dauer": 8.82
+  },
+  {
+   "name": "A1 Antwort",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Probe am Text: hundertachtzig plus dreihundertsechzig gleich fünfhundertvierzig. Vertauscht: zweihundertsiebzig plus zweihundertvierzig gleich fünfhundertzehn. Die Kapitalien sind neuntausend und zwölftausend Franken.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 1   ① Deklaration   ② Ansatz   ③ Grundform   ④ Lösen   {1:⑤ Antwort}",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Zwei Kapitalien bringen in einem Jahr zu 2 %|und zu 3 % zusammen 540 CHF Zins. Wären die|Zinssätze vertauscht, gäbe es 510 CHF Zins.|Wie gross sind die beiden Kapitalien?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} @9000 + 12\\,000 = 21\\,000@",
+     "x": 1000,
+     "y": 540,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} @180 + 360 = 540 \\text{ und } 270 + 240 = 510@",
+     "x": 1000,
+     "y": 624,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} 180 + 360 = 540 genügt",
+     "x": 1000,
+     "y": 708,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{x}@: Kapital zu 2 % in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{y}@: Kapital zu 3 % in CHF",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "x = 9000,\\ y = 12\\,000",
+     "x": 150,
+     "y": 328,
+     "groesse": 40,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "180 + 360 = 540 \\;\\checkmark \\qquad 270 + 240 = 510 \\;\\checkmark",
+     "x": 1000,
+     "y": 520,
+     "groesse": 40,
+     "ein": 1.0,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fc{9000}@ CHF und @\\fc{12\\,000}@ CHF",
+     "x": 1000,
+     "y": 610,
+     "groesse": 40,
+     "ein": 9.26,
+     "abstand": 0
+    }
+   ],
+   "dauer": 13.55
+  },
+  {
+   "name": "A2 Text",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Ein Kapital bringt in einem Jahr vierhundertachtzig Franken Zins. Wäre es um viertausend Franken kleiner und der Zinssatz um null Komma vier Prozentpunkte höher, ergäbe es gleich viel Zins. Wie gross sind Kapital und Zinssatz?",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 2   ~① Deklaration~   ~② Ansatz~   ~③ Grundform~   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "titel",
+     "text": "Aufgabe 2",
+     "x": 150,
+     "y": 300,
+     "groesse": 80,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "notiz",
+     "text": "Zins",
+     "x": 150,
+     "y": 420,
+     "groesse": 46,
+     "farbe": "blau",
+     "ein": 0.4,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Ein Kapital bringt in einem Jahr 480 CHF Zins.|Wäre es um 4000 CHF kleiner und der Zinssatz|um 0.4 Prozentpunkte höher, ergäbe es gleich|viel Zins. Wie gross sind Kapital und Zinssatz?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    }
+   ],
+   "dauer": 13.68
+  },
+  {
+   "name": "A2 Deklaration",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "K ist das Kapital in Franken, p der Zinssatz als Dezimalzahl. Null Komma vier Prozentpunkte mehr heisst p plus null Komma null null vier.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 2   {1:① Deklaration}   ~② Ansatz~   ~③ Grundform~   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Ein Kapital bringt in einem Jahr 480 CHF Zins.|Wäre es um 4000 CHF kleiner und der Zinssatz|um 0.4 Prozentpunkte höher, ergäbe es gleich|viel Zins. Wie gross sind Kapital und Zinssatz?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} K: Zins in CHF, p: Zinssatz",
+     "x": 1000,
+     "y": 540,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} K: Kapital in CHF, p: Zins in CHF",
+     "x": 1000,
+     "y": 624,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} K: Kapital in CHF, p: Zinssatz (Dezimalzahl)",
+     "x": 1000,
+     "y": 708,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{K}@: Kapital in CHF",
+     "x": 1000,
+     "y": 520,
+     "groesse": 40,
+     "ein": 1.0,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{p}@: Zinssatz (Dezimalzahl)",
+     "x": 1000,
+     "y": 590,
+     "groesse": 40,
+     "ein": 2.49,
+     "abstand": 0
+    },
+    {
+     "typ": "notiz",
+     "text": "0.4 Prozentpunkte mehr: @p + 0.004@",
+     "x": 1000,
+     "y": 690,
+     "groesse": 38,
+     "farbe": "blau",
+     "ein": 4.51,
+     "abstand": 0
+    }
+   ],
+   "dauer": 9.05
+  },
+  {
+   "name": "A2 Ansatz",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Zins gleich Kapital mal Zinssatz: K mal p gleich vierhundertachtzig. Mit viertausend Franken weniger und dem höheren Zinssatz: Klammer K minus viertausend mal Klammer p plus null Komma null null vier, wieder vierhundertachtzig. Ein Produkt der Unbekannten: quadratisch.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 2   ① Deklaration   {1:② Ansatz}   ~③ Grundform~   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Ein Kapital bringt in einem Jahr 480 CHF Zins.|Wäre es um 4000 CHF kleiner und der Zinssatz|um 0.4 Prozentpunkte höher, ergäbe es gleich|viel Zins. Wie gross sind Kapital und Zinssatz?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} @K \\cdot p = 480 \\text{ und } (K - 4000) \\cdot p + 0.004 = 480@",
+     "x": 1000,
+     "y": 540,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} @K \\cdot p = 480 \\text{ und } (K - 4000) \\cdot (p + 0.004) = 480@",
+     "x": 1000,
+     "y": 624,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} @K \\cdot p = 480 \\text{ und } (K - 4000) \\cdot (p + 0.4) = 480@",
+     "x": 1000,
+     "y": 708,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{K}@: Kapital in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{p}@: Zinssatz (Dezimalzahl)",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "\\begin{cases} K \\cdot p = 480 \\\\ (K - 4000) \\cdot (p + 0.004) = 480 \\end{cases}",
+     "x": 1000,
+     "y": 520,
+     "groesse": 40,
+     "ein": 1.16,
+     "abstand": 0
+    },
+    {
+     "typ": "notiz",
+     "text": "Produkt der Unbekannten: quadratisch",
+     "x": 1000,
+     "y": 700,
+     "groesse": 38,
+     "farbe": "rot",
+     "ein": 14.12,
+     "abstand": 0
+    }
+   ],
+   "dauer": 17.0
+  },
+  {
+   "name": "A2 Grundform",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Ausmultipliziert: K p plus null Komma null null vier K minus viertausend p minus sechzehn gleich vierhundertachtzig. Mit K p gleich vierhundertachtzig bleibt null Komma null null vier K gleich viertausend p plus sechzehn, also K gleich viertausend plus eine Million mal p. Eingesetzt: eine Million p Quadrat plus viertausend p minus vierhundertachtzig gleich null.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 2   ① Deklaration   ② Ansatz   {1:③ Grundform}   ~④ Lösen~   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Ein Kapital bringt in einem Jahr 480 CHF Zins.|Wäre es um 4000 CHF kleiner und der Zinssatz|um 0.4 Prozentpunkte höher, ergäbe es gleich|viel Zins. Wie gross sind Kapital und Zinssatz?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} @1\\,000\\,000 \\cdot p^2 + 4000 \\cdot p - 480 = 0@",
+     "x": 1000,
+     "y": 540,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} @1\\,000\\,000 \\cdot p^2 - 4000 \\cdot p - 480 = 0@",
+     "x": 1000,
+     "y": 624,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} @1\\,000\\,000 \\cdot p^2 + 4000 \\cdot p + 480 = 0@",
+     "x": 1000,
+     "y": 708,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{K}@: Kapital in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{p}@: Zinssatz (Dezimalzahl)",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "\\begin{cases} K \\cdot p = 480 \\\\ (K - 4000) \\cdot (p + 0.004) = 480 \\end{cases}",
+     "x": 150,
+     "y": 328,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "K p + 0.004 \\cdot K - 4000 \\cdot p - 16 = 480",
+     "x": 1000,
+     "y": 520,
+     "groesse": 36,
+     "ein": 1.0,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "K = 4000 + 1\\,000\\,000 \\cdot p",
+     "x": 1000,
+     "y": 590,
+     "groesse": 38,
+     "ein": 13.78,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "(4000 + 1\\,000\\,000 \\cdot p) \\cdot p = 480",
+     "x": 1000,
+     "y": 660,
+     "groesse": 38,
+     "ein": 16.84,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "1\\,000\\,000 \\cdot p^2 + 4000 \\cdot p - 480 = 0",
+     "x": 1000,
+     "y": 740,
+     "groesse": 40,
+     "ein": 18.4,
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 520,
+     "zeilen": [
+      "POLY SOLVER",
+      "1:ax²+bx+c=0",
+      "2:ax³+bx²+cx+d=0"
+     ],
+     "tasten": [
+      "2nd",
+      "poly-solv"
+     ],
+     "x": 150,
+     "y": 640,
+     "ein": 19.4,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 520,
+     "zeilen": [
+      "a=1000000",
+      "",
+      ""
+     ],
+     "tasten": [
+      "enter",
+      "1000000"
+     ],
+     "x": 150,
+     "y": 640,
+     "ein": 20.7,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 520,
+     "zeilen": [
+      "b=4000",
+      "",
+      ""
+     ],
+     "tasten": [
+      "enter",
+      "4000"
+     ],
+     "x": 150,
+     "y": 640,
+     "ein": 22.0,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 520,
+     "zeilen": [
+      "c=⁻480",
+      "",
+      ""
+     ],
+     "tasten": [
+      "enter",
+      "(−)",
+      "480"
+     ],
+     "x": 150,
+     "y": 640,
+     "ein": 23.3,
+     "anim": "fade",
+     "abstand": 0
+    }
+   ],
+   "dauer": 26.03
+  },
+  {
+   "name": "A2 Lösen",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Als Dezimalzahl null Komma null zwei und minus null Komma null zwei vier. Mit dem negativen Wert wäre K gleich vierhundertachtzig durch p negativ, minus zwanzigtausend Franken: unmöglich. Also p gleich null Komma null zwei und K gleich vierhundertachtzig durch null Komma null zwei, vierundzwanzigtausend Franken.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 2   ① Deklaration   ② Ansatz   ③ Grundform   {1:④ Lösen}   ~⑤ Antwort~",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Ein Kapital bringt in einem Jahr 480 CHF Zins.|Wäre es um 4000 CHF kleiner und der Zinssatz|um 0.4 Prozentpunkte höher, ergäbe es gleich|viel Zins. Wie gross sind Kapital und Zinssatz?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} @p = 0.02 \\text{ und } K = 24\\,000@",
+     "x": 1000,
+     "y": 770,
+     "groesse": 38,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} p = 0.02 oder p = −0.024",
+     "x": 1000,
+     "y": 854,
+     "groesse": 38,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} @p = 1/50\\,\\%@",
+     "x": 1000,
+     "y": 938,
+     "groesse": 38,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{K}@: Kapital in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{p}@: Zinssatz (Dezimalzahl)",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "1\\,000\\,000 \\cdot p^2 + 4000 \\cdot p - 480 = 0",
+     "x": 150,
+     "y": 328,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 400,
+     "zeilen": [
+      "x1=[1|50]",
+      ""
+     ],
+     "tasten": [
+      "enter"
+     ],
+     "x": 1000,
+     "y": 515,
+     "ein": 0.05,
+     "anim": "fade",
+     "abstand": 0,
+     "_gegeben": true
+    },
+    {
+     "typ": "rechner",
+     "breite": 400,
+     "zeilen": [
+      "x2=⁻[3|125]",
+      ""
+     ],
+     "tasten": [
+      "enter"
+     ],
+     "x": 1420,
+     "y": 515,
+     "ein": 0.05,
+     "anim": "fade",
+     "abstand": 0,
+     "_gegeben": true
+    },
+    {
+     "typ": "rechner",
+     "breite": 400,
+     "zeilen": [
+      "x1=0.02",
+      "",
+      ""
+     ],
+     "tasten": [
+      "↔"
+     ],
+     "x": 1000,
+     "y": 515,
+     "ein": 1.0,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 400,
+     "zeilen": [
+      "x2=⁻0.024",
+      "",
+      ""
+     ],
+     "tasten": [
+      "↔"
+     ],
+     "x": 1420,
+     "y": 515,
+     "ein": 1.53,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fd{p = -0.024}@: @K = -20\\,000@, unmöglich",
+     "x": 1000,
+     "y": 760,
+     "groesse": 34,
+     "ein": 5.29,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "p = \\fc{0.02}, \\quad K = 480 : 0.02 = \\fc{24\\,000}",
+     "x": 1000,
+     "y": 850,
+     "groesse": 40,
+     "ein": 11.69,
+     "abstand": 0
+    }
+   ],
+   "dauer": 19.59
+  },
+  {
+   "name": "A2 Antwort",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Probe am Text: vierundzwanzigtausend mal null Komma null zwei gleich vierhundertachtzig. Viertausend weniger sind zwanzigtausend, zu zwei Komma vier Prozent gibt das wieder vierhundertachtzig Franken. Das Kapital beträgt vierundzwanzigtausend Franken, der Zinssatz zwei Prozent.",
+   "elemente": [
+    {
+     "typ": "text",
+     "text": "Aufgabe 2   ① Deklaration   ② Ansatz   ③ Grundform   ④ Lösen   {1:⑤ Antwort}",
+     "x": 150,
+     "y": 140,
+     "groesse": 30,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Ein Kapital bringt in einem Jahr 480 CHF Zins.|Wäre es um 4000 CHF kleiner und der Zinssatz|um 0.4 Prozentpunkte höher, ergäbe es gleich|viel Zins. Wie gross sind Kapital und Zinssatz?",
+     "x": 1000,
+     "y": 200,
+     "groesse": 36,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "{2:A} @24\\,000 - 4000 = 20\\,000@",
+     "x": 1000,
+     "y": 540,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:B} @24\\,000  \\cdot  0.02 = 480 \\text{ und } 20\\,000  \\cdot  0.024 = 480@",
+     "x": 1000,
+     "y": 624,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "{2:C} 24 000 · 0.02 = 480 genügt",
+     "x": 1000,
+     "y": 708,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0,
+     "aus": 0.9
+    },
+    {
+     "typ": "text",
+     "text": "@\\fa{K}@: Kapital in CHF",
+     "x": 150,
+     "y": 210,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "@\\fb{p}@: Zinssatz (Dezimalzahl)",
+     "x": 150,
+     "y": 269,
+     "groesse": 34,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "K = 24\\,000,\\ p = 0.02",
+     "x": 150,
+     "y": 328,
+     "groesse": 40,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "formel",
+     "text": "24\\,000 \\cdot 0.02 = 480 \\;\\checkmark \\qquad 20\\,000 \\cdot 0.024 = 480 \\;\\checkmark",
+     "x": 1000,
+     "y": 520,
+     "groesse": 36,
+     "ein": 1.0,
+     "abstand": 0
+    },
+    {
+     "typ": "text",
+     "text": "Kapital @\\fc{24\\,000}@ CHF, Zinssatz @\\fc{2\\,\\%}@",
+     "x": 1000,
+     "y": 610,
+     "groesse": 40,
+     "ein": 11.9,
+     "abstand": 0
+    }
+   ],
+   "dauer": 16.62
+  },
+  {
+   "name": "Merke",
+   "layout": "zentriert",
+   "oben": 200,
+   "sprecher": "Zum Mitnehmen: Zwei Zinsgleichungen mit bekannten Zinssätzen geben ein lineares System, mal hundert für sys-solv. Sind Kapital und Zinssatz beide unbekannt, steht das Produkt K mal p im System: ausmultiplizieren, eine Unbekannte ausdrücken, einsetzen, Grundform, poly-solv. Negative Kapitalien fallen weg.",
+   "elemente": [
+    {
+     "typ": "titel",
+     "text": "Zum Mitnehmen",
+     "x": 150,
+     "y": 250,
+     "groesse": 76,
+     "ein": 0.05,
+     "abstand": 0
+    },
+    {
+     "typ": "notiz",
+     "text": "bekannte Zinssätze: lineares System|Kapital und Zinssatz unbekannt: quadratisch|negative Kapitalien verwerfen",
+     "x": 150,
+     "y": 390,
+     "groesse": 46,
+     "farbe": "blau",
+     "ein": 1.2,
+     "abstand": 0
+    }
+   ],
+   "dauer": 19.67
+  }
+ ],
+ "folge": 12,
+ "fragen": [
+  {
+   "szene": "A1 Deklaration",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ① Deklaration",
+   "text": "Welche Deklaration führt hier zum Ziel?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 1,
+   "rueck": {
+    "0": "Die Zinssätze sind gegeben: 2 % und 3 %.",
+    "2": "Gefragt sind die Kapitalien, nicht die Zinsen."
+   },
+   "sprich": "Welche Deklaration führt hier zum Ziel? A, B oder C?",
+   "rueck_sprich": {
+    "0": "Die Zinssätze sind gegeben: zwei und drei Prozent.",
+    "2": "Gefragt sind die Kapitalien, nicht die Zinsen."
+   }
+  },
+  {
+   "szene": "A1 Ansatz",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ② Ansatz",
+   "text": "Welche Gleichung beschreibt «vertauscht»?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 2,
+   "rueck": {
+    "0": "Das sind die ursprünglichen Zinssätze.",
+    "1": "Das ist dieselbe Verteilung wie im ersten Satz, nur anders geordnet."
+   },
+   "sprich": "Welche Gleichung beschreibt: Zinssätze vertauscht? A, B oder C?"
+  },
+  {
+   "szene": "A1 Grundform",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ③ Grundform",
+   "text": "Mit 100 multipliziert: Was tippst du ein?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 0,
+   "rueck": {
+    "1": "Mit 100 multipliziert wird auch die rechte Seite.",
+    "2": "Mal 100: Aus 0.02 wird 2, nicht 200."
+   },
+   "sprich": "Mit hundert multipliziert: Was tippst du ein? A, B oder C?",
+   "rueck_sprich": {
+    "1": "Mit hundert multipliziert wird auch die rechte Seite.",
+    "2": "Mal hundert: Aus null Komma null zwei wird zwei, nicht zweihundert."
+   }
+  },
+  {
+   "szene": "A1 Lösen",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ④ Lösen",
+   "text": "sys-solv zeigt x = 9000 und y = 12 000. Was heisst das?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 2,
+   "rueck": {
+    "0": "x war das Kapital zu 2 %.",
+    "1": "x und y sind Kapitalien, nicht Zinsen."
+   },
+   "sprich": "sys-solv zeigt x gleich neuntausend und y gleich zwölftausend. Was heisst das? A, B oder C?",
+   "rueck_sprich": {
+    "0": "x war das Kapital zu zwei Prozent.",
+    "1": "x und y sind Kapitalien, nicht Zinsen."
+   }
+  },
+  {
+   "szene": "A1 Antwort",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ⑤ Antwort",
+   "text": "Mit welcher Probe prüfst du beide Aussagen?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 1,
+   "rueck": {
+    "0": "Die Summe der Kapitalien steht nicht im Text.",
+    "2": "Der Text macht zwei Aussagen."
+   },
+   "sprich": "Mit welcher Probe prüfst du beide Aussagen? A, B oder C?"
+  },
+  {
+   "szene": "A2 Deklaration",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ① Deklaration",
+   "text": "Zwei Unbekannte: Welche Deklaration?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 2,
+   "rueck": {
+    "0": "Der Zins ist gegeben: 480 CHF.",
+    "1": "Der Zins ist gegeben. Was ist neben dem Kapital unbekannt?"
+   },
+   "sprich": "Zwei Unbekannte: Welche Deklaration passt? A, B oder C?",
+   "rueck_sprich": {
+    "0": "Der Zins ist gegeben: vierhundertachtzig Franken.",
+    "1": "Der Zins ist gegeben. Was ist neben dem Kapital unbekannt?"
+   }
+  },
+  {
+   "szene": "A2 Ansatz",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ② Ansatz",
+   "text": "Welches System übersetzt die Aussagen?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 1,
+   "rueck": {
+    "0": "Der neue Zinssatz multipliziert das ganze neue Kapital: Klammer.",
+    "2": "0.4 Prozentpunkte als Dezimalzahl?"
+   },
+   "sprich": "Welches System übersetzt die Aussagen? A, B oder C?",
+   "rueck_sprich": {
+    "0": "Der neue Zinssatz multipliziert das ganze neue Kapital: Klammer.",
+    "2": "Null Komma vier Prozentpunkte als Dezimalzahl?"
+   }
+  },
+  {
+   "szene": "A2 Grundform",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ③ Grundform",
+   "text": "K durch p ausgedrückt, eingesetzt: Welche Grundform?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 0,
+   "rueck": {
+    "1": "Prüfe das Vorzeichen in K = 4000 + 1 000 000·p.",
+    "2": "Prüfe das Vorzeichen der 480."
+   },
+   "sprich": "K durch p ausgedrückt und eingesetzt: Welche Grundform entsteht? A, B oder C?",
+   "rueck_sprich": {
+    "1": "Prüfe das Vorzeichen in K gleich viertausend plus eine Million mal p.",
+    "2": "Prüfe das Vorzeichen der vierhundertachtzig."
+   }
+  },
+  {
+   "szene": "A2 Lösen",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ④ Lösen",
+   "text": "poly-solv zeigt x1 = 1/50 und x2 = −3/125. Was folgt?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 0,
+   "rueck": {
+    "1": "Rechne K = 480 : p für beide Werte. Ist jedes Kapital möglich?",
+    "2": "1/50 als Dezimalzahl ist 0.02, als Prozent 2 %."
+   },
+   "sprich": "poly-solv zeigt x eins gleich ein Fünfzigstel und x zwei gleich minus drei Hundertfünfundzwanzigstel. Was folgt? A, B oder C?",
+   "rueck_sprich": {
+    "1": "Rechne K gleich vierhundertachtzig durch p für beide Werte. Ist jedes Kapital möglich?",
+    "2": "Ein Fünfzigstel als Dezimalzahl ist null Komma null zwei, als Prozent zwei Prozent."
+   }
+  },
+  {
+   "szene": "A2 Antwort",
+   "bei": 0.3,
+   "typ": "wahl",
+   "kopf": "Schritt ⑤ Antwort",
+   "text": "Welche Probe prüft beide Aussagen?",
+   "optionen": [
+    "A",
+    "B",
+    "C"
+   ],
+   "richtig": 1,
+   "rueck": {
+    "0": "Das prüft den Zins nicht.",
+    "2": "Prüfe auch die zweite Aussage."
+   },
+   "sprich": "Welche Probe prüft beide Aussagen? A, B oder C?"
+  }
+ ]
+}

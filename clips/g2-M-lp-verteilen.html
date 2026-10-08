@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Ansatz finden: Verteilen</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;gap:14px;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · Textaufgaben</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>08.10.2026</span></div>
+<div class="l m" data-at="0.60" data-out="14.84" data-anim="rise" style="left:150px;top:260px;font-size:42px">A: 18 t pro Fahrt<br>B: 14 t pro Fahrt<br>12 Fahrten, zusammen 188 t</div>
+<div class="l graf" data-at="0.60" data-out="14.84" data-anim="fade" style="left:1000px;top:180px"><svg width="820" height="700" viewBox="0 0 820 700"><line x1="722.7" y1="0" x2="722.7" y2="700" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="236.0" x2="820" y2="236.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="128.7" x2="820" y2="128.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="611.5" x2="820" y2="611.5" stroke="#1c1a17" stroke-width="3"/><line x1="52.7" y1="700" x2="52.7" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="820.0,611.5 802.0,602.5 802.0,620.5" fill="#1c1a17"/><polygon points="52.7,0 43.7,18 61.7,18" fill="#1c1a17"/><line x1="722.7" y1="604.5" x2="722.7" y2="618.5" stroke="#1c1a17" stroke-width="2.5"/><text x="722.7" y="643.5" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">12</text><line x1="45.7" y1="236.0" x2="59.7" y2="236.0" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="244.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">14</text><line x1="45.7" y1="128.7" x2="59.7" y2="128.7" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="136.7" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">18</text><polygon points="52.7,611.5 331.8,611.5 331.8,128.7 52.7,128.7" fill="#1a4f8a" fill-opacity="0.3" stroke="none"/><polygon points="331.8,611.5 722.7,611.5 722.7,236.0 331.8,236.0" fill="#b85c00" fill-opacity="0.3" stroke="none"/><text x="192.2" y="654.4" font-size="34" font-weight="600" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x</text><text x="527.2" y="654.4" font-size="34" font-weight="600" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">y</text><text x="812.0" y="595.5" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke" text-anchor="end">Fahrten</text><text x="66.7" y="26" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke">t pro Fahrt</text></svg></div>
+<div class="l m" data-at="16.10" data-out="24.57" data-anim="rise" style="left:150px;top:280px;font-size:40px">\(\fa{x}\): Anzahl Fahrten Lastwagen A</div>
+<div class="l m" data-at="19.96" data-out="24.57" data-anim="rise" style="left:150px;top:350px;font-size:40px">\(\fb{y}\): Anzahl Fahrten Lastwagen B</div>
+<div class="l hand" data-at="21.66" data-out="24.57" data-anim="rise" style="left:150px;top:460px;font-size:40px;color:var(--blau)">ganze Zahlen, nicht negativ</div>
+<div class="l graf" data-at="14.89" data-out="24.57" data-anim="fade" style="left:1000px;top:180px"><svg width="820" height="700" viewBox="0 0 820 700"><line x1="722.7" y1="0" x2="722.7" y2="700" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="236.0" x2="820" y2="236.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="128.7" x2="820" y2="128.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="611.5" x2="820" y2="611.5" stroke="#1c1a17" stroke-width="3"/><line x1="52.7" y1="700" x2="52.7" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="820.0,611.5 802.0,602.5 802.0,620.5" fill="#1c1a17"/><polygon points="52.7,0 43.7,18 61.7,18" fill="#1c1a17"/><line x1="722.7" y1="604.5" x2="722.7" y2="618.5" stroke="#1c1a17" stroke-width="2.5"/><text x="722.7" y="643.5" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">12</text><line x1="45.7" y1="236.0" x2="59.7" y2="236.0" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="244.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">14</text><line x1="45.7" y1="128.7" x2="59.7" y2="128.7" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="136.7" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">18</text><polygon points="52.7,611.5 331.8,611.5 331.8,128.7 52.7,128.7" fill="#1a4f8a" fill-opacity="0.3" stroke="none"/><polygon points="331.8,611.5 722.7,611.5 722.7,236.0 331.8,236.0" fill="#b85c00" fill-opacity="0.3" stroke="none"/><text x="192.2" y="654.4" font-size="34" font-weight="600" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x</text><text x="527.2" y="654.4" font-size="34" font-weight="600" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">y</text><text x="812.0" y="595.5" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke" text-anchor="end">Fahrten</text><text x="66.7" y="26" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke">t pro Fahrt</text></svg></div>
+<div class="l m row" data-at="27.10" data-out="35.09" data-anim="rise" style="left:150px;top:300px;font-size:56px"><span>\(\fa{x} + \fb{y} = 12\)</span></div>
+<div class="l hand" data-at="31.12" data-out="35.09" data-anim="rise" style="left:150px;top:420px;font-size:42px;color:var(--blau)">Stückbilanz: Anzahl Fahrten</div>
+<div class="l graf" data-at="24.62" data-out="35.09" data-anim="fade" style="left:1000px;top:180px"><svg width="820" height="700" viewBox="0 0 820 700"><line x1="722.7" y1="0" x2="722.7" y2="700" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="236.0" x2="820" y2="236.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="128.7" x2="820" y2="128.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="611.5" x2="820" y2="611.5" stroke="#1c1a17" stroke-width="3"/><line x1="52.7" y1="700" x2="52.7" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="820.0,611.5 802.0,602.5 802.0,620.5" fill="#1c1a17"/><polygon points="52.7,0 43.7,18 61.7,18" fill="#1c1a17"/><line x1="722.7" y1="604.5" x2="722.7" y2="618.5" stroke="#1c1a17" stroke-width="2.5"/><text x="722.7" y="643.5" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">12</text><line x1="45.7" y1="236.0" x2="59.7" y2="236.0" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="244.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">14</text><line x1="45.7" y1="128.7" x2="59.7" y2="128.7" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="136.7" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">18</text><polygon points="52.7,611.5 331.8,611.5 331.8,128.7 52.7,128.7" fill="#1a4f8a" fill-opacity="0.3" stroke="none"/><polygon points="331.8,611.5 722.7,611.5 722.7,236.0 331.8,236.0" fill="#b85c00" fill-opacity="0.3" stroke="none"/><g class="zt" data-ein="27.10"><line x1="52.7" y1="85.8" x2="722.7" y2="85.8" stroke="#1f6b3a" stroke-width="4" stroke-linecap="round" /></g><text x="192.2" y="654.4" font-size="34" font-weight="600" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x</text><text x="527.2" y="654.4" font-size="34" font-weight="600" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">y</text><g class="zt" data-ein="27.10"><text x="387.7" y="61.6" font-size="32" font-weight="600" fill="#1f6b3a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x + y = 12</text></g><text x="812.0" y="595.5" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke" text-anchor="end">Fahrten</text><text x="66.7" y="26" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke">t pro Fahrt</text></svg></div>
+<div class="l m row" data-at="38.12" data-out="48.98" data-anim="rise" style="left:150px;top:300px;font-size:52px"><span>\(18 \cdot \fa{x} + 14 \cdot \fb{y} = 188\)</span></div>
+<div class="l hand" data-at="44.28" data-out="48.98" data-anim="rise" style="left:150px;top:420px;font-size:42px;color:var(--blau)">Wertbilanz: Tonnen Kies</div>
+<div class="l m row" data-at="38.68" data-out="48.98" data-anim="rise" style="left:150px;top:520px;font-size:40px"><span>\(\text{Anzahl} \cdot \text{Wert pro Stück} = \text{Wert}\)</span></div>
+<div class="l graf" data-at="35.14" data-out="48.98" data-anim="fade" style="left:1000px;top:180px"><svg width="820" height="700" viewBox="0 0 820 700"><line x1="722.7" y1="0" x2="722.7" y2="700" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="236.0" x2="820" y2="236.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="128.7" x2="820" y2="128.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="611.5" x2="820" y2="611.5" stroke="#1c1a17" stroke-width="3"/><line x1="52.7" y1="700" x2="52.7" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="820.0,611.5 802.0,602.5 802.0,620.5" fill="#1c1a17"/><polygon points="52.7,0 43.7,18 61.7,18" fill="#1c1a17"/><line x1="722.7" y1="604.5" x2="722.7" y2="618.5" stroke="#1c1a17" stroke-width="2.5"/><text x="722.7" y="643.5" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">12</text><line x1="45.7" y1="236.0" x2="59.7" y2="236.0" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="244.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">14</text><line x1="45.7" y1="128.7" x2="59.7" y2="128.7" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="136.7" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">18</text><polygon points="52.7,611.5 331.8,611.5 331.8,128.7 52.7,128.7" fill="#1a4f8a" fill-opacity="0.3" stroke="none"/><polygon points="331.8,611.5 722.7,611.5 722.7,236.0 331.8,236.0" fill="#b85c00" fill-opacity="0.3" stroke="none"/><g class="zt" data-ein="35.14"><line x1="52.7" y1="85.8" x2="722.7" y2="85.8" stroke="#1f6b3a" stroke-width="4" stroke-linecap="round" /></g><text x="192.2" y="654.4" font-size="34" font-weight="600" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x</text><text x="527.2" y="654.4" font-size="34" font-weight="600" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">y</text><g class="zt" data-ein="38.12"><text x="192.2" y="370.1" font-size="34" font-weight="600" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">18 · x</text></g><g class="zt" data-ein="38.12"><text x="527.2" y="423.8" font-size="34" font-weight="600" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">14 · y</text></g><g class="zt" data-ein="35.14"><text x="387.7" y="61.6" font-size="32" font-weight="600" fill="#1f6b3a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x + y = 12</text></g><text x="812.0" y="595.5" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke" text-anchor="end">Fahrten</text><text x="66.7" y="26" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke">t pro Fahrt</text></svg></div>
+<div class="l graf" data-at="50.68" data-out="62.57" data-anim="fade" style="left:150px;top:230px"><svg width="700" height="268" viewBox="0 0 700 268"><rect x="0" y="0" width="700" height="268" fill="#f8f6f1"/><rect x="0" y="0" width="700" height="194" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="664" height="162" rx="5" fill="#c9d4c4"/><text x="30.0" y="79.7" font-family="monospace" font-size="68.0" fill="#1c1a17" xml:space="preserve">(1)x+(1)y=12</text><text x="30.0" y="153.7" font-family="monospace" font-size="68.0" fill="#1c1a17" xml:space="preserve">(18)x+(14)y=188</text><rect x="289.5" y="206.0" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="350.0" y="242.0" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="51.72" data-out="62.57" data-anim="fade" style="left:150px;top:560px"><svg width="400" height="198" viewBox="0 0 400 198"><rect x="0" y="0" width="400" height="198" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="125" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="93" rx="5" fill="#c9d4c4"/><text x="30.0" y="52.7" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">x=5</text><rect x="139.5" y="136.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="172.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="52.52" data-out="62.57" data-anim="fade" style="left:570px;top:560px"><svg width="400" height="198" viewBox="0 0 400 198"><rect x="0" y="0" width="400" height="198" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="125" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="93" rx="5" fill="#c9d4c4"/><text x="30.0" y="52.7" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">y=7</text><rect x="139.5" y="136.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="172.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l m row" data-at="54.80" data-out="62.57" data-anim="rise" style="left:150px;top:800px;font-size:40px"><span>\(18 \cdot 5 + 14 \cdot 7 = 90 + 98 = 188 \;\checkmark\)</span></div>
+<div class="l graf" data-at="49.03" data-out="62.57" data-anim="fade" style="left:1000px;top:180px"><svg width="820" height="700" viewBox="0 0 820 700"><line x1="722.7" y1="0" x2="722.7" y2="700" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="331.8" y1="0" x2="331.8" y2="700" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="236.0" x2="820" y2="236.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="128.7" x2="820" y2="128.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="611.5" x2="820" y2="611.5" stroke="#1c1a17" stroke-width="3"/><line x1="52.7" y1="700" x2="52.7" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="820.0,611.5 802.0,602.5 802.0,620.5" fill="#1c1a17"/><polygon points="52.7,0 43.7,18 61.7,18" fill="#1c1a17"/><line x1="722.7" y1="604.5" x2="722.7" y2="618.5" stroke="#1c1a17" stroke-width="2.5"/><text x="722.7" y="643.5" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">12</text><line x1="331.8" y1="604.5" x2="331.8" y2="618.5" stroke="#1c1a17" stroke-width="2.5"/><text x="331.8" y="643.5" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">5</text><line x1="45.7" y1="236.0" x2="59.7" y2="236.0" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="244.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">14</text><line x1="45.7" y1="128.7" x2="59.7" y2="128.7" stroke="#1c1a17" stroke-width="2.5"/><text x="39.7" y="136.7" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">18</text><polygon points="52.7,611.5 331.8,611.5 331.8,128.7 52.7,128.7" fill="#1a4f8a" fill-opacity="0.3" stroke="none"/><polygon points="331.8,611.5 722.7,611.5 722.7,236.0 331.8,236.0" fill="#b85c00" fill-opacity="0.3" stroke="none"/><g class="zt" data-ein="49.03"><line x1="52.7" y1="85.8" x2="722.7" y2="85.8" stroke="#1f6b3a" stroke-width="4" stroke-linecap="round" /></g><text x="192.2" y="654.4" font-size="34" font-weight="600" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x</text><text x="527.2" y="654.4" font-size="34" font-weight="600" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">y</text><g class="zt" data-ein="49.03"><text x="192.2" y="370.1" font-size="34" font-weight="600" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">18 · x</text></g><g class="zt" data-ein="49.03"><text x="527.2" y="423.8" font-size="34" font-weight="600" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">14 · y</text></g><g class="zt" data-ein="49.03"><text x="387.7" y="61.6" font-size="32" font-weight="600" fill="#1f6b3a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">x + y = 12</text></g><text x="812.0" y="595.5" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke" text-anchor="end">Fahrten</text><text x="66.7" y="26" font-size="26" font-style="italic" fill="#1c1a17" stroke="#f8f6f1" stroke-width="10" paint-order="stroke">t pro Fahrt</text></svg></div>
+<div class="l hand mitte" data-at="62.62" data-out="75.19" data-anim="rise" style="left:150px;top:250px;font-size:66px;font-weight:600;color:var(--tinte)">Ein Set zählt doppelt</div>
+<div class="l m" data-at="64.32" data-out="75.19" data-anim="rise" style="left:150px;top:380px;font-size:40px">\(x\): einzelne Stöcke, \(y\): einzelne Brillen, \(\fc{z}\): Sets</div>
+<div class="l m row" data-at="67.48" data-out="75.19" data-anim="rise" style="left:150px;top:470px;font-size:46px"><span>\(\begin{cases} x + \fc{z} = 21 &amp; \text{(Stöcke)} \\ y + \fc{z} = 17 &amp; \text{(Brillen)} \end{cases}\)</span></div>
+<div class="l hand" data-at="70.92" data-out="75.19" data-anim="rise" style="left:150px;top:660px;font-size:42px;color:var(--rot)">eine Stückbilanz pro Artikel</div>
+<div class="l m row" data-at="78.46" data-out="88.94" data-anim="rise" style="left:150px;top:300px;font-size:46px"><span>\(18 \cdot x + 14 \cdot (12 - x) = 190 \;\Rightarrow\; 4 \cdot x = 22\)</span></div>
+<div class="l m row" data-at="80.52" data-out="88.94" data-anim="rise" style="left:150px;top:400px;font-size:46px"><span>\(x = 5.5 \quad \fd{\text{keine ganze Zahl}}\)</span></div>
+<div class="l hand" data-at="83.28" data-out="88.94" data-anim="rise" style="left:150px;top:530px;font-size:42px;color:var(--rot)">Die Probe am Text entscheidet: nicht möglich.</div>
+<div class="l hand mitte" data-at="88.99" data-out="101.98" data-anim="rise" style="left:150px;top:250px;font-size:66px;font-weight:600;color:var(--tinte)">Wann quadratisch?</div>
+<div class="l m row" data-at="95.48" data-out="101.98" data-anim="rise" style="left:150px;top:400px;font-size:44px"><span>\(\fa{\text{Anzahl}} \cdot \fb{\text{Betrag pro Person}} = \text{Kosten}\)</span></div>
+<div class="l hand" data-at="97.98" data-out="101.98" data-anim="rise" style="left:150px;top:520px;font-size:44px;color:var(--rot)">beide unbekannt: Produkt, quadratisch</div>
+<div class="l hand mitte" data-at="102.03" data-out="113.40" data-anim="rise" style="left:150px;top:250px;font-size:76px;font-weight:600;color:var(--tinte)">Zum Mitnehmen</div>
+<div class="l m row" data-at="103.18" data-out="113.40" data-anim="rise" style="left:150px;top:390px;font-size:50px"><span>\(x + y = N \qquad a \cdot x + b \cdot y = W\)</span></div>
+<div class="l hand" data-at="107.40" data-out="113.40" data-anim="rise" style="left:150px;top:500px;font-size:46px;color:var(--blau)">Set: in beiden Stückbilanzen<br>Stückzahlen ganz, nicht negativ</div>
+<div class="l hand mitte" data-at="113.45" data-out="119.56" data-anim="rise" style="left:150px;top:300px;font-size:86px;font-weight:600;color:var(--tinte)">Jetzt du</div>
+<div class="l hand" data-at="114.00" data-out="119.56" data-anim="rise" style="left:150px;top:450px;font-size:50px;color:var(--blau)">Erkunde diese Zusammenhänge<br>in der Animation unter dem Clip<br>und löse die Aufgaben.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-M-lp-verteilen.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 119.56;
+const SPRECHER = [{"bei": 0.4, "text": "Ein Kieswerk liefert mit zwei Lastwagen Kies. Lastwagen A lädt pro Fahrt achtzehn Tonnen, Lastwagen B vierzehn Tonnen, beide immer voll. In zwölf Fahrten werden hundertachtundachtzig Tonnen geliefert. Wie viele Fahrten hat jeder gemacht?"}, {"bei": 15.24, "text": "Unbekannt sind die Anzahlen: x Fahrten von Lastwagen A, y Fahrten von Lastwagen B. Anzahlen sind ganze Zahlen und nicht negativ."}, {"bei": 24.97, "text": "Im Bild ist jede Fahrt ein Streifen. Die Breite zählt die Fahrten: x plus y gleich zwölf. Das ist die Stückbilanz."}, {"bei": 35.49, "text": "Jeder Streifen ist so hoch wie die Ladung einer Fahrt. Die Fläche ist Anzahl mal Tonnen pro Fahrt: achtzehn x plus vierzehn y gleich hundertachtundachtzig. Das ist die Wertbilanz."}, {"bei": 49.38, "text": "Beide Gleichungen sind schon geordnet. sys-solv liefert x gleich fünf und y gleich sieben. Probe am Text: neunzig plus achtundneunzig gleich hundertachtundachtzig Tonnen, und fünf plus sieben gleich zwölf Fahrten."}, {"bei": 62.97, "text": "Vorsicht bei Sets. Ein Set Stöcke und Brille enthält zwei Artikel. Es zählt in beiden Stückbilanzen: einmal bei den Stöcken, einmal bei den Brillen. Darum gibt es eine Stückbilanz pro Artikel."}, {"bei": 75.59, "text": "Und wenn das Ergebnis nicht ganz ist? Mit hundertneunzig Tonnen statt hundertachtundachtzig ergibt sich x gleich fünf Komma fünf. Eine halbe Fahrt gibt es nicht: Mit zwölf vollen Fahrten sind hundertneunzig Tonnen nicht möglich."}, {"bei": 89.34, "text": "Sind Anzahl und Wert pro Stück beide unbekannt, etwa die Anzahl Personen und der Betrag pro Person, steht ein Produkt zweier Unbekannter. Dann wird das System quadratisch."}, {"bei": 102.38, "text": "Zum Mitnehmen: Die Stückbilanz zählt die Stücke, die Wertbilanz Anzahl mal Wert pro Stück. Ein Set zählt in jeder Stückbilanz seiner Artikel. Stückzahlen müssen ganz und nicht negativ sein."}, {"bei": 113.8, "text": "Jetzt du: Erkunde diese Zusammenhänge in der Animation unter dem Clip und löse die Aufgaben."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
+  document.addEventListener('keydown', e => {
+    const ziel = e.target && e.target.closest ? e.target : null;
+    if (ziel && ziel.closest('input, select, textarea')) return;
+    if (e.code === 'Space' && ziel && ziel.closest('button, a, summary')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

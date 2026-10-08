@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Ansatz finden: Verteilen mit einer Unbekannten</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;gap:14px;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · Textaufgaben</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>08.10.2026</span></div>
+<div class="l m" data-at="0.05" data-out="13.02" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   <span class="dim">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l hand mitte" data-at="0.05" data-out="13.02" data-anim="rise" style="left:150px;top:300px;font-size:80px;font-weight:600;color:var(--tinte)">Aufgabe 1</div>
+<div class="l hand" data-at="0.40" data-out="13.02" data-anim="rise" style="left:150px;top:420px;font-size:46px;color:var(--blau)">Verteilen</div>
+<div class="l m" data-at="0.05" data-out="13.02" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Für einen Klassenausflug kauft eine Lehrerin<br>24 Billette: für Erwachsene zu 18 CHF, für<br>Jugendliche zu 12 CHF. Zusammen bezahlt sie<br>312 CHF. Wie viele Erwachsenenbillette sind es?</div>
+<div class="l m" data-at="13.07" data-out="20.05" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   <span class="f1">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="13.07" data-out="20.05" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Für einen Klassenausflug kauft eine Lehrerin<br>24 Billette: für Erwachsene zu 18 CHF, für<br>Jugendliche zu 12 CHF. Zusammen bezahlt sie<br>312 CHF. Wie viele Erwachsenenbillette sind es?</div>
+<div class="l m" data-at="13.07" data-out="13.92" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> x: Erwachsenenbillette (Stück), Rest x − 24</div>
+<div class="l m" data-at="13.07" data-out="13.92" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> x: Erwachsenenbillette (Stück), Rest 24 − x</div>
+<div class="l m" data-at="13.07" data-out="13.92" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> x: Preis eines Erwachsenenbilletts</div>
+<div class="l m" data-at="14.10" data-out="20.05" data-anim="rise" style="left:1000px;top:520px;font-size:40px">\(\fa{x}\): Anzahl Erwachsenenbillette</div>
+<div class="l m" data-at="15.68" data-out="20.05" data-anim="rise" style="left:1000px;top:600px;font-size:40px">Jugendbillette: \(24 - x\)</div>
+<div class="l m" data-at="20.10" data-out="32.51" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   <span class="f1">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="20.10" data-out="32.51" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Für einen Klassenausflug kauft eine Lehrerin<br>24 Billette: für Erwachsene zu 18 CHF, für<br>Jugendliche zu 12 CHF. Zusammen bezahlt sie<br>312 CHF. Wie viele Erwachsenenbillette sind es?</div>
+<div class="l m" data-at="20.10" data-out="20.95" data-anim="rise" style="left:1000px;top:540px;font-size:38px"><span class="f2">A</span> \(18 \cdot x + 12 \cdot x = 312\)</div>
+<div class="l m" data-at="20.10" data-out="20.95" data-anim="rise" style="left:1000px;top:624px;font-size:38px"><span class="f2">B</span> \(x + (24 - x) = 312\)</div>
+<div class="l m" data-at="20.10" data-out="20.95" data-anim="rise" style="left:1000px;top:708px;font-size:38px"><span class="f2">C</span> \(18 \cdot x + 12 \cdot (24 - x) = 312\)</div>
+<div class="l m" data-at="20.10" data-out="32.51" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Anzahl Erwachsenenbillette; Rest \(24 - x\)</div>
+<div class="l m row" data-at="21.05" data-out="32.51" data-anim="rise" style="left:1000px;top:520px;font-size:44px"><span>\(18 \cdot x + 12 \cdot (24 - x) = 312\)</span></div>
+<div class="l hand" data-at="28.62" data-out="32.51" data-anim="rise" style="left:1000px;top:610px;font-size:38px;color:var(--blau)">Stückbilanz im Term \(24 - x\)</div>
+<div class="l m" data-at="32.56" data-out="46.90" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   ② Ansatz   <span class="f1">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="32.56" data-out="46.90" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Für einen Klassenausflug kauft eine Lehrerin<br>24 Billette: für Erwachsene zu 18 CHF, für<br>Jugendliche zu 12 CHF. Zusammen bezahlt sie<br>312 CHF. Wie viele Erwachsenenbillette sind es?</div>
+<div class="l m" data-at="32.56" data-out="46.90" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Anzahl Erwachsenenbillette; Rest \(24 - x\)</div>
+<div class="l m row" data-at="32.56" data-out="46.90" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(18 \cdot x + 12 \cdot (24 - x) = 312\)</span></div>
+<div class="l m row" data-at="33.51" data-out="46.90" data-anim="rise" style="left:1000px;top:520px;font-size:42px"><span>\(18 \cdot x + 288 - 12 \cdot x = 312\)</span></div>
+<div class="l m row" data-at="38.98" data-out="46.90" data-anim="rise" style="left:1000px;top:600px;font-size:42px"><span>\(6 \cdot x + 288 = 312 \qquad \fb{\mid -288}\)</span></div>
+<div class="l m row" data-at="43.84" data-out="46.90" data-anim="rise" style="left:1000px;top:680px;font-size:44px"><span>\(6 \cdot x = 24\)</span></div>
+<div class="l m" data-at="46.95" data-out="53.31" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   ② Ansatz   ③ Grundform   <span class="f1">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="46.95" data-out="53.31" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Für einen Klassenausflug kauft eine Lehrerin<br>24 Billette: für Erwachsene zu 18 CHF, für<br>Jugendliche zu 12 CHF. Zusammen bezahlt sie<br>312 CHF. Wie viele Erwachsenenbillette sind es?</div>
+<div class="l m" data-at="46.95" data-out="47.80" data-anim="rise" style="left:1000px;top:540px;font-size:38px"><span class="f2">A</span> quadratisch: poly-solv</div>
+<div class="l m" data-at="46.95" data-out="47.80" data-anim="rise" style="left:1000px;top:624px;font-size:38px"><span class="f2">B</span> linear: x = 24 : 6 = 4</div>
+<div class="l m" data-at="46.95" data-out="47.80" data-anim="rise" style="left:1000px;top:708px;font-size:38px"><span class="f2">C</span> linear: x = 24 · 6 = 144</div>
+<div class="l m" data-at="46.95" data-out="53.31" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Anzahl Erwachsenenbillette; Rest \(24 - x\)</div>
+<div class="l m row" data-at="46.95" data-out="53.31" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(6 \cdot x = 24\)</span></div>
+<div class="l hand" data-at="49.04" data-out="53.31" data-anim="rise" style="left:1000px;top:520px;font-size:40px;color:var(--blau)">linear: von Hand lösen</div>
+<div class="l m row" data-at="50.44" data-out="53.31" data-anim="rise" style="left:1000px;top:610px;font-size:48px"><span>\(x = 24 : 6 = \fc{4}\)</span></div>
+<div class="l m" data-at="53.36" data-out="65.59" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 1   ① Deklaration   ② Ansatz   ③ Grundform   ④ Lösen   <span class="f1">⑤ Antwort</span></div>
+<div class="l m" data-at="53.36" data-out="65.59" data-anim="rise" style="left:1000px;top:200px;font-size:36px">Für einen Klassenausflug kauft eine Lehrerin<br>24 Billette: für Erwachsene zu 18 CHF, für<br>Jugendliche zu 12 CHF. Zusammen bezahlt sie<br>312 CHF. Wie viele Erwachsenenbillette sind es?</div>
+<div class="l m" data-at="53.36" data-out="54.21" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> Es sind 4 Franken.</div>
+<div class="l m" data-at="53.36" data-out="54.21" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> Es sind 20 Erwachsenenbillette.</div>
+<div class="l m" data-at="53.36" data-out="54.21" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> Es sind 4 Erwachsenenbillette.</div>
+<div class="l m" data-at="53.36" data-out="65.59" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{x}\): Anzahl Erwachsenenbillette; Rest \(24 - x\)</div>
+<div class="l m row" data-at="53.36" data-out="65.59" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(x = 4\)</span></div>
+<div class="l m" data-at="54.92" data-out="65.59" data-anim="rise" style="left:1000px;top:520px;font-size:40px">\(\fc{4}\) Erwachsenenbillette, \(20\) Jugendbillette</div>
+<div class="l m row" data-at="56.96" data-out="65.59" data-anim="rise" style="left:1000px;top:610px;font-size:40px"><span>\(4 \cdot 18 + 20 \cdot 12 = 72 + 240 = 312 \;\checkmark\)</span></div>
+<div class="l m" data-at="65.64" data-out="75.64" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   <span class="dim">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l hand mitte" data-at="65.64" data-out="75.64" data-anim="rise" style="left:150px;top:300px;font-size:80px;font-weight:600;color:var(--tinte)">Aufgabe 2</div>
+<div class="l hand" data-at="65.99" data-out="75.64" data-anim="rise" style="left:150px;top:420px;font-size:46px;color:var(--blau)">Verteilen</div>
+<div class="l m" data-at="65.64" data-out="75.64" data-anim="rise" style="left:1000px;top:200px;font-size:36px">In einem Saal stehen 216 Stühle in Reihen<br>mit gleich vielen Stühlen. Jede Reihe hat<br>6 Stühle mehr, als es Reihen gibt.<br>Wie viele Reihen sind es?</div>
+<div class="l m" data-at="75.69" data-out="80.89" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   <span class="f1">① Deklaration</span>   <span class="dim">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="75.69" data-out="80.89" data-anim="rise" style="left:1000px;top:200px;font-size:36px">In einem Saal stehen 216 Stühle in Reihen<br>mit gleich vielen Stühlen. Jede Reihe hat<br>6 Stühle mehr, als es Reihen gibt.<br>Wie viele Reihen sind es?</div>
+<div class="l m" data-at="75.69" data-out="76.54" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> r: Anzahl Reihen; pro Reihe 6·r Stühle</div>
+<div class="l m" data-at="75.69" data-out="76.54" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> r: Anzahl Stühle</div>
+<div class="l m" data-at="75.69" data-out="76.54" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> r: Anzahl Reihen; pro Reihe r + 6 Stühle</div>
+<div class="l m" data-at="76.64" data-out="80.89" data-anim="rise" style="left:1000px;top:520px;font-size:40px">\(\fa{r}\): Anzahl Reihen</div>
+<div class="l m" data-at="77.18" data-out="80.89" data-anim="rise" style="left:1000px;top:600px;font-size:40px">Stühle pro Reihe: \(r + 6\)</div>
+<div class="l m" data-at="80.94" data-out="92.28" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   <span class="f1">② Ansatz</span>   <span class="dim">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="80.94" data-out="92.28" data-anim="rise" style="left:1000px;top:200px;font-size:36px">In einem Saal stehen 216 Stühle in Reihen<br>mit gleich vielen Stühlen. Jede Reihe hat<br>6 Stühle mehr, als es Reihen gibt.<br>Wie viele Reihen sind es?</div>
+<div class="l m" data-at="80.94" data-out="92.28" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{r}\): Anzahl Reihen; Stühle pro Reihe \(r + 6\)</div>
+<div class="l m row" data-at="81.89" data-out="92.28" data-anim="rise" style="left:1000px;top:520px;font-size:48px"><span>\(r \cdot (r + 6) = 216\)</span></div>
+<div class="l hand" data-at="88.76" data-out="92.28" data-anim="rise" style="left:1000px;top:610px;font-size:38px;color:var(--rot)">r in beiden Faktoren: quadratisch</div>
+<div class="l m" data-at="92.33" data-out="108.41" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   ② Ansatz   <span class="f1">③ Grundform</span>   <span class="dim">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="92.33" data-out="108.41" data-anim="rise" style="left:1000px;top:200px;font-size:36px">In einem Saal stehen 216 Stühle in Reihen<br>mit gleich vielen Stühlen. Jede Reihe hat<br>6 Stühle mehr, als es Reihen gibt.<br>Wie viele Reihen sind es?</div>
+<div class="l m" data-at="92.33" data-out="93.18" data-anim="rise" style="left:1000px;top:540px;font-size:38px"><span class="f2">A</span> \(a = 2, b = 6, c = -216\)</div>
+<div class="l m" data-at="92.33" data-out="93.18" data-anim="rise" style="left:1000px;top:624px;font-size:38px"><span class="f2">B</span> \(a = 1, b = 6, c = -216\)</div>
+<div class="l m" data-at="92.33" data-out="93.18" data-anim="rise" style="left:1000px;top:708px;font-size:38px"><span class="f2">C</span> \(a = 1, b = 6, c = 216\)</div>
+<div class="l m" data-at="92.33" data-out="108.41" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{r}\): Anzahl Reihen; Stühle pro Reihe \(r + 6\)</div>
+<div class="l m row" data-at="92.33" data-out="108.41" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(r \cdot (r + 6) = 216\)</span></div>
+<div class="l m row" data-at="93.28" data-out="108.41" data-anim="rise" style="left:1000px;top:520px;font-size:44px"><span>\(r^2 + 6 \cdot r = 216\)</span></div>
+<div class="l m row" data-at="96.74" data-out="108.41" data-anim="rise" style="left:1000px;top:610px;font-size:46px"><span>\(r^2 + 6 \cdot r - 216 = 0\)</span></div>
+<div class="l graf" data-at="102.72" data-out="108.41" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">POLY SOLVER</text><text x="30.0" y="116.7" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">1:ax²+bx+c=0</text><text x="30.0" y="169.9" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">2:ax³+bx²+cx+d=0</text><rect x="115.5" y="217.6" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="157.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="207.5" y="217.6" width="197.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="306.0" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >poly-solv</text></svg></div>
+<div class="l graf" data-at="104.02" data-out="108.41" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">a=1</text><rect x="165.0" y="217.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="225.5" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="295.0" y="217.6" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="325.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >1</text></svg></div>
+<div class="l graf" data-at="105.32" data-out="108.41" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">b=6</text><rect x="165.0" y="217.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="225.5" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="295.0" y="217.6" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="325.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >6</text></svg></div>
+<div class="l graf" data-at="106.62" data-out="108.41" data-anim="fade" style="left:150px;top:640px"><svg width="520" height="279" viewBox="0 0 520 279"><rect x="0" y="0" width="520" height="279" fill="#f8f6f1"/><rect x="0" y="0" width="520" height="206" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="484" height="174" rx="5" fill="#c9d4c4"/><text x="30.0" y="63.5" font-family="monospace" font-size="48.9" fill="#1c1a17" xml:space="preserve">c=⁻216</text><rect x="107.5" y="217.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="168.0" y="253.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="237.5" y="217.6" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="279.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">(−)</text><rect x="329.5" y="217.6" width="83.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="371.0" y="253.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >216</text></svg></div>
+<div class="l m" data-at="108.46" data-out="116.10" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   ② Ansatz   ③ Grundform   <span class="f1">④ Lösen</span>   <span class="dim">⑤ Antwort</span></div>
+<div class="l m" data-at="108.46" data-out="116.10" data-anim="rise" style="left:1000px;top:200px;font-size:36px">In einem Saal stehen 216 Stühle in Reihen<br>mit gleich vielen Stühlen. Jede Reihe hat<br>6 Stühle mehr, als es Reihen gibt.<br>Wie viele Reihen sind es?</div>
+<div class="l m" data-at="108.46" data-out="116.10" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{r}\): Anzahl Reihen; Stühle pro Reihe \(r + 6\)</div>
+<div class="l m row" data-at="108.46" data-out="116.10" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(r^2 + 6 \cdot r - 216 = 0\)</span></div>
+<div class="l graf" data-at="108.46" data-out="116.10" data-anim="fade" style="left:1000px;top:515px"><svg width="400" height="198" viewBox="0 0 400 198"><rect x="0" y="0" width="400" height="198" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="125" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="93" rx="5" fill="#c9d4c4"/><text x="30.0" y="52.7" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">x1=12</text><rect x="139.5" y="136.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="172.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="108.46" data-out="116.10" data-anim="fade" style="left:1420px;top:515px"><svg width="400" height="198" viewBox="0 0 400 198"><rect x="0" y="0" width="400" height="198" fill="#f8f6f1"/><rect x="0" y="0" width="400" height="125" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="364" height="93" rx="5" fill="#c9d4c4"/><text x="30.0" y="52.7" font-family="monospace" font-size="36.1" fill="#1c1a17" xml:space="preserve">x2=⁻18</text><rect x="139.5" y="136.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="200.0" y="172.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l m" data-at="109.78" data-out="116.10" data-anim="rise" style="left:1000px;top:760px;font-size:36px">\(\fd{r = -18}\): keine Anzahl</div>
+<div class="l m row" data-at="112.96" data-out="116.10" data-anim="rise" style="left:1000px;top:850px;font-size:48px"><span>\(r = \fc{12}\)</span></div>
+<div class="l m" data-at="116.15" data-out="125.88" data-anim="rise" style="left:150px;top:140px;font-size:30px">Aufgabe 2   ① Deklaration   ② Ansatz   ③ Grundform   ④ Lösen   <span class="f1">⑤ Antwort</span></div>
+<div class="l m" data-at="116.15" data-out="125.88" data-anim="rise" style="left:1000px;top:200px;font-size:36px">In einem Saal stehen 216 Stühle in Reihen<br>mit gleich vielen Stühlen. Jede Reihe hat<br>6 Stühle mehr, als es Reihen gibt.<br>Wie viele Reihen sind es?</div>
+<div class="l m" data-at="116.15" data-out="117.00" data-anim="rise" style="left:1000px;top:540px;font-size:34px"><span class="f2">A</span> 12 Reihen zu 18 Stühlen: 12 · 18 = 216</div>
+<div class="l m" data-at="116.15" data-out="117.00" data-anim="rise" style="left:1000px;top:624px;font-size:34px"><span class="f2">B</span> \(12^2 + 6  \cdot  12 - 216 = 0\)</div>
+<div class="l m" data-at="116.15" data-out="117.00" data-anim="rise" style="left:1000px;top:708px;font-size:34px"><span class="f2">C</span> \(12 + 18 = 30\)</div>
+<div class="l m" data-at="116.15" data-out="125.88" data-anim="rise" style="left:150px;top:210px;font-size:34px">\(\fa{r}\): Anzahl Reihen; Stühle pro Reihe \(r + 6\)</div>
+<div class="l m row" data-at="116.15" data-out="125.88" data-anim="rise" style="left:150px;top:269px;font-size:40px"><span>\(r = 12\)</span></div>
+<div class="l m row" data-at="117.10" data-out="125.88" data-anim="rise" style="left:1000px;top:520px;font-size:44px"><span>\(12 \cdot 18 = 216 \;\checkmark\)</span></div>
+<div class="l m" data-at="117.10" data-out="125.88" data-anim="rise" style="left:1000px;top:610px;font-size:40px">Es sind \(\fc{12}\) Reihen.</div>
+<div class="l hand mitte" data-at="125.93" data-out="139.34" data-anim="rise" style="left:150px;top:250px;font-size:76px;font-weight:600;color:var(--tinte)">Zum Mitnehmen</div>
+<div class="l hand" data-at="127.08" data-out="139.34" data-anim="rise" style="left:150px;top:390px;font-size:46px;color:var(--blau)">Rest als Term: \(24 - x\)<br>Unbekannte in beiden Faktoren: quadratisch<br>negative Anzahlen verwerfen</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-M-lp-kontrolle-verteilen-1.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 139.34;
+const SPRECHER = [{"bei": 0.4, "text": "Für einen Klassenausflug kauft eine Lehrerin vierundzwanzig Billette: für Erwachsene zu achtzehn Franken, für Jugendliche zu zwölf Franken. Zusammen bezahlt sie dreihundertzwölf Franken. Wie viele Erwachsenenbillette sind es?"}, {"bei": 13.42, "text": "x ist die Anzahl Erwachsenenbillette. Die übrigen vierundzwanzig minus x Billette sind für Jugendliche."}, {"bei": 20.45, "text": "Die Beträge ergeben zusammen dreihundertzwölf Franken: achtzehn mal x plus zwölf mal Klammer vierundzwanzig minus x gleich dreihundertzwölf. Die Stückbilanz steckt schon im Term vierundzwanzig minus x."}, {"bei": 32.91, "text": "Ausmultipliziert: achtzehn x plus zweihundertachtundachtzig minus zwölf x gleich dreihundertzwölf. Zusammengefasst sechs x plus zweihundertachtundachtzig gleich dreihundertzwölf, also sechs x gleich vierundzwanzig."}, {"bei": 47.3, "text": "Eine Unbekannte und kein Quadrat: linear. Durch sechs teilen: x gleich vier."}, {"bei": 53.71, "text": "Es sind vier Erwachsenenbillette und zwanzig Jugendbillette. Probe am Text: vier mal achtzehn plus zwanzig mal zwölf, zweiundsiebzig plus zweihundertvierzig, gibt dreihundertzwölf Franken."}, {"bei": 65.99, "text": "In einem Saal stehen zweihundertsechzehn Stühle in Reihen mit gleich vielen Stühlen. Jede Reihe hat sechs Stühle mehr, als es Reihen gibt. Wie viele Reihen sind es?"}, {"bei": 76.04, "text": "r ist die Anzahl Reihen. Jede Reihe hat sechs Stühle mehr: r plus sechs."}, {"bei": 81.29, "text": "Anzahl Reihen mal Stühle pro Reihe gibt alle Stühle: r mal Klammer r plus sechs gleich zweihundertsechzehn. Die Unbekannte steht in beiden Faktoren: Die Gleichung ist quadratisch."}, {"bei": 92.68, "text": "Ausmultipliziert: r Quadrat plus sechs r gleich zweihundertsechzehn. Minus zweihundertsechzehn: r Quadrat plus sechs r minus zweihundertsechzehn gleich null. Für poly-solv: a gleich eins, b gleich sechs, c gleich minus zweihundertsechzehn."}, {"bei": 108.81, "text": "Eine Anzahl ist nie negativ, minus achtzehn fällt weg. Es sind zwölf Reihen mit je achtzehn Stühlen."}, {"bei": 116.5, "text": "Probe am Text: zwölf Reihen, jede mit sechs Stühlen mehr, also achtzehn. Zwölf mal achtzehn gibt zweihundertsechzehn Stühle. Es sind zwölf Reihen."}, {"bei": 126.28, "text": "Zum Mitnehmen: Mit einer Unbekannten steckt die Stückbilanz im Term, etwa vierundzwanzig minus x. Steht die Unbekannte in beiden Faktoren von Anzahl mal Wert pro Stück, wird die Gleichung quadratisch. Negative Anzahlen fallen weg."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
+}
+const FRAGEN = [{"typ": "wahl", "kopf": "Schritt ① Deklaration", "text": "Mit einer Unbekannten: Was ist x, was der Rest?", "optionen": ["A", "B", "C"], "richtig": 1, "rueck": {"0": "Bei x = 4 wäre der Rest negativ. Wie viele Billette bleiben?", "2": "Der Preis ist gegeben: 18 CHF."}, "t": 13.32, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f0-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f0-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-verteilen-1-f0-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ② Ansatz", "text": "Welche Wertbilanz stimmt?", "optionen": ["A", "B", "C"], "richtig": 2, "rueck": {"0": "Wie viele Jugendbillette sind es: auch x?", "1": "Hier werden Stück gezählt, rechts stehen aber Franken."}, "t": 20.35, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f1-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f1-r0.mp3", "r1": "ton/g2-M-lp-kontrolle-verteilen-1-f1-r1.mp3"}}, {"typ": "wahl", "text": "Ausmultipliziert und zusammengefasst: Was bleibt?", "optionen": ["6·x = 312", "6·x = 24", "30·x = 24"], "richtig": 1, "rueck": {"2": "Das Minus vor 12·x: 18·x − 12·x = ?", "0": "Was ist mit 12 · 24 = 288 passiert?"}, "kopf": "Schritt ③ Grundform", "t": 32.81, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f2-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f2-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-verteilen-1-f2-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ④ Lösen", "text": "Welcher Typ, und was ergibt sich für x?", "optionen": ["A", "B", "C"], "richtig": 1, "rueck": {"0": "Kommt x im Quadrat vor?", "2": "144 Billette bei 24 insgesamt?"}, "t": 47.2, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f3-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f3-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-verteilen-1-f3-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ⑤ Antwort", "text": "Wie lautet der Antwortsatz?", "optionen": ["A", "B", "C"], "richtig": 2, "rueck": {"0": "x zählt Billette, nicht Franken.", "1": "20 ist der Rest: 24 − x."}, "t": 53.61, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f4-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f4-r0.mp3", "r1": "ton/g2-M-lp-kontrolle-verteilen-1-f4-r1.mp3"}}, {"typ": "wahl", "kopf": "Schritt ① Deklaration", "text": "Welche Deklaration passt zum Text?", "optionen": ["A", "B", "C"], "richtig": 2, "rueck": {"0": "«6 mehr» heisst plus 6, nicht 6-mal so viele.", "1": "Die Anzahl Stühle ist gegeben: 216."}, "t": 75.94, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f5-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f5-r0.mp3", "r1": "ton/g2-M-lp-kontrolle-verteilen-1-f5-r1.mp3"}}, {"typ": "wahl", "text": "Welche Gleichung gibt die Anzahl Stühle?", "optionen": ["r + (r + 6) = 216", "r·6 = 216", "r·(r + 6) = 216"], "richtig": 2, "rueck": {"0": "Reihen mal Stühle pro Reihe gibt alle Stühle, nicht die Summe.", "1": "Stühle pro Reihe sind r + 6, nicht 6."}, "kopf": "Schritt ② Ansatz", "t": 81.19, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f6-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f6-r0.mp3", "r1": "ton/g2-M-lp-kontrolle-verteilen-1-f6-r1.mp3"}}, {"typ": "wahl", "kopf": "Schritt ③ Grundform", "text": "In Grundform: Was tippst du in poly-solv ein?", "optionen": ["A", "B", "C"], "richtig": 1, "rueck": {"0": "r · r = r², also a = ?", "2": "Die 216 kommt nach links. Welches Vorzeichen hat sie dort?"}, "t": 92.58, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f7-frage.mp3", "r0": "ton/g2-M-lp-kontrolle-verteilen-1-f7-r0.mp3", "r2": "ton/g2-M-lp-kontrolle-verteilen-1-f7-r2.mp3"}}, {"typ": "wahl", "text": "poly-solv zeigt x1 = 12 und x2 = −18. Wie viele Reihen?", "optionen": ["12 Reihen", "12 oder −18 Reihen", "18 Reihen"], "richtig": 0, "rueck": {"1": "Eine Anzahl Reihen ist nie negativ.", "2": "18 sind die Stühle pro Reihe."}, "kopf": "Schritt ④ Lösen", "t": 108.71, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f8-frage.mp3", "r1": "ton/g2-M-lp-kontrolle-verteilen-1-f8-r1.mp3", "r2": "ton/g2-M-lp-kontrolle-verteilen-1-f8-r2.mp3"}}, {"typ": "wahl", "kopf": "Schritt ⑤ Antwort", "text": "Welche Probe prüft den Text?", "optionen": ["A", "B", "C"], "richtig": 0, "rueck": {"1": "Das prüft die eigene Gleichung, nicht den Text.", "2": "Im Text steht die Anzahl Stühle, keine Summe."}, "t": 116.4, "ton": {"frage": "ton/g2-M-lp-kontrolle-verteilen-1-f9-frage.mp3", "r1": "ton/g2-M-lp-kontrolle-verteilen-1-f9-r1.mp3", "r2": "ton/g2-M-lp-kontrolle-verteilen-1-f9-r2.mp3"}}];
+(() => {
+  if (location.search.includes('render')) return;
+  const pp = document.getElementById('pp');
+  const css = document.createElement('style');
+  css.textContent = `
+    #frage{position:absolute;left:110px;top:560px;width:820px;z-index:50;display:none;
+      background:rgba(255,255,255,.97);border:3px solid var(--f2);border-radius:22px;
+      padding:28px 34px;box-shadow:0 10px 40px rgba(0,0,0,.18);font-family:inherit;color:inherit}
+    #frage .fr-kopf{font-size:26px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--f2);margin-bottom:10px}
+    #frage .fr-text{font-size:38px;line-height:1.3;margin-bottom:22px}
+    #frage .fr-knoepfe{display:flex;flex-wrap:wrap;gap:14px}
+    #frage button{font:inherit;font-size:32px;padding:10px 26px;border-radius:999px;cursor:pointer;
+      border:2.5px solid var(--f2);background:var(--f2w);color:inherit}
+    #frage button.ok{border-color:var(--f3);background:var(--f3w)}
+    #frage button.nein{border-color:var(--f4);background:var(--f4w)}
+    #frage .fr-rueck{font-size:32px;line-height:1.35;margin-top:20px}
+    #frage .fr-weiter{margin-top:20px}
+    #frage .fr-eingabe{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:30px;margin-top:14px;width:100%}
+    #frage .fr-eingabe input{font:inherit;font-size:30px;width:4.2em;padding:4px 10px;border:2.5px solid var(--f2);border-radius:12px}
+    .fr-tippbar, .fr-tippbar svg{pointer-events:auto !important;cursor:crosshair}`;
+  document.head.appendChild(css);
+  const box = document.createElement('div'); box.id = 'frage'; stage.appendChild(box);
+  let letzt = 0, offen = null, tippen = null, stimme = null, sprung = false;
+  // Vorlesen mit derselben Stimme wie der Clip — nur wenn dessen Ton an ist.
+  const hauptton = document.getElementById('ton');
+  const vorlesen = src => {
+    if (stimme) { stimme.pause(); stimme = null; }
+    if (!src || !hauptton || hauptton.muted) return;
+    stimme = new Audio(src); stimme.play().catch(() => {});
+  };
+  const erledigt = new Set();     // beantwortete Fragen
+  const pause = () => { if (pp.textContent === 'Pause') pp.click(); };
+  const weiter = () => { if (pp.textContent === 'Play') pp.click(); };
+  function schliessen() {
+    vorlesen(null);
+    // Fokus zurueck auf Play/Pause — auch wenn er mit dem gesperrten Antwortknopf
+    // schon auf <body> gefallen ist
+    const fo = document.activeElement;
+    if (!fo || fo === document.body || box.contains(fo)) pp.focus({ preventScroll: true });
+    box.style.display = 'none'; box.innerHTML = '';
+    document.querySelectorAll('.fr-marke').forEach(m => m.remove());
+    document.querySelectorAll('.fr-tippbar').forEach(l => l.classList.remove('fr-tippbar'));
+    if (tippen) { stage.removeEventListener('click', tippen); tippen = null; }
+    offen = null;
+  }
+  function antwort(F, ok, text, schl) {
+    const o = offen; erledigt.add(o.i);
+    box.dataset.fertig = '1';
+    vorlesen((F.ton || {})[schl]);
+    if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
+    const r = box.querySelector('.fr-rueck');
+    r.innerHTML = (ok ? '✓ ' : '') + text;
+    r.style.color = ok ? 'var(--f3)' : '';
+    if (ok) {                      // richtig: kurz bestaetigen, dann von selbst weiter
+      setTimeout(() => { if (offen === o) { schliessen(); weiter(); } }, 1300);
+      return;
+    }
+    const w = document.createElement('button'); w.className = 'fr-weiter'; w.textContent = 'Weiter ▶';
+    w.onclick = () => { schliessen(); weiter(); };
+    box.appendChild(w); w.focus();
+  }
+  function zeigen(i, F) {
+    offen = { i, t: F.t }; pause(); delete box.dataset.fertig;
+    box.innerHTML = '<div class="fr-kopf"></div><div class="fr-text"></div>'
+      + '<div class="fr-knoepfe"></div><div class="fr-rueck"></div>';
+    box.querySelector('.fr-kopf').textContent = F.kopf || 'Deine Vorhersage';  // "kopf": z. B. «Dein Vorgehen»
+    box.querySelector('.fr-text').textContent = F.text;
+    const kn = box.querySelector('.fr-knoepfe');
+    if (F.typ === 'wahl') {
+      F.optionen.forEach((o, j) => {
+        const b = document.createElement('button'); b.textContent = o;
+        b.onclick = () => {
+          kn.querySelectorAll('button').forEach(x => x.disabled = true);
+          b.classList.add(j === F.richtig ? 'ok' : 'nein');
+          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'), 'r' + j);
+        };
+        kn.appendChild(b);
+      });
+    } else if (F.typ === 'klick') {
+      const L = [...document.querySelectorAll('.l')].find(l => +l.style.opacity > 0.5 && l.querySelector('[data-fenster]'));
+      if (!L) { schliessen(); weiter(); return; }
+      const svg = L.querySelector('svg'), fe = L.querySelector('[data-fenster]').dataset.fenster.split(',').map(Number);
+      const [x0, x1, y0, y1, b, h, rd] = fe;
+      L.classList.add('fr-tippbar');
+      // Toleranz: eine Zahl (Abstand in Dateneinheiten) oder [dx, dy] je Achse —
+      // Letzteres, wenn die Achsen verschiedene Grössen tragen (s und C).
+      const tol = F.toleranz || 0.5;
+      // Ziel und Fallen sind ein Punkt [x, y] oder eine Strecke [[x1, y1], [x2, y2]] (seit 08.10.2026):
+      // Bei einer Strecke zaehlt ihr naechster Punkt — gerechnet in Toleranz-Einheiten, wenn die Achsen
+      // verschiedene Toleranzen tragen.
+      const tx_ = Array.isArray(tol) ? tol[0] : 1, ty_ = Array.isArray(tol) ? tol[1] : 1;
+      const fuss = (x, y, z) => {
+        if (!Array.isArray(z[0])) return z;
+        const [[ax, ay], [bx, by]] = z, dx = (bx - ax) / tx_, dy = (by - ay) / ty_, l2 = dx * dx + dy * dy;
+        const q = l2 ? Math.max(0, Math.min(1, ((x - ax) / tx_ * dx + (y - ay) / ty_ * dy) / l2)) : 0;
+        return [ax + (bx - ax) * q, ay + (by - ay) * q];
+      };
+      const nah = (x, y, z) => { z = fuss(x, y, z);
+        return Array.isArray(tol) ? Math.abs(x - z[0]) <= tol[0] && Math.abs(y - z[1]) <= tol[1]
+                                  : Math.hypot(x - z[0], y - z[1]) <= tol; };
+      // Wie weit weg, in Toleranzen — liegt ein Tipp in zwei Fallen, gewinnt die naechste (seit 08.10.2026)
+      const weit = (x, y, z) => { z = fuss(x, y, z);
+        return Array.isArray(tol) ? Math.max(Math.abs(x - z[0]) / tol[0], Math.abs(y - z[1]) / tol[1])
+                                  : Math.hypot(x - z[0], y - z[1]) / tol; };
+      const px = (x, y) => [rd + (x - x0) / (x1 - x0) * (b - 2 * rd), h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd)];
+      const mk = (cx, cy, farbe) => { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', 16); c.setAttribute('class', 'fr-marke');
+        c.setAttribute('fill', 'none'); c.setAttribute('stroke', farbe); c.setAttribute('stroke-width', 6); svg.appendChild(c); };
+      const pruefePunkt = (x, y) => {
+        mk(...px(x, y), 'var(--f2)');
+        if (nah(x, y, F.ziel)) return antwort(F, true, F.richtig_text || 'Getroffen.', 'ok');
+        if (Array.isArray(F.ziel[0])) {        // Strecke als Ziel: grün nachgezogen
+          const [a, e] = [px(...F.ziel[0]), px(...F.ziel[1])], l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          l.setAttribute('x1', a[0]); l.setAttribute('y1', a[1]); l.setAttribute('x2', e[0]); l.setAttribute('y2', e[1]);
+          l.setAttribute('class', 'fr-marke'); l.setAttribute('stroke', 'var(--f3)'); l.setAttribute('stroke-width', 14);
+          l.setAttribute('stroke-linecap', 'round'); l.setAttribute('stroke-opacity', '.6'); svg.appendChild(l);
+        } else mk(...px(F.ziel[0], F.ziel[1]), 'var(--f3)');
+        let fk = -1;
+        (F.fallen || []).forEach((f, k) => { if (nah(x, y, f.bei) && (fk < 0 || weit(x, y, f.bei) < weit(x, y, F.fallen[fk].bei))) fk = k; });
+        antwort(F, false, fk >= 0 ? F.fallen[fk].text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'),
+                fk >= 0 ? 'fall' + fk : 'falsch');
+      };
+      // Am Stage horchen, nicht am Layer: unsichtbare spaetere Layer (Deckkraft 0)
+      // liegen obenauf und wuerden den Tipp abfangen.
+      tippen = ev => {
+        if (!offen || box.dataset.fertig || box.contains(ev.target)) return;
+        const r = svg.getBoundingClientRect();
+        if (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom) return;
+        const sx = (ev.clientX - r.left) / r.width * b, sy = (ev.clientY - r.top) / r.height * h;
+        pruefePunkt(x0 + (sx - rd) / (b - 2 * rd) * (x1 - x0), y0 + (h - rd - sy) / (h - 2 * rd) * (y1 - y0));
+      };
+      stage.addEventListener('click', tippen);
+      kn.innerHTML = '<span style="font-size:30px;color:var(--f2)">👉 Tipp ins Bild rechts.</span>';
+      // Ohne Zeigegeraet: dieselbe Antwort als zwei Zahlen ("eingabe": [Name x, Name y])
+      if (F.eingabe) {
+        const f = document.createElement('form'); f.className = 'fr-eingabe';
+        f.innerHTML = '<span>oder eingeben:</span>' + F.eingabe.map((n, k) =>
+          '<label>' + n + ' <input inputmode="decimal" autocomplete="off" data-k="' + k + '"></label>').join('')
+          + '<button type="submit">Prüfen</button>';
+        f.onsubmit = ev => {
+          ev.preventDefault();
+          if (box.dataset.fertig) return;
+          const w = [...f.querySelectorAll('input')].map(i => parseFloat(i.value.replace(',', '.')));
+          if (w.some(isNaN)) { f.querySelector('input').focus(); return; }
+          pruefePunkt(w[0], w[1]);
+        };
+        kn.appendChild(f);
+      }
+    }
+    box.style.display = 'block';
+    // Fokus auf die erste Antwort: Tab, Enter und Leertaste reichen dann
+    const erst = box.querySelector('.fr-knoepfe button, .fr-eingabe input');
+    if (erst) erst.focus({ preventScroll: true });
+    vorlesen((F.ton || {}).frage);
+  }
+  // Spulen wird ausdruecklich erkannt: Pfeiltasten und ein Klick auf die
+  // Zeitleiste setzen ein Zeichen, das das naechste Bild auswertet. Ein
+  // spaetes Bild (langsames Laden, Hintergrund-Tab) ist kein Spulen.
+  // Neustart (R) und ein Sprung vor die erste Frage stellen alle Fragen neu;
+  // nach R laeuft der Clip ab 0 wie beim ersten Abspielen.
+  document.addEventListener('keydown', e => {
+    if (e.target && e.target.closest && e.target.closest('input, select, textarea')) return;
+    if ((e.key || '').toLowerCase() === 'r') { schliessen(); erledigt.clear(); letzt = 0; }
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') sprung = true;
+  });
+  const bar = document.getElementById('bar');
+  bar.addEventListener('click', () => { sprung = true; });
+  // Die Abspielzeit ist im Abspieler lokal; zurueckgestellt wird sie ueber
+  // dessen Zeitleiste.
+  const zurueck = s => {
+    const r = bar.getBoundingClientRect();
+    if (r.width > 0 && bar.onclick) bar.onclick({ currentTarget: bar, clientX: r.left + s / DUR * r.width });
+  };
+  const vorFragen = seek;
+  seek = function (t) {
+    vorFragen(t);
+    if (sprung) {
+      // gespult: eine uebersprungene Frage wird nicht gestellt, eine
+      // beantwortete kommt nicht wieder — ausser zurueck an den Anfang
+      sprung = false;
+      if (FRAGEN.length && t < Math.min(...FRAGEN.map(F => F.t))) { schliessen(); erledigt.clear(); }
+    } else if (!offen && pp.textContent === 'Pause') {
+      // gewoehnliches Abspielen, auch wenn ein Bild weit springt: die erste
+      // ueberschrittene Frage wird gestellt, der Clip geht an ihre Stelle zurueck
+      let i = -1;
+      FRAGEN.forEach((F, j) => {
+        if (!erledigt.has(j) && letzt < F.t && t >= F.t && (i < 0 || F.t < FRAGEN[i].t)) i = j;
+      });
+      if (i >= 0) {
+        zeigen(i, FRAGEN[i]);
+        if (offen && t - offen.t > 0.1) { t = offen.t; zurueck(t); vorFragen(t); }
+      }
+    }
+    if (offen && Math.abs(t - offen.t) > 1.0) schliessen();
+    letzt = t;
+  };
+})();
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
+  document.addEventListener('keydown', e => {
+    const ziel = e.target && e.target.closest ? e.target : null;
+    if (ziel && ziel.closest('input, select, textarea')) return;
+    if (e.code === 'Space' && ziel && ziel.closest('button, a, summary')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

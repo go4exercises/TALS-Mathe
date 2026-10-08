@@ -196,6 +196,13 @@ SEITEN = {
    titel='Leitprogramm Trigonometrische Gleichungen — Einheitskreis, Arkusfunktion, Lösungsmenge',
    beschreibung='Leitprogramm zu den trigonometrischen Gleichungen nach RLP GF 5.5: sin φ = c, cos φ = c und tan φ = c am Einheitskreis sehen, mit der Arkusfunktion und der Symmetrie lösen, alle Lösungen mit der Periode angeben — mit Clips, Simulationen, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Trigonometrische Gleichung', 'Arkusfunktion', 'Einheitskreis', 'Lösungsmenge', 'Leitprogramm']),
+ 'leitprogramme/modellieren.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (Prüfung §15 offen)
+   noindex=True,
+   titel='Leitprogramm Textaufgaben modellieren — Zahlenrätsel, Mischen, Verteilen, Zins',
+   beschreibung='Leitprogramm zum Modellieren von Textaufgaben nach RLP GF 2.1 und 2.3: Zahlenrätsel, Mischen, Verteilen und Zins Schritt für Schritt vom Text über die Deklaration zum Ansatz, in die Grundform und mit dem TI-30X Pro gelöst — mit Clips, Simulationen, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Textaufgabe', 'Modellieren', 'Deklaration', 'Mischungsaufgabe', 'Zinseszins', 'Gleichungssystem', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
