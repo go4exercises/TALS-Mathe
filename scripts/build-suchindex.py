@@ -357,6 +357,12 @@ ZUSATZSEITEN = [
      'Leitprogramm Planimetrie', 'thema'),
     ('leitprogramme/lineare-quadratische-gleichungen.html', '▤',
      'Leitprogramm Lineare und quadratische Gleichungen', 'thema'),
+    ('leitprogramme/trigonometrische-berechnungen.html', '▤',
+     'Leitprogramm Trigonometrische Berechnungen', 'thema'),
+    ('leitprogramme/einheitskreis.html', '▤',
+     'Leitprogramm Einheitskreis', 'thema'),
+    ('leitprogramme/trigonometrische-gleichungen.html', '▤',
+     'Leitprogramm Trigonometrische Gleichungen', 'thema'),
 ]
 
 

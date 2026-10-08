@@ -1152,9 +1152,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
 `HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 08.10.2026: 391 Clips in
-`clips.json` (363:01 min, davon 223 Animationsclips), dazu 151 mit `"probe": true` — 88 Clips der
-sichtbaren Leitprogramme (in `clips.html` in der Spalte «Leitprogramm»), 28 der noch unverlinkten
-Leitprogramme GF 5.3–5.5 und 35 Prüfungsclips.
+`clips.json` (363:01 min, davon 223 Animationsclips), dazu 151 mit `"probe": true` — 116 Clips der
+sichtbaren Leitprogramme (in `clips.html` in der Spalte «Leitprogramm») und 35 Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass

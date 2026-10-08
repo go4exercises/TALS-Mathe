@@ -49,10 +49,11 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt. **Seit dem 06.10.2026 sind dort nur die
-  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — neun
+  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — zwölf
   (`quadratische-funktionen`, `lineare-funktionen`, `potenz-wurzelfunktionen`,
   `polynomfunktionen`, `exp-log-funktionen`, `trigonometrische-funktionen`,
-  `betragsfunktionen`, `planimetrie`, `lineare-quadratische-gleichungen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
+  `betragsfunktionen`, `planimetrie`, `lineare-quadratische-gleichungen`,
+  `trigonometrische-berechnungen`, `einheitskreis`, `trigonometrische-gleichungen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
   `gleichungssysteme`, `uebungspruefung-1`, `trigo2`) bleiben als Dateien bestehen, ihre
   Kärtchen stehen vorübergehend unter «Alte Leitprogramme (werden demnächst ersetzt)»
   am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
@@ -63,8 +64,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     `exp-log-funktionen.html`, `trigonometrische-funktionen.html`, `betragsfunktionen.html`,
     `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`, `lineare-quadratische-gleichungen.html`
     (Umformer statt Regler), `planimetrie.html` (Geometrie-Arbeitsbereich), `trigonometrische-berechnungen.html`,
-    `einheitskreis.html`, `trigonometrische-gleichungen.html` (GF 5.3–5.5, Stand 08.10.2026 geprüft und behoben,
-    noch unverlinkt mit `noindex` bis zur Abnahme))
+    `einheitskreis.html`, `trigonometrische-gleichungen.html` (GF 5.3–5.5, freigeschaltet 08.10.2026))
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
