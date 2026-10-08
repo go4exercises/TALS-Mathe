@@ -371,6 +371,10 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
   python3 scripts/build-clip-fragen-ton.py <clip>   # je Text clips/ton/<clip>-f<i>-<schluessel>.mp3
   python3 scripts/build-clips.py <clip>             # danach: der Clip nimmt nur vorhandene Dateien auf
   ```
+  Einzelne Fragen neu: `--fragen 2,5:r1` spricht alle Töne von Frage 2 und nur `r1` von
+  Frage 5 (Fragen ab 1 wie in der Ausgabe; die Dateien zählen ab 0, also `-f1-*` und
+  `-f4-r1`). Alle anderen Fragetöne bleiben unberührt. Ohne den Schalter löscht das Skript
+  alle Fragetöne des Clips und spricht sie neu.
   Gesprochen wird der Wortlaut aus `sprich`, `rueck_sprich` (je Option), `richtig_sprich`,
   `falsch_sprich` und `fallen[].sprich` — wie beim Sprechertext ausgeschrieben («x minus
   zwei», nicht «x − 2»). Fehlt er, liest die Stimme den angezeigten Text. Welche Texte es
@@ -1219,6 +1223,23 @@ python3 scripts/build-clips.py    <clip>     # baut den Clip mit den neuen Dauer
 ```
 
 Die Reihenfolge ist zwingend: Das erste Skript ändert nur das Drehbuch und legt den Ton ab.
+
+**Nur einzelne Szenen neu (seit 08.10.2026).** Piper klingt bei jedem Lauf etwas anders.
+Nach einer Korrektur an einer Szene sollen die übrigen so bleiben, wie sie abgenommen wurden:
+
+```sh
+python3 scripts/build-clip-ton.py <clip> --szenen 2,5   # Nummern ab 1, wie die Ausgabe zählt
+```
+
+Gesprochen werden nur die Szenen 2 und 5; ihre `dauer` wird neu gemessen. Alle anderen
+Szenen behalten `dauer` und Ton: Das Skript schneidet sie samt Stille aus der bisherigen
+`ton/<clip>.mp3` (Lage nach den Dauern im Drehbuch) und setzt sie an ihren neuen Start.
+Kopfraum 0.95 bekommen nur die neuen Stücke, die alte Spur hat ihn schon — der Pegel bleibt
+gleich. Die übernommenen Szenen werden ein zweites Mal als MP3 kodiert (gemessen rund 3–4 %
+RMS-Abweichung, nicht hörbar). Passt die Spur nicht mehr zum Drehbuch (Länge weicht über
+0.05 s ab, etwa weil eine Szene dazukam oder eine `dauer` von Hand geändert wurde), bricht
+das Skript ab — dann ganz vertonen. **Wer den Text einer Szene ändert, muss sie nennen:**
+Das Skript merkt nicht, dass eine nicht genannte Szene neuen Text hat.
 
 ### Wie es im Clip läuft
 

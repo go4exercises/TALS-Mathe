@@ -13,7 +13,7 @@ LP Trigonometrische Gleichungen (GF 5.5).
 | `seite.js` | fünf Kreisbild-Simulationen mit Aufgabenleiste, 10 Übungstypen, Kreisbilder zu den Aufgaben (`svg.ek-mini[data-ek]`) | wird von `seite.py` eingebunden |
 | `clips.py` | erzeugt die zehn Drehbücher `clips/g5-4-lp-*.json` (Reihe «Einheitskreis sehen») | **ja** — rettet die gemessenen `dauer` |
 | `wortzeiten.py` | misst die Wortzeiten der vertonten Clips mit faster-whisper → `wortzeiten.json` | nach jeder Neuvertonung |
-| `teilton.py` | vertont nur einzelne Szenen (`szenen <clip> "<Szene>"`) oder Fragetöne (`fragen <clip> <i>[:<schl>]`) neu; die übrigen Szenen kommen unverändert aus der bisherigen Tonspur | nach einer Textkorrektur statt `build-clip-ton.py` |
+| `teilton.py` | vertont nur einzelne Szenen (`szenen <clip> "<Szene>"`) oder Fragetöne (`fragen <clip> <i>[:<schl>]`) neu; die übrigen Szenen kommen unverändert aus der bisherigen Tonspur | nach einer Textkorrektur statt `build-clip-ton.py`; seit 08.10.2026 dasselbe mit `build-clip-ton.py <clip> --szenen 2,5` und `build-clip-fragen-ton.py <clip> --fragen 2:r1` (Nummern ab 1) |
 | `zahlen.py` | rechnet jede Zahl der Seite, der Clips und des Gesamttests nach | vor jedem Bau |
 
 Gesamttest und Bewertungspaket: `downloads/leitprogramme/einheitskreis/*.tex`, gebaut mit

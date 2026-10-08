@@ -17,57 +17,30 @@ und §5.5, `scripts/lp/` mit sechs Leitprogrammen, Skill `lp-pruefung`, vier Pr�
 **Abgeräumt am 07.10.2026:** die zwei Einträge vom 06.10.2026 (Leitprogramme-Seite mit Kacheln,
 `clips.html` in drei Spalten) — in Physik umgesetzt (Commit `2641b57`; nachgesehen: `scripts/clips_bibliothek.py`,
 21 Tabellen in `clips.html`, Kachelzeilen in `leitprogramme.html`).
+**Abgeräumt am 08.10.2026:** die zwei Einträge vom 07.10.2026 (`abgleich.py` mit DATEN und Suchtitel der
+Leitprogramme; gemeinsamer `build-clips.py`) — in Physik umgesetzt (Eintrag in `OFFEN`, Quelle Physik, 07.10.2026;
+nachgesehen: `TEXTBREITE_BEGRENZEN` in Physiks `build-clips.py`, Ähnlichkeit 99.8 %).
 Ein erledigter Eintrag wird künftig gelöscht, nicht als «erledigt» markiert.
 Übertrage an geteiltem Werkzeug laufen zusätzlich über die Warteschlange `OFFEN`
 in `scripts/abgleich.py`.
 
 ## Offen
 
-### 07.10.2026 · `abgleich.py` übernehmen (DATEN) · Suchtitel der Leitprogramme
+### 08.10.2026 · Teilvertonung: `--szenen` in `build-clip-ton.py`, `--fragen` in `build-clip-fragen-ton.py`
 
-**Was.** `scripts/abgleich.py` aus Mathe übernehmen: Neu lässt `DATEN` die Seitenlisten (`SEITEN`, `LG_G`,
-`LG_S` in `build-seo.py`; `ZUSATZSEITEN`/`UNVERLINKT` in `build-suchindex.py`) beim Vergleich weg, mit neuen
-Grundlinien 0.898 und 0.963. Sonst ist in Physik dafür nichts zu tun.
-**Befund dazu, nur Physik:** `scripts/build-suchindex.py`, Funktion `seiten_aus_navjs`, trägt jedes
-Leitprogramm mit `'titel': 'Leitprogramm'` ein. Im Physik-`suchindex.js` stehen darum 14 Seiten mit
-`t:"Leitprogramm"` (nachgesehen: dynamik, elektrizitaet, energie, experimente-waerme …), und `suche.js` zeigt
-diesen Titel in jeder Trefferzeile (`sr-q`) — alle Leitprogramme sehen gleich aus. Vorschlag: bei der
-Auto-Erkennung den Titel aus `<title>` (oder `<h1>`) der Seite lesen; Mathe nennt den Namen von Hand
-(«Leitprogramm Quadratische Funktionen»).
-**Warum.** Ohne `DATEN` fällt jede neue Seite als Drift auf; die Warnung stand so dauernd und übertönte echte.
-
-### 07.10.2026 · `build-clips.py`: gemeinsamer Bauer mit TEXTBREITE_BEGRENZEN, Korrekturen und Werkzeug-Erweiterungen
-
-**Was.** Im Zweig `bew-gd` (bewegtes Steigungsdreieck an einer bewegten Geraden) eine Bedingung mehr:
-`sichtbar = Math.abs(dx) > 1e-9 && innen(xa, ya) && innen(xb, yb);` — vorher stand bei dx = 0 ein leeres
-Dreieck mit der Beschriftung «Δx = 0» im Bild, solange es noch nicht wuchs (Mathe: `g3-2-lp-steigungsdreieck`,
-fünf Sekunden «Δx = 0», während «Δx grösser als null» gesagt wird).
-
-**Wo in Physik** (nur gelesen): `scripts/build-clips.py` Z. 1127, gleicher Wortlaut wie vorher in Mathe.
-**Zweite Stelle, gleicher Anlass (07.10.2026):** Einheitskreis beim Tangens (`bew-kk`, Zweig `if (tg)`):
-Liegt P links der y-Achse (2. und 3. Quadrant), lief die Linie vom Mittelpunkt zur Tangente und P hing
-daneben. Neu beginnt sie dort bei P (`const vonP = ok && Math.cos(th) < 0;` und `lin('.kk-radius', vonP ? P[0] : cx,
-vonP ? P[1] : cy, …)`). Physik: gleiche Zeile Z. 1358.
-**Einstellung TEXTBREITE_BEGRENZEN** (Mathe 07.10.2026, beim Übernehmen von Physiks zusammengeführter
-Fassung): Physiks Textbreite (Rand 130 px bei zentrierten Zeilen, `width` aus `breite` bei links gesetzten
-Elementen) gilt nur, wenn die Konstante am Dateianfang `True` ist. **In Physik `True` setzen** — dann ändert
-sich dort nichts. Mathe hat `False`: Mit `True` brachen 62 Textelemente in 56 Mathe-Clips neu um.
-Ausserdem nennen zwei Kommentare zu `clipRahmen` jetzt «physiklib.js bzw. mathlib.js».
-
-**Am einfachsten:** `scripts/build-clips.py` aus Mathe übernehmen und drei Werte zurücksetzen —
-Seitenname «physik.begreifbar.ch» (zweimal), `KARO_OHNE_ACHSEN = False`, `TEXTBREITE_BEGRENZEN = True`;
-das Feld `"werkzeug"` im Index kann bleiben oder raus. Warteschlange `OFFEN`, Quelle Mathe, 07.10.2026.
-
-**Später am 07.10.2026 dazu** (Werkzeug-Erweiterungen, ohne die neuen Felder wirkungslos): `ein`/`aus` an
-jedem Teil eines `graf`, `laeufer` an Kurven (bewegt und fest), zwei Nachkommastellen in Live-Beschriftungen
-wenn der Wert genau zwei hat (**wirkt auch in Physik auf bestehende Beschriftungen**, z. B. 1.25 statt 1.3 —
-dort nach der Übernahme kurz durchsehen), Parabel `normalform` und `achse`, `schnitte` an bewegten Geraden,
-`bewegung` an `figuren`, `grenzen` an bewegten Kurven, Tangensstrecke am Rand abgeschnitten. Doku in
-Mathes HOWTO-clips.md, Abschnitt «Später einblenden, bewegen, mitlaufen». Auch dafür: Datei übernehmen.
-Nachgetragen: `ein`/`aus` an `laeufer` und `dreieck`, Figuren-Bewegung Feld für Feld (ein Fehler, der sie
-springen liess), `farbe` umgeschaltet, gleiche Nachbarbilder zusammengefasst, «Δy» links bei Δx < 0.
-Zweite Runde: `drehung`/`um` an Figuren, Formelkurven mit `parameter` (der Abspieler zeichnet sie; die
-Formel wird über den Python-Syntaxbaum nach JavaScript übersetzt, `formel_js`) samt mitfahrenden `punkte`,
-`betrag_von`, `lage` am Läufer und an `marken`, `ein`/`aus` je mitfahrendem Punkt. **Wirkt auch in Physik auf bestehende Clips:** Läufer liegen über festen
-Punkten, und Beschriftungen mitfahrender Punkte klappen am Bildrand auf die andere Seite (in Mathe
-betraf das keinen bestehenden Clip; in Physik nach der Übernahme kurz durchsehen).
+**Was.** `scripts/build-clip-ton.py <clip> --szenen 2,5` (Nummern ab 1, wie die Ausgabe zählt) spricht nur diese
+Szenen neu und misst ihre `dauer`; die übrigen behalten `dauer` und Ton, ausgeschnitten samt Stille aus der
+bisherigen `clips/ton/<clip>.mp3` nach den Dauern im Drehbuch. Kopfraum 0.95 nur für die neuen Stücke (Piper
+liefert Spitze 1.0, Faktor also gleich). Abbruch, wenn die Spurlänge um mehr als 0.05 s von der Summe der Dauern
+abweicht oder einer nicht genannten Szene `dauer` fehlt. Neu ist `alte_spur()`, alles Übrige hinter `if alt` —
+ohne Schalter byte-gleich. `scripts/build-clip-fragen-ton.py --fragen 2,5:r1` (Fragen ab 1, optional ein
+Schlüssel) löscht und spricht nur die gewählten Fragetöne.
+**Wo.** Physik `scripts/build-clip-ton.py` (KERN, vorher gleich): Mathe-Fassung ganz übernehmen, Grundlinie in
+`abgleich.py` wieder 1.000. Physik `scripts/build-clip-fragen-ton.py` (nicht im Abgleich, weicht nur im Docstring
+ab): Block `--fragen` übernehmen. Dazu die zwei Absätze in HOWTO-clips (Ton → Bauen; Fragen im Clip → Vorlesen).
+**Warum.** Piper klingt bei jedem Lauf anders (gleicher Text 6.86 s gegen 7.28 s); nach einer Textkorrektur
+sollen abgenommene Szenen und Fragetöne bleiben. Bisher nur mit Behelfsskripten.
+**Getestet.** Ohne Schalter: alte und neue Fassung mit festem Piper-Ersatz (`PIPER_CMD`) auf einer Kopie von
+`g5-5-anim-kopplung` — JSON und MP3 byte-gleich. Mit echtem Piper (`--szenen 3`, Satz angehängt): übrige Dauern
+gleich, Spur = Summe der Dauern, 0 Samples Versatz, gleicher Pegel, `sprechzeiten.py` ±0.02 s. `--fragen 2,4:r1`:
+nur die 4 gewählten Dateien neu, 13 unberührt.

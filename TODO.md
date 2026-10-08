@@ -179,7 +179,7 @@ noch ausdrücklich, R setzt Fragen zurück (`FRAGEN_JS`); 4 Clips neu vertont (1
   93.1 % gegen Grundlinie 100 %, drüben liegt also eine neuere Fassung.
 - [–] Physik-Übertrag: steht in `TODO-schwesterprojekt.md` (zwei Einträge vom 02.10.2026),
   wird in einer Physik-Session abgearbeitet.
-- [ ] **Teilvertonung in `build-clip-ton.py`** (Wunsch 08.10.2026): Das Skript vertont immer den ganzen Clip in eine
+- [x] **Teilvertonung in `build-clip-ton.py`** (Wunsch 08.10.2026; erledigt: `--szenen`, dazu `--fragen` in `build-clip-fragen-ton.py`, Übertrag in `TODO-schwesterprojekt.md` und `OFFEN`): Das Skript vertont immer den ganzen Clip in eine
   Spur. Für Korrekturen an einzelnen Szenen entstanden zwei Behelfe — `scripts/lp/einheitskreis/teilton.py` und ein
   gleichartiges Skript im Scratchpad (Themen-Clips g5): geänderte Szenen neu sprechen, die übrigen aus der alten Spur
   schneiden. Als Schalter `--szenen` ins geteilte Werkzeug übernehmen (dann auch `TODO-schwesterprojekt.md`).

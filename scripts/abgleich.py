@@ -137,6 +137,11 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
+    dict(quelle='Mathe', was='build-clip-ton.py: Teilvertonung --szenen (08.10.2026)',
+         wie='Neuer Schalter --szenen 2,5: nur diese Szenen neu sprechen, die uebrigen samt dauer aus der alten '
+             'Spur schneiden; ohne Schalter byte-gleich (mit festem PIPER_CMD getestet). Dazu --fragen in '
+             'build-clip-fragen-ton.py (nicht im Abgleich). Datei ganz uebernehmen, Grundlinie bleibt 1.000. '
+             'Einzelheiten und Tests: TODO-schwesterprojekt.md, Eintrag vom 08.10.2026.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',
