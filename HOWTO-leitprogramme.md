@@ -354,6 +354,10 @@ des Auftraggebers). Drei Arbeitsweisen: Figur verändern (Regler), Hilfslinie an
 eigener Rückmeldung), Grösse berechnen und eingeben. Gefragte Werte erscheinen erst nach der Antwort;
 nichts wird aus Bildschirm-Pixeln abgelesen. Aufbau und Prüfwerkzeug (`.claude/tools/pruef-geo.mjs`):
 `scripts/lp/planimetrie/README.md`.
+Ebenso gebaut: *Trigonometrische Berechnungen* (GF 5.3, Aufgaben mit festen Werten zeigen sie auch neben
+den Reglern, Gesuchtes als «?»; `scripts/lp/trigonometrische-berechnungen/README.md`). *Einheitskreis* und
+*Trigonometrische Gleichungen* (GF 5.4/5.5) arbeiten mit Simulationen am Einheitskreis (Regler für den Winkel in
+ganzen Grad, Toleranz gegen den ungerundeten Zielwinkel); Aufbau in den README ihrer Ordner.
 
 ---
 
