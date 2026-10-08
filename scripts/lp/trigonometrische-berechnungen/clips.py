@@ -306,12 +306,17 @@ clip('kontrolle-seiten', 2, 'Dreiecke berechnen: Kontrollfragen zu Sinus, Cosinu
             titel('Zum Mitnehmen', 250, 76),
             n('Seiten vom Winkel aus benennen|gesucht oben: mal; unten: geteilt', 400, 'blau', 44, ein=1.2)),
      ], [
+         # Ziel (0 | 2.5) auf BC; Toleranz 1.8 deckt BC von y = 0.7 bis 4.3 und bleibt unter dem Abstand zu AB (2.12)
+         # und zu CA (2.5). Die Fallen liegen auf CA und AB (gleiche Toleranz; das Ziel wird zuerst geprüft) und so,
+         # dass kein Klick auf eine Seite die Meldung einer anderen bekommt (nachgezählt: 200 Stellen je Seite).
          klick('Frage 1', 'x liegt bei B. Tipp die Ankathete von x an.', [0, 2.5], 'Getroffen: BC liegt am Winkel x an.',
                [{'bei': [4, 0], 'text': 'Das ist die Gegenkathete: Sie liegt dem Winkel bei B gegenüber.',
                  'sprich': 'Das ist die Gegenkathete. Sie liegt dem Winkel bei B gegenüber.'},
                 {'bei': [4, 2.5], 'text': 'Das ist die Hypotenuse: Sie liegt dem rechten Winkel gegenüber.',
+                 'sprich': 'Das ist die Hypotenuse. Sie liegt dem rechten Winkel gegenüber.'},
+                {'bei': [2.4, 3.5], 'text': 'Das ist die Hypotenuse: Sie liegt dem rechten Winkel gegenüber.',
                  'sprich': 'Das ist die Hypotenuse. Sie liegt dem rechten Winkel gegenüber.'}],
-               FALSCH, sprich='x liegt bei B. Tipp die Ankathete von x an.', falsch_sprich=FALSCH, tol=0.9),
+               FALSCH, sprich='x liegt bei B. Tipp die Ankathete von x an.', falsch_sprich=FALSCH, tol=1.8),
          wahl('Frage 2', 'Welcher Bruch ist cos x?', ['AK : H', 'GK : H', 'GK : AK'], 0,
               {0: 'Ja.', 1: 'Das ist der Sinus. Welche Seite liegt am Winkel an?', 2: 'Das ist der Tangens. Wo kommt die Hypotenuse vor?'},
               sprich='Welcher Bruch ist Cosinus x?',
@@ -324,14 +329,14 @@ clip('kontrolle-seiten', 2, 'Dreiecke berechnen: Kontrollfragen zu Sinus, Cosinu
                             2: 'Die Gegenkathete ist kürzer als die Hypotenuse. Mal oder geteilt?'}),
          wahl('Frage 4', 'x = 25°, GK = 6 cm. Wie lang ist die Hypotenuse?', ['≈ 14.20 cm', '≈ 2.54 cm', '≈ 6.62 cm'], 0,
               {0: 'Ja.', 1: 'Die Hypotenuse ist die längste Seite. Steht H oben oder unten im Bruch?',
-               2: 'Das passt zur Ankathete. Welche Funktion verbindet GK und H?'},
+               2: 'Das wäre richtig, wenn 6 cm die Ankathete wären. Welche Funktion verbindet GK und H?'},
               sprich='x gleich fünfundzwanzig Grad, G K gleich sechs Zentimeter. Wie lang ist die Hypotenuse?',
               rueck_sprich={1: 'Die Hypotenuse ist die längste Seite. Steht H oben oder unten im Bruch?',
-                            2: 'Das passt zur Ankathete. Welche Funktion verbindet G K und H?'}),
-         wahl('Frage 5', 'Ein Dreieck wird bei gleichem x doppelt so gross. Was macht sin x?',
+                            2: 'Das wäre richtig, wenn sechs Zentimeter die Ankathete wären. Welche Funktion verbindet G K und H?'}),
+         wahl('Frage 5', 'Bei gleichem x werden alle Seiten doppelt so lang. Was macht sin x?',
               ['bleibt gleich', 'verdoppelt sich', 'halbiert sich'], 0,
               {0: 'Ja.', 1: 'Auch die Hypotenuse verdoppelt sich. Was macht dann der Bruch?', 2: 'Beide Seiten wachsen. Was macht der Bruch?'},
-              sprich='Ein Dreieck wird bei gleichem x doppelt so gross. Was macht Sinus x?',
+              sprich='Bei gleichem x werden alle Seiten doppelt so lang. Was macht Sinus x?',
               rueck_sprich={1: 'Auch die Hypotenuse verdoppelt sich. Was macht dann der Bruch?', 2: 'Beide Seiten wachsen. Was macht der Bruch?'}),
      ], art='Kontrollclip')
 
@@ -370,7 +375,7 @@ clip('winkel', 3, 'Dreiecke berechnen: den Winkel zurückrechnen',
             'Probe: Tangens zweiundzwanzig Komma sechs zwei Grad gibt wieder rund null Komma vier eins sieben. Der andere spitze '
             'Winkel ist neunzig minus zweiundzwanzig Komma sechs zwei, also siebenundsechzig Komma drei acht Grad.',
             f(r'\tan 22.62^\circ \approx 0.417 \;\checkmark', 300, 50, ein=0.4),
-            f(r'\beta = 90^\circ - 22.62^\circ = \fc{67.38^\circ}', 430, 48, ein=7.7),
+            f(r'90^\circ - x = 90^\circ - 22.62^\circ = \fc{67.38^\circ}', 430, 46, ein=7.7),
             graf(W2, rw_figur(C2, A2, B2, farbe_x=3) + [T(8.9, 0.35, '22.62°', 3, 'end', 28, False)], ein=0.3),
             graf(W2, [WI(B2, C2, A2, 3), T(0.25, 3.4, '67.38°', 3, 'start', 26, False)], ein=7.7, raster=False)),
          sz('Steigung',
@@ -379,7 +384,8 @@ clip('winkel', 3, 'Dreiecke berechnen: den Winkel zurückrechnen',
             f(r'8\,\% = \dfrac{8}{100} = 0.08', 300, 50, ein=3.9),
             f(r'x = \arctan 0.08 \approx \fc{4.57^\circ}', 430, 48, ein=9.8),
             graf(W2, [V([A2s, B2s, C2s]), RW(C2s, 0, 90, px=14), WI(A2s, B2s, C2s, 2, 90), T(6, -0.85, '100 m', 5, 'middle', 28, False),
-                      T(-0.4, 0.5, '8 m', 5, 'end', 28, False), T(4.9, 1.35, 'Höhe : Strecke', 5, 'middle', 26, False)], ein=0.3)),
+                      T(-0.4, 0.5, '8 m', 5, 'end', 28, False), T(4.9, 1.35, 'Höhe : Strecke', 5, 'middle', 26, False),
+                      T(10.4, 0.5, 'x', 2, 'end', 28)], ein=0.3)),
          sz('Merke',
             'Zum Mitnehmen: Verhältnis bilden, dann die Umkehrtaste. Der Rechner gibt den Winkel in Grad, wenn er auf D E G steht. '
             'Und Probe machen.',
@@ -443,7 +449,7 @@ W3 = geo(-3, -3, 26.5)
 D3, AL3 = 15, 52
 H3 = D3 * math.tan(rad(AL3))
 P3, F3, T3 = (0, 0), (D3, 0), (D3, H3)
-BAUM = [S((-3, 0), (21, 0), 5, dicke=3), S(F3, (D3, H3), 5, dicke=7), KR((D3, H3 - 0.4), 1.6, 5, dicke=3)]
+BAUM = [S((-3, 0), (21, 0), 5, dicke=3), S(F3, (D3, H3), 5, dicke=7), KR((D3, H3 - 1.6), 1.6, 5, dicke=3)]
 DREIECK3 = [V([P3, F3, T3], 1, 0.10), RW(F3, 180, 90)]
 # Tiefenwinkel: Turm 12 m hoch bei x = 2, Boot bei x = 18 (nur Bild)
 TT, TB = (2, 12), (18, 0)
@@ -464,7 +470,8 @@ clip('hoehen', 5, 'Dreiecke berechnen: Höhen und Distanzen',
             'Katheten, also Tangens.',
             f(r'\tan 52^\circ = \dfrac{h}{15}', 320, 54, ein=7.5),
             graf(W3, BAUM + DREIECK3 + [S(P3, T3, 2, True, 3), WI(P3, F3, T3, 2, 60), T(3.2, 1.2, 'α', 2)], punkte=[pt(P3)], ein=0.3),
-            graf(W3, [T(7.5, -1.4, 'AK', 2, 'middle', 30), T(16.4, H3 / 2, 'GK = h', 2, 'start', 30)], ein=1.9, raster=False)),
+            # Ton (sprechzeiten.py): «Ankathete» ≈ 3.1 s, «Gegenkathete» ≈ 4.6 s
+            graf(W3, [mit(T(7.5, -1.4, 'AK', 2, 'middle', 30), ein=3.0), mit(T(16.4, H3 / 2, 'GK = h', 2, 'start', 30), ein=4.6)], ein=0.3, raster=False)),
          sz('Rechnen',
             'h gleich fünfzehn mal Tangens zweiundfünfzig Grad, rund neunzehn Komma zwei null Meter.',
             f(r'h = 15 \cdot \tan 52^\circ \approx \fc{19.20\,\mathrm{m}}', 320, 48, ein=0.4),
@@ -479,7 +486,7 @@ clip('hoehen', 5, 'Dreiecke berechnen: Höhen und Distanzen',
             'Misst du mit dem Auge, beginnt das Dreieck auf Augenhöhe. Bei eins Komma sechs Metern kommt diese Höhe dazu: '
             'rund zwanzig Komma acht null Meter.',
             f(r'19.20\,\mathrm{m} + 1.6\,\mathrm{m} \approx \fc{20.80\,\mathrm{m}}', 320, 46, ein=5.9),
-            graf(W3, [S((-3, 0), (21, 0), 5, dicke=3), S(F3, (D3, H3 + 1.6), 5, dicke=7), KR((D3, H3 + 1.2), 1.6, 5, dicke=3),
+            graf(W3, [S((-3, 0), (21, 0), 5, dicke=3), S(F3, (D3, H3 + 1.6), 5, dicke=7), KR((D3, H3), 1.6, 5, dicke=3),
                       S((0, 0), (0, 1.6), 5, dicke=6), V([(0, 1.6), (D3, 1.6), (D3, H3 + 1.6)], 1, 0.10), RW((D3, 1.6), 180, 90),
                       WI((0, 1.6), (D3, 1.6), (D3, H3 + 1.6), 2, 60), T(-0.4, 0.5, '1.6 m', 2, 'end', 26, False)], ein=0.3)),
          sz('Tiefenwinkel',
@@ -538,20 +545,20 @@ clip('kontrolle-hoehen', 6, 'Dreiecke berechnen: Kontrollfragen zu Höhen und Di
             titel('Zum Mitnehmen', 250, 76),
             n('Skizze → Dreieck → Funktion → prüfen', 400, 'blau', 46, ein=1.2)),
      ], [
-         wahl('Frage 1', 'Du stehst 30 m vor einem Turm und siehst die Spitze unter 20°. Welche Rechnung gibt die Höhe?',
+         wahl('Frage 1', 'Du stehst 30 m vor einem Turm und siehst die Spitze unter 20° (Augenhöhe vernachlässigt). Welche Rechnung gibt die Höhe?',
               ['30 · tan 20°', '30 · sin 20°', '30 : tan 20°'], 0,
               {0: 'Ja.', 1: 'sin braucht die Hypotenuse. Ist der Abstand die Hypotenuse?', 2: 'tan 20° = h : 30. Wie stellst du nach h um?'},
-              sprich='Du stehst dreissig Meter vor einem Turm und siehst die Spitze unter zwanzig Grad. Welche Rechnung gibt die Höhe?',
+              sprich='Du stehst dreissig Meter vor einem Turm und siehst die Spitze unter zwanzig Grad. Die Augenhöhe ist vernachlässigt. Welche Rechnung gibt die Höhe?',
               rueck_sprich={1: 'Sinus braucht die Hypotenuse. Ist der Abstand die Hypotenuse?', 2: 'Tangens zwanzig Grad ist h durch dreissig. Wie stellst du nach h um?'}),
          wahl('Frage 2', 'Ohne Rechnen: Abstand 10 m, Höhenwinkel 60°. Der Turm ist …', ['höher als 10 m', 'genau 10 m hoch', 'niedriger als 10 m'], 0,
               {0: 'Ja.', 1: 'Genau 10 m wären es bei 45°. Liegt 60° darüber oder darunter?', 2: 'Bei 45° wären es genau 10 m. Was ändert ein grösserer Winkel?'},
               sprich='Ohne Rechnen: Abstand zehn Meter, Höhenwinkel sechzig Grad. Der Turm ist …',
               rueck_sprich={1: 'Genau zehn Meter wären es bei fünfundvierzig Grad. Liegt sechzig Grad darüber oder darunter?',
                             2: 'Bei fünfundvierzig Grad wären es genau zehn Meter. Was ändert ein grösserer Winkel?'}),
-         wahl('Frage 3', 'Vom Turm aus siehst du ein Boot unter dem Tiefenwinkel 15°. Unter welchem Höhenwinkel sieht man vom Boot die Turmspitze?',
+         wahl('Frage 3', 'Von der Turmspitze aus siehst du ein Boot unter dem Tiefenwinkel 15°. Unter welchem Höhenwinkel sieht man vom Boot die Turmspitze?',
               ['15°', '75°', '165°'], 0,
               {0: 'Ja.', 1: '75° ergänzt auf 90°. Wo liegen die beiden Winkel an den Parallelen?', 2: 'Der Höhenwinkel ist spitz. Vergleiche die Winkel an den beiden Waagrechten.'},
-              sprich='Vom Turm aus siehst du ein Boot unter dem Tiefenwinkel fünfzehn Grad. Unter welchem Höhenwinkel sieht man vom Boot die Turmspitze?',
+              sprich='Von der Turmspitze aus siehst du ein Boot unter dem Tiefenwinkel fünfzehn Grad. Unter welchem Höhenwinkel sieht man vom Boot die Turmspitze?',
               rueck_sprich={1: 'Fünfundsiebzig Grad ergänzt auf neunzig Grad. Wo liegen die beiden Winkel an den Parallelen?',
                             2: 'Der Höhenwinkel ist spitz. Vergleiche die Winkel an den beiden Waagrechten.'}),
          wahl('Frage 4', 'Eine 5 m lange Leiter bildet mit dem Boden 70°. Wie hoch reicht sie?', ['≈ 4.70 m', '≈ 1.71 m', '≈ 13.74 m'], 0,
@@ -622,7 +629,8 @@ clip('sinussatz', 7, 'Dreiecke berechnen: der Sinussatz',
             f(r'\fb{\alpha = 35^\circ}, \ \fb{c = 6}, \ \fb{a = 4.5}', 290, 46, ein=4.2),
             n('SSW: zwei Dreiecke möglich', 410, 'blau', 42, ein=11.6),
             graf(W4s, [S((0, 0), STRAHL, 5, dicke=2.5), S((0, 0), (6, 0), 1, dicke=4), WI((0, 0), (6, 0), STRAHL, 2, 50),
-                       T(1.7, 0.35, '35°', 2, 'start', 26, False), T(3, -0.75, 'c = 6', 5, 'middle', 28, False),
+                       # «35°» dicht am Bogen bei A, nicht unter C₂; c gegeben, also orange
+                       T(0.85, 0.1, '35°', 2, 'start', 24, False), T(3, -0.75, 'c = 6', 2, 'middle', 28, False),
                        T(-0.35, -0.65, 'A', kursiv=False), T(6.3, -0.65, 'B', kursiv=False)], punkte=[pt((0, 0)), pt((6, 0))], ein=0.3),
             graf(W4s, [KR((6, 0), 4.5, 2, gestrichelt=True, dicke=2.5)], ein=8.7, raster=False),
             graf(W4s, [V([(0, 0), (6, 0), C4a], 1, 0.15), V([(0, 0), (6, 0), C4b], 1, 0.06),
@@ -721,6 +729,22 @@ def tri5_bew(t0, t1, al0, al1):
 def wi5_bew(t0, t1, al0, al1):
     k = 12
     return [[round(t0 + (t1 - t0) * i / k, 3), {'bis': round(al0 + (al1 - al0) * (i / k) ** 2 * (3 - 2 * i / k), 2)}] for i in range(k + 1)]
+def a5_bew(t0, t1, al0, al1):
+    """Seite a = BC grün hervorgehoben, läuft mit dem Dreieck mit; dazu ihr Name «a» an der Mitte."""
+    k = 12
+    def C(i):
+        return tri5(al0 + (al1 - al0) * (i / k) ** 2 * (3 - 2 * i / k))[2]
+    def L(i):   # Name «a» neben der Mitte von BC, auf der von A abgewandten Seite (0.7 Einheiten)
+        c = C(i)
+        m, d = ((c[0] + 10) / 2, c[1] / 2), (c[0] - 10, c[1])
+        nx, ny = d[1], -d[0]
+        if nx * m[0] + ny * m[1] < 0:
+            nx, ny = -nx, -ny
+        n_ = math.hypot(nx, ny)
+        return [round(m[0] + 0.7 * nx / n_, 3), round(m[1] + 0.7 * ny / n_ - 0.2, 3)]
+    strecke = mit(S((10, 0), C(0), 3, dicke=8), bewegung=[[round(t0 + (t1 - t0) * i / k, 3), {'bis': r3(C(i))}] for i in range(k + 1)])
+    name = mit(T(L(0)[0], L(0)[1], 'a', 3), bewegung=[[round(t0 + (t1 - t0) * i / k, 3), {'bei': L(i)}] for i in range(k + 1)])
+    return [strecke, name]
 FIG5 = [V(P5), T(-0.45, -0.7, 'A', kursiv=False), T(10.4, -0.7, 'B', kursiv=False), T(P5[2][0], P5[2][1] + 0.45, 'C', kursiv=False)]
 clip('cosinussatz', 9, 'Dreiecke berechnen: Cosinussatz und Fläche',
      'Ohne Paar aus Seite und Gegenwinkel: a² = b² + c² − 2bc · cos α, bei 90° Pythagoras, bei stumpfem Winkel wird a länger; '
@@ -743,15 +767,17 @@ clip('cosinussatz', 9, 'Dreiecke berechnen: Cosinussatz und Fläche',
             f(r'\cos 90^\circ = 0 \;\Rightarrow\; a^2 = b^2 + c^2', 320, 48, ein=2.4),
             n('Korrekturglied @-2bc \\cdot \\cos\\alpha@', 450, 'blau', 42, ein=5.2),
             graf(W5, [mit(V(P5), bewegung=tri5_bew(0.5, 2.4, 55, 90)), T(-0.45, -0.7, 'A', kursiv=False), T(10.4, -0.7, 'B', kursiv=False),
-                      mit(WI((0, 0), (10, 0), P5[2], 2, 44), bewegung=wi5_bew(0.5, 2.4, 55, 90))], ein=0.3),
+                      mit(WI((0, 0), (10, 0), P5[2], 2, 44), bewegung=wi5_bew(0.5, 2.4, 55, 90))] + a5_bew(0.5, 2.4, 55, 90), ein=0.3),
             graf(W5, [RW((0, 0), 0, 90, 2)], ein=2.4, raster=False)),
          sz('Stumpf',
             'Ist Alpha stumpf, ist der Cosinus negativ. Das Korrekturglied wird positiv, und a wird länger als beim rechten Winkel. '
             'Der Rechner kennt den Cosinus auch für stumpfe Winkel.',
             f(r'\alpha \gt 90^\circ: \ \cos\alpha \lt 0', 300, 50, ein=0.4),
-            n('@-2bc \\cdot \\cos\\alpha \\gt 0@: @a@ wird länger', 420, 'blau', 42, ein=2.9),
+            n('@-2bc \\cdot \\cos\\alpha \\gt 0@: @a@ länger als bei @90^\\circ@', 420, 'blau', 42, ein=2.9),
+            n('warum @\\cos\\alpha \\lt 0@: Einheitskreis (5.4)', 540, 'blau', 36, ein=7.4),
             graf(W5, [mit(V(tri5(90)), bewegung=tri5_bew(0.5, 2.6, 90, 125)), T(-0.45, -0.7, 'A', kursiv=False), T(10.4, -0.7, 'B', kursiv=False),
-                      mit(WI((0, 0), (10, 0), tri5(90)[2], 2, 44), bewegung=wi5_bew(0.5, 2.6, 90, 125))], ein=0.3)),
+                      mit(WI((0, 0), (10, 0), tri5(90)[2], 2, 44), bewegung=wi5_bew(0.5, 2.6, 90, 125)),
+                      S((10, 0), tri5(90)[2], 5, True, 3)] + a5_bew(0.5, 2.6, 90, 125), ein=0.3)),
          sz('Vorgelöst',
             'Beispiel: b gleich sieben, c gleich zehn, Alpha fünfundfünfzig Grad. a Quadrat gleich neunundvierzig plus hundert '
             'minus hundertvierzig mal Cosinus fünfundfünfzig Grad, rund achtundsechzig Komma sieben. a ist rund acht Komma zwei '

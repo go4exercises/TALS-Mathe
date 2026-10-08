@@ -167,8 +167,14 @@
     });
     function werte(){
       var w = { bewegt: bewegt };
-      for (var k in regler){ w[k] = +regler[k].value; var sv = regler[k].parentNode.querySelector('.sl-val'); if (sv) sv.textContent = z(w[k]) + (regler[k].dataset.einheit || ''); }
+      for (var k in regler) w[k] = +regler[k].value;
       return w;
+    }
+    /* Anzeige neben den Reglern aus den Werten, die die Figur zeigt (mit `fest`), die gesuchte Grösse als «?» */
+    function anzeigen(w){
+      var verdeckt = (aufgabe && aufgabe.verdeckt) || [];
+      for (var k in regler){ var sv = regler[k].parentNode.querySelector('.sl-val'); if (!sv) continue;
+        sv.textContent = verdeckt.indexOf(k) >= 0 ? '?' : z(w[k]) + (regler[k].dataset.einheit || ''); }
     }
     function meldung(cls, html){ rueck.className = 'g-rueck ' + cls; rueck.innerHTML = html; setzen(rueck); }
     function wahl(kid){
@@ -218,6 +224,7 @@
     function zeichnen(){
       var w = werte(); w.gewaehlt = gewaehlt; w.richtig = richtig;
       if (aufgabe && aufgabe.fest) for (var fk in aufgabe.fest) w[fk] = aufgabe.fest[fk];
+      anzeigen(w);
       F.leeren();
       var text = o.zeichnen(F, w, { aufgabe: aufgabe, wahl: aufgabe && aufgabe.wahl ? wahl : null });
       // Formeln nur neu setzen, wenn sich der Text geändert hat (Regler feuern viele Ereignisse)
@@ -289,7 +296,7 @@
       { text: '\\(x = 40°\\), \\(H = 8\\,\\text{cm}\\). Berechne die Gegenkathete.', setup: function(s){ s.setze({ x: 40, H: 8 }); s.sperre('x', 'H'); },
         lab: { c: 'H = 8 cm', a: '?' }, gegeben: '\\(H = 8\\,\\text{cm}\\)', gesucht: '\\(GK\\)',
         frage: [{ name: 'GK', label: '\\(GK \\approx\\)', einheit: 'cm', soll: 5.14, fehler: [[6.13, 'Das ist die Ankathete. Zur Gegenkathete und der Hypotenuse gehört der Sinus.'], [12.45, 'Die Gegenkathete ist kürzer als die Hypotenuse. Aus \\(\\sin x = \\tfrac{GK}{H}\\) folgt \\(GK = H \\cdot \\sin x\\).'], [5.96, RAD]], tipp: '\\(\\sin x = \\tfrac{GK}{H}\\), also \\(GK = H \\cdot \\sin x\\).' }] },
-      { text: '\\(x = 55°\\), Ankathete \\(AK = 4\\,\\text{cm}\\). Wie lang ist die Hypotenuse?', fest: { x: 55, H: 4 / Math.cos(55 * PI / 180) }, setup: function(s){ s.sperre('x', 'H'); },
+      { text: '\\(x = 55°\\), Ankathete \\(AK = 4\\,\\text{cm}\\). Wie lang ist die Hypotenuse?', fest: { x: 55, H: 4 / Math.cos(55 * PI / 180) }, verdeckt: ['H'], setup: function(s){ s.sperre('x', 'H'); },
         lab: { b: 'AK = 4 cm', c: '?' }, gegeben: '\\(AK = 4\\,\\text{cm}\\)', gesucht: '\\(H\\)',
         frage: [{ name: 'H', label: '\\(H \\approx\\)', einheit: 'cm', soll: 6.97, fehler: [[2.29, 'Die Hypotenuse ist die längste Seite. Aus \\(\\cos x = \\tfrac{AK}{H}\\) folgt \\(H = \\tfrac{AK}{\\cos x}\\) — teilen, nicht multiplizieren.'], [4.88, 'Mit \\(AK\\) und \\(H\\) gehört der Cosinus dazu, nicht der Sinus.'], [180.78, RAD]], tipp: '\\(\\cos x = \\tfrac{AK}{H}\\), nach \\(H\\) umstellen.' }] }
     ]
@@ -336,7 +343,7 @@
       var P = [0, e], Fu = [d, e], T = [d, e + h];
       F.strecke([-3, 0], [23, 0], 'boden');
       F.strecke([d, 0], T, 'baum');
-      F.kreis([d, e + h - 0.2], 1.0, 'krone');
+      F.kreis([d, e + h - 1.0], 1.0, 'krone');
       if (e){ F.strecke([0, 0], P, 'person'); F.strecke([0, e], [d, e], 'hilfe2'); F.text([0, e / 2], '1.6 m', 'mass', -6, 4, 'end'); }
       F.vieleck([P, Fu, T], 'figur');
       F.rechts(Fu, [-1, 0], [0, 1], '');
@@ -365,7 +372,7 @@
       { text: 'Augenhöhe \\(1.6\\,\\text{m}\\), \\(d = 18\\,\\text{m}\\), \\(\\alpha = 40°\\). Wie hoch ist der Baum?', auge: 1.6, setup: function(s){ s.setze({ d: 18, alpha: 40 }); s.sperre('d', 'alpha'); },
         lab: { d: 'd = 18 m', h: '?' }, gegeben: 'Augenhöhe \\(1.6\\,\\text{m}\\), \\(d = 18\\,\\text{m}\\), \\(\\alpha = 40°\\)', gesucht: 'Baumhöhe',
         frage: [{ name: 'h', label: 'Höhe \\(\\approx\\)', einheit: 'm', soll: 16.70, fehler: [[15.1, 'Das ist die Höhe über deinen Augen. Die Augenhöhe kommt dazu.'], [13.5, 'Die Augenhöhe wird addiert: Das Dreieck beginnt auf Augenhöhe, der Baum am Boden.']], tipp: 'Erst \\(18 \\cdot \\tan 40°\\), dann die Augenhöhe.' }] },
-      { text: 'Der Baum ist \\(14\\,\\text{m}\\) hoch, du stehst \\(20\\,\\text{m}\\) entfernt. Unter welchem Höhenwinkel siehst du die Spitze?', fest: { d: 20, alpha: atanG(0.7) }, setup: function(s){ s.sperre('d', 'alpha'); },
+      { text: 'Der Baum ist \\(14\\,\\text{m}\\) hoch, du stehst \\(20\\,\\text{m}\\) entfernt. Unter welchem Höhenwinkel siehst du die Spitze?', fest: { d: 20, alpha: atanG(0.7) }, verdeckt: ['alpha'], setup: function(s){ s.sperre('d', 'alpha'); },
         lab: { d: 'd = 20 m', h: 'h = 14 m' }, gegeben: '\\(h = 14\\,\\text{m}\\), \\(d = 20\\,\\text{m}\\)', gesucht: '\\(\\alpha\\)',
         frage: [{ name: 'a', label: '\\(\\alpha \\approx\\)', einheit: '°', soll: 34.99, tol: 0.011, fehler: [[55.01, 'Vertauscht: \\(\\tan\\alpha = \\tfrac{h}{d}\\), die Höhe steht oben.'], [0.7, 'Das ist \\(\\tan\\alpha\\), noch nicht der Winkel.'], [44.43, 'Der Sinus braucht die Hypotenuse (den Sehstrahl). Mit \\(h\\) und \\(d\\): Tangens.'], [0.61, RAD]], tipp: '\\(\\alpha = \\arctan\\tfrac{h}{d}\\).' }] }
     ]
@@ -412,13 +419,13 @@
       { text: 'Stell \\(a\\) so ein, dass es kein Dreieck gibt.', zeigeH: true, probe: { a: 3 }, ziel: function(w){ return w.a < H4; } },
       { text: 'Stell \\(a\\) so ein, dass es genau ein Dreieck gibt.', zeigeH: true, probe: { a: 7 }, ziel: function(w){ return w.a >= C4; } },
       { text: '\\(a = 5\\): Berechne beide möglichen Winkel \\(\\gamma\\) bei \\(C\\).', setup: function(s){ s.setze({ a: 5 }); s.sperre('a'); }, gesucht: '\\(\\gamma_1\\), \\(\\gamma_2\\)',
-        frage: [{ name: 'g1', label: '\\(\\gamma_1 \\approx\\)', einheit: '° (spitz)', soll: 43.50, tol: 0.011, fehler: [[0.69, 'Das ist \\(\\sin\\gamma\\), noch nicht der Winkel.'], [0.76, RAD], [17.49, 'Sinussatz: \\(\\tfrac{\\sin\\gamma}{c} = \\tfrac{\\sin\\alpha}{a}\\) — die Seite \\(c\\) gehört zu \\(\\gamma\\), die Seite \\(a\\) zu \\(\\alpha\\).']], tipp: '\\(\\sin\\gamma = \\tfrac{c \\cdot \\sin\\alpha}{a}\\).' },
+        frage: [{ name: 'g1', label: '\\(\\gamma_1 \\approx\\)', einheit: '° (spitz)', soll: 43.50, tol: 0.011, fehler: [[0.69, 'Das ist \\(\\sin\\gamma\\), noch nicht der Winkel.'], [-0.54, RAD], [28.55, 'Sinussatz: \\(\\tfrac{\\sin\\gamma}{c} = \\tfrac{\\sin\\alpha}{a}\\) — die Seite \\(c\\) gehört zu \\(\\gamma\\), die Seite \\(a\\) zu \\(\\alpha\\).']], tipp: '\\(\\sin\\gamma = \\tfrac{c \\cdot \\sin\\alpha}{a}\\).' },
                 { name: 'g2', label: '\\(\\gamma_2 \\approx\\)', einheit: '° (stumpf)', soll: 136.50, tol: 0.011, fehler: [[43.5, 'Das ist der spitze Winkel. Der zweite Schnittpunkt gibt den stumpfen: \\(180° - \\gamma_1\\).'], [46.5, 'Nicht \\(90° - \\gamma_1\\): Der stumpfe Winkel mit demselben Sinus ist \\(180° - \\gamma_1\\).']], tipp: '\\(\\gamma_2 = 180° - \\gamma_1\\).' }] },
       { text: '\\(a = 7\\): Berechne \\(\\gamma\\). Warum gibt es nur eine Lösung?', setup: function(s){ s.setze({ a: 7 }); s.sperre('a'); }, gesucht: '\\(\\gamma\\)',
-        frage: [{ name: 'g', label: '\\(\\gamma \\approx\\)', einheit: '°', soll: 29.45, tol: 0.011, fehler: [[150.55, 'Der stumpfe Winkel geht hier nicht: \\(35° + 150.55°\\) wäre mehr als \\(180°\\).'], [0.49, 'Das ist \\(\\sin\\gamma\\), noch nicht der Winkel.'], [0.51, RAD]], tipp: '\\(\\sin\\gamma = \\tfrac{c \\cdot \\sin\\alpha}{a}\\).' }],
+        frage: [{ name: 'g', label: '\\(\\gamma \\approx\\)', einheit: '°', soll: 29.45, tol: 0.011, fehler: [[150.55, 'Der stumpfe Winkel geht hier nicht: \\(35° + 150.55°\\) wäre mehr als \\(180°\\).'], [0.49, 'Das ist \\(\\sin\\gamma\\), noch nicht der Winkel.'], [-0.38, RAD], [42, 'Sinussatz: \\(\\tfrac{\\sin\\gamma}{c} = \\tfrac{\\sin\\alpha}{a}\\) — die Seite \\(c\\) gehört zu \\(\\gamma\\), die Seite \\(a\\) zu \\(\\alpha\\).']], tipp: '\\(\\sin\\gamma = \\tfrac{c \\cdot \\sin\\alpha}{a}\\).' }],
         loesung: 'Der stumpfe Kandidat \\(150.55°\\) hätte mit \\(\\alpha = 35°\\) zusammen mehr als \\(180°\\).' },
       { text: '\\(a = 7\\): Wie lang ist die Seite \\(b = AC\\)?', setup: function(s){ s.setze({ a: 7 }); s.sperre('a'); }, gesucht: '\\(b\\)',
-        frage: [{ name: 'b', label: '\\(b \\approx\\)', einheit: '', soll: 11.01, fehler: [[6, 'Das ist \\(c\\). Zu \\(b\\) gehört der Gegenwinkel \\(\\beta = 180° - \\alpha - \\gamma\\).'], [3.82, 'Seite durch Sinus des Gegenwinkels: \\(\\tfrac{b}{\\sin\\beta} = \\tfrac{a}{\\sin\\alpha}\\), also \\(b = \\tfrac{a \\cdot \\sin\\beta}{\\sin\\alpha}\\).']], tipp: 'Zuerst \\(\\beta = 180° - 35° - \\gamma\\), dann \\(\\tfrac{b}{\\sin\\beta} = \\tfrac{a}{\\sin\\alpha}\\).' }] }
+        frage: [{ name: 'b', label: '\\(b \\approx\\)', einheit: '', soll: 11.01, fehler: [[6, 'Das ist \\(c\\). Zu \\(b\\) gehört der Gegenwinkel \\(\\beta = 180° - \\alpha - \\gamma\\).'], [3.81, 'Falsches Paar: Neben \\(b\\) und \\(\\beta\\) gehört ins Verhältnis ein vollständiges Paar, hier \\(a\\) und \\(\\alpha\\).'], [4.45, 'Seite durch Sinus des Gegenwinkels: \\(\\tfrac{b}{\\sin\\beta} = \\tfrac{a}{\\sin\\alpha}\\), also \\(b = \\tfrac{a \\cdot \\sin\\beta}{\\sin\\alpha}\\).']], tipp: 'Zuerst \\(\\beta = 180° - 35° - \\gamma\\), dann \\(\\tfrac{b}{\\sin\\beta} = \\tfrac{a}{\\sin\\alpha}\\).' }] }
     ]
   });
 
@@ -459,7 +466,7 @@
       { text: '\\(b = 5\\), \\(c = 8\\), \\(\\alpha = 70°\\). Berechne \\(a\\).', setup: function(s){ s.setze({ b: 5, c: 8, alpha: 70 }); s.sperre('b', 'c', 'alpha'); },
         lab: { b: 'b = 5', c: 'c = 8', a: 'a = ?' }, gegeben: '\\(b = 5\\), \\(c = 8\\), \\(\\alpha = 70°\\)', gesucht: '\\(a\\)',
         frage: [{ name: 'a', label: '\\(a \\approx\\)', einheit: '', soll: 7.85, fehler: [[9.43, 'Das ist \\(\\sqrt{b^2 + c^2}\\) — das Korrekturglied \\(-2bc\\cos\\alpha\\) fehlt.'], [10.79, 'Vorzeichen: Das Korrekturglied wird abgezogen, \\(a^2 = b^2 + c^2 - 2bc\\cos\\alpha\\).'], [61.64, 'Das ist \\(a^2\\). Zieh noch die Wurzel.'], [6.19, RAD]], tipp: '\\(a^2 = b^2 + c^2 - 2bc\\cos\\alpha\\), dann die Wurzel.' }] },
-      { text: 'Drei Seiten: \\(a = 8\\), \\(b = 5\\), \\(c = 7\\). Wie gross ist \\(\\alpha\\)?', fest: { b: 5, c: 7, alpha: acosG(1 / 7) }, setup: function(s){ s.sperre('b', 'c', 'alpha'); },
+      { text: 'Drei Seiten: \\(a = 8\\), \\(b = 5\\), \\(c = 7\\). Wie gross ist \\(\\alpha\\)?', fest: { b: 5, c: 7, alpha: acosG(1 / 7) }, verdeckt: ['alpha'], setup: function(s){ s.sperre('b', 'c', 'alpha'); },
         lab: { b: 'b = 5', c: 'c = 7', a: 'a = 8' }, gegeben: '\\(a = 8\\), \\(b = 5\\), \\(c = 7\\)', gesucht: '\\(\\alpha\\)',
         frage: [{ name: 'al', label: '\\(\\alpha \\approx\\)', einheit: '°', soll: 81.79, tol: 0.011, fehler: [[0.14, 'Das ist \\(\\cos\\alpha\\), noch nicht der Winkel.'], [1.43, RAD], [60, 'Das ist der Winkel gegenüber \\(c\\). Für \\(\\alpha\\) steht \\(a^2\\) allein: \\(\\cos\\alpha = \\tfrac{b^2 + c^2 - a^2}{2bc}\\).'], [38.21, 'Das ist der Winkel gegenüber \\(b\\). Für \\(\\alpha\\) steht \\(a^2\\) allein.']], tipp: '\\(\\cos\\alpha = \\tfrac{b^2 + c^2 - a^2}{2bc}\\).' }] },
       { text: '\\(b = 5\\), \\(c = 8\\), \\(\\alpha = 70°\\). Wie gross ist die Fläche?', zeigeH: true, setup: function(s){ s.setze({ b: 5, c: 8, alpha: 70 }); s.sperre('b', 'c', 'alpha'); },
@@ -467,7 +474,7 @@
         frage: [{ name: 'A', label: '\\(A \\approx\\)', einheit: '', soll: 18.79, fehler: [[20, 'Das wäre ein rechter Winkel. Die Höhe ist \\(h = b \\cdot \\sin\\alpha\\), nicht \\(b\\).'], [37.59, 'Das \\(\\tfrac{1}{2}\\) fehlt: \\(A = \\tfrac{b \\cdot c}{2}\\sin\\alpha\\).'], [15.48, RAD], [6.84, 'Die Höhe kommt mit dem Sinus, nicht mit dem Cosinus.']], tipp: '\\(A = \\tfrac{b \\cdot c}{2} \\sin\\alpha\\).' }] },
       { text: '\\(b = 4\\), \\(c = 6\\), \\(\\alpha = 120°\\). Wie lang ist \\(a\\)?', setup: function(s){ s.setze({ b: 4, c: 6, alpha: 120 }); s.sperre('b', 'c', 'alpha'); },
         lab: { b: 'b = 4', c: 'c = 6', a: 'a = ?' }, gegeben: '\\(b = 4\\), \\(c = 6\\), \\(\\alpha = 120°\\)', gesucht: '\\(a\\)',
-        frage: [{ name: 'a', label: '\\(a \\approx\\)', einheit: '', soll: 8.72, fehler: [[5.29, 'Bei einem stumpfen Winkel ist \\(\\cos\\alpha\\) negativ: Minus mal minus gibt plus, \\(a\\) wird länger.'], [7.21, 'Das ist \\(\\sqrt{b^2 + c^2}\\) — das Korrekturglied fehlt.']], tipp: '\\(\\cos 120° = -0.5\\); \\(a^2 = 16 + 36 - 48 \\cdot (-0.5)\\).' }] }
+        frage: [{ name: 'a', label: '\\(a \\approx\\)', einheit: '', soll: 8.72, fehler: [[5.29, 'Bei einem stumpfen Winkel ist \\(\\cos\\alpha\\) negativ: Minus mal minus gibt plus, \\(a\\) wird länger als beim rechten Winkel.'], [7.21, 'Das ist \\(\\sqrt{b^2 + c^2}\\) — das Korrekturglied fehlt.']], tipp: '\\(\\cos 120° = -0.5\\); \\(a^2 = 16 + 36 - 48 \\cdot (-0.5)\\).' }] }
     ]
   });
 
@@ -495,11 +502,14 @@
       // sinussatz: ss|α|β|gegebene Seite|Wert|gesuchte Seite
       'ss|42|71|c|9|a', 'ss|42|71|c|9|b', 'ss|58|75|c|120|b', 'ss|58|75|c|120|a', 'ss|40|65|a|8|b', 'ss|40|65|a|8|c',
       // ssw: sw|α|c|a
-      'sw|35|6|4.5', 'sw|35|6|2.5', 'sw|42|10|8', 'sw|35|6|5', 'sw|35|6|7', 'sw|34|9|6', 'sw|40|10|7',
+      'sw|35|6|4.5', 'sw|35|6|2.5', 'sw|42|10|8', 'sw|42|10|5', 'sw|42|10|12', 'sw|35|6|5', 'sw|35|6|7', 'sw|34|9|6', 'sw|40|10|7',
       // cosinussatz: cs|sws|b|c|α bzw. cs|sss|a|b|c
       'cs|sws|7|10|55', 'cs|sws|5|8|70', 'cs|sws|4|6|120', 'cs|sss|8|5|7', 'cs|sss|7|9|12', 'cs|sws|4.2|3.5|48', 'cs|sws|3|5|60', 'cs|sws|60|85|125',
       // flaeche: fl|p|q|φ
-      'fl|7|10|55', 'fl|5|8|70', 'fl|32|45|110', 'fl|6|4|30', 'fl|60|85|125'
+      'fl|7|10|55', 'fl|5|8|70', 'fl|32|45|110', 'fl|6|4|30', 'fl|60|85|125',
+      // welcher-satz: ws|gegebene Stücke (Seiten, dann Winkel) — Aufgabe 5e (a), (b), (d). Nicht gesperrt: SSS (a, b, c
+      // wie 5e (c), es gibt nur diesen Fall) und b, c, α (Kontrollclip 5, Frage 1) — sonst bliebe für SWS ein einziger Fall.
+      'ws|a|b|gamma', 'ws|c|alpha|beta', 'ws|a|b|beta'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
     function feld(A, f, e, soll, tipp, fehler, tol){
@@ -601,17 +611,19 @@
           var art = zufall(['gk|h', 'ak|h', 'gk|ak']), k = art.split('|');
           var v1, v2, soll;
           if (art === 'gk|ak'){ v1 = zufall([2, 3, 4, 5, 6, 7, 2.5, 4.5]); v2 = zufall([3, 5, 6, 8, 9, 10, 12]); if (v1 === v2) v2 += 1; soll = atanG(v1 / v2); }
-          else { v2 = zufall([5, 6, 8, 9, 10, 12, 7.5]); v1 = r2(v2 * zufall([0.2, 0.3, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85])); soll = art === 'gk|h' ? asinG(v1 / v2) : acosG(v1 / v2); }
+          else { v2 = zufall([5, 6, 8, 9, 10, 12, 7.5]);
+            // Kathete auf halbe Zentimeter, zwischen 20 % und 85 % der Hypotenuse
+            v1 = zufallG(Math.ceil(v2 * 0.2 * 2), Math.floor(v2 * 0.85 * 2)) / 2; soll = art === 'gk|h' ? asinG(v1 / v2) : acosG(v1 / v2); }
           var q = v1 / v2, std = Math.random() < 0.5, text;
           if (std){ var nm = { gk: 'a', ak: 'b', h: 'c' };
             text = 'Rechtwinkliges Dreieck mit \\(\\gamma = 90°\\): \\(' + nm[k[0]] + ' = ' + v1 + '\\,\\text{cm}\\), \\(' + nm[k[1]] + ' = ' + v2 + '\\,\\text{cm}\\). Wie gross ist \\(\\alpha\\)?'; }
           else text = 'Rechtwinkliges Dreieck: ' + NAME[k[0]] + ' von \\(x\\) \\(' + KURZ[k[0]] + ' = ' + v1 + '\\,\\text{cm}\\), ' + NAME[k[1]] + ' \\(' + KURZ[k[1]] + ' = ' + v2 + '\\,\\text{cm}\\). Wie gross ist \\(x\\)?';
           var soll2 = r2(soll), wn = std ? '\\alpha' : 'x';
-          var falsch = [[90 - soll, 'Das ist der andere spitze Winkel. Benenne die Seiten von \\(' + wn + '\\) aus.', 'andere'],
+          var falsch = [[90 - soll, art === 'gk|ak' ? 'Das ist der andere spitze Winkel. Benenne die Seiten von \\(' + wn + '\\) aus.'
+                          : 'Das ist der andere spitze Winkel — er kommt heraus, wenn die Seiten vom falschen Winkel aus benannt sind oder die Umkehrtaste nicht passt. ' + (art === 'gk|h' ? 'Zu Gegenkathete und Hypotenuse gehört der Sinus.' : 'Zu Ankathete und Hypotenuse gehört der Cosinus.'), 'andere'],
                         [q, 'Das ist das Verhältnis, noch nicht der Winkel. Die Umkehrtaste macht daraus den Winkel.', 'Verhältnis'],
                         [soll * PI / 180, RAD, 'Bogenmass']];
           if (art === 'gk|ak'){ falsch.push([asinG(q), 'Mit den zwei Katheten nimmst du den Tangens.', 'Tangens']); falsch.push([1 / tanG(q), '\\(\\tan^{-1}\\) heisst Umkehrung, nicht Kehrwert.', 'Kehrwert']); }
-          else falsch.push([art === 'gk|h' ? acosG(q) : asinG(q), art === 'gk|h' ? 'Zu Gegenkathete und Hypotenuse gehört der Sinus.' : 'Zu Ankathete und Hypotenuse gehört der Cosinus.', 'Funktion']);
           return { k1: k[0], v1: v1, k2: k[1], v2: v2, art: art, soll: soll2, falsch: falsch, text: text, std: std }; },
         fehler: function(A){ return fehlerListe(A, 'w', A.falsch, 0.011); },
         pruefen: function(A, e){ var f = A.falsch.filter(function(x){ return Math.abs(r2(x[0]) - A.soll) > 0.07; });
@@ -624,13 +636,16 @@
         eingabe: function(A){ return { w: String(A.soll) }; },
         neu: function(){
           var art = zufall(['pw', 'wp', 'hl']);
-          if (art === 'pw'){ var p = zufall([5, 6, 7, 9, 10, 14, 15, 18, 20, 22, 30, 45]), s = atanG(p / 100);
+          if (art === 'pw'){ var p = zufall([15, 16, 18, 22, 24, 28, 30, 35, 40, 45]), s = atanG(p / 100);
             return { art: art, p: p, soll: r2(s), einh: '°', tol: 0.011, text: 'Eine Strasse hat \\(' + p + '\\,\\%\\) Steigung. Wie gross ist der Steigungswinkel?',
               falsch: [[atanG(p), '\\(' + p + '\\,\\%\\) heisst \\(\\tfrac{' + p + '}{100}\\) — nicht \\(' + p + '\\).', 'heisst'], [p, 'Prozent sind keine Grad: \\(\\tan x = \\tfrac{' + p + '}{100}\\).', 'Grad'], [asinG(p / 100), 'Die Steigung ist Höhe durch <b>waagrechte</b> Strecke: Tangens.', 'Tangens']] }; }
-          if (art === 'wp'){ var w = zufall([3, 4, 6, 8, 10, 15, 20, 25]);
+          if (art === 'wp'){ var w = zufall([8, 10, 12, 14, 15, 16, 18, 20, 25]);
             return { art: art, w: w, soll: r2(tanG(w) * 100), einh: '%', text: 'Eine Rampe ist um \\(' + w + '°\\) geneigt. Wie viel Prozent Steigung hat sie?',
               falsch: [[tanG(w), 'Das ist die Steigung als Zahl. In Prozent: mal \\(100\\).', 'Prozent'], [sinG(w) * 100, 'Steigung ist Höhe durch waagrechte Strecke: Tangens, nicht Sinus.', 'Tangens'], [Math.tan(w) * 100, RAD, 'Bogenmass']] }; }
           var hh = zufall([12, 18, 24, 30, 45, 60, 75]), l = zufall([2, 2.5, 3, 4, 5, 6]) ;
+          // Bei flachen Rampen geben Sinus und Tangens auf zwei Dezimalen fast denselben Winkel: Der Fehler
+          // «Sinus statt Tangens» wäre unsichtbar. Darum nur Rampen, bei denen er mindestens 0.1° ausmacht.
+          if (Math.abs(r2(asinG(hh / 100 / l)) - r2(atanG(hh / 100 / l))) < 0.1) return TYPEN['steigung'].neu();
           return { art: art, hh: hh, l: l, soll: r2(atanG(hh / 100 / l)), einh: '°', tol: 0.011, text: 'Eine Rampe überwindet \\(' + hh + '\\,\\text{cm}\\) Höhe auf \\(' + String(l).replace('.', '.') + '\\,\\text{m}\\) waagrechter Länge. Wie gross ist ihr Steigungswinkel?',
             falsch: [[atanG(hh / l), 'Einheiten angleichen: \\(' + hh + '\\,\\text{cm} = ' + r2(hh / 100) + '\\,\\text{m}\\).', 'Einheiten'], [atanG(l * 100 / hh), 'Vertauscht: Steigung ist Höhe durch waagrechte Strecke.', 'Vertauscht'], [asinG(hh / 100 / l), 'Die Länge ist waagrecht gemessen, also die Ankathete: Tangens.', 'Tangens']] }; },
         vorbereiten: function(box, A){ var e = box.querySelector('.ue-eingabe'); e.innerHTML = e.innerHTML.replace('{einh}', A.einh === '%' ? '%' : '°'); },
@@ -647,6 +662,9 @@
         neu: function(){
           var art = zufall(['h', 'h', 'e', 'w']), obj = zufall([['eines Baums', 'der Baum'], ['eines Turms', 'der Turm'], ['eines Masts', 'der Mast'], ['eines Gebäudes', 'das Gebäude']]);
           var d = zufall([15, 18, 22, 25, 28, 35, 40, 45, 60]), w = zufall([16, 22, 26, 29, 33, 37, 42, 47, 53]);
+          // Bäume höher als 35 m wären unglaubwürdig: dann ein Turm
+          var hoch = art === 'w' ? 36 : d * tanG(w);
+          if (obj[1] === 'der Baum' && hoch > 35) obj = ['eines Turms', 'der Turm'];
           if (art === 'w'){ var hh = zufall([8, 12, 15, 21, 24, 30, 36]);
             return { art: art, hh: hh, d: d, soll: r2(atanG(hh / d)), einh: '°', tol: 0.011, text: 'Die Spitze ' + obj[0] + ' liegt \\(' + hh + '\\,\\text{m}\\) über deinen Augen, du stehst \\(' + d + '\\,\\text{m}\\) entfernt. Unter welchem Höhenwinkel siehst du sie?',
               falsch: [[atanG(d / hh), 'Vertauscht: \\(\\tan\\alpha = \\tfrac{h}{d}\\), die Höhe steht oben.', 'Vertauscht'], [hh / d, 'Das ist \\(\\tan\\alpha\\), noch nicht der Winkel.', 'Winkel'], [Math.atan(hh / d), RAD, 'Bogenmass']] }; }
@@ -691,7 +709,7 @@
         eingabe: function(A){ return { x: String(A.soll) }; },
         neu: function(){
           var al = zufall([28, 34, 41, 47, 52, 63, 76]), be = zufall([37, 44, 58, 66, 71, 84]);
-          if (al + be > 150 || al === be) return TYPEN['sinussatz'].neu();
+          if (al + be > 150 || al === be || Math.abs(al + be - 90) < 12) return TYPEN['sinussatz'].neu();
           var ga = 180 - al - be, W = { a: al, b: be, c: ga }, geg = zufall(['a', 'b', 'c']), ges = zufall(['a', 'b', 'c'].filter(function(s){ return s !== geg; }));
           var wert = zufall([5, 6, 7.5, 8, 9, 11, 12, 14]), soll = r2(wert * sinG(W[ges]) / sinG(W[geg]));
           var gw = { a: '\\alpha', b: '\\beta', c: '\\gamma' };
@@ -763,35 +781,47 @@
         neu: function(){
           var p = zufall([3, 4, 5, 6, 7.5, 8, 9, 12]), q = zufall([4, 5, 6, 8, 10, 11]), phi = zufall([25, 35, 48, 62, 75, 105, 118, 136, 142]);
           var gn = zufall([['a', 'b', '\\gamma'], ['b', 'c', '\\alpha'], ['a', 'c', '\\beta']]);
-          return { p: p, q: q, phi: phi, soll: r2(p * q / 2 * sinG(phi)), text: 'Dreieck mit \\(' + gn[0] + ' = ' + p + '\\,\\text{cm}\\), \\(' + gn[1] + ' = ' + q + '\\,\\text{cm}\\) und dem Zwischenwinkel \\(' + gn[2] + ' = ' + phi + '°\\). Berechne die Fläche.',
+          return { p: p, q: q, phi: phi, gn: gn, soll: r2(p * q / 2 * sinG(phi)), text: 'Dreieck mit \\(' + gn[0] + ' = ' + p + '\\,\\text{cm}\\), \\(' + gn[1] + ' = ' + q + '\\,\\text{cm}\\) und dem Zwischenwinkel \\(' + gn[2] + ' = ' + phi + '°\\). Berechne die Fläche.',
             falsch: [[p * q / 2, 'Das wäre ein rechter Winkel. Die Höhe ist \\(' + gn[0] + ' \\cdot \\sin ' + gn[2] + '\\), nicht \\(' + gn[0] + '\\).', 'rechter'],
                      [p * q * sinG(phi), 'Das \\(\\tfrac{1}{2}\\) fehlt: Dreieck ist die Hälfte.', 'Hälfte'],
                      [p * q / 2 * cosG(phi), 'Die Höhe kommt mit dem Sinus, nicht mit dem Cosinus.', 'Sinus'],
                      [p * q / 2 * Math.sin(phi), RAD, 'Bogenmass']] }; },
         fehler: function(A){ return fehlerListe(A, 'A', A.falsch); },
         pruefen: function(A, e){ var f = A.falsch.filter(function(x){ return Math.abs(r2(x[0]) - A.soll) > 0.07; });
-          return feld(A, 'A', e, A.soll, '\\(A = \\tfrac{p \\cdot q}{2}\\sin\\varphi\\) mit dem Winkel <b>zwischen</b> den beiden Seiten.', f); },
+          return feld(A, 'A', e, A.soll, '\\(A = \\tfrac{' + A.gn[0] + ' \\cdot ' + A.gn[1] + '}{2}\\sin ' + A.gn[2] + '\\) mit dem Winkel <b>zwischen</b> den beiden Seiten.', f); },
         loesung: function(A){ return 'A = \\tfrac{' + A.p + ' \\cdot ' + A.q + '}{2} \\sin ' + A.phi + '° \\approx ' + A.soll + '\\,\\text{cm}^2'; } },
 
+      /* Welcher Satz? Fall gewürfelt (WWS, WSW, SSW, SWS, SSS) mit zufälliger Rolle der Ecken; der Fall steht erst in
+         der Rückmeldung, nicht in der Aufgabe (er wäre schon die halbe Antwort). */
       'welcher-satz': { felder: ['s'], muster: '{s:Sinussatz|Cosinussatz}',
+        schl: function(A){ return 'ws|' + A.geg.join('|'); },
         eingabe: function(A){ return { s: A.soll }; },
         neu: function(){
-          var faelle = [
-            ['\\(\\alpha\\), \\(\\beta\\) und \\(a\\)', 'Sinussatz', 'WWS', 'Das Paar \\(a\\) und \\(\\alpha\\) ist vollständig.'],
-            ['\\(\\beta\\), \\(\\gamma\\) und \\(a\\)', 'Sinussatz', 'WSW', 'Zuerst \\(\\alpha = 180° - \\beta - \\gamma\\) — dann ist das Paar \\(a\\), \\(\\alpha\\) vollständig.'],
-            ['\\(a\\), \\(b\\) und \\(\\alpha\\)', 'Sinussatz', 'SSW', 'Das Paar \\(a\\) und \\(\\alpha\\) ist vollständig (an die zweite Lösung denken).'],
-            ['\\(b\\), \\(c\\) und \\(\\alpha\\)', 'Cosinussatz', 'SWS', 'Kein Paar: \\(\\alpha\\) liegt zwischen \\(b\\) und \\(c\\), seine Gegenseite \\(a\\) fehlt.'],
-            ['\\(a\\), \\(c\\) und \\(\\beta\\)', 'Cosinussatz', 'SWS', 'Kein Paar: \\(\\beta\\) liegt zwischen \\(a\\) und \\(c\\).'],
-            ['\\(a\\), \\(b\\) und \\(c\\)', 'Cosinussatz', 'SSS', 'Kein Winkel bekannt, also kein Paar.'],
-            ['\\(b\\), \\(c\\) und \\(\\beta\\)', 'Sinussatz', 'SSW', 'Das Paar \\(b\\) und \\(\\beta\\) ist vollständig.'],
-            ['\\(\\alpha\\), \\(\\gamma\\) und \\(b\\)', 'Sinussatz', 'WSW', 'Zuerst \\(\\beta\\) aus der Winkelsumme — dann ist das Paar \\(b\\), \\(\\beta\\) vollständig.']];
-          var f = zufall(faelle);
-          return { soll: f[1], fall: f[2], grund: f[3], text: 'Gegeben sind ' + f[0] + ' (' + f[2] + '). Mit welchem Satz beginnst du?' }; },
+          var S = ['a', 'b', 'c'], W = ['\\alpha', '\\beta', '\\gamma'], p = [0, 1, 2];
+          for (var i = 2; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = p[i]; p[i] = p[j]; p[j] = t; }
+          var fall = zufall(['WWS', 'WSW', 'SSW', 'SWS', 'SWS', 'SSS']), seiten, winkel, soll, grund;
+          var s0 = S[p[0]], s1 = S[p[1]], s2 = S[p[2]], w0 = W[p[0]], w1 = W[p[1]], w2 = W[p[2]];
+          if (fall === 'WWS'){ winkel = [p[0], p[1]]; seiten = [p[0]]; soll = 'Sinussatz';
+            grund = 'Das Paar \\(' + s0 + '\\) und \\(' + w0 + '\\) ist vollständig.'; }
+          else if (fall === 'WSW'){ winkel = [p[0], p[1]]; seiten = [p[2]]; soll = 'Sinussatz';
+            grund = 'Zuerst \\(' + w2 + ' = 180° - ' + w0 + ' - ' + w1 + '\\) — dann ist das Paar \\(' + s2 + '\\), \\(' + w2 + '\\) vollständig.'; }
+          else if (fall === 'SSW'){ seiten = [p[0], p[1]]; winkel = [p[0]]; soll = 'Sinussatz';
+            grund = 'Das Paar \\(' + s0 + '\\) und \\(' + w0 + '\\) ist vollständig (an die zweite Lösung denken).'; }
+          else if (fall === 'SWS'){ seiten = [p[0], p[1]]; winkel = [p[2]]; soll = 'Cosinussatz';
+            grund = 'Kein Paar: \\(' + w2 + '\\) liegt zwischen \\(' + s0 + '\\) und \\(' + s1 + '\\), seine Gegenseite \\(' + s2 + '\\) fehlt.'; }
+          else { seiten = [0, 1, 2]; winkel = []; soll = 'Cosinussatz'; grund = 'Kein Winkel bekannt, also kein Paar.'; }
+          seiten.sort(); winkel.sort();
+          var geg = seiten.map(function(k){ return S[k]; }).concat(winkel.map(function(k){ return W[k]; }));
+          var liste = geg.map(function(g){ return '\\(' + g + '\\)'; });
+          return { soll: soll, fall: fall, grund: grund, geg: geg.map(function(g){ return g.replace('\\', ''); }),
+            text: 'Gegeben sind ' + liste.slice(0, -1).join(', ') + ' und ' + liste[liste.length - 1] + '. Mit welchem Satz beginnst du?' }; },
         fehler: function(A){ return [[{ s: A.soll === 'Sinussatz' ? 'Cosinussatz' : 'Sinussatz' }, null]]; },
+        gut: function(A){ return 'Fall ' + A.fall + ': ' + A.grund; },
         pruefen: function(A, e){
           if (e.s === A.soll) return null;
-          return A.soll === 'Sinussatz' ? 'Suche ein Paar aus einer Seite und ihrem Gegenwinkel. ' + A.grund : 'Gibt es ein vollständiges Paar aus Seite und Gegenwinkel? ' + A.grund; },
-        loesung: function(A){ return '\\text{' + A.soll + '}'; } }
+          return (A.soll === 'Sinussatz' ? 'Suche ein Paar aus einer Seite und ihrem Gegenwinkel. ' : 'Gibt es ein vollständiges Paar aus Seite und Gegenwinkel? ')
+            + 'Fall ' + A.fall + ': ' + A.grund; },
+        loesung: function(A){ return '\\text{' + A.soll + ' (' + A.fall + ')}'; } }
     };
 
     ALLE.forEach(function(box){
@@ -827,7 +857,7 @@
         if (f === null){
           serie = versuche === 1 ? serie + 1 : 0; geloest = true;
           rueck.className = 'ue-rueck richtig';
-          rueck.innerHTML = '✓ Richtig' + (komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + ' <button type="button" class="ue-weiter">Nächste</button>';
+          rueck.innerHTML = '✓ Richtig' + (komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + (T.gut ? '. ' + T.gut(A) : '') + ' <button type="button" class="ue-weiter">Nächste</button>';
           rueck.querySelector('.ue-weiter').addEventListener('click', neu);
         } else {
           serie = 0; rueck.className = 'ue-rueck falsch';

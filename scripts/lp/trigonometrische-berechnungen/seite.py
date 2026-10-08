@@ -37,6 +37,7 @@ kopf = alt[:alt.index('</style>')]
 for marke in ('\n/* ════════ Planimetrie', MARKE_CSS):
     if marke in kopf:
         kopf = kopf[:kopf.index(marke)]
+kopf = kopf.rstrip('\n') + '\n\n'                            # sonst kommt bei jedem Lauf eine Leerzeile dazu
 i = alt.index('<script>\n  window.MathJax')
 j = min(k for k in (alt.find('<script>\n/* Leitprogramm Planimetrie —'), alt.find(MARKE_JS)) if k > 0)
 basis = alt[i:j]
@@ -168,7 +169,7 @@ sim1 = bereich(1, 'Rechtwinkliges Dreieck ABC mit dem Winkel x und der Hypotenus
 fest1 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Sinus, Cosinus und Tangens</div>
-          <p>Im rechtwinkligen Dreieck benennt man die Seiten <b>vom betrachteten Winkel \(x\) aus</b> (\(x \neq 90°\)): Die <b>Hypotenuse</b> \(H\) liegt dem rechten Winkel gegenüber (die längste Seite), die <b>Gegenkathete</b> \(GK\) liegt \(x\) gegenüber, die <b>Ankathete</b> \(AK\) liegt an \(x\) an.</p>
+          <p>Im rechtwinkligen Dreieck benennt man die Seiten <b>vom betrachteten spitzen Winkel \(x\) aus</b>: Die <b>Hypotenuse</b> \(H\) liegt dem rechten Winkel gegenüber (die längste Seite), die <b>Gegenkathete</b> \(GK\) liegt \(x\) gegenüber, die <b>Ankathete</b> \(AK\) liegt an \(x\) an.</p>
           <p>\[ \sin x = \frac{GK}{H} \qquad \cos x = \frac{AK}{H} \qquad \tan x = \frac{GK}{AK} \]</p>
           <p>Alle rechtwinkligen Dreiecke mit demselben Winkel \(x\) sind ähnlich: Die Verhältnisse hängen nur von \(x\) ab, nicht von der Grösse des Dreiecks.</p>
           <p><b>Seite berechnen:</b> Seiten vom Winkel aus benennen → die Funktion wählen, die gegebene und gesuchte Seite verbindet → umstellen. Steht die gesuchte Seite oben im Bruch, wird multipliziert (\(GK = H \cdot \sin x\)), steht sie unten, wird geteilt (\(H = \tfrac{AK}{\cos x}\)).</p>
@@ -222,7 +223,10 @@ fest2 = r'''      <div class="festhalten">
       </div>'''
 auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
     ('2a', 3, r'Rechtwinkliges Dreieck mit \(\gamma = 90°\), \(a = 9\,\text{cm}\) und \(b = 14\,\text{cm}\). Berechne \(\alpha\), \(\beta\) und \(c\).',
-     r'<p>\(\tan\alpha = \tfrac{9}{14}\), \(\alpha = \arctan\tfrac{9}{14} \approx 32.74°\); \(\beta = 90° - \alpha \approx 57.26°\); \(c = \sqrt{9^2 + 14^2} = \sqrt{277} \approx 16.64\,\text{cm}\).</p>', ''),
+     r'<p>\(\tan\alpha = \tfrac{9}{14}\), \(\alpha = \arctan\tfrac{9}{14} \approx 32.74°\); \(\beta = 90° - \alpha \approx 57.26°\); \(c = \sqrt{9^2 + 14^2} = \sqrt{277} \approx 16.64\,\text{cm}\).</p>',
+     fig([['v', [[0, 0], [7, 0], [0, 4.5]]], ['r', [0, 0], [1, 0], [0, 1]], ['w', [7, 0], [0, 4.5], [0, 0], 'α', 26], ['w', [0, 4.5], [0, 0], [7, 0], 'β', 22]]
+         + ecken(([0, 0], 'C', -9, 13), ([7, 0], 'A', 9, 13), ([0, 4.5], 'B', -9, -4)) + [['t', [3.5, 0], 'b = 14 cm', 'mass', 0, 15], ['t', [0, 2.25], 'a = 9 cm', 'mass', -6, 4, 'end']],
+         '-3.2,8.2,-1', 220, 140)),
     ('2b', 2, r'Im rechtwinkligen Dreieck ist die Hypotenuse \(9.5\,\text{cm}\) und die Gegenkathete von \(x\) \(4\,\text{cm}\) lang. Wie gross ist \(x\)?',
      r'<p>\(\sin x = \tfrac{4}{9.5}\), \(x = \arcsin\tfrac{4}{9.5} \approx 24.90°\).</p>', ''),
     ('2c', 3, r'Eine Bergbahn überwindet auf \(800\,\text{m}\) waagrechter Strecke \(300\,\text{m}\) Höhe. Wie viel Prozent Steigung sind das, wie gross ist der Steigungswinkel, und wie lang ist die Strecke entlang der Bahn?',
@@ -246,7 +250,7 @@ fest3 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Höhen und Distanzen</div>
           <p><b>Vorgehen:</b> Skizze → rechtwinkliges Dreieck suchen → Seiten vom Winkel aus benennen → Funktion wählen und rechnen → prüfen (Grössenordnung, Einheit).</p>
-          <p>Der <b>Höhenwinkel</b> wird von der Waagrechten nach oben gemessen, der <b>Tiefenwinkel</b> von der Waagrechten nach unten. Sie sind gleich gross (Wechselwinkel an Parallelen).</p>
+          <p>Der <b>Höhenwinkel</b> wird von der Waagrechten nach oben gemessen, der <b>Tiefenwinkel</b> von der Waagrechten nach unten. Der Tiefenwinkel, unter dem du von oben ein Ziel siehst, ist gleich gross wie der Höhenwinkel, unter dem man vom Ziel aus zu dir hinaufschaut (Wechselwinkel an den beiden Waagrechten).</p>
           <p>Baum: \(h = d \cdot \tan\alpha\). Bei \(d = 15\,\text{m}\) und \(\alpha = 52°\) ist \(h \approx 19.20\,\text{m}\). Misst du mit dem Auge, kommt die Augenhöhe dazu.</p>
           <p><b>Plausibel?</b> Bei \(\alpha \lt 45°\) ist \(h \lt d\), bei \(\alpha \gt 45°\) ist \(h \gt d\).</p>
           <p><b>Fuss unerreichbar:</b> Zwei Höhenwinkel \(\alpha\) und \(\beta\) von zwei Standorten im Abstand \(s\) geben zwei Gleichungen: \(\tan\beta = \tfrac{h}{d}\) und \(\tan\alpha = \tfrac{h}{d + s}\). Setze \(h = d \cdot \tan\beta\) in die zweite ein und löse nach \(d\) auf.</p>
@@ -287,10 +291,10 @@ fest4 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Sinussatz</div>
           <p>Im allgemeinen Dreieck liegt die Seite \(a\) der Ecke \(A\) gegenüber, \(\alpha\) liegt bei \(A\) (ebenso \(b\), \(\beta\) und \(c\), \(\gamma\)); \(\alpha + \beta + \gamma = 180°\).</p>
-          <p>Die Höhe von \(C\) ist \(h = b \cdot \sin\alpha = a \cdot \sin\beta\). Daraus folgt der <b>Sinussatz</b>:</p>
+          <p>Die Höhe von \(C\) auf \(c\) ist \(h_c = b \cdot \sin\alpha = a \cdot \sin\beta\). Daraus folgt der <b>Sinussatz</b>:</p>
           <p>\[ \frac{a}{\sin\alpha} = \frac{b}{\sin\beta} = \frac{c}{\sin\gamma} \]</p>
           <p>Über dem Bruchstrich die Seite, darunter der Sinus ihres <b>Gegenwinkels</b>. Er braucht ein vollständiges <b>Paar</b> aus Seite und Gegenwinkel und eine weitere Angabe: zwei Winkel und eine Seite (WSW, WWS; zuerst den dritten Winkel) oder zwei Seiten und den Gegenwinkel einer davon (SSW).</p>
-          <p><b>SSW:</b> Der Rechner liefert nur den spitzen Winkel \(\gamma_1\). Auch \(\gamma_2 = 180° - \gamma_1\) hat denselben Sinus (\(\sin(180° - \gamma) = \sin\gamma\); warum, zeigt der Einheitskreis in 5.4). \(\gamma_2\) gibt ein zweites Dreieck, wenn \(\alpha + \gamma_2 \lt 180°\). Mit der Höhe \(h = c \cdot \sin\alpha\): \(a \lt h\) kein Dreieck, \(a = h\) eines (rechtwinklig), \(h \lt a \lt c\) zwei, \(a \geq c\) eines.</p>
+          <p><b>SSW:</b> Der Rechner liefert nur den spitzen Winkel \(\gamma_1\). Auch \(\gamma_2 = 180° - \gamma_1\) hat denselben Sinus (\(\sin(180° - \gamma) = \sin\gamma\); warum, zeigt der Einheitskreis in 5.4). \(\gamma_2\) gibt ein zweites Dreieck, wenn \(\alpha + \gamma_2 \lt 180°\). Bei <b>spitzem</b> \(\alpha\) entscheidet die Höhe von \(B\) auf den Schenkel von \(\alpha\), \(h = c \cdot \sin\alpha\): \(a \lt h\) kein Dreieck, \(a = h\) eines (rechtwinklig), \(h \lt a \lt c\) zwei, \(a \geq c\) eines. Bei stumpfem oder rechtem \(\alpha\) ist die Gegenseite die längste: \(a \gt c\) eines, sonst keines.</p>
           <p>Der Rechner kennt Sinus und Cosinus auch für stumpfe Winkel. Die Themenseite begründet den Sinussatz zusätzlich über den Umkreis: Jeder Quotient ist der Durchmesser \(2r\).</p>
         </div>
         <div class="warn">
@@ -330,7 +334,7 @@ fest5 = r'''      <div class="festhalten">
           <div class="titel">Cosinussatz und Dreiecksfläche</div>
           <p>Ohne Paar aus Seite und Gegenwinkel — zwei Seiten und der Winkel dazwischen (SWS) oder drei Seiten (SSS) — hilft der <b>Cosinussatz</b>:</p>
           <p>\[ a^2 = b^2 + c^2 - 2bc \cdot \cos\alpha \]</p>
-          <p>ebenso \(b^2 = a^2 + c^2 - 2ac \cdot \cos\beta\) und \(c^2 = a^2 + b^2 - 2ab \cdot \cos\gamma\). Links die gesuchte Seite, im Cosinus ihr Gegenwinkel. Bei \(\alpha = 90°\) ist \(\cos\alpha = 0\): der Satz des Pythagoras. Bei stumpfem \(\alpha\) ist \(\cos\alpha \lt 0\), und \(a\) wird länger.</p>
+          <p>ebenso \(b^2 = a^2 + c^2 - 2ac \cdot \cos\beta\) und \(c^2 = a^2 + b^2 - 2ab \cdot \cos\gamma\). Links die gesuchte Seite, im Cosinus ihr Gegenwinkel. Bei \(\alpha = 90°\) ist \(\cos\alpha = 0\): der Satz des Pythagoras. Bei stumpfem \(\alpha\) ist \(\cos\alpha \lt 0\), und \(a\) wird länger als beim rechten Winkel.</p>
           <p><b>Drei Seiten:</b> \(\cos\alpha = \tfrac{b^2 + c^2 - a^2}{2bc}\), dann \(\arccos\). Ein negativer Cosinus heisst: \(\alpha\) ist stumpf — das ist genau dann so, wenn \(a^2 \gt b^2 + c^2\).</p>
           <p><b>Fläche</b> aus zwei Seiten und dem Winkel dazwischen: Die Höhe auf \(c\) ist \(h = b \cdot \sin\alpha\), also \(A = \tfrac{b \cdot c}{2} \cdot \sin\alpha\). Die Themenseite schreibt allgemein \(A = \tfrac{p \cdot q}{2}\sin\varphi\).</p>
           <p><b>Welcher Satz?</b> Paar aus Seite und Gegenwinkel vorhanden: Sinussatz. Kein Paar: Cosinussatz — danach ist oft ein Paar vollständig, und der Rest geht mit dem Sinussatz.</p>
@@ -342,11 +346,11 @@ fest5 = r'''      <div class="festhalten">
           <p>Für die Fläche einen Winkel nehmen, der nicht zwischen den beiden Seiten liegt.</p>
         </div>
       </div>'''
-auf5 = test('t5', 'Aufgaben · Kapitel 5', 13, [
+auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
     ('5a', 3, r'Von einer Weggabelung führen zwei gerade Wege weg, \(4.2\,\text{km}\) und \(3.5\,\text{km}\) lang, unter dem Winkel \(48°\). Wie weit liegen die beiden Wegenden auseinander?',
      r'<p>SWS: \(d^2 = 4.2^2 + 3.5^2 - 2 \cdot 4.2 \cdot 3.5 \cdot \cos 48° \approx 10.22\), \(d \approx 3.20\,\text{km}\).</p>', ''),
-    ('5b', 3, r'Dreieck mit \(a = 7\), \(b = 9\), \(c = 12\). Wie gross ist der grösste Winkel?',
-     r'<p>Er liegt der längsten Seite \(c\) gegenüber: \(\cos\gamma = \tfrac{49 + 81 - 144}{2 \cdot 7 \cdot 9} = -\tfrac{14}{126} \approx -0.1111\), \(\gamma \approx 96.38°\) — stumpf, weil der Cosinus negativ ist.</p>', ''),
+    ('5b', 4, r'Dreieck mit \(a = 7\), \(b = 9\), \(c = 12\). Wie gross ist der grösste Winkel? Ist er spitz oder stumpf? Begründe es zusätzlich ohne den Winkel, mit einem Vergleich von \(c^2\) und \(a^2 + b^2\).',
+     r'<p>Er liegt der längsten Seite \(c\) gegenüber: \(\cos\gamma = \tfrac{49 + 81 - 144}{2 \cdot 7 \cdot 9} = -\tfrac{14}{126} \approx -0.1111\), \(\gamma \approx 96.38°\) — stumpf, weil der Cosinus negativ ist.</p><p>Ohne Winkel: \(c^2 = 144 \gt a^2 + b^2 = 130\). Die Seite gegenüber \(\gamma\) ist länger als beim rechten Winkel (dort wäre \(c^2 = a^2 + b^2\)), also ist \(\gamma\) stumpf.</p>', ''),
     ('5c', 3, r'Ein dreieckiges Grundstück hat zwei Seiten von \(32\,\text{m}\) und \(45\,\text{m}\), die einen Winkel von \(110°\) einschliessen. Wie gross ist es?',
      r'<p>\(A = \tfrac{32 \cdot 45}{2} \cdot \sin 110° \approx 676.58\,\text{m}^2\).</p>',
      fig([['v', [[0, 0], [9, 0], [-2.19, 6.01]]], ['w', [0, 0], [9, 0], [-2.19, 6.01], '110°', 18], ['t', [4.5, 0], '45 m', 'mass', 0, 14], ['t', [-1.1, 3], '32 m', 'mass', -6, 0, 'end']],
@@ -404,11 +408,11 @@ gt = f'''
           <b>Selbsteinschätzung</b>
           <table>
             <tr><td>22 – 25 P</td><td>Die geprüften Teile sitzen. Wo du Punkte verloren hast: das Kapitel dieser Aufgabe nochmals (Zuordnung unten).</td></tr>
-            <tr><td>17 – 21 P</td><td>Den schwächsten Teil nochmals: Tüfteln und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
+            <tr><td>17 – 21 P</td><td>Das schwächste Kapitel nochmals: Tüfteln und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1; G2 → 2; G3 → 3; G4, G5 → 4; G6, G7 → 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1; G2 → 2; G3 → 3; G4 (a) → 4, G4 (b) → 1; G5 → 4; G6, G7 → 5</p>
         </div>
       </div>
     </section>
