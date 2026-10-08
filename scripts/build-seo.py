@@ -257,7 +257,7 @@ SEITEN = {
  'grundlagen/g2-modellieren.html': dict(
    beschreibung='Textaufgaben modellieren: Unbekannte deklarieren, Mengen- und Wertbilanz aufstellen — für Zahlenrätsel, Misch-, Verteil- und Zinsaufgaben, mit Ansatz-Trainer.',
    themen=['Textaufgabe', 'Gleichungssystem aufstellen', 'Mischungsaufgabe', 'Zinsaufgabe', 'Zahlenrätsel', 'Modellieren'],
-   tg='2.1 Grundlagen'),
+   tg='2.1 Grundlagen und 2.3 Lineare Gleichungssysteme'),
    # Ergaenzung ohne eigene RLP-Nummer (nav.js: id 'g2-M', nr '2.M'); die Seite
    # vertieft 2.1 (Sachverhalte formulieren) und 2.3 (Gleichungssysteme).
  'grundlagen/g3-1-grundlagen.html': dict(

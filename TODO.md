@@ -1118,4 +1118,7 @@ M1 (`seite.js:724`), N `\;` (`seite.js:619`).
 - [ ] Clips: «kg» kursiv ohne Abstand (`clips_basis.py` `auto_tex()` hält Wörter < 3 Buchstaben für Mathematik → `\,\text{kg}`); «m p» ohne Malpunkt; Zucker in Litern (`kontrolle-mischen-1` A1); Antwortsätze ohne Einheit (`mischen` «Lösen», «w = 3»), ohne Zuordnung (`kontrolle-zins-2` A1 «9000 CHF zu 2 % …»); Probe 5 + 7 = 12 fehlt (`verteilen`); Fragetext ≠ Ton (`kontrolle-verteilen-2` A2 «Was prüft …», `kontrolle-zins-1` A1 «mit Probe»); Deklaration «m vor dem Verdünnen»; Sets-Szene ohne Herkunft der 21/17, z grün; Balkenmassstab Zins/Kapital; «Prozentpunkte» nicht eingeführt; «2 % Jahreszins»; x1/x2 heisst hier r bzw. p; Zeitversätze `zins` «Lösen», `kontrolle-zins-1` A2, `verteilen` «Lösen».
 
 ### Themenseite g2-modellieren: beim Bau und Prüfen gemeldet
-- [ ] Merksatz «jede Misch-, Verteil-, Zinsaufgabe = Mengenbilanz plus Wertbilanz» passt nicht auf Sets und Zins ohne Kapitalgleichung; «Prozentsätze addieren sich nie» (Z. 474) zu absolut; Breadcrumb/JSON-LD nur «2.1», RLP-Box 2.1 und 2.3; K1 nennt Ungleichungen, die Seite hat keine.
+**Behoben 08.10.2026:** Merksatz (Z. 308) nennt Sets und fehlende Gesamtmenge; Z. 474 «die Prozentsätze der Sorten aber nicht
+zum Prozentsatz der Mischung»; `build-seo.py` tg «2.1 Grundlagen und 2.3 Lineare Gleichungssysteme». Bewusst gelassen: «Ungleichung»
+in K1 ist RLP-Wortlaut (2.1), die Seite deckt davon nur Gleichungen und Systeme ab.
+- [x] Merksatz «jede Misch-, Verteil-, Zinsaufgabe = Mengenbilanz plus Wertbilanz» passt nicht auf Sets und Zins ohne Kapitalgleichung; «Prozentsätze addieren sich nie» (Z. 474) zu absolut; Breadcrumb/JSON-LD nur «2.1», RLP-Box 2.1 und 2.3; K1 nennt Ungleichungen, die Seite hat keine.
