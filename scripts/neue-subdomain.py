@@ -19,10 +19,13 @@
 #    3. WARTEN auf den DNS-Eintrag — den muss der Mensch beim Registrar setzen
 #    4. Repo anlegen und pushen (gh repo create --public --source=. --push)
 #    5. Pages einschalten, auf «built» warten, HTTPS erzwingen
-#    6. Kachel in apex-startseite/index.html einfuegen und lokal committen
-#       (entfaellt mit --ohne-kachel — fuer Einzelseiten, die nicht ins
-#       Faecher-Verzeichnis gehoeren)
-#    7. Apex-Repo klonen, Inhalt uebernehmen, pushen — die Kachel geht live
+#    6. Kachel in index.html des Apex-Repos einfuegen (entfaellt mit
+#       --ohne-kachel — fuer Einzelseiten, die nicht ins Faecher-Verzeichnis
+#       gehoeren)
+#    7. Apex-Repo committen und pushen — die Kachel geht live
+#
+#  Die Startseite hat genau eine Quelle: das Repo go4exercises/begreifbar.
+#  Das Skript klont es in Schritt 1 in den Arbeitsordner und schreibt dort.
 #    8. Abschlussmessung ueber HTTPS
 #
 #  Was das Skript NICHT kann: den DNS-Eintrag setzen. Dafuer braeuchte es
@@ -45,11 +48,9 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
 DOMAIN = 'begreifbar.ch'
 KONTO = 'go4exercises'
 APEX_REPO = f'{KONTO}/begreifbar'
-APEX_QUELLE = ROOT / 'apex-startseite'
 PAGES_ZIEL = f'{KONTO}.github.io.'          # Ziel des CNAME-Eintrags beim Registrar
 DOH = 'https://cloudflare-dns.com/dns-query?name={}&type=CNAME'
 
@@ -170,7 +171,7 @@ def pruefe_alleinstehend(html_pfad):
         info('Entweder alles in die HTML einbetten oder ein ZIP mit allen Dateien übergeben.')
 
 
-def vorpruefungen(args, repo):
+def vorpruefungen(args, repo, arbeit):
     schritt(1, 'Vorprüfungen')
     for werkzeug in ('git', 'gh'):
         if not shutil.which(werkzeug):
@@ -200,23 +201,19 @@ def vorpruefungen(args, repo):
         ok('ohne Kachel — begreifbar.ch wird nicht angefasst')
         return
 
-    if not (APEX_QUELLE / 'index.html').is_file():
-        raise Abbruch(f'{APEX_QUELLE}/index.html fehlt — läuft das Skript im Repo-Wurzelverzeichnis?')
-    apex = (APEX_QUELLE / 'index.html').read_text(encoding='utf-8')
-    if not args.ohne_kachel and f'https://{args.subdomain}.{DOMAIN}/' in apex:
-        raise Abbruch(f'In apex-startseite/index.html gibt es bereits eine Kachel für '
+    klon = arbeit / 'apex'
+    lauf(['gh', 'repo', 'clone', APEX_REPO, str(klon), '--', '--depth', '1'], still=True)
+    apex = (klon / 'index.html').read_text(encoding='utf-8')
+    if f'https://{args.subdomain}.{DOMAIN}/' in apex:
+        raise Abbruch(f'In {APEX_REPO}/index.html gibt es bereits eine Kachel für '
                       f'{args.subdomain}.{DOMAIN}.')
     for marke in ('FAECHER:ANFANG', 'FAECHER:ENDE', 'FACHFARBEN:ANFANG', 'FACHFARBEN:ENDE'):
         if marke not in apex:
-            raise Abbruch(f'Marke «{marke}» fehlt in apex-startseite/index.html.')
-    ok('Apex-Startseite bereit, Kachel noch nicht vorhanden')
+            raise Abbruch(f'Marke «{marke}» fehlt in {APEX_REPO}/index.html.')
+    ok(f'Apex-Startseite ({APEX_REPO}) geklont, Kachel noch nicht vorhanden')
 
     grund, hell, rand = farbsatz(args.farbe)   # wirft bei unbekanntem Wert
     ok(f'Farbe {args.farbe} → {grund} / {hell} / {rand}')
-
-    rc, _ = lauf(['git', 'diff', '--quiet', '--', str(APEX_QUELLE)], cwd=ROOT, pruefen=False, still=True)
-    if rc != 0:
-        warn('apex-startseite/ hat uncommittete Änderungen — die kämen mit in den Commit.')
 
 
 # ── 2. ZIP auspacken ─────────────────────────────────────────────────────────
@@ -373,9 +370,9 @@ def kachel_text(s, slug, host, titel, marke, text, farbe):
     return s.replace('\n    <!-- FAECHER:ENDE -->', kachel, 1), grund
 
 
-def kachel_einfuegen(args, host):
-    schritt(6, 'Kachel in apex-startseite/index.html einfügen')
-    datei = APEX_QUELLE / 'index.html'
+def kachel_einfuegen(args, host, klon):
+    schritt(6, f'Kachel in {APEX_REPO}/index.html einfügen')
+    datei = klon / 'index.html'
     neu, grund = kachel_text(datei.read_text(encoding='utf-8'), args.subdomain, host,
                              args.titel, args.marke, args.text, args.farbe)
     datei.write_text(neu, encoding='utf-8')
@@ -390,38 +387,24 @@ def kachel_einfuegen(args, host):
                        or ('name="description"' in z) or ('og:description' in z)
                        or '<title>' in z or 'og:title' in z)]
         warn(f'Die Seite trägt jetzt {anzahl} Fächer, spricht aber weiter von zweien.')
-        info('Von Hand nachziehen in apex-startseite/index.html:')
+        info(f'Von Hand nachziehen in {APEX_REPO}/index.html:')
         for st in stellen:
             info(f'  Zeile {st}')
-
-    lauf(['git', 'add', str(datei)], cwd=ROOT, still=True)
-    lauf(['git', 'commit', '-m',
-          f'Apex-Startseite: Kachel für {host}\n\n'
-          f'Fach «{args.titel}», Farbe {grund}. Repository {KONTO}/{args.repo or args.subdomain}.'],
-         cwd=ROOT, still=True)
-    ok('lokal committet (Push dieses Repos bleibt bei dir)')
+    return grund
 
 
 # ── 7. Apex-Repo aktualisieren ───────────────────────────────────────────────
 
-def apex_veroeffentlichen(arbeitsordner):
-    schritt(7, f'Apex-Repo {APEX_REPO} aktualisieren')
-    klon = arbeitsordner / 'apex'
-    lauf(['gh', 'repo', 'clone', APEX_REPO, str(klon), '--', '--depth', '1'], still=True)
-    for p in APEX_QUELLE.iterdir():
-        if p.name in ('README.md', '.git'):
-            continue                       # die Anleitung gehoert nicht auf die Website
-        ziel = klon / p.name
-        if p.is_dir():
-            shutil.copytree(p, ziel, dirs_exist_ok=True)
-        else:
-            shutil.copy2(p, ziel)
-    rc, aus = lauf(['git', 'status', '--porcelain'], cwd=klon, still=True)
-    if not aus:
-        warn('Apex-Repo ist bereits auf diesem Stand — nichts zu pushen.')
-        return
-    lauf(['git', 'add', '-A'], cwd=klon, still=True)
-    lauf(['git', 'commit', '-m', 'Startseite: neue Fach-Kachel'], cwd=klon, still=True)
+def apex_veroeffentlichen(args, host, klon, grund):
+    schritt(7, f'Apex-Repo {APEX_REPO} pushen')
+    lauf(['git', 'add', 'index.html'], cwd=klon, still=True)
+    lauf(['git', 'commit', '-m',
+          f'Startseite: Kachel für {host}\n\n'
+          f'Fach «{args.titel}», Farbe {grund}. Repository {KONTO}/{args.repo or args.subdomain}.'],
+         cwd=klon, still=True)
+    # Zwischen Klon (Schritt 1) und Push liegt das Warten auf DNS und Pages —
+    # wer in der Zeit an der Startseite gearbeitet hat, wird hier eingeholt.
+    lauf(['git', 'pull', '--rebase'], cwd=klon, still=True)
     lauf(['git', 'push'], cwd=klon, still=True)
     ok(f'https://{DOMAIN}/ aktualisiert')
 
@@ -487,7 +470,7 @@ def main():
         print(f'\n\033[1m{host}\033[0m  ←  {args.quelle.name}  ·  Repository {repo}')
         if args.nur_pruefen:                 # unsinniger Name gedruckt wird
             print('   \033[1mProbelauf\033[0m — es wird nichts angelegt und nichts gepusht.')
-        vorpruefungen(args, repo)
+        vorpruefungen(args, repo, arbeit)
         seite = bereitstellen(args.quelle, arbeit / 'seite')
         if args.nur_pruefen:
             beigaben(seite, host)
@@ -503,13 +486,11 @@ def main():
             schritt(6, 'Kachel übersprungen (--ohne-kachel)')
             info(f'https://{DOMAIN}/ bleibt unverändert.')
         else:
-            kachel_einfuegen(args, host)
-            apex_veroeffentlichen(arbeit)
+            grund = kachel_einfuegen(args, host, arbeit / 'apex')
+            apex_veroeffentlichen(args, host, arbeit / 'apex', grund)
         messen(host, mit_apex=not args.ohne_kachel)
         print(f'\n\033[1mFertig.\033[0m  https://{host}/'
               + ('' if args.ohne_kachel else f'  ·  Kachel auf https://{DOMAIN}/'))
-        if not args.ohne_kachel:
-            print(f'   Offen: «git push» in {ROOT} — der Kachel-Commit liegt lokal.')
         return 0
     except Abbruch as e:
         print(f'\n\033[1mAbbruch:\033[0m {e}', file=sys.stderr)

@@ -35,26 +35,11 @@ physik.begreifbar.ch  →  Repo TALS-Physik
 
 ## Startseite `begreifbar.ch` pflegen
 
-`apex-startseite/` in diesem Repo ist die gepflegte Quelle, das Repo
-`go4exercises/begreifbar` die Auslieferung. **Kein Automatismus** verbindet die
-beiden — die Brücke wird jedes Mal von Hand geschlagen:
-
-```sh
-gh repo clone go4exercises/begreifbar ~/begreifbar        # einmalig
-cd ~/begreifbar
-rsync -a --delete --exclude '.git' --exclude 'README.md' ~/tals-mathe/apex-startseite/ .
-git add -A && git commit -m "…" && git push
-```
-
-`--exclude '.git'` ist Pflicht, sonst löscht `--delete` das `.git` des Klons.
-`schriften.css` und `schriften/` gehören mit dazu, sonst fällt die Seite still auf
-Georgia zurück.
-
-> ⚠️ **Live ist die Seite weiter als der Ordner** (gemessen 14.09.2026): Dort steht
-> zusätzlich ein Link «Projektwoche IDM 2027» auf `projektwoche/` samt CSS-Block
-> `.anlass`, der in `apex-startseite/index.html` fehlt. Vor dem nächsten `rsync
-> --delete` erst den Ordner aus dem Apex-Repo aktualisieren, sonst geht der Link
-> verloren.
+Einzige Quelle ist das Repo **`go4exercises/begreifbar`** (lokal `~/begreifbar`):
+dort ändern, committen, pushen. Der frühere Ordner `apex-startseite/` in diesem
+Repo ist seit 08.10.2026 entfernt — er war hinter den Live-Stand zurückgefallen.
+Anleitung und Begründungen stehen in `README.md` des Apex-Repos;
+`scripts/neue-subdomain.py` schreibt neue Kacheln direkt dorthin.
 
 ---
 

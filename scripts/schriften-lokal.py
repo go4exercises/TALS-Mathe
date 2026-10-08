@@ -11,11 +11,6 @@ Verbindung.
 Voraussetzung: schriften.css und der Ordner schriften/ liegen im Wurzel-
 verzeichnis des Repos.
 
-Ausgenommen ist apex-startseite/ — der Ordner wird aus einem eigenen Repo
-an begreifbar.ch ausgeliefert und hat keinen Zugriff auf die Wurzel dieses
-Repos. Er traegt seine eigene schriften.css und seinen eigenen schriften/
--Ordner; siehe apex-startseite/README.md.
-
     python3 scripts/schriften-lokal.py            # zeigt nur, was geändert würde
     python3 scripts/schriften-lokal.py --schreiben
 
@@ -56,8 +51,7 @@ def main():
     geaendert, schon, ohne = [], [], 0
     for ordner, unter, dateien in os.walk(WURZEL):
         unter[:] = [u for u in unter
-                       if u not in (".git", "node_modules", "schriften",
-                                    "apex-startseite")]
+                       if u not in (".git", "node_modules", "schriften")]
         for d in sorted(dateien):
             if not d.endswith(".html"):
                 continue

@@ -32,7 +32,6 @@ Voraussetzung: vendor/mathjax/tex-svg.js liegt im Repo (aus
 node_modules/mathjax-full/es5, Version 3.2.2 — genau das, was
 `mathjax@3` vom CDN geliefert hat).
 
-Ausgenommen ist apex-startseite/ — eigenes Repo, eigene Auslieferung.
 Die Startseite benutzt ohnehin kein MathJax.
 
     python3 scripts/mathjax-lokal.py            # zeigt nur, was geaendert wuerde
@@ -73,8 +72,7 @@ def main():
     geaendert, schon, ohne = [], [], 0
     for ordner, unter, dateien in os.walk(WURZEL):
         unter[:] = [u for u in unter
-                    if u not in (".git", "node_modules", "vendor",
-                                 "apex-startseite")]
+                    if u not in (".git", "node_modules", "vendor")]
         for d in sorted(dateien):
             if not d.endswith(".html"):
                 continue

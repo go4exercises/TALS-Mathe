@@ -589,9 +589,8 @@ Der Pre-Flight prüft das (`check_keine_fremdhosts`) und meldet einen Treffer al
 `<a href>` lädt nichts, bevor jemand klickt. Eingebettete `<iframe>` zu fremden Hosts
 sind nicht erlaubt.
 
-Ausnahme: `apex-startseite/` wird aus einem eigenen Repo ausgeliefert und trägt darum
-eine eigene, kleinere Schriftkopie. Die beiden Umstell-Skripte
-(`scripts/schriften-lokal.py`, `scripts/mathjax-lokal.py`) lassen den Ordner aus.
+Die Startseite `begreifbar.ch` liegt im eigenen Repo `go4exercises/begreifbar` und
+trägt dort eine eigene, kleinere Schriftkopie.
 
 ### 5.4 Aufgaben-Nummerierung (verbindlich)
 
