@@ -1,0 +1,112 @@
+% Gesamttest «Vierecke» — Quelle des PDFs (python3 scripts/build-lp-pdf.py vierecke).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (scripts/lp/vierecke/zahlen.py, 08.10.2026).
+% Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Vierecke}
+\renewcommand{\lpteilgebiet}{5.2b}
+\renewcommand{\lpbereich}{Grundlagenfach}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 30 Minuten. \textbf{Hilfsmittel:} Taschenrechner erlaubt (RLP 5.2 trägt keinen Vermerk «auch ohne
+Hilfsmittel»). Mach zu jeder Aufgabe eine \textbf{Skizze} und schreib den \textbf{Rechenweg} auf — bewertet wird der Weg.
+Längen und Flächen auf zwei Dezimalen runden, Zwischenresultate ungerundet weiterverwenden. Figuren sind Skizzen, nicht
+massstäblich. Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket}
+bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Aufgaben G1 bis G7}{Kapitel 1 bis 4 · Taschenrechner erlaubt · 25 Punkte}
+
+\begin{lpaufgabe}{G1}{Vierecke beschreiben}{4 P}
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=2pt]
+\item Ein Viereck hat zwei gleich lange Diagonalen, die sich gegenseitig halbieren, aber nicht senkrecht aufeinander stehen.
+  Um welches Viereck handelt es sich? Begründe.
+\item Im Parallelogramm $ABCD$ ist der Winkel $\alpha$ um $40^\circ$ grösser als $\beta$. Berechne alle vier Winkel.
+\end{enumerate}
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Parallelogramm}{4 P}
+\begin{minipage}[t]{0.55\linewidth}\vspace{0pt}
+Im Parallelogramm $ABCD$ ist $a = \overline{AB} = 7.5\,\text{cm}$, $b = \overline{AD} = 5\,\text{cm}$, und die Höhe auf $a$
+ist $h_a = 4\,\text{cm}$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=2pt]
+\item Berechne die Fläche und den Umfang.
+\item Wie gross ist der Abstand $h_b$ der beiden Seiten $AD$ und $BC$?
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.40\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.5]
+  \coordinate (A) at (0,0); \coordinate (B) at (7.5,0); \coordinate (C) at (10.5,4); \coordinate (D) at (3,4);
+  \draw[lpblau,thick,fill=lpblau!8] (A)--(B)--(C)--(D)--cycle;
+  \draw[lporange,thick,dashed] (D)--(3,0); \draw[lporange] (3,0) ++(0.35,0) -- ++(0,0.35) -- ++(-0.35,0);
+  \node[lporange,left] at (3,2) {\small $h_a$};
+  \node[below left] at (A) {$A$}; \node[below right] at (B) {$B$}; \node[above right] at (C) {$C$}; \node[above left] at (D) {$D$};
+  \node[below] at (3.75,0) {\small $a$}; \node[above left] at (1.5,2) {\small $b$};
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G3}{Fenster in Rhombusform}{4 P}
+\begin{minipage}[t]{0.58\linewidth}\vspace{0pt}
+Ein Fenster hat die Form eines Rhombus. Seine Diagonalen sind $70\,\text{cm}$ und $40\,\text{cm}$ lang.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=2pt]
+\item Wie gross ist die Glasfläche in $\text{m}^2$?
+\item Wie lang ist der Rahmen rundherum (der Umfang)?
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.38\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.065]
+  \draw[lpblau,thick,fill=lpblau!8] (-35,0)--(0,-20)--(35,0)--(0,20)--cycle;
+  \draw[lporange,dashed] (-35,0)--(35,0); \draw[lporange,dashed] (0,-20)--(0,20);
+  \node[lporange,above] at (-19,0) {\small $70\,\text{cm}$}; \node[lporange,right] at (0,-9) {\small $40\,\text{cm}$};
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G4}{Walmdach}{4 P}
+\begin{minipage}[t]{0.58\linewidth}\vspace{0pt}
+Eine Seitenfläche eines Walmdachs ist ein gleichschenkliges Trapez: unten die Traufe, $12\,\text{m}$ lang, oben der First,
+$7\,\text{m}$ lang. Senkrecht von der Traufe zum First gemessen ist die Dachfläche $4.5\,\text{m}$ hoch.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=2pt]
+\item Wie lang ist die Mittellinie, wie gross die Fläche?
+\item Für $1\,\text{m}^2$ braucht es $15$ Ziegel. Wie viele Ziegel braucht diese Dachfläche mindestens?
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.38\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.42]
+  \draw[lpblau,thick,fill=lpblau!8] (0,0)--(12,0)--(9.5,4.5)--(2.5,4.5)--cycle;
+  \draw[lporange,dashed] (2.5,4.5)--(2.5,0); \node[lporange,right] at (2.5,2.2) {\small $4.5\,\text{m}$};
+  \node[below] at (6,0) {\small Traufe $12\,\text{m}$}; \node[above] at (6,4.5) {\small First $7\,\text{m}$};
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G5}{Trapez rückwärts}{3 P}
+Ein Trapez hat die Fläche $60\,\text{cm}^2$, die Höhe $h = 6\,\text{cm}$ und die Grundseite $a = 13\,\text{cm}$. Wie lang ist
+die zweite Parallelseite $c$?
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G6}{Gleichschenkliges Trapez}{4 P}
+Ein gleichschenkliges Trapez hat die Parallelseiten $a = 18\,\text{cm}$ und $c = 8\,\text{cm}$ und zwei Schenkel von je
+$13\,\text{cm}$. Berechne die Höhe, die Fläche und den Umfang. Zeichne das rechtwinklige Teildreieck in deine Skizze ein.
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Eine fremde Lösung}{2 P}
+Mia soll die Diagonale eines Rechtecks mit den Seiten $6\,\text{cm}$ und $8\,\text{cm}$ berechnen. Sie schreibt:
+\[ d = 6 \cdot \sqrt{2} \approx 8.49\,\text{cm} \]
+Was ist falsch? Berechne die Diagonale richtig.
+\lpplatz{4}
+\end{lpaufgabe}
+\end{document}

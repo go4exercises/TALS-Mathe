@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Ähnlichkeit sehen: ähnliche Dreiecke</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;gap:14px;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Geometrie · Planimetrie</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>08.10.2026</span></div>
+<div class="l m row" data-at="4.20" data-out="12.20" data-anim="rise" style="left:150px;top:300px;font-size:50px"><span>\(180° - 50° - 70° = 60°\)</span></div>
+<div class="l hand" data-at="8.10" data-out="12.20" data-anim="rise" style="left:150px;top:420px;font-size:42px;color:var(--blau)">zwei gleiche Winkel \(\Rightarrow\) ähnlich (WW)</div>
+<div class="l graf" data-at="0.30" data-out="12.20" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><line x1="53.8" y1="0" x2="53.8" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="111.0" y1="0" x2="111.0" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="168.2" y1="0" x2="168.2" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="225.5" y1="0" x2="225.5" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="282.7" y1="0" x2="282.7" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="339.9" y1="0" x2="339.9" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="397.2" y1="0" x2="397.2" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="454.4" y1="0" x2="454.4" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="511.6" y1="0" x2="511.6" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="568.9" y1="0" x2="568.9" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="626.1" y1="0" x2="626.1" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="683.3" y1="0" x2="683.3" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="740.6" y1="0" x2="740.6" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="597.8" x2="760" y2="597.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="540.8" x2="760" y2="540.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="483.8" x2="760" y2="483.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="426.8" x2="760" y2="426.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="369.8" x2="760" y2="369.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="312.8" x2="760" y2="312.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="255.8" x2="760" y2="255.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="198.8" x2="760" y2="198.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="141.8" x2="760" y2="141.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="84.8" x2="760" y2="84.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="27.8" x2="760" y2="27.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><clipPath id="fg40191447"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fg40191447)"><polygon points="53.8,540.8 282.7,540.8 213.5,351.3" fill="#1a4f8a" fill-opacity="0.14" stroke="#1a4f8a" stroke-width="4" stroke-linejoin="round"/><path d="M53.8 540.8 L93.8 540.8 A40 40 0 0 0 79.5 510.2 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><path d="M282.7 540.8 L269.0 503.2 A40 40 0 0 0 242.7 540.8 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><path d="M213.5 351.3 L187.7 381.9 A40 40 0 0 0 227.1 388.9 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><text x="119.6" y="523.7" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">50°</text><text x="222.6" y="523.7" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">70°</text><text x="211.2" y="401.1" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">60°</text><text x="30.7" y="558.9" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">A</text><text x="304.4" y="561.4" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">B</text><text x="219.4" y="333.1" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">C</text></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="1.50" data-out="12.20" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><clipPath id="fg4ee3e5b1"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fg4ee3e5b1)"><polygon points="383.6,239.4 357.1,540.8 694.8,384.0" fill="#b85c00" fill-opacity="0.1" stroke="#b85c00" stroke-width="4" stroke-linejoin="round" stroke-dasharray="14 10"/><path d="M383.6 239.4 L380.1 279.3 A40 40 0 0 0 419.9 256.3 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><path d="M357.1 540.8 L393.4 523.9 A40 40 0 0 0 360.6 500.9 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><path d="M694.8 384.0 L658.5 367.1 A40 40 0 0 0 658.5 400.9 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><text x="413.7" y="298.1" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">70°</text><text x="391.6" y="498.6" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">60°</text><text x="634.7" y="390.8" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">50°</text><text x="368.2" y="222.2" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">P</text><text x="339.4" y="570.0" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">Q</text><text x="723.4" y="390.3" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">R</text></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l hand" data-at="12.80" data-out="20.80" data-anim="rise" style="left:150px;top:300px;font-size:44px;color:var(--blau)">gleichen Winkeln gegenüber</div>
+<div class="l m row" data-at="18.90" data-out="20.80" data-anim="rise" style="left:150px;top:410px;font-size:50px"><span>\(AB \;\leftrightarrow\; RP\)</span></div>
+<div class="l graf" data-at="12.25" data-out="20.80" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><line x1="53.8" y1="0" x2="53.8" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="111.0" y1="0" x2="111.0" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="168.2" y1="0" x2="168.2" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="225.5" y1="0" x2="225.5" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="282.7" y1="0" x2="282.7" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="339.9" y1="0" x2="339.9" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="397.2" y1="0" x2="397.2" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="454.4" y1="0" x2="454.4" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="511.6" y1="0" x2="511.6" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="568.9" y1="0" x2="568.9" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="626.1" y1="0" x2="626.1" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="683.3" y1="0" x2="683.3" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="740.6" y1="0" x2="740.6" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="597.8" x2="760" y2="597.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="540.8" x2="760" y2="540.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="483.8" x2="760" y2="483.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="426.8" x2="760" y2="426.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="369.8" x2="760" y2="369.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="312.8" x2="760" y2="312.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="255.8" x2="760" y2="255.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="198.8" x2="760" y2="198.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="141.8" x2="760" y2="141.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="84.8" x2="760" y2="84.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="27.8" x2="760" y2="27.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><clipPath id="fg5e4ae0a8"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fg5e4ae0a8)"><polygon points="53.8,540.8 282.7,540.8 213.5,351.3" fill="#1a4f8a" fill-opacity="0.14" stroke="#1a4f8a" stroke-width="4" stroke-linejoin="round"/><path d="M53.8 540.8 L93.8 540.8 A40 40 0 0 0 79.5 510.2 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><path d="M282.7 540.8 L269.0 503.2 A40 40 0 0 0 242.7 540.8 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><path d="M213.5 351.3 L187.7 381.9 A40 40 0 0 0 227.1 388.9 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><text x="119.6" y="523.7" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">50°</text><text x="222.6" y="523.7" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">70°</text><text x="211.2" y="401.1" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">60°</text><text x="30.7" y="558.9" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">A</text><text x="304.4" y="561.4" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">B</text><text x="219.4" y="333.1" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">C</text><polygon points="383.6,239.4 357.1,540.8 694.8,384.0" fill="#b85c00" fill-opacity="0.1" stroke="#b85c00" stroke-width="4" stroke-linejoin="round" stroke-dasharray="14 10"/><path d="M383.6 239.4 L380.1 279.3 A40 40 0 0 0 419.9 256.3 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><path d="M357.1 540.8 L393.4 523.9 A40 40 0 0 0 360.6 500.9 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><path d="M694.8 384.0 L658.5 367.1 A40 40 0 0 0 658.5 400.9 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><text x="413.7" y="298.1" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">70°</text><text x="391.6" y="498.6" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">60°</text><text x="634.7" y="390.8" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">50°</text><text x="368.2" y="222.2" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">P</text><text x="339.4" y="570.0" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">Q</text><text x="723.4" y="390.3" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">R</text></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="15.80" data-out="20.80" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><clipPath id="fg7a29bcd6"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fg7a29bcd6)"><line x1="53.8" y1="540.8" x2="282.7" y2="540.8" stroke="#1f6b3a" stroke-width="9" stroke-linecap="round"/></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="18.90" data-out="20.80" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><clipPath id="fgd6c9bbc7"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fgd6c9bbc7)"><line x1="694.8" y1="384.0" x2="383.6" y2="239.4" stroke="#1f6b3a" stroke-width="9" stroke-linecap="round"/></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l m row" data-at="24.10" data-out="33.84" data-anim="rise" style="left:150px;top:300px;font-size:48px"><span>\(k = \dfrac{\overline{RP}}{\overline{AB}} = \dfrac{6}{4} = \fb{1.5}\)</span></div>
+<div class="l m row" data-at="28.00" data-out="33.84" data-anim="rise" style="left:150px;top:460px;font-size:44px"><span>\(\overline{PQ} = 1.5 \cdot \overline{BC}\)</span></div>
+<div class="l m row" data-at="31.60" data-out="33.84" data-anim="rise" style="left:150px;top:570px;font-size:44px"><span>\(\approx 1.5 \cdot 3.54 \approx \fc{5.31}\)</span></div>
+<div class="l graf" data-at="20.85" data-out="33.84" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><line x1="53.8" y1="0" x2="53.8" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="111.0" y1="0" x2="111.0" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="168.2" y1="0" x2="168.2" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="225.5" y1="0" x2="225.5" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="282.7" y1="0" x2="282.7" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="339.9" y1="0" x2="339.9" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="397.2" y1="0" x2="397.2" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="454.4" y1="0" x2="454.4" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="511.6" y1="0" x2="511.6" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="568.9" y1="0" x2="568.9" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="626.1" y1="0" x2="626.1" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="683.3" y1="0" x2="683.3" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="740.6" y1="0" x2="740.6" y2="640" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="597.8" x2="760" y2="597.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="540.8" x2="760" y2="540.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="483.8" x2="760" y2="483.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="426.8" x2="760" y2="426.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="369.8" x2="760" y2="369.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="312.8" x2="760" y2="312.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="255.8" x2="760" y2="255.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="198.8" x2="760" y2="198.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="141.8" x2="760" y2="141.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="84.8" x2="760" y2="84.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="27.8" x2="760" y2="27.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><clipPath id="fg0d522cfb"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fg0d522cfb)"><polygon points="53.8,540.8 282.7,540.8 213.5,351.3" fill="#1a4f8a" fill-opacity="0.14" stroke="#1a4f8a" stroke-width="4" stroke-linejoin="round"/><path d="M53.8 540.8 L93.8 540.8 A40 40 0 0 0 79.5 510.2 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><path d="M282.7 540.8 L269.0 503.2 A40 40 0 0 0 242.7 540.8 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><path d="M213.5 351.3 L187.7 381.9 A40 40 0 0 0 227.1 388.9 Z" fill="#1a4f8a" fill-opacity=".22" stroke="#1a4f8a" stroke-width="2.5"/><text x="119.6" y="523.7" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">50°</text><text x="222.6" y="523.7" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">70°</text><text x="211.2" y="401.1" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">60°</text><text x="30.7" y="558.9" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">A</text><text x="304.4" y="561.4" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">B</text><text x="219.4" y="333.1" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">C</text><polygon points="383.6,239.4 357.1,540.8 694.8,384.0" fill="#b85c00" fill-opacity="0.1" stroke="#b85c00" stroke-width="4" stroke-linejoin="round" stroke-dasharray="14 10"/><path d="M383.6 239.4 L380.1 279.3 A40 40 0 0 0 419.9 256.3 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><path d="M357.1 540.8 L393.4 523.9 A40 40 0 0 0 360.6 500.9 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><path d="M694.8 384.0 L658.5 367.1 A40 40 0 0 0 658.5 400.9 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><text x="413.7" y="298.1" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">70°</text><text x="391.6" y="498.6" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">60°</text><text x="634.7" y="390.8" font-size="26" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">50°</text><text x="368.2" y="222.2" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">P</text><text x="339.4" y="570.0" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">Q</text><text x="723.4" y="390.3" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">R</text><text x="168.2" y="583.5" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">4</text><text x="552.5" y="289.0" font-size="30" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">6</text></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="25.60" data-out="33.84" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><clipPath id="fg7d4cfcdf"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fg7d4cfcdf)"><line x1="282.7" y1="540.8" x2="213.5" y2="351.3" stroke="#1f6b3a" stroke-width="9" stroke-linecap="round"/></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="27.90" data-out="33.84" data-anim="fade" style="left:1010px;top:240px"><svg width="760" height="640" viewBox="0 0 760 640"><clipPath id="fg42b56aaa"><rect x="0" y="0" width="760" height="640"/></clipPath><g clip-path="url(#fg42b56aaa)"><line x1="383.6" y1="239.4" x2="357.1" y2="540.8" stroke="#1f6b3a" stroke-width="9" stroke-linecap="round"/></g><path data-fenster="-0.8,12.2,-1.6,9.347,760,640,8" d="" fill="none"/></svg></div>
+<div class="l m row" data-at="37.14" data-out="49.19" data-anim="rise" style="left:150px;top:300px;font-size:46px"><span>\(4,\ 5,\ 6 \quad \text{und} \quad 6,\ 7.5,\ 9\)</span></div>
+<div class="l m row" data-at="41.44" data-out="49.19" data-anim="rise" style="left:150px;top:410px;font-size:48px"><span>\(\dfrac{6}{4} = \dfrac{7.5}{5} = \dfrac{9}{6} = 1.5\)</span></div>
+<div class="l hand" data-at="44.24" data-out="49.19" data-anim="rise" style="left:150px;top:540px;font-size:44px;color:var(--blau)">ähnlich (sss)</div>
+<div class="l m row" data-at="47.54" data-out="49.19" data-anim="rise" style="left:150px;top:640px;font-size:44px"><span>\(6,\ 7.5,\ \fd{8}: \; \fd{\dfrac{8}{6} \approx 1.33 \neq 1.5}\)</span></div>
+<div class="l m row" data-at="62.69" data-out="69.29" data-anim="rise" style="left:150px;top:300px;font-size:50px"><span>\(\dfrac{h}{7.80} = \dfrac{1.80}{1.20}\)</span></div>
+<div class="l m row" data-at="64.39" data-out="69.29" data-anim="rise" style="left:150px;top:430px;font-size:48px"><span>\(h = 7.80 \cdot 1.5 = \fc{11.70\,\mathrm{m}}\)</span></div>
+<div class="l graf" data-at="49.49" data-out="69.29" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="8.0" y1="0" x2="8.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="61.1" y1="0" x2="61.1" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="114.3" y1="0" x2="114.3" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="167.4" y1="0" x2="167.4" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="220.6" y1="0" x2="220.6" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="273.7" y1="0" x2="273.7" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="326.9" y1="0" x2="326.9" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="433.1" y1="0" x2="433.1" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="486.3" y1="0" x2="486.3" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="539.4" y1="0" x2="539.4" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="592.6" y1="0" x2="592.6" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="645.7" y1="0" x2="645.7" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="698.9" y1="0" x2="698.9" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="752.0" y1="0" x2="752.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="752.0" x2="760" y2="752.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="698.9" x2="760" y2="698.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="645.7" x2="760" y2="645.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="592.6" x2="760" y2="592.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="539.4" x2="760" y2="539.4" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="486.3" x2="760" y2="486.3" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="433.1" x2="760" y2="433.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="380.0" x2="760" y2="380.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="326.9" x2="760" y2="326.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="273.7" x2="760" y2="273.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="220.6" x2="760" y2="220.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="167.4" x2="760" y2="167.4" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="114.3" x2="760" y2="114.3" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="61.1" x2="760" y2="61.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="760" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><clipPath id="fg36f250e6"><rect x="0" y="0" width="760" height="760"/></clipPath><g clip-path="url(#fg36f250e6)"><line x1="8.0" y1="645.7" x2="752.0" y2="645.7" stroke="#1c1a17" stroke-width="3" stroke-linecap="round"/><line x1="124.9" y1="645.7" x2="124.9" y2="550.1" stroke="#1a4f8a" stroke-width="7" stroke-linecap="round"/><line x1="725.4" y1="645.7" x2="725.4" y2="23.9" stroke="#1f6b3a" stroke-width="7" stroke-linecap="round"/><line x1="61.1" y1="645.7" x2="124.9" y2="550.1" stroke="#b85c00" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="14 10"/><line x1="310.9" y1="645.7" x2="725.4" y2="23.9" stroke="#b85c00" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="14 10"/><path d="M124.9 623.7 L102.9 623.7 L102.9 645.7" fill="none" stroke="#1c1a17" stroke-width="2.5"/><circle cx="113.9" cy="634.7" r="3" fill="#1c1a17"/><path d="M725.4 623.7 L703.4 623.7 L703.4 645.7" fill="none" stroke="#1c1a17" stroke-width="2.5"/><circle cx="714.4" cy="634.7" r="3" fill="#1c1a17"/><path d="M61.1 645.7 L111.1 645.7 A50 50 0 0 0 88.9 604.1 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><path d="M310.9 645.7 L360.9 645.7 A50 50 0 0 0 338.6 604.1 Z" fill="#b85c00" fill-opacity=".22" stroke="#b85c00" stroke-width="2.5"/><text x="93.0" y="685.6" font-size="26" font-style="normal" fill="#1c1a17" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">1.20</text><text x="518.2" y="685.6" font-size="26" font-style="normal" fill="#1c1a17" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">7.80</text><text x="138.2" y="603.2" font-size="26" font-style="normal" fill="#1a4f8a" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">1.80</text><text x="706.8" y="334.8" font-size="32" font-style="normal" fill="#1f6b3a" text-anchor="end" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">h</text></g><path data-fenster="-1,13,-2,12,760,760,8" d="" fill="none"/></svg></div>
+<div class="l m row" data-at="77.09" data-out="85.29" data-anim="rise" style="left:150px;top:300px;font-size:48px"><span>\(\dfrac{h}{p} = \dfrac{q}{h} \;\Rightarrow\; h^2 = p \cdot q\)</span></div>
+<div class="l m row" data-at="83.19" data-out="85.29" data-anim="rise" style="left:150px;top:430px;font-size:46px"><span>\(h = \sqrt{1.8 \cdot 3.2} = \sqrt{5.76} = \fc{2.4}\)</span></div>
+<div class="l graf" data-at="69.59" data-out="85.29" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="59.3" y1="0" x2="59.3" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="123.4" y1="0" x2="123.4" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="187.6" y1="0" x2="187.6" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="251.7" y1="0" x2="251.7" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="315.9" y1="0" x2="315.9" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="444.1" y1="0" x2="444.1" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="508.3" y1="0" x2="508.3" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="572.4" y1="0" x2="572.4" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="636.6" y1="0" x2="636.6" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="700.7" y1="0" x2="700.7" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="752.0" x2="760" y2="752.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="687.9" x2="760" y2="687.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="623.7" x2="760" y2="623.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="559.6" x2="760" y2="559.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="495.4" x2="760" y2="495.4" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="431.3" x2="760" y2="431.3" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="367.2" x2="760" y2="367.2" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="303.0" x2="760" y2="303.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="238.9" x2="760" y2="238.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="174.8" x2="760" y2="174.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="110.6" x2="760" y2="110.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="46.5" x2="760" y2="46.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><clipPath id="fge4afb477"><rect x="0" y="0" width="760" height="760"/></clipPath><g clip-path="url(#fge4afb477)"><polygon points="59.3,623.7 700.7,623.7 469.8,315.9" fill="#1a4f8a" fill-opacity="0.1" stroke="#1a4f8a" stroke-width="4" stroke-linejoin="round"/><line x1="469.8" y1="315.9" x2="469.8" y2="623.7" stroke="#b85c00" stroke-width="5" stroke-linecap="round"/><path d="M491.8 623.7 L491.8 601.7 L469.8 601.7" fill="none" stroke="#b85c00" stroke-width="2.5"/><circle cx="480.8" cy="612.7" r="3" fill="#b85c00"/><path d="M452.2 329.1 L465.4 346.7 L483.0 333.5" fill="none" stroke="#1c1a17" stroke-width="2.5"/><circle cx="467.6" cy="331.3" r="3" fill="#1c1a17"/><text x="31.6" y="639.5" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">A</text><text x="727.9" y="641.0" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">B</text><text x="477.9" y="295.9" font-size="30" font-style="normal" fill="#1a4f8a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">C</text><text x="469.8" y="671.8" font-size="30" font-style="normal" fill="#1c1a17" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">H</text></g><path data-fenster="-0.8,10.8,-2,9.6,760,760,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="74.09" data-out="85.29" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><clipPath id="fg0e3a5a9c"><rect x="0" y="0" width="760" height="760"/></clipPath><g clip-path="url(#fg0e3a5a9c)"><polygon points="59.3,623.7 469.8,623.7 469.8,315.9" fill="#1f6b3a" fill-opacity="0.18" stroke="#1f6b3a" stroke-width="4" stroke-linejoin="round"/><polygon points="469.8,623.7 700.7,623.7 469.8,315.9" fill="#b85c00" fill-opacity="0.18" stroke="#b85c00" stroke-width="4" stroke-linejoin="round"/></g><path data-fenster="-0.8,10.8,-2,9.6,760,760,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="72.89" data-out="85.29" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><clipPath id="fgc1e8da21"><rect x="0" y="0" width="760" height="760"/></clipPath><g clip-path="url(#fgc1e8da21)"><text x="264.6" y="710.3" font-size="28" font-style="normal" fill="#1f6b3a" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">q = 3.2</text><text x="585.2" y="710.3" font-size="28" font-style="normal" fill="#b85c00" text-anchor="middle" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">p = 1.8</text><text x="485.8" y="469.8" font-size="32" font-style="normal" fill="#1c1a17" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">h</text></g><path data-fenster="-0.8,10.8,-2,9.6,760,760,8" d="" fill="none"/></svg></div>
+<div class="l hand mitte" data-at="85.69" data-out="93.99" data-anim="rise" style="left:150px;top:250px;font-size:76px;font-weight:600;color:var(--tinte)">Zum Mitnehmen</div>
+<div class="l hand" data-at="86.49" data-out="93.99" data-anim="rise" style="left:150px;top:400px;font-size:42px;color:var(--blau)">zwei gleiche Winkel genügen (WW)<br>zuordnen über die Winkel<br>\(k\) aus einem Paar entsprechender Seiten</div>
+<div class="l hand mitte" data-at="94.39" data-out="100.40" data-anim="rise" style="left:150px;top:280px;font-size:86px;font-weight:600;color:var(--tinte)">Jetzt du</div>
+<div class="l hand" data-at="94.59" data-out="100.40" data-anim="rise" style="left:150px;top:430px;font-size:50px;color:var(--blau)">Erkunde diese Zusammenhänge<br>in der Animation unter dem Clip<br>und löse die Aufgaben.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g5-2d-lp-dreiecke.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 100.4;
+const SPRECHER = [{"bei": 0.4, "text": "Zwei Dreiecke mit den Winkeln fünfzig und siebzig Grad: Der dritte ist bei beiden sechzig Grad. Darum haben sie dieselbe Form, sie sind ähnlich. Zwei gleiche Winkel genügen."}, {"bei": 12.6, "text": "Entsprechende Seiten liegen gleichen Winkeln gegenüber. A B liegt sechzig Grad gegenüber, im zweiten Dreieck ist das R P."}, {"bei": 21.2, "text": "A B ist vier, R P ist sechs: k gleich eins Komma fünf. Die Seite B C gegenüber fünfzig Grad wird zu P Q, rund drei Komma fünf vier mal eins Komma fünf, also rund fünf Komma drei eins."}, {"bei": 34.24, "text": "Statt der Winkel genügen auch die Seitenverhältnisse: vier, fünf, sechs und sechs, sieben Komma fünf, neun. Alle drei Verhältnisse sind eins Komma fünf, die Dreiecke sind ähnlich. Bei sechs, sieben Komma fünf, acht stimmt das dritte nicht."}, {"bei": 49.59, "text": "Die Sonnenstrahlen sind parallel, Stab und Baum stehen senkrecht: Die Schattendreiecke stimmen in zwei Winkeln überein. Der Stab ist eins Komma acht Meter hoch, sein Schatten eins Komma zwei Meter lang. Der Baumschatten ist sieben Komma acht Meter lang, also ist der Baum elf Komma sieben Meter hoch."}, {"bei": 69.69, "text": "Im rechtwinkligen Dreieck teilt die Höhe die Hypotenuse in p und q. Die beiden Teildreiecke sind zum ganzen ähnlich. Daraus folgt: h im Quadrat gleich p mal q. Mit p gleich eins Komma acht und q gleich drei Komma zwei ist h gleich zwei Komma vier."}, {"bei": 85.69, "text": "Zum Mitnehmen: Zwei gleiche Winkel genügen. Entsprechende Seiten liegen gleichen Winkeln gegenüber, und k kommt aus einem Paar entsprechender Seiten."}, {"bei": 94.39, "text": "Jetzt du: Erkunde diese Zusammenhänge in der nachfolgenden Animation und löse die Aufgaben."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
+  document.addEventListener('keydown', e => {
+    const ziel = e.target && e.target.closest ? e.target : null;
+    if (ziel && ziel.closest('input, select, textarea')) return;
+    if (e.code === 'Space' && ziel && ziel.closest('button, a, summary')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

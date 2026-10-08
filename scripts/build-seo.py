@@ -201,6 +201,34 @@ SEITEN = {
    titel='Leitprogramm Textaufgaben modellieren — Zahlenrätsel, Mischen, Verteilen, Zins',
    beschreibung='Leitprogramm zum Modellieren von Textaufgaben nach RLP GF 2.1 und 2.3: Zahlenrätsel, Mischen, Verteilen und Zins Schritt für Schritt vom Text über die Deklaration zum Ansatz, in die Grundform und mit dem TI-30X Pro gelöst — mit Clips, Simulationen, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Textaufgabe', 'Modellieren', 'Deklaration', 'Mischungsaufgabe', 'Zinseszins', 'Gleichungssystem', 'Leitprogramm']),
+ 'leitprogramme/dreiecke.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (Prüfung §15 offen)
+   noindex=True,
+   titel='Leitprogramm Dreiecke — Winkel, besondere Linien, Fläche und Pythagoras',
+   beschreibung='Leitprogramm Dreiecke nach RLP GF 5.2: Winkelsumme und Aussenwinkel, Höhen, Seiten- und Winkelhalbierende, Mittelsenkrechte mit ihren Schnittpunkten, Fläche, Umfang und Pythagoras — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Dreieck', 'Winkelsumme', 'Höhe', 'Seitenhalbierende', 'Mittelsenkrechte', 'Pythagoras', 'Leitprogramm']),
+ 'leitprogramme/vierecke.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (Prüfung §15 offen)
+   noindex=True,
+   titel='Leitprogramm Vierecke — Vierecks-Familie, Fläche, Trapez und fehlende Längen',
+   beschreibung='Leitprogramm Vierecke nach RLP GF 5.2: Vierecks-Familie und Winkel, Fläche und Umfang von Rechteck, Parallelogramm und Rhombus, Trapez mit Mittellinie und fehlende Längen mit Pythagoras — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Viereck', 'Parallelogramm', 'Rhombus', 'Trapez', 'Mittellinie', 'Diagonale', 'Leitprogramm']),
+ 'leitprogramme/kreis-kreisteile.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (Prüfung §15 offen)
+   noindex=True,
+   titel='Leitprogramm Kreis und Kreisteile — Linien am Kreis, π, Bogen, Sektor, Segment',
+   beschreibung='Leitprogramm zu Kreis und Kreisteilen nach RLP GF 5.2: Sehne, Sekante, Tangente und Abstand, Umfang und Fläche mit π, Bogen und Sektor, Segment und Kreisring — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Kreis', 'Tangente', 'Kreiszahl π', 'Bogenlänge', 'Kreissektor', 'Kreissegment', 'Leitprogramm']),
+ 'leitprogramme/aehnlichkeit.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (Prüfung §15 offen)
+   noindex=True,
+   titel='Leitprogramm Zentrische Streckung und Ähnlichkeit — Strahlensätze, ähnliche Figuren',
+   beschreibung='Leitprogramm zur zentrischen Streckung und Ähnlichkeit nach RLP GF 5.2: Streckung mit Zentrum und Faktor, Strahlensätze, ähnliche Figuren mit k und k², Massstab, Ähnlichkeitssätze und Höhensatz — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'zentrische Streckung', 'Strahlensatz', 'Ähnlichkeit', 'Massstab', 'Ähnlichkeitssätze', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
