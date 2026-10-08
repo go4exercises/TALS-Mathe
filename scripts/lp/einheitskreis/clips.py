@@ -860,7 +860,8 @@ SP4 = [
     ('Am Ursprung', 'Spiegeln wir A am Ursprung, entsteht der Punkt zu hundertachtzig Grad plus alpha. Beide Koordinaten '
                     'wechseln das Vorzeichen. Der Tangens als Quotient bleibt darum gleich.'),
     ('Komplement', 'An der Geraden y gleich x gespiegelt, entsteht der Punkt zu neunzig Grad minus alpha. Hier wechselt kein '
-                   'Vorzeichen, aber die Koordinaten tauschen die Plätze: Sinus von neunzig Grad minus alpha ist Cosinus alpha. '
+                   'Vorzeichen, aber die Koordinaten tauschen die Plätze: Sinus von neunzig Grad minus alpha ist Cosinus alpha, '
+                   'und Cosinus von neunzig Grad minus alpha ist Sinus alpha. '
                    'Im Bogenmass: Sinus von pi halbe minus phi ist Cosinus phi.'),
     ('Anwenden', 'So rechnet man ohne Taschenrechner, wenn ein Wert bekannt ist: Cosinus fünfundzwanzig Grad ist ungefähr '
                  'null Komma neun null sechs. Cosinus zweihundertfünf Grad ist Cosinus von hundertachtzig plus fünfundzwanzig Grad, '
@@ -911,7 +912,7 @@ clip(C, 'Einheitskreis sehen: Symmetrien',
             graf(WK, [S((A25[0], A25[1]), (-A25[0], -A25[1]), 5, 3, True)] + spiegelbild(t_o + 0.6, t_o + 2.6, (-A25[0], -A25[1]), ein=t_o + 0.6), ein=t_o, raster=False, achsen=False)),
          sz('Komplement', sp4['Komplement'],
             f(r'\sin(90^\circ - \alpha) = \fc{\cos\alpha}', 280, 48, ein=w('Komplement', 'sinus')),
-            f(r'\cos(90^\circ - \alpha) = \fa{\sin\alpha}', 380, 48, ein=w('Komplement', 'sinus')),
+            f(r'\cos(90^\circ - \alpha) = \fa{\sin\alpha}', 380, 48, ein=w('Komplement', 'cosinus', 2)),
             f(r'\sin\left(\tfrac{\pi}{2} - \varphi\right) = \cos\varphi', 520, 50, ein=w('Komplement', 'bogenmass')),
             graf(WK, [kreis()] + A_FIG, ein=0.3),
             graf(WK, [S((-1.45, -1.45), (1.45, 1.45), 5, 3, True)] + spiegelbild(t_k + 0.6, t_k + 2.6, (A25[1], A25[0]), ein=t_k + 0.6), ein=t_k, raster=False, achsen=False)),

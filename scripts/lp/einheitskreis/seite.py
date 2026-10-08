@@ -39,7 +39,8 @@ SEO = ('<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand �
        '<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">\n'
        '<link rel="apple-touch-icon" href="../apple-touch-icon.png">\n'
        '<!-- SEO:ENDE -->')
-if 'name="robots"' not in alt[:alt.index('<!-- SEO:ENDE -->')]:
+# Nach der Freischaltung steht der volle Block von build-seo.py da (ohne robots, mit JSON-LD): nicht überschreiben.
+if 'name="robots"' not in alt[:alt.index('<!-- SEO:ENDE -->')] and 'application/ld+json' not in alt[:alt.index('<!-- SEO:ENDE -->')]:
     a, b = alt.index('<!-- SEO:ANFANG'), alt.index('<!-- SEO:ENDE -->') + len('<!-- SEO:ENDE -->')
     alt = alt[:a] + SEO + alt[b:]
 

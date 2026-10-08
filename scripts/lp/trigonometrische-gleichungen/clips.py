@@ -763,7 +763,8 @@ clip('kontrolle-tangens', 'Winkel finden: Kontrollfragen zum Tangens',
             frage_bild(graf(WT, [], gross='tan', figuren=[KR(), tangente()])),
             graf(WT, [], ein=1.0, gross='tan', figuren=[KR(), tangente(), TANLINIE(-T06)],
                  punkte=[pt(1, -0.6, 2), kpb(180 - T06, 2, '149.0°', [-1.0, 0.25]), kpb(360 - T06, 2, '329.0°', [1.06, -0.40], 'start'),
-                         kpt(T06, 4, '31.0°', 22), kp(180 + T06, 4, '211.0°')])),   # falsche Angebote rot
+                         kpb(T06, 4, '31.0°', [0.72, 0.36]), kp(180 + T06, 4, '211.0°')])),   # falsche Angebote rot;
+                         # «31.0°» innen links unter dem Punkt, nicht über der Tangente x = 1 (Prüfung 08.10.2026)
          sz('Merke',
             'Zum Mitnehmen: Beim Tangens zwei Gegenpunkte, hundertachtzig Grad auseinander. Nie hundertachtzig minus Phi eins '
             'wie beim Sinus.',

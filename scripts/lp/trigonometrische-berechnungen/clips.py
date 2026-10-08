@@ -587,6 +587,9 @@ t0, q4 = 6 * math.cos(rad(35)), math.sqrt(4.5 ** 2 - h4 ** 2)
 C4a = ((t0 - q4) * math.cos(rad(35)), (t0 - q4) * math.sin(rad(35)))
 C4b = ((t0 + q4) * math.cos(rad(35)), (t0 + q4) * math.sin(rad(35)))
 STRAHL = (10 * math.cos(rad(35)), 10 * math.sin(rad(35)))
+F4s = (t0 * math.cos(rad(35)), t0 * math.sin(rad(35)))   # Fusspunkt der Höhe von B auf den freien Schenkel
+# Wortzeiten «Zwei Dreiecke» (faster-whisper): «Höhe», «a ist länger», «Kreis», «Schenkel zweimal», «Es gibt zwei Dreiecke»
+T_H, T_HAC, T_KREIS, T_DREI, T_ZWEI = 8.3, 13.5, 17.4, 19.7, 20.9
 clip('sinussatz', 7, 'Dreiecke berechnen: der Sinussatz',
      'Die Höhe zerlegt das Dreieck in zwei rechtwinklige — daraus folgt a : sin α = b : sin β = c : sin γ. Ein Paar aus Seite '
      'und Gegenwinkel; vorgelöst mit zwei Winkeln und einer Seite; bei zwei Seiten und einem Gegenwinkel (SSW) zwei Dreiecke.',
@@ -625,17 +628,23 @@ clip('sinussatz', 7, 'Dreiecke berechnen: der Sinussatz',
             graf(W4, [T((C4[0] + 9) / 2 + 0.4, C4[1] / 2 + 0.2, 'a ≈ 6.54', 3, 'start', 28, False)], ein=18.4, raster=False)),
          sz('Zwei Dreiecke',
             'Sind zwei Seiten und der Gegenwinkel einer davon gegeben, wird es heikel. Alpha fünfunddreissig Grad, c gleich sechs, '
-            'a gleich vier Komma fünf. Der Kreis um B mit dem Radius a trifft den Schenkel zweimal: Es gibt zwei Dreiecke.',
+            'a gleich vier Komma fünf. Die Höhe von B auf den freien Schenkel von Alpha ist c mal Sinus Alpha, rund drei Komma '
+            'vier vier. a ist länger als diese Höhe, aber kürzer als c. Darum trifft der Kreis um B mit dem Radius a den '
+            'freien Schenkel zweimal: Es gibt zwei Dreiecke.',
+            # h = 6 · sin 35° = 3.441 < a = 4.5 < c = 6 (python3); Fusspunkt F = 6 cos 35° · (cos 35°, sin 35°) = (4.026 | 2.819)
             f(r'\fb{\alpha = 35^\circ}, \ \fb{c = 6}, \ \fb{a = 4.5}', 290, 46, ein=4.2),
-            n('SSW: zwei Dreiecke möglich', 410, 'blau', 42, ein=11.6),
+            f(r'h = c \cdot \sin\alpha \approx 3.44', 390, 46, ein=T_H),
+            f(r'h \lt a \lt c', 490, 46, ein=T_HAC),
+            n('SSW: zwei Dreiecke möglich', 600, 'blau', 42, ein=T_ZWEI),
             graf(W4s, [S((0, 0), STRAHL, 5, dicke=2.5), S((0, 0), (6, 0), 1, dicke=4), WI((0, 0), (6, 0), STRAHL, 2, 50),
                        # «35°» dicht am Bogen bei A, nicht unter C₂; c gegeben, also orange
                        T(0.85, 0.1, '35°', 2, 'start', 24, False), T(3, -0.75, 'c = 6', 2, 'middle', 28, False),
                        T(-0.35, -0.65, 'A', kursiv=False), T(6.3, -0.65, 'B', kursiv=False)], punkte=[pt((0, 0)), pt((6, 0))], ein=0.3),
-            graf(W4s, [KR((6, 0), 4.5, 2, gestrichelt=True, dicke=2.5)], ein=8.7, raster=False),
+            graf(W4s, [S((6, 0), F4s, 2, True, 3), RW(F4s, 215, 305, 2), T(F4s[0] + 1.25, F4s[1] - 1.1, 'h', 2, 'start')], ein=T_H, raster=False),
+            graf(W4s, [KR((6, 0), 4.5, 2, gestrichelt=True, dicke=2.5)], ein=T_KREIS, raster=False),
             graf(W4s, [V([(0, 0), (6, 0), C4a], 1, 0.15), V([(0, 0), (6, 0), C4b], 1, 0.06),
                        T(C4a[0] - 0.3, C4a[1] + 0.35, 'C₂', 1, 'end', 28, False), T(C4b[0] - 0.3, C4b[1] + 0.35, 'C₁', 1, 'end', 28, False)],
-                 punkte=[pt(C4a, 1), pt(C4b, 1)], ein=10.6, raster=False)),
+                 punkte=[pt(C4a, 1), pt(C4b, 1)], ein=T_DREI, raster=False)),
          sz('Zweite Lösung',
             'Der Sinussatz gibt Sinus Gamma gleich sechs mal Sinus fünfunddreissig Grad durch vier Komma fünf, rund null Komma '
             'sieben sechs fünf. Der Rechner liefert nur den spitzen Winkel, rund neunundvierzig Komma acht neun Grad. Der '
@@ -682,7 +691,7 @@ clip('kontrolle-sinussatz', 8, 'Dreiecke berechnen: Kontrollfragen zum Sinussatz
             f(r'180^\circ - 40^\circ = \fc{140^\circ}', 300, 56, ein=1.0)),
          sz('Frage 4',
             'Die Höhe ist sechs mal Sinus fünfunddreissig Grad, rund drei Komma vier vier. a ist kürzer: Der Kreis um B erreicht den '
-            'Schenkel nicht. Kein Dreieck.',
+            'freien Schenkel von Alpha nicht. Kein Dreieck.',
             f(r'h = 6 \cdot \sin 35^\circ \approx 3.44 \gt 2.5', 300, 48, ein=1.0)),
          sz('Frage 5',
             'Achtzig plus hundertfünfzig ist mehr als hundertachtzig Grad. Den stumpfen Kandidaten gibt es hier nicht.',

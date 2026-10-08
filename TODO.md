@@ -985,8 +985,8 @@ Nachgeprüft vom Hauptagenten: H1 (Bild `fest-sim3.png`), GT-Zahlen G1–G7.
 
 **Behoben 08.10.2026** (7560fb2): alle HOCH/MITTEL, NIEDRIG fast alle. Gesamttest neu verteilt (Teil A 10 P, Teil B 15 P;
 G1(c) gestrichen, Steigung in %, SSW kein/ein Dreieck). Keine Szene neu vertont, Fragetöne Kontrolle Seiten/Höhen neu.
-Bewusst offen (bräuchten Neuvertonung): Sinussatz-Clip Satz zu h = c·sin α; Kontrolle Sinussatz F4 «freien Schenkel»;
-Hörprobe «a wird länger» (Cosinussatz «Stumpf»). Abnahme offen.
+Nachgetragen 08.10.2026: Sinussatz-Clip Satz zu h = c·sin α, Kontrolle Sinussatz F4 «freien Schenkel» (Teilvertonung).
+Offen nur Hörprobe «a wird länger» (Cosinussatz «Stumpf»), «drei Komma vier vier», «a ist kürzer». Abnahme offen.
 
 ### HOCH
 - [x] **H1 · Gesperrte Regler zeigen falsche Werte, teils die gesuchte Grösse** (`seite.js` `werte()`; sim1 A7, sim2 A7, sim3 A7, sim5 A5): Figur zeichnet `fest`, `.sl-val` zeigt den Startwert (sim3 A7 «15 m | 52°» bei h = 14, d = 20, gesucht α). → `.sl-val` aus `w` schreiben, gesuchte Grösse «?».
@@ -1019,7 +1019,7 @@ Nachgeprüft vom Hauptagenten: H1, H2.
 
 **Behoben 08.10.2026** (e1c6489): alle HOCH/MITTEL, NIEDRIG grösstenteils. GT G2–G5 neu. Neu vertont: sinus-cosinus «Weiter drehen»,
 symmetrien «Anwenden», Kontrolle Tangens F5, Kontrolle Periode F3 (+ Fragetöne). Bewusst gelassen: sim4 A2/A3 (Erkennen),
-Komplement-Formel ungesprochen, Clipzeit 13.3 min (> 12). Abnahme offen.
+Clipzeit 13.3 min (> 12). Komplement-Formel seit 08.10.2026 gesprochen. Abnahme offen.
 
 ### HOCH
 - [x] **H1 · BP G7 wertet die richtige Antwort als Fehler** (BP:141): «180° − 63.4°» = 116.6° ist der richtige zweite Punkt; gemeint 180° − (−63.4°) = 243.4°.
@@ -1051,8 +1051,8 @@ Sperrliste deckt GT). Werkzeuge grün (`pruef-uebungen` 8 × 2000, `pruef-formel
 Nachgeprüft vom Hauptagenten: H1 (Toleranz 0.3 bei Schritt 0.5), H2 (Selektor `.sim-breit svg`).
 
 **Behoben 08.10.2026** (ebd3a34): alle HOCH/MITTEL, NIEDRIG fast alle. GT G2(b), G4–G6 neu; Vortest 12 P mit Tangens.
-Neu vertont: einheitskreis «Besondere Werte», Kontrolle Tangens F5 (+ zwei Fragetöne). Bewusst gelassen: Labels 143.1°/216.9°
-in Sim 4 bei 360 px berühren sich leicht; «31.0°» in Kontrolle Tangens F5 streift die Tangente. Abnahme offen.
+Neu vertont: einheitskreis «Besondere Werte», Kontrolle Tangens F5 (+ zwei Fragetöne). Labels 143.1°/216.9° (Sim 4) und «31.0°»
+(Kontrolle Tangens F5) am 08.10.2026 nachgetragen. Abnahme offen.
 
 ### HOCH
 - [x] **H1 · Sim 2 (5 Ziele) und Sim 3 (3 Ziele) «Dreh P auf …» mit Maus/Finger kaum treffbar** (`seite.js:314, 363` Toleranz 0.3, Regler 0–360 Schritt 0.5, 144 px): bei 360 px alle 8 unerreichbar. → Schritt 1°, Toleranz ≥ 0.6 bzw. 1° gegen den ungerundeten Zielwinkel.

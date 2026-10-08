@@ -152,9 +152,9 @@
       waagrechte: function(c, name){ if (c >= y0 && c <= y1){ el(ebene, 'line', { x1: X(x0), y1: Y(c), x2: X(x1), y2: Y(c), 'class': 'waagrechte' });
         if (name) el(zahlen, 'text', { x: X(x1) - 2, y: Y(c) + (c < 0 ? 11 : -4), 'text-anchor': 'end', 'class': 'skala' }, name); } },
       band: function(a, b, cls){ el(ebene, 'rect', { x: X(Math.max(a, x0)), y: Y(y1), width: Math.max(0, X(Math.min(b, x1)) - X(Math.max(a, x0))), height: Y(y0) - Y(y1), 'class': cls }); },
-      punkt: function(x, y, cls, text, oben){
+      punkt: function(x, y, cls, text, oben, dx){
         el(ebene, 'circle', { cx: X(x), cy: Y(y), r: o.r || 4, 'class': cls });
-        if (text) el(ebene, 'text', { x: X(x), y: Y(y) + (oben === false ? 14 : -7), 'text-anchor': 'middle', 'class': 'p-text ' + cls }, text);
+        if (text) el(ebene, 'text', { x: X(x) + (dx || 0), y: Y(y) + (oben === false ? 14 : -7), 'text-anchor': 'middle', 'class': 'p-text ' + cls }, text);
       }
     };
   }
@@ -413,7 +413,11 @@
       K.waagrechte(c);
       // alle Lösungen im Bild hohl, das Paar zu k gefüllt und beschriftet
       for (var kk = -4; kk <= 6; kk++) st.g.forEach(function(x){ var v = x + kk * st.p; if (v >= -360 - 1e-9 && v <= 720 + 1e-9 && kk !== st.k) K.punkt(v, c, 'p-hohl'); });
-      st.m.forEach(function(v){ if (v >= -360 - 1e-9 && v <= 720 + 1e-9) K.punkt(v, c, 'p-lauf ' + FARBE[f], grad1(v), c < 1.2); });
+      // Liegt das Paar näher als 56 Einheiten (Beschriftung «143.1°» ≈ 38 breit, mit Hof), rücken die
+      // Beschriftungen gleichmässig auseinander (cos φ = −0.8: 143.1° und 216.9° sind 43 auseinander; Prüfung 08.10.2026).
+      var sicht = st.m.filter(function(v){ return v >= -360 - 1e-9 && v <= 720 + 1e-9; }).sort(function(a, b){ return a - b; });
+      var luecke = sicht.length === 2 ? K.X(sicht[1]) - K.X(sicht[0]) : 99, weg = luecke < 56 ? (56 - luecke) / 2 : 0;
+      sicht.forEach(function(v, i){ K.punkt(v, c, 'p-lauf ' + FARBE[f], grad1(v), c < 1.2, i === 0 ? -weg : weg); });
       var zeile;
       if (!st.g.length) zeile = sp('tx-' + FARBE[f], f + ' φ = ' + z(c)) + '; &nbsp;<b>keine Lösung</b>';
       else {
