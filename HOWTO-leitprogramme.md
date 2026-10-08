@@ -606,6 +606,9 @@ gegen sie und darüber hinaus.
   die der Lehrplan nicht hergibt.
 - **Nicht nur nicht abfragen, auch nicht benutzen, was erst später kommt**: \(\ln\) in Kapitel 3,
   erklärt erst in Kapitel 5. Vorgezogenes kurz erklären und im Vortest prüfen.
+- **Umkehrung nicht als Folgerung** (Einheitskreis 08.10.2026): «\(\sin\varphi = w \Rightarrow \varphi = \arcsin w\)»
+  ist falsch (\(\sin 150^\circ = 0.5\), \(\arcsin 0.5 = 30^\circ\)) — und stand auch auf der Themenseite.
+  \(\arcsin w\) ist *der* Winkel aus dem Hauptwertbereich; die Gleichung hat mehr Lösungen.
 
 **Clips**
 - **Eine neue Bewegung einmal wirklich laufen lassen.** Nicht ein Bild ansehen, sondern
@@ -641,6 +644,12 @@ gegen sie und darüber hinaus.
 - Rückmeldungen lenken aufs Hinschauen und verraten die Lösung nicht; angezeigter Text =
   gesprochener Text.
 - Notation wie im Leitprogramm, auch im Merkbild (keine \(u, v\), wo \(x_s, y_s\) gilt).
+- **Klickziel auf einer Strecke** (Trig. Berechnungen 08.10.2026): Der Abspieler misst den Abstand zu einem
+  Punkt; mit Toleranz 0.9 um die Mitte einer 5 Einheiten langen Seite zählten nur 36 % der Seite. Toleranz bis
+  knapp unter den Abstand zu den Nachbarseiten, Fallen auf die anderen Seiten, nachzählen (200 Klickstellen je Seite).
+- **Die Rückmeldung einer Falle am Fallenpunkt nachrechnen** (Einheitskreis 08.10.2026): «im Uhrzeigersinn
+  gedreht» stand bei \((0.71 \mid -0.71)\) = 315°, gemeint war \((-0.71 \mid -0.71)\).
+- **Eine Gerade auf einer Achse ist unsichtbar** (Gerade OP bei 90°): eigens hervorheben und beschriften.
 
 **Animationen und Übungen**
 - Kein Ziel der Aufgabenleiste ist schon im Startzustand erfüllt; Ziele sind nicht die
@@ -686,6 +695,16 @@ gegen sie und darüber hinaus.
 - **Sonderwerte können einen Fehler unsichtbar machen**: Bei einer doppelten Nullstelle ±1 gibt
   das vergessene Quadrat dasselbe \(a\) — die falsche Rechnung gilt als richtig. Solche Werte
   nicht würfeln.
+  Ebenso **kleine Winkel**: \(\arcsin 0.05 = 2.87^\circ\), \(\arctan 0.05 = 2.86^\circ\) — «Sinus statt Tangens»
+  galt in 23 % der Würfe als richtig (Trig. Berechnungen 08.10.2026). Nur Fälle würfeln, in denen sich falsche
+  und richtige Formel auf der verlangten Genauigkeit unterscheiden.
+- **Feste Werte bestimmen auch die Anzeige neben den Reglern** (Trig. Berechnungen 08.10.2026): Die Figur
+  zeichnete `fest`, die Regler zeigten ihren Startwert — teils als Wert der gesuchten Grösse. Gesuchtes als «?».
+- **Erreichbarkeit mit Maus und Finger messen** (Trig. Gleichungen 08.10.2026): Toleranz 0.3° bei Schritt 0.5°
+  auf 721 Stufen in 144 px — nur ein Reglerwert trifft, auf dem Handy keiner. Toleranz gegen den ungerundeten
+  Zielwert, mindestens zwei treffende Reglerwerte, pixelweise nachmessen.
+- **CSS für Bilder mit Kindselektor** (`.rahmen > svg`): `.sim-breit svg{display:block}` traf auch die
+  MathJax-Formeln der Aufgabenleiste — jede Formel stand auf eigener Zeile.
 - **Was ein Übungsbild zeigen soll, in Pixeln nachrechnen**: Bei Nullstellenabstand 1 ist der
   Buckel einer doppelten Nullstelle 1–2 px hoch — Berühren und Schneiden sind nicht zu unterscheiden.
 - **Farbwörter in Rückmeldungen gegen den Abspieler prüfen.** Nach einem Fehlklick zeichnet er den
@@ -739,6 +758,14 @@ gegen sie und darüber hinaus.
 - Selbsteinschätzung verspricht keine Kompetenz, die der Test nicht prüft; jede Aufgabe ist
   einem Kapitel zugeordnet.
 - Datenschutz: kein Name, keine Standortdaten im Foto.
+- **Ein Fehlerbeispiel im Raster muss wirklich falsch sein** (Einheitskreis 08.10.2026): «180° − 63.4°» als
+  Fehler ergab 116.6° — die richtige Antwort. Jede Fehlerzahl ausrechnen.
+- **Gleiche Zahlen, gleiche Punkte**: Zwei typische Fehler mit denselben Ergebnissen dürfen nicht verschieden
+  bewertet werden — die KI sieht nur die Zahlen. Unterscheidet nur die Skizze, das so sagen.
+- **Fehlt eine Lösung, greift kein Folgepunkt für die Lösungsmenge** (Trig. Gleichungen 08.10.2026: «nur
+  339.5°» gab 3 von 4 P). Typischen Fehler «nur der Rechnerwert» in jeder Aufgabe mit mehreren Lösungen regeln.
+- **Folgepunkte bei Konstruktionen** auf die eigene Konstruktion beziehen (S auf der Geraden durch den eigenen P),
+  nicht auf eine feste Koordinate mit Toleranz.
 
 **Zeit:** geschätzt aus den Teilen, nicht aus der Planung übernommen (§3).
 

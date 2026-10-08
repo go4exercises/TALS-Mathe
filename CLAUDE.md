@@ -43,7 +43,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
   Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
-- `leitprogramme/` — 14 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 17 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
@@ -58,11 +58,13 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
   im Suchindex. Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine
   kleine Pille «LP» (`.karte-lp`/`.lp-link` in `index.html`). Die zwei Arten:
-  - *nach Thema* (12: `potenzen.html`, `quadratische-gleichungen.html`,
+  - *nach Thema* (15: `potenzen.html`, `quadratische-gleichungen.html`,
     `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
     `exp-log-funktionen.html`, `trigonometrische-funktionen.html`, `betragsfunktionen.html`,
     `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`, `lineare-quadratische-gleichungen.html`
-    (Umformer statt Regler), `planimetrie.html` (Geometrie-Arbeitsbereich))
+    (Umformer statt Regler), `planimetrie.html` (Geometrie-Arbeitsbereich), `trigonometrische-berechnungen.html`,
+    `einheitskreis.html`, `trigonometrische-gleichungen.html` (GF 5.3–5.5, Stand 08.10.2026 geprüft und behoben,
+    noch unverlinkt mit `noindex` bis zur Abnahme))
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
@@ -88,11 +90,12 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 514 Drehbücher, alle vertont: **391 in `clips.json`** (363:01 min,
-  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **123** Clips mit
-  `"probe": true` (35 Prüfungsclips und 88 Clips der Leitprogramme nach Thema:
+- `clips/` — 542 Drehbücher, alle vertont: **391 in `clips.json`** (363:01 min,
+  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **151** Clips mit
+  `"probe": true` (35 Prüfungsclips und 116 Clips der Leitprogramme nach Thema:
   je 10 «Parabel sehen», «Kurve sehen», «Polynom sehen», «Exponentialkurve sehen»,
-  «Sinuskurve sehen», «Knick sehen», «Figuren sehen», «Gleichungen lösen», 8 «Gerade sehen»), die im zugehörigen Leitprogramm stehen und
+  «Sinuskurve sehen», «Knick sehen», «Figuren sehen», «Gleichungen lösen», «Dreiecke berechnen»,
+  «Einheitskreis sehen», 8 «Gerade sehen», 8 «Winkel finden»), die im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. Die Clips der *sichtbaren* Leitprogramme zeigt
   `clips.html` seit 06.10.2026 trotzdem: je Themenseite eine Tabelle Animationen · Leitprogramm · Weitere Clips
   (`scripts/clips_bibliothek.py`, HOWTO-clips «Bibliotheksseite»). **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
