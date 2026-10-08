@@ -619,6 +619,11 @@ gegen sie und darüber hinaus.
 - **Rechneranzeige nur so weit belegt wie die Quelle**: «poly-solv zeigt den Bruch» ist nur für ganzzahlige
   Koeffizienten belegt. Grundform ganzzahlig machen (mit einem Faktor erweitern) oder die Anzeigeform nicht nennen.
 
+- **Gegenbeispiel-Texte für jede Klasse prüfen** (Vierecke 08.10.2026): «Es hat keine rechten Winkel» stimmt für ein
+  Parallelogramm, nicht für jedes Trapez. Eine Rückmeldung «Denk an X» nennt besser ein bestimmtes, gezeigtes X.
+- **Definition über eine Eigenschaft, die eine Oberklasse auch hat** (gleichschenkliges Trapez über b = d — gilt für
+  jedes Parallelogramm). Definitionen an der Klassenhierarchie des Leitprogramms prüfen.
+
 **Clips**
 - **Eine neue Bewegung einmal wirklich laufen lassen.** Nicht ein Bild ansehen, sondern
   über `window.__seek(t)` im `?render`-Modus mehrere Zeitpunkte abtasten und die Pfade
@@ -665,6 +670,14 @@ gegen sie und darüber hinaus.
 - **Rechnereingaben, die im Bild ablaufen, mitsprechen** — sonst sieben Sekunden Tastendrücke in Stille.
 - **Anker nicht auf Zahlwörter legen**: Whisper schreibt «sechzehntausend» als «16 000», der Anker fällt stumm auf
   eine Schätzung zurück. Nachbarwort wählen. Nach Teilvertonung die Szenendauer prüfen (Stille am Ende).
+
+- **Verdeckte Grössen verraten sich** über das Karo, einen gesperrten Regler am Anschlag oder eine massstäbliche
+  Figur im PDF (Vierecke 08.10.2026). Karo aus, Regler ausblenden, im Test bewusst verzerrt zeichnen.
+- **Würfe mit gegebenen Seiten und Höhen auf Existenz prüfen** (h_a < b, Dreiecksungleichung, 2·Schenkel > Basis)
+  und **gerundet angezeigte Angaben nicht ungerundet bewerten** (Dreiecke 08.10.2026: «0.04 m» angezeigt, mit 0.035
+  gerechnet — 28 % der richtigen Rechnungen falsch).
+- **Linien aus derselben Ecke**: Ihre Treffstreifen überlappen; der nächstliegende Kandidat muss gewinnen, und
+  Beschriftungen dürfen den Klick nicht schlucken. Mit echten Klicks messen, nicht nur mit `pruef-geo`.
 
 **Animationen und Übungen**
 - Kein Ziel der Aufgabenleiste ist schon im Startzustand erfüllt; Ziele sind nicht die
@@ -776,6 +789,10 @@ gegen sie und darüber hinaus.
 - **Teile nach Hilfsmittel, nicht nach Aufgabenart** (Modellieren 08.10.2026): Ein Teil «Zahlenrätsel, ohne
   Rechner» verlangte eine quadratische Gleichung von Hand, die das Leitprogramm nur mit poly-solv löste. Was im
   Teil ohne Rechner steht, muss ohne Rechner geübt sein.
+- **Eine Regel für Folgepunkte, im ganzen Raster gleich** (5.2a–d 08.10.2026): (E) für Ergebnisse direkt aus den
+  Angaben, Folgezeilen für Schritte aus eigenen Zwischenwerten; derselbe Begriffsfehler nochmals gibt keinen
+  Folgepunkt; was als «unmöglich» gilt, steht ausgeschrieben. Fehlerwerte so rechnen, wie der Fehler wirklich läuft
+  (Ähnlichkeit: «Zuordnung nach Buchstaben» gab PQ ≈ 11.23, nicht 9).
 - **Ein Fehlerbeispiel im Raster muss wirklich falsch sein** (Einheitskreis 08.10.2026): «180° − 63.4°» als
   Fehler ergab 116.6° — die richtige Antwort. Jede Fehlerzahl ausrechnen.
 - **Gleiche Zahlen, gleiche Punkte**: Zwei typische Fehler mit denselben Ergebnissen dürfen nicht verschieden

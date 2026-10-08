@@ -384,7 +384,7 @@ k0 = '''
     <section class="kap" id="k0">
       <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-gf">Vorwissen · GF 5.1, 5.2a</span><span class="zeit">≈ 10 min</span></div>
       <h2 id="vorwissen">Vorwissen</h2>
-      <p class="ziel">Satz des Pythagoras, das gleichseitige Dreieck, Bruchteile des Vollwinkels, Gleichungen mit \\(x^2\\) und Flächeneinheiten. Wenn das wackelt: <a href="''' + TA + '''#pythagoras">Themenseite 5.2a, Pythagoras</a> und das <a href="planimetrie.html">Leitprogramm Planimetrie</a> (Kapitel 1–2).</p>
+      <p class="ziel">Satz des Pythagoras, das gleichseitige Dreieck, Bruchteile des Vollwinkels, Gleichungen mit \\(x^2\\) und Flächeneinheiten. Wenn das wackelt: <a href="''' + TA + '''#pythagoras">Themenseite 5.2a, Pythagoras</a> und das <a href="dreiecke.html">Leitprogramm Dreiecke</a> (Kapitel 3–4).</p>
       ''' + clipkarte('g5-2a-pythagoras', 'Der Satz des Pythagoras') + '''
 ''' + test('t0', 'Vortest', 10, [
     ('0a', 2, r'Rechtwinkliges Dreieck: (a) Katheten \(5\,\text{cm}\) und \(12\,\text{cm}\) — Hypotenuse? (b) Hypotenuse \(10\,\text{cm}\), eine Kathete \(6\,\text{cm}\) — andere Kathete?',

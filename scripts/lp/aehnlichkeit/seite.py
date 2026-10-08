@@ -380,7 +380,7 @@ k0 = '''
     <section class="kap" id="k0">
       <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-gf">Vorwissen · GF 5.1 · 5.2a</span><span class="zeit">≈ 10 min</span></div>
       <h2 id="vorwissen">Vorwissen</h2>
-      <p class="ziel">Verhältnisgleichungen, Winkelsumme, Koordinaten, Flächen und Einheiten. Wenn das wackelt: <a href="planimetrie.html">Leitprogramm Planimetrie</a> (Kapitel 1 und 2) und die <a href="../grundlagen/g5-2a-dreiecke.html">Themenseite 5.2a</a>.</p>
+      <p class="ziel">Verhältnisgleichungen, Winkelsumme, Koordinaten, Flächen und Einheiten. Wenn das wackelt: <a href="dreiecke.html">Leitprogramm Dreiecke</a> (Kapitel 1 und 3) und die <a href="../grundlagen/g5-2a-dreiecke.html">Themenseite 5.2a</a>.</p>
       ''' + clipkarte('g1-4-einheiten', 'Einheiten: Länge, Fläche, Volumen') + '''
 ''' + test('t0', 'Vortest', 10, [
     ('0a', 2, r'Löse: (a) \(\dfrac{x}{6} = \dfrac{4}{3}\) (b) \(\dfrac{5}{x} = \dfrac{2}{7}\)',
@@ -553,7 +553,7 @@ oben = '''<div id="nav-root"></div>
           <li><b>K1</b> geometrische Sachverhalte von elementaren Objekten beschreiben — hier nur: ähnliche Dreiecke, Rechtecke, Quadrate und Kreise (Kapitel 3 und 4).</li>
           <li><b>K2</b> Zusammenhänge (Umfang, Flächeninhalt, Abstand) berechnen — hier nur über den Streckfaktor: Abstände zum Zentrum (Kapitel 1 und 2), Umfang und Fläche ähnlicher Figuren (Kapitel 3).</li>
         </ul>
-        <p class="rlp-quelle">Der Rest von K1 und K2 — Dreiecke, Vierecke, Kreis und Kreisteile mit ihren Elementen — steht auf den <a href="../grundlagen/g5-2a-dreiecke.html">Themenseiten 5.2a bis 5.2c</a> und im <a href="planimetrie.html">Leitprogramm Planimetrie</a>.</p>
+        <p class="rlp-quelle">Der Rest von K1 und K2 — Dreiecke, Vierecke, Kreis und Kreisteile mit ihren Elementen — steht auf den <a href="../grundlagen/g5-2a-dreiecke.html">Themenseiten 5.2a bis 5.2c</a> und in den Leitprogrammen <a href="dreiecke.html">Dreiecke</a>, <a href="vierecke.html">Vierecke</a> und <a href="kreis-kreisteile.html">Kreis und Kreisteile</a>.</p>
       </details>
     </div>
 '''

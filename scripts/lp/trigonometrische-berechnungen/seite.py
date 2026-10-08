@@ -371,7 +371,7 @@ k0 = '''
     <section class="kap" id="k0">
       <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-gf">Vorwissen · GF 5.2</span><span class="zeit">≈ 10 min</span></div>
       <h2 id="vorwissen">Vorwissen</h2>
-      <p class="ziel">Satz des Pythagoras, ähnliche Dreiecke, Winkelsumme, Beschriftung und einfache Verhältnisgleichungen. Wenn das wackelt: <a href="planimetrie.html">Leitprogramm Planimetrie</a> (Kapitel 1, 3 und 5).</p>
+      <p class="ziel">Satz des Pythagoras, ähnliche Dreiecke, Winkelsumme, Beschriftung und einfache Verhältnisgleichungen. Wenn das wackelt: Leitprogramme <a href="dreiecke.html">Dreiecke</a>, <a href="vierecke.html">Vierecke</a> und <a href="aehnlichkeit.html">Zentrische Streckung und Ähnlichkeit</a>.</p>
       ''' + clipkarte('g5-2a-pythagoras', 'Der Satz des Pythagoras') + '''
 ''' + test('t0', 'Vortest', 10, [
     ('0a', 2, r'Rechtwinkliges Dreieck: (a) Katheten \(9\,\text{cm}\) und \(12\,\text{cm}\) — Hypotenuse? (b) Hypotenuse \(13\,\text{cm}\), eine Kathete \(5\,\text{cm}\) — andere Kathete?',
