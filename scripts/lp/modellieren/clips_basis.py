@@ -15,6 +15,7 @@ Farben — eine Farbe, eine Bedeutung, gleich wie auf der Seite:
   5 Tinte  = neutral
 """
 import difflib
+import importlib.util
 import json
 import os
 import re
@@ -26,6 +27,8 @@ PRAEFIX = 'g2-M-lp-'
 LX, RX = 150, 1000
 WZ = json.load(open(HIER + 'wortzeiten.json')) if os.path.exists(HIER + 'wortzeiten.json') else {}
 FEHLT = []
+NEU_TON = []       # (clip, Szenen-Nr. ab 1) mit neuem Sprechertext — für build-clip-ton.py --szenen
+NEU_FRAGEN = []    # (clip, '3' oder '3:r1') mit neuem Fragetext — für build-clip-fragen-ton.py --fragen
 NB = ' '           # schmales geschütztes Leerzeichen als Tausendertrenner im Klartext (Fragen)
 
 
@@ -230,15 +233,45 @@ def wahl(szene, text, opt, richtig, rueck, sprich=None, rueck_sprich=None, bei=0
     return d
 
 
+_BC = []
+
+
+def _fragen_texte(F):
+    # dieselbe Liste wie fragen_texte() in build-clips.py (dort geholt, nicht nachgebaut)
+    if not _BC:
+        spec = importlib.util.spec_from_file_location('bc', R + 'scripts/build-clips.py')
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        _BC.append(m)
+    return [(k, g) for k, _, g in _BC[0].fragen_texte(F)]
+
+
 def clip(name, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip', folge=None):
     zeiten(name, szenen)
     pfad = R + 'clips/' + PRAEFIX + name + '.json'
     if os.path.exists(pfad):
-        frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in json.load(open(pfad))['szenen']}
-        for q in szenen:
+        alt = json.load(open(pfad))
+        frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in alt['szenen']}
+        nach_name = {q['name']: q.get('dauer') for q in alt['szenen']}
+        for i, q in enumerate(szenen, 1):
             d_ = frueher.get((q['name'], q['sprecher']))
             if d_:
                 q['dauer'] = d_
+            elif nach_name.get(q['name']):
+                # Text geändert: die alte dauer bleibt stehen, bis build-clip-ton.py --szenen neu misst (das Skript
+                # braucht die alten Dauern, um die übrigen Szenen aus der bisherigen Spur zu schneiden).
+                q['dauer'] = nach_name[q['name']]
+                NEU_TON.append((PRAEFIX + name, i))
+        alt_f = alt.get('fragen', [])
+        for i, F_ in enumerate(fragen or [], 1):
+            neu_t = dict(_fragen_texte(F_))
+            alt_t = dict(_fragen_texte(alt_f[i - 1])) if i <= len(alt_f) else {}
+            if set(neu_t) != set(alt_t):
+                NEU_FRAGEN.append((PRAEFIX + name, str(i)))
+            else:
+                for k_, g_ in neu_t.items():
+                    if alt_t.get(k_) != g_:
+                        NEU_FRAGEN.append((PRAEFIX + name, '%d:%s' % (i, k_)))
     d = {'titel': titel_, 'dateiname': PRAEFIX + name, 'kurzbeschrieb': kurz,
          'schlagworte': schlag, 'themenbereich': 'Algebra · Textaufgaben',
          'fach': 'Grundlagenfach', 'lerngebiet': '2 · Gleichungen, Ungleichungen und Gleichungssysteme',
@@ -305,6 +338,8 @@ def auto_tex(o):
         return o
     t = o.replace('·', ' \\cdot ').replace('²', '^2').replace('−', '-').replace('\u202f', '\\,').replace('½', '\\tfrac{1}{2}').replace(' %', '\\,\\%')
     t = ' \\text{ und } '.join(t.split(' und '))
+    # Einheiten aufrecht und mit Abstand (Prüfung 08.10.2026: «35 kg» stand kursiv als Produkt k · g)
+    t = re.sub(r'(?<=\d) (kg|l|CHF)\b', r'\\,\\text{\1}', t)
     return '@' + t + '@'
 
 

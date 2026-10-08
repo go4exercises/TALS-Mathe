@@ -10,9 +10,10 @@
 (function(){
   'use strict';
   var NS = 'http://www.w3.org/2000/svg', NB = ' ';
-  /* Zahl für Anzeigen: höchstens 4 Nachkommastellen, Tausendertrenner ab 5 Stellen (wie die Themenseite: 7000, 30 000) */
+  /* Zahl für Anzeigen: höchstens 6 Nachkommastellen (Faktoren wie 0.00375 exakt, Prüfung 08.10.2026, H2 — mit 4 Stellen
+     stand «0.0038» als Lösung da), Tausendertrenner ab 5 Stellen (wie die Themenseite: 7000, 30 000) */
   function z(v, st){
-    var r = Math.round(v * 10000) / 10000; if (Object.is(r, -0)) r = 0;
+    var r = Math.round(v * 1e6) / 1e6; if (Object.is(r, -0)) r = 0;
     var s = st == null ? String(Math.abs(r)) : Math.abs(r).toFixed(st);
     var t = s.split('.'), g = t[0];
     if (g.length > 4) g = g.replace(/\B(?=(\d{3})+(?!\d))/g, NB);
@@ -152,11 +153,11 @@
       { text: 'Erkunde: Stelle Zahlen ein, die beim Vertauschen grösser werden, und solche, die kleiner werden.',
         ok: function(s){ return s.merk.groesser && s.merk.kleiner; } },
       { text: 'Stelle die Zahl 50 ein. Welche Zahl entsteht beim Vertauschen?', ok: function(s){ return s.z === 5 && s.e === 0; } },
-      { text: 'Finde eine Zahl, die beim Vertauschen um 45 grösser wird.', ok: function(s){ return 9 * (s.e - s.z) === 45; } },
+      { text: 'Finde eine Zahl, die beim Vertauschen um 54 kleiner wird.', ok: function(s){ return 9 * (s.z - s.e) === 54; } },
       { text: 'Die Quersumme ist 13, und beim Vertauschen wird die Zahl um 27 kleiner.',
         ok: function(s){ return s.z + s.e === 13 && 9 * (s.z - s.e) === 27; } },
-      { text: 'Die Einerziffer ist um 1 grösser als das Doppelte der Zehnerziffer, und die Quersumme ist 10.',
-        ok: function(s){ return s.e === 2 * s.z + 1 && s.z + s.e === 10; } },
+      { text: 'Die Einerziffer ist um 2 grösser als das Doppelte der Zehnerziffer, und die Quersumme ist 11.',
+        ok: function(s){ return s.e === 2 * s.z + 2 && s.z + s.e === 11; } },
       { text: 'Quersumme 9 und Produkt der Ziffern 20: Stelle nacheinander beide Zahlen ein, die passen.',
         ok: function(s){ return s.merk.z4e5 && s.merk.z5e4; } }
     ], sim);
@@ -229,15 +230,15 @@
     function zust(){ var w = werte(r); return { x: w.x, y: w.y, n: w.x + w.y, w: S.a * w.x + S.b * w.y, a: S.a, merk: merk }; }
     var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ leeren(merk); sorte(START); } };
     function zeichnen(){
-      var s = zust(), X0 = 48, Y0 = 250, kx = 15, ky = 9;
+      var s = zust(), X0 = 48, Y0 = 250, kx = 11.5, ky = 9;    // Breite bis 40 Stück (Regler 20 + 20) passt in die viewBox
       leer(svg);
       var g = el(svg, 'g', {});
-      for (var t = 0; t <= 30; t += 5) { el(g, 'line', { x1: X0 + t * kx, y1: Y0, x2: X0 + t * kx, y2: Y0 + 5, 'class': 'achse' }); text(g, X0 + t * kx, Y0 + 18, String(t), 'skala'); }
-      [S.a, S.b].forEach(function(h){ el(g, 'line', { x1: X0 - 5, y1: Y0 - h * ky, x2: X0 + 30 * kx, y2: Y0 - h * ky, 'class': 'gitter' }); text(g, X0 - 8, Y0 - h * ky + 4, String(h), 'skala', 'end'); });
+      for (var t = 0; t <= 40; t += 5) { el(g, 'line', { x1: X0 + t * kx, y1: Y0, x2: X0 + t * kx, y2: Y0 + 5, 'class': 'achse' }); text(g, X0 + t * kx, Y0 + 18, String(t), 'skala'); }
+      [S.a, S.b].forEach(function(h){ el(g, 'line', { x1: X0 - 5, y1: Y0 - h * ky, x2: X0 + 40 * kx, y2: Y0 - h * ky, 'class': 'gitter' }); text(g, X0 - 8, Y0 - h * ky + 4, String(h), 'skala', 'end'); });
       rechteck(g, X0, Y0 - S.a * ky, s.x * kx, S.a * ky, 'fl blau');
       rechteck(g, X0 + s.x * kx, Y0 - S.b * ky, s.y * kx, S.b * ky, 'fl orange');
-      if (s.x > 1) text(g, X0 + s.x * kx / 2, Y0 - S.a * ky / 2, S.a + '·x', 'bt-klein');
-      if (s.y > 1) text(g, X0 + (s.x + s.y / 2) * kx, Y0 - S.b * ky / 2, S.b + '·y', 'bt-klein');
+      if (s.x > 2) text(g, X0 + s.x * kx / 2, Y0 - S.a * ky / 2, S.a + '·x', 'bt-klein');
+      if (s.y > 2) text(g, X0 + (s.x + s.y / 2) * kx, Y0 - S.b * ky / 2, S.b + '·y', 'bt-klein');
       var oben = Y0 - Math.max(S.a, S.b) * ky - 16;
       if (s.n > 0) { el(g, 'line', { x1: X0, y1: oben, x2: X0 + s.n * kx, y2: oben, 'class': 'klammer' }); text(g, X0 + s.n * kx / 2, oben - 6, s.n + ' ' + S.stueck, 'bt-klein gruen'); }
       el(g, 'line', { x1: X0, y1: Y0, x2: 530, y2: Y0, 'class': 'achse' }); el(g, 'line', { x1: X0, y1: Y0, x2: X0, y2: 20, 'class': 'achse' });
@@ -265,7 +266,7 @@
      umschaltbar) und «Zinseszins» (5000 CHF wachsen zwei Jahre mit dem Faktor 1 + p). */
   (function(){
     var fig = document.getElementById('sim4'); if (!fig) return;
-    var svg = fig.querySelector('svg'); svg.setAttribute('viewBox', '0 0 560 300');
+    var svg = fig.querySelector('svg'); svg.setAttribute('viewBox', '0 0 420 330');   // schmal: Schrift bei 360 px rund 13 px
     var pruefen = function(){}, merk = {}, S = { t2: 1 }, K = 30000, K2 = 5000;
     var r = regler(fig, zeichnen);
     function merken(){ var w = werte(r); if (wahlWert(fig, 's4-art') === 'a'){ if (w.x <= 6000) merk.wenig = true; if (w.x >= 24000) merk.viel = true; } }
@@ -279,27 +280,31 @@
       fig.querySelectorAll('.sl-grp').forEach(function(gr){ var p = gr.querySelector('input').dataset.p; gr.hidden = (s.art === 'a') !== (p === 'x'); });
       leer(svg); g = el(svg, 'g', {});
       if (s.art === 'a'){
-        var b = 460, X0 = 50, y = K - s.x, kz = 0.42;
-        text(g, X0, 28, 'Kapital 30' + NB + '000 CHF', 'bt-kopf', 'start');
-        rechteck(g, X0, 40, b * s.x / K, 46, 'fl blau'); rechteck(g, X0 + b * s.x / K, 40, b * y / K, 46, 'fl orange');
-        if (s.x >= 3000) text(g, X0 + b * s.x / K / 2, 68, 'x = ' + z(s.x), 'bt-klein');
-        if (y >= 3000) text(g, X0 + b * (s.x + y / 2) / K, 68, 'y = ' + z(y), 'bt-klein');
-        text(g, X0, 122, 'Zins in CHF' + (S.t2 === 1 ? '' : ' (Obligation nur ½ Jahr)'), 'bt-kopf', 'start');
+        /* Beschriftung gross genug für 360 px (Prüfung 08.10.2026: dort rund 7 px) und mit den Namen der Anlagen */
+        var b = 360, X0 = 30, y = K - s.x, kz = 0.55;
+        text(g, X0, 22, 'Kapital 30' + NB + '000 CHF', 'bt-kopf', 'start');
+        rechteck(g, X0, 30, b * s.x / K, 44, 'fl blau'); rechteck(g, X0 + b * s.x / K, 30, b * y / K, 44, 'fl orange');
+        if (s.x >= 7000) text(g, X0 + b * s.x / K / 2, 58, z(s.x), 'bt-klein');
+        if (y >= 7000) text(g, X0 + b * (s.x + y / 2) / K, 58, z(y), 'bt-klein');
+        rechteck(g, X0, 88, 15, 15, 'fl blau'); text(g, X0 + 22, 101, 'x: Sparkonto, 0.75' + NB + '%', 'bt-klein', 'start');
+        rechteck(g, X0, 112, 15, 15, 'fl orange');
+        text(g, X0 + 22, 125, 'y: Obligation, 2' + NB + '%' + (S.t2 === 1 ? '' : ', nur ½ Jahr'), 'bt-klein', 'start');
+        text(g, X0, 162, 'Zins in CHF', 'bt-kopf', 'start');
         var z1 = 0.0075 * s.x, z2 = 0.02 * S.t2 * y;
-        rechteck(g, X0, 134, z1 * kz, 40, 'fl blau dunkel'); rechteck(g, X0 + z1 * kz, 134, z2 * kz, 40, 'fl orange dunkel');
-        text(g, X0, 196, '0.0075 · x = ' + z(z1, 2), 'bt-klein', 'start');
-        text(g, X0, 216, (S.t2 === 1 ? '0.02' : '0.02 · ½') + ' · y = ' + z(z2, 2), 'bt-klein', 'start');
-        text(g, X0 + 300, 206, 'Zins: ' + z(s.zins, 2) + ' CHF', 'bt gruen', 'start');
+        rechteck(g, X0, 170, z1 * kz, 34, 'fl blau dunkel'); rechteck(g, X0 + z1 * kz, 170, z2 * kz, 34, 'fl orange dunkel');
+        text(g, X0, 234, '0.0075 · x = ' + z(z1, 2), 'bt-klein', 'start');
+        text(g, X0, 262, (S.t2 === 1 ? '0.02' : '0.02 · ½') + ' · y = ' + z(z2, 2), 'bt-klein', 'start');
+        text(g, X0, 302, 'Zins: ' + z(s.zins, 2) + ' CHF', 'bt gruen', 'start');
         rolle(fig, 'formel').innerHTML = 'Kapital: ' + sp('tx-blau', z(s.x)) + ' + ' + sp('tx-orange', z(y)) + ' = 30' + NB + '000 CHF'
           + '; &nbsp;Zins: 0.0075 · ' + sp('tx-blau', z(s.x)) + ' + ' + (S.t2 === 1 ? '0.02' : '0.02 · ½') + ' · ' + sp('tx-orange', z(y)) + ' = ' + z(s.zins, 2) + ' CHF';
       } else {
-        var p = s.p / 100, w = [K2, K2 * (1 + p), K2 * (1 + p) * (1 + p)], X = [70, 230, 390], ky = 0.034, Y0 = 250;
+        var p = s.p / 100, w = [K2, K2 * (1 + p), K2 * (1 + p) * (1 + p)], X = [30, 165, 300], ky = 0.036, Y0 = 280;
         w.forEach(function(v, k){
           rechteck(g, X[k], Y0 - K2 * ky, 90, K2 * ky, 'fl blau');
           rechteck(g, X[k], Y0 - v * ky, 90, (v - K2) * ky, 'fl gruen dunkel');
           text(g, X[k] + 45, Y0 - v * ky - 8, chf(v), 'bt-klein');
-          text(g, X[k] + 45, Y0 + 18, ['Start', 'nach 1 Jahr', 'nach 2 Jahren'][k], 'bt-klein');
-          if (k) text(g, X[k] - 35, Y0 - 100, '· (1 + p)', 'bt-klein');
+          text(g, X[k] + 45, Y0 + 22, ['Start', 'nach 1 Jahr', 'nach 2 Jahren'][k], 'bt-klein');
+          if (k) text(g, X[k] - 22, 36, '· (1 + p)', 'bt-klein', 'middle');
         });
         rolle(fig, 'formel').innerHTML = 'p = ' + z(p) + ' (' + z(s.p, 1) + NB + '%)' + '; &nbsp;5000 → ' + chf(w[1]) + ' → ' + chf(w[2]) + ' CHF'
           + '; &nbsp;Zins in zwei Jahren ' + chf(w[2] - K2) + ' CHF';
@@ -409,24 +414,35 @@
     /* Sperrliste: Keine Zufallsübung würfelt eine feste Aufgabe des Leitprogramms (Clips, Simulationen,
        Kapitelaufgaben, Vortest, Gesamttest) oder ein Beispiel der Themenseite. Schlüssel je Typ. */
     var SPERRE = [
-      // ziffern: Zahlen aus Clips (72, 27, 48, 64, 47/74), Aufgaben 1a (49), 1d (36), Leiste (85, 37, 45, 54), Gesamttest G1 (69), Themenseite (84, 24)
-      'zf|72', 'zf|27', 'zf|48', 'zf|84', 'zf|64', 'zf|47', 'zf|74', 'zf|49', 'zf|36', 'zf|63', 'zf|85', 'zf|37', 'zf|45', 'zf|54', 'zf|69', 'zf|24', 'zf|50',
-      // folge: Clip (Quadratsumme 113), Gesamttest G2 (145), Aufgabe 1c (Abstand 2, 168), Themenseite (72 mit Abstand 1, 84 mit Abstand 5)
+      // ziffern: Zahlen aus Clips (72, 27, 48, 64, 47/74), Aufgaben 1a (49), 1d (36/63), Leiste (50, 71, 82, 93, 85, 38, 45, 54),
+      // Gesamttest G1 (69), Themenseite (84, 24)
+      'zf|72', 'zf|27', 'zf|48', 'zf|84', 'zf|64', 'zf|47', 'zf|74', 'zf|49', 'zf|36', 'zf|63', 'zf|85', 'zf|38', 'zf|45', 'zf|54',
+      'zf|71', 'zf|82', 'zf|93', 'zf|69', 'zf|24', 'zf|50',
+      // folge: Clip (Quadratsumme 113), Aufgabe 1c (Abstand 2, 168), Themenseite (72 mit Abstand 1, 84 mit Abstand 5); 145 (frühere G2)
       'fo|qsum|1|113', 'fo|qsum|1|145', 'fo|prod|2|168', 'fo|prod|1|72', 'fo|prod|5|84',
-      // stoff: Einführung/Themenseite (20 %, 50 %, 30 kg, 30 %), Kontrollclip (60, 85, 50, 70), Leiste, Gesamttest G5
+      // art: Gleichungen aus Clips (132, 113, 216, 312, Quersumme 12/36, Quersumme 9/Produkt 14), Aufgabe 1c (168), Leiste (Produkt 20, 5202)
+      'ar|n + (n + 1) + (n + 2) = 132', 'ar|n^2 + (n + 1)^2 = 113', 'ar|n^2 + (n + 1)^2 = 145', 'ar|n \\cdot (n + 2) = 168',
+      'ar|n \\cdot (n + 6) = 216', 'ar|18 \\cdot x + 12 \\cdot (24 - x) = 312', 'ar|5000 \\cdot (1 + p)^2 = 5202',
+      'ar|\\begin{cases} z + e = 12 \\\\ 10 \\cdot e + z = 10 \\cdot z + e + 36 \\end{cases}',
+      'ar|\\begin{cases} z + e = 9 \\\\ z \\cdot e = 14 \\end{cases}', 'ar|\\begin{cases} z + e = 9 \\\\ z \\cdot e = 20 \\end{cases}',
+      // stoff: Einführung/Themenseite (20 %, 50 %, 30 kg, 30 %), Kontrollclip (60, 85, 50, 70), Leiste
       'st|20|50|30|30', 'st|60|85|50|70', 'st|20|50|24|40', 'st|20|50|24|25', 'st|20|50|30|32', 'st|58|90|40|66',
       // verduennen: Kontrollclip (12 l, 25 % → 10 %), Themenseite und Einführung (2 l, 40 → 16; 5 l, 30 → 12), Leiste (15, 10 → 6)
       'vd|12|25|10', 'vd|2|40|16', 'vd|5|30|12', 'vd|15|10|6',
-      // wertbilanz: Einführung, Kontrollclip, Aufgabe 3a, Leiste, Gesamttest G3, Themenseite
+      // verdunsten: frühere Gesamttestaufgabe (5 kg, 12 % → 20 %)
+      'vu|5|12|20',
+      // wertbilanz: Einführung, Kontrollclip, Aufgabe 3a, Leiste, Gesamttest G2, Themenseite (Mini-Check 20 Personen, 15 und 9 CHF)
       'wb|12|18|14|188', 'wb|70|30|55|2600', 'wb|150|17|11|2190', 'wb|10|18|14|160', 'wb|30|16|9|382', 'wb|300|22|30|7400', 'wb|40|18|7|500', 'wb|24|18|12|312',
+      'wb|20|15|9|252',
       // reihen: Kontrollclip (216 Stühle, 6 mehr)
       'rh|plus|6|216',
-      // faktor: Aufgabe 4b, Themenseite (Mini-Check, A5), Gesamttest G7, Kontrollclip (2 % ein halbes Jahr)
-      'fk|1.8|8', 'fk|0.9|3', 'fk|2.4|5', 'fk|1.5|4', 'fk|2.7|4', 'fk|2|9', 'fk|2|6', 'fk|2.4|6',
-      // zinseszins: Kontrollclip, Einführung/Themenseite A7, Aufgabe 4c, Leiste
-      'zz|5000|2000|2', 'zz|5000|0|3', 'zz|8000|0|1.5', 'zz|5000|0|2', 'zz|5000|0|4'
+      // faktor: Aufgabe 4b, Themenseite (Mini-Checks, A5), Gesamttest G7 (2 % für 9 Monate, 1.2 % ein Jahr), Kontrollclip (2 % ein halbes Jahr)
+      'fk|1.8|8', 'fk|0.9|3', 'fk|2.4|5', 'fk|1.5|4', 'fk|2.7|4', 'fk|2|9', 'fk|2|6', 'fk|2.4|6', 'fk|0.6|12', 'fk|1.2|12',
+      // zinseszins: Kontrollclip, Einführung/Themenseite A7, frühere Aufgabe 4c, Leiste, Gesamttest G6 (Abhebung)
+      'zz|5000|2000|2', 'zz|5000|0|3', 'zz|8000|0|1.5', 'zz|5000|0|2', 'zz|5000|0|4', 'zz|6000|-1000|1'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
+    var HAND = 'von Hand (oder num-solv)';
     var FACH = { 2: 'Doppelte', 3: 'Dreifache', 4: 'Vierfache', 5: 'Fünffache', 6: 'Sechsfache' };
     var MAL = { 2: 'doppelt', 3: 'dreimal', 4: 'viermal' };
 
@@ -438,7 +454,7 @@
         neu: function(){
           var z_, e_, s1, s2, T1, T2, t1, t2, F = [], k, c;
           do {
-            z_ = ri(1, 9); e_ = ri(0, 9); if (z_ === e_) continue;
+            z_ = ri(1, 9); e_ = ri(1, 9); if (z_ === e_) continue;     // e ≠ 0: sonst hiesse die vertauschte Zahl «03»
             var verh = (z_ > 0 && e_ % z_ === 0 && e_ / z_ >= 2 && e_ / z_ <= 4) || (e_ > 0 && z_ % e_ === 0 && z_ / e_ >= 2 && z_ / e_ <= 4);
             s1 = verh && Math.random() < 0.4 ? 'verh' : 'qs';
             s2 = zufall(s1 === 'verh' ? ['tausch', 'vielf'] : ['tausch', 'diff', 'vielf']);
@@ -527,7 +543,7 @@
 
       /* ── Kapitel 1: Gleichungsart und Löser bestimmen (RLP 2.1: den Typ einer Gleichung bestimmen) ── */
       'art': { felder: ['art', 'loeser'],
-        muster: 'Gleichungsart: {art:linear|quadratisch|lineares System|quadratisches System}<br>Löser: {loeser:keiner, von Hand|poly-solv|sys-solv|erst einsetzen, dann poly-solv}',
+        muster: 'Gleichungsart: {art:linear|quadratisch|lineares System|quadratisches System}<br>Löser: {loeser:von Hand (oder num-solv)|poly-solv|sys-solv|erst einsetzen, dann poly-solv}',
         schl: function(A){ return 'ar|' + A.tex; },
         eingabe: function(A){ return { art: A.art, loeser: A.loeser }; },
         neu: function(){
@@ -548,13 +564,13 @@
             function(){ a = ri(8, 20); b = ri(2, 6) * 6; return '\\begin{cases} x \\cdot y = ' + a * b + ' \\\\ (x - 2) \\cdot (y + ' + ri(2, 8) + ') = ' + a * b + ' \\end{cases}'; },
             function(){ a = ri(1, 4); b = a + ri(1, 5); return '\\begin{cases} z + e = ' + (a + b) + ' \\\\ z \\cdot e = ' + a * b + ' \\end{cases}'; },
             function(){ return '\\begin{cases} m \\cdot p = ' + ri(3, 9) + ' \\\\ (m + ' + ri(5, 20) + ') \\cdot (p - 0.1) = ' + ri(3, 9) + ' \\end{cases}'; }])();
-          var L = { 'linear': 'keiner, von Hand', 'quadratisch': 'poly-solv', 'lineares System': 'sys-solv', 'quadratisches System': 'erst einsetzen, dann poly-solv' }[art];
+          var L = { 'linear': HAND, 'quadratisch': 'poly-solv', 'lineares System': 'sys-solv', 'quadratisches System': 'erst einsetzen, dann poly-solv' }[art];
           return { art: art, loeser: L, tex: t,
             text: 'Welche Art von Gleichung ist das, und welcher Löser des TI-30X passt? \\(' + t + '\\)' }; },
         fehler: function(A){
           var F = { 'linear': [['quadratisch', 'poly-solv', 'ersten Potenz'], ['lineares System', 'sys-solv', 'Unbekannte']],
-                    'quadratisch': [['linear', 'keiner, von Hand', 'Quadrat'], ['quadratisches System', 'erst einsetzen, dann poly-solv', 'Unbekannte']],
-                    'lineares System': [['quadratisches System', 'erst einsetzen, dann poly-solv', 'multipliziert'], ['linear', 'keiner, von Hand', 'Unbekannte']],
+                    'quadratisch': [['linear', HAND, 'Quadrat'], ['quadratisches System', 'erst einsetzen, dann poly-solv', 'Unbekannte']],
+                    'lineares System': [['quadratisches System', 'erst einsetzen, dann poly-solv', 'multipliziert'], ['linear', HAND, 'Unbekannte']],
                     'quadratisches System': [['lineares System', 'sys-solv', 'Produkt'], ['quadratisch', 'poly-solv', 'Unbekannte']] }[A.art];
           var aus = F.map(function(f){ return [{ art: f[0], loeser: f[1] }, f[2]]; });
           var L2 = { 'linear': 'poly-solv', 'quadratisch': 'sys-solv', 'lineares System': 'poly-solv', 'quadratisches System': 'sys-solv' }[A.art];
@@ -570,8 +586,9 @@
             return 'In keiner Gleichung werden Unbekannte multipliziert oder quadriert.';
           }
           if (e.loeser === A.loeser) return null;
-          if (A.art === 'lineares System' && e.loeser === 'keiner, von Hand') return null;     // ohne Rechner auch richtig (RLP 2.3)
-          if (A.art === 'linear') return 'Löser: Eine lineare Gleichung löst du von Hand — ordnen, dann teilen.';
+          // Von Hand geht jede dieser Gleichungen (RLP 2.3 «auch ohne Hilfsmittel», Lösungsformel) — Prüfung 08.10.2026, M7
+          if (e.loeser === HAND) return null;
+          if (A.art === 'linear') return 'Löser: Eine lineare Gleichung löst du von Hand — ordnen, dann teilen (oder mit num-solv).';
           if (A.art === 'quadratisch') return 'Löser: poly-solv löst \\(a \\cdot x^2 + b \\cdot x + c = 0\\) — zuerst in diese Grundform bringen.';
           if (A.art === 'lineares System') return 'Löser: Für zwei lineare Gleichungen mit zwei Unbekannten gibt es sys-solv (oder du löst von Hand).';
           return 'Löser: sys-solv löst nur lineare Systeme, poly-solv nur eine Unbekannte. Erst einsetzen, dann entsteht eine quadratische Gleichung.'; },
@@ -582,9 +599,12 @@
         schl: function(A){ return 'st|' + A.p1 + '|' + A.p2 + '|' + A.M + '|' + A.p; },
         eingabe: function(A){ return ein6(A.T1, A.T2); },
         neu: function(){
-          var p1, p2, x, y, M, P;
-          do { p1 = ri(1, 12) * 5; p2 = ri(p1 / 5 + 2, 19) * 5; x = ri(2, 30); y = ri(2, 30); M = x + y; P = p1 * x + p2 * y; } while (P % M !== 0 || P / M === p1 || P / M === p2);
-          var K = zufall([['Sirup', 'Zucker'], ['Legierung', 'Kupfer'], ['Salzlösung', 'Salz'], ['Düngerlösung', 'Stickstoff']]);
+          // Gehalt je Sachzusammenhang (Prüfung 08.10.2026, H4): Kochsalz löst sich nur bis rund 26 %, Flüssigdünger bis rund 30 %
+          // Stickstoff, Sirup bis rund 65 % Zucker. p = M ausgeschlossen: Sonst träfe die richtige Mengenbilanz die Falle [1, 1, p] (M2).
+          var K = zufall([['Sirup', 'Zucker', 65], ['Legierung', 'Kupfer', 95], ['Salzlösung', 'Salz', 25], ['Düngerlösung', 'Stickstoff', 30]]);
+          var p1, p2, x, y, M, P, hoch = K[2] / 5;
+          do { p1 = ri(1, hoch - 2) * 5; p2 = ri(p1 / 5 + 2, hoch) * 5; x = ri(2, 30); y = ri(2, 30); M = x + y; P = p1 * x + p2 * y; }
+          while (P % M !== 0 || P / M === p1 || P / M === p2 || P / M === M);
           var p = P / M;
           return { p1: p1, p2: p2, M: M, p: p, x: x, y: y, T1: [1, 1, M], T2: [p1 / 100, p2 / 100, p * M / 100],
             text: K[0] + ' 1 enthält ' + p1 + NB + '% ' + K[1] + ', ' + K[0] + ' 2 enthält ' + p2 + NB + '%. Daraus entstehen ' + M + ' kg mit ' + p + NB + '% ' + K[1]
@@ -617,6 +637,25 @@
           if (gl(e.w, A.V * A.p1 / A.p2)) return 'Das ist die ganze Mischung. \\(w\\) ist nur das Wasser: Die Mischung hat \\(' + A.V + ' + w\\) Liter.';
           return 'Stoff vorher = Stoff nachher: \\(' + zt(A.p1 / 100) + ' \\cdot ' + A.V + ' = ' + zt(A.p2 / 100) + ' \\cdot (' + A.V + ' + w)\\). Wasser bringt keinen Wirkstoff mit.'; },
         loesung: function(A){ return zt(A.p1 / 100) + ' \\cdot ' + A.V + ' = ' + zt(A.p2 / 100) + ' \\cdot (' + A.V + ' + w) \;\\Rightarrow\; w = ' + zt(A.w); } },
+
+      /* ── Kapitel 2: Eindampfen — Wasser verdunstet, eine Unbekannte (Prüfung 08.10.2026, M3: im Gesamttest verlangt) ── */
+      'verdunsten': { felder: ['w'], muster: 'verdunstetes Wasser: w = {w} kg',
+        schl: function(A){ return 'vu|' + A.V + '|' + A.p1 + '|' + A.p2; },
+        neu: function(){
+          // Salz löst sich nur bis rund 26 %: Salzlösung bis 25 %, Zuckerlösung bis 60 %. p2 = 2 · p1 nicht: Dann wäre die
+          // Masse danach gleich dem verdunsteten Wasser, und die Falle «Masse danach» gälte als richtig.
+          var K = zufall([['Salzlösung', 'Salz', 25], ['Zuckerlösung', 'Zucker', 60]]), V, p1, p2, w;
+          do { V = ri(4, 40); p1 = ri(1, K[2] / 5 - 1) * 5; p2 = ri(p1 / 5 + 1, K[2] / 5) * 5; w = V * (p2 - p1) / p2; }
+          while (Math.abs(w * 2 - Math.round(w * 2)) > 1e-9 || p2 === 2 * p1);
+          return { V: V, p1: p1, p2: p2, w: w, stoff: K[1],
+            text: V + ' kg ' + K[0] + ' enthalten ' + p1 + NB + '% ' + K[1] + '. Wie viele Kilogramm Wasser \\(w\\) müssen verdunsten, damit die Lösung ' + p2 + NB + '% ' + K[1] + ' enthält?' }; },
+        fehler: function(A){ return [[{ w: String(A.V * A.p1 / A.p2) }, 'danach'], [{ w: String(-A.w) }, 'leichter']]; },
+        pruefen: function(A, e){
+          if (gl(e.w, A.w)) return null;
+          if (gl(e.w, A.V * A.p1 / A.p2)) return 'Das ist die Masse danach. \\(w\\) ist das verdunstete Wasser: Danach wiegt die Lösung \\(' + A.V + ' - w\\) kg.';
+          if (gl(e.w, -A.w)) return 'Beim Verdunsten wird die Lösung leichter: danach \\(' + A.V + ' - w\\) kg, nicht \\(' + A.V + ' + w\\).';
+          return A.stoff + ' vorher = ' + A.stoff + ' nachher: \\(' + zt(A.p1 / 100) + ' \\cdot ' + A.V + ' = ' + zt(A.p2 / 100) + ' \\cdot (' + A.V + ' - w)\\). Es verdunstet nur Wasser.'; },
+        loesung: function(A){ return zt(A.p1 / 100) + ' \\cdot ' + A.V + ' = ' + zt(A.p2 / 100) + ' \\cdot (' + A.V + ' - w) \;\\Rightarrow\; w = ' + zt(A.w); } },
 
       /* ── Kapitel 3: Stück- und Wertbilanz in die Grundform ─────────────────────── */
       'wertbilanz': { felder: ['a1', 'b1', 'c1', 'a2', 'b2', 'c2'], muster: MUSTER6('x', 'y'),
@@ -696,33 +735,39 @@
         eingabe: function(A){ return { a: tz(A.G[0]), b: tz(A.G[1]), c: tz(A.G[2]), p: String(A.p) }; },
         neu: function(){
           var K, E, pp, S;
-          // E ≠ K: sonst gäben «Binom vergessen» (b = K + E) und «E · (1 + p) vergessen» (b = 2 · K) dieselbe Zahl
-          do { K = ri(2, 9) * 1000; E = zufall([0, 0, 1000, 2000, 3000]); pp = zufall([1, 1.5, 2, 2.5, 3, 4, 5]);
-               S = K * (1 + pp / 100) * (1 + pp / 100) + E * (1 + pp / 100); } while (E === K || Math.abs(S * 100 - Math.round(S * 100)) > 1e-6);
+          // E ≠ K: sonst gäben «Binom vergessen» (b = K + E) und «E · (1 + p) vergessen» (b = 2 · K) dieselbe Zahl.
+          // E < 0 ist eine Abhebung (wie Gesamttest G6, Prüfung 08.10.2026: dort verlangt, hier geübt); E ≠ −K, sonst b = K + E = 0.
+          do { K = ri(2, 9) * 1000; E = zufall([0, 0, 1000, 2000, 3000, -1000, -2000]); pp = zufall([1, 1.5, 2, 2.5, 3, 4, 5]);
+               S = K * (1 + pp / 100) * (1 + pp / 100) + E * (1 + pp / 100); }
+          while (E === K || E === -K || Math.abs(S * 100 - Math.round(S * 100)) > 1e-6);
           S = Math.round(S * 100) / 100;
           var p = pp / 100, G = [K, 2 * K + E, Math.round((K + E - S) * 100) / 100];
           return { K: K, E: E, pp: pp, p: p, S: S, G: G, neg: poly(G[0], G[1], G[2])[1],
-            text: (E ? z(K) + ' CHF werden eingezahlt, nach einem Jahr nochmals ' + z(E) + ' CHF.' : z(K) + ' CHF liegen zwei Jahre auf einem Konto.')
+            text: (E > 0 ? z(K) + ' CHF werden eingezahlt, nach einem Jahr nochmals ' + z(E) + ' CHF.'
+                   : E < 0 ? z(K) + ' CHF werden eingezahlt; nach einem Jahr werden ' + z(-E) + ' CHF abgehoben.'
+                   : z(K) + ' CHF liegen zwei Jahre auf einem Konto.')
               + ' Der Zins wird mitverzinst, der Zinssatz bleibt gleich. Nach zwei Jahren sind es ' + z(S, 2) + ' CHF. Bring die Gleichung für den Zinssatz \\(p\\) (Dezimalzahl) in die Grundform und gib \\(p\\) an.' }; },
         fehler: function(A){
           var G = A.G, ein = function(g, p){ return { a: tz(g[0]), b: tz(g[1]), c: tz(g[2]), p: String(p) }; }, f = [];
           f.push([ein([G[0], A.K + A.E, G[2]], A.p), 'Binom']);
-          if (A.E) f.push([ein([G[0], 2 * A.K, G[2]], A.p), 'Glied mit p'], [ein([G[0], G[1], Math.round((A.K - A.S) * 100) / 100], A.p), 'Einzahlung']);
+          if (A.E) f.push([ein([G[0], 2 * A.K, G[2]], A.p), 'Glied mit p'], [ein([G[0], G[1], Math.round((A.K - A.S) * 100) / 100], A.p), A.E > 0 ? 'Einzahlung' : 'Abhebung']);
           f.push([ein([G[0], G[1], -G[2]], A.p), 'Vorzeichen'], [ein(G, A.pp), 'Dezimalzahl'], [ein(G, Math.round(A.neg * 1e6) / 1e6), 'passt nicht']);
           return f; },
         pruefen: function(A, e){
           var r = [e.a, e.b, e.c], G = A.G;
           if (!prop(r, G)){
             if (prop(r, [G[0], A.K + A.E, G[2]])) return 'Binom: \\((1 + p)^2 = 1 + 2 \\cdot p + p^2\\) — das Glied \\(2 \\cdot ' + z(A.K) + ' \\cdot p\\) fehlt.';
-            if (A.E && prop(r, [G[0], 2 * A.K, G[2]])) return 'Auch \\(' + A.E + ' \\cdot (1 + p)\\) liefert ein Glied mit p.';
-            if (A.E && prop(r, [G[0], G[1], A.K - A.S])) return 'Die Einzahlung steht auch ohne p da: \\(c = ' + A.K + ' + ' + A.E + ' - ' + zt(A.S) + '\\).';
+            if (A.E && prop(r, [G[0], 2 * A.K, G[2]])) return 'Auch \\(' + (A.E > 0 ? A.E : '-' + (-A.E)) + ' \\cdot (1 + p)\\) liefert ein Glied mit p.';
+            if (A.E && prop(r, [G[0], G[1], A.K - A.S])) return (A.E > 0 ? 'Die Einzahlung' : 'Die Abhebung') + ' steht auch ohne p da: Sie gehört ins konstante Glied \\(c\\).';
             if (prop(r, [G[0], G[1], -G[2]])) return 'Vorzeichen: Der Endbetrag kommt mit Minus nach links.';
             return 'Multipliziere \\((1 + p)^2\\) aus, bring alles auf eine Seite und fasse zusammen: \\(a \\cdot p^2 + b \\cdot p + c = 0\\).';
           }
           if (gl(e.p, A.p)) return null;
           if (gl(e.p, A.pp)) return 'p als Dezimalzahl: ' + z(A.pp) + NB + '% sind ' + z(A.p) + '.';
-          if (e.p < 0) return 'Diese Lösung von poly-solv passt nicht: Ein Zinssatz unter −100 % gibt es nicht.';
-          return 'Die Grundform stimmt. Löse mit poly-solv; die Umschalttaste zeigt die Dezimalzahl.'; },
+          // nur bei der zweiten Lösung von poly-solv (unter −100 %), nicht bei jeder negativen Eingabe (Prüfung 08.10.2026, M1)
+          if (e.p <= -1) return 'Diese Lösung von poly-solv passt nicht: Einen Zinssatz unter −100 % gibt es nicht.';
+          if (gl(e.p, -A.p)) return 'Vorzeichen: Das Kapital wächst, der Zinssatz ist positiv. Welche Lösung zeigt poly-solv?';
+          return 'Die Grundform stimmt. Löse mit poly-solv und wähle die Lösung, die ein Zinssatz sein kann.'; },
         loesung: function(A){ return grundTex(A.G[0], A.G[1], A.G[2], 'p') + ',\\quad p = ' + zt(A.p) + ' = ' + z(A.pp) + '\\,\\%'; } }
     };
 

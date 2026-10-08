@@ -7,7 +7,10 @@ Grundgleichung der Aufgabenart, eine Simulation mit Aufgabenleiste und **zwei Ko
 (lineare und quadratische Gleichung) und «zwei Unbekannte» (lineares und quadratisches System). Jede der 16
 Aufgaben läuft in fünf Schritten — Deklaration → Ansatz → Grundform → Lösen → Antwort —, an jedem Schritt eine
 Kontrollfrage. Gelöst wird mit dem TI-30X Pro (poly-solv, sys-solv); die linearen Systeme der Kapitelaufgaben
-1a–4a und die Teile A und B des Gesamttests ohne Rechner (RLP 2.3, «auch ohne Hilfsmittel»).
+1a–4a und Teil A des Gesamttests ohne Rechner (RLP 2.3, «auch ohne Hilfsmittel»).
+
+**Zeiten** (neu geschätzt nach der Prüfung, 08.10.2026): Vorwissen 20 · Kapitel 1 60 · Kapitel 2 65 · Kapitel 3 60 ·
+Kapitel 4 65 · Gesamttest 35 = 305 min, rund sieben Lektionen — über der Zielgrösse des Kapitelmusters (HOWTO §3).
 
 | Datei | Zweck | laufen lassen? |
 |---|---|---|
@@ -16,7 +19,7 @@ Kontrollfrage. Gelöst wird mit dem TI-30X Pro (poly-solv, sys-solv); die linear
 | `clips.py` | erzeugt die zwölf Drehbücher `clips/g2-M-lp-*.json` (Reihe «Ansatz finden») | **ja** — rettet die gemessenen `dauer` |
 | `wortzeiten.py` | misst die Wortzeiten der vertonten Clips (faster-whisper) → `wortzeiten.json` | nach jeder Vertonung |
 | `seite.py` | baut `leitprogramme/modellieren.html` (Gerüst beim ersten Lauf aus `trigonometrische-gleichungen.html`) | **ja**, nach jeder Änderung an `seite.py` oder `seite.js` |
-| `seite.js` | vier Simulationen mit Aufgabenleiste, Bilder zu den Aufgaben (`svg.mo-bild[data-bild]`), neun Übungstypen | wird von `seite.py` eingebunden |
+| `seite.js` | vier Simulationen mit Aufgabenleiste, Bilder zu den Aufgaben (`svg.mo-bild[data-bild]`), zehn Übungstypen | wird von `seite.py` eingebunden |
 
 Gesamttest und Bewertungspaket: `downloads/leitprogramme/modellieren/*.tex`, gebaut mit
 `python3 scripts/build-lp-pdf.py modellieren` (**Filter `modellieren`** — ein Filter wie `gesamttest` baut die PDFs aller
@@ -44,9 +47,11 @@ Mischung, Lösung · 4 rot = Fehler, verworfene Lösung · 5 Tinte = neutral. Gl
 
 ## Sperrliste der Übungen
 
-`SPERRE` in `seite.js`, ein Schlüssel je Typ (`zf|Zahl`, `fo|…`, `st|…`, `vd|…`, `wb|…`, `rh|…`, `fk|…`, `zz|…`). Neue feste
-Aufgabe = neuer Eintrag. Zwei Würfelräume sind bewusst eingeschränkt, weil sonst zwei Fehlermuster dieselbe Zahl
-gäben: `faktor` würfelt nicht 1 Monat, `zinseszins` nicht E = K.
+`SPERRE` in `seite.js`, ein Schlüssel je Typ (`zf|Zahl`, `fo|…`, `ar|Gleichung`, `st|…`, `vd|…`, `vu|…`, `wb|…`, `rh|…`, `fk|…`, `zz|…`).
+Neue feste Aufgabe = neuer Eintrag. Eingeschränkte Würfelräume, weil sonst zwei Fehlermuster dieselbe Zahl gäben oder der
+Sachzusammenhang unmöglich würde: `faktor` würfelt nicht 1 Monat, `zinseszins` nicht E = K und nicht E = −K, `verdunsten` nicht
+p₂ = 2 · p₁, `stoff` nicht p = M; `stoff` und `verdunsten` würfeln den Gehalt je Stoff nur bis zur Löslichkeit bzw. zu einem
+üblichen Gehalt (Salz 25 %, Stickstoff 30 %, Zucker 60–65 %). `ziffern` würfelt keine Einerziffer 0.
 
 ## Zeiten auf den Ton
 
@@ -61,7 +66,12 @@ python3 scripts/build-clips.py           g2-M-lp-<name>
 python3 scripts/lp/modellieren/seite.py                   # Clipzeiten auf der Seite
 ```
 
-Einzelne Szenen neu: `build-clip-ton.py --szenen`, Fragen `build-clip-fragen-ton.py --fragen` (HOWTO-clips).
+Einzelne Szenen neu: `build-clip-ton.py --szenen`, Fragen `build-clip-fragen-ton.py --fragen` (HOWTO-clips). `clips.py` nennt
+am Schluss («NEU VERTONEN …»), welche Szenen und Fragetöne seit dem letzten Lauf neuen Text haben, und lässt bei diesen
+Szenen die alte `dauer` stehen — `build-clip-ton.py --szenen` braucht sie, um die übrigen Szenen aus der alten Spur zu
+schneiden. Die Liste vergleicht mit dem Drehbuch auf der Platte: also direkt nach dem Ändern lesen, vor dem zweiten Lauf.
+Wörter, die Whisper als Ziffern schreibt («16 000») oder verhört, taugen nicht als «@wort» — dann ein Nachbarwort mit
+«+Sekunden» nehmen (`FEHLT` zeigt, was geschätzt wurde).
 
 ## Prüfen
 

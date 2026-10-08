@@ -128,6 +128,8 @@ svg.mo-bild{display:block;width:100%;max-width:300px;margin:6px 0;background:var
 .ue-eingabe{line-height:2.4}
 .ue-eingabe input{width:4.6em}
 .sl-grp.akz-grau{--akz:var(--tinte-2)}
+/* Simulation Zins: viel Text im Bild — grösser, damit es bei 360 px noch lesbar ist (Prüfung 08.10.2026) */
+#sim4 > svg{max-width:440px} #sim4 .bt-klein{font-size:19px} #sim4 .bt-kopf{font-size:17px} #sim4 .bt{font-size:21px}
 .nb{white-space:nowrap}
 '''
 
@@ -258,7 +260,7 @@ fest1 = r'''      <div class="festhalten">
             <li><b>Aufeinanderfolgende natürliche Zahlen:</b> \(n\), \(n + 1\), \(n + 2\) — eine Unbekannte genügt.</li>
             <li><b>Übersetzen:</b> «um 3 grösser als \(a\)» ist \(a + 3\), «3-mal so gross wie \(a\)» ist \(3 \cdot a\).</li>
           </ul>
-          <p><b>Gleichungsart erkennen:</b> Stehen die Unbekannten nur in Summen und Vielfachen, ist es linear — eine Gleichung löst du von Hand, ein System mit sys-solv oder von Hand. Ein Quadrat oder ein <b>Produkt der Unbekannten</b> (\(z \cdot e\)) macht es quadratisch: einsetzen, in die Grundform \(a \cdot x^2 + b \cdot x + c = 0\) bringen, poly-solv.</p>
+          <p><b>Gleichungsart erkennen:</b> Stehen die Unbekannten nur in Summen und Vielfachen, ist es linear — eine Gleichung löst du von Hand (oder mit num-solv), ein System mit sys-solv oder von Hand. Bleibt nach dem Ausmultiplizieren ein Quadrat oder ein <b>Produkt der Unbekannten</b> (\(z \cdot e\)) stehen, ist es quadratisch: einsetzen, in die Grundform \(a \cdot x^2 + b \cdot x + c = 0\) bringen, poly-solv. (In \((n + 1)^2 - n^2 = 15\) fällt das Quadrat weg: linear.)</p>
           <p><b>Probe am Text</b>, und Lösungen verwerfen, die keine Ziffer oder keine natürliche Zahl sind. Beispiel aus dem Clip: Quersumme 9, Produkt der Ziffern 14 gibt \(z^2 - 9 \cdot z + 14 = 0\) — zwei Zahlen, 72 und 27.</p>
         </div>
         <div class="warn">
@@ -278,7 +280,7 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 10, [
      r'<p>(a) 3 Zehnerstangen und 6 Einer: 36. Vertauscht 63, Differenz \(63 - 36 = 27\). (b) \((10 \cdot e + z) - (10 \cdot z + e) = 9 \cdot e - 9 \cdot z = 9 \cdot (e - z)\) — immer 9 mal eine ganze Zahl.</p>',
      bild({'art': 'zahl', 'z': 3, 'e': 6}, 'Drei Zehnerstangen und sechs Einerwürfel')),
 ])
-k1 = kapitel(1, 'zahlenraetsel', 'Zahlen- und Ziffernrätsel', 45,
+k1 = kapitel(1, 'zahlenraetsel', 'Zahlen- und Ziffernrätsel', 60,
              r'Du übersetzt die Aussagen eines Zahlenrätsels in Gleichungen — mit dem Stellenwert \(10 \cdot z + e\) —, erkennst, ob eine lineare oder quadratische Gleichung oder ein System entsteht, bringst sie in die Grundform für den Rechner und prüfst jede Lösung am Text.',
              ('g2-M-lp-zahlenraetsel', 'Zahlen- und Ziffernrätsel'),
              sim1, [('g2-M-lp-kontrolle-zahlen-1', 'Kontrollfragen: eine Unbekannte'), ('g2-M-lp-kontrolle-zahlen-2', 'Kontrollfragen: zwei Unbekannte')],
@@ -298,7 +300,8 @@ fest2 = r'''      <div class="festhalten">
           <ul>
             <li>\(p_1\), \(p_2\) sind die Anteile der Sorten, \(p\) der Anteil der Mischung, \(M\) die Gesamtmenge. Anteile als <b>Dezimalzahl</b>: 3.8 % wird zu \(0.038\). Stoff = Anteil mal Menge.</li>
             <li>Beim Mischen von Preisen ist \(p\) der Preis pro kg, die zweite Gleichung eine Wertbilanz in CHF.</li>
-            <li><b>Verdünnen:</b> Wasser ist eine Sorte mit dem Anteil \(0\). Mit einer Unbekannten entsteht eine lineare Gleichung.</li>
+            <li><b>Verdünnen:</b> Wasser ist eine Sorte mit dem Anteil \(0\). Mit einer Unbekannten entsteht eine lineare Gleichung. <b>Eindampfen:</b> Verdunstet Wasser, bleibt der Stoff, die Masse wird kleiner: \(p_1 \cdot V = p_2 \cdot (V - w)\).</li>
+            <li><b>Prozentpunkte:</b> Sinkt ein Anteil von 30 % um 10 Prozentpunkte, sind es 20 % — als Dezimalzahl \(p - 0.1\). (Um 10 Prozent gesunken wären es 27 %.)</li>
             <li>Für sys-solv darf die Stoffbilanz mit 100 multipliziert werden: ganze Zahlen tippen sich sicherer.</li>
             <li><b>Quadratisch</b> wird es, wenn Menge und Anteil beide unbekannt sind (\(m \cdot p\)) oder wenn zweimal Gemisch entnommen und ersetzt wird.</li>
           </ul>
@@ -306,7 +309,7 @@ fest2 = r'''      <div class="festhalten">
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
-          <p>Prozent und Menge in derselben Gleichung: In \(0.2 \cdot x + 0.5 \cdot y = 0.3\) steht links eine Masse, rechts ein Anteil. Prozente addieren sich nie.</p>
+          <p>Prozent und Menge in derselben Gleichung: In \(0.2 \cdot x + 0.5 \cdot y = 0.3\) steht links eine Masse, rechts ein Anteil. Die Anteile der Sorten addieren sich nicht zum Anteil der Mischung — addiert werden die Stoffmengen.</p>
           <p>Kontrollfrage für jede Gleichung: Welche Einheit steht links, welche rechts? Es muss dieselbe sein.</p>
         </div>
       </div>'''
@@ -315,17 +318,17 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 10, [
      r'<p>\(x\): Masse Tee zu 40 CHF in kg, \(y\): Masse Tee zu 64 CHF in kg. \(x + y = 6\) und \(40 \cdot x + 64 \cdot y = 48 \cdot 6 = 288\). Mit \(x = 6 - y\): \(240 + 24 \cdot y = 288\), \(y = 2\), \(x = 4\). <b>4 kg zu 40 CHF und 2 kg zu 64 CHF.</b> Probe am Text: \(160 + 128 = 288\) CHF, und \(288 : 6 = 48\) CHF pro kg ✓.</p>', ''),
     ('2b', 2, r'Für «Milch mit 3.5 % Fett und Rahm mit 35 % Fett ergeben 70 kg mit 8 % Fett» schreibt jemand \(x + y = 70\) und \(0.035 \cdot x + 0.35 \cdot y = 8\). Was ist falsch? Korrigiere und löse mit dem Taschenrechner.',
      r'<p>Rechts steht ein Prozentwert, links eine Fettmasse in kg. Richtig ist die Fettmasse der Mischung: \(0.08 \cdot 70 = 5.6\). sys-solv mit \(x + y = 70\) und \(0.035 \cdot x + 0.35 \cdot y = 5.6\): <b>\(x = 60\) kg Milch, \(y = 10\) kg Rahm.</b> Probe: \(2.1 + 3.5 = 5.6\) kg Fett ✓.</p>', ''),
-    ('2c', 3, r'Ein Behälter enthält 50 l reines Frostschutzmittel. Zweimal lässt man gleich viel ab und füllt mit Wasser auf; dazwischen wird gut gemischt. Danach enthält er noch 32 l Frostschutzmittel. Wie viel wurde jedes Mal abgelassen? (Taschenrechner)',
-     r'<p>\(x\): jedes Mal abgelassene Menge in l, \(0 \lt x \lt 50\). Nach dem ersten Mal \(50 - x\) l Mittel, Anteil \(\tfrac{50 - x}{50}\); danach bleibt \(\tfrac{(50 - x)^2}{50} = 32\). Also \((50 - x)^2 = 1600\), Grundform \(x^2 - 100 \cdot x + 900 = 0\); poly-solv: \(x_1 = 90\), \(x_2 = 10\). 90 l sind mehr, als im Behälter ist: <b>jedes Mal 10 l</b>. Probe: 40 l, dann \(40 - 10 \cdot \tfrac{40}{50} = 32\) l ✓.</p>', ''),
+    ('2c', 3, r'Ein Behälter enthält 50 l reines Frostschutzmittel. Man lässt eine Menge ab, füllt mit Wasser auf und mischt gut. Dann lässt man <em>doppelt so viel</em> ab wie beim ersten Mal und füllt wieder mit Wasser auf. Jetzt enthält er noch 24 l Frostschutzmittel. Wie viel wurde beim ersten Mal abgelassen? (Taschenrechner)',
+     r'<p>\(x\): beim ersten Mal abgelassene Menge in l, beim zweiten Mal \(2 \cdot x\); \(0 \lt 2 \cdot x \lt 50\). Nach dem ersten Mal \(50 - x\) l Mittel, Anteil \(\tfrac{50 - x}{50}\). Beim zweiten Mal gehen \(2 \cdot x \cdot \tfrac{50 - x}{50}\) l Mittel weg; übrig bleibt \((50 - x) \cdot \tfrac{50 - 2 \cdot x}{50} = 24\). Mal 50: \((50 - x) \cdot (50 - 2 \cdot x) = 1200\), Grundform \(2 \cdot x^2 - 150 \cdot x + 1300 = 0\) (oder durch 2: \(x^2 - 75 \cdot x + 650 = 0\)); poly-solv: \(x_1 = 65\), \(x_2 = 10\). 65 l sind mehr, als im Behälter ist: <b>beim ersten Mal 10 l, beim zweiten Mal 20 l</b>. Probe am Text: 40 l Mittel in 50 l, also 80 %; mit 20 l Gemisch gehen 16 l Mittel weg, es bleiben 24 l ✓.</p>', ''),
     ('2d', 2, r'(a) Lies im Bild die Stoffmengen ab und berechne den Anteil der Mischung. (b) Warum ist der Anteil nicht der Mittelwert \((20\,\% + 60\,\%) : 2 = 40\,\%\)?',
      r'<p>(a) \(0.2 \cdot 30 = 6\) kg und \(0.6 \cdot 10 = 6\) kg, zusammen 12 kg Stoff in 40 kg: \(12 : 40 = 0.3\), also 30 %. (b) Es ist dreimal so viel von der 20-%-Sorte dabei. Der Anteil der Mischung liegt darum näher bei 20 %: Gemittelt wird mit den Mengen, nicht mit den Prozenten allein.</p>',
      bild({'art': 'misch', 'x': 30, 'p1': 0.2, 'y': 10, 'p2': 0.6}, 'Gefäss mit 30 kg zu 20 Prozent, Gefäss mit 10 kg zu 60 Prozent und die Mischung')),
 ])
-k2 = kapitel(2, 'mischen', 'Mischen', 45,
-             r'Du deklarierst bei Mischaufgaben die Mengen, stellst Mengenbilanz und Stoffbilanz auf — Anteil mal Menge, Anteile als Dezimalzahl —, verdünnst mit Wasser als Sorte mit Anteil 0 und erkennst, wann ein Produkt zweier Unbekannter die Aufgabe quadratisch macht.',
+k2 = kapitel(2, 'mischen', 'Mischen', 65,
+             r'Du deklarierst bei Mischaufgaben die Mengen, stellst Mengenbilanz und Stoffbilanz auf — Anteil mal Menge, Anteile als Dezimalzahl —, verdünnst mit Wasser als Sorte mit Anteil 0, dampfst ein, indem Wasser verdunstet, und erkennst, wann ein Produkt zweier Unbekannter die Aufgabe quadratisch macht.',
              ('g2-M-lp-mischen', 'Mischen'),
              sim2, [('g2-M-lp-kontrolle-mischen-1', 'Kontrollfragen: eine Unbekannte'), ('g2-M-lp-kontrolle-mischen-2', 'Kontrollfragen: zwei Unbekannte')],
-             fest2, [uebung('stoff', 'Mengen- und Stoffbilanz für sys-solv'), uebung('verduennen', 'Verdünnen mit Wasser')],
+             fest2, [uebung('stoff', 'Mengen- und Stoffbilanz für sys-solv'), uebung('verduennen', 'Verdünnen mit Wasser'), uebung('verdunsten', 'Eindampfen: Wasser verdunstet')],
              auf2, f'<a href="{TS}#mischen">Themenseite 2.M, Typ 2 — Mischen</a>',
              'Taschenrechner erlaubt, 2a ohne')
 
@@ -356,14 +359,14 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 10, [
     ('3a', 3, r'Ein Kino verkauft an einem Abend 150 Billette, für Erwachsene zu 17 CHF und für Kinder zu 11 CHF. Die Einnahmen betragen 2190 CHF. Deklariere, stelle das System auf und löse es von Hand ' + OHNE + '.',
      r'<p>\(x\): Anzahl Erwachsenenbillette, \(y\): Anzahl Kinderbillette. \(x + y = 150\) und \(17 \cdot x + 11 \cdot y = 2190\). Mit \(y = 150 - x\): \(6 \cdot x + 1650 = 2190\), \(x = 90\), \(y = 60\). <b>90 Erwachsenen- und 60 Kinderbillette.</b> Probe am Text: \(1530 + 660 = 2190\) CHF ✓.</p>', ''),
     ('3b', 2, r'Ein Laden verkauft Kappen zu 25 CHF, Schals zu 30 CHF und das Set «Kappe + Schal» zu 45 CHF. An einem Tag gehen 20 Kappen und 14 Schals weg — einzeln oder im Set — für zusammen 820 CHF. Deklariere und stelle das System auf. Nicht lösen.',
-     r'<p>\(x\): einzeln verkaufte Kappen, \(y\): einzeln verkaufte Schals, \(z\): verkaufte Sets. \(x + z = 20\) (Kappen), \(y + z = 14\) (Schals), \(25 \cdot x + 30 \cdot y + 45 \cdot z = 820\) (CHF).</p><p class="komm">Zur Kontrolle: \(z = 10\), \(x = 10\), \(y = 4\). Ein System mit drei Unbekannten lösen: Themenseite 2.3.</p>', ''),
-    ('3c', 3, r'Ein Verein kauft für 600 CHF T-Shirts. Wären sie pro Stück 5 CHF billiger, hätte er für denselben Betrag 6 T-Shirts mehr bekommen. Wie viele T-Shirts hat er gekauft, und was kostet eines? (Taschenrechner)',
-     r'<p>\(x\): Anzahl T-Shirts, \(y\): Preis pro Stück in CHF. \(x \cdot y = 600\) und \((x + 6) \cdot (y - 5) = 600\). Ausmultipliziert und \(x \cdot y = 600\) benutzt: \(-5 \cdot x + 6 \cdot y = 30\), also \(y = \tfrac{5 \cdot x + 30}{6}\). Eingesetzt und mit 6 multipliziert: \(5 \cdot x^2 + 30 \cdot x - 3600 = 0\); poly-solv: \(x_1 = 24\), \(x_2 = -30\). Eine Anzahl ist nicht negativ: <b>24 T-Shirts zu 25 CHF.</b> Probe: \(24 \cdot 25 = 600\) ✓, \(30 \cdot 20 = 600\) ✓.</p>', ''),
+     r'<p>\(x\): einzeln verkaufte Kappen, \(y\): einzeln verkaufte Schals, \(z\): verkaufte Sets. \(x + z = 20\) (Kappen), \(y + z = 14\) (Schals), \(25 \cdot x + 30 \cdot y + 45 \cdot z = 820\) (CHF).</p><p class="komm">Zur Kontrolle, wenn du es lösen willst: Aus den Stückbilanzen \(x = 20 - z\) und \(y = 14 - z\) — eingesetzt bleibt eine Gleichung mit \(z\): \(25 \cdot (20 - z) + 30 \cdot (14 - z) + 45 \cdot z = 820\), zusammengefasst \(920 - 10 \cdot z = 820\). Also \(z = 10\), \(x = 10\) und \(y = 4\). Mehr zu Systemen mit drei Unbekannten: Themenseite 2.3.</p>', ''),
+    ('3c', 3, r'In einem Saal stehen 120 Stühle in gleich langen Reihen. Für eine Feier räumt man 3 Reihen weg und nimmt aus jeder übrigen Reihe 2 Stühle heraus. Jetzt stehen noch 70 Stühle. Wie viele Reihen waren es, und wie viele Stühle standen in jeder? (Taschenrechner)',
+     r'<p>\(r\): Anzahl Reihen, \(s\): Stühle pro Reihe — ganze Zahlen, nicht negativ. \(r \cdot s = 120\) und \((r - 3) \cdot (s - 2) = 70\). Ausmultipliziert und \(r \cdot s = 120\) benutzt: \(120 - 2 \cdot r - 3 \cdot s + 6 = 70\), also \(s = \tfrac{56 - 2 \cdot r}{3}\). Eingesetzt und mit 3 multipliziert: \(2 \cdot r^2 - 56 \cdot r + 360 = 0\); poly-solv: \(r_1 = 18\), \(r_2 = 10\) (der Rechner nennt sie \(x_1\), \(x_2\)). Bei 18 Reihen wären es \(\tfrac{120}{18} = 6.\overline{6}\) Stühle pro Reihe — keine ganze Zahl, fällt weg. <b>10 Reihen zu 12 Stühlen.</b> Probe am Text: \(10 \cdot 12 = 120\) ✓, \(7 \cdot 10 = 70\) ✓.</p><p class="komm">Hier sind beide Lösungen positiv. Erst die zweite Unbekannte zeigt, welche Lösung zum Text passt.</p>', ''),
     ('3d', 2, r'(a) Lies im Rechteckmodell ab: Wie viele Stück sind es, und wie gross ist der Gesamtwert? (b) Warum ist mit 12 Stück zu 18 CHF und 7 CHF ein Gesamtwert von genau 100 CHF unmöglich?',
      r'<p>(a) \(4 + 8 = 12\) Stück; Wert \(18 \cdot 4 + 7 \cdot 8 = 72 + 56 = 128\) CHF. (b) \(18 \cdot x + 7 \cdot (12 - x) = 100\) gibt \(11 \cdot x = 16\), also \(x = \tfrac{16}{11}\) — keine ganze Zahl. Bruchteile von Stücken gibt es nicht.</p>',
      bild({'art': 'rechteck', 'x': 4, 'a': 18, 'y': 8, 'b': 7}, 'Rechteckmodell: 4 Stück zu 18 CHF und 8 Stück zu 7 CHF')),
 ])
-k3 = kapitel(3, 'verteilen', 'Verteilen', 45,
+k3 = kapitel(3, 'verteilen', 'Verteilen', 60,
              r'Du stellst bei Verteilaufgaben Stückbilanz und Wertbilanz auf — Anzahl mal Wert pro Stück —, zählst Sets in jeder Stückbilanz ihrer Artikel, prüfst, ob Stückzahlen ganz und nicht negativ sind, und erkennst, wann Anzahl und Wert pro Stück beide unbekannt sind: Dann wird es quadratisch.',
              ('g2-M-lp-verteilen', 'Verteilen'),
              sim3, [('g2-M-lp-kontrolle-verteilen-1', 'Kontrollfragen: eine Unbekannte'), ('g2-M-lp-kontrolle-verteilen-2', 'Kontrollfragen: zwei Unbekannte')],
@@ -384,7 +387,8 @@ fest4 = r'''      <div class="festhalten">
           <ul>
             <li>Zinssätze als <b>Dezimalzahl</b>: 2 % wird zu \(0.02\). Zeitanteil \(t\) in Jahren: Halbjahr \(t = \tfrac{1}{2}\), vier Monate \(t = \tfrac{1}{3}\). Einfacher Zins: Zins \(= p \cdot t \cdot\) Kapital.</li>
             <li><b>Zinseszins</b> (Themenseite, A7): Wird der Zins gutgeschrieben und mitverzinst, wächst ein Kapital pro Jahr mit dem Faktor \(1 + p\): nach zwei Jahren \(K \cdot (1 + p)^2\).</li>
-            <li><b>Quadratisch</b> wird es, wenn bei Zinseszins \(p\) gesucht ist oder wenn Kapital und Zinssatz beide unbekannt sind (\(K \cdot p\)). poly-solv zeigt Brüche; die Umschalttaste zeigt die Dezimalzahl.</li>
+            <li><b>Einfacher Zins</b> über zwei Jahre (Zins nicht mitverzinst): \(K \cdot (1 + 2 \cdot p)\). <b>Zinseszins:</b> \(K \cdot (1 + p)^2\).</li>
+            <li><b>Quadratisch</b> wird es, wenn bei Zinseszins \(p\) gesucht ist oder wenn Kapital und Zinssatz beide unbekannt sind (\(K \cdot p\)). Bei ganzzahligen Koeffizienten zeigt poly-solv eine Lösung wie \(\tfrac{1}{50}\) als Bruch; die Umschalttaste ↔ zeigt die Dezimalzahl. Steht in der Grundform eine Dezimalzahl, multiplizierst du die Gleichung vorher, bis alle Koeffizienten ganz sind.</li>
           </ul>
           <p>Beispiel aus dem Clip: 30 000 CHF zu 0.75 % und 2 %, 425 CHF Zins: \(x + y = 30\,000\), \(0.0075 \cdot x + 0.02 \cdot y = 425\); \(x = 14\,000\), \(y = 16\,000\).</p>
         </div>
@@ -399,13 +403,13 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 10, [
      r'<p>\(x\): Kapital zu 1.5 % in CHF, \(y\): Kapital zu 2.5 % in CHF. \(x + y = 16\,000\) und \(0.015 \cdot x + 0.025 \cdot y = 300\). Mit \(x = 16\,000 - y\): \(240 + 0.01 \cdot y = 300\), \(y = 6000\), \(x = 10\,000\). <b>10 000 CHF zu 1.5 %, 6000 CHF zu 2.5 %.</b> Probe: \(150 + 150 = 300\) CHF ✓.</p>', ''),
     ('4b', 2, r'Welcher Faktor steht in der Zinsgleichung vor dem Kapital? (a) 1.8 %, 8 Monate (b) 0.9 %, ein Vierteljahr (c) 2.4 %, 5 Monate',
      r'<p>(a) \(0.018 \cdot \tfrac{8}{12} = 0.012\). (b) \(0.009 \cdot \tfrac{1}{4} = 0.00225\). (c) \(0.024 \cdot \tfrac{5}{12} = 0.01\).</p>', ''),
-    ('4c', 3, r'8000 CHF liegen zwei Jahre auf einem Konto; der Zins wird mitverzinst, der Zinssatz bleibt gleich. Danach sind es 8241.80 CHF. Bestimme den Zinssatz: Grundform, poly-solv, Antwort.',
-     r'<p>\(p\): Zinssatz als Dezimalzahl. \(8000 \cdot (1 + p)^2 = 8241.80\); Grundform \(8000 \cdot p^2 + 16\,000 \cdot p - 241.8 = 0\); poly-solv: \(x_1 = \tfrac{3}{200} = 0.015\), \(x_2 = -\tfrac{403}{200} = -2.015\) (verworfen). <b>Zinssatz 1.5 %.</b> Probe: \(8000 \cdot 1.015 = 8120\), \(8120 \cdot 1.015 = 8241.80\) ✓.</p><p class="komm">Auch Wurzelziehen geht: \((1 + p)^2 = 1.030225\), \(1 + p = 1.015\).</p>', ''),
+    ('4c', 3, r'10 000 CHF liegen zwei Jahre auf einem Konto; der Zins wird mitverzinst. Im zweiten Jahr ist der Zinssatz um 0.5 Prozentpunkte höher als im ersten. Nach zwei Jahren sind es 10 353 CHF. Bestimme den Zinssatz des ersten Jahres: Gleichung, Grundform, poly-solv, Antwort.',
+     r'<p>\(p\): Zinssatz im ersten Jahr als Dezimalzahl, im zweiten Jahr \(p + 0.005\). \(10\,000 \cdot (1 + p) \cdot (1.005 + p) = 10\,353\). Ausmultipliziert: \(10\,000 \cdot p^2 + 20\,050 \cdot p + 10\,050 = 10\,353\), Grundform \(10\,000 \cdot p^2 + 20\,050 \cdot p - 303 = 0\); poly-solv: \(x_1 = \tfrac{3}{200} = 0.015\), \(x_2 = -\tfrac{101}{50} = -2.02\) (unter −100 %, verworfen). <b>1.5 % im ersten, 2 % im zweiten Jahr.</b> Probe am Text: \(10\,000 \cdot 1.015 = 10\,150\) und \(10\,150 \cdot 1.02 = 10\,353\) ✓.</p><p class="komm">Hier hilft Wurzelziehen nicht: Die zwei Jahre haben verschiedene Faktoren.</p>', ''),
     ('4d', 2, r'(a) Lies im Bild die beiden Kapitalien und ihre Zinssätze ab und berechne den Zins nach einem Jahr. (b) Warum ist der Zins nicht \(20\,000 \cdot 1.75\,\% = 350\) CHF, obwohl 1.75 % der Mittelwert der Zinssätze ist?',
      r'<p>(a) 12 000 CHF zu 1 % und 8000 CHF zu 2.5 %: \(120 + 200 = 320\) CHF. (b) Mehr Geld liegt zum tieferen Zinssatz. Der mittlere Zinssatz gälte nur, wenn beide Kapitalien gleich gross wären.</p>',
      bild({'art': 'zins', 'x': 12000, 'p1': 0.01, 'y': 8000, 'p2': 0.025}, 'Kapital 20 000 CHF, geteilt in 12 000 CHF zu 1 Prozent und 8000 CHF zu 2.5 Prozent, darunter die Zinsen')),
 ])
-k4 = kapitel(4, 'zins', 'Zins', 45,
+k4 = kapitel(4, 'zins', 'Zins', 65,
              r'Du stellst Kapitalgleichung und Zinsgleichung auf — Zinssatz als Dezimalzahl, Zeit in Jahren —, rechnest mit Zinseszins über zwei Jahre (Faktor \(1 + p\) pro Jahr) und löst die entstehenden linearen und quadratischen Gleichungen und Systeme, wo nötig mit dem Rechner.',
              ('g2-M-lp-zins', 'Zins'),
              sim4, [('g2-M-lp-kontrolle-zins-1', 'Kontrollfragen: eine Unbekannte'), ('g2-M-lp-kontrolle-zins-2', 'Kontrollfragen: zwei Unbekannte')],
@@ -416,7 +420,7 @@ k4 = kapitel(4, 'zins', 'Zins', 45,
 # ------------------------------------------------------------------ Vorwissen
 k0 = '''
     <section class="kap" id="k0">
-      <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-gf">Vorwissen · GF 2.2 · 2.3</span><span class="zeit">≈ 15 min</span></div>
+      <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-gf">Vorwissen · GF 2.2 · 2.3</span><span class="zeit">≈ 20 min</span></div>
       <h2 id="vorwissen">Vorwissen</h2>
       <p class="ziel">Das Bilanzprinzip in vier Schritten, die vier Arten von Gleichungen mit ihrer Grundform und die zwei Löser des TI-30X Pro (MathPrint bzw. MultiView). Wenn das wackelt: Leitprogramm <a href="lineare-quadratische-gleichungen.html">Lineare und quadratische Gleichungen</a> (GF 2.2) und <a href="../grundlagen/g2-3-lineare-gleichungssysteme.html">Themenseite 2.3 Lineare Gleichungssysteme</a>.</p>
       ''' + clipkarte('g2-M-deklarieren-bilanzieren', 'Textaufgaben: zuerst deklarieren, dann bilanzieren', '1:14') + '''
@@ -428,16 +432,16 @@ k0 = '''
           <p>Das Bilanzprinzip der Themenseite in vier Schritten: <b>① Unbekannte deklarieren</b> — mit Bedeutung und Einheit; <b>② Gleichungen aufstellen</b> — so viele unabhängige wie Unbekannte, jede eine Bilanz; <b>③ Lösen</b>; <b>④ Probe am Text</b>. In den Kontrollclips ist ③ geteilt: zuerst die <b>Grundform</b>, dann <b>Lösen</b>.</p>
           <div class="tab-rahmen"><table class="arten">
             <tr><th>Art</th><th>Grundform</th><th>Lösen</th></tr>
-            <tr><td>lineare Gleichung</td><td>\(a \cdot x = c\)</td><td>von Hand: \(x = c : a\)</td></tr>
+            <tr><td>lineare Gleichung</td><td>\(a \cdot x = c\) mit \(a \neq 0\)</td><td>von Hand: \(x = c : a\) (oder num-solv)</td></tr>
             <tr><td>quadratische Gleichung</td><td>\(a \cdot x^2 + b \cdot x + c = 0\)</td><td>poly-solv: \(a\), \(b\), \(c\) mit Vorzeichen</td></tr>
             <tr><td>lineares Gleichungssystem</td><td>\(a_1 \cdot x + b_1 \cdot y = c_1\)<br>\(a_2 \cdot x + b_2 \cdot y = c_2\)</td><td>sys-solv 2×2 — oder von Hand (Einsetzen, Addition)</td></tr>
             <tr><td>quadratisches Gleichungssystem</td><td>eine Gleichung nach einer Unbekannten auflösen, einsetzen: quadratische Gleichung</td><td>poly-solv, dann die zweite Unbekannte</td></tr>
           </table></div>
-          <p>«Grundform» heisst hier die geordnete Form, die der Rechner verlangt. Die Themenseite 2.2b nennt \(a \cdot x^2 + b \cdot x + c = 0\) die allgemeine Form.</p>
+          <p>«Grundform» heisst hier die geordnete Form, die der Rechner verlangt. Die Themenseite 2.2b nennt \(a \cdot x^2 + b \cdot x + c = 0\) die allgemeine Form, das Leitprogramm <a href="lineare-quadratische-gleichungen.html">Lineare und quadratische Gleichungen</a> \(a \cdot x = c\) die Zwischenform. Jede Art geht auch ganz von Hand.</p>
         </div>
         <div class="warn">
           <div class="titel">Rechner richtig lesen</div>
-          <p>poly-solv zeigt immer beide Lösungen der Gleichung — welche zum Text passen, entscheidest du. sys-solv nennt die Unbekannten \(x\) und \(y\), auch wenn sie bei dir \(z\) und \(e\) heissen.</p>
+          <p>poly-solv zeigt immer beide Lösungen der Gleichung — welche zum Text passen, entscheidest du. Es nennt sie \(x_1\) und \(x_2\), auch wenn die Unbekannte bei dir \(n\), \(r\) oder \(p\) heisst; sys-solv nennt die Unbekannten \(x\) und \(y\), auch wenn sie bei dir \(z\) und \(e\) heissen.</p>
           <p>Das Minus einer negativen Zahl kommt mit der Vorzeichentaste (−). Brüche wie \(\tfrac{1}{50}\) schaltet die Umschalttaste in die Dezimalzahl um.</p>
         </div>
       </div>
@@ -462,10 +466,10 @@ gt = f'''
     <section class="kap" id="gesamttest">
       <div class="gesamt">
         <div class="gesamt-kopf">
-          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 2.1 · 2.3 · Kapitel 1–4</span><span class="zeit">≈ 40 min · 25 Punkte</span></div>
+          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 2.1 · 2.3 · Kapitel 1–4</span><span class="zeit">≈ 35 min · 25 Punkte</span></div>
           <h2 id="gesamttest-titel">Gesamttest</h2>
           <div class="pdf-weg">
-            <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Deklaration, Ansatz und Rechenweg. Teile A und B ohne Taschenrechner, Teile C und D mit Taschenrechner.<br>
+            <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Deklaration, Ansatz und Rechenweg. Teil A ohne Taschenrechner, Teil B mit Taschenrechner.<br>
               <a class="pdf-knopf" href="{PDF}gesamttest.pdf" download>⬇ Gesamttest (PDF)</a></div></div>
             <div class="pdf-schritt"><span class="nr">2</span><div><b>Bewerten lassen</b> — Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem Bewertungspaket einer KI geben. Das Paket enthält die Musterlösung: erst danach öffnen.<br>
               <a class="pdf-knopf" href="{PDF}bewertungspaket.pdf" download>⬇ Bewertungspaket (PDF)</a></div></div>
@@ -480,7 +484,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast — zuerst die Kontrollclips.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 0 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1; G2 → 1; G3 → 3; G4 → 2; G5 → 2; G6 → 4; G7 → 4</p>
+          <p>Aufgabe → Kapitel: G1 → 1; G2 → 3; G3 → 3; G4 → 2; G5 → 2; G6 → 4; G7 → 4</p>
         </div>
       </div>
     </section>'''
@@ -497,31 +501,42 @@ oben = '''<div id="nav-root"></div>
            zielführend einsetzen sowie Lösungen überprüfen (2.1)
        K3  ein lineares Gleichungssystem mit maximal drei Variablen lösen (auch ohne Hilfsmittel) (2.3)
      K1, K2 ohne Vermerk: Taschenrechner erlaubt (TI-30X Pro, Löser poly-solv und sys-solv). K3 «auch ohne
-     Hilfsmittel»: je Kapitel eine Aufgabe (1a, 2a, 3a, 4a) und die Gesamttest-Teile A und B ohne Rechner.
+     Hilfsmittel»: je Kapitel eine Aufgabe (1a, 2a, 3a, 4a) und der Gesamttest-Teil A ohne Rechner (G1–G3).
 
      Kompetenzmatrix (Kompetenz | ohne HM? | Kapitel | Kapitelaufgaben | Gesamttest):
        K1 als Gleichung oder Gleichungssystem formulieren | —        | 1–4 (Clips, Sim.) | 1a, 1b, 2a, 2b, 2c, 3a, 3b, 3c, 4a, 4c | G1–G7
        K1 «Ungleichung»                                   | —        | nicht hier → LP/Themenseite 2.2a (Ungleichungen); die Themenseite 2.M hat keine
        K2 Typ bestimmen, Methoden zielführend, prüfen     | —        | 0–4               | 0b, 0c, 1b, 1c, 1d, 2c, 2d, 3c, 3d, 4c, 4d; Übung «art» | G2, G3, G5, G6, G7
-       K3 lineares System lösen, auch ohne HM             | ja       | 0–4               | 0d, 0e, 1a, 2a, 3a, 4a              | G1, G3 (ohne TR), G5
-       K3 drei Variablen                                  | —        | 3 (nur aufstellen: Set) | 3b                            | — (lösen: Themenseite 2.3)
+       K3 lineares System lösen, auch ohne HM             | ja       | 0–4               | 0d, 0e, 1a, 2a, 3a, 4a              | G1, G2, G3 (ohne TR); G4, G7 (sys-solv)
+       K3 drei Variablen                                  | ja       | 3 (Set: aufstellen, Lösungsweg im Kommentar) | 3b     | G3 (Set, über Terme mit einer Unbekannten)
      Kein Kapitelziel ohne Kompetenz.
 
      Planung (Kapitel | Lernziel | Clips | Tüfteln | Kontrollclip-Aufgaben: Gleichungsart → Löser | Häufiger Fehler | min):
-       0 Vorwissen  | Bilanzprinzip, Arten, Grundform, Löser | g2-M-deklarieren-bilanzieren, g2-2b-ti30x-poly-solv, g2-3-ti30x-sys-solv | — | — | — | 15
+       0 Vorwissen  | Bilanzprinzip, Arten, Grundform, Löser | g2-M-deklarieren-bilanzieren, g2-2b-ti30x-poly-solv, g2-3-ti30x-sys-solv | — | — | — | 20
        1 Zahlen     | 10·z + e, je Aussage eine Gleichung | lp-zahlenraetsel + 2 Kontrollclips | sim1 Zehnerstangen | aufeinanderfolgende Zahlen, Summe 132 (linear → von Hand);
-                      Quadratsumme 113 (quadratisch → poly-solv); Quersumme 12, vertauscht +36 (LGS → sys-solv); z = e + 2, Zahl mal Quersumme 640 (QGS → poly-solv) | um/mal, Richtung, z · e | 45
+                      Quadratsumme 113 (quadratisch → poly-solv); Quersumme 12, vertauscht +36 (LGS → sys-solv); z = e + 2, Zahl mal Quersumme 640 (QGS → poly-solv) | um/mal, Richtung, z · e | 60
        2 Mischen    | Mengen- und Stoffbilanz, Wasser 0 | lp-mischen + 2 | sim2 Gefässe | 12 l Sirup verdünnen (linear); Fass 40 l zweimal abzapfen (quadratisch);
-                      60 % und 85 % zu 50 kg (LGS); Salzlösung m · p = 6 (QGS) | Prozent statt Menge | 45
+                      60 % und 85 % zu 50 kg (LGS); Salzlösung m · p = 3, 5 Prozentpunkte weniger (QGS) | Prozent statt Menge | 65
        3 Verteilen  | Stück- und Wertbilanz, Sets, ganze Zahlen | lp-verteilen + 2 | sim3 Rechteckmodell | 24 Billette (linear); 216 Stühle in Reihen (quadratisch);
-                      Fähre 70 Fahrzeuge (LGS); Bus 360 CHF (QGS) | Set einmal gezählt | 45
+                      Fähre 70 Fahrzeuge (LGS); Bus 360 CHF (QGS) | Set einmal gezählt | 60
        4 Zins       | Kapital- und Zinsgleichung, Zeitanteil, Zinseszins | lp-zins + 2 | sim4 Balken/Zinseszins | 12 000 CHF mit Halbjahr (linear);
-                      Zinseszins mit Einzahlung 7242 CHF (quadratisch); vertauschte Zinssätze (LGS); K · p = 480 (QGS) | Prozent stehen lassen, Zeitanteil | 45
-       Gesamttest 40 — Summe 235 min: vier Kapitel zu je einer Lektion, Vorwissen und Gesamttest. Clips: 12 eigene (dazu 3 der Themenseiten).
+                      Zinseszins mit Einzahlung 7242 CHF (quadratisch); vertauschte Zinssätze (LGS); K · p = 480 (QGS) | Prozent stehen lassen, Zeitanteil | 65
+       Gesamttest 35 — Summe 305 min (rund 7 Lektionen): Vorwissen 20, Kapitel 60 + 65 + 60 + 65, Gesamttest 35.
+       Zeiten neu geschätzt nach der Prüfung (08.10.2026, M12) aus den Teilen: Einführungsclip 3, Tüfteln 8, zwei Kontrollclips mit
+       je 10 Fragen und Rechner 2 × 10, Festhalten 3, Übungen 10–15 (Kapitel 2: drei), Aufgaben auf Papier 15. Das ist mehr als die
+       Zielgrösse des Kapitelmusters (HOWTO §3: 35–45 min je Kapitel, bis 5 Lektionen) — offen, ob geteilt wird.
+       Clips: 12 eigene (dazu 3 der Themenseiten).
+
+     Gesamttest (Neufassung 08.10.2026 nach Prüfung H1, M3, M4): Teil A ohne Taschenrechner — G1 Ziffernrätsel (LGS), G2 Ansätze
+     vergleichen (LGS, eine Unbekannte), G3 Set mit drei Unbekannten über Terme (linear); Teil B mit Taschenrechner — G4 zwei Lösungen
+     und Wasser (LGS, sys-solv), G5 Eindampfen mit Masse und Anteil unbekannt (QGS, poly-solv), G6 Zinseszins mit Abhebung
+     (quadratisch, poly-solv), G7 gleich viel Zins mit Zeitanteil (LGS, sys-solv). Jede Aufgabe kombiniert Geübtes neu: Wasser als
+     dritte Sorte (Clip Verdünnen + LGS), Eindampfen (Übung) mit m · p (Kontrollclip), Abhebung (Übung Zinseszins), Set (Clip, 3b) mit
+     Rest als Term (Kontrollclips), «gleich viel Zins» statt Gesamtzins.
 
      Kern: alles oben. Vertiefung: Zinseszins ist auf der Themenseite Vertiefung (A7); hier Kern von Kapitel 4, weil der Auftrag in jeder
      Aufgabenart eine quadratische Gleichung verlangt und der Zinseszins die natürliche ist (eingeführt im Einführungsclip).
-     Bewusst weggelassen (→ Themenseite 2.M): Bruchrätsel (Bruchgleichungen), Systeme mit drei Unbekannten lösen (Set nur aufstellen),
+     Bewusst weggelassen (→ Themenseite 2.M): Bruchrätsel (Bruchgleichungen), Systeme mit drei Unbekannten allgemein lösen (das Set nur über Terme mit einer Unbekannten),
      die technische Zusatzserie A8–A11 (Widerstände, Träger, Linse, Mischtemperatur), der Ansatz-Trainer; Ungleichungen (2.2a).
 
      Konventionen wie auf der Themenseite: Deklaration mit Bedeutung und Einheit; z Zehnerziffer, e Einerziffer, Zahl 10 · z + e;
@@ -547,7 +562,7 @@ oben = '''<div id="nav-root"></div>
     <div>
       <p class="marke">begreifbar.ch · Leitprogramm</p>
       <h1>Textaufgaben modellieren</h1>
-      <p class="unter">Vom Text zur Deklaration, zum Ansatz und mit dem Rechner zur Lösung — für Zahlenrätsel, Mischen, Verteilen und Zins. Vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest.</p>
+      <p class="unter">Vom Text zur Deklaration, zum Ansatz und mit dem Rechner zur Lösung — für Zahlenrätsel, Mischen, Verteilen und Zins. Vier Kapitel zu je rund anderthalb Lektionen, dazu Vorwissen und Gesamttest — zusammen rund sieben Lektionen.</p>
     </div>
     <div class="kopf-rechts">
       <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>
@@ -604,7 +619,7 @@ oben = '''<div id="nav-root"></div>
           <li><b>K2</b> den Typ einer Gleichung bestimmen und beim Lösen entsprechend beachten, Lösungs- und Umformungsmethoden zielführend einsetzen sowie Lösungen überprüfen — Kapitel 0–4</li>
           <li><b>K3</b> ein lineares Gleichungssystem mit maximal drei Variablen lösen <span class="ohm">auch ohne Hilfsmittel</span> — Kapitel 1–4, je die erste Aufgabe ohne Taschenrechner</li>
         </ul>
-        <p class="rlp-quelle">Auf der <a href="''' + TS + '''">Themenseite 2.M</a>, nicht hier: Bruchrätsel, Systeme mit drei Unbekannten lösen, die technischen Sachverhalte A8–A11 und der Ansatz-Trainer. Ungleichungen: <a href="../grundlagen/g2-2a-lineare-gleichungen.html">Themenseite 2.2a</a>.</p>
+        <p class="rlp-quelle">Auf der <a href="''' + TS + '''">Themenseite 2.M</a>, nicht hier: Bruchrätsel, Systeme mit drei Unbekannten allgemein lösen, die technischen Sachverhalte A8–A11 und der Ansatz-Trainer. Ungleichungen: <a href="../grundlagen/g2-2a-lineare-gleichungen.html">Themenseite 2.2a</a>.</p>
       </details>
     </div>
 '''
@@ -625,7 +640,7 @@ unten = '''
 </div>
 </div>
 '''
-# Zeiten (08.10.2026): Vorwissen 15 (vorab) · K1 45 · K2 45 · K3 45 · K4 45 · Gesamttest 40 = 235 min
+# Zeiten (neu geschätzt 08.10.2026, Prüfung M12): Vorwissen 20 · K1 60 · K2 65 · K3 60 · K4 65 · Gesamttest 35 = 305 min
 body = oben + k0 + k1 + k2 + k3 + k4 + gt + unten
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read().replace(
     '<script>\n/* Leitprogramm Modellieren —', '<script>\n/* Leitprogramm Modellieren —') + '\n' + fuss

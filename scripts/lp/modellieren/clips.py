@@ -105,12 +105,13 @@ clip('zahlenraetsel', 'Ansatz finden: Zahlen- und Ziffernrätsel',
             f(r'47 = 10 \cdot \fa{4} + \fb{7}', 400, 58, ein='@Zehner')),
          sz('Die Unbekannten',
             'In einem Zahlenrätsel sind die Ziffern unbekannt. Heisst die Zehnerziffer z und die Einerziffer e, dann ist die Zahl '
-            'zehn mal z plus e. Die Zehnerziffer ist eine Ziffer von eins bis neun, die Einerziffer von null bis neun.',
+            'zehn mal z plus e. Die Zehnerziffer ist eine Ziffer von eins bis neun, die Einerziffer von null bis neun. '
+            'Nicht z mal e: Das wäre das Produkt der Ziffern.',
             zbild(ein=0.05),
             tx(r'@\fa{z}@: Zehnerziffer, @\fb{e}@: Einerziffer', 260, 42, ein='@Zehnerziffer'),
-            f(r'\text{Zahl} = 10 \cdot \fa{z} + \fb{e}', 370, 52, ein='@zehn'),
-            f(r'z \in \{1;\ 2;\ \ldots;\ 9\} \qquad e \in \{0;\ 1;\ \ldots;\ 9\}', 480, 36, ein='@eins'),
-            n('nicht @z \\cdot e@ — das wäre das Produkt der Ziffern', 600, 'rot', 38, ein=8)),
+            f(r'\text{Zahl} = 10 \cdot \fa{z} + \fb{e}', 370, 52, ein='@dann+0.5'),
+            f(r'z \in \{1;\ 2;\ \ldots;\ 9\} \qquad e \in \{0;\ 1;\ \ldots;\ 9\}', 480, 36, ein='@bis'),
+            n('nicht @z \\cdot e@ — das wäre das Produkt der Ziffern', 600, 'rot', 38, ein='@Produkt')),
          sz('Vertauschen',
             'Vertauscht man die Ziffern, entstehen sieben Zehner und vier Einer: vierundsiebzig, allgemein zehn mal e plus z. '
             'Die Differenz ist siebenundzwanzig, also neun mal Klammer sieben minus vier. Bei jeder zweistelligen Zahl ist sie '
@@ -123,28 +124,29 @@ clip('zahlenraetsel', 'Ansatz finden: Zahlen- und Ziffernrätsel',
          sz('Übersetzen',
             'Jede Aussage des Textes wird eine Gleichung. Dabei zählt jedes Wort: um drei grösser heisst plus drei, '
             'dreimal so gross heisst mal drei. Die Quersumme ist z plus e. Und aufeinanderfolgende Zahlen heissen n, '
-            'n plus eins, n plus zwei: Dafür genügt eine Unbekannte.',
+            'n plus eins, n plus zwei: Dafür genügt eine Unbekannte. Kontrolle mit einer Zahl: Bei a gleich zwei heisst um drei grösser fünf.',
             titel('Jede Aussage eine Gleichung', 250, 66),
             f(r'\text{um 3 grösser als } a: \quad a + 3', 380, 44, ein='@grösser'),
-            f(r'\text{3-mal so gross wie } a: \quad 3 \cdot a', 470, 44, ein='@dreimal'),
+            f(r'\text{3-mal so gross wie } a: \quad 3 \cdot a', 470, 44, ein='@plus+0.9'),
             f(r'\text{Quersumme}: \quad z + e', 560, 44, ein='@Quersumme'),
-            f(r'\text{aufeinanderfolgend}: \quad n,\ \ n + 1,\ \ n + 2', 650, 44, ein='@aufeinanderfolgende'),
-            n('Kontrolle mit einer Zahl: Bei @a = 2@ heisst «um 3 grösser» 5.', 770, 'rot', 38, ein='@Unbekannte')),
+            f(r'\text{aufeinanderfolgend}: \quad n,\ \ n + 1,\ \ n + 2', 650, 44, ein='@aufeinander'),
+            n('Kontrolle mit einer Zahl: Bei @a = 2@ heisst «um 3 grösser» 5.', 770, 'rot', 38, ein='@Kontrolle')),
          sz('Ein System',
             'Ein Beispiel von der Themenseite: Quersumme neun, und vertauscht wird die Zahl um fünfundvierzig kleiner. '
             'Zwei Aussagen, zwei Gleichungen. Geordnet für den Rechner: z plus e gleich neun, und neun z minus neun e gleich '
-            'fünfundvierzig. sys-solv liefert z gleich sieben und e gleich zwei: Die Zahl heisst zweiundsiebzig.',
+            'fünfundvierzig. sys-solv liefert x gleich sieben und y gleich zwei. Der Rechner nennt die Unbekannten x und y: hier ist '
+            'x die Zehnerziffer z und y die Einerziffer e. Die Zahl heisst zweiundsiebzig.',
             tx('Quersumme 9; vertauscht um 45 kleiner.', 220, 40, ein=0.3),
             f(r'\begin{cases} z + e = 9 \\ 10 \cdot e + z = 10 \cdot z + e - 45 \end{cases}', 310, 44, ein='@Aussagen'),
             f(r'\begin{cases} z + e = 9 \\ 9 \cdot z - 9 \cdot e = 45 \end{cases}', 520, 44, ein='@Geordnet'),
             rechner(['(1)x+(1)y=9', '(9)x-(9)y=45'], ['enter'], 220, '@Rechner', RX, 640),
             rechner(['x=7', ''], ['enter'], 560, '@liefert', RX, 400),
             rechner(['y=2', ''], ['enter'], 560, '@liefert+0.8', RX + 420, 400),
-            f(r'\text{Zahl } \fc{72}', 760, 50, ein='@zweiundsiebzig', x=RX),
-            n('Der Rechner nennt die Unbekannten @x@ und @y@:|hier @x = z@, @y = e@.', 760, 'blau', 36, ein='@liefert+1.5')),
+            f(r'\text{Zahl } \fc{72}', 760, 50, ein='@heisst+0.4', x=RX),
+            n('Der Rechner nennt die Unbekannten @x@ und @y@:|hier @x = z@, @y = e@.', 760, 'blau', 36, ein='@nennt')),
          sz('Quadratisch',
             'Heisst die zweite Aussage: Das Produkt der Ziffern ist vierzehn, dann steht z mal e gleich vierzehn. '
-            'Setzt man e gleich neun minus z ein, entsteht eine quadratische Gleichung. In Grundform: z Quadrat minus neun z plus '
+            'Ein Produkt der Unbekannten macht das System quadratisch. Setzt man e gleich neun minus z ein, entsteht eine quadratische Gleichung. In Grundform: z Quadrat minus neun z plus '
             'vierzehn gleich null. poly-solv liefert sieben und zwei. Beide sind Ziffern: Es gibt zwei Zahlen, zweiundsiebzig und '
             'siebenundzwanzig.',
             tx('Quersumme 9; Produkt der Ziffern 14.', 220, 40, ein=0.3),
@@ -153,8 +155,8 @@ clip('zahlenraetsel', 'Ansatz finden: Zahlen- und Ziffernrätsel',
             f(r'z^2 - 9 \cdot z + 14 = 0', 610, 44, ein='@Grundform'),
             rechner(['x1=7', ''], ['enter'], 220, '@liefert', RX, 400),
             rechner(['x2=2', ''], ['enter'], 220, '@liefert+0.8', RX + 420, 400),
-            f(r'\text{Zahlen } \fc{72} \text{ und } \fc{27}', 460, 50, ein='@zwei#3', x=RX),
-            n('Ein Produkt der Unbekannten macht|das System quadratisch.', 740, 'rot', 40, ein='@Beide')),
+            f(r'\text{Zahlen } \fc{72} \text{ und } \fc{27}', 460, 50, ein='@Zahlen', x=RX),
+            n('Ein Produkt der Unbekannten macht|das System quadratisch.', 740, 'rot', 40, ein='@macht')),
          sz('Merke',
             'Zum Mitnehmen: Die Zahl ist zehn z plus e, vertauscht zehn e plus z. Jede Aussage des Textes wird eine Gleichung. '
             'Ein Produkt der Unbekannten macht das System quadratisch.',
@@ -241,7 +243,7 @@ kontrolle('kontrolle-zahlen-1', 'Ansatz finden: Zahlenrätsel mit einer Unbekann
                   el=[f(r'n^2 + (n + 1)^2 = 113', 520, 48, x=RX, ein='@quadrieren')]),
              dict(gegeben=[G_text(r'@\fa{n}@: kleinere Zahl, @n + 1@: grössere'), G_formel(r'n^2 + (n + 1)^2 = 113')],
                   frage=dict(text='In Grundform a·n² + b·n + c = 0: Was tippst du in poly-solv?',
-                             sprich='In Grundform a n Quadrat plus b n plus c gleich null: Was tippst du in poly-solv ein?',
+                             sprich='In Grundform a n Quadrat plus b n plus c gleich null: Was tippst du in poly-solv?',
                              opt=['a = 2, b = 2, c = −112', 'a = 2, b = 1, c = −112', 'a = 2, b = 2, c = 112'],
                              rueck={1: '(n + 1)² hat ein Mittelglied. Welches?', 2: 'Die 113 kommt nach links. Welches Vorzeichen hat sie dort?'},
                              rueck_sprich={1: 'Klammer n plus eins im Quadrat hat ein Mittelglied. Welches?',
@@ -250,7 +252,7 @@ kontrolle('kontrolle-zahlen-1', 'Ansatz finden: Zahlenrätsel mit einer Unbekann
                       'hundertdreizehn. Minus hundertdreizehn: zwei n Quadrat plus zwei n minus hundertzwölf gleich null. '
                       'In poly-solv: a gleich zwei, b gleich zwei, c gleich minus hundertzwölf.',
                   el=[f(r'n^2 + n^2 + 2 \cdot n + 1 = 113', 520, 42, x=RX, ein='@Binom'),
-                      f(r'2 \cdot n^2 + 2 \cdot n - 112 = 0', 610, 46, x=RX, ein='@hundertzwölf'),
+                      f(r'2 \cdot n^2 + 2 \cdot n - 112 = 0', 610, 46, x=RX, ein='@Minus+1.5'),
                       ] + poly_eingabe(2, 2, -112, 640, '@poly')),
              dict(gegeben=[G_text(r'@\fa{n}@: kleinere Zahl, @n + 1@: grössere'), G_formel(r'2 \cdot n^2 + 2 \cdot n - 112 = 0')],
                   frage=dict(text='poly-solv zeigt x1 = 7 und x2 = −8. Was gilt für n?',
@@ -301,7 +303,7 @@ kontrolle('kontrolle-zahlen-2', 'Ansatz finden: Zahlenrätsel mit zwei Unbekannt
                       f(r'\text{Zahl } 10 \cdot z + e \qquad \text{vertauscht } 10 \cdot e + z', 610, 36, x=RX, ein='@Zahl')]),
              dict(gegeben=[G_text(DZ), G_formel(r'\text{Zahl } 10 \cdot z + e', 36)],
                   frage=dict(text='«Vertauscht um 36 grösser»: Welche Gleichung?',
-                             sprich='Vertauscht um sechsunddreissig grösser: Welche Gleichung passt?',
+                             sprich='Vertauscht um sechsunddreissig grösser: Welche Gleichung?',
                              opt=['10·e + z = 10·z + e + 36', '10·e + z + 36 = 10·z + e', 'e + z = z + e + 36'],
                              rueck={1: 'Die vertauschte Zahl ist die grössere. Zu welcher Seite gehört die 36?',
                                     2: 'Der Stellenwert fehlt: Die Zehnerziffer zählt zehnfach.'},
@@ -312,7 +314,7 @@ kontrolle('kontrolle-zahlen-2', 'Ansatz finden: Zahlenrätsel mit zwei Unbekannt
                       n('Die 36 kommt zur kleineren Zahl.', 700, 'blau', 38, x=RX, ein='@vertauschte')]),
              dict(gegeben=[G_text(DZ), G_formel(r'\begin{cases} z + e = 12 \\ 10 \cdot e + z = 10 \cdot z + e + 36 \end{cases}', 38, 120)],
                   frage=dict(text='Zweite Gleichung als a·z + b·e = c: Was tippst du ein?',
-                             sprich='Die zweite Gleichung in der Form a z plus b e gleich c: Was tippst du ein?',
+                             sprich='Zweite Gleichung als a z plus b e gleich c: Was tippst du ein?',
                              opt=['9·z − 9·e = −36', '9·z − 9·e = 36', '11·z + 11·e = 36'],
                              rueck={1: 'Prüfe das Vorzeichen der 36: Auf welcher Seite steht sie, wenn z und e links stehen?',
                                     2: 'Wer einen Term auf die andere Seite bringt, wechselt sein Vorzeichen.'},
@@ -322,7 +324,7 @@ kontrolle('kontrolle-zahlen-2', 'Ansatz finden: Zahlenrätsel mit zwei Unbekannt
                       'minus sechsunddreissig.',
                   el=[f(r'\begin{cases} z + e = 12 \\ 9 \cdot z - 9 \cdot e = -36 \end{cases}', 520, 44, x=RX, ein='@Ordnen'),
                       n('gleichwertig: @-9 \\cdot z + 9 \\cdot e = 36@', 690, 'blau', 36, x=RX, ein='@zweiten'),
-                      ] + sys_eingabe((1, 1, 12), (9, -9, -36), 640, '@sys')),
+                      ] + sys_eingabe((1, 1, 12), (9, -9, -36), 640, '@erste')),
              dict(gegeben=[G_text(DZ), G_formel(r'\begin{cases} z + e = 12 \\ 9 \cdot z - 9 \cdot e = -36 \end{cases}', 40, 120)],
                   frage=dict(text='sys-solv zeigt x = 4 und y = 8. Wie heisst die Zahl?',
                              sprich='sys-solv zeigt x gleich vier und y gleich acht. Wie heisst die Zahl?',
@@ -335,7 +337,7 @@ kontrolle('kontrolle-zahlen-2', 'Ansatz finden: Zahlenrätsel mit zwei Unbekannt
                       f(r'z = \fc{4},\ e = \fc{8}', 740, 46, x=RX, ein='@Also'),
                       tx(r'Zahl @\fc{48}@', 830, 40, x=RX, ein='@heisst')]),
              dict(gegeben=[G_text(DZ), G_formel(r'z = 4,\ e = 8: \ 48')],
-                  frage=dict(text='Welche Probe prüft beide Aussagen?', sprich='Welche Probe prüft beide Aussagen des Textes?',
+                  frage=dict(text='Welche Probe prüft beide Aussagen?', sprich='Welche Probe prüft beide Aussagen?',
                              opt=['4 + 8 = 12 und 84 − 48 = 36', '4 + 8 = 12 und 9·4 − 9·8 = −36', '48 − 36 = 12'],
                              rueck={1: 'Die zweite Rechnung prüft die eigene Gleichung, nicht den Text.',
                                     2: 'Was sagt der Text über die vertauschte Zahl?'}),
@@ -374,14 +376,15 @@ kontrolle('kontrolle-zahlen-2', 'Ansatz finden: Zahlenrätsel mit zwei Unbekannt
                       n('Produkt der Unbekannten: quadratisch', 700, 'rot', 38, x=RX, ein='@Produkt')]),
              dict(gegeben=[G_text(DZ), G_formel(r'\begin{cases} z = e + 2 \\ (10 \cdot z + e) \cdot (z + e) = 640 \end{cases}', 38, 120)],
                   frage=dict(text='z = e + 2 eingesetzt: Welche Grundform entsteht?',
-                             sprich='z gleich e plus zwei eingesetzt und geordnet: Welche Grundform entsteht?',
+                             sprich='z gleich e plus zwei eingesetzt: Welche Grundform entsteht?',
                              opt=['22·e² + 62·e − 600 = 0', '22·e² + 42·e − 600 = 0', '22·e² + 62·e + 40 = 0'],
                              rueck={1: 'Rechne das gemischte Glied nach: (11·e + 20)·(2·e + 2).', 2: 'Die 640 muss auch nach links.'},
                              rueck_sprich={1: 'Rechne das gemischte Glied nach: elf e plus zwanzig, mal zwei e plus zwei.',
                                            2: 'Die sechshundertvierzig muss auch nach links.'}),
                   spr='Für z setzt du e plus zwei ein. Die Zahl wird elf e plus zwanzig, die Quersumme zwei e plus zwei. '
                       'Ausmultipliziert: zweiundzwanzig e Quadrat plus zweiundsechzig e plus vierzig gleich sechshundertvierzig. '
-                      'Minus sechshundertvierzig gibt die Grundform für poly-solv.',
+                      'Minus sechshundertvierzig gibt die Grundform. In poly-solv: a gleich zweiundzwanzig, b gleich zweiundsechzig, '
+                      'c gleich minus sechshundert.',
                   el=[f(r'(11 \cdot e + 20) \cdot (2 \cdot e + 2) = 640', 520, 40, x=RX, ein='@Zahl'),
                       f(r'22 \cdot e^2 + 62 \cdot e + 40 = 640', 600, 40, x=RX, ein='@Ausmultipliziert'),
                       f(r'22 \cdot e^2 + 62 \cdot e - 600 = 0', 680, 44, x=RX, ein='@Grundform'),
@@ -404,7 +407,7 @@ kontrolle('kontrolle-zahlen-2', 'Ansatz finden: Zahlenrätsel mit zwei Unbekannt
                              rueck_sprich={2: 'Vier ist erst die Einerziffer. Wie heisst die Zehnerziffer?'}),
                   spr='Zehnerziffer sechs, Einerziffer vier: Die Zahl heisst vierundsechzig. Probe am Text: Sechs ist um zwei grösser '
                       'als vier, und vierundsechzig mal die Quersumme zehn gibt sechshundertvierzig.',
-                  el=[tx(r'Die Zahl heisst @\fc{64}@.', 520, 40, x=RX, ein='@Zehnerziffer'),
+                  el=[tx(r'Die Zahl heisst @\fc{64}@.', 520, 40, x=RX, ein='@heisst'),
                       f(r'6 = 4 + 2 \;\checkmark \qquad 64 \cdot 10 = 640 \;\checkmark', 610, 40, x=RX, ein='@Probe')]),
          ]),
 ], merke('Zum Mitnehmen: Bei Ziffernrätseln sind die Ziffern die Unbekannten, die Zahl ist zehn z plus e. Ein lineares System '
@@ -433,30 +436,31 @@ def becher(x0, menge, stoff, farbe, text, ein=0.3, ein_menge=None, ein_stoff=Non
     return fig
 
 
-def mischbild(menge=False, stoff=False, ein=0.05, ein_menge=None, ein_stoff=None, mischung=True, ein_misch=None):
-    fig = (becher(1, 20 if menge else 0, 4 if stoff else 0, 1, 'A: 20 %', ein_menge=ein_menge, ein_stoff=ein_stoff)
-           + becher(12.8, 10 if menge else 0, 5 if stoff else 0, 2, 'B: 50 %', ein_menge=ein_menge, ein_stoff=ein_stoff))
+def mischbild(menge=False, stoff=False, ein=0.05, ein_menge=None, ein_stoff=None, mischung=True, ein_misch=None, xm=15, ym=15):
+    # xm, ym: Füllhöhe der Sorten. Bis zur Lösung neutral gleich hoch (Prüfung 08.10.2026, M10: 20 / 10 verriet die Lösung).
+    fig = (becher(1, xm if menge else 0, 0.2 * xm if stoff else 0, 1, 'A: 20 %', ein_menge=ein_menge, ein_stoff=ein_stoff)
+           + becher(12.8, ym if menge else 0, 0.5 * ym if stoff else 0, 2, 'B: 50 %', ein_menge=ein_menge, ein_stoff=ein_stoff))
     if mischung:
         mb = becher(24.6, 30 if menge else 0, 9 if stoff else 0, 3, 'Mischung: 30 %', ein_menge=ein_misch or ein_menge,
                     ein_stoff=ein_stoff)
         fig += mb
     texte = []
     if menge:
-        texte += [{'art': 'text', 'bei': [5, 21.6], 'text': 'x kg', 'farbe': 1, 'groesse': 32, 'ein': ein_menge or 0.05},
-                  {'art': 'text', 'bei': [16.8, 11.6], 'text': 'y kg', 'farbe': 2, 'groesse': 32, 'ein': ein_menge or 0.05}]
+        texte += [{'art': 'text', 'bei': [5, xm + 1.6], 'text': 'x kg', 'farbe': 1, 'groesse': 32, 'ein': ein_menge or 0.05},
+                  {'art': 'text', 'bei': [16.8, ym + 1.6], 'text': 'y kg', 'farbe': 2, 'groesse': 32, 'ein': ein_menge or 0.05}]
         if mischung:
             texte.append({'art': 'text', 'bei': [28.6, 32.4], 'text': '30 kg', 'farbe': 3, 'groesse': 32, 'kursiv': False,
                           'ein': ein_misch or ein_menge or 0.05})
     if stoff:
-        texte += [{'art': 'text', 'bei': [5, 1.4], 'text': '0.2·x', 'farbe': 5, 'groesse': 28, 'ein': ein_stoff or 0.05},
-                  {'art': 'text', 'bei': [16.8, 1.9], 'text': '0.5·y', 'farbe': 5, 'groesse': 28, 'ein': ein_stoff or 0.05},
+        texte += [{'art': 'text', 'bei': [5, 0.1 * xm - 0.1], 'text': '0.2·x', 'farbe': 5, 'groesse': 28, 'ein': ein_stoff or 0.05},
+                  {'art': 'text', 'bei': [16.8, 0.25 * ym - 0.3], 'text': '0.5·y', 'farbe': 5, 'groesse': 28, 'ein': ein_stoff or 0.05},
                   {'art': 'text', 'bei': [28.6, 4.0], 'text': '9 kg', 'farbe': 5, 'groesse': 28, 'kursiv': False, 'ein': ein_stoff or 0.05}]
     return dict(typ='graf', x=RX, y=170, breite=800, hoehe=780, abstand=0, anim='fade', ein=ein, achsen=False, raster=False,
                 xbereich=[-2.2, 36.2], ybereich=[-4.5, 34.2], figuren=fig + texte)
 
 
 clip('mischen', 'Ansatz finden: Mischen',
-     'Mengenbilanz und Stoffbilanz an zwei Sirupen: Menge mal Anteil ist Stoff, und Prozente addieren sich nie. Dazu Verdünnen mit Wasser und wann es quadratisch wird.',
+     'Mengenbilanz und Stoffbilanz an zwei Sirupen: Anteil mal Menge ist Stoff; addiert werden Mengen und Stoffmengen, nicht die Anteile. Dazu Verdünnen mit Wasser und wann es quadratisch wird.',
      ['Mischungsaufgabe', 'Mengenbilanz', 'Stoffbilanz', 'Verdünnen', 'sys-solv'], [
          sz('Zwei Sorten',
             'Aus Sirup A mit zwanzig Prozent Zucker und Sirup B mit fünfzig Prozent Zucker sollen dreissig Kilogramm Sirup mit '
@@ -484,29 +488,32 @@ clip('mischen', 'Ansatz finden: Mischen',
             n('Stoffbilanz: kg Zucker', 410, 'blau', 42, ein='@Mischung'),
             f(r'\text{Anteil} \cdot \text{Menge} = \text{Stoff}', 520, 44, ein='@Anteil')),
          sz('Die Falle',
-            'Prozente addieren sich nie. Wer rechts null Komma drei schreibt, setzt einen Anteil gleich einer Masse. '
+            'Die Anteile der Sorten addieren sich nicht zum Anteil der Mischung: Zwanzig und fünfzig Prozent geben nicht siebzig Prozent. '
+            'Addiert werden die Stoffmengen. Wer rechts null Komma drei schreibt, setzt einen Anteil gleich einer Masse. '
             'Prüfe jede Gleichung: Links und rechts muss dieselbe Grösse stehen, hier Kilogramm Zucker.',
-            titel('Prozente addieren sich nie', 250, 64),
-            f(r'\fd{0.2 \cdot x + 0.5 \cdot y = 0.3}', 400, 48, ein='@rechts'),
-            f(r'\fd{20\,\% + 50\,\% = 70\,\%}', 500, 48, ein=1.0),
-            n('links und rechts dieselbe Grösse: kg Zucker', 640, 'rot', 44, ein='@Prüfe')),
+            titel('Anteile addieren sich nicht', 250, 64),
+            f(r'\fd{20\,\% + 50\,\% = 70\,\%}', 400, 48, ein='@Mischung+0.5'),
+            f(r'\fd{0.2 \cdot x + 0.5 \cdot y = 0.3}', 500, 48, ein='@rechts'),
+            n('links und rechts dieselbe Grösse: kg Zucker', 640, 'rot', 44, ein='@jede')),
          sz('Lösen',
             'Für sys-solv die Stoffbilanz mal zehn: zwei x plus fünf y gleich neunzig. Der Rechner liefert x gleich zwanzig und '
-            'y gleich zehn. Probe am Text: vier plus fünf gleich neun Kilogramm Zucker, und neun durch dreissig sind dreissig Prozent.',
+            'y gleich zehn. Probe am Text: vier plus fünf gleich neun Kilogramm Zucker, und neun durch dreissig sind dreissig Prozent. '
+            'Es braucht zwanzig Kilogramm Sirup A und zehn Kilogramm Sirup B.',
             f(r'\begin{cases} x + y = 30 \\ 2 \cdot x + 5 \cdot y = 90 \end{cases}', 240, 48, ein=0.5),
             rechner(['(1)x+(1)y=30', '(2)x+(5)y=90'], ['enter'], 220, '@Rechner', RX, 640),
             rechner(['x=20', ''], ['enter'], 560, '@liefert', RX, 400),
             rechner(['y=10', ''], ['enter'], 560, '@liefert+0.8', RX + 420, 400),
             f(r'0.2 \cdot 20 + 0.5 \cdot 10 = 4 + 5 = 9 \;\checkmark', 470, 42, ein='@Probe'),
-            f(r'9 : 30 = 0.3 = 30\,\% \;\checkmark', 560, 42, ein='@durch')),
+            f(r'9 : 30 = 0.3 = 30\,\% \;\checkmark', 560, 42, ein='@durch'),
+            tx(r'Es braucht @\fc{20}@ kg Sirup A und @\fc{10}@ kg Sirup B.', 670, 40, ein='@braucht')),
          sz('Verdünnen',
             'Wird mit Wasser verdünnt, ist Wasser eine Sorte mit dem Anteil null. Zwei Liter Konzentrat mit vierzig Prozent '
             'Wirkstoff sollen sechzehn Prozent haben: null Komma vier mal zwei gleich null Komma eins sechs mal Klammer zwei plus w. '
             'Eine Unbekannte, eine lineare Gleichung: w gleich drei Liter Wasser.',
             tx('2 l Konzentrat mit 40 % auf 16 % verdünnen', 240, 42, ein=0.3),
             tx(r'@\fb{w}@: Menge Wasser in l', 330, 42, ein='@Wasser'),
-            f(r'0.4 \cdot 2 + 0 \cdot \fb{w} = 0.16 \cdot (2 + \fb{w})', 430, 48, ein='@null#2'),
-            f(r'0.8 = 0.32 + 0.16 \cdot w \quad \Rightarrow \quad w = \fc{3}', 540, 46, ein='@lineare'),
+            f(r'0.4 \cdot 2 + 0 \cdot \fb{w} = 0.16 \cdot (2 + \fb{w})', 430, 48, ein='@haben+0.7'),
+            f(r'0.8 = 0.32 + 0.16 \cdot w \quad \Rightarrow \quad w = \fc{3}\ \text{l}', 540, 46, ein='@lineare'),
             n('Wasser: Anteil 0', 660, 'blau', 42, ein='@Sorte')),
          sz('Quadratisch',
             'Sind Menge und Anteil beide unbekannt, steht in der Stoffbilanz ein Produkt zweier Unbekannter: Menge mal Anteil. '
@@ -516,7 +523,7 @@ clip('mischen', 'Ansatz finden: Mischen',
             n('Produkt zweier Unbekannter: quadratisch', 520, 'rot', 44, ein='@quadratisch')),
          sz('Merke',
             'Zum Mitnehmen: Deklariere Mengen. Die Mengen addieren sich zur Gesamtmenge, der Stoff, Anteil mal Menge, zum Stoff der '
-            'Mischung. Prozente addieren sich nie.',
+            'Mischung. Die Anteile addieren sich nicht.',
             titel('Zum Mitnehmen', 250, 76),
             f(r'x + y = M \qquad p_1 \cdot x + p_2 \cdot y = p \cdot M', 390, 50, ein=1.2),
             n('Anteile als Dezimalzahl|links und rechts dieselbe Grösse', 500, 'blau', 46, ein='@Stoff')),
@@ -561,7 +568,7 @@ kontrolle('kontrolle-mischen-1', 'Ansatz finden: Mischen mit einer Unbekannten',
                   el=[f(r'3 = 1.2 + 0.1 \cdot w \qquad \fb{\mid -1.2}', 520, 44, x=RX, ein='@Links'),
                       f(r'0.1 \cdot w = 1.8', 610, 44, x=RX, ein='@Minus')]),
              dict(gegeben=[G_text(DW), G_formel(r'0.1 \cdot w = 1.8')],
-                  frage=dict(text='Welcher Typ, und was ergibt sich für w?', sprich='Welcher Typ ist das, und was ergibt sich für w?',
+                  frage=dict(text='Welcher Typ, und was ergibt sich für w?', sprich='Welcher Typ, und was ergibt sich für w?',
                              opt=['linear: w = 1.8 : 0.1 = 18', 'linear: w = 1.8 · 0.1 = 0.18', 'quadratisch: mit poly-solv'],
                              rueck={1: 'Damit w allein steht: mal 0.1 oder durch 0.1?', 2: 'Kommt w im Quadrat vor?'},
                              rueck_sprich={1: 'Damit w allein steht: mal null Komma eins oder durch null Komma eins?'}),
@@ -606,16 +613,16 @@ kontrolle('kontrolle-mischen-1', 'Ansatz finden: Mischen mit einer Unbekannten',
                       n('Saft vorher − Saft weg = Saft nachher', 790, 'blau', 36, x=RX, ein='@Übrig')]),
              dict(gegeben=[G_text(DF), G_formel(r'\dfrac{(40 - x)^2}{40} = 22.5', 40, 130)],
                   frage=dict(text='Mal 40, ausmultipliziert, auf null: Was tippst du ein?',
-                             sprich='Mal vierzig, ausmultipliziert und auf null gebracht: Was tippst du in poly-solv ein?',
+                             sprich='Mal vierzig, ausmultipliziert, auf null: Was tippst du ein?',
                              opt=['a = 1, b = −80, c = 700', 'a = 1, b = −80, c = 1600', 'a = 1, b = −40, c = 700'],
-                             rueck={1: 'Die 900 von rechts gehört auch nach links: 1600 − 900.',
-                                    2: 'Prüfe das Mittelglied von (40 − x)²: 2 · 40 · x.'},
-                             rueck_sprich={1: 'Die neunhundert von rechts gehört auch nach links: tausendsechshundert minus neunhundert.',
-                                           2: 'Prüfe das Mittelglied von Klammer vierzig minus x im Quadrat: zwei mal vierzig mal x.'}),
+                             rueck={1: 'Auch die rechte Seite gehört nach links. Was bleibt vom konstanten Glied?',
+                                    2: 'Prüfe das Mittelglied von (40 − x)² mit der binomischen Formel.'},
+                             rueck_sprich={1: 'Auch die rechte Seite gehört nach links. Was bleibt vom konstanten Glied?',
+                                           2: 'Prüfe das Mittelglied von Klammer vierzig minus x im Quadrat mit der binomischen Formel.'}),
                   spr='Mal vierzig: Klammer vierzig minus x im Quadrat gleich neunhundert. Ausmultipliziert x Quadrat minus achtzig x plus '
                       'tausendsechshundert gleich neunhundert. Minus neunhundert gibt die Grundform: x Quadrat minus achtzig x plus '
                       'siebenhundert gleich null. Für poly-solv: a gleich eins, b gleich minus achtzig, c gleich siebenhundert.',
-                  el=[f(r'(40 - x)^2 = 900', 520, 42, x=RX, ein='@Mal'),
+                  el=[f(r'(40 - x)^2 = 900', 520, 42, x=RX, ein='@Klammer'),
                       f(r'x^2 - 80 \cdot x + 1600 = 900', 600, 42, x=RX, ein='@Ausmultipliziert'),
                       f(r'x^2 - 80 \cdot x + 700 = 0', 680, 46, x=RX, ein='@Grundform'),
                       ] + poly_eingabe(1, -80, 700, 640, '@poly')),
@@ -649,9 +656,9 @@ kontrolle('kontrolle-mischen-1', 'Ansatz finden: Mischen mit einer Unbekannten',
 
 # ════════════════════════════════════════════════ Kapitel 2 · Kontrolle, zwei Unbekannte
 DL = [G_text(r'@\fa{x}@: Masse der 60-%-Legierung in kg', 34), G_text(r'@\fb{y}@: Masse der 85-%-Legierung in kg', 34)]
-DS = [G_text(r'@\fa{m}@: Masse der Lösung in kg', 34), G_text(r'@\fb{p}@: Salzanteil (Dezimalzahl)', 34)]
+DS = [G_text(r'@\fa{m}@: Masse der Lösung vor dem Verdünnen in kg', 34), G_text(r'@\fb{p}@: Salzanteil vorher (Dezimalzahl)', 34)]
 kontrolle('kontrolle-mischen-2', 'Ansatz finden: Mischen mit zwei Unbekannten',
-          'Zwei Mischaufgaben Schritt für Schritt: zwei Legierungen (lineares System, sys-solv) und eine Salzlösung mit unbekannter Masse und unbekanntem Anteil (quadratisches System, poly-solv).',
+          'Zwei Mischaufgaben Schritt für Schritt: zwei Legierungen (lineares System, sys-solv) und eine Salzlösung mit unbekannter Masse und unbekanntem Anteil, die verdünnt wird (quadratisches System, poly-solv).',
           ['Mischungsaufgabe', 'Legierung', 'lineares Gleichungssystem', 'quadratisches Gleichungssystem', 'sys-solv', 'poly-solv', 'Kontrollfragen'], [
     dict(nr=1, kurz='Mischen',
          text='Eine Giesserei mischt eine Legierung mit|60 % Kupfer und eine mit 85 % Kupfer zu|50 kg einer Legierung mit 70 % Kupfer.|Wie viel kg braucht sie von jeder?',
@@ -680,10 +687,12 @@ kontrolle('kontrolle-mischen-2', 'Ansatz finden: Mischen mit zwei Unbekannten',
                              opt=['60·x + 85·y = 3500', '60·x + 85·y = 35', '60·x + 85·y = 70'],
                              rueck={1: 'Mit 100 multipliziert wird auch die rechte Seite.', 2: 'Rechts gehört die Kupfermasse hin, nicht der Anteil.'},
                              rueck_sprich={1: 'Mit hundert multipliziert wird auch die rechte Seite.'}),
-                  spr='Damit ganze Zahlen dastehen, die Kupferbilanz mal hundert: sechzig x plus fünfundachtzig y gleich '
-                      'dreitausendfünfhundert. Zeile eins bleibt eins, eins, fünfzig.',
-                  el=[f(r'\begin{cases} x + y = 50 \\ 60 \cdot x + 85 \cdot y = 3500 \end{cases}', 520, 44, x=RX, ein='@ganze'),
-                      ] + sys_eingabe((1, 1, 50), (60, 85, 3500), 640, '@Zeile')),
+                  spr='Damit ganze Zahlen dastehen, nimmst du die Kupferbilanz mal hundert: sechzig x plus fünfundachtzig y gleich '
+                      'dreitausendfünfhundert. In sys-solv: erste Zeile eins, eins, fünfzig, zweite Zeile sechzig, fünfundachtzig, '
+                      'dreitausendfünfhundert.',
+                  el=[f(r'60 \cdot x + 85 \cdot y = 3500', 520, 44, x=RX, ein='@ganze'),
+                      n('Zeile 1 bleibt: @x + y = 50@', 610, 'blau', 38, x=RX, ein='@erste'),
+                      ] + sys_eingabe((1, 1, 50), (60, 85, 3500), 640, '@erste')),
              dict(gegeben=DL + [G_formel(r'60 \cdot x + 85 \cdot y = 3500', 38)],
                   frage=dict(text='sys-solv zeigt x = 30 und y = 20. Ist das plausibel?',
                              sprich='sys-solv zeigt x gleich dreissig und y gleich zwanzig. Ist das plausibel?',
@@ -698,7 +707,7 @@ kontrolle('kontrolle-mischen-2', 'Ansatz finden: Mischen mit zwei Unbekannten',
              dict(gegeben=DL + [G_formel(r'x = 30,\ y = 20')],
                   frage=dict(text='Welche Probe prüft den Kupferanteil?', sprich='Welche Probe prüft den Kupferanteil?',
                              opt=['18 + 17 = 35 kg; 35 : 50 = 0.7', '30 + 20 = 50 kg', '0.6 + 0.85 = 1.45'],
-                             rueck={1: 'Das prüft nur die Menge.', 2: 'Anteile addieren sich nie.'}),
+                             rueck={1: 'Das prüft nur die Menge.', 2: 'Die Anteile der Sorten addieren sich nicht. Geprüft wird die Kupfermasse.'}),
                   spr='Probe am Text: null Komma sechs mal dreissig gleich achtzehn, null Komma acht fünf mal zwanzig gleich siebzehn, '
                       'zusammen fünfunddreissig Kilogramm Kupfer. Fünfunddreissig durch fünfzig ist null Komma sieben, siebzig Prozent. '
                       'Es braucht dreissig Kilogramm der einen und zwanzig Kilogramm der anderen Legierung.',
@@ -707,63 +716,65 @@ kontrolle('kontrolle-mischen-2', 'Ansatz finden: Mischen mit zwei Unbekannten',
                       tx(r'@\fc{30}@ kg mit 60 %, @\fc{20}@ kg mit 85 %', 690, 38, x=RX, ein='@braucht')]),
          ]),
     dict(nr=2, kurz='Mischen',
-         text='Eine Salzlösung enthält 6 kg Salz. Gibt man|10 kg Wasser dazu, sinkt ihr Salzanteil um|10 Prozentpunkte. Wie schwer war die Lösung,|und welchen Salzanteil hatte sie?',
-         spr='Eine Salzlösung enthält sechs Kilogramm Salz. Gibt man zehn Kilogramm Wasser dazu, sinkt ihr Salzanteil um zehn '
+         # Prüfung 08.10.2026, H4: früher 6 kg Salz und 30 % — mehr, als sich löst (rund 26 % bei 20 °C). Jetzt 15 % → 10 %.
+         text='Eine Salzlösung enthält 3 kg Salz. Gibt man|10 kg Wasser dazu, sinkt ihr Salzanteil um|5 Prozentpunkte. Wie schwer war die Lösung,|und welchen Salzanteil hatte sie?',
+         spr='Eine Salzlösung enthält drei Kilogramm Salz. Gibt man zehn Kilogramm Wasser dazu, sinkt ihr Salzanteil um fünf '
              'Prozentpunkte. Wie schwer war die Lösung, und welchen Salzanteil hatte sie?',
          schritte=[
              dict(frage=dict(text='Was ist unbekannt? Wähle die Deklaration.', sprich='Was ist unbekannt? Wähle die Deklaration.',
                              opt=['m: Masse der Lösung in kg, p: Salzanteil', 'm: Masse des Salzes in kg, p: Salzanteil', 'm: Masse des Wassers in kg'],
-                             rueck={1: 'Das Salz ist gegeben: 6 kg.', 2: 'Das Wasser ist gegeben: 10 kg. Was ist unbekannt?'},
-                             rueck_sprich={1: 'Das Salz ist gegeben: sechs Kilogramm.', 2: 'Das Wasser ist gegeben: zehn Kilogramm. Was ist unbekannt?'}),
-                  spr='m ist die Masse der Lösung in Kilogramm, p ihr Salzanteil als Dezimalzahl. Zehn Prozentpunkte weniger heisst: '
-                      'p minus null Komma eins.',
-                  el=[tx(r'@\fa{m}@: Masse der Lösung in kg', 520, 38, x=RX, ein='@Masse'),
-                      tx(r'@\fb{p}@: Salzanteil (Dezimalzahl)', 590, 38, x=RX, ein='@Salzanteil'),
-                      n('10 Prozentpunkte weniger: @p - 0.1@', 690, 'blau', 38, x=RX, ein='@Prozentpunkte')]),
+                             rueck={1: 'Das Salz ist gegeben: 3 kg.', 2: 'Das Wasser ist gegeben: 10 kg. Was ist unbekannt?'},
+                             rueck_sprich={1: 'Das Salz ist gegeben: drei Kilogramm.', 2: 'Das Wasser ist gegeben: zehn Kilogramm. Was ist unbekannt?'}),
+                  spr='m ist die Masse der Lösung vor dem Verdünnen in Kilogramm, p ihr Salzanteil als Dezimalzahl. Fünf Prozentpunkte '
+                      'weniger heisst: p minus null Komma null fünf.',
+                  el=[tx(r'@\fa{m}@: Masse der Lösung vor dem Verdünnen in kg', 520, 36, x=RX, ein='@Masse'),
+                      tx(r'@\fb{p}@: Salzanteil vorher (Dezimalzahl)', 590, 36, x=RX, ein='@Salzanteil'),
+                      n('5 Prozentpunkte weniger: @p - 0.05@', 690, 'blau', 38, x=RX, ein='@Punkte')]),
              dict(gegeben=DS,
                   frage=dict(text='Welches System stimmt?', sprich='Welches System stimmt?',
-                             opt=['m·p = 6 und (m + 10)·(p − 0.1) = 6', 'm·p = 6 und (m + 10)·p = 6 − 0.1', 'm·p = 6 und (m + 10)·(p − 10) = 6'],
-                             rueck={1: 'Der Salzanteil sinkt um 0.1, nicht die Salzmenge.', 2: '10 Prozentpunkte sind als Dezimalzahl 0.1.'},
-                             rueck_sprich={1: 'Der Salzanteil sinkt um null Komma eins, nicht die Salzmenge.',
-                                           2: 'Zehn Prozentpunkte sind als Dezimalzahl null Komma eins.'}),
-                  spr='Salz gleich Masse mal Anteil. Vorher: m mal p gleich sechs. Nachher ist die Masse m plus zehn, der Anteil p minus '
-                      'null Komma eins, und das Salz ist immer noch sechs Kilogramm. Zwei Unbekannte werden multipliziert: Das System ist quadratisch.',
-                  el=[f(r'\begin{cases} m \cdot p = 6 \\ (m + 10) \cdot (p - 0.1) = 6 \end{cases}', 520, 42, x=RX, ein='@Vorher'),
+                             opt=['m·p = 3 und (m + 10)·(p − 0.05) = 3', 'm·p = 3 und (m + 10)·p = 3 − 0.05', 'm·p = 3 und (m + 10)·(p − 5) = 3'],
+                             rueck={1: 'Der Salzanteil sinkt um 0.05, nicht die Salzmenge.', 2: '5 Prozentpunkte sind als Dezimalzahl 0.05.'},
+                             rueck_sprich={1: 'Der Salzanteil sinkt um null Komma null fünf, nicht die Salzmenge.',
+                                           2: 'Fünf Prozentpunkte sind als Dezimalzahl null Komma null fünf.'}),
+                  spr='Salz gleich Masse mal Anteil. Vorher: m mal p gleich drei. Nachher ist die Masse m plus zehn, der Anteil p minus '
+                      'null Komma null fünf, und das Salz ist immer noch drei Kilogramm. Zwei Unbekannte werden multipliziert: Das System ist quadratisch.',
+                  el=[f(r'\begin{cases} m \cdot p = 3 \\ (m + 10) \cdot (p - 0.05) = 3 \end{cases}', 520, 42, x=RX, ein='@Vorher'),
                       n('Produkt der Unbekannten: quadratisch', 700, 'rot', 38, x=RX, ein='@multipliziert')]),
-             dict(gegeben=DS + [G_formel(r'\begin{cases} m \cdot p = 6 \\ (m + 10) \cdot (p - 0.1) = 6 \end{cases}', 36, 110)],
+             dict(gegeben=DS + [G_formel(r'\begin{cases} m \cdot p = 3 \\ (m + 10) \cdot (p - 0.05) = 3 \end{cases}', 36, 110)],
                   frage=dict(text='Nach dem Einsetzen: Welche Grundform entsteht?', sprich='Nach dem Einsetzen: Welche Grundform entsteht?',
                              opt=['m² + 10·m − 600 = 0', 'm² + 10·m + 600 = 0', 'm² − 10·m − 600 = 0'],
-                             rueck={1: 'Prüfe das Vorzeichen der 600.', 2: 'Prüfe das Vorzeichen in p = 0.01·m + 0.1.'},
+                             rueck={1: 'Prüfe das Vorzeichen der 600.', 2: 'Prüfe die Vorzeichen beim Ausmultiplizieren von (m + 10) · (p − 0.05).'},
                              rueck_sprich={1: 'Prüfe das Vorzeichen der sechshundert.',
-                                           2: 'Prüfe das Vorzeichen in p gleich null Komma null eins m plus null Komma eins.'}),
-                  spr='Ausmultipliziert: m p minus null Komma eins m plus zehn p minus eins gleich sechs. Mit m p gleich sechs bleibt '
-                      'zehn p gleich null Komma eins m plus eins, also p gleich null Komma null eins m plus null Komma eins. Eingesetzt in '
-                      'm mal p gleich sechs und mal hundert: m Quadrat plus zehn m minus sechshundert gleich null.',
-                  el=[f(r'm p - 0.1 \cdot m + 10 \cdot p - 1 = 6', 520, 38, x=RX, ein='@Ausmultipliziert'),
-                      f(r'p = 0.01 \cdot m + 0.1', 590, 38, x=RX, ein='@also'),
-                      f(r'm \cdot (0.01 \cdot m + 0.1) = 6', 660, 38, x=RX, ein='@Eingesetzt'),
-                      f(r'm^2 + 10 \cdot m - 600 = 0', 740, 44, x=RX, ein='@hundert'),
-                      ] + poly_eingabe(1, 10, -600, 640, '@hundert+1')),
+                                           2: 'Prüfe die Vorzeichen beim Ausmultiplizieren von Klammer m plus zehn mal Klammer p minus null Komma null fünf.'}),
+                  spr='Ausmultipliziert: m p minus null Komma null fünf m plus zehn p minus null Komma fünf gleich drei. Mit m p gleich drei '
+                      'bleibt zehn p gleich null Komma null fünf m plus null Komma fünf, also p gleich null Komma null null fünf m plus null '
+                      'Komma null fünf. Eingesetzt in m mal p gleich drei und mal zweihundert: m Quadrat plus zehn m minus sechshundert '
+                      'gleich null. In poly-solv: a gleich eins, b gleich zehn, c gleich minus sechshundert.',
+                  el=[f(r'm \cdot p - 0.05 \cdot m + 10 \cdot p - 0.5 = 3', 520, 38, x=RX, ein='@Aus'),
+                      f(r'p = 0.005 \cdot m + 0.05', 590, 38, x=RX, ein='@also'),
+                      f(r'm \cdot (0.005 \cdot m + 0.05) = 3', 660, 38, x=RX, ein='@Eingesetzt'),
+                      f(r'm^2 + 10 \cdot m - 600 = 0', 740, 44, x=RX, ein='@mal#2+0.3'),
+                      ] + poly_eingabe(1, 10, -600, 640, '@poly')),
              dict(gegeben=DS + [G_formel(r'm^2 + 10 \cdot m - 600 = 0')],
                   frage=dict(text='poly-solv zeigt x1 = 20 und x2 = −30. Was folgt?',
                              sprich='poly-solv zeigt x eins gleich zwanzig und x zwei gleich minus dreissig. Was folgt?',
-                             opt=['m = 20, dann p = 0.3', 'm = 20 oder m = −30', 'm = −30, dann p = −0.2'],
+                             opt=['m = 20, dann p = 0.15', 'm = 20 oder m = −30', 'm = −30, dann p = −0.1'],
                              rueck={1: 'Kann eine Masse negativ sein?', 2: 'Eine Masse ist nie negativ.'}),
-                  spr='Eine Masse ist nie negativ, minus dreissig fällt weg. Also m gleich zwanzig Kilogramm, und p gleich sechs durch '
-                      'zwanzig gleich null Komma drei.',
+                  spr='Eine Masse ist nie negativ, minus dreissig fällt weg. Also m gleich zwanzig Kilogramm, und p gleich drei durch '
+                      'zwanzig gleich null Komma eins fünf.',
                   el=ergebnis('x1=20', 'x2=⁻30') + [
                       tx(r'@\fd{m = -30}@: keine Masse', 760, 36, x=RX, ein='@negativ'),
-                      f(r'm = \fc{20}, \quad p = 6 : 20 = \fc{0.3}', 850, 44, x=RX, ein='@Also')]),
-             dict(gegeben=DS + [G_formel(r'm = 20,\ p = 0.3')],
+                      f(r'm = \fc{20}, \quad p = 3 : 20 = \fc{0.15}', 850, 44, x=RX, ein='@Also')]),
+             dict(gegeben=DS + [G_formel(r'm = 20,\ p = 0.15')],
                   frage=dict(text='Wie lautet die Antwort auf die Frage?', sprich='Wie lautet die Antwort auf die Frage?',
-                             opt=['20 kg Lösung mit 30 % Salz', '20 kg Lösung mit 0.3 % Salz', '30 kg Lösung mit 20 % Salz'],
-                             rueck={1: '0.3 als Prozent: Wie viel ist das?', 2: 'Das ist die Lösung nach dem Verdünnen. Gefragt ist die ursprüngliche.'},
-                             rueck_sprich={1: 'Null Komma drei als Prozent: Wie viel ist das?'}),
-                  spr='Die Lösung wog zwanzig Kilogramm und hatte dreissig Prozent Salz. Probe am Text: null Komma drei mal zwanzig gleich '
-                      'sechs Kilogramm Salz. Mit dem Wasser sind es dreissig Kilogramm, sechs durch dreissig ist zwanzig Prozent: zehn '
+                             opt=['20 kg Lösung mit 15 % Salz', '20 kg Lösung mit 0.15 % Salz', '30 kg Lösung mit 10 % Salz'],
+                             rueck={1: '0.15 als Prozent: Wie viel ist das?', 2: 'Das ist die Lösung nach dem Verdünnen. Gefragt ist die ursprüngliche.'},
+                             rueck_sprich={1: 'Null Komma eins fünf als Prozent: Wie viel ist das?'}),
+                  spr='Die Lösung wog zwanzig Kilogramm und hatte fünfzehn Prozent Salz. Probe am Text: null Komma eins fünf mal zwanzig '
+                      'gleich drei Kilogramm Salz. Mit dem Wasser sind es dreissig Kilogramm, drei durch dreissig ist zehn Prozent: fünf '
                       'Prozentpunkte weniger.',
-                  el=[tx(r'@\fc{20}@ kg Lösung mit @\fc{30\,\%}@ Salz', 520, 40, x=RX, ein='@wog'),
-                      f(r'0.3 \cdot 20 = 6 \;\checkmark \qquad 6 : 30 = 0.2 = 20\,\% \;\checkmark', 610, 38, x=RX, ein='@Probe')]),
+                  el=[tx(r'@\fc{20}@ kg Lösung mit @\fc{15\,\%}@ Salz', 520, 40, x=RX, ein='@wog'),
+                      f(r'0.15 \cdot 20 = 3 \;\checkmark \qquad 3 : 30 = 0.1 = 10\,\% \;\checkmark', 610, 38, x=RX, ein='@Probe')]),
          ]),
 ], merke('Zum Mitnehmen: Zwei Sorten mit bekanntem Anteil geben ein lineares System, Mengenbilanz und Stoffbilanz. Für sys-solv '
          'darf die Stoffbilanz mit hundert multipliziert werden. Sind Menge und Anteil beide unbekannt, steht ein Produkt im System: '
@@ -773,18 +784,20 @@ kontrolle('kontrolle-mischen-2', 'Ansatz finden: Mischen mit zwei Unbekannten',
 
 
 # ════════════════════════════════════════════════ Kapitel 3 · Einführung
-def rechteckbild(ein=0.05, flaeche=True, breite=False, ein_fl=None, ein_br=None, fuenf=False, ein5=None):
-    """Rechteckmodell: Breite = Anzahl Fahrten, Höhe = Tonnen pro Fahrt, Fläche = Tonnen."""
-    fl = [{'punkte': [[0, 0], [5, 0], [5, 18], [0, 18]], 'farbe': 1, 'deckung': 0.3},
-          {'punkte': [[5, 0], [12, 0], [12, 14], [5, 14]], 'farbe': 2, 'deckung': 0.3}]
-    tx_ = [{'bei': [2.5, -1.6], 'text': 'x', 'farbe': 1, 'groesse': 34},
-           {'bei': [8.5, -1.6], 'text': 'y', 'farbe': 2, 'groesse': 34}]
+def rechteckbild(ein=0.05, flaeche=True, breite=False, ein_fl=None, ein_br=None, fuenf=False, ein5=None, xb=6):
+    """Rechteckmodell: Breite = Anzahl Fahrten, Höhe = Tonnen pro Fahrt, Fläche = Tonnen. Jede Fahrt ein Streifen.
+    xb: Breite des blauen Teils — bis zur Lösung neutral 6 (Prüfung 08.10.2026, M10: 5 / 7 verriet die Lösung)."""
+    fl = [{'punkte': [[0, 0], [xb, 0], [xb, 18], [0, 18]], 'farbe': 1, 'deckung': 0.3},
+          {'punkte': [[xb, 0], [12, 0], [12, 14], [xb, 14]], 'farbe': 2, 'deckung': 0.3}]
+    tx_ = [{'bei': [xb / 2, -1.6], 'text': 'x', 'farbe': 1, 'groesse': 34},
+           {'bei': [(xb + 12) / 2, -1.6], 'text': 'y', 'farbe': 2, 'groesse': 34}]
     if flaeche:
-        tx_ += [{'bei': [2.5, 9], 'text': '18 · x', 'farbe': 1, 'groesse': 34, 'ein': ein_fl or 0.05},
-                {'bei': [8.5, 7], 'text': '14 · y', 'farbe': 2, 'groesse': 34, 'ein': ein_fl or 0.05}]
-    st = []
+        tx_ += [{'bei': [xb / 2, 9], 'text': '18 · x', 'farbe': 1, 'groesse': 34, 'ein': ein_fl or 0.05},
+                {'bei': [(xb + 12) / 2, 7], 'text': '14 · y', 'farbe': 2, 'groesse': 34, 'ein': ein_fl or 0.05}]
+    # Streifen: eine Fahrt je Streifen (Prüfung M9: der Ton sprach von Streifen, das Bild zeigte keine)
+    st = [{'von': [k, 0], 'bis': [k, 18 if k < xb else 14], 'farbe': 1 if k < xb else 2, 'dicke': 1.5} for k in range(1, 12) if k != xb]
     if breite:
-        st = [{'von': [0, 19.6], 'bis': [12, 19.6], 'farbe': 3, 'dicke': 4, 'ein': ein_br or 0.05}]
+        st += [{'von': [0, 19.6], 'bis': [12, 19.6], 'farbe': 3, 'dicke': 4, 'ein': ein_br or 0.05}]
         tx_.append({'bei': [6, 20.5], 'text': 'x + y = 12', 'farbe': 3, 'groesse': 32, 'ein': ein_br or 0.05})
     xt = [[12, '12']] + ([[5, '5']] if fuenf else [])
     g = dict(typ='graf', x=RX, y=180, breite=820, hoehe=700, abstand=0, anim='fade', ein=ein, pfeile=True,
@@ -810,7 +823,7 @@ clip('verteilen', 'Ansatz finden: Verteilen',
          sz('Stückbilanz',
             'Im Bild ist jede Fahrt ein Streifen. Die Breite zählt die Fahrten: x plus y gleich zwölf. Das ist die Stückbilanz.',
             f(r'\fa{x} + \fb{y} = 12', 300, 56, ein='@Breite'),
-            n('Stückbilanz: Anzahl Fahrten', 420, 'blau', 42, ein='@Stückbilanz'),
+            n('Stückbilanz: Anzahl Fahrten', 420, 'blau', 42, ein='@Stück'),
             rechteckbild(flaeche=False, breite=True, ein_br='@Breite')),
          sz('Wertbilanz',
             'Jeder Streifen ist so hoch wie die Ladung einer Fahrt. Die Fläche ist Anzahl mal Tonnen pro Fahrt: achtzehn x plus '
@@ -826,14 +839,17 @@ clip('verteilen', 'Ansatz finden: Verteilen',
             rechner(['x=5', ''], ['enter'], 560, '@liefert', LX, 400),
             rechner(['y=7', ''], ['enter'], 560, '@liefert+0.8', LX + 420, 400),
             f(r'18 \cdot 5 + 14 \cdot 7 = 90 + 98 = 188 \;\checkmark', 800, 40, ein='@Probe'),
-            rechteckbild(breite=True, fuenf=True)),
+            f(r'5 + 7 = 12 \;\checkmark', 880, 40, ein='@Tonnen+0.6'),
+            rechteckbild(breite=True, fuenf=True, xb=5, ein='@liefert')),
          sz('Sets',
-            'Vorsicht bei Sets. Ein Set Stöcke und Brille enthält zwei Artikel. Es zählt in beiden Stückbilanzen: einmal bei den '
-            'Stöcken, einmal bei den Brillen. Darum gibt es eine Stückbilanz pro Artikel.',
-            titel('Ein Set zählt doppelt', 250, 66),
-            tx(r'@x@: einzelne Stöcke, @y@: einzelne Brillen, @\fc{z}@: Sets', 380, 40, ein='@Set'),
-            f(r'\begin{cases} x + \fc{z} = 21 & \text{(Stöcke)} \\ y + \fc{z} = 17 & \text{(Brillen)} \end{cases}', 470, 46, ein='@beiden'),
-            n('eine Stückbilanz pro Artikel', 660, 'rot', 42, ein='@Darum')),
+            'Vorsicht bei Sets. Ein Beispiel von der Themenseite: Ein Sportgeschäft verkauft einundzwanzig Paar Stöcke und siebzehn '
+            'Brillen, einzeln oder im Set Stöcke und Brille. Ein Set enthält zwei Artikel. Es zählt in beiden Stückbilanzen: einmal bei '
+            'den Stöcken, einmal bei den Brillen. Darum gibt es eine Stückbilanz pro Artikel.',
+            titel('Ein Set zählt doppelt', 230, 66),
+            tx('21 Paar Stöcke und 17 Brillen, einzeln oder im Set', 330, 40, ein='@Sportgeschäft'),
+            tx(r'@x@: einzelne Stöcke, @y@: einzelne Brillen, @z@: Sets', 410, 40, ein='@enthält'),
+            f(r'\begin{cases} x + z = 21 & \text{(Stöcke)} \\ y + z = 17 & \text{(Brillen)} \end{cases}', 500, 46, ein='@beiden'),
+            n('eine Stückbilanz pro Artikel', 690, 'rot', 42, ein='@Darum')),
          sz('Ganze Zahlen',
             'Und wenn das Ergebnis nicht ganz ist? Mit hundertneunzig Tonnen statt hundertachtundachtzig ergibt sich x gleich fünf '
             'Komma fünf. Eine halbe Fahrt gibt es nicht: Mit zwölf vollen Fahrten sind hundertneunzig Tonnen nicht möglich.',
@@ -867,12 +883,12 @@ kontrolle('kontrolle-verteilen-1', 'Ansatz finden: Verteilen mit einer Unbekannt
              'Jugendliche zu zwölf Franken. Zusammen bezahlt sie dreihundertzwölf Franken. Wie viele Erwachsenenbillette sind es?',
          schritte=[
              dict(frage=dict(text='Mit einer Unbekannten: Was ist x, was der Rest?',
-                             sprich='Mit einer Unbekannten: Was ist x, und was ist der Rest?',
+                             sprich='Mit einer Unbekannten: Was ist x, was der Rest?',
                              opt=['x: Erwachsenenbillette (Stück), Rest 24 − x', 'x: Preis eines Erwachsenenbilletts',
                                   'x: Erwachsenenbillette (Stück), Rest x − 24'],
-                             rueck={1: 'Der Preis ist gegeben: 18 CHF.', 2: 'Bei x = 4 wäre der Rest negativ. Wie viele Billette bleiben?'},
+                             rueck={1: 'Der Preis ist gegeben: 18 CHF.', 2: 'Setz eine Zahl ein, etwa x = 10: Ist x − 24 dann eine Anzahl? Wie viele Billette bleiben?'},
                              rueck_sprich={1: 'Der Preis ist gegeben: achtzehn Franken.',
-                                           2: 'Bei x gleich vier wäre der Rest negativ. Wie viele Billette bleiben?'}),
+                                           2: 'Setz eine Zahl ein, etwa x gleich zehn: Ist x minus vierundzwanzig dann eine Anzahl? Wie viele Billette bleiben?'}),
                   spr='x ist die Anzahl Erwachsenenbillette. Die übrigen vierundzwanzig minus x Billette sind für Jugendliche.',
                   el=[tx(r'@\fa{x}@: Anzahl Erwachsenenbillette', 520, 40, x=RX, ein='@Anzahl'),
                       tx(r'Jugendbillette: @24 - x@', 600, 40, x=RX, ein='@übrigen')]),
@@ -911,7 +927,7 @@ kontrolle('kontrolle-verteilen-1', 'Ansatz finden: Verteilen mit einer Unbekannt
                              rueck_sprich={2: 'Zwanzig ist der Rest: vierundzwanzig minus x.'}),
                   spr='Es sind vier Erwachsenenbillette und zwanzig Jugendbillette. Probe am Text: vier mal achtzehn plus zwanzig mal zwölf, '
                       'zweiundsiebzig plus zweihundertvierzig, gibt dreihundertzwölf Franken.',
-                  el=[tx(r'@\fc{4}@ Erwachsenenbillette, @20@ Jugendbillette', 520, 40, x=RX, ein='@Erwachsenenbillette'),
+                  el=[tx(r'@\fc{4}@ Erwachsenenbillette, @20@ Jugendbillette', 520, 40, x=RX, ein='@Erwachsenen'),
                       f(r'4 \cdot 18 + 20 \cdot 12 = 72 + 240 = 312 \;\checkmark', 610, 40, x=RX, ein='@Probe')]),
          ]),
     dict(nr=2, kurz='Verteilen',
@@ -935,7 +951,7 @@ kontrolle('kontrolle-verteilen-1', 'Ansatz finden: Verteilen mit einer Unbekannt
                   spr='Anzahl Reihen mal Stühle pro Reihe gibt alle Stühle: r mal Klammer r plus sechs gleich zweihundertsechzehn. '
                       'Die Unbekannte steht in beiden Faktoren: Die Gleichung ist quadratisch.',
                   el=[f(r'r \cdot (r + 6) = 216', 520, 48, x=RX, ein='@Anzahl'),
-                      n('r in beiden Faktoren: quadratisch', 610, 'rot', 38, x=RX, ein='@Faktoren')]),
+                      n('r in beiden Faktoren: quadratisch', 610, 'rot', 38, x=RX, ein='@beiden')]),
              dict(gegeben=[G_text(DR, 34), G_formel(r'r \cdot (r + 6) = 216')],
                   frage=dict(text='In Grundform: Was tippst du in poly-solv ein?', sprich='In Grundform: Was tippst du in poly-solv ein?',
                              opt=['a = 1, b = 6, c = −216', 'a = 1, b = 6, c = 216', 'a = 2, b = 6, c = −216'],
@@ -949,7 +965,7 @@ kontrolle('kontrolle-verteilen-1', 'Ansatz finden: Verteilen mit einer Unbekannt
                       ] + poly_eingabe(1, 6, -216, 640, '@poly')),
              dict(gegeben=[G_text(DR, 34), G_formel(r'r^2 + 6 \cdot r - 216 = 0')],
                   frage=dict(text='poly-solv zeigt x1 = 12 und x2 = −18. Wie viele Reihen?',
-                             sprich='poly-solv zeigt x eins gleich zwölf und x zwei gleich minus achtzehn. Wie viele Reihen sind es?',
+                             sprich='poly-solv zeigt x eins gleich zwölf und x zwei gleich minus achtzehn. Wie viele Reihen?',
                              opt=['12 Reihen', '12 oder −18 Reihen', '18 Reihen'],
                              rueck={1: 'Eine Anzahl Reihen ist nie negativ.', 2: '18 sind die Stühle pro Reihe.'},
                              rueck_sprich={2: 'Achtzehn sind die Stühle pro Reihe.'}),
@@ -958,7 +974,7 @@ kontrolle('kontrolle-verteilen-1', 'Ansatz finden: Verteilen mit einer Unbekannt
                       tx(r'@\fd{r = -18}@: keine Anzahl', 760, 36, x=RX, ein='@negativ'),
                       f(r'r = \fc{12}', 850, 48, x=RX, ein='@Reihen')]),
              dict(gegeben=[G_text(DR, 34), G_formel(r'r = 12')],
-                  frage=dict(text='Welche Probe prüft den Text?', sprich='Welche Probe prüft hier den Text?',
+                  frage=dict(text='Welche Probe prüft den Text?', sprich='Welche Probe prüft den Text?',
                              opt=['12 Reihen zu 18 Stühlen: 12 · 18 = 216', '12² + 6 · 12 − 216 = 0', '12 + 18 = 30'],
                              rueck={1: 'Das prüft die eigene Gleichung, nicht den Text.', 2: 'Im Text steht die Anzahl Stühle, keine Summe.'}),
                   spr='Probe am Text: zwölf Reihen, jede mit sechs Stühlen mehr, also achtzehn. Zwölf mal achtzehn gibt zweihundertsechzehn '
@@ -982,7 +998,7 @@ kontrolle('kontrolle-verteilen-2', 'Ansatz finden: Verteilen mit zwei Unbekannte
          spr='Eine Fähre bringt an einem Tag siebzig Fahrzeuge über den See: Personenwagen zu dreissig Franken und Lieferwagen zu '
              'fünfundfünfzig Franken. Die Einnahmen betragen zweitausendsechshundert Franken. Wie viele Lieferwagen waren es?',
          schritte=[
-             dict(frage=dict(text='Welche Deklaration ist vollständig?', sprich='Welche Deklaration ist hier vollständig?',
+             dict(frage=dict(text='Welche Deklaration ist vollständig?', sprich='Welche Deklaration ist vollständig?',
                              opt=['x: Anzahl Personenwagen, y: Anzahl Lieferwagen', 'x: Personenwagen, y: Lieferwagen',
                                   'x, y: Preis je Personenwagen und Lieferwagen'],
                              rueck={1: 'Was von den Personenwagen: Anzahl, Preis, Einnahmen?', 2: 'Die Preise sind gegeben.'}),
@@ -990,7 +1006,7 @@ kontrolle('kontrolle-verteilen-2', 'Ansatz finden: Verteilen mit zwei Unbekannte
                   el=[tx(r'@\fa{x}@: Anzahl Personenwagen', 520, 40, x=RX, ein='@Anzahl'),
                       tx(r'@\fb{y}@: Anzahl Lieferwagen', 590, 40, x=RX, ein='@Anzahl#2')]),
              dict(gegeben=DFW,
-                  frage=dict(text='Welches System übersetzt den Text?', sprich='Welches System übersetzt hier den Text?',
+                  frage=dict(text='Welches System übersetzt den Text?', sprich='Welches System übersetzt den Text?',
                              opt=['x + y = 70 und 30·x + 55·y = 2600', 'x + y = 2600 und 30·x + 55·y = 70', 'x + y = 70 und 55·x + 30·y = 2600'],
                              rueck={1: 'Was zählt die Stückbilanz: Fahrzeuge oder Franken?', 2: 'x zählt die Personenwagen. Welcher Preis gehört zu x?'}),
                   spr='Stückbilanz: x plus y gleich siebzig Fahrzeuge. Wertbilanz: dreissig x plus fünfundfünfzig y gleich '
@@ -1052,15 +1068,16 @@ kontrolle('kontrolle-verteilen-2', 'Ansatz finden: Verteilen mit zwei Unbekannte
                              rueck_sprich={1: 'Prüfe das Vorzeichen der dreihundertsechzig.', 2: 'Prüfe das Vorzeichen in y gleich zwei x minus sechs.'}),
                   spr='Ausmultipliziert: x y plus sechs x minus drei y minus achtzehn gleich dreihundertsechzig. Mit x y gleich '
                       'dreihundertsechzig bleibt sechs x minus drei y gleich achtzehn, also y gleich zwei x minus sechs. Eingesetzt: zwei x '
-                      'Quadrat minus sechs x minus dreihundertsechzig gleich null.',
-                  el=[f(r'x y + 6 \cdot x - 3 \cdot y - 18 = 360', 520, 38, x=RX, ein='@Ausmultipliziert'),
+                      'Quadrat minus sechs x minus dreihundertsechzig gleich null. In poly-solv: a gleich zwei, b gleich minus sechs, '
+                      'c gleich minus dreihundertsechzig.',
+                  el=[f(r'x \cdot y + 6 \cdot x - 3 \cdot y - 18 = 360', 520, 38, x=RX, ein='@Ausmultipliziert'),
                       f(r'6 \cdot x - 3 \cdot y = 18 \;\Rightarrow\; y = 2 \cdot x - 6', 590, 38, x=RX, ein='@bleibt'),
                       f(r'x \cdot (2 \cdot x - 6) = 360', 660, 38, x=RX, ein='@Eingesetzt'),
                       f(r'2 \cdot x^2 - 6 \cdot x - 360 = 0', 740, 44, x=RX, ein='@Quadrat'),
-                      ] + poly_eingabe(2, -6, -360, 640, '@Quadrat+1')),
+                      ] + poly_eingabe(2, -6, -360, 640, '@poly')),
              dict(gegeben=DBU + [G_formel(r'2 \cdot x^2 - 6 \cdot x - 360 = 0')],
                   frage=dict(text='poly-solv zeigt x1 = 15 und x2 = −12. Was folgt?',
-                             sprich='poly-solv zeigt x eins gleich fünfzehn und x zwei gleich minus zwölf. Was folgt daraus?',
+                             sprich='poly-solv zeigt x eins gleich fünfzehn und x zwei gleich minus zwölf. Was folgt?',
                              opt=['15 Personen', '15 oder −12 Personen', '12 Personen'],
                              rueck={1: 'Eine Anzahl Personen ist nie negativ.', 2: '12 fahren nach den Absagen mit. Gefragt sind die Angemeldeten.'},
                              rueck_sprich={2: 'Zwölf fahren nach den Absagen mit. Gefragt sind die Angemeldeten.'}),
@@ -1070,7 +1087,7 @@ kontrolle('kontrolle-verteilen-2', 'Ansatz finden: Verteilen mit zwei Unbekannte
                       tx(r'@\fd{x = -12}@: keine Anzahl', 760, 36, x=RX, ein='@negativ'),
                       f(r'x = \fc{15}, \quad y = 2 \cdot 15 - 6 = 24', 850, 42, x=RX, ein='@Angemeldet')]),
              dict(gegeben=DBU + [G_formel(r'x = 15,\ y = 24')],
-                  frage=dict(text='Probe: Was prüft vor und nach den Absagen?', sprich='Probe: Was prüft die Kosten vor und nach den Absagen?',
+                  frage=dict(text='Probe: Was prüft die Kosten vor und nach den Absagen?', sprich='Probe: Was prüft die Kosten vor und nach den Absagen?',
                              opt=['15 · 24 = 360 und 12 · 30 = 360', '15 · 24 = 360 genügt', '15 − 3 = 12'],
                              rueck={1: 'Und nach den Absagen? Prüfe beide Aussagen.', 2: 'Das prüft die Kosten nicht.'}),
                   spr='Probe am Text: fünfzehn mal vierundzwanzig gleich dreihundertsechzig. Nach drei Absagen zahlen zwölf Personen je '
@@ -1086,19 +1103,21 @@ kontrolle('kontrolle-verteilen-2', 'Ansatz finden: Verteilen mit zwei Unbekannte
 
 
 # ════════════════════════════════════════════════ Kapitel 4 · Einführung
-def zinsbild(ein=0.05, zins=False, ein_z=None):
-    """Kapital (in tausend CHF) und Zins (1 Einheit = 15 CHF) als Säulen; x blau, y orange."""
-    fig = [{'art': 'vieleck', 'punkte': [[2, 0], [7, 0], [7, 14], [2, 14]], 'farbe': 1, 'fuellung': 0.3, 'dicke': 3},
-           {'art': 'vieleck', 'punkte': [[2, 14], [7, 14], [7, 30], [2, 30]], 'farbe': 2, 'fuellung': 0.3, 'dicke': 3},
-           {'art': 'text', 'bei': [4.5, 7], 'text': 'x', 'farbe': 1, 'groesse': 40},
-           {'art': 'text', 'bei': [4.5, 22], 'text': 'y', 'farbe': 2, 'groesse': 40},
+def zinsbild(ein=0.05, zins=False, ein_z=None, xk=15):
+    """Kapital (in tausend CHF) und Zins (1 Einheit = 15 CHF) als Säulen; x blau, y orange.
+    xk: Kapital x in tausend CHF — bis zur Lösung neutral 15 (Prüfung 08.10.2026, M10: 14 / 16 verriet die Lösung)."""
+    z1, z2 = 0.0075 * xk * 1000 / 15, 0.02 * (30 - xk) * 1000 / 15
+    fig = [{'art': 'vieleck', 'punkte': [[2, 0], [7, 0], [7, xk], [2, xk]], 'farbe': 1, 'fuellung': 0.3, 'dicke': 3},
+           {'art': 'vieleck', 'punkte': [[2, xk], [7, xk], [7, 30], [2, 30]], 'farbe': 2, 'fuellung': 0.3, 'dicke': 3},
+           {'art': 'text', 'bei': [4.5, xk / 2], 'text': 'x', 'farbe': 1, 'groesse': 40},
+           {'art': 'text', 'bei': [4.5, (xk + 30) / 2], 'text': 'y', 'farbe': 2, 'groesse': 40},
            {'art': 'text', 'bei': [4.5, -2.4], 'text': 'Kapital 30 000', 'farbe': 5, 'groesse': 30, 'kursiv': False}]
     if zins:
         e = ein_z or 0.05
-        fig += [{'art': 'vieleck', 'punkte': [[13, 0], [18, 0], [18, 7], [13, 7]], 'farbe': 1, 'fuellung': 0.55, 'dicke': 3, 'ein': e},
-                {'art': 'vieleck', 'punkte': [[13, 7], [18, 7], [18, 28.33], [13, 28.33]], 'farbe': 2, 'fuellung': 0.55, 'dicke': 3, 'ein': e},
-                {'art': 'text', 'bei': [15.5, 3.2], 'text': '0.0075·x', 'farbe': 5, 'groesse': 26, 'ein': e},
-                {'art': 'text', 'bei': [15.5, 17.5], 'text': '0.02·y', 'farbe': 5, 'groesse': 26, 'ein': e},
+        fig += [{'art': 'vieleck', 'punkte': [[13, 0], [18, 0], [18, z1], [13, z1]], 'farbe': 1, 'fuellung': 0.55, 'dicke': 3, 'ein': e},
+                {'art': 'vieleck', 'punkte': [[13, z1], [18, z1], [18, z1 + z2], [13, z1 + z2]], 'farbe': 2, 'fuellung': 0.55, 'dicke': 3, 'ein': e},
+                {'art': 'text', 'bei': [15.5, z1 / 2 - 0.3], 'text': '0.0075·x', 'farbe': 5, 'groesse': 26, 'ein': e},
+                {'art': 'text', 'bei': [15.5, z1 + z2 / 2 - 0.3], 'text': '0.02·y', 'farbe': 5, 'groesse': 26, 'ein': e},
                 {'art': 'text', 'bei': [15.5, -2.4], 'text': 'Zins 425', 'farbe': 5, 'groesse': 30, 'kursiv': False, 'ein': e}]
     return dict(typ='graf', x=RX + 60, y=170, breite=600, hoehe=780, abstand=0, anim='fade', ein=ein, achsen=False, raster=False,
                 xbereich=[0, 20.5], ybereich=[-4.6, 32], figuren=fig)
@@ -1112,7 +1131,7 @@ clip('zins', 'Ansatz finden: Zins',
             'Die Zeit zählt in Jahren: ein halbes Jahr ist ein halb, vier Monate sind ein Drittel.',
             titel('Zins', 250, 70),
             f(r'\text{Zins} = p \cdot t \cdot \text{Kapital}', 380, 54, ein='@Zinssatz'),
-            f(r'2\,\% \;\to\; p = 0.02', 490, 44, ein='@Dezimalzahl'),
+            f(r'2\,\% \;\to\; p = 0.02', 490, 44, ein='@Dezimal'),
             f(r'\tfrac{1}{2}\ \text{Jahr} \;\to\; t = \tfrac{1}{2} \qquad 4\ \text{Monate} \;\to\; t = \tfrac{4}{12} = \tfrac{1}{3}', 580, 44, ein='@Jahren')),
          sz('Zwei Anlagen',
             'Herr Keller legt dreissigtausend Franken an: einen Teil auf ein Sparkonto zu null Komma sieben fünf Prozent, den Rest in '
@@ -1132,14 +1151,16 @@ clip('zins', 'Ansatz finden: Zins',
             n('Zinsgleichung: CHF Zins', 560, 'blau', 38, ein='@Zinsgleichung'),
             zinsbild(zins=True, ein_z='@Zinsgleichung')),
          sz('Lösen',
-            'Hier geht es auch von Hand, mit Einsetzen: x gleich dreissigtausend minus y. Dann bleibt zweihundertfünfundzwanzig plus '
-            'null Komma null eins zwei fünf y gleich vierhundertfünfundzwanzig, also y gleich sechzehntausend und x gleich vierzehntausend. '
-            'Probe: hundertfünf plus dreihundertzwanzig gleich vierhundertfünfundzwanzig Franken.',
-            f(r'x = 30\,000 - y', 260, 46, ein='@Einsetzen'),
-            f(r'225 + 0.0125 \cdot y = 425', 350, 46, ein='@bleibt'),
-            f(r'y = \fc{16\,000}, \quad x = \fc{14\,000}', 440, 46, ein='@sechzehntausend'),
-            f(r'0.0075 \cdot 14\,000 + 0.02 \cdot 16\,000 = 105 + 320 = 425 \;\checkmark', 560, 38, ein='@Probe'),
-            zinsbild(zins=True)),
+            'Hier geht es auch von Hand, mit Einsetzen: x gleich dreissigtausend minus y in die Zinsgleichung. Null Komma null null sieben '
+            'fünf mal Klammer dreissigtausend minus y plus null Komma null zwei y gleich vierhundertfünfundzwanzig. Ausmultipliziert bleibt '
+            'zweihundertfünfundzwanzig plus null Komma null eins zwei fünf y gleich vierhundertfünfundzwanzig, also y gleich sechzehntausend '
+            'und x gleich vierzehntausend. Probe: hundertfünf plus dreihundertzwanzig gleich vierhundertfünfundzwanzig Franken.',
+            f(r'x = 30\,000 - y', 240, 44, ein='@Einsetzen'),
+            f(r'0.0075 \cdot (30\,000 - y) + 0.02 \cdot y = 425', 320, 38, ein='@Klammer'),
+            f(r'225 + 0.0125 \cdot y = 425', 400, 44, ein='@Aus'),
+            f(r'y = \fc{16\,000}, \quad x = \fc{14\,000}', 480, 44, ein='@also+1.0'),
+            f(r'0.0075 \cdot 14\,000 + 0.02 \cdot 16\,000 = 105 + 320 = 425 \;\checkmark', 590, 36, ein='@Probe'),
+            zinsbild(zins=True, xk=14, ein='@also+1.0')),
          sz('Zeitanteil',
             'Liegt ein Teil nur ein halbes Jahr, kommt der Zeitanteil dazu. Ein Beispiel von der Themenseite: null Komma acht Prozent ein '
             'ganzes Jahr und zwei Komma vier Prozent ein halbes Jahr. In der Zinsgleichung steht dann null Komma null zwei vier mal '
@@ -1149,23 +1170,29 @@ clip('zins', 'Ansatz finden: Zins',
             f(r'0.024 \cdot \tfrac{1}{2} = 0.012', 500, 46, ein='@also'),
             n('Zeitanteil nie vergessen', 620, 'rot', 42, ein='@Zeitanteil')),
          sz('Zinseszins',
-            'Wird der Zins gutgeschrieben und im nächsten Jahr mitverzinst, wächst das Kapital jedes Jahr mit dem Faktor eins plus p. '
-            'Nach zwei Jahren steht das Kapital mal eins plus p im Quadrat da. Bei drei Prozent werden aus fünftausend Franken '
-            'fünftausendhundertfünfzig und dann fünftausenddreihundertvier Franken fünfzig.',
-            titel('Zinseszins', 250, 66),
-            f(r'K \;\to\; K \cdot (1 + p) \;\to\; K \cdot (1 + p)^2', 390, 50, ein='@wächst'),
-            f(r'5000 \;\to\; 5150 \;\to\; 5304.50 \qquad (p = 0.03)', 500, 44, ein='@drei'),
-            n('Faktor @1 + p@ mit @p@ als Dezimalzahl', 620, 'blau', 40, ein='@Faktor')),
+            'Beim einfachen Zins bleibt der Zins jedes Jahr gleich: Nach zwei Jahren hat man K mal Klammer eins plus zwei p. '
+            'Wird der Zins dagegen gutgeschrieben und im nächsten Jahr mitverzinst, wächst das Kapital jedes Jahr mit dem Faktor eins plus p. '
+            'Das ist der Zinseszins: Nach zwei Jahren steht das Kapital mal eins plus p im Quadrat da. Bei drei Prozent werden aus '
+            'fünftausend Franken fünftausendhundertfünfzig und dann fünftausenddreihundertvier Franken fünfzig.',
+            titel('Zinseszins', 230, 66),
+            f(r'\text{einfacher Zins:} \quad K \cdot (1 + 2 \cdot p)', 340, 44, ein='@einfachen'),
+            f(r'\text{Zinseszins:} \quad K \;\to\; K \cdot (1 + p) \;\to\; K \cdot (1 + p)^2', 440, 46, ein='@wächst'),
+            f(r'5000 \;\to\; 5150 \;\to\; 5304.50 \qquad (p = 0.03)', 550, 44, ein='@werden'),
+            n('Faktor @1 + p@ mit @p@ als Dezimalzahl', 670, 'blau', 40, ein='@Faktor')),
          sz('Quadratisch',
+            # Prüfung 08.10.2026, M6: Mit −304.5 ist die Bruchanzeige von poly-solv nicht belegt — mal zwei, ganzzahlig.
             'Ist der Zinssatz gesucht, steht p im Quadrat. Aus fünftausend mal Klammer eins plus p im Quadrat gleich fünftausenddreihundertvier '
             'Komma fünf wird die Grundform fünftausend p Quadrat plus zehntausend p minus dreihundertvier Komma fünf gleich null. '
-            'poly-solv liefert drei Hundertstel und minus zweihundertdrei Hundertstel. Nur p gleich null Komma null drei passt: drei Prozent.',
-            f(r'5000 \cdot (1 + p)^2 = 5304.50', 260, 46, ein='@Klammer'),
-            f(r'5000 \cdot p^2 + 10\,000 \cdot p - 304.5 = 0', 360, 46, ein='@Grundform'),
-            rechner(['x1=[3|100]', ''], ['enter'], 470, '@liefert', LX, 400),
-            rechner(['x2=⁻[203|100]', ''], ['enter'], 470, '@liefert+0.8', LX + 420, 400),
-            tx(r'@p = \fc{0.03} = 3\,\%@; @\fd{p = -2.03}@ verworfen', 770, 40, ein='@passt'),
-            n('Auch Kapital mal Zinssatz,|beide unbekannt, ist ein Produkt:|quadratisch.', 470, 'rot', 40, ein='@Prozent#2', x=RX)),
+            'Mal zwei, damit ganze Zahlen dastehen: zehntausend p Quadrat plus zwanzigtausend p minus sechshundertneun gleich null. '
+            'poly-solv liefert drei Hundertstel und minus zweihundertdrei Hundertstel. Nur p gleich null Komma null drei passt: drei Prozent. '
+            'Auch Kapital mal Zinssatz, wenn beide unbekannt sind, ist ein Produkt: Dann wird das System quadratisch.',
+            f(r'5000 \cdot (1 + p)^2 = 5304.50', 240, 44, ein='@Klammer'),
+            f(r'5000 \cdot p^2 + 10\,000 \cdot p - 304.5 = 0', 330, 44, ein='@Grundform'),
+            f(r'10\,000 \cdot p^2 + 20\,000 \cdot p - 609 = 0 \qquad \fb{\mid \cdot 2}', 420, 44, ein='@ganze'),
+            rechner(['x1=[3|100]', ''], ['enter'], 520, '@liefert', LX, 400),
+            rechner(['x2=⁻[203|100]', ''], ['enter'], 520, '@liefert+0.8', LX + 420, 400),
+            tx(r'@p = \fc{0.03} = 3\,\%@; @\fd{p = -2.03}@ verworfen', 830, 40, ein='@passt'),
+            n('Auch Kapital mal Zinssatz,|beide unbekannt, ist ein Produkt:|quadratisch.', 520, 'rot', 40, ein='@Auch', x=RX)),
          sz('Merke',
             'Zum Mitnehmen: Kapitalgleichung und Zinsgleichung, beide in Franken. Der Zinssatz als Dezimalzahl, die Zeit in Jahren. '
             'Mit Zinseszins wächst das Kapital mit dem Faktor eins plus p pro Jahr.',
@@ -1186,7 +1213,7 @@ kontrolle('kontrolle-zins-1', 'Ansatz finden: Zins mit einer Unbekannten',
          spr='Lea teilt zwölftausend Franken auf. Einen Teil legt sie ein ganzes Jahr zu eins Komma fünf Prozent an, den Rest nur ein '
              'halbes Jahr zu zwei Prozent. Zusammen erhält sie hundertsechzig Franken Zins. Wie viel legt sie zu eins Komma fünf Prozent an?',
          schritte=[
-             dict(frage=dict(text='Mit einer Unbekannten: Welche Deklaration?', sprich='Mit einer Unbekannten: Welche Deklaration passt?',
+             dict(frage=dict(text='Mit einer Unbekannten: Welche Deklaration?', sprich='Mit einer Unbekannten: Welche Deklaration?',
                              opt=['x: Kapital zu 1.5 % in CHF; Rest 12' + NB + '000 − x', 'x: Zins in CHF', 'x: Zinssatz des Rests'],
                              rueck={1: 'Der Zins ist gegeben: 160 CHF.', 2: 'Die Zinssätze sind gegeben.'},
                              rueck_sprich={1: 'Der Zins ist gegeben: hundertsechzig Franken.'}),
@@ -1204,7 +1231,7 @@ kontrolle('kontrolle-zins-1', 'Ansatz finden: Zins mit einer Unbekannten',
                   el=[f(r'0.015 \cdot 1 \cdot x + 0.02 \cdot \tfrac{1}{2} \cdot (12\,000 - x) = 160', 520, 38, x=RX, ein='@Zinssatz'),
                       n('Zeitanteil: @t = \\tfrac{1}{2}@', 610, 'blau', 38, x=RX, ein='@halbes')]),
              dict(gegeben=[G_text(DZ1, 34), G_formel(r'0.015 \cdot x + 0.01 \cdot (12\,000 - x) = 160', 36)],
-                  frage=dict(text='Ausmultipliziert und geordnet: Was bleibt?', sprich='Ausmultipliziert und geordnet: Was bleibt übrig?',
+                  frage=dict(text='Ausmultipliziert und geordnet: Was bleibt?', sprich='Ausmultipliziert und geordnet: Was bleibt?',
                              opt=['0.005·x = 40', '0.005·x = 160', '0.025·x = 40'],
                              rueck={1: 'Was ist mit 0.01 · 12 000 = 120 passiert?', 2: 'Das Minus vor 0.01·x: 0.015·x − 0.01·x = ?'},
                              rueck_sprich={1: 'Was ist mit null Komma null eins mal zwölftausend, also hundertzwanzig, passiert?',
@@ -1212,7 +1239,7 @@ kontrolle('kontrolle-zins-1', 'Ansatz finden: Zins mit einer Unbekannten',
                   spr='Der Faktor des Rests: null Komma null zwei mal ein halb gleich null Komma null eins. Ausmultipliziert null Komma null '
                       'eins fünf x plus hundertzwanzig minus null Komma null eins x gleich hundertsechzig. Also null Komma null null fünf x '
                       'gleich vierzig.',
-                  el=[f(r'0.015 \cdot x + 120 - 0.01 \cdot x = 160', 520, 42, x=RX, ein='@Ausmultipliziert'),
+                  el=[f(r'0.015 \cdot x + 120 - 0.01 \cdot x = 160', 520, 42, x=RX, ein='@Multipliziert'),
                       f(r'0.005 \cdot x = 40', 610, 44, x=RX, ein='@Also')]),
              dict(gegeben=[G_text(DZ1, 34), G_formel(r'0.005 \cdot x = 40')],
                   frage=dict(text='Welcher Typ, und was ergibt sich daraus?', sprich='Welcher Typ, und was ergibt sich daraus?',
@@ -1223,7 +1250,7 @@ kontrolle('kontrolle-zins-1', 'Ansatz finden: Zins mit einer Unbekannten',
                   el=[n('linear: von Hand lösen', 520, 'blau', 40, x=RX, ein='@linear'),
                       f(r'x = 40 : 0.005 = \fc{8000}', 610, 48, x=RX, ein='@teilen')]),
              dict(gegeben=[G_text(DZ1, 34), G_formel(r'x = 8000')],
-                  frage=dict(text='Wie lautet die Antwort mit Probe?', sprich='Wie lautet die Antwort?',
+                  frage=dict(text='Wie lautet die Antwort?', sprich='Wie lautet die Antwort?',
                              opt=['8000 CHF zu 1.5 %, 4000 CHF zu 2 %', '8000 CHF Zins', '4000 CHF zu 1.5 %'],
                              rueck={1: 'x ist ein Kapital, kein Zins.', 2: '4000 ist der Rest.'},
                              rueck_sprich={2: 'Viertausend ist der Rest.'}),
@@ -1252,9 +1279,9 @@ kontrolle('kontrolle-zins-1', 'Ansatz finden: Zins mit einer Unbekannten',
                   spr='Die fünftausend Franken wachsen zwei Jahre lang, die zweitausend nur ein Jahr: fünftausend mal Klammer eins plus p '
                       'im Quadrat plus zweitausend mal Klammer eins plus p gleich siebentausendzweihundertzweiundvierzig.',
                   el=[f(r'5000 \cdot (1 + p)^2 + 2000 \cdot (1 + p) = 7242', 520, 40, x=RX, ein='@wachsen'),
-                      n('5000 zwei Jahre, 2000 ein Jahr', 610, 'blau', 38, x=RX, ein='@zweitausend')]),
+                      n('5000 zwei Jahre, 2000 ein Jahr', 610, 'blau', 38, x=RX, ein='@nur')]),
              dict(gegeben=[G_text(DZ2, 34), G_formel(r'5000 \cdot (1 + p)^2 + 2000 \cdot (1 + p) = 7242', 36)],
-                  frage=dict(text='Ausmultipliziert, auf null: Was tippst du ein?', sprich='Ausmultipliziert und auf null gebracht: Was tippst du ein?',
+                  frage=dict(text='Ausmultipliziert, auf null: Was tippst du ein?', sprich='Ausmultipliziert, auf null: Was tippst du ein?',
                              opt=['a = 5000, b = 12' + NB + '000, c = −242', 'a = 5000, b = 10' + NB + '000, c = −242', 'a = 5000, b = 12' + NB + '000, c = 7242'],
                              rueck={1: 'Auch 2000·(1 + p) liefert ein Glied mit p.', 2: 'Die 7242 kommt nach links, zusammen mit 5000 + 2000.'},
                              rueck_sprich={1: 'Auch zweitausend mal Klammer eins plus p liefert ein Glied mit p.',
@@ -1263,7 +1290,8 @@ kontrolle('kontrolle-zins-1', 'Ansatz finden: Zins mit einer Unbekannten',
                       'Zusammen fünftausend p Quadrat plus zwölftausend p plus siebentausend. Minus siebentausendzweihundertzweiundvierzig: '
                       'c gleich minus zweihundertzweiundvierzig.',
                   el=[f(r'5000 \cdot p^2 + 10\,000 \cdot p + 5000 + 2000 \cdot p + 2000 = 7242', 520, 34, x=RX, ein='@Ausmultipliziert'),
-                      f(r'5000 \cdot p^2 + 12\,000 \cdot p - 242 = 0', 610, 42, x=RX, ein='@Minus'),
+                      f(r'5000 \cdot p^2 + 12\,000 \cdot p + 7000 = 7242', 595, 38, x=RX, ein='@Zusammen'),
+                      f(r'5000 \cdot p^2 + 12\,000 \cdot p - 242 = 0', 675, 42, x=RX, ein='@Minus'),
                       ] + poly_eingabe(5000, 12000, -242, 640, '@Minus+1')),
              dict(gegeben=[G_text(DZ2, 34), G_formel(r'5000 \cdot p^2 + 12\,000 \cdot p - 242 = 0', 38)],
                   frage=dict(text='poly-solv zeigt x1 = 1/50 und x2 = −121/50. Was gilt?',
@@ -1313,7 +1341,7 @@ kontrolle('kontrolle-zins-2', 'Ansatz finden: Zins mit zwei Unbekannten',
                   el=[tx(r'@\fa{x}@: Kapital zu 2 % in CHF', 520, 40, x=RX, ein='@Kapital'),
                       tx(r'@\fb{y}@: Kapital zu 3 % in CHF', 590, 40, x=RX, ein='@Kapital#2')]),
              dict(gegeben=DV + [G_formel(r'0.02 \cdot x + 0.03 \cdot y = 540', 36)],
-                  frage=dict(text='Welche Gleichung beschreibt «vertauscht»?', sprich='Welche Gleichung beschreibt: Zinssätze vertauscht?',
+                  frage=dict(text='Welche Gleichung beschreibt «Zinssätze vertauscht»?', sprich='Welche Gleichung beschreibt: Zinssätze vertauscht?',
                              opt=['0.03·x + 0.02·y = 510', '0.02·x + 0.03·y = 510', '0.03·y + 0.02·x = 510'],
                              rueck={1: 'Das sind die ursprünglichen Zinssätze.', 2: 'Das ist dieselbe Verteilung wie im ersten Satz, nur anders geordnet.'}),
                   spr='Die erste Aussage steht schon da. Vertauscht bekommt x drei Prozent und y zwei Prozent: null Komma null drei x plus '
@@ -1327,9 +1355,10 @@ kontrolle('kontrolle-zins-2', 'Ansatz finden: Zins mit zwei Unbekannten',
                              rueck_sprich={1: 'Mit hundert multipliziert wird auch die rechte Seite.',
                                            2: 'Mal hundert: Aus null Komma null zwei wird zwei, nicht zweihundert.'}),
                   spr='Beide Gleichungen mal hundert: zwei x plus drei y gleich vierundfünfzigtausend, drei x plus zwei y gleich '
-                      'einundfünfzigtausend. Ganze Zahlen tippen sich sicherer.',
-                  el=[f(r'\begin{cases} 2 \cdot x + 3 \cdot y = 54\,000 \\ 3 \cdot x + 2 \cdot y = 51\,000 \end{cases}', 520, 44, x=RX, ein='@hundert'),
-                      ] + sys_eingabe((2, 3, 54000), (3, 2, 51000), 640, '@Ganze')),
+                      'einundfünfzigtausend. Ganze Zahlen tippen sich sicherer. In sys-solv: erste Zeile zwei, drei, vierundfünfzigtausend, '
+                      'zweite Zeile drei, zwei, einundfünfzigtausend.',
+                  el=[f(r'\begin{cases} 2 \cdot x + 3 \cdot y = 54\,000 \\ 3 \cdot x + 2 \cdot y = 51\,000 \end{cases}', 520, 44, x=RX, ein='@mal'),
+                      ] + sys_eingabe((2, 3, 54000), (3, 2, 51000), 640, '@erste')),
              dict(gegeben=DV + [G_formel(r'\begin{cases} 2 \cdot x + 3 \cdot y = 54\,000 \\ 3 \cdot x + 2 \cdot y = 51\,000 \end{cases}', 36, 110)],
                   frage=dict(text='sys-solv zeigt x = 9000 und y = 12 000. Was heisst das?',
                              sprich='sys-solv zeigt x gleich neuntausend und y gleich zwölftausend. Was heisst das?',
@@ -1338,22 +1367,23 @@ kontrolle('kontrolle-zins-2', 'Ansatz finden: Zins mit zwei Unbekannten',
                              rueck_sprich={1: 'x war das Kapital zu zwei Prozent.'}),
                   spr='x ist das Kapital zu zwei Prozent: neuntausend Franken. y, das Kapital zu drei Prozent, beträgt zwölftausend Franken.',
                   el=ergebnis('x=9000', 'y=12000') + [
-                      tx(r'@\fc{9000}@ CHF zu 2 %, @\fc{12\,000}@ CHF zu 3 %', 760, 38, x=RX, ein='@neuntausend')]),
+                      tx(r'@\fc{9000}@ CHF zu 2 %, @\fc{12\,000}@ CHF zu 3 %', 760, 38, x=RX, ein='@Kapital+1.3')]),
              dict(gegeben=DV + [G_formel(r'x = 9000,\ y = 12\,000')],
                   frage=dict(text='Mit welcher Probe prüfst du beide Aussagen?', sprich='Mit welcher Probe prüfst du beide Aussagen?',
                              opt=['180 + 360 = 540 und 270 + 240 = 510', '180 + 360 = 540 genügt', '9000 + 12' + NB + '000 = 21' + NB + '000'],
                              rueck={1: 'Der Text macht zwei Aussagen.', 2: 'Die Summe der Kapitalien steht nicht im Text.'}),
                   spr='Probe am Text: hundertachtzig plus dreihundertsechzig gleich fünfhundertvierzig. Vertauscht: zweihundertsiebzig plus '
-                      'zweihundertvierzig gleich fünfhundertzehn. Die Kapitalien sind neuntausend und zwölftausend Franken.',
+                      'zweihundertvierzig gleich fünfhundertzehn. Die Kapitalien: neuntausend Franken zu zwei Prozent und zwölftausend Franken '
+                      'zu drei Prozent.',
                   el=[f(r'180 + 360 = 540 \;\checkmark \qquad 270 + 240 = 510 \;\checkmark', 520, 40, x=RX, ein='@Probe'),
-                      tx(r'@\fc{9000}@ CHF und @\fc{12\,000}@ CHF', 610, 40, x=RX, ein='@Kapitalien')]),
+                      tx(r'@\fc{9000}@ CHF zu 2 %, @\fc{12\,000}@ CHF zu 3 %', 610, 40, x=RX, ein='@Kapitalien')]),
          ]),
     dict(nr=2, kurz='Zins',
          text='Ein Kapital bringt in einem Jahr 480 CHF Zins.|Wäre es um 4000 CHF kleiner und der Zinssatz|um 0.4 Prozentpunkte höher, ergäbe es gleich|viel Zins. Wie gross sind Kapital und Zinssatz?',
          spr='Ein Kapital bringt in einem Jahr vierhundertachtzig Franken Zins. Wäre es um viertausend Franken kleiner und der Zinssatz '
              'um null Komma vier Prozentpunkte höher, ergäbe es gleich viel Zins. Wie gross sind Kapital und Zinssatz?',
          schritte=[
-             dict(frage=dict(text='Zwei Unbekannte: Welche Deklaration?', sprich='Zwei Unbekannte: Welche Deklaration passt?',
+             dict(frage=dict(text='Zwei Unbekannte: Welche Deklaration?', sprich='Zwei Unbekannte: Welche Deklaration?',
                              opt=['K: Kapital in CHF, p: Zinssatz (Dezimalzahl)', 'K: Zins in CHF, p: Zinssatz', 'K: Kapital in CHF, p: Zins in CHF'],
                              rueck={1: 'Der Zins ist gegeben: 480 CHF.', 2: 'Der Zins ist gegeben. Was ist neben dem Kapital unbekannt?'},
                              rueck_sprich={1: 'Der Zins ist gegeben: vierhundertachtzig Franken.'}),
@@ -1361,7 +1391,7 @@ kontrolle('kontrolle-zins-2', 'Ansatz finden: Zins mit zwei Unbekannten',
                       'Komma null null vier.',
                   el=[tx(r'@\fa{K}@: Kapital in CHF', 520, 40, x=RX, ein='@Kapital'),
                       tx(r'@\fb{p}@: Zinssatz (Dezimalzahl)', 590, 40, x=RX, ein='@Zinssatz'),
-                      n('0.4 Prozentpunkte mehr: @p + 0.004@', 690, 'blau', 38, x=RX, ein='@Prozentpunkte')]),
+                      n('0.4 Prozentpunkte mehr: @p + 0.004@', 690, 'blau', 38, x=RX, ein='@Punkte')]),
              dict(gegeben=DK,
                   frage=dict(text='Welches System übersetzt die Aussagen?', sprich='Welches System übersetzt die Aussagen?',
                              opt=['K·p = 480 und (K − 4000)·(p + 0.004) = 480', 'K·p = 480 und (K − 4000)·(p + 0.4) = 480',
@@ -1375,7 +1405,7 @@ kontrolle('kontrolle-zins-2', 'Ansatz finden: Zins mit zwei Unbekannten',
                       n('Produkt der Unbekannten: quadratisch', 700, 'rot', 38, x=RX, ein='@Produkt')]),
              dict(gegeben=DK + [G_formel(r'\begin{cases} K \cdot p = 480 \\ (K - 4000) \cdot (p + 0.004) = 480 \end{cases}', 34, 110)],
                   frage=dict(text='K durch p ausgedrückt, eingesetzt: Welche Grundform?',
-                             sprich='K durch p ausgedrückt und eingesetzt: Welche Grundform entsteht?',
+                             sprich='K durch p ausgedrückt, eingesetzt: Welche Grundform?',
                              opt=['1' + NB + '000' + NB + '000·p² + 4000·p − 480 = 0', '1' + NB + '000' + NB + '000·p² − 4000·p − 480 = 0',
                                   '1' + NB + '000' + NB + '000·p² + 4000·p + 480 = 0'],
                              rueck={1: 'Prüfe das Vorzeichen in K = 4000 + 1 000 000·p.', 2: 'Prüfe das Vorzeichen der 480.'},
@@ -1383,19 +1413,21 @@ kontrolle('kontrolle-zins-2', 'Ansatz finden: Zins mit zwei Unbekannten',
                                            2: 'Prüfe das Vorzeichen der vierhundertachtzig.'}),
                   spr='Ausmultipliziert: K p plus null Komma null null vier K minus viertausend p minus sechzehn gleich vierhundertachtzig. '
                       'Mit K p gleich vierhundertachtzig bleibt null Komma null null vier K gleich viertausend p plus sechzehn, also K gleich '
-                      'viertausend plus eine Million mal p. Eingesetzt: eine Million p Quadrat plus viertausend p minus vierhundertachtzig gleich null.',
-                  el=[f(r'K p + 0.004 \cdot K - 4000 \cdot p - 16 = 480', 520, 36, x=RX, ein='@Ausmultipliziert'),
-                      f(r'K = 4000 + 1\,000\,000 \cdot p', 590, 38, x=RX, ein='@also'),
-                      f(r'(4000 + 1\,000\,000 \cdot p) \cdot p = 480', 660, 38, x=RX, ein='@Eingesetzt'),
-                      f(r'1\,000\,000 \cdot p^2 + 4000 \cdot p - 480 = 0', 740, 40, x=RX, ein='@Quadrat'),
-                      ] + poly_eingabe(1000000, 4000, -480, 640, '@Quadrat+1')),
+                      'viertausend plus eine Million mal p. Eingesetzt: eine Million p Quadrat plus viertausend p minus vierhundertachtzig gleich null. '
+                      'In poly-solv: a gleich eine Million, b gleich viertausend, c gleich minus vierhundertachtzig.',
+                  el=[f(r'K \cdot p + 0.004 \cdot K - 4000 \cdot p - 16 = 480', 520, 36, x=RX, ein='@Ausmultipliziert'),
+                      f(r'0.004 \cdot K = 4000 \cdot p + 16', 585, 36, x=RX, ein='@bleibt'),
+                      f(r'K = 4000 + 1\,000\,000 \cdot p', 650, 36, x=RX, ein='@also'),
+                      f(r'(4000 + 1\,000\,000 \cdot p) \cdot p = 480', 715, 36, x=RX, ein='@Eingesetzt'),
+                      f(r'1\,000\,000 \cdot p^2 + 4000 \cdot p - 480 = 0', 790, 40, x=RX, ein='@Quadrat'),
+                      ] + poly_eingabe(1000000, 4000, -480, 640, '@poly')),
              dict(gegeben=DK + [G_formel(r'1\,000\,000 \cdot p^2 + 4000 \cdot p - 480 = 0', 36)],
                   frage=dict(text='poly-solv zeigt x1 = 1/50 und x2 = −3/125. Was folgt?',
                              sprich='poly-solv zeigt x eins gleich ein Fünfzigstel und x zwei gleich minus drei Hundertfünfundzwanzigstel. Was folgt?',
                              opt=['p = 0.02 und K = 24' + NB + '000', 'p = 0.02 oder p = −0.024', 'p = 1/50 %'],
-                             rueck={1: 'Rechne K = 480 : p für beide Werte. Ist jedes Kapital möglich?', 2: '1/50 als Dezimalzahl ist 0.02, als Prozent 2 %.'},
+                             rueck={1: 'Rechne K = 480 : p für beide Werte. Ist jedes Kapital möglich?', 2: '1/50 ist der Zinssatz als Dezimalzahl, nicht in Prozent. Wie viele Prozent sind das?'},
                              rueck_sprich={1: 'Rechne K gleich vierhundertachtzig durch p für beide Werte. Ist jedes Kapital möglich?',
-                                           2: 'Ein Fünfzigstel als Dezimalzahl ist null Komma null zwei, als Prozent zwei Prozent.'}),
+                                           2: 'Ein Fünfzigstel ist der Zinssatz als Dezimalzahl, nicht in Prozent. Wie viele Prozent sind das?'}),
                   spr='Als Dezimalzahl null Komma null zwei und minus null Komma null zwei vier. Mit dem negativen Wert wäre K gleich '
                       'vierhundertachtzig durch p negativ, minus zwanzigtausend Franken: unmöglich. Also p gleich null Komma null zwei und K '
                       'gleich vierhundertachtzig durch null Komma null zwei, vierundzwanzigtausend Franken.',
@@ -1423,3 +1455,10 @@ kontrolle('kontrolle-zins-2', 'Ansatz finden: Zins mit zwei Unbekannten',
 
 if FEHLT and WZ:
     print('Ohne gemessene Wortzeit (geschätzt):', len(FEHLT))
+
+# Was neu zu vertonen ist (Text geändert, Szene oder Frage gleich geblieben): HOWTO-clips «Nur einzelne Szenen neu»
+from clips_basis import NEU_TON, NEU_FRAGEN  # noqa: E402
+for c in sorted({c for c, _ in NEU_TON}):
+    print('NEU VERTONEN  python3 scripts/build-clip-ton.py %s --szenen %s' % (c, ','.join(str(i) for c_, i in NEU_TON if c_ == c)))
+for c in sorted({c for c, _ in NEU_FRAGEN}):
+    print('NEU VERTONEN  python3 scripts/build-clip-fragen-ton.py %s --fragen %s' % (c, ','.join(i for c_, i in NEU_FRAGEN if c_ == c)))
