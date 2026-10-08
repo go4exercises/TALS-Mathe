@@ -111,7 +111,8 @@
 
   /* ---------- Kurvenbild: Winkel φ in Grad waagrecht, y senkrecht (Kapitel 4, Aufgaben) ---------- */
   function Kurvenbild(svg, o){
-    var W = o.w, H = o.h, x0 = o.x0, x1 = o.x1, y0 = o.y0, y1 = o.y1, li = 4, re = 4;
+    // Beginnt das Bild bei 0°, steht die y-Achse am Rand: links Platz für die Zahlen ±1 (Prüfung 08.10.2026, M6).
+    var W = o.w, H = o.h, x0 = o.x0, x1 = o.x1, y0 = o.y0, y1 = o.y1, li = x0 >= 0 ? 18 : 4, re = 4;
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     function X(x){ return li + (x - x0) / (x1 - x0) * (W - li - re); }
@@ -124,10 +125,11 @@
     var pf = 6;
     el(g, 'polygon', { points: X(x1) + ',' + Y(0) + ' ' + (X(x1) - pf) + ',' + (Y(0) - pf / 2) + ' ' + (X(x1) - pf) + ',' + (Y(0) + pf / 2), 'class': 'pfeil' });
     if (x0 <= 0 && x1 >= 0) el(g, 'polygon', { points: X(0) + ',' + Y(y1) + ' ' + (X(0) - pf / 2) + ',' + (Y(y1) + pf) + ' ' + (X(0) + pf / 2) + ',' + (Y(y1) + pf), 'class': 'pfeil' });
-    var mk = o.marken || schritt * 2;
-    for (x = Math.ceil(x0 / mk) * mk; x <= x1 - mk / 3; x += mk) if (x !== 0 && x > x0 + mk / 4) el(g, 'text', { x: X(x), y: Y(0) + 11, 'text-anchor': 'middle', 'class': 'skala' }, (x < 0 ? '−' : '') + Math.abs(x) + '°');
-    [[1, '1'], [-1, '−1']].forEach(function(t){ if (t[0] > y0 && t[0] < y1 && x0 <= 0) el(g, 'text', { x: X(0) - 3, y: Y(t[0]) + 3, 'text-anchor': 'end', 'class': 'skala' }, t[1]); });
     var ebene = el(svg, 'g', {});
+    // Achsenzahlen über der Kurve, mit Hof: Die Sinuskurve geht genau durch −180°, 180°, … (Prüfung 08.10.2026)
+    var zahlen = el(svg, 'g', {}), mk = o.marken || schritt * 2;
+    for (x = Math.ceil(x0 / mk) * mk; x <= x1 - mk / 3; x += mk) if (x !== 0 && x > x0 + mk / 4) el(zahlen, 'text', { x: X(x), y: Y(0) + 11, 'text-anchor': 'middle', 'class': 'skala' }, (x < 0 ? '−' : '') + Math.abs(x) + '°');
+    [[1, '1'], [-1, '−1']].forEach(function(t){ if (t[0] > y0 && t[0] < y1 && x0 <= 0) el(zahlen, 'text', { x: X(0) - 3, y: Y(t[0]) + 3, 'text-anchor': 'end', 'class': 'skala' }, t[1]); });
     el(svg, 'text', { x: W - 2, y: Y(0) - 6, 'text-anchor': 'end', 'class': 'achsname' }, 'φ');
     if (x0 <= 0 && x1 >= 0) el(svg, 'text', { x: X(0) + 6, y: Y(y1) + 9, 'text-anchor': 'start', 'class': 'achsname' }, 'y');
     return {
@@ -147,7 +149,8 @@
         return e;
       },
       pole: function(){ for (var p = Math.ceil((x0 - 90) / 180) * 180 + 90; p <= x1; p += 180) el(ebene, 'line', { x1: X(p), y1: Y(y0), x2: X(p), y2: Y(y1), 'class': 'pol' }); },
-      waagrechte: function(c){ if (c >= y0 && c <= y1) el(ebene, 'line', { x1: X(x0), y1: Y(c), x2: X(x1), y2: Y(c), 'class': 'waagrechte' }); },
+      waagrechte: function(c, name){ if (c >= y0 && c <= y1){ el(ebene, 'line', { x1: X(x0), y1: Y(c), x2: X(x1), y2: Y(c), 'class': 'waagrechte' });
+        if (name) el(zahlen, 'text', { x: X(x1) - 2, y: Y(c) + (c < 0 ? 11 : -4), 'text-anchor': 'end', 'class': 'skala' }, name); } },
       band: function(a, b, cls){ el(ebene, 'rect', { x: X(Math.max(a, x0)), y: Y(y1), width: Math.max(0, X(Math.min(b, x1)) - X(Math.max(a, x0))), height: Y(y0) - Y(y1), 'class': cls }); },
       punkt: function(x, y, cls, text, oben){
         el(ebene, 'circle', { cx: X(x), cy: Y(y), r: o.r || 4, 'class': cls });
@@ -268,8 +271,9 @@
       { text: 'Sinus: Stell \\(c\\) so ein, dass die Lösungen bei \\(210^\\circ\\) und \\(330^\\circ\\) liegen.', ok: function(s){ return s.f === 'sin' && Math.abs(s.c + 0.5) < 1e-9; } },
       { text: 'Schalte auf Cosinus. Stell \\(c\\) so ein, dass die Lösungen bei \\(90^\\circ\\) und \\(270^\\circ\\) liegen.', ok: function(s){ return s.f === 'cos' && Math.abs(s.c) < 1e-9; } },
       { text: 'Cosinus: Stell \\(c\\) so ein, dass die Gleichung <b>keine</b> Lösung hat.', ok: function(s){ return s.f === 'cos' && s.n === 0; } },
-      // Zielspiel: 60° und 300° — nur cos φ = 0.5 trifft beide (sin φ = c hat nie zwei Lösungen gleicher x-Koordinate).
-      { text: 'Triff die beiden grau markierten Punkte: Wähle Sinus oder Cosinus und \\(c\\).', setup: function(){ ziel = [60, 300]; }, ok: function(s){ return s.f === 'cos' && Math.abs(s.c - 0.5) < 1e-9; } }
+      // Zielspiel: 72.5° und 287.5° — nur cos φ = 0.3 trifft beide (sin φ = c hat nie zwei Lösungen gleicher x-Koordinate).
+      // Nicht cos φ = 0.5: Der Startwert ist c = 0.5, ein Klick auf «cos» hätte die Aufgabe gelöst (Prüfung 08.10.2026, M1).
+      { text: 'Triff die beiden grau markierten Punkte: Wähle Sinus oder Cosinus und \\(c\\).', setup: function(){ ziel = [72.5424, 287.4576]; }, ok: function(s){ return s.f === 'cos' && Math.abs(s.c - 0.3) < 1e-9; } }
     ], sim);
     zeichnen();
   })();
@@ -308,15 +312,19 @@
       kreisPunkt(K, st.phi, 'p-pkt', 'P');
       var name = f + '⁻¹(' + z(c) + ')';
       rolle(fig, 'formel').innerHTML = sp('tx-' + FARBE[f], f + ' φ = ' + z(c)) + '; &nbsp;Rechner: ' + name + ' ' + ungefaehr(h) + grad1(h)
-        + '<br>P: φ = ' + (+st.phi).toFixed(1) + '°';
+        + '<br>P: φ = ' + st.phi + '°';
       pruefen();
     }
-    function trifft(s, f, c, g){ return s.f === f && Math.abs(s.c - c) < 1e-9 && Math.abs(s.phi - g) <= 0.3; }
+    /* Regler «Winkel von P» in ganzen Grad, Toleranz 1° gegen den ungerundeten Zielwinkel: Je zwei Reglerwerte
+       treffen (143.13 → 143 und 144). Mit Schritt 0.5 und Toleranz 0.3 traf nur einer, und der war mit Maus oder
+       Finger oft nicht erreichbar (Prüfung 08.10.2026, H1). Der Regler steht dafür über die ganze Breite. */
+    var TOL = 1;
+    function trifft(s, f, c, g){ return s.f === f && Math.abs(s.c - c) < 1e-9 && Math.abs(s.phi - g) <= TOL; }
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh \\(c\\) von negativen zu positiven Werten. Wo liegt der Punkt des Rechners — und wo der zweite?', ok: function(s){ return s.beide; } },
       // Startzustand: Sinus, c = 0.4 (wie im Clip), P bei 0° — keine Aufgabe ist schon gelöst.
-      // Zielwinkel (scripts/lp/trigonometrische-gleichungen/zahlen.py): 143.13 → 143.0; 194.48 → 194.5;
-      // 345.52 → 345.5; 249.51 → 249.5; 323.13 → 323.0 — je höchstens 0.13 neben einem Reglerwert (Schritt 0.5).
+      // Zielwinkel (scripts/lp/trigonometrische-gleichungen/zahlen.py): 143.13; 194.48; 345.52; 249.51; 323.13 —
+      // je zwei ganze Grad innerhalb der Toleranz 1°, keiner davon im Ziel einer anderen Aufgabe.
       { text: 'Sinus, \\(c = 0.6\\): Dreh \\(P\\) auf die zweite Lösung.', setup: function(s){ s.setze('sin', 0.6); }, ok: function(s){ return trifft(s, 'sin', 0.6, 143.13); } },
       { text: 'Sinus, \\(c = -0.25\\): Dreh \\(P\\) auf die Lösung im dritten Quadranten.', setup: function(s){ s.setze('sin', -0.25); }, ok: function(s){ return trifft(s, 'sin', -0.25, 194.48); } },
       { text: 'Sinus, \\(c = -0.25\\): Dreh \\(P\\) auf die Lösung im vierten Quadranten — zwischen \\(0^\\circ\\) und \\(360^\\circ\\).', setup: function(s){ s.setze('sin', -0.25); }, ok: function(s){ return trifft(s, 'sin', -0.25, 345.52); } },
@@ -332,7 +340,8 @@
      zweite Lösung holt man mit P — sie liegt dem Rechnerpunkt am Ursprung gegenüber. */
   (function(){
     var fig = document.getElementById('sim3'); if (!fig) return;
-    var K = Kreisbild(fig.querySelector('svg'), { w: 290, x0: -1.35, x1: 1.75, y0: -2.4, y1: 2.4, ymarken: [[1, '1'], [-1, '−1'], [2, '2'], [-2, '−2']] });
+    // Fenster ±2.6 bei c bis ±2.4: S und seine Beschriftung bleiben ganz im Bild (Prüfung 08.10.2026).
+    var K = Kreisbild(fig.querySelector('svg'), { w: 290, x0: -1.35, x1: 1.75, y0: -2.6, y1: 2.6, ymarken: [[1, '1'], [-1, '−1'], [2, '2'], [-2, '−2']] });
     var pruefen = function(){}, spur = { min: 1, max: 1 };
     var inp = fig.querySelector('input[data-p="c"]');
     inp.addEventListener('input', function(){ var v = +inp.value; spur.min = Math.min(spur.min, v); spur.max = Math.max(spur.max, v); });
@@ -346,7 +355,7 @@
     function zeichnen(){
       var st = zust(), c = st.c, h = st.h;
       K.leeren();
-      K.strecke(1, -2.4, 1, 2.4, 'tangente');
+      K.strecke(1, K.y0, 1, K.y1, 'tangente');
       K.gerade(-1, -c, 1, c, 'strahl');
       K.strecke(1, 0, 1, c, 'koord orange');
       K.punkt(1, c, 'p-lauf orange', 'S', 7, c >= 0 ? -6 : 14);
@@ -357,19 +366,20 @@
       K.strecke(0, 0, cosG(st.phi), sinG(st.phi), 'radius gestr');
       kreisPunkt(K, st.phi, 'p-pkt', 'P');
       rolle(fig, 'formel').innerHTML = sp('tx-orange', 'tan φ = ' + z(c)) + '; &nbsp;S(1 | ' + z(c) + '); &nbsp;Rechner: tan⁻¹(' + z(c) + ') ' + ungefaehr(h) + grad1(h)
-        + '<br>P: φ = ' + (+st.phi).toFixed(1) + '°';
+        + '<br>P: φ = ' + st.phi + '°';
       pruefen();
     }
-    function trifft(s, c, g){ return Math.abs(s.c - c) < 1e-9 && Math.abs(s.phi - g) <= 0.3; }
+    function trifft(s, c, g){ return Math.abs(s.c - c) < 1e-9 && Math.abs(s.phi - g) <= 1; }   // wie Sim 2: ganze Grad, Toleranz 1°
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh \\(c\\) ganz nach oben und ganz nach unten. Trifft die Gerade durch \\(O\\) und \\(S\\) den Kreis immer?', ok: function(s){ return s.ganz; } },
       // Startzustand: c = 1 (wie im Clip), P bei 0° — keine Aufgabe ist schon gelöst.
-      // Ziele (zahlen.py): 206.57 → 206.5; 123.69 → 123.5; 303.69 → 303.5 (höchstens 0.19 daneben).
+      // Ziele (zahlen.py): 206.57; 123.69; 303.69 — je zwei ganze Grad innerhalb der Toleranz 1°.
       { text: '\\(c = 0.5\\): Dreh \\(P\\) auf die zweite Lösung.', setup: function(s){ s.setze(0.5); }, ok: function(s){ return trifft(s, 0.5, 206.57); } },
       { text: '\\(c = -1.5\\): Dreh \\(P\\) auf die Lösung im zweiten Quadranten.', setup: function(s){ s.setze(-1.5); }, ok: function(s){ return trifft(s, -1.5, 123.69); } },
       { text: '\\(c = -1.5\\): Dreh \\(P\\) auf die Lösung im vierten Quadranten.', setup: function(s){ s.setze(-1.5); }, ok: function(s){ return trifft(s, -1.5, 303.69); } },
       { text: 'Stell \\(c\\) so ein, dass beide Lösungen auf der \\(x\\)-Achse liegen.', ok: function(s){ return Math.abs(s.c) < 1e-9; } },
-      { text: 'Stell \\(c\\) so ein, dass eine Lösung bei ungefähr \\(243^\\circ\\) liegt.', ok: function(s){ return Math.abs(s.c - 2) < 1e-9; } }
+      // c = 2: 243.43° → 243°; die Nachbarn c = 1.9 und 2.1 geben 242.24° und 244.54° (zahlen.py).
+      { text: 'Stell \\(c\\) so ein, dass eine Lösung, auf ganze Grad gerundet, bei \\(243^\\circ\\) liegt.', ok: function(s){ return Math.abs(s.c - 2) < 1e-9; } }
     ], sim);
     zeichnen();
   })();
@@ -407,11 +417,22 @@
       var zeile;
       if (!st.g.length) zeile = sp('tx-' + FARBE[f], f + ' φ = ' + z(c)) + '; &nbsp;<b>keine Lösung</b>';
       else {
-        var fam = st.g.map(function(x){ return 'φ = ' + grad1(x) + ' + k · ' + st.p + '°'; }).join(' oder ');
-        zeile = sp('tx-' + FARBE[f], f + ' φ = ' + z(c)) + ': &nbsp;' + fam + '<br>k = ' + st.k + ': &nbsp;' + st.m.map(grad1).join('; ');
+        // gerundete Winkel mit «≈» (HOWTO §15, Live-Anzeigen)
+        var fam = st.g.map(function(x){ return 'φ ' + ungefaehr(x) + grad1(x) + ' + k · ' + st.p + '°'; }).join(' oder ');
+        zeile = sp('tx-' + FARBE[f], f + ' φ = ' + z(c)) + ': &nbsp;' + fam + '<br>k = ' + st.k + ': &nbsp;' + st.m.map(function(v){ return ungefaehr(v).replace('= ', '') + grad1(v); }).join('; ');
       }
       rolle(fig, 'formel').innerHTML = zeile;
+      folgen(st.m);
       pruefen();
+    }
+    /* Auf dem Handy ist das Bild breiter als sein Rahmen (min. 560 px): Der Rahmen folgt den markierten
+       Lösungen, sonst lägen die Aufgaben in [360°; 720°[ im verdeckten Teil (Prüfung 08.10.2026, M4). */
+    var rahmen = fig.querySelector('.kurven-rahmen'), bild = fig.querySelector('.kurven-rahmen > svg');
+    function folgen(m){
+      if (!rahmen || !bild || rahmen.scrollWidth <= rahmen.clientWidth + 1) return;
+      var drin = m.filter(function(v){ return v >= -360 && v <= 720; }); if (!drin.length) return;
+      var mitte = (K.X(Math.min.apply(null, drin)) + K.X(Math.max.apply(null, drin))) / 2 * bild.clientWidth / 640;
+      rahmen.scrollLeft = Math.max(0, mitte - rahmen.clientWidth / 2);
     }
     function alle(s, a, b){ return s.m.length && s.m.every(function(v){ return v >= a - 1e-9 && v < b - 1e-9; }); }
     pruefen = Leiste(fig, [
@@ -439,7 +460,9 @@
     (d.p || []).forEach(function(g, i){
       var c = cosG(g), s = sinG(g);
       K.strecke(0, 0, c, s, 'radius');
-      K.punkt(c, s, 'p-lauf ' + (d.farbe || 'blau'), (d.namen || [])[i] || '', c >= 0 ? 5 : -5, s >= 0 ? -5 : 12, c >= 0 ? 'start' : 'end');
+      // lagen: [dx, dy, Anker] je Name, wo die radiale Lage mit S zusammenstösst (Lösung 3d)
+      var lg = (d.lagen || [])[i] || [c >= 0 ? 5 : -5, s >= 0 ? -5 : 12, c >= 0 ? 'start' : 'end'];
+      K.punkt(c, s, 'p-lauf ' + (d.farbe || 'blau'), (d.namen || [])[i] || '', lg[0], lg[1], lg[2]);
     });
     svg.setAttribute('role', 'img');
   });
@@ -448,7 +471,7 @@
     var K = Kurvenbild(svg, { w: d.breite || 420, h: d.hoehe || 150, x0: d.von, x1: d.bis, y0: d.y0 || -1.4, y1: d.y1 || 1.4, schritt: 90, marken: d.marken || 180, r: 3.5 });
     if (d.f === 'tan') K.pole();
     K.kurve(d.f, 'kurve ' + FARBE[d.f]);
-    K.waagrechte(d.c);
+    K.waagrechte(d.c, 'y = ' + z(d.c));
     (d.punkte || []).forEach(function(p, i){ K.punkt(p[0], d.c, 'p-lauf ' + FARBE[d.f], p[1], i % 2 === 0); });   // abwechselnd über und unter der Geraden
     svg.setAttribute('role', 'img');
   });
@@ -493,16 +516,22 @@
     function lsg(f, c, iv){ var l = loesungen(f, c); return imIntervall(l, f === 'tan' ? 180 : 360, IV[iv][2], IV[iv][3]); }
     function ftex(f){ return '\\' + f + '\\varphi'; }
     function gtex(g){ return tz(Math.round(g * 1000) / 1000) + '^\\circ'; }
+    /* Winkel für Lösungstexte: gerundet mit «≈» (\\approx 14.5^\\circ), exakte ohne (90^\\circ) */
+    function naeh(g){ var r = r1(g); return (Math.abs(g - r) > 1e-9 ? '\\approx ' : '') + tz(r) + '^\\circ'; }
     function mtex(l){ return l.length ? '\\{' + l.map(gtex).join(';\\ ') + '\\}' : '\\{\\,\\}'; }
 
     /* Feste Aufgaben, die eine Zufallsübung nicht treffen darf (HOWTO §15), je Typ ein Schlüssel.
        Quellen: Clips g5-5-lp-* · Aufgaben der Kapitel · Vortest · Gesamttest
-       (downloads/leitprogramme/trigonometrische-gleichungen/gesamttest.tex). */
+       (downloads/leitprogramme/trigonometrische-gleichungen/gesamttest.tex).
+       Ausnahme (Prüfung 08.10.2026, M2/M3): In «anzahl», «spezial» und «tan-spezial» sind die vorgerechneten
+       Beispiele der Einführungsclips frei (sin φ = 1; sin φ = 1/2, cos φ = −1/2; tan φ = ±1). Sonst fegte die
+       Liste den Wurfraum leer: «anzahl» würfelte nie eine einzige Lösung, «spezial» nie einen positiven
+       Sinuswert, «tan-spezial» nur zwei Gleichungen. Gesperrt bleiben Kontrollfragen, Aufgaben, Vortest, Gesamttest. */
     var SPERRE = [
-      // anzahl: Clip 1 (sin 1, sin > 1), Kontrollclip 1 (cos −1, sin 1.4), Aufgabe 1d, Gesamttest G2
-      'an|sin|1', 'an|sin|1.4', 'an|cos|-1', 'an|sin|-1', 'an|cos|1.01', 'an|sin|0', 'an|cos|-0.999', 'an|sin|-1.2', 'an|cos|1',
-      // spezial (Intervall [0°; 360°[): Clip 1 (sin 1/2, cos −1/2), Kontrollclip 1 (sin √2/2), Aufgabe 1c, Gesamttest G1, G3
-      'sp|sin|1/2|0', 'sp|cos|−1/2|0', 'sp|sin|√2/2|0', 'sp|sin|√3/2|0', 'sp|cos|0|0', 'sp|cos|−√2/2|0', 'sp|cos|√3/2|0', 'sp|cos|√2/2|0',
+      // anzahl: Clip 1 (sin > 1), Kontrollclip 1 (cos −1, sin 1.4), Aufgaben 1d, 1e und 4d (cos 1), Gesamttest G2 (sin −1.2)
+      'an|sin|1.4', 'an|cos|-1', 'an|sin|-1', 'an|cos|1.01', 'an|sin|0', 'an|cos|-0.999', 'an|sin|-1.2', 'an|cos|1',
+      // spezial (Intervall [0°; 360°[): Kontrollclip 1 (sin √2/2), Aufgabe 1c, Gesamttest G1, G3
+      'sp|sin|√2/2|0', 'sp|sin|√3/2|0', 'sp|cos|0|0', 'sp|cos|−√2/2|0', 'sp|cos|√3/2|0', 'sp|cos|√2/2|0',
       // quadranten: Aufgaben 1a, 1b
       'qu|sin|0.8', 'qu|cos|-0.3',
       // zweite: Clip 2 (sin 0.4, cos −0.7, sin −0.4), Kontrollclip 2 (sin 0.9, cos −0.45, sin −0.6, cos 0.25),
@@ -511,8 +540,8 @@
       'zw|sin|0.7', 'zw|cos|-0.2', 'zw|sin|-0.45', 'zw|sin|0.3', 'zw|sin|0.6', 'zw|cos|-0.3', 'zw|sin|-0.35', 'zw|cos|-0.6', 'zw|cos|0.42',
       // tan-loesen: Clip 3 (2.5), Kontrollclip 3 (0.6, −5, −0.6), Aufgaben 3a, 3b, 3d, Gesamttest G6
       'tl|2.5', 'tl|0.6', 'tl|-5', 'tl|-0.6', 'tl|1.2', 'tl|-3.2', 'tl|-0.5', 'tl|-2.4',
-      // tan-spezial ([0°; 360°[): Clip 3 (1, −1), Aufgabe 3c (√3/3, 0), Gesamttest G3 (−√3)
-      'ts|1|0', 'ts|−1|0', 'ts|√3/3|0', 'ts|0|0', 'ts|−√3|0',
+      // tan-spezial ([0°; 360°[): Aufgabe 3c (√3/3, 0), Gesamttest G3 (−√3)
+      'ts|√3/3|0', 'ts|0|0', 'ts|−√3|0',
       // allgemein: Clip 4 (sin 1/2, tan 1), Kontrollclip 4 (cos 1/2, tan −1, sin √3/2), Gesamttest G3 (tan −√3, cos √2/2)
       'al|sin|1/2', 'al|tan|1', 'al|cos|1/2', 'al|tan|−1', 'al|sin|√3/2', 'al|tan|−√3', 'al|cos|√2/2',
       // intervall: Clip 4 (30/150 in [0; 720[ und [−360; 0[), Kontrollclip 4 (210/330 in [360; 720[, 120/240 in [0; 720[)
@@ -544,14 +573,15 @@
           if (A.c === 0 && w === 1) return A.f === 'sin' ? 'Die \\(x\\)-Achse trifft den Kreis rechts und links: bei \\(0^\\circ\\) und \\(180^\\circ\\).' : 'Die \\(y\\)-Achse trifft den Kreis oben und unten: bei \\(90^\\circ\\) und \\(270^\\circ\\).';
           if (w === 1) return 'Zeichne die ' + g + '. Wie oft schneidet sie den Kreis?';
           return '\\(' + tz(A.c) + '\\) liegt zwischen \\(-1\\) und \\(1\\): Die ' + g + ' trifft den Kreis.'; },
-        loesung: function(A){ var l = loesungen(A.f, A.c); return ftex(A.f) + ' = ' + tz(A.c) + ':\\ ' + A.n + '\\ \\text{Lösung' + (A.n === 1 ? '' : 'en') + '}' + (A.n ? ',\\ ' + l.map(gtex).join(',\\ ') : ''); } },
+        loesung: function(A){ var l = loesungen(A.f, A.c); return ftex(A.f) + ' = ' + tz(A.c) + ':\\ ' + A.n + '\\ \\text{Lösung' + (A.n === 1 ? '' : 'en') + '}' + (A.n ? '\\ (' + l.map(naeh).join(';\\ ') + ')' : ''); } },
 
       /* ── Kapitel 1: besondere Werte, ohne Taschenrechner ──────────── */
-      'spezial': { felder: ['a', 'b'], muster: 'φ₁ = {a} ° &nbsp; φ₂ = {b} °',
+      'spezial': { felder: ['a', 'b'], muster: 'Lösungen: {a} ° &nbsp;und&nbsp; {b} °',
         schl: function(A){ return 'sp|' + A.f + '|' + A.t + '|' + A.iv; },
         eingabe: function(A){ return pz(A.l); },
         neu: function(){
-          var f = zufall(['sin', 'cos']), t = zufall(['0', '1/2', '−1/2', '√2/2', '−√2/2', '√3/2', '−√3/2']), iv = Math.random() < 0.6 ? '0' : 'm';
+          // nur [0°; 360°[: andere Intervalle kommen erst in Kapitel 4 (Prüfung 08.10.2026, M3)
+          var f = zufall(['sin', 'cos']), t = zufall(['0', '1/2', '−1/2', '√2/2', '−√2/2', '√3/2', '−√3/2']), iv = '0';
           return { f: f, t: t, iv: iv, l: lsg(f, exZahl(t), iv),
             text: 'Löse ohne Taschenrechner: \\(' + ftex(f) + ' = ' + exTex(t) + '\\) im Intervall \\(' + ivTex(iv) + '\\). Gib beide Lösungen in Grad an.' }; },
         kandidaten: function(A){
@@ -603,10 +633,11 @@
           if (e.q === A.ander) return A.f === 'sin' ? 'Das gilt für den Cosinus. Der Sinus ist die Höhe: Zeichne die Waagrechte \\(y = ' + tz(A.c) + '\\).' : 'Das gilt für den Sinus. Der Cosinus ist die waagrechte Koordinate: Zeichne die Senkrechte \\(x = ' + tz(A.c) + '\\).';
           if (e.q === A.vz) return 'Vorzeichen: \\(' + tz(A.c) + '\\) ist ' + (A.c > 0 ? 'positiv' : 'negativ') + ' — liegt die Gerade ' + (A.f === 'sin' ? 'über oder unter der \\(x\\)-Achse?' : 'rechts oder links der \\(y\\)-Achse?');
           return 'Zeichne ' + (A.f === 'sin' ? 'die Waagrechte \\(y = ' : 'die Senkrechte \\(x = ') + tz(A.c) + '\\) in den Einheitskreis. Ihre beiden Schnittpunkte liegen ' + (A.f === 'sin' ? 'auf gleicher Höhe, links und rechts der \\(y\\)-Achse.' : 'senkrecht übereinander, über und unter der \\(x\\)-Achse.'); },
-        loesung: function(A){ var l = loesungen(A.f, A.c); return ftex(A.f) + ' = ' + tz(A.c) + ':\\ \\text{Quadranten ' + A.q + '}\\ (' + l.map(function(g){ return tz(r1(g)) + '^\\circ'; }).join(',\\ ') + ')'; } },
+        loesung: function(A){ var l = loesungen(A.f, A.c); return ftex(A.f) + ' = ' + tz(A.c) + ':\\ \\text{Quadranten ' + A.q + '}\\ (' + l.map(naeh).join(';\\ ') + ')'; } },
 
       /* ── Kapitel 2: zweite Lösung zum Wert des Rechners ───────────── */
-      'zweite': { felder: ['a', 'b'], muster: 'φ₁ ≈ {a} ° &nbsp; φ₂ ≈ {b} °',
+      // Felder ohne «φ₁/φ₂»: φ₁ heisst im Festhalten der Hauptwert, der oft nicht im Intervall liegt
+      'zweite': { felder: ['a', 'b'], muster: 'Lösungen: ≈ {a} ° &nbsp;und&nbsp; ≈ {b} °',
         schl: function(A){ return 'zw|' + A.f + '|' + A.c; },
         eingabe: function(A){ return pz(A.l); },
         neu: function(){
@@ -647,7 +678,7 @@
           return '\\varphi_1 \\approx ' + tz(A.hr) + '^\\circ,\\ ' + x + (A.f === 'sin' && A.h < 0 ? ',\\ ' + tz(A.hr) + '^\\circ + 360^\\circ' : '') + ':\\ \\mathbb{L} = ' + mtex(A.l); } },
 
       /* ── Kapitel 3: Tangensgleichung mit dem Rechner ──────────────── */
-      'tan-loesen': { felder: ['a', 'b'], muster: 'φ₁ ≈ {a} ° &nbsp; φ₂ ≈ {b} °',
+      'tan-loesen': { felder: ['a', 'b'], muster: 'Lösungen: ≈ {a} ° &nbsp;und&nbsp; ≈ {b} °',
         schl: function(A){ return 'tl|' + A.c; },
         eingabe: function(A){ return pz(A.l); },
         neu: function(){
@@ -679,11 +710,11 @@
           return '\\tan^{-1}(' + tz(A.c) + ') \\approx ' + tz(h) + '^\\circ' + (A.h < 0 ? ',\\ ' + tz(h) + '^\\circ + 180^\\circ,\\ ' + tz(h) + '^\\circ + 360^\\circ' : ',\\ ' + tz(h) + '^\\circ + 180^\\circ') + ':\\ \\mathbb{L} = ' + mtex(A.l); } },
 
       /* ── Kapitel 3: Tangens, besondere Werte ──────────────────────── */
-      'tan-spezial': { felder: ['a', 'b'], muster: 'φ₁ = {a} ° &nbsp; φ₂ = {b} °',
+      'tan-spezial': { felder: ['a', 'b'], muster: 'Lösungen: {a} ° &nbsp;und&nbsp; {b} °',
         schl: function(A){ return 'ts|' + A.t + '|' + A.iv; },
         eingabe: function(A){ return pz(A.l); },
         neu: function(){
-          var t = zufall(['0', '1', '−1', '√3', '−√3', '√3/3', '−√3/3']), iv = Math.random() < 0.5 ? '0' : 'm';
+          var t = zufall(['0', '1', '−1', '√3', '−√3', '√3/3', '−√3/3']), iv = '0';   // nur [0°; 360°[ (M3)
           return { t: t, iv: iv, l: lsg('tan', exZahl(t), iv),
             text: 'Löse ohne Taschenrechner: \\(\\tan\\varphi = ' + exTex(t) + '\\) im Intervall \\(' + ivTex(iv) + '\\).' }; },
         kandidaten: function(A){

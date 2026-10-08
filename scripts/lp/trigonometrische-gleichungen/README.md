@@ -20,9 +20,9 @@ Gesamttest und Bewertungspaket: `downloads/leitprogramme/trigonometrische-gleich
 ## Die Simulationen
 
 - **sim1** Kreis und Gerade: `sin φ = c` → Waagrechte, `cos φ = c` → Senkrechte, Schnittpunkte; keine Winkel als Zahl.
-- **sim2** Rechner und zweite Lösung: Hauptwert φ₁ (mit Hauptwertbereich als Band), zweiter Kreispunkt hohl, Probepunkt P (Regler, Schritt 0.5°, Toleranz 0.3°).
+- **sim2** Rechner und zweite Lösung: Hauptwert φ₁ (mit Hauptwertbereich als Band), zweiter Kreispunkt hohl, Probepunkt P (Regler in ganzen Grad über die ganze Breite, Toleranz 1° gegen den ungerundeten Zielwinkel — mit Maus und Finger bei 360 und 1280 px jedes Ziel erreichbar, Prüfung 08.10.2026).
 - **sim3** Tangens: S(1 | c), Gerade durch O und S, Hauptwert, Gegenpunkt hohl, Probepunkt P.
-- **sim4** Kurve von −360° bis 720° mit Regler k: Das Paar φ₁ + k · p, φ₂ + k · p ist gefüllt, alle übrigen Lösungen hohl. Auf dem Handy mindestens 560 px breit und im Rahmen seitlich verschiebbar.
+- **sim4** Kurve von −360° bis 720° mit Regler k: Das Paar φ₁ + k · p, φ₂ + k · p ist gefüllt, alle übrigen Lösungen hohl. Auf dem Handy mindestens 560 px breit und im Rahmen seitlich verschiebbar; der Rahmen folgt den markierten Lösungen (`folgen()`), ein Hinweis steht darunter.
 
 Aufgaben mit fester Gleichung setzen und sperren Wert und Funktion (`s.setze`); beim Wechsel gibt die Leiste alles frei
 und setzt Regler und Auswahl auf den Startwert zurück.
@@ -49,10 +49,19 @@ python3 scripts/build-clips.py           g5-5-lp-<name>
 
 Die Wortzeiten (faster-whisper) stehen als Kommentar an den Szenen in `clips.py`.
 
+## Nur einzelne Szenen neu vertonen
+
+`build-clip-ton.py` spricht immer den ganzen Clip neu. Am 08.10.2026 (Behebung der Prüfung) wurden nur die Szenen
+mit geändertem Text neu gesprochen, die übrigen aus der alten Tonspur übernommen: Drehbuch und mp3 vorher sichern,
+dann für jede Szene mit gleichem Namen und Sprechertext das Stück `[start, start + dauer]` der alten Spur nach dem
+alten Szenenplan (`szenen_planen`) kopieren, nur die neuen mit `sprich()` erzeugen und `dauer` messen wie
+`build-clip-ton.py`. Fragetöne ebenso: `build-clip-fragen-ton.py` laufen lassen, danach die Dateien unveränderter
+Texte (`fragen_texte`) aus der Sicherung zurückholen.
+
 ## Farben — eine Farbe, eine Bedeutung
 
 1 blau = Sinus · 2 orange = Tangens · 3 grün = Cosinus · 4 rot = Gegenbeispiel · 5 Tinte = neutral (Kreis,
-Gerade y = c bzw. x = c, Tangente). Gleich wie im LP Einheitskreis.
+Gerade y = c bzw. x = c, Tangente). Gleich wie im LP Einheitskreis. Polgeraden des Tangens in den Kurvenbildern der Clips rot (`POLE`, wie «nicht definiert»), damit sie sich von der Waagrechten y = c unterscheiden.
 
 ## Prüfen
 

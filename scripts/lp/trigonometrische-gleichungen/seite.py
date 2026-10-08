@@ -66,10 +66,18 @@ CSS = '''
 .sim-gross{max-width:640px;margin:10px auto 6px}
 .sim-gross > svg{max-width:360px}
 .sim-breit{max-width:820px;margin:10px auto 6px}
-.sim-breit svg{display:block;width:100%;max-width:820px;margin:0 auto}
-/* Kurvenbild auf dem Handy: nicht kleiner als 560 px, dafür im Rahmen seitlich verschiebbar */
+/* Kindselektor: «.sim-breit svg» traf auch die Formeln, die MathJax in die Aufgabenleiste setzt (Prüfung 08.10.2026, H2) */
+.sim-breit .kurven-rahmen > svg{display:block;width:100%;max-width:820px;margin:0 auto}
+/* Kurvenbild auf dem Handy: nicht kleiner als 560 px, dafür im Rahmen seitlich verschiebbar; der Rahmen folgt
+   den markierten Lösungen (seite.js, folgen), der Hinweis steht nur, wo verschoben werden kann */
 .kurven-rahmen{overflow-x:auto;-webkit-overflow-scrolling:touch}
-@media(max-width:620px){.kurven-rahmen svg{min-width:560px}}
+.kurven-hinweis{display:none;font-family:var(--sans);font-size:.8rem;color:var(--tinte-2);text-align:center;margin:2px 0 6px}
+@media(max-width:620px){.kurven-rahmen > svg{min-width:560px}.kurven-hinweis{display:block}}
+/* Winkelregler über die ganze Breite: genug Pixel für ganze Grad (Prüfung 08.10.2026, H1) */
+.sl-row:has(.sl-weit){flex-wrap:wrap}
+.sl-grp.sl-weit{flex:1 1 100%;display:flex;align-items:center;gap:10px}
+.sl-grp.sl-weit input[type=range]{flex:1;min-width:0;width:auto}
+@media(max-width:620px){.sl-grp.sl-weit{flex-wrap:wrap;gap:2px 10px}.sl-grp.sl-weit label{flex:1 1 100%}}
 #sim3 > svg{max-width:300px}
 .sim .skala,svg.kv-mini .skala{stroke:var(--karte);stroke-width:3px;paint-order:stroke}
 .leiste{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 10px;padding:9px 12px;border-radius:9px;
@@ -169,8 +177,8 @@ def uebung(typ, titel):
         </div>'''
 
 
-def regler(sim, p, label, mn, mx, st, val, akz='grau', einheit=''):
-    return (f'<div class="sl-grp akz-{akz}"><label for="{sim}-{p}"><span class="var">{label}</span></label>'
+def regler(sim, p, label, mn, mx, st, val, akz='grau', einheit='', weit=False):
+    return (f'<div class="sl-grp akz-{akz}{" sl-weit" if weit else ""}"><label for="{sim}-{p}"><span class="var">{label}</span></label>'
             f'<input type="range" id="{sim}-{p}" data-p="{p}" data-einheit="{einheit}" min="{mn}" max="{mx}" step="{st}" value="{val}"><span class="sl-val"></span></div>')
 
 
@@ -185,7 +193,7 @@ def sim(nr, label, unten, klasse='sim-gross'):
     return f'''      <figure class="sim {klasse}" id="sim{nr}">
         <div class="leiste" aria-live="polite"></div>
         <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
-        {'<div class="kurven-rahmen">' if klasse == 'sim-breit' else ''}<svg role="img" aria-label="{label}"></svg>{'</div>' if klasse == 'sim-breit' else ''}
+        {'<div class="kurven-rahmen">' if klasse == 'sim-breit' else ''}<svg role="img" aria-label="{label}"></svg>{'</div>' if klasse == 'sim-breit' else ''}{'<p class="kurven-hinweis">Das Bild lässt sich seitlich verschieben; es folgt den markierten Lösungen.</p>' if klasse == 'sim-breit' else ''}
         {unten}
       </figure>'''
 
@@ -303,7 +311,7 @@ k1 = kapitel(1, 'am-einheitskreis', 'Gleichungen am Einheitskreis', 40,
 sim2 = sim(2, 'Einheitskreis mit der Geraden zum Wert c, dem Punkt des Rechners und einem Punkt P zum eingestellten Winkel',
            wahl('s2-fn', 'Gleichung', [('sin', 'sin φ = c'), ('cos', 'cos φ = c')])
            + '\n        <div class="sl-row">\n          ' + regler('s2', 'c', 'Wert c', -1, 1, 0.05, 0.4)
-           + '\n          ' + regler('s2', 'phi', 'Winkel von P', 0, 360, 0.5, 0, 'grau', '°') + '\n        </div>')
+           + '\n          ' + regler('s2', 'phi', 'Winkel von P', 0, 360, 1, 0, 'grau', '°', True) + '\n        </div>')
 fest2 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Mit der Arkusfunktion lösen</div>
@@ -348,7 +356,7 @@ k2 = kapitel(2, 'arkusfunktion', 'Mit der Arkusfunktion: die zweite Lösung', 40
 # ------------------------------------------------------------------ Kapitel 3
 sim3 = sim(3, 'Einheitskreis mit der Tangente x = 1, dem Punkt S(1 | c), der Geraden durch O und S, dem Punkt des Rechners und einem Punkt P',
            '<div class="sl-row">\n          ' + regler('s3', 'c', 'Wert c', -2.4, 2.4, 0.1, 1)
-           + '\n          ' + regler('s3', 'phi', 'Winkel von P', 0, 360, 0.5, 0, 'grau', '°') + '\n        </div>')
+           + '\n          ' + regler('s3', 'phi', 'Winkel von P', 0, 360, 1, 0, 'grau', '°', True) + '\n        </div>')
 fest3 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Tangensgleichungen</div>
@@ -373,7 +381,8 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 12, [
      r'<p>(a) \(\tan 30^\circ = \tfrac{\sqrt{3}}{3}\): \(\mathbb{L} = \{30^\circ;\ 210^\circ\}\). (b) \(S(1 \mid 0)\), die Gerade ist die \(x\)-Achse: \(\mathbb{L} = \{0^\circ;\ 180^\circ\}\).</p>', ''),
     ('3d', 2, r'Zeichne für \(\tan\varphi = -0.5\) in einen Einheitskreis die Tangente \(x = 1\), den Punkt \(S\), die Gerade durch \(O\) und \(S\) und die beiden Lösungspunkte. Gib die Lösungen in \([0^\circ;\, 360^\circ[\) an (Taschenrechner).',
      r'<p>\(S(1 \mid -0.5)\). Die Gerade durch \(O\) und \(S\) trifft den Kreis im II. und IV. Quadranten. \(\arctan(-0.5) \approx -26.6^\circ\): \(\mathbb{L} = \{153.4^\circ;\ 333.4^\circ\}\).</p>'
-     + ek({'p': [153.4349, 333.4349], 'tan': -0.5, 'farbe': 'orange', 'fenster': [-1.9, 1.9, -1.4, 1.4], 'namen': ['153.4°', '333.4°']}, 'Einheitskreis mit Tangente, S(1 | −0.5) und den Lösungspunkten bei 153.4 und 333.4 Grad'), ''),
+     + ek({'p': [153.4349, 333.4349], 'tan': -0.5, 'farbe': 'orange', 'fenster': [-1.9, 1.9, -1.4, 1.4], 'breite': 240,
+           'namen': ['153.4°', '333.4°'], 'lagen': [None, [-6, 15, 'end']]}, 'Einheitskreis mit Tangente, S(1 | −0.5) und den Lösungspunkten bei 153.4 und 333.4 Grad'), ''),
     ('3e', 2, r'Warum hat \(\tan\varphi = c\) für jedes \(c\) zwei Lösungen in \([0^\circ;\, 360^\circ[\), und warum liegen sie genau \(180^\circ\) auseinander?',
      r'<p>Zu jedem \(c\) gibt es auf der Tangente \(x = 1\) den Punkt \(S(1 \mid c)\), und die Gerade durch \(O\) und \(S\) geht durch den Mittelpunkt des Kreises — sie trifft ihn immer in zwei Punkten. Diese liegen sich am Ursprung gegenüber; von einem zum anderen ist es eine halbe Drehung, also \(180^\circ\).</p>', ''),
 ])
@@ -420,7 +429,7 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
     ('4d', 2, r'Gib ohne Taschenrechner alle Lösungen an: (a) \(\sin\varphi = -1\) (b) \(\cos\varphi = 1\)',
      r'<p>(a) Nur der tiefste Punkt des Kreises: \(\varphi = 270^\circ + k \cdot 360^\circ\), \(k \in \mathbb{Z}\). (b) Nur der Punkt \((1 \mid 0)\): \(\varphi = k \cdot 360^\circ\), \(k \in \mathbb{Z}\).</p>', ''),
     ('4e', 2, r'Warum genügt beim Tangens eine Formel \(\varphi = \varphi_1 + k \cdot 180^\circ\), während man beim Sinus in der Regel zwei braucht?',
-     r'<p>Die zwei Lösungen des Tangens in einer Runde liegen genau \(180^\circ\) auseinander; mit \(+\,k \cdot 180^\circ\) springt man von der einen zur anderen und erfasst beide Familien in einer Formel. Beim Sinus liegen \(\varphi_1\) und \(180^\circ - \varphi_1\) im Allgemeinen nicht eine Periode (\(360^\circ\)) auseinander — jede braucht ihr eigenes \(+\,k \cdot 360^\circ\).</p>', ''),
+     r'<p>Beim Tangens folgen die Lösungen in <b>gleichen</b> Abständen: Die zweite liegt \(180^\circ\) nach der ersten, die nächste wieder \(180^\circ\) weiter. Ein einziger Schritt \(+\,k \cdot 180^\circ\) trifft darum alle. Beim Sinus sind die Abstände <b>ungleich</b>: Bei \(\sin\varphi = \tfrac{1}{2}\) folgen \(30^\circ\), \(150^\circ\), \(390^\circ\), \(510^\circ\), also abwechselnd \(120^\circ\) und \(240^\circ\) weiter. Kein gleicher Schritt trifft alle — darum zwei Formeln mit je \(+\,k \cdot 360^\circ\). Nur bei \(c = 0\) (Abstand immer \(180^\circ\)) und bei \(c = \pm 1\) (eine Lösung je Runde) genügt eine.</p>', ''),
 ])
 k4 = kapitel(4, 'loesungsmenge', 'Alle Lösungen: Periode und Lösungsmenge', 40,
              r'Du gibst alle Lösungen mit der Periode an (\(+\,k \cdot 360^\circ\) bei Sinus und Cosinus, \(+\,k \cdot 180^\circ\) beim Tangens, \(k \in \mathbb{Z}\)) und schreibst die Lösungsmenge in einem vorgegebenen Intervall auf.',
@@ -435,10 +444,10 @@ k0 = '''
     <section class="kap" id="k0">
       <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-gf">Vorwissen · GF 5.4</span><span class="zeit">≈ 10 min</span></div>
       <h2 id="vorwissen">Vorwissen</h2>
-      <p class="ziel">Sinus und Cosinus als Koordinaten am Einheitskreis, die besonderen Werte, die Umkehrtaste des Rechners und die Periode. Wenn das wackelt: Leitprogramm <a href="einheitskreis.html">Einheitskreis</a> (GF 5.4), besonders <a href="einheitskreis.html#besondere-winkel">Kapitel 2</a> und <a href="einheitskreis.html#periode-umkehr">Kapitel 5</a>.</p>
+      <p class="ziel">Sinus und Cosinus als Koordinaten am Einheitskreis, der Tangens auf der Tangente, die besonderen Werte, die Umkehrtaste des Rechners und die Periode. Wenn das wackelt: Leitprogramm <a href="einheitskreis.html">Einheitskreis</a> (GF 5.4), besonders <a href="einheitskreis.html#besondere-winkel">Kapitel 2</a>, <a href="einheitskreis.html#tangens-pythagoras">Kapitel 3</a> (Tangens) und <a href="einheitskreis.html#periode-umkehr">Kapitel 5</a>.</p>
       ''' + clipkarte('g5-4-einheitskreis', 'Einheitskreis: Sinus und Cosinus als Koordinaten', '1:04') + '''
       ''' + clipkarte('g5-4-spezialwinkel', 'Einheitskreis: die Werte der Spezialwinkel', '0:58') + '''
-''' + test('t0', 'Vortest', 10, [
+''' + test('t0', 'Vortest', 12, [
     ('0a', 2, r'Gib die Koordinaten des Punktes \(P\) auf dem Einheitskreis zu \(\varphi = 150^\circ\) exakt an.',
      r'<p>\(P(\cos 150^\circ \mid \sin 150^\circ) = P\left(-\tfrac{\sqrt{3}}{2} \mid \tfrac{1}{2}\right)\).</p><p class="komm">II. Quadrant, Referenzwinkel \(30^\circ\) — LP Einheitskreis, Kapitel 2.</p>', ''),
     ('0b', 2, r'Gib ohne Taschenrechner exakt an: \(\sin 210^\circ\) und \(\cos 300^\circ\).',
@@ -449,8 +458,11 @@ k0 = '''
      r'<p>\(\sin^{-1}\): aus \([-90^\circ;\, 90^\circ]\), rechte Kreishälfte. \(\cos^{-1}\): aus \([0^\circ;\, 180^\circ]\), obere Kreishälfte.</p><p class="komm">LP Einheitskreis, Kapitel 5 — darauf baut Kapitel 2 auf.</p>', ''),
     ('0e', 2, r'Ergänze mit einem Winkel zwischen \(0^\circ\) und \(360^\circ\): \(\sin 400^\circ = \sin\,\)? und \(\cos(-30^\circ) = \cos\,\)?',
      r'<p>\(\sin 400^\circ = \sin 40^\circ\) (\(400^\circ - 360^\circ\)); \(\cos(-30^\circ) = \cos 330^\circ\) (\(-30^\circ + 360^\circ\)).</p><p class="komm">Die Periode \(360^\circ\) — Kapitel 2 und 4 brauchen sie.</p>', ''),
+    # Tangens-Vorwissen für Kapitel 3 (Prüfung 08.10.2026, M8): S(1 | tan φ) und die besonderen Werte √3/3, √3
+    ('0f', 2, r'Gib ohne Taschenrechner exakt an: \(\tan 30^\circ\) und \(\tan 120^\circ\). Welcher Punkt auf der Tangente \(x = 1\) zeigt am Einheitskreis den Wert \(\tan 30^\circ\)?',
+     r'<p>\(\tan 30^\circ = \tfrac{\sqrt{3}}{3}\); \(\tan 120^\circ = -\sqrt{3}\) (II. Quadrant, Referenzwinkel \(60^\circ\), der Tangens ist dort negativ). Die Gerade durch \(O\) und den Kreispunkt zu \(30^\circ\) trifft die Tangente \(x = 1\) in \(S\left(1 \mid \tfrac{\sqrt{3}}{3}\right)\): Seine Höhe ist \(\tan 30^\circ\).</p><p class="komm">LP Einheitskreis, <a href="einheitskreis.html#tangens-pythagoras">Kapitel 3</a> — darauf baut Kapitel 3 auf.</p>', ''),
 ]) + '''
-      <p class="komm">Weniger als 7 von 10 Punkten: zuerst die verlinkten Stellen zu den falschen Aufgaben, dann Kapitel 1.</p>
+      <p class="komm">Weniger als 8 von 12 Punkten: zuerst die verlinkten Stellen zu den falschen Aufgaben, dann Kapitel 1.</p>
     </section>'''
 
 # ------------------------------------------------------------------ Gesamttest
@@ -477,7 +489,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1; G2 → 1, 3; G3 → 1, 3, 4; G4 → 2; G5 → 2, 4; G6 → 3, 4; G7 → 2</p>
+          <p>Aufgabe → Kapitel: G1 → 1; G2 → 1, 3, 4; G3 → 1, 3, 4; G4 → 2, 4; G5 → 2, 4; G6 → 3, 4; G7 → 2</p>
         </div>
       </div>
     </section>'''
@@ -498,12 +510,12 @@ oben = '''<div id="nav-root"></div>
      Kompetenzmatrix (Teil von K1 | ohne HM? | Kapitel | Kapitelaufgaben | Gesamttest):
        K1 visualisieren (Gerade y = c, x = c, S(1 | c); Anzahl Lösungen) | —             | 1, 3    | 1a, 1b, 1d, 1e, 2c, 3d, 3e | G1, G2
        K1 lösen, besondere Werte                                      | ohne TR       | 1, 3, 4 | 1c, 3c, 4d                 | G1, G3
-       K1 lösen mit der Arkusfunktion, zweite Lösung                  | mit TR        | 2, 3    | 2a–2e, 3a, 3b              | G4, G6, G7
-       K1 alle Lösungen (Periode), Lösungsmenge im Intervall           | mit/ohne TR   | 4       | 4a–4e                      | G3, G5, G6
+       K1 lösen mit der Arkusfunktion, zweite Lösung                  | mit TR        | 2, 3    | 2a–2e, 3a, 3b              | G4, G5, G6, G7
+       K1 alle Lösungen (Periode), Lösungsmenge im Intervall           | mit/ohne TR   | 4       | 4a–4e                      | G2, G3, G4, G5, G6
      Kein Kapitelziel ohne Kompetenz. Gesamttest: Teil A (G1–G3, 10 P) ohne, Teil B (G4–G7, 15 P) mit Rechner.
 
      Planung (Kapitel | Lernziel | Clips | Tüfteln | Beispiel | Häufiger Fehler | min):
-       0 Vorwissen   | P(cos φ | sin φ), besondere Werte, sin⁻¹/cos⁻¹, Periode | g5-4-einheitskreis, g5-4-spezialwinkel | — | 150°, 210°, 300° | — | 10
+       0 Vorwissen   | P(cos φ | sin φ), S(1 | tan φ), besondere Werte, sin⁻¹/cos⁻¹, Periode | g5-4-einheitskreis, g5-4-spezialwinkel | — | 150°, 210°, 300° | — | 10
        1 Am Kreis    | Waagrechte/Senkrechte, 2/1/0 Lösungen, besondere Werte exakt | lp-einheitskreis + Kontrolle | sim1 Gerade und Kreis | sin φ = 1/2, cos φ = −1/2 | Senkrechte statt Waagrechte; c = ±1 | 40
        2 Arkus       | Hauptwert, φ₂ = 180° − φ₁ bzw. 360° − φ₁, +360°, Probe | lp-arkus + Kontrolle | sim2 Rechnerpunkt und P | sin φ = 0.4, cos φ = −0.7, sin φ = −0.4 | Regeln vertauscht; nur ein Wert | 40
        3 Tangens     | S(1 | c), immer lösbar, φ₂ = φ₁ + 180° | lp-tangens + Kontrolle | sim3 Tangente und P | tan φ = 1, 2.5, −1 | Sinus-/Cosinusregel; negativer Wert | 35

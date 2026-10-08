@@ -58,6 +58,8 @@ def yt(*werte):
 WK = dict(xbereich=[-1.45, 1.45], ybereich=[-1.45, 1.45], xteilung=yt(-1, 1), yteilung=yt(-1, 1),
           xname='x', yname='y')
 WK5 = dict(WK, xteilung=yt(-1, -0.5, 0.5, 1), yteilung=yt(-1, -0.5, 0.5, 1))
+# Kontrollfrage y = 1.4: weiteres Fenster, sonst läuft die Gerade durch Pfeil und «y» (Prüfung 08.10.2026)
+WK7 = dict(WK, xbereich=[-1.7, 1.7], ybereich=[-1.7, 1.7])
 # Tangens: 3.2 × 5.5 auf 500 × 860 (gleich geteilt bis auf die 8 px Rand)
 WT = dict(xbereich=[-1.6, 1.6], ybereich=[-2.75, 2.75], xteilung=yt(-1, 1), yteilung=yt(-2, -1, 1, 2),
           xname='x', yname='y')
@@ -127,6 +129,24 @@ def kpb(w, farbe, text, bei, anker='end', **kw):
     """Punkt auf dem Kreis mit frei gesetzter Beschriftung — wo die radiale Lage mit S zusammenstösst."""
     x, y = c3(w)
     return pt(x, y, farbe, text, bei, anker, **kw)
+
+
+def kpt(w, farbe, text, dreh=-16, r_=1.3, **kw):
+    """Punkt auf der Geraden durch O (Tangens): Beschriftung neben der Geraden statt radial auf ihr
+    (Prüfung 08.10.2026: radiale Beschriftungen wurden von der Geraden durchkreuzt)."""
+    x, y = c3(w)
+    bx, by = r_ * math.cos(rad(w + dreh)), r_ * math.sin(rad(w + dreh))
+    anker = 'start' if bx > 0.15 else ('end' if bx < -0.15 else 'middle')
+    return pt(x, y, farbe, text, [bx, by - 0.06], anker, **kw)
+
+
+def p_name(w, ein, aus=None, r_=1.17):
+    """Name «P» am laufenden Punkt — Behelf: der Kreis-Begleiter beschriftet P nicht (Wunsch an den Clip-Bauer)."""
+    d = T(r_ * math.cos(rad(w)) + 0.02, r_ * math.sin(rad(w)) + 0.06, 'P', 5, 'start' if math.cos(rad(w)) > -0.2 else 'end', 32, ein=ein)
+    d['kursiv'] = True
+    if aus is not None:
+        d['aus'] = aus
+    return d
 
 
 def lauf(bahn, art='sin', farbe=1, ein=None):
@@ -241,6 +261,13 @@ def clip(name, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'
 
 
 FOLGE = {}
+# Polgeraden des Tangens anders als die Waagrechte y = c (beide waren Tinte gestrichelt): rot wie «nicht definiert»
+# im Clip tangens (90°, 270°). Der Bauer kennt für asymptoten nur die Farbe, keine eigene Strichart.
+POLE = {'farbe': 4}
+# Szene «Besondere Werte» (einheitskreis), neu vertont 08.10.2026 — Zeiten nach sprechzeiten.py: «Sinus von 30°» 3.8–5.8,
+# «von 45°» 6.1–8.6, «von 60°» 8.8–10.9, «Beim Cosinus» 11.2
+TAB_SIN, TAB_COS = 3.8, 11.2
+BW_30, BW_45, BW_60 = 4.6, 6.4, 9.1
 
 
 # ════════════════════════════════════════════════ Kapitel 1 · Einführung
@@ -256,14 +283,15 @@ clip('einheitskreis', 'Winkel finden: Gleichungen am Einheitskreis',
             f(r'\fa{\sin\varphi} = \tfrac{1}{2}', 300, 66, ein=0.4),
             # Wortzeiten (faster-whisper): «Höhe des Punktes P» 5.8–6.6, «auf der Höhe ein Halb» 9.3–9.8
             n('Sinus = Höhe von @P@', 420, 'blau', 46, ein=4.8),
-            graf(WK, [lauf([[0, 0], [4.8, 0], [6.6, 60], [7.4, 60], [9.6, 30]])], figuren=[KR()], ein=0.3,
+            graf(WK, [lauf([[0, 0], [4.8, 0], [6.6, 60], [7.4, 60], [9.6, 30]])], ein=0.3,
+                 figuren=[KR(), p_name(0, 0.3, 4.8), p_name(60, 6.6, 7.4), p_name(30, 9.6)],
                  geraden=[dict(m=0, q=0.5, farbe=5, gestrichelt=True, dicke=3, ein=9.3)])),
          sz('Zwei Punkte',
             'Die Waagrechte y gleich ein Halb schneidet den Kreis in zwei Punkten. Rechts liegt P eins bei dreissig Grad. '
             'Links liegt P zwei, das Spiegelbild an der y-Achse: hundertachtzig minus dreissig, also hundertfünfzig Grad.',
             # «zwei Punkten» 3.6, «P eins bei 30°» 4.9–5.6, «P zwei» 7.1, «Spiegelbild» 8.0, «180» 10.1, «150°» 12.2
             f(r'\varphi_1 = 30^\circ', 300, 56, ein=5.6),
-            f(r'\varphi_2 = 180^\circ - 30^\circ = 150^\circ', 400, 56, ein=10.0),
+            f(r'\varphi_2 = 180^\circ - 30^\circ = 150^\circ', 400, 56, ein=12.0),   # «150» erst bei 12.0 gesprochen
             n('Spiegelbild an der @y@-Achse', 500, 'blau', 44, ein=8.0),
             graf(WK, [lauf([[0, 30], [6.5, 30], [7.6, 150]])], ein=0.05,
                  figuren=[KR(), S((-1.45, 0.5), (1.45, 0.5), 5, True, 3),
@@ -295,16 +323,19 @@ clip('einheitskreis', 'Winkel finden: Gleichungen am Einheitskreis',
                  geraden=waagrechte_bewegt([[0, 0.5], [3.3, 0.5], [7.0, 1.0], [10.4, 1.0], [11.8, 1.3]]))),
          sz('Besondere Werte',
             'Für besondere Werte kennst du die Winkel vom Einheitskreis: Sinus von dreissig Grad ist ein Halb, '
-            'von fünfundvierzig Grad die Wurzel aus zwei halbe, von sechzig Grad die Wurzel aus drei halbe. '
+            'von fünfundvierzig Grad Wurzel zwei halbe, von sechzig Grad Wurzel drei halbe. '
             'Beim Cosinus ist es umgekehrt. Die übrigen Lösungen holst du über die Spiegelung.',
+            # Zwei deckungsgleiche Tabellen (\phantom hält die Masse gleich): die Sinuszeile mit dem Ton, die Cosinuszeile
+            # bei «Beim Cosinus» — vorher stand die ganze Tabelle ab 0.6 s (Prüfung 08.10.2026). Zeiten: TAB_SIN, TAB_COS.
             f(r'\begin{array}{c|ccc} \varphi & 30^\circ & 45^\circ & 60^\circ \\ \hline '
               r'\fa{\sin\varphi} & \tfrac{1}{2} & \tfrac{\sqrt{2}}{2} & \tfrac{\sqrt{3}}{2} \\[4pt] '
-              r'\fc{\cos\varphi} & \tfrac{\sqrt{3}}{2} & \tfrac{\sqrt{2}}{2} & \tfrac{1}{2} \end{array}', 300, 46, ein=0.6),
+              r'\phantom{\fc{\cos\varphi}} & \phantom{\tfrac{\sqrt{3}}{2}} & \phantom{\tfrac{\sqrt{2}}{2}} & \phantom{\tfrac{1}{2}} \end{array}', 300, 46, ein=TAB_SIN),
+            f(r'\begin{array}{c|ccc} \phantom{\varphi} & \phantom{30^\circ} & \phantom{45^\circ} & \phantom{60^\circ} \\ \phantom{\fa{\sin\varphi}} & \phantom{\tfrac{1}{2}} & \phantom{\tfrac{\sqrt{2}}{2}} & \phantom{\tfrac{\sqrt{3}}{2}} \\[4pt] '
+              r'\fc{\cos\varphi} & \tfrac{\sqrt{3}}{2} & \tfrac{\sqrt{2}}{2} & \tfrac{1}{2} \end{array}', 300, 46, ein=TAB_COS),
             graf(WK, [], ein=0.05,
-                 # «30°» 4.1, «45°» 6.0, «60°» 8.9
-                 figuren=[KR(), S(c3(30), (c3(30)[0], 0), 1, False, 4, ein=4.1), S(c3(45), (c3(45)[0], 0), 1, False, 4, ein=6.0),
-                          S(c3(60), (c3(60)[0], 0), 1, False, 4, ein=8.9)],
-                 punkte=[kp(30, 1, '30°', ein=4.1), kp(45, 1, '45°', ein=6.0), kp(60, 1, '60°', ein=8.9)])),
+                 figuren=[KR(), S(c3(30), (c3(30)[0], 0), 1, False, 4, ein=BW_30), S(c3(45), (c3(45)[0], 0), 1, False, 4, ein=BW_45),
+                          S(c3(60), (c3(60)[0], 0), 1, False, 4, ein=BW_60)],
+                 punkte=[kp(30, 1, '30°', ein=BW_30), kp(45, 1, '45°', ein=BW_45), kp(60, 1, '60°', ein=BW_60)])),
          sz('Merke',
             'Zum Mitnehmen: Sinus von Phi gleich c heisst Waagrechte y gleich c, Cosinus von Phi gleich c heisst Senkrechte '
             'x gleich c. Die Schnittpunkte mit dem Kreis sind die Lösungen: zwei, eine oder keine. Die zweite ist das '
@@ -334,13 +365,13 @@ clip('kontrolle-einheitskreis', 'Winkel finden: Kontrollfragen am Einheitskreis'
             'Cosinus ist die waagrechte Koordinate: Die Senkrechte x gleich null Komma sechs trifft den Kreis oben und unten. '
             'Im vierten Quadranten liegt der Punkt null Komma sechs, minus null Komma acht.',
             f(r'\fc{\cos\varphi} = 0.6', 300, 60, ein=1.0),
-            n('4. Quadrant: @(0.6 \\mid -0.8)@', 410, 'gruen', 44, ein=1.2),
+            n('IV. Quadrant: @(0.6 \\mid -0.8)@', 410, 'gruen', 44, ein=1.2),
             frage_bild(graf(WK5, [], figuren=[KR()])),
             graf(WK5, [], ein=1.0, figuren=[KR(), S((0.6, -1.45), (0.6, 1.45), 5, True, 3)],
                  punkte=[pt(0.6, 0.8, 3), pt(0.6, -0.8, 3, '(0.6 | −0.8)', [0.68, -1.0])])),
          sz('Frage 3',
             'Die Senkrechte x gleich minus eins berührt den Kreis nur in einem Punkt, bei hundertachtzig Grad: eine Lösung.',
-            f(r'\fc{\cos\varphi} = -1: \; \mathbb{L} = \{180^\circ\}', 300, 56, ein=1.0),
+            f(r'\fc{\cos\varphi} = -1\colon \; \mathbb{L} = \{180^\circ\}', 300, 56, ein=1.0),
             frage_bild(graf(WK, [], figuren=[KR()])),
             graf(WK, [], ein=1.0, figuren=[KR(), S((-1, -1.45), (-1, 1.45), 5, True, 3)],
                  punkte=[kp(180, 3, '180°', aussen=1.15)])),
@@ -350,13 +381,14 @@ clip('kontrolle-einheitskreis', 'Winkel finden: Kontrollfragen am Einheitskreis'
             f(r'\mathbb{L} = \{45^\circ;\ 135^\circ\}', 300, 58, ein=1.0),
             frage_bild(graf(WK, [], figuren=[KR()])),
             graf(WK, [], ein=1.0, figuren=[KR(), S((-1.45, 0.7071), (1.45, 0.7071), 5, True, 3)],
-                 punkte=[kp(45, 1, '45°'), kp(135, 1, '135°')])),
+                 # falsche Angebote rot (HOWTO §15): 315° und 225° liegen unter der x-Achse
+                 punkte=[kp(45, 1, '45°'), kp(135, 1, '135°'), kp(225, 4, '225°'), kp(315, 4, '315°')])),
          sz('Frage 5',
             'Der Kreis hat den Radius eins. Die Waagrechte y gleich eins Komma vier liegt über ihm und trifft ihn nie: '
             'Die Lösungsmenge ist leer.',
-            f(r'\fa{\sin\varphi} = 1.4: \; \mathbb{L} = \{\,\}', 300, 58, ein=1.0),
-            frage_bild(graf(WK, [], figuren=[KR()])),
-            graf(WK, [], ein=1.0, figuren=[KR(), S((-1.45, 1.4), (1.45, 1.4), 4, True, 3)])),
+            f(r'\fa{\sin\varphi} = 1.4\colon \; \mathbb{L} = \{\,\}', 300, 58, ein=1.0),
+            frage_bild(graf(WK7, [], figuren=[KR()])),
+            graf(WK7, [], ein=1.0, figuren=[KR(), S((-1.7, 1.4), (1.7, 1.4), 4, True, 3)])),
          sz('Merke',
             'Zum Mitnehmen: Erst die Gerade zeichnen, waagrecht beim Sinus, senkrecht beim Cosinus. Dann die Schnittpunkte '
             'mit dem Kreis suchen und ihre Winkel bestimmen.',
@@ -399,13 +431,13 @@ clip('kontrolle-einheitskreis', 'Winkel finden: Kontrollfragen am Einheitskreis'
               rueck_sprich={1: 'Bei dreihundertfünfzehn Grad liegt P unter der x-Achse. Dort ist der Sinus negativ. Spiegle an der y-Achse, nicht an der x-Achse.',
                             2: 'Bei zweihundertfünfundzwanzig Grad liegt P unter der x-Achse, der Sinus ist dort negativ. Wo liegt die Waagrechte y gleich Wurzel zwei halbe?'}),
          wahl('Frage 5', 'Warum hat sin φ = 1.4 keine Lösung?',
-              ['Die Waagrechte y = 1.4 trifft den Kreis nicht.', 'Der Rechner zeigt eine Fehlermeldung.',
+              ['Die Waagrechte y = 1.4 trifft den Kreis nicht.', 'Die Lösung liegt ausserhalb von [0°; 360°[.',
                'Weil 1.4 keine besondere Zahl ist.'], 0,
               {0: 'Ja.',
-               1: 'Das stimmt, erklärt aber nichts. Warum findet auch der Kreis keinen Punkt?',
+               1: 'Auch nach weiteren Umdrehungen kommt P nicht höher. Wie hoch kommt ein Punkt des Einheitskreises?',
                2: 'Auch sin φ = 0.4 ist kein besonderer Wert und hat Lösungen. Wie hoch kommt ein Punkt des Einheitskreises?'},
               sprich='Warum hat Sinus von Phi gleich eins Komma vier keine Lösung?',
-              rueck_sprich={1: 'Das stimmt, erklärt aber nichts. Warum findet auch der Kreis keinen Punkt?',
+              rueck_sprich={1: 'Auch nach weiteren Umdrehungen kommt P nicht höher. Wie hoch kommt ein Punkt des Einheitskreises?',
                             2: 'Auch Sinus von Phi gleich null Komma vier ist kein besonderer Wert und hat Lösungen. Wie hoch kommt ein Punkt des Einheitskreises?'}),
      ], art='Kontrollclip')
 
@@ -432,7 +464,7 @@ clip('arkus', 'Winkel finden: mit der Arkusfunktion',
             'Der Rechner liefert immer nur einen Winkel, den Hauptwert. Beim Arkussinus liegt er zwischen minus neunzig und '
             'neunzig Grad, auf der rechten Kreishälfte. Den zweiten Schnittpunkt musst du selbst finden.',
             # «zwischen minus 90 und 90 Grad» 4.4–6.4, «Den zweiten Schnittpunkt» 8.6
-            f(r'\arcsin: \; -90^\circ \leq \varphi_1 \leq 90^\circ', 300, 50, ein=4.4),
+            f(r'\arcsin\colon \; -90^\circ \leq \varphi_1 \leq 90^\circ', 300, 50, ein=4.4),
             graf(WK, [], ein=0.05,
                  figuren=[dict(art='sektor', m=[0, 0], r=1, von=-90, bis=90, farbe=1, fuellung=0.12, ein=4.4),
                           KR(), S((-1.45, 0.4), (1.45, 0.4), 5, True, 3)],
@@ -506,14 +538,14 @@ clip('kontrolle-arkus', 'Winkel finden: Kontrollfragen zur Arkusfunktion',
             f(r'\varphi_2 = 180^\circ - 64.2^\circ \approx 115.8^\circ', 300, 50, ein=1.0),
             frage_bild(graf(WK, [], figuren=[KR()], punkte=[kp(64.158, 1, '64.2°')])),
             graf(WK, [], ein=1.0, figuren=[KR(), S((-1.45, 0.9), (1.45, 0.9), 5, True, 3)],
-                 punkte=[kp(64.158, 1, '64.2°'), kp(115.842, 1, '115.8°')])),
+                 punkte=[kp(64.158, 1, '64.2°'), kp(115.842, 1, '115.8°'), kp(295.842, 4, '295.8°'), kp(244.158, 4, '244.2°')])),
          sz('Frage 2',
             'Beim Cosinus spiegelt man an der x-Achse: dreihundertsechzig minus hundertsechzehn Komma sieben gibt '
             'zweihundertdreiundvierzig Komma drei Grad.',
             f(r'\varphi_2 = 360^\circ - 116.7^\circ \approx 243.3^\circ', 300, 50, ein=1.0),
             frage_bild(graf(WK, [], figuren=[KR()], punkte=[kp(116.744, 3, '116.7°')])),
             graf(WK, [], ein=1.0, figuren=[KR(), S((-0.45, -1.45), (-0.45, 1.45), 5, True, 3)],
-                 punkte=[kp(116.744, 3, '116.7°'), kp(243.256, 3, '243.3°')])),
+                 punkte=[kp(116.744, 3, '116.7°'), kp(243.256, 3, '243.3°'), kp(63.256, 4, '63.3°'), kp(296.744, 4, '296.7°')])),
          sz('Frage 3',
             'Minus sechsunddreissig Komma neun Grad heisst: im Uhrzeigersinn drehen. P liegt rechts unten, bei null Komma acht, '
             'minus null Komma sechs.',
@@ -525,9 +557,10 @@ clip('kontrolle-arkus', 'Winkel finden: Kontrollfragen zur Arkusfunktion',
             'Minus sechsunddreissig Komma neun plus dreihundertsechzig gibt dreihundertdreiundzwanzig Komma eins. Die zweite Lösung: '
             'hundertachtzig plus sechsunddreissig Komma neun, also zweihundertsechzehn Komma neun Grad.',
             f(r'\mathbb{L} = \{216.9^\circ;\ 323.1^\circ\}', 300, 54, ein=1.0),
+            n('@-36.9^\\circ@ ist derselbe Punkt wie @323.1^\\circ@,|liegt aber nicht in @[0^\\circ;\\, 360^\\circ[@', 410, 'rot', 40, ein=1.0),
             frage_bild(graf(WK, [], figuren=[KR()])),
             graf(WK, [], ein=1.0, figuren=[KR(), S((-1.45, -0.6), (1.45, -0.6), 5, True, 3)],
-                 punkte=[kp(180 + A06, 1, '216.9°'), kp(360 - A06, 1, '323.1°', aussen=1.25)])),
+                 punkte=[kp(180 + A06, 1, '216.9°'), kp(360 - A06, 1, '323.1°', aussen=1.25), kp(180 - A06, 4, '143.1°')])),
          sz('Frage 5',
             'Bei hundertvier Komma fünf Grad liegt P links der y-Achse, dort ist der Cosinus negativ. Richtig ist '
             'dreihundertsechzig minus fünfundsiebzig Komma fünf, also zweihundertvierundachtzig Komma fünf Grad.',
@@ -595,6 +628,23 @@ T25 = math.degrees(math.atan(2.5))     # 68.199
 TANLINIE = lambda w: S((-1.6 * 1.0, -1.6 * math.tan(rad(w))), (1.6, 1.6 * math.tan(rad(w))), 2, True, 3)
 
 
+def _dreh_senkrecht(t0=7.4, t1=8.8, w0=math.degrees(math.atan(2.6))):
+    """Stützpunkte [t, m, 0] für die Drehung von w0 über 90° bis 180° − w0."""
+    out, w = [], w0
+    ws = [w0 + k * 2 for k in range(int((90 - w0) // 2) + 1)] + [89.0]
+    ws = ws + [180 - x for x in reversed(ws)]
+    n_ = len(ws)
+    for i, w in enumerate(ws):
+        t = t0 + (t1 - t0) * i / (n_ - 1)
+        if w == 180 - 89.0:
+            t = max(t, out[-1][0] + 0.02)
+        out.append([round(t, 3), round(math.tan(rad(w)), 3), 0])
+    return out[1:]
+
+
+DREH_SENKRECHT = _dreh_senkrecht()
+
+
 def tangente(**kw):
     return S((1, -2.75), (1, 2.75), 5, False, 3, **kw)
 
@@ -610,7 +660,8 @@ clip('tangens', 'Winkel finden: Tangensgleichungen',
             # «Gerade durch den Ursprung und P trifft die Tangente im Punkt S» 5.1–8.2, «auf der Höhe c» 11.3–12.1
             n('@S(1 \\mid c)@ auf der Tangente @x = 1@', 410, 'orange', 42, ein=11.3),
             graf(WT, [lauf([[0, 0], [5.0, 0], [7.4, 50]], 'tan', 2)], ein=0.05, gross='tan',
-                 figuren=[KR(), tangente(), T(1.12, round(math.tan(rad(50)), 3), 'S', 2, 'start', 30, ein=7.4)])),
+                 figuren=[KR(), tangente(), T(1.12, round(math.tan(rad(50)), 3), 'S', 2, 'start', 30, ein=7.4),
+                          p_name(0, 0.05, 5.0), p_name(50, 7.4, r_=1.2)])),
          sz('Gegenpunkte',
             'Tangens von Phi gleich eins: S liegt auf der Höhe eins. Die Gerade durch O und S trifft den Kreis zweimal, '
             'bei fünfundvierzig Grad und gegenüber bei zweihundertfünfundzwanzig Grad. Die beiden Punkte liegen sich am '
@@ -622,7 +673,7 @@ clip('tangens', 'Winkel finden: Tangensgleichungen',
             graf(WT, [], ein=0.05, gross='tan',
                  figuren=[KR(), tangente(), dict(TANLINIE(45), ein=3.9), T(1.12, 1.0, 'S', 2, 'start', 30, ein=2.3)],
                  punkte=[pt(1, 1, 2, ein=2.3), dict(kpb(45, 2, '45°', [0.56, 0.86]), ein=7.2),
-                         dict(kp(225, 2, '225°', aussen=1.3), ein=9.2)])),
+                         dict(kpb(225, 2, '225°', [-1.05, -0.62]), ein=9.2)])),   # neben der Geraden, nicht auf ihr
          sz('Mit dem Rechner',
             'Tangens von Phi gleich zwei Komma fünf: Der Arkustangens liefert ungefähr achtundsechzig Komma zwei Grad. '
             'Die zweite Lösung liegt hundertachtzig Grad weiter: zweihundertachtundvierzig Komma zwei Grad.',
@@ -655,10 +706,12 @@ clip('tangens', 'Winkel finden: Tangensgleichungen',
             f(r'\fb{\tan\varphi} = c \; \text{für jedes } c', 300, 52, ein=2.9),
             n('bei @90^\\circ@ und @270^\\circ@ nicht definiert', 410, 'rot', 42, ein=14.3),
             graf(WT, halbkreise(), ein=0.05, gross='tan', figuren=[KR(), tangente()],
-                 geraden=[{'bewegung': [[0, 1, 0], [4.6, 1, 0], [6.6, 2.6, 0], [7.4, 2.6, 0], [8.8, -2.6, 0]], 'farbe': 2,
+                 # Die Gerade dreht über die Senkrechte (Winkel 69° → 111°), nicht über die Waagrechte: Stützpunkte nach
+                 # dem Winkel, bei 90° ein Sprung von +57 auf −57 in 0.02 s (Prüfung 08.10.2026, M5).
+                 geraden=[{'bewegung': [[0, 1, 0], [4.6, 1, 0], [6.6, 2.6, 0], [7.4, 2.6, 0]] + DREH_SENKRECHT, 'farbe': 2,
                            'gestrichelt': True, 'dicke': 3, 'schnitte': {'kurve': k, 'farbe': 2, 'beschriftung': False, 'anzahl': 2},
                            'marken': [{'x': 1, 'text': 'S', 'farbe': 2}] if k == 0 else []} for k in (0, 1)],
-                 punkte=[dict(kp(90, 4, '90°', aussen=1.2), ein=9.5), dict(kp(270, 4, '270°', aussen=1.25), ein=10.4)])),
+                 punkte=[dict(kpb(90, 4, '90°', [0.12, 1.12], 'start'), ein=9.5), dict(kpb(270, 4, '270°', [0.12, -1.24], 'start'), ein=10.4)])),
          sz('Merke',
             'Zum Mitnehmen: Tangens von Phi gleich c hat für jedes c Lösungen. Der Rechner liefert Phi eins zwischen minus '
             'neunzig und neunzig Grad, die zweite Lösung ist Phi eins plus hundertachtzig Grad.',
@@ -680,7 +733,8 @@ clip('kontrolle-tangens', 'Winkel finden: Kontrollfragen zum Tangens',
             f(r'\varphi_2 = 31.0^\circ + 180^\circ = 211.0^\circ', 300, 48, ein=1.0),
             frage_bild(graf(WT, [], gross='tan', figuren=[KR(), tangente()], punkte=[kpb(T06, 2, '31.0°', [0.72, 0.76])])),
             graf(WT, [], ein=1.0, gross='tan', figuren=[KR(), tangente(), TANLINIE(T06)],
-                 punkte=[pt(1, 0.6, 2), kpb(T06, 2, '31.0°', [0.72, 0.76]), kp(180 + T06, 2, '211.0°', aussen=1.32)])),
+                 punkte=[pt(1, 0.6, 2), kpb(T06, 2, '31.0°', [0.72, 0.76]), kpb(180 + T06, 2, '211.0°', [-1.0, -0.38]),
+                         kp(180 - T06, 4, '149.0°'), kp(360 - T06, 4, '329.0°')])),   # falsche Angebote rot
          sz('Frage 2',
             'Der Tangens ist die Höhe auf der Tangente x gleich eins: S liegt bei eins, zwei.',
             f(r'S(1 \mid 2)', 300, 60, ein=1.0),
@@ -697,17 +751,19 @@ clip('kontrolle-tangens', 'Winkel finden: Kontrollfragen zum Tangens',
          sz('Frage 4',
             'Auch für tausend gibt es einen Punkt S, sehr weit oben auf der Tangente. Die Gerade durch O und S ist fast '
             'senkrecht und trifft den Kreis zweimal.',
-            f(r'\fb{\tan\varphi} = 1000: \; 2 \text{ Lösungen}', 300, 52, ein=1.0),
+            f(r'\fb{\tan\varphi} = 1000\colon \; 2 \text{ Lösungen}', 300, 52, ein=1.0),
             frage_bild(graf(WT, [], gross='tan', figuren=[KR(), tangente()])),
             graf(WT, [], ein=1.0, gross='tan', figuren=[KR(), tangente(), S((-0.0027, -2.7), (0.0027, 2.7), 2, True, 3)],
-                 punkte=[kp(89.943, 2, '89.9°', aussen=1.3), kp(269.943, 2, '269.9°', aussen=1.3)])),
+                 punkte=[kpt(89.943, 2, '89.9°', -14), kpt(269.943, 2, '269.9°', 14)])),
          sz('Frage 5',
-            'Der Rechner liefert minus einunddreissig Grad. Plus hundertachtzig gibt hundertneunundvierzig, plus '
+            'Der Rechner liefert ungefähr minus einunddreissig Grad. Plus hundertachtzig gibt hundertneunundvierzig, plus '
             'dreihundertsechzig gibt dreihundertneunundzwanzig Grad.',
             f(r'\mathbb{L} = \{149.0^\circ;\ 329.0^\circ\}', 300, 54, ein=1.0),
+            n('@-31.0^\\circ@ liegt nicht in @[0^\\circ;\\, 360^\\circ[@', 410, 'rot', 40, ein=1.0),
             frage_bild(graf(WT, [], gross='tan', figuren=[KR(), tangente()])),
             graf(WT, [], ein=1.0, gross='tan', figuren=[KR(), tangente(), TANLINIE(-T06)],
-                 punkte=[pt(1, -0.6, 2), kp(180 - T06, 2, '149.0°', aussen=1.32), kpb(360 - T06, 2, '329.0°', [0.72, -0.82])])),
+                 punkte=[pt(1, -0.6, 2), kpb(180 - T06, 2, '149.0°', [-1.0, 0.25]), kpb(360 - T06, 2, '329.0°', [1.06, -0.40], 'start'),
+                         kpt(T06, 4, '31.0°', 22), kp(180 + T06, 4, '211.0°')])),   # falsche Angebote rot
          sz('Merke',
             'Zum Mitnehmen: Beim Tangens zwei Gegenpunkte, hundertachtzig Grad auseinander. Nie hundertachtzig minus Phi eins '
             'wie beim Sinus.',
@@ -814,7 +870,8 @@ clip('loesungsmenge', 'Winkel finden: alle Lösungen und die Lösungsmenge',
             n('@390^\\circ = 30^\\circ + 360^\\circ@', 360, 'blau', 42, ein=5.2),
             gk(WKK, [sinus(KRE([[0, 0], [0.9, 0], [6.6, 2 * P + P6], [13.0, 2 * P + P6], [16.6, 4 * P]])), waag(0.5, von=0, bis=4 * P)],
                ein=0.05,
-               punkte=[gp(30, 0.5, 1, '30°', ein=1.2), gp(150, 0.5, 1, '150°', ein=2.3),
+               # P erreicht 30° bei 1.87 s und 150° bei 3.31 s (Bahn geglättet, Prüfung 08.10.2026)
+               punkte=[gp(30, 0.5, 1, '30°', ein=1.9), gp(150, 0.5, 1, '150°', ein=3.35),
                        gp(390, 0.5, 1, '390°', ein=13.9), gp(510, 0.5, 1, '510°', ein=15.2)])),
          sz('Alle Lösungen',
             'Alle Lösungen schreibt man mit einer ganzen Zahl k: Phi gleich dreissig Grad plus k mal dreihundertsechzig Grad, '
@@ -830,7 +887,7 @@ clip('loesungsmenge', 'Winkel finden: alle Lösungen und die Lösungsmenge',
             'Von null bis siebenhundertzwanzig Grad sind es k gleich null und k gleich eins. Die Lösungsmenge hat vier Elemente, '
             'aufsteigend geordnet.',
             # «Von 0 bis 720 Grad» 7.0–8.4, «k gleich 0 und k gleich 1» 9.4–11.1, «Die Lösungsmenge» 11.8
-            f(r'0^\circ \leq \varphi \lt 720^\circ: \; k = 0,\ 1', 240, 50, ein=9.4),
+            f(r'0^\circ \leq \varphi \lt 720^\circ\colon \; k = 0,\ 1', 240, 50, ein=9.4),
             f(r'\mathbb{L} = \{30^\circ;\ 150^\circ;\ 390^\circ;\ 510^\circ\}', 340, 50, ein=11.8),
             gk(WKK, [sinus(von=0, bis=4 * P), waag(0.5, von=0, bis=4 * P)],
                flaechen=[dict(punkte=[[0, -1.45], [4 * P, -1.45], [4 * P, 1.45], [0, 1.45]], farbe=1, deckung=0.08, ein=7.0)],
@@ -839,8 +896,8 @@ clip('loesungsmenge', 'Winkel finden: alle Lösungen und die Lösungsmenge',
             'Von minus dreihundertsechzig bis null Grad nimmt man k gleich minus eins: dreissig minus dreihundertsechzig gibt '
             'minus dreihundertdreissig Grad, hundertfünfzig minus dreihundertsechzig gibt minus zweihundertzehn Grad.',
             # «k gleich minus eins» 2.9–3.6, «minus 330 Grad» 6.4–7.4, «minus 210 Grad» 10.3–11.1
-            f(r'-360^\circ \leq \varphi \lt 0^\circ: \; k = -1', 240, 50, ein=2.9),
-            f(r'\mathbb{L} = \{-330^\circ;\ -210^\circ\}', 340, 50, ein=10.4),
+            f(r'-360^\circ \leq \varphi \lt 0^\circ\colon \; k = -1', 240, 50, ein=2.9),
+            f(r'\mathbb{L} = \{-330^\circ;\ {-210^\circ}\}', 340, 50, ein=10.4),
             gk(WKN, [sinus(), waag(0.5)],
                flaechen=[dict(punkte=[[-2 * P, -1.45], [0, -1.45], [0, 1.45], [-2 * P, 1.45]], farbe=1, deckung=0.08)],
                punkte=[gp(30, 0.5, 1, '30°'), gp(150, 0.5, 1, '150°'),
@@ -849,8 +906,8 @@ clip('loesungsmenge', 'Winkel finden: alle Lösungen und die Lösungsmenge',
             'Beim Tangens ist die Periode hundertachtzig Grad. Tangens von Phi gleich eins: Phi gleich fünfundvierzig Grad plus '
             'k mal hundertachtzig Grad. Eine einzige Formel genügt, denn hundertachtzig Grad weiter liegt schon die zweite Lösung.',
             # «Periode 180 Grad» 1.8–2.8, «Phi gleich 45 Grad plus k mal 180 Grad» 5.3–7.9
-            f(r'\fb{\tan\varphi} = 1: \; \varphi = 45^\circ + k \cdot 180^\circ', 240, 50, ein=5.3),
-            gk(WKT, [dict(bewegung=[[0, 1, 1, 0, 0]], trig='tan', farbe=2, von=0, bis=4 * P, asymptoten={'farbe': 5}),
+            f(r'\fb{\tan\varphi} = 1\colon \; \varphi = 45^\circ + k \cdot 180^\circ', 240, 50, ein=5.3),
+            gk(WKT, [dict(bewegung=[[0, 1, 1, 0, 0]], trig='tan', farbe=2, von=0, bis=4 * P, asymptoten=POLE),
                      waag(1, von=0, bis=4 * P, ein=3.5)],
                punkte=[dict(pt(rad(w), 1, 2), ein=e) for w, e in ((45, 5.6), (225, 7.3), (405, 7.3), (585, 7.3))])),
          sz('Sonderfälle',
@@ -858,8 +915,8 @@ clip('loesungsmenge', 'Winkel finden: alle Lösungen und die Lösungsmenge',
             'gleich k mal hundertachtzig Grad. Sinus von Phi gleich eins: Phi gleich neunzig Grad plus k mal dreihundertsechzig Grad.',
             # «Sinus von Phi gleich 0» 5.3–6.4, «Phi gleich k mal 180 Grad» 7.1–8.4, «Sinus von Phi gleich 1» 9.1–10.1,
             # «Phi gleich 90 Grad plus k mal 360 Grad» 10.9–13.5
-            f(r'\fa{\sin\varphi} = 0: \; \varphi = k \cdot 180^\circ', 240, 48, ein=7.1),
-            f(r'\fa{\sin\varphi} = 1: \; \varphi = 90^\circ + k \cdot 360^\circ', 340, 48, ein=10.9),
+            f(r'\fa{\sin\varphi} = 0\colon \; \varphi = k \cdot 180^\circ', 240, 48, ein=7.1),
+            f(r'\fa{\sin\varphi} = 1\colon \; \varphi = 90^\circ + k \cdot 360^\circ', 340, 48, ein=10.9),
             gk(WKK, [sinus(von=0, bis=4 * P), waag(1, von=0, bis=4 * P, ein=9.1)],
                punkte=[dict(gp(w, 0, 1), ein=7.1) for w in (0, 180, 360, 540, 720)]
                + [dict(gp(w, 1, 1), ein=10.9) for w in (90, 450)])),
@@ -894,13 +951,14 @@ clip('kontrolle-loesungsmenge', 'Winkel finden: Kontrollfragen zur Lösungsmenge
             frage_bild(gk(WKK, [])),
             gk(WKK, [sinus(von=0, bis=4 * P), waag(-0.5, von=0, bis=4 * P)], ein=1.0,
                flaechen=[dict(punkte=[[2 * P, -1.45], [4 * P, -1.45], [4 * P, 1.45], [2 * P, 1.45]], farbe=1, deckung=0.08)],
-               punkte=[gp(w, -0.5, 1, '%d°' % w, oben=False) for w in (210, 330, 570, 690)])),
+               punkte=[gp(w, -0.5, 1, '%d°' % w, oben=False) for w in (210, 330, 570, 690)]
+               + [gp(w, 0.5, 4, '%d°' % w) for w in (390, 510)])),   # falsches Angebot rot: dort ist der Sinus +0.5
          sz('Frage 3',
             'Der Tangens wiederholt sich schon nach hundertachtzig Grad: Phi gleich minus fünfundvierzig Grad plus k mal '
             'hundertachtzig Grad.',
             f(r'\varphi = -45^\circ + k \cdot 180^\circ', 300, 54, ein=1.0),
             frage_bild(gk(WKT, [])),
-            gk(WKT, [dict(bewegung=[[0, 1, 1, 0, 0]], trig='tan', farbe=2, von=0, bis=4 * P, asymptoten={'farbe': 5}),
+            gk(WKT, [dict(bewegung=[[0, 1, 1, 0, 0]], trig='tan', farbe=2, von=0, bis=4 * P, asymptoten=POLE),
                      waag(-1, von=0, bis=4 * P)], ein=1.0,
                punkte=[pt(rad(w), -1, 2) for w in (135, 315, 495, 675)])),
          sz('Frage 4',
@@ -909,8 +967,8 @@ clip('kontrolle-loesungsmenge', 'Winkel finden: Kontrollfragen zur Lösungsmenge
             frage_bild(gk(WGRAD, [dict(formel='sin(x*pi/180)', farbe=1, dicke=5)],
                           punkte=[pt(60, 0.866, 1, '60°', [60, 1.2], 'middle')])),
             gk(WGRAD, [dict(formel='sin(x*pi/180)', farbe=1, dicke=5), waag(0.866)], ein=1.0,
-               punkte=[pt(60, 0.866, 1, '60°', [60, 1.2], 'middle'), pt(120, 0.866, 5),
-                       pt(420, 0.866, 1, '420°', [420, 1.2], 'middle'), pt(480, 0.866, 5)])),
+               punkte=[pt(60, 0.866, 1, '60°', [60, 1.2], 'middle'), pt(120, 0.866, 1),
+                       pt(420, 0.866, 1, '420°', [420, 1.2], 'middle'), pt(480, 0.866, 1)])),   # auch Lösungen: blau
          sz('Frage 5',
             'Hundertzwanzig und zweihundertvierzig Grad, dazu dieselben plus dreihundertsechzig: vierhundertachtzig und '
             'sechshundert Grad. Aufsteigend in die Lösungsmenge.',
@@ -946,7 +1004,7 @@ clip('kontrolle-loesungsmenge', 'Winkel finden: Kontrollfragen zur Lösungsmenge
               {0: 'Ja.',
                1: 'Mit 360° fehlt jede zweite Lösung. Wie weit liegen die Gegenpunkte am Kreis auseinander?',
                2: 'Dann wäre auch 45° eine Lösung — dort ist der Tangens +1.'},
-              sprich='Tangens von Phi gleich minus eins: Welche Periode gehört in die allgemeine Lösung?',
+              sprich='Tangens von Phi gleich minus eins: Welche Periode gehört in die allgemeine Lösung Phi gleich minus fünfundvierzig Grad plus k mal …?',
               rueck_sprich={1: 'Mit dreihundertsechzig Grad fehlt jede zweite Lösung. Wie weit liegen die Gegenpunkte am Kreis auseinander?',
                             2: 'Dann wäre auch fünfundvierzig Grad eine Lösung. Dort ist der Tangens plus eins.'}),
          klick('Frage 4', 'sin φ = √3/2 hat die Lösung 60°. Tipp die Lösung, die eine Periode weiter rechts liegt.',
