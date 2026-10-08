@@ -43,28 +43,29 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
   Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
-- `leitprogramme/` — 17 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 18 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt. **Seit dem 06.10.2026 sind dort nur die
-  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — zwölf
+  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — dreizehn
   (`quadratische-funktionen`, `lineare-funktionen`, `potenz-wurzelfunktionen`,
   `polynomfunktionen`, `exp-log-funktionen`, `trigonometrische-funktionen`,
   `betragsfunktionen`, `planimetrie`, `lineare-quadratische-gleichungen`,
-  `trigonometrische-berechnungen`, `einheitskreis`, `trigonometrische-gleichungen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
+  `trigonometrische-berechnungen`, `einheitskreis`, `trigonometrische-gleichungen`, `modellieren`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
   `gleichungssysteme`, `uebungspruefung-1`, `trigo2`) bleiben als Dateien bestehen, ihre
   Kärtchen stehen vorübergehend unter «Alte Leitprogramme (werden demnächst ersetzt)»
   am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
   im Suchindex. Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine
   kleine Pille «LP» (`.karte-lp`/`.lp-link` in `index.html`). Die zwei Arten:
-  - *nach Thema* (15: `potenzen.html`, `quadratische-gleichungen.html`,
+  - *nach Thema* (16: `potenzen.html`, `quadratische-gleichungen.html`,
     `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
     `exp-log-funktionen.html`, `trigonometrische-funktionen.html`, `betragsfunktionen.html`,
     `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`, `lineare-quadratische-gleichungen.html`
     (Umformer statt Regler), `planimetrie.html` (Geometrie-Arbeitsbereich), `trigonometrische-berechnungen.html`,
-    `einheitskreis.html`, `trigonometrische-gleichungen.html` (GF 5.3–5.5, freigeschaltet 08.10.2026))
+    `einheitskreis.html`, `trigonometrische-gleichungen.html` (GF 5.3–5.5, freigeschaltet 08.10.2026),
+    `modellieren.html` (GF 2.M Textaufgaben, je Aufgabenart ein Kapitel, freigeschaltet 08.10.2026))
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
@@ -90,12 +91,12 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 542 Drehbücher, alle vertont: **391 in `clips.json`** (363:01 min,
-  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **151** Clips mit
-  `"probe": true` (35 Prüfungsclips und 116 Clips der Leitprogramme nach Thema:
+- `clips/` — 554 Drehbücher, alle vertont: **391 in `clips.json`** (363:01 min,
+  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **163** Clips mit
+  `"probe": true` (35 Prüfungsclips und 128 Clips der Leitprogramme nach Thema:
   je 10 «Parabel sehen», «Kurve sehen», «Polynom sehen», «Exponentialkurve sehen»,
   «Sinuskurve sehen», «Knick sehen», «Figuren sehen», «Gleichungen lösen», «Dreiecke berechnen»,
-  «Einheitskreis sehen», 8 «Gerade sehen», 8 «Winkel finden»), die im zugehörigen Leitprogramm stehen und
+  «Einheitskreis sehen», 12 «Ansatz finden», 8 «Gerade sehen», 8 «Winkel finden»), die im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. Die Clips der *sichtbaren* Leitprogramme zeigt
   `clips.html` seit 06.10.2026 trotzdem: je Themenseite eine Tabelle Animationen · Leitprogramm · Weitere Clips
   (`scripts/clips_bibliothek.py`, HOWTO-clips «Bibliotheksseite»). **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;

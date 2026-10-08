@@ -64,9 +64,9 @@ def lp_clips(wurzel, clipsdir):
             if not m:
                 continue
             sim = re.search(r'<figure class="sim[^"]*" id="([^"]+)"', teil)
-            for st in re.findall(r'clips/([a-z0-9-]+)\.html', teil):
+            for st in re.findall(r'clips/([A-Za-z0-9-]+)\.html', teil):
                 ziel.setdefault(st, sim.group(1) if sim else m.group(1))
-        for stamm in re.findall(r'clips/([a-z0-9-]+)\.html', text):
+        for stamm in re.findall(r'clips/([A-Za-z0-9-]+)\.html', text):
             if stamm in gesehen:
                 continue
             dreh_pfad = os.path.join(clipsdir, stamm + ".json")

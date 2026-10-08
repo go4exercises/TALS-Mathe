@@ -363,6 +363,8 @@ ZUSATZSEITEN = [
      'Leitprogramm Einheitskreis', 'thema'),
     ('leitprogramme/trigonometrische-gleichungen.html', '▤',
      'Leitprogramm Trigonometrische Gleichungen', 'thema'),
+    ('leitprogramme/modellieren.html', '▤',
+     'Leitprogramm Textaufgaben modellieren', 'thema'),
 ]
 
 

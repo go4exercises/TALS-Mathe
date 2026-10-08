@@ -183,6 +183,10 @@ noch ausdrücklich, R setzt Fragen zurück (`FRAGEN_JS`); 4 Clips neu vertont (1
   Spur. Für Korrekturen an einzelnen Szenen entstanden zwei Behelfe — `scripts/lp/einheitskreis/teilton.py` und ein
   gleichartiges Skript im Scratchpad (Themen-Clips g5): geänderte Szenen neu sprechen, die übrigen aus der alten Spur
   schneiden. Als Schalter `--szenen` ins geteilte Werkzeug übernehmen (dann auch `TODO-schwesterprojekt.md`).
+- [ ] Clip-Bauer-Wünsche aus dem LP Modellieren (08.10.2026, ohne Auftrag offen): Rechnerfolge (`stapel`) mit je
+  einem Ankerwort pro Schirm statt Startzeit plus festem Schritt; `build-clip-ton.py` erkennt geänderte Sprechertexte
+  selbst und warnt vor langer Stille am Szenenende (Behelf: `scripts/lp/modellieren/clips.py` meldet «NEU VERTONEN …»).
+  Geteiltes Werkzeug — bei Umsetzung auch `TODO-schwesterprojekt.md` und `OFFEN`.
 - [x] Clip-Bauer-Wünsche aus den LPs 5.3–5.5 (08.10.2026; alle umgesetzt, HOWTO-clips «Dritte Runde», Übertrag in `TODO-schwesterprojekt.md` und `OFFEN`): `aus` an einem ganzen `graf`-Element; Klickziel als Strecke
   und nächstgelegene Falle gewinnt; `kreis`-Begleiter beschriftet P; Text-Figuren folgen einem bewegten Punkt;
   Achsenzahlen neben statt auf dem Einheitskreis; Bogen entlang des Kreises statt linear; Farbe je Zeitabschnitt in

@@ -614,6 +614,11 @@ gegen sie und darüber hinaus.
   ist falsch (\(\sin 150^\circ = 0.5\), \(\arcsin 0.5 = 30^\circ\)) — und stand auch auf der Themenseite.
   \(\arcsin w\) ist *der* Winkel aus dem Hauptwertbereich; die Gleichung hat mehr Lösungen.
 
+- **Sachzusammenhang physikalisch möglich** (Modellieren 08.10.2026): Kochsalzlösung mit 30 % (löslich ≈ 26 %),
+  Zufallsübung bis 95 % Salz, 60 % Stickstoff. Gehalte je Stoff begrenzen, auch in Würfen.
+- **Rechneranzeige nur so weit belegt wie die Quelle**: «poly-solv zeigt den Bruch» ist nur für ganzzahlige
+  Koeffizienten belegt. Grundform ganzzahlig machen (mit einem Faktor erweitern) oder die Anzeigeform nicht nennen.
+
 **Clips**
 - **Eine neue Bewegung einmal wirklich laufen lassen.** Nicht ein Bild ansehen, sondern
   über `window.__seek(t)` im `?render`-Modus mehrere Zeitpunkte abtasten und die Pfade
@@ -654,6 +659,12 @@ gegen sie und darüber hinaus.
 - **Die Rückmeldung einer Falle am Fallenpunkt nachrechnen** (Einheitskreis 08.10.2026): «im Uhrzeigersinn
   gedreht» stand bei \((0.71 \mid -0.71)\) = 315°, gemeint war \((-0.71 \mid -0.71)\).
 - **Eine Gerade auf einer Achse ist unsichtbar** (Gerade OP bei 90°): eigens hervorheben und beschriften.
+
+- **Das Einführungsbild verrät die Lösung nicht** (Modellieren 08.10.2026): Becher bis 20/10 gefüllt, Rechtecke
+  5 und 7 breit, Balken 14 : 16, bevor gerechnet ist. Neutral beginnen, die Lösung beim Satz zeigen, der sie nennt.
+- **Rechnereingaben, die im Bild ablaufen, mitsprechen** — sonst sieben Sekunden Tastendrücke in Stille.
+- **Anker nicht auf Zahlwörter legen**: Whisper schreibt «sechzehntausend» als «16 000», der Anker fällt stumm auf
+  eine Schätzung zurück. Nachbarwort wählen. Nach Teilvertonung die Szenendauer prüfen (Stille am Ende).
 
 **Animationen und Übungen**
 - Kein Ziel der Aufgabenleiste ist schon im Startzustand erfüllt; Ziele sind nicht die
@@ -762,6 +773,9 @@ gegen sie und darüber hinaus.
 - Selbsteinschätzung verspricht keine Kompetenz, die der Test nicht prüft; jede Aufgabe ist
   einem Kapitel zugeordnet.
 - Datenschutz: kein Name, keine Standortdaten im Foto.
+- **Teile nach Hilfsmittel, nicht nach Aufgabenart** (Modellieren 08.10.2026): Ein Teil «Zahlenrätsel, ohne
+  Rechner» verlangte eine quadratische Gleichung von Hand, die das Leitprogramm nur mit poly-solv löste. Was im
+  Teil ohne Rechner steht, muss ohne Rechner geübt sein.
 - **Ein Fehlerbeispiel im Raster muss wirklich falsch sein** (Einheitskreis 08.10.2026): «180° − 63.4°» als
   Fehler ergab 116.6° — die richtige Antwort. Jede Fehlerzahl ausrechnen.
 - **Gleiche Zahlen, gleiche Punkte**: Zwei typische Fehler mit denselben Ergebnissen dürfen nicht verschieden
