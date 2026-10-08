@@ -964,3 +964,96 @@ Gleichung bzw. Notiz in parameter «Die Fälle» und Kontrolle Verfahren F5 ab S
 Bewusst belassen: Clipzeit 1:07 (HOWTO §7 rundet ab, die Bibliothek rundet); Bewertungspaket S. 5 nur
 Selbsteinschätzung (Abschnittsfolge nach §9, Kästen nicht teilbar); optionale Neuvertonungen («Lösungen» in
 Kontrolle Verfahren F3, «m ≠ 0» im Ton) nicht gemacht.
+
+## Prüfung Trigonometrische Berechnungen (08.10.2026)
+
+Skill `/lp-pruefung leitprogramme/trigonometrische-berechnungen.html`, drei Agenten (Seite, Clips, PDFs), Stand Commit
+`2f968ca` (unverlinkt, noindex, nicht live). `seite.*`/`clips.py` = `scripts/lp/trigonometrische-berechnungen/`,
+`GT`/`BP` = `downloads/leitprogramme/trigonometrische-berechnungen/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** in Vortest, 1a–5e, Festhalten, Arbeitsbereichen, 10 Clips, 25 Kontrollfragen, GT G1–G7 samt
+Folgefehlern. Werkzeuge grün (`pruef-uebungen` 11 × 2000, `pruef-leiste` 5, `pruef-geo` 5, `pruef-fragen` 5 × 9/9).
+Nachgeprüft vom Hauptagenten: H1 (Bild `fest-sim3.png`), GT-Zahlen G1–G7.
+
+### HOCH
+- [ ] **H1 · Gesperrte Regler zeigen falsche Werte, teils die gesuchte Grösse** (`seite.js` `werte()`; sim1 A7, sim2 A7, sim3 A7, sim5 A5): Figur zeichnet `fest`, `.sl-val` zeigt den Startwert (sim3 A7 «15 m | 52°» bei h = 14, d = 20, gesucht α). → `.sl-val` aus `w` schreiben, gesuchte Grösse «?».
+- [ ] **H2 · Steigungs-Übung: Sinus statt Tangens oft als richtig gewertet** (`seite.js:627–638`): arcsin(0.05) = 2.87° vs. arctan 2.86°; rund 23 % der Würfe zählen den Fehler als richtig, 49 % unerkannt. → nur Steigungen ab ~14 % / Winkel ab 8° würfeln oder Diagnose vor dem Nah-Filter.
+- [ ] **H3 · Kontrolle Seiten F1: richtiger Klick zählt als falsch** (`clips.py:309`, `tol=0.9` um (0|2.5) auf BC von (0|0) bis (0|5)): nur 36 % der Seite angenommen. → `tol` 1.8 (Abstand zu AB 2.12, zu CA 2.5) und Fallen auf den anderen Seiten.
+- [ ] **H4 · SSW-Regel ohne «α spitz»** (Festhalten 4, `seite.py:293`): bei α = 120°, c = 6, a = 5.5 (h = 5.20 < a < c) kein Dreieck. Themenseite Z. 827 gleich (→ Themenseiten unten).
+
+### MITTEL
+- [ ] M1 · Arbeitsbereich 4: Fehlwerte A5 17.49 (passt zu keiner Rechnung; a/c vertauscht ergibt 28.55) und A7 3.82 (c·sin α/sin β = 3.81 ausserhalb Toleranz; Meldung meint a·sin α/sin β = 4.45) greifen nie; RAD-Werte 0.76/0.51 nur bei gemischtem Modus.
+- [ ] M2 · Ein Zeichen h für zwei Höhen im selben Festhalten 4 (`seite.py:290` Höhe von C, `:293` Höhe von B). → h_c bzw. «Höhe von B».
+- [ ] M3 · «Welcher Satz?» nennt den Fall (SWS …) gleich mit (`seite.js:789`), nur 8 feste Fälle. → Fall erst in der Rückmeldung.
+- [ ] M4 · Raster BP: G3 Skizzenzeile verlangt Höhenwinkel, die die Aufgabe nicht fordert (BP:87/61); G3 zwei typische Fehler mit gleichen Zahlen (14.25/8.57), verschiedene Punkte (BP:92–93); viele E-Zeilen in Folge kosten einen Fehler doppelt (G3 Abstand, G4 b, G5 β → Folgepunkte); G7 Vergleich c² vs a² + b² nie geübt (in 5b ergänzen).
+- [ ] M5 · GT G5 Titel «Zwei mögliche Dreiecke» verrät (a). → «Seite, Seite, Winkel».
+- [ ] M6 · Clips: hoehen «Benennen» GK-Beschriftung bei 1.9 s, «Gegenkathete» bei 4.6 s; Kontrolle Höhen F3 «Vom Turm aus» → «Von der Turmspitze aus»; Kontrolle Seiten F4 Rückmeldung «Das passt zur Ankathete» zu 6.62 irreführend; cosinussatz «Pythagoras»/«Stumpf» ohne Verweis auf 5.4 und Seite a nicht markiert (**Neuvertonung** je nach Wortlaut).
+- [ ] M7 · GT deckt Kapitelziele nicht ganz: Steigung % ↔ Grad, SSW «kein/ein Dreieck». (Selbsteinschätzung ehrlich.)
+
+### NIEDRIG
+- [ ] Seite: Tiefenwinkel-Satz (`seite.py:249`) präzisieren («Tiefenwinkel von oben = Höhenwinkel von unten»); Kapitel 2 ohne Aufgabe mit Figur; «(x ≠ 90°)» → «spitzer Winkel x»; «a wird länger» → «… als beim rechten Winkel»; Übung `flaeche` Tipp (p·q)/2; Übung `hoehe` «Baum» bis 79 m; `winkel-rw` krumme Längen, Funktionsmeldung nie erreichbar; `sinussatz` «γ vergessen» bei γ ≈ 90° unsichtbar; G4b Kapitelzuordnung.
+- [ ] Clips: Kontrolle Höhen F1 «(Augenhöhe vernachlässigt)»; sinussatz ein Satz zu h = c·sin α; Baumkrone über der Spitze; «35°» bei C₂, «c = 6» Tinte statt Orange; Steigungsbogen ohne «x»; «β = 90° − …» vs. «90° − x»; Kontrolle Seiten F5 «doppelt so gross»; Kontrolle Sinussatz F4 «freien Schenkel»; Hörprobe «a wird länger».
+- [ ] PDFs: G1 «vertauscht» (a) nur 0, wenn dort vertauscht; G2 «Rest zählt» klären; G6 Vorzeichenfehler einheitlich; G7 Urteil 0 nur bei Zustimmung; G6 «125°» im Bogen; BP Umbruch im KI-Auftrag Punkt 5; Schreibplatz G3/G7, Seite 3 halb leer; Selbsteinschätzung «Teil» vs. «Kapitel».
+
+## Prüfung Einheitskreis (08.10.2026)
+
+Skill `/lp-pruefung leitprogramme/einheitskreis.html`, Stand Commit `2f968ca`. `seite.*`/`clips.py` = `scripts/lp/einheitskreis/`,
+`GT`/`BP` = `downloads/leitprogramme/einheitskreis/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** (Vortest, 1a–5d, Festhalten, Leistenziele, 10 Clips, 25 Kontrollfragen, GT G1–G8). Werkzeuge grün
+(`pruef-uebungen` 10 × 2000, `pruef-formelsatz`, `pruef-leiste` 5, `pruef-fragen` 5 × 9/9, `zahlen.py`).
+Nachgeprüft vom Hauptagenten: H1, H2.
+
+### HOCH
+- [ ] **H1 · BP G7 wertet die richtige Antwort als Fehler** (BP:141): «180° − 63.4°» = 116.6° ist der richtige zweite Punkt; gemeint 180° − (−63.4°) = 243.4°.
+- [ ] **H2 · Festhalten 5: «sin φ = w ⇒ φ = arcsin w»** (`seite.py:433–435`): falsch (sin 150° = 0.5, arcsin 0.5 = 30°). → «arcsin w ist der Winkel aus [−90°; 90°] mit sin φ = w». Themenseite g5-4 Z. 947 gleich.
+- [ ] **H3 · Dreieck OQP widersprüchlich**: Clip sinus-cosinus «Weiter drehen» sagt «bei 140° kein solches Dreieck», zeichnet es aber (`P_teile` mit `'dreieck'`); Kontrollclip 3 F5 und Festhalten 3 rechnen mit OQP in jedem Quadranten; «Winkel φ bei O» (`seite.py:347`) gilt nur im I. Quadranten. → «kein Dreieck mehr mit φ bei O» + Referenzwinkel (**Neuvertonung** sinus-cosinus «Weiter drehen» falls Wortlaut).
+- [ ] **H4 · Übung «Aus einem Wert die anderen» verwirft richtig gerundete Dezimalzahlen** (`seite.js:693`, Toleranz 0.0015; −1.33 statt −4/3 → irreführende Meldung). → «auf drei Dezimalen» und «zu grob gerundet» erkennen.
+- [ ] **H5 · Übung «Exakte Werte»: Sperrliste lässt 15 Aufgaben, 60 % Achsenwerte, nie 30°/45°/60°** (`seite.js:608`). → Wurfraum erweitern (negative, > 360°, Bogenmass), Achsen seltener.
+
+### MITTEL
+- [ ] M1 · Clips: Kontrolle Sinus/Cosinus F2 Falle (0.707 | −0.707) mit Rückmeldung «im Uhrzeigersinn» (gehört zu (−0.707 | −0.707)); symmetrien «Anwenden» «ohne Taschenrechner» −0.906 ohne Angabe cos 25° ≈ 0.906; Gerade OP bei 90° unsichtbar (tangens-pythagoras «Kein Wert», Kontrolle 3 F3); besondere-winkel «Referenzwinkel» dreht statt spiegelt; Kontrolle Periode F2/F3 prüfen dasselbe (+360°). (**Neuvertonung** symmetrien «Anwenden», ggf. Kontrolle Periode F3.)
+- [ ] M2 · Hauptwert aus β (Übung «Welchen Winkel liefert der Rechner?», GT G7b/G8b) nirgends gezeigt; Festhalten 5 braucht ein Beispiel — Abgrenzung zu LP 5.5 (zweite Lösung) wahren.
+- [ ] M3 · Wiederholungen (HOWTO §9): GT G3 = Aufgabe 1d (P(0.28 | −0.96)); G2(b) cos 315° = 2b; G4 = 4a mit 35°; G5 = 4e; Aufgabe 5d = Festhalten-Fehler (sin⁻¹ 0.5 → 0.524); Kontrolle Symmetrien F5 tan 35°/215° und Kontrolle Besondere F1 cos 240° wie GT.
+- [ ] M4 · Raster: G1 Toleranz P (±14°) vs. S (±0.25) widersprüchlich → S als Folgepunkt zur eigenen Geraden; G2 «exakt angeben» ohne Weg, Raster verlangt Weg; G8(a) Begründungszeile teilrichtig lesbar; G6 Himmelsrichtung ohne Vorlauf, Antwortform offen; Teil A Hilfsmittel (Geodreieck?); RLP-Vermerk «ohne Hilfsmittel» nur bei K3 — Auslegung als solche kennzeichnen (GT und Seite).
+- [ ] M5 · «Gegenwinkel» für 180° − α (`seite.py:397`) kollidiert mit LP 5.3 (Gegenwinkel = gegenüber einer Seite). → «Supplement».
+- [ ] M6 · Kapitel-3-Ziel «warum bei 90° kein Tangens» und Rückführung über 360° ohne HM im GT nicht geprüft.
+
+### NIEDRIG
+- [ ] Seite: sim4 A2/A3 Durchklicken genügt; sim1 A4 prüft nur φ = 200; «zieh jeweils an α»; Festhalten 4 «−α = 360° − α» als Gleichung, Punktspiegelung unter «Spiegelachsen», «an der Mitte O»; tan-Spalte ohne Bedingung; Referenzwinkel-Formeln nur 0°–360° (Aufgabe 2a verlangt −60°, 420°); «Exakte Werte» auf den Achsen meldet Referenzwinkel; Sperrliste `tw|210`, `hw|cos|305`, `sw|25|cos|335`; Clipzeit 13.1 min (> 12).
+- [ ] Clips: Ton/Bild runden verschieden (0.84/0.839, 1.19/1.192, 0.58/0.577); «nur bei 90° und 270°»; «sein Winkel ist positiv»; Beschriftungen «23.6°» über «y = 0.4», «y = 1.2 …» über y-Achse, «20°» bei «−1», «180°−α» am Punkt, B auf A 0.8 s; Referenzbogen orange (Kommentar sagt Tinte); Komplement-Formel ungesprochen; Hörprobe «Arkussinus»/«Arkustangens».
+- [ ] PDFs: G3 «≈ −3.43» in Teil A, Vorzeichenbegründung; G4 «Symmetrie genannt» definieren; G5 reines Zitat; Platz für Skizzen G2/G5, halbleere Seiten GT und BP.
+
+## Prüfung Trigonometrische Gleichungen (08.10.2026)
+
+Skill `/lp-pruefung leitprogramme/trigonometrische-gleichungen.html`, Stand Commit `2f968ca`. `seite.*`/`clips.py` =
+`scripts/lp/trigonometrische-gleichungen/`, `GT`/`BP` = `downloads/leitprogramme/trigonometrische-gleichungen/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** (Vortest, 1a–4e, Festhalten, Leistenziele, 8 Clips, 20 Kontrollfragen, GT G1–G7 samt Folgefehlern,
+Sperrliste deckt GT). Werkzeuge grün (`pruef-uebungen` 8 × 2000, `pruef-formelsatz`, `pruef-leiste` 4, `pruef-fragen` 4 × 9/9).
+Nachgeprüft vom Hauptagenten: H1 (Toleranz 0.3 bei Schritt 0.5), H2 (Selektor `.sim-breit svg`).
+
+### HOCH
+- [ ] **H1 · Sim 2 (5 Ziele) und Sim 3 (3 Ziele) «Dreh P auf …» mit Maus/Finger kaum treffbar** (`seite.js:314, 363` Toleranz 0.3, Regler 0–360 Schritt 0.5, 144 px): bei 360 px alle 8 unerreichbar. → Schritt 1°, Toleranz ≥ 0.6 bzw. 1° gegen den ungerundeten Zielwinkel.
+- [ ] **H2 · Sim 4: alle Formeln der Aufgabenleiste auf eigenen Zeilen** (`seite.py:69` `.sim-breit svg{display:block…}` trifft MathJax). → `.sim-breit .kurven-rahmen > svg`.
+- [ ] **H3 · Raster G4/G5: nur eine Lösung gibt 3 von 4 P** (BP:97–105): «Nur 339.5°» fehlt als typischer Fehler, Folgepunkt-Zeile «Lösungsmenge, Probe» passt dazu; G6 behandelt denselben Fehler anders. Ausserdem G4 Menge + Probe in einer Zeile (Regel «teilrichtig = 0» vs. «oder»), G4 «Vorzeichen übersehen» Doppelabzug, G3(b) «beide Familien» vs. typischer Fehler.
+
+### MITTEL
+- [ ] M1 · Sim 1 A6: Klick auf «cos» löst die Aufgabe (`seite.js:272`, Startwert c = 0.5 = Ziel). → anderes Ziel/Startwert.
+- [ ] M2 · Übung «Wie viele Lösungen?» würfelt nie n = 1 (Sperrliste sperrt alle ±1, `seite.js:503/529`). → Sperre nur je Funktion/Intervall.
+- [ ] M3 · Übungen Kapitel 1/3 verlangen [−180°; 180°[ vor Kapitel 4 (60 % bzw. 78 % der Würfe); positive Sinus-Sonderwerte auf [0°; 360°[ nie. → Kapitel 1/3 nur [0°; 360°[.
+- [ ] M4 · Kapitel-4-Kurvenbild bei 360 px 47 % verdeckt, Leistenaufgaben 2 und 5 im verdeckten Teil, kein Hinweis.
+- [ ] M5 · Clips: Wahlfragen-Auflösungen zeigen falsche Angebote nicht rot (§15) — Kontrolle Einheitskreis F4, Arkus F1/F2/F4, Tangens F1/F5, Lösungsmenge F2/F5; loesungsmenge «Weiter drehen» Punkte 30°/150° vor der Kurve (`ein` 1.9 / 3.35); tangens «Immer lösbar» Gerade schwenkt über die Waagrechte statt zur Senkrechten.
+- [ ] M6 · Lösungsbild 3d: «S» von «333.4°» ganz verdeckt; Kurvenbild 4b ohne ±1 (Beschriftung links aus dem Bild, `seite.js:129`), y = −0.9 unbeschriftet.
+- [ ] M7 · Wiederholungen: GT G4 ≈ 2c/Festhalten 2, G5 ≈ 4b, G6 ≈ 4c, G2(b) cos φ = 1 = 1e/4d.
+- [ ] M8 · Vortest prüft kein Tangens-Vorwissen (S(1 | tan φ), √3/3) — Link auf `einheitskreis.html#…` Kapitel 3.
+
+### NIEDRIG
+- [ ] Seite: Lösung 4e Begründung (Abstände 120°/240°); Feldnamen «φ₁/φ₂» kollidieren mit φ₁ = Hauptwert; «≈» fehlt (Sim 4 Live-Zeile, Lösungen `anzahl` dreistellig mit Komma, `quadranten`); Sinuskurve über Achsenzahlen Sim 4; S bei c = ±2.4 halb aus dem Bild; Sim 3 A6 «ungefähr 243°» → «auf ganze Grad».
+- [ ] Clips: Kontrolle Einheitskreis F5 Gerade y = 1.4 über y-Achse (ybereich ±1.7) und Option «Fehlermeldung» (Rechnerangabe unbelegt); P unbeschriftet; Kontrolle Lösungsmenge F4 Farbe 120°/480°; `:` statt `\colon`; «− 210°» als Rechenzeichen; Ergebnis vor dem Ton (einheitskreis «Zwei Punkte» 150°, «Besondere Werte» Tabelle); Gradbeschriftungen von Linien gekreuzt; «Wurzel aus zwei halbe»; «minus einunddreissig Grad» ohne «ungefähr»; Kontrolle Lösungsmenge F3 Text ≠ Ton; «4. Quadrant» → «IV.»; Tangens-Kurvenbild Pole und y = 1 gleich gezeichnet.
+- [ ] PDFs: Dezimalkomma + Komma als Trenner mehrdeutig; Bogenmass in G3 regeln; G5 «720°» unrealistischer Fehler; Platz für Skizzen G2/G4; BP Seite 1 halb leer; G7(a) (A).
+
+## Themenseiten 5.3–5.5: beim Bau der Leitprogramme gemeldet (08.10.2026, ohne Auftrag nicht geändert)
+- [ ] g5-3: Fälle klein/gross (wsw/WSW); GK/AK/H neben Geg/An/Hyp, SOH-CAH-TOA, «GAGA», «HY»; «Arcus» vs. «Arkus»; cos 110° vor 5.4; Merkkasten Fläche «Pythagoras-Spezialfall»; SSW-Regel ohne «α spitz» (Z. 827).
+- [ ] g5-4: «sin φ = w ⇒ φ = arcsin w» (Z. 947, fachlich falsch); Koordinaten mit Komma in Animation 1/2; «Strahl OP» trifft die Tangente im II./III. Quadranten nicht, Tangens als «Länge RS»; Farben sin/cos uneinheitlich; Bogenmass-Verweis auf 5.1; «Funktionen in Kapitel 5.5».
+- [ ] g5-5: **Tangens in [0°; 360°[ «φ₁ und φ₁ + 180°» falsch für c < 0** (tan φ = −1: 135°, 315°); RLP-Box «Arcusfunktion» statt «Arkusfunktion»; drei Schreibweisen für alle Lösungen; Mengen mit Komma, «𝕃 ≈ {…}»; arctan-Bereich (−90°; 90°); Mini-Check Riesenrad sin x = 0.5 vs. Mittelpunktshöhe; «0° ≤ φ ≤ 720°» vs. [0°; 720°[.
