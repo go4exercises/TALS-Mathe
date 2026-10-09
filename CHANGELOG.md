@@ -4,6 +4,24 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 08./09. Oktober 2026 · Je Themenseite 5.2a–d ein Leitprogramm
+
+### Hinzugefügt
+
+- **Vier Leitprogramme statt «Planimetrie»:** `dreiecke.html` (GF 5.2a), `vierecke.html` (5.2b),
+  `kreis-kreisteile.html` (5.2c) und `aehnlichkeit.html` (5.2d), je Vorwissen, vier Kapitel mit Geometrie-Arbeitsbereich,
+  acht Clips (Reihen «Dreiecke sehen», «Vierecke sehen», «Kreisteile sehen», «Ähnlichkeit sehen») und Gesamttest mit
+  Bewertungspaket. Die Teilkompetenzen von RLP 5.2 sind je Objekt zugeordnet, erarbeitet, geübt und im Test geprüft.
+  Geprüft nach HOWTO-leitprogramme §15 (zwölf Prüfer), Befunde behoben, freigeschaltet. `planimetrie.html` steht unter
+  «Alte Leitprogramme».
+
+### Geändert
+
+- **Themenseiten 5.2a–d:** Streckung mit \(k \lt 0\) ist gleichsinnig (Drehung um 180°), Längen mit \(|k|\); «Kreis
+  mit \(d = 1\)» statt Einheitskreis mit \(r = \tfrac12\); Tangente über den Berührpunkt definiert; Trapez-Schenkel \(b\)
+  und \(d\) statt der Diagonalennamen (Versatz jetzt \(v\)); Höhe als Lot auf die Gerade durch die Seite.
+- **Clip-Bauer:** `"gleichmaessig": true` an bewegten Kurven aus Physik übernommen (lineare statt weiche Überblendung).
+
 ## [Unveröffentlicht] — 08. Oktober 2026 · Leitprogramme Trigonometrie und Textaufgaben
 
 ### Hinzugefügt

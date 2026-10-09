@@ -22,7 +22,7 @@ Die Seite steht bis zur Freischaltung unverlinkt: Beim ersten Lauf setzt `seite.
 ## Arbeitsbereiche
 
 Wie in `scripts/lp/planimetrie/README.md`: `arbeitsbereich('simN', { fenster, zeichnen(F, w, k), aufgaben })`, Aufgaben mit
-`ziel`/`probe`, `wahl` (Linie antippen) oder `frage` (Grösse eingeben); `verdeckt: ['h']` zeigt den gesuchten Reglerwert als «?».
+`ziel`/`probe`, `wahl` (Linie antippen) oder `frage` (Grösse eingeben); `verdeckt: ['h']` zeigt den gesuchten Reglerwert als «?». Seit der Prüfung (08.10.2026) blendet `verdeckt` auch das Karo und den gesperrten Regler aus — sonst liesse sich die Grösse abzählen. sim2 A6 («Tipp die Höhe h_b an») startet mit a 6, h 4, v 3, damit die Falle BD nicht wie eine Höhe aussieht.
 
 | Bereich | Figur | Regler (Start) |
 |---|---|---|
@@ -34,6 +34,14 @@ Wie in `scripts/lp/planimetrie/README.md`: `arbeitsbereich('simN', { fenster, ze
 
 Der Versatz der oberen Seite heisst **v** (die Themenseite nennt ihn d, das ist hier schon die Seite DA), der Überstand im
 gleichschenkligen Trapez **ü** = (a − c)/2.
+
+## Stand nach der Prüfung (08.10.2026)
+
+Behoben nach `TODO.md` «Prüfung Leitprogramme GF 5.2a–d». Neu geübt: die Umkehrung «das Viereck an den Diagonalen
+erkennen» (Festhalten 1, Übung `familie` mit Wenn-dann-Aussagen, Aufgabe 1f), «β ist um d° grösser als α»
+(`viereck-winkel`) und die Höhe im Parallelogramm aus dem Teildreieck (`trapez-hoehe`). Der Gesamttest ist neu gebaut:
+**24 P**, G1–G6, jede Aufgabe kombiniert zwei Kapitel; Figuren bewusst verzerrt. Raster: (E) für Ergebnisse direkt aus
+den Angaben, (F) für Folgezeilen, «unmöglich» ausgeschrieben.
 
 ## Clips
 
