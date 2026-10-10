@@ -126,6 +126,12 @@ SEITEN = {
    titel='Notationstrainer — Definitions- und Lösungsmengen richtig aufschreiben',
    beschreibung='Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit drei Fächern zum Wiederholen.',
    themen=['Mathematik', 'Definitionsmenge', 'Lösungsmenge', 'Intervall', 'Grundmenge', 'Lernkartei']),
+ 'werkzeuge/strategietrainer.html': dict(
+   ort='Werkzeuge · Strategietrainer',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Strategietrainer — den passenden Lösungsschritt wählen',
+   beschreibung='Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.',
+   themen=['Mathematik', 'Lineare Gleichung', 'Quadratische Gleichung', 'Lösungsverfahren', 'Übung']),
  'leitprogramme/potenzen.html': dict(
    ort='Leitprogramm · Potenzen',
    typ='article', lrt='Leitprogramm',

@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategietrainer — Mathe begreifbar</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Strategietrainer — den passenden Lösungsschritt wählen">
+<meta property="og:description" content="Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html",
+   "name": "Strategietrainer — den passenden Lösungsschritt wählen",
+   "description": "Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Lineare Gleichung"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Quadratische Gleichung"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Lösungsverfahren"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Übung"
+    }
+   ],
+   "keywords": "Mathematik, Lineare Gleichung, Quadratische Gleichung, Lösungsverfahren, Übung",
+   "learningResourceType": [
+    "Werkzeug",
+    "Übung"
+   ],
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<link rel="stylesheet" href="../style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
+  svg: { fontCache:'global', scale:1.05 },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+<style>
+/* Strategietrainer — seiteneigene Klassen (Präfix st-), Farben aus style.css.
+   Orange = Aufgabe und Wahl, Grün = richtig und Lösung, Rot = Fehlgriff, Grau = erlaubter Umweg.
+   Seitenspalte und Karte wie im Notationstrainer, der Verlauf wie im Umformer der Leitprogramme. */
+.st-wrap { grid-template-columns:minmax(0, 1fr) 190px; gap:44px; }
+.st-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
+.st-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
+  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
+.st-seite summary::-webkit-details-marker { display:none; }
+.st-seite summary::before { content:'▸ '; }
+.st-seite details[open] summary::before { content:'▾ '; }
+.st-gruppe { margin-bottom:16px; }
+.st-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
+  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
+.st-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
+  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
+.st-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
+  border-radius:3px; background:var(--weiss); }
+.st-opt.aktiv { color:var(--tinte); }
+.st-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
+.st-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
+.st-opt:hover { color:var(--blau); }
+.st-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
+.st-zahl b { color:var(--tinte); font-weight:600; }
+.st-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
+@media (min-width:901px) { .st-seite summary { display:none; } }
+@media (max-width:900px) {
+  .st-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
+  .st-seite { order:-1; position:static; margin-bottom:-10px; }
+  .st-seite details[open] > div { padding:12px 4px 0; }
+  .st-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
+}
+.st-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
+.st-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
+.st-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:10px; }
+.st-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
+.st-tag.st-grund { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); margin-left:auto; }
+.st-verlauf { display:grid; grid-template-columns:minmax(0,auto) auto; justify-content:start; gap:4px 22px; padding:10px 14px;
+  border:1px solid var(--linie); border-radius:9px; background:var(--papier); min-height:2.6em; overflow-x:auto; font-size:1.05rem; }
+.st-zeile { display:contents; }
+.st-gl { color:var(--blau); }
+.st-op { color:var(--orange); font-size:.86rem; align-self:center; font-family:var(--sans); }
+.st-zeile.st-ende .st-gl { color:var(--gruen); font-weight:600; }
+.st-frage { font-family:var(--sans); font-size:.9rem; font-weight:600; color:var(--orange); margin:14px 2px 8px; }
+.st-wahl { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; }
+.st-knopf { font-family:var(--sans); font-size:.86rem; line-height:1.3; cursor:pointer; border-radius:8px; padding:7px 11px;
+  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--tinte); text-align:left; }
+.st-knopf:hover, .st-knopf:focus-visible { border-color:var(--orange); outline:none; }
+.st-knopf.st-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
+.st-knopf.st-umweg { border-color:var(--linie); background:var(--papier-2); color:var(--tinte-2); }
+.st-knopf.st-zeigen { border-color:var(--gruen); box-shadow:0 0 0 2px var(--gruen-hell); }
+.st-knopf:disabled { cursor:default; opacity:.45; }
+.st-rueck { font-family:var(--sans); font-size:.9rem; margin-top:12px; border-radius:7px; }
+.st-rueck:empty { display:none; }
+.st-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
+.st-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
+.st-rueck.hinweis { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
+.st-rueck p { margin:0; }
+.st-rueck p + p { margin-top:6px; }
+.st-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
+.st-btn { font-family:var(--sans); font-size:.95rem; font-weight:600; padding:9px 18px; border-radius:8px; cursor:pointer;
+  border:1.5px solid var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
+.st-btn:hover { filter:brightness(.97); }
+.st-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
+.st-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
+.st-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
+.st-bilanz ul { margin:6px 0 0 18px; }
+[hidden] { display:none !important; }
+@media (max-width:560px) {
+  .st-vorne { padding-left:14px; padding-right:14px; }
+  .st-wahl { grid-template-columns:minmax(0, 1fr); }
+  .st-btn { min-width:0; flex:1 1 60%; }
+  .st-taste { display:none; }
+}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap st-wrap">
+  <main class="content">
+    <div class="page-titel">
+      <div class="pt-bereich">WZ · Werkzeuge</div>
+      <h1 class="pt-h1">Strategietrainer</h1>
+      <p class="pt-untertitel">Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus. Geübt wird das Entscheiden: Welcher Schritt passt hier, und warum passt ein anderer nicht?
+        Der Stoff dazu steht in <a href="../grundlagen/g2-2a-lineare-gleichungen.html">2.2a Lineare Gleichungen</a>
+        und <a href="../grundlagen/g2-2b-quadratische-gleichungen.html">2.2b Quadratische Gleichungen</a>.</p>
+    </div>
+
+<div class="st-karte" id="st-karte">
+  <div id="st-aufgabe">
+    <div class="st-vorne">
+      <div class="st-kopf"><span class="st-tag" id="st-nr"></span><span class="st-tag st-grund">\(\mathbb{G} = \mathbb{R}\)</span></div>
+      <div class="st-verlauf" id="st-verlauf" aria-live="polite"></div>
+      <p class="st-frage" id="st-frage">Was ist der nächste Schritt?</p>
+      <div class="st-wahl" id="st-wahl"></div>
+      <div class="st-rueck" id="st-rueck" aria-live="polite"></div>
+    </div>
+    <div class="st-knoepfe" id="st-weiter-box" hidden>
+      <button type="button" class="st-btn" id="st-weiter">Nächste Aufgabe →<span class="st-taste">Enter</span></button>
+    </div>
+  </div>
+  <div class="st-bilanz" id="st-bilanz" hidden></div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 So funktioniert der Trainer</div>
+  <p>Eine Serie hat zehn Zufallsaufgaben. Bei jeder wählst du aus derselben Liste den nächsten Schritt. Passt er, rechnet das Werkzeug ihn aus und schreibt die Umformung rechts daneben — wie im Heft. Am Schluss gibst du die Lösungsmenge an.</p>
+  <ul>
+    <li><strong>✓ Passt:</strong> Der Schritt wird ausgeführt. Oft passen zwei Schritte, zum Beispiel Faktorisieren und Mitternachtsformel.</li>
+    <li><strong>≈ Erlaubt, aber ein Umweg:</strong> Der Schritt wäre nicht falsch, führt aber nicht schneller ans Ziel. Er zählt nicht als Fehlgriff — wähle neu.</li>
+    <li><strong>✗ Passt nicht:</strong> Du erfährst, warum. Beim zweiten Fehlgriff im selben Schritt kommt ein Tipp, beim dritten wird der passende Schritt markiert.</li>
+  </ul>
+  <p>Die Liste bleibt immer gleich — auch Schritte, die zu einer ganz anderen Art Gleichung gehören. Genau das ist die Übung: erkennen, was hier passt. Gespeichert wird nichts.</p>
+</div>
+
+<details class="block block-merksatz" style="margin-top:10px">
+  <summary class="block-titel" style="cursor:pointer">⭐ Welcher Schritt wann?</summary>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <thead><tr><th>Schritt</th><th>passt, wenn …</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Mit dem Hauptnenner multiplizieren</td><td style="text-align:left;font-family:var(--sans)">Brüche vorkommen — das kommt zuerst.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Klammern auflösen</td><td style="text-align:left;font-family:var(--sans)">\(x\) in einer Klammer steckt und auf der anderen Seite nicht \(0\) steht. Erst danach zeigt sich, ob die Gleichung linear oder quadratisch ist.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Glieder mit \(x\) auf eine Seite, Zahlen auf die andere</td><td style="text-align:left;font-family:var(--sans)">die Gleichung linear ist — oder quadratisch ohne Glied mit \(x\): \(x^2 + 3 = 12\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Alles auf eine Seite: \(\ldots = 0\)</td><td style="text-align:left;font-family:var(--sans)">die Gleichung quadratisch ist und noch nicht \(0\) auf einer Seite steht.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Durch die Zahl vor \(x\) bzw. \(x^2\) teilen</td><td style="text-align:left;font-family:var(--sans)">nur noch \(a \cdot x = b\) oder \(a \cdot x^2 = b\) dasteht — oder alle Zahlen einen gemeinsamen Faktor haben.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Durch \(x\) teilen</td><td style="text-align:left;font-family:var(--sans)">nie: Die Lösung \(x = 0\) ginge verloren.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(x\) ausklammern</td><td style="text-align:left;font-family:var(--sans)">die Zahl ohne \(x\) fehlt: \(ax^2 + bx = 0\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Faktorisieren</td><td style="text-align:left;font-family:var(--sans)">ein Binom sichtbar ist oder \(x^2 + bx + c = 0\) sich mit ganzen Zahlen zerlegen lässt (Produkt \(c\), Summe \(b\)).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Satz vom Nullprodukt</td><td style="text-align:left;font-family:var(--sans)">ein Produkt \(= 0\) dasteht — nur bei \(0\), nie bei einer anderen Zahl.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Wurzel ziehen</td><td style="text-align:left;font-family:var(--sans)">das Quadrat allein steht: \(x^2 = c\) oder \((x + d)^2 = c\). Beide Vorzeichen!</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Mitternachtsformel</td><td style="text-align:left;font-family:var(--sans)">\(ax^2 + bx + c = 0\) dasteht. Sie geht immer — am meisten lohnt sie sich, wenn nichts anderes passt.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Quadratisch ergänzen</td><td style="text-align:left;font-family:var(--sans)">\(x^2 + px = k\) mit geradem \(p\) dasteht.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Lösungsmenge angeben</td><td style="text-align:left;font-family:var(--sans)">\(x = \ldots\) dasteht oder \(x\) ganz weggefallen ist.</td></tr>
+    </tbody>
+  </table>
+</details>
+
+  </main>
+  <aside class="st-seite">
+    <details id="st-seite-det">
+      <summary>Serie und Auswahl · <span id="st-kurz"></span></summary>
+      <div class="st-gruppen">
+        <div class="st-gruppe">
+          <div class="st-g-titel">Serie</div>
+          <div class="st-zahl"><span>Aufgabe</span><b id="st-z-nr"></b></div>
+          <div class="st-zahl"><span>Fehlgriffe</span><b id="st-z-fehl">0</b></div>
+          <div class="st-zahl"><span>Umwege</span><b id="st-z-um">0</b></div>
+          <div class="st-zahl"><span>Zeit</span><b id="st-z-zeit">0:00</b></div>
+        </div>
+        <div class="st-gruppe" id="st-bereich">
+          <div class="st-g-titel">Gleichungen</div>
+          <button type="button" class="st-opt aktiv" data-b="lin">Lineare Gleichungen</button>
+          <button type="button" class="st-opt aktiv" data-b="quad">Quadratische Gleichungen</button>
+        </div>
+        <div class="st-gruppe st-neu"><button type="button" id="st-neu">Neue Serie</button></div>
+      </div>
+    </details>
+  </aside>
+</div>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Werkzeuge · Strategietrainer</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script src="../nav.js"></script>
+<script>buildNav({ id: 'werkzeuge' });</script>
+<script>
+// ── KERN:ANFANG ─────────────────────────────────────────────────
+// Aufgaben, Zustände und Regeln — ohne DOM, damit .claude/tools/pruef-strategietrainer.mjs
+// den Block mit Tausenden Zufallsaufgaben durchspielen kann.
+//
+// Eine Aufgabe ist eine Folge von Zuständen. Jeder Zustand hat eine Art (k), die Zeile im
+// Verlauf (z, LaTeX) und seine Zahlen. REGELN[k](st) sagt für jede Strategie:
+//   ['ok', null, () => ({ zeilen:[[LaTeX, Umformung], …], op, next })]  — wird ausgeführt
+//   ['um', Text]   erlaubt, aber ein Umweg — kein Fehlgriff, neu wählen
+//   ['x',  Text]   passt nicht, mit Begründung
+// Was eine Art nicht nennt, kommt aus STANDARD ihrer Gruppe (lin, quad, ende).
+// Aufgaben werden von hinten gebaut (Lösung → Faktoren → ausmultipliziert): Jeder Schritt ist
+// darum bekannt, gerechnet wird nur mit ganzen Zahlen und exakten Wurzeln.
+
+const STRAT = [
+  ['brueche',     'Mit dem Hauptnenner multiplizieren'],
+  ['klammern',    'Klammern auflösen'],
+  ['sammeln',     'Glieder mit \\(x\\) auf eine Seite, Zahlen auf die andere'],
+  ['null',        'Alles auf eine Seite: \\(\\ldots = 0\\)'],
+  ['teilen',      'Durch die Zahl vor \\(x\\) bzw. \\(x^2\\) teilen'],
+  ['durchx',      'Durch \\(x\\) teilen'],
+  ['ausklammern', '\\(x\\) ausklammern'],
+  ['binom',       'Faktorisieren: Binom oder Zweiklammersatz'],
+  ['nullprodukt', 'Satz vom Nullprodukt'],
+  ['wurzel',      'Wurzel ziehen'],
+  ['mf',          'Mitternachtsformel'],
+  ['ergaenzen',   'Quadratisch ergänzen'],
+  ['L',           'Lösungsmenge angeben'],
+];
+const STRAT_NAME = Object.fromEntries(STRAT);
+
+// ── Zahlen ──
+const ggT = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
+const kgV = (a, b) => Math.abs(a * b) / ggT(a, b);
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const nz = (a, b) => { let v; do v = rnd(a, b); while (v === 0); return v; };
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const istQuadrat = n => n >= 0 && Math.round(Math.sqrt(n)) ** 2 === n;
+// n = k² · m mit m quadratfrei
+function zerlegen(n) { let k = 1; for (let i = 2; i * i <= n; i++) while (n % (i * i) === 0) { n /= i * i; k *= i; } return { k, m: n }; }
+// Exakte Zahl (p + q·√m) / d, gekürzt, Nenner positiv
+function wz(p, q, m, d) {
+  if (q !== 0 && m === 1) { p += q; q = 0; }
+  if (d < 0) { p = -p; q = -q; d = -d; }
+  if (q === 0) m = 1;
+  const g = ggT(ggT(p, q), d) || 1;
+  return { p: p / g, q: q / g, m, d: d / g };
+}
+const wzWert = w => (w.p + w.q * Math.sqrt(w.m)) / w.d;
+function bruchTex(n, d) {
+  if (d < 0) { n = -n; d = -d; }
+  const g = ggT(n, d) || 1; n /= g; d /= g;
+  if (d === 1) return String(n);
+  return (n < 0 ? '-' : '') + '\\frac{' + Math.abs(n) + '}{' + d + '}';
+}
+function wzTex(w) {
+  if (w.q === 0) return bruchTex(w.p, w.d);
+  const wur = (Math.abs(w.q) === 1 ? '' : Math.abs(w.q)) + '\\sqrt{' + w.m + '}';
+  if (w.p === 0) {
+    const s = w.q < 0 ? '-' : '';
+    return w.d === 1 ? s + wur : s + '\\frac{' + wur + '}{' + w.d + '}';
+  }
+  const zaehler = w.p + (w.q < 0 ? ' - ' : ' + ') + wur;
+  return w.d === 1 ? zaehler : '\\frac{' + zaehler + '}{' + w.d + '}';
+}
+const kl = n => n < 0 ? '(' + n + ')' : String(n);
+
+// ── Terme schreiben ──
+function poly(cs) {                       // cs = [[Koeffizient, 'x^2' | 'x' | ''], …]
+  let s = '', erster = true;
+  for (const [c, v] of cs) {
+    if (c === 0) continue;
+    const a = Math.abs(c);
+    s += c < 0 ? (erster ? '-' : ' - ') : (erster ? '' : ' + ');
+    s += (v && a === 1) ? v : a + v;
+    erster = false;
+  }
+  return s || '0';
+}
+const quadT = (a, b, c) => poly([[a, 'x^2'], [b, 'x'], [c, '']]);
+const linT = (a, b) => poly([[a, 'x'], [b, '']]);
+const mitVz = s => (s[0] === '-' ? s : '+' + s);                  // «\mid +3»
+const klammer = h => '(x ' + (h < 0 ? '-' : '+') + ' ' + Math.abs(h) + ')';
+const faktor = (a, h) => a === 1 ? (h === 0 ? 'x' : 'x ' + (h < 0 ? '-' : '+') + ' ' + Math.abs(h))
+                                 : (a === -1 ? '-' : String(a)) + (h === 0 ? 'x' : klammer(h));
+const teilOp = a => '\\(\\mid :' + kl(a) + '\\)';
+const T = s => '\\(' + s + '\\)';
+
+// ── Zustände ──
+function lsg(wurzeln, z) {
+  const w = wurzeln.slice().sort((u, v) => wzWert(u) - wzWert(v));
+  if (!z) z = w.length === 1 ? 'x = ' + wzTex(w[0]) : 'x_1 = ' + wzTex(w[0]) + '; \\quad x_2 = ' + wzTex(w[1]);
+  return { k: 'lsg', z, w };
+}
+function lsgL(st) {
+  if (st.alle) return '\\mathbb{L} = \\mathbb{R}';
+  if (!st.w.length) return '\\mathbb{L} = \\{\\,\\}';
+  return '\\mathbb{L} = \\{' + st.w.map(wzTex).join(';\\, ') + '\\}';
+}
+const linWid = (z, wahr) => ({ k: 'wid', z, wahr });
+const linIso = (A, E) => A === 1 ? lsg([wz(E, 0, 1, 1)]) : { k: 'lin_iso', A, E, z: linT(A, 0) + ' = ' + E };
+const linSeiten = (A, B, C, D, z) => ({ k: 'lin_seiten', A, B, C, D, z: z || linT(A, B) + ' = ' + linT(C, D) });
+function linNorm(A, B, C, D) {
+  if (A === 0 && C === 0) return linWid(B + ' = ' + D, B === D);
+  if (C === 0 && B === 0) return linIso(A, D);
+  return linSeiten(A, B, C, D);
+}
+// Klammern: z wie gestellt, roh = aufgelöste Zeile (optional), dann die Normalform
+const linKl = (z, A, B, C, D, roh) => ({ k: 'lin_kl', z, A, B, C, D, roh });
+
+function qNorm(a, b, c) {
+  const st = { a, b, c, z: quadT(a, b, c) + ' = 0' };
+  if (c === 0) st.k = 'q_ohne_c';
+  else if (b === 0) st.k = 'q_rein';
+  else if (a !== 1 && b % a === 0 && c % a === 0) st.k = 'q_teilbar';
+  else if (a === 1 && istQuadrat(b * b - 4 * c)) st.k = (b * b === 4 * c) ? 'q_binom' : 'q_fakt';
+  else st.k = 'q_allg';
+  return st;
+}
+function qUng(a, b, c, d, e) {                     // ax² + bx + c = dx + e
+  if (a === 1 && c === 0 && d === 0 && b !== 0 && b % 2 === 0 && e !== 0) return qErg(b, e);
+  if (b === 0 && d === 0 && c === 0) return a === 1 ? qX2(e, 1) : qAIso(a, e);
+  return { k: 'q_ung', a, b, c, d, e, z: quadT(a, b, c) + ' = ' + linT(d, e) };
+}
+const qErg = (p, k) => ({ k: 'q_erg', p, kk: k, z: quadT(1, p, 0) + ' = ' + k });
+const qQuadrat = (h, r) => ({ k: 'q_quadrat', h, r, z: klammer(h) + '^2 = ' + r });
+const qAIso = (a, k) => ({ k: 'q_a_iso', a, kk: k, z: quadT(a, 0, 0) + ' = ' + k });
+const qX2 = (n, d) => { const g = ggT(n, d) || 1; n /= g; d /= g; if (d < 0) { n = -n; d = -d; }
+  return { k: 'q_x2', n, d, z: 'x^2 = ' + bruchTex(n, d) }; };
+// Produkt = 0: faktoren = LaTeX der Faktoren mit x, w = Lösungen
+const qProd = (z, faktoren, w, art) => ({ k: 'q_prod', z, faktoren, w, art });
+// Produkt = Zahl ≠ 0: aufgelöst zu x² + B·x + C = r
+const qKl = (z, B, C, r, art) => ({ k: 'q_kl', z, B, C, r, art });
+const linSchein = (z, A, B, D, roh) => ({ k: 'lin_schein', z, A, B, D, roh });   // → x² + Ax + B = x² + D
+const linX2 = (A, B, D, z) => ({ k: 'lin_x2', A, B, D, z });
+
+// ── Ausführen ──
+function mfAusf(a, b, c) {
+  const D = b * b - 4 * a * c;
+  const zeilen = [['D = ' + kl(b) + '^2 - 4 \\cdot ' + kl(a) + ' \\cdot ' + kl(c) + ' = ' + D, '']];
+  let next;
+  if (D < 0) next = lsg([], 'D \\lt 0 \\;\\Rightarrow\\; \\text{keine Lösung}');
+  else if (D === 0) {
+    zeilen.push(['x = \\frac{-' + kl(b) + '}{2 \\cdot ' + kl(a) + '}', '']);
+    next = lsg([wz(-b, 0, 1, 2 * a)]);
+  } else {
+    const { k, m } = zerlegen(D);
+    zeilen.push(['x_{1,2} = \\frac{-' + kl(b) + ' \\pm \\sqrt{' + D + '}}{2 \\cdot ' + kl(a) + '}', '']);
+    next = lsg([wz(-b, -k, m, 2 * a), wz(-b, k, m, 2 * a)]);
+  }
+  return { op: 'Mitternachtsformel', zeilen, next };
+}
+function wurzelAusf(links, n, d, h) {             // links² = n/d, links = x + h
+  if (n < 0) return { op: 'Wurzel ziehen', zeilen: [], next: lsg([], '\\text{Kein Quadrat ist negativ} \\;\\Rightarrow\\; \\text{keine Lösung}') };
+  const { k, m } = zerlegen(n * d);
+  const wTex = m === 1 ? bruchTex(k, d) : wzTex(wz(0, k, m, d));
+  const zeilen = [[links + ' = \\pm ' + wTex, '']];
+  if (n === 0) return { op: 'Wurzel ziehen', zeilen: [], next: lsg([wz(-h, 0, 1, 1)]) };
+  if (h === 0) return { op: 'Wurzel ziehen', zeilen: [], next: lsg([wz(0, -k, m, d), wz(0, k, m, d)]) };
+  return { op: 'Wurzel ziehen', zeilen, next: lsg([wz(-h * d, -k, m, d), wz(-h * d, k, m, d)]) };
+}
+
+// ── Regeln ──
+const KEIN_X2 = 'In der Gleichung kommt kein \\(x^2\\) vor — sie ist linear. Verfahren für quadratische Gleichungen braucht es hier nicht.';
+const NICHT_FERTIG = 'Noch steht \\(x\\) nicht allein — die Lösung lässt sich noch nicht ablesen.';
+const STANDARD = {
+  lin: {
+    brueche: ['x', 'Hier stehen keine Brüche.'],
+    klammern: ['x', 'Hier stehen keine Klammern, die aufgelöst werden müssten.'],
+    null: ['um', 'Erlaubt, aber bei einer linearen Gleichung brauchst du die \\(0\\) nicht. Sammle die Glieder mit \\(x\\) auf der einen Seite und die Zahlen auf der anderen.'],
+    durchx: ['x', 'Dann steht \\(x\\) im Nenner, und aus der linearen Gleichung wird eine Bruchgleichung. Gesucht ist \\(x\\) allein — nicht \\(x\\) weg.'],
+    ausklammern: ['x', KEIN_X2], binom: ['x', KEIN_X2], nullprodukt: ['x', KEIN_X2],
+    wurzel: ['x', KEIN_X2], mf: ['x', KEIN_X2], ergaenzen: ['x', KEIN_X2],
+    L: ['x', NICHT_FERTIG],
+  },
+  quad: {
+    brueche: ['x', 'Hier stehen keine Brüche.'],
+    klammern: ['x', 'Hier stehen keine Klammern, die aufgelöst werden müssten.'],
+    sammeln: ['um', 'Erlaubt, aber Glieder mit \\(x^2\\) und mit \\(x\\) lassen sich nicht zusammenfassen. Quadratische Gleichungen löst man aus der Form \\(\\ldots = 0\\).'],
+    null: ['um', 'Auf einer Seite steht schon \\(0\\).'],
+    durchx: ['x', 'Durch \\(x\\) teilen ist nur erlaubt, wenn \\(x = 0\\) sicher keine Lösung ist — sonst geht sie verloren. Bei quadratischen Gleichungen ist das der klassische Fehler.'],
+    ausklammern: ['x', '\\(x\\) lässt sich nicht aus allen Gliedern ausklammern — mindestens ein Glied hat kein \\(x\\).'],
+    binom: ['x', 'Faktorisieren hilft erst, wenn auf einer Seite \\(0\\) steht.'],
+    nullprodukt: ['x', 'Der Satz vom Nullprodukt braucht ein Produkt auf der einen und \\(0\\) auf der anderen Seite. Das steht hier nicht.'],
+    wurzel: ['x', 'Wurzel ziehen geht erst, wenn das Quadrat allein steht: \\(x^2 = c\\) oder \\((x + d)^2 = c\\).'],
+    mf: ['x', 'Die Mitternachtsformel braucht die Form \\(ax^2 + bx + c = 0\\). Ordne die Gleichung zuerst.'],
+    ergaenzen: ['um', 'Erlaubt, aber hier länger als nötig.'],
+    L: ['x', NICHT_FERTIG],
+  },
+};
+const GRUPPE = { lin_seiten: 'lin', lin_iso: 'lin', lin_kl: 'lin', lin_br: 'lin', lin_schein: 'lin', lin_x2: 'lin',
+  wid: 'ende', lsg: 'ende' };                    // alle q_* → quad
+const SCHON_1 = ['x', 'Vor \\(x^2\\) steht schon \\(1\\) — da gibt es nichts zu teilen.'];
+const KEIN_XGLIED = ['x', 'Es gibt kein Glied mit \\(x\\) allein, das man ergänzen könnte.'];
+
+const REGELN = {
+  // ── linear ──
+  lin_seiten: st => ({
+    sammeln: ['ok', null, () => {
+      const a = st.A - st.C, e = st.D - st.B;
+      const op = T('\\mid ' + mitVz(poly([[-st.C, 'x'], [-st.B, '']])));
+      if (a === 0) return { op, zeilen: [], next: linWid('0 = ' + e, e === 0) };
+      return { op, zeilen: [], next: linIso(a, e) };
+    }],
+    teilen: ['um', 'Erlaubt, aber teilen kommt am Schluss, wenn nur noch \\(a \\cdot x = b\\) dasteht. Jetzt '
+      + (st.C !== 0 && st.A !== 0 ? 'stehen noch auf beiden Seiten Glieder mit \\(x\\).' : 'steht noch eine Zahl neben dem Glied mit \\(x\\).')],
+  }),
+  lin_iso: st => ({
+    teilen: ['ok', null, () => ({ op: teilOp(st.A), zeilen: [], next: lsg([wz(st.E, 0, 1, st.A)]) })],
+    sammeln: ['um', 'Das ist schon geschehen: Links steht nur noch das Glied mit \\(x\\), rechts nur eine Zahl.'],
+    null: ['um', 'Erlaubt, aber ein Umweg. Es fehlt nur noch ein Schritt bis \\(x = \\ldots\\).'],
+  }),
+  lin_kl: st => ({
+    klammern: ['ok', null, () => {
+      const next = linNorm(st.A, st.B, st.C, st.D);
+      return { op: 'Klammern auflösen', zeilen: st.roh ? [[st.roh, 'zusammenfassen']] : [], next };
+    }],
+    sammeln: ['x', 'Das \\(x\\) steckt noch in der Klammer. Solange sie steht, lassen sich die Glieder mit \\(x\\) nicht sammeln.'],
+    teilen: ['um', 'Erlaubt, aber teilen kommt am Schluss, wenn nur noch \\(a \\cdot x = b\\) dasteht. Zuerst muss das \\(x\\) aus der Klammer.'],
+    null: ['um', 'Erlaubt, aber die Klammern bleiben stehen. Löse sie zuerst auf.'],
+  }),
+  lin_br: st => ({
+    brueche: ['ok', null, () => ({ op: T('\\mid \\cdot ' + st.N), zeilen: [], next: st.danach })],
+    sammeln: ['um', 'Erlaubt, aber mit Brüchen rechnet es sich mühsam. Mach sie zuerst weg.'],
+    teilen: ['um', 'Erlaubt, aber die Brüche bleiben. Mach sie zuerst weg.'],
+    null: ['um', 'Erlaubt, aber mit Brüchen rechnet es sich mühsam. Mach sie zuerst weg.'],
+  }),
+  lin_schein: st => {
+    const zuerst = ['x', 'Zuerst die Klammer auflösen — ob die Gleichung wirklich quadratisch ist, zeigt sich erst danach.'];
+    return {
+      klammern: ['ok', null, () => ({ op: 'Klammern auflösen', zeilen: [], next: linX2(st.A, st.B, st.D, st.roh) })],
+      ausklammern: zuerst, binom: zuerst, mf: zuerst, ergaenzen: zuerst,
+      nullprodukt: ['x', 'Auf der rechten Seite steht nicht \\(0\\). Der Satz vom Nullprodukt braucht \\(0\\) auf einer Seite.'],
+      wurzel: ['x', 'Auf der rechten Seite steht noch \\(x^2\\). Wurzel ziehen geht nur, wenn dort eine Zahl steht.'],
+      sammeln: ['x', 'Das \\(x\\) steckt noch in der Klammer — zuerst auflösen.'],
+      null: ['um', 'Erlaubt, aber die Klammer bleibt. Löse sie zuerst auf.'],
+      teilen: ['x', 'Hier gibt es keine Zahl vor \\(x\\), durch die man teilen könnte — zuerst die Klammer auflösen.'],
+      durchx: ['x', 'Durch \\(x\\) teilen hilft nicht und ist nur erlaubt, wenn \\(x \\ne 0\\) sicher ist. Zuerst die Klammer auflösen.'],
+    };
+  },
+  lin_x2: st => {
+    const weg = ['x', 'Vergleiche die beiden Seiten: \\(x^2\\) steht links und rechts und hebt sich weg. Die Gleichung ist gar nicht quadratisch.'];
+    return {
+      sammeln: ['ok', null, () => ({ op: T('\\mid ' + mitVz(poly([[-1, 'x^2'], [-st.B, '']]))), zeilen: [],
+        next: st.A === 0 ? linWid('0 = ' + (st.D - st.B), st.D === st.B) : linIso(st.A, st.D - st.B) })],
+      null: ['um', 'Erlaubt — dabei hebt sich \\(x^2\\) weg. Kürzer: Glieder mit \\(x\\) auf eine Seite, Zahlen auf die andere.'],
+      teilen: ['um', 'Erlaubt, aber zuerst sammeln: Dabei hebt sich \\(x^2\\) weg.'],
+      durchx: weg, ausklammern: weg, binom: weg, nullprodukt: weg, wurzel: weg, mf: weg, ergaenzen: weg,
+    };
+  },
+  // ── quadratisch ──
+  q_ung: st => {
+    const r = {
+      null: ['ok', null, () => ({ op: T('\\mid ' + mitVz(poly([[-st.d, 'x'], [-st.e, '']]))), zeilen: [],
+        next: qNorm(st.a, st.b - st.d, st.c - st.e) })],
+      binom: ['x', 'Faktorisieren hilft erst, wenn auf einer Seite \\(0\\) steht. Ordne zuerst.'],
+      teilen: st.a === 1 ? SCHON_1 : ['um', 'Erlaubt, aber ordne zuerst die Gleichung.'],
+    };
+    if (st.b === 0 && st.d === 0) {                // ax² + c = e: ohne Glied mit x
+      r.sammeln = ['ok', null, () => ({ op: T('\\mid ' + mitVz(poly([[-st.c, '']]))), zeilen: [],
+        next: st.a === 1 ? qX2(st.e - st.c, 1) : qAIso(st.a, st.e - st.c) })];
+      r.wurzel = ['x', 'Zuerst muss \\(x^2\\) allein stehen: Bring die Zahl auf die andere Seite.'];
+      r.ergaenzen = KEIN_XGLIED;
+    }
+    if (st.c === 0 && st.e === 0) {                // ax² + bx = dx
+      r.durchx = ['x', 'Durch \\(x\\) teilen verliert die Lösung \\(x = 0\\). Bringe alles auf eine Seite und klammere \\(x\\) aus.'];
+      r.ausklammern = ['um', 'Erlaubt, aber für den Satz vom Nullprodukt muss eine Seite \\(0\\) sein. Bringe zuerst alles auf eine Seite.'];
+    }
+    return r;
+  },
+  q_kl: st => ({
+    klammern: ['ok', null, () => ({ op: 'Klammern auflösen', zeilen: [], next: qUng(1, st.B, st.C, 0, st.r) })],
+    nullprodukt: ['x', 'Rechts steht \\(' + st.r + '\\), nicht \\(0\\). Aus «Produkt \\(= ' + st.r + '\\)» folgt nichts über die einzelnen Faktoren — der Satz vom Nullprodukt gilt nur für \\(0\\).'],
+    null: ['um', 'Erlaubt, aber dann steht ein Produkt neben einer Zahl — das hilft nicht. Löse zuerst die Klammern auf.'],
+    ausklammern: st.art === 'x' ? ['um', '\\(x\\) steht schon ausgeklammert, aber rechts steht nicht \\(0\\). So hilft das Produkt nicht.']
+                                : ['x', 'Hier lässt sich kein \\(x\\) aus allem ausklammern. Und rechts steht nicht \\(0\\).'],
+    binom: ['x', 'Die linke Seite ist schon ein Produkt — aber rechts steht nicht \\(0\\). Zuerst Klammern auflösen und ordnen.'],
+    sammeln: ['x', 'Die \\(x\\) stecken noch in den Klammern — zuerst auflösen.'],
+    teilen: ['x', 'Vor dem Produkt steht keine Zahl, durch die man teilen könnte.'],
+  }),
+  q_erg: st => ({
+    ergaenzen: ['ok', null, () => {
+      const h = st.p / 2;
+      return { op: T('\\mid +' + h * h), zeilen: [[quadT(1, st.p, h * h) + ' = ' + (st.kk + h * h), 'Binom']], next: qQuadrat(h, st.kk + h * h) };
+    }],
+    null: ['ok', null, () => ({ op: T('\\mid ' + mitVz(String(-st.kk))), zeilen: [], next: qNorm(1, st.p, -st.kk) })],
+    sammeln: ['um', 'Schon geordnet: Links stehen die Glieder mit \\(x\\), rechts die Zahl.'],
+    ausklammern: ['um', 'Erlaubt: \\(x(' + linT(1, st.p) + ') = ' + st.kk + '\\). Aber rechts steht nicht \\(0\\) — so hilft das Nullprodukt nicht.'],
+    binom: ['x', 'Rechts steht nicht \\(0\\). Zum Faktorisieren müsste zuerst alles auf eine Seite.'],
+    teilen: SCHON_1,
+  }),
+  q_quadrat: st => ({
+    wurzel: ['ok', null, () => wurzelAusf(linT(1, st.h), st.r, 1, st.h)],
+    klammern: ['um', 'Erlaubt, aber dann ist das Quadrat wieder weg. Hier steht es schon allein.'],
+    null: ['um', 'Erlaubt, aber ein Umweg: Das Quadrat steht schon allein.'],
+    binom: ['um', 'Das Binom steht schon da.'],
+    nullprodukt: ['x', 'Rechts steht \\(' + st.r + '\\), nicht \\(0\\).'],
+    mf: ['um', 'Erlaubt nach Ausmultiplizieren und Ordnen, aber ein Umweg: Das Quadrat steht schon allein.'],
+    ergaenzen: ['um', 'Das ist schon geschehen.'],
+    sammeln: ['um', 'Schon geordnet: links das Quadrat, rechts die Zahl.'],
+    teilen: ['x', 'Vor dem Quadrat steht keine Zahl, durch die man teilen müsste.'],
+    ausklammern: ['x', 'Hier gibt es nichts auszuklammern — das Quadrat steht schon allein.'],
+  }),
+  q_a_iso: st => ({
+    teilen: ['ok', null, () => ({ op: teilOp(st.a), zeilen: [], next: qX2(st.kk, st.a) })],
+    wurzel: ['x', 'Zuerst muss \\(x^2\\) ganz allein stehen: Vor \\(x^2\\) steht noch \\(' + st.a + '\\).'],
+    sammeln: ['um', 'Schon geordnet: links \\(x^2\\), rechts die Zahl.'],
+    null: ['um', 'Erlaubt, aber ein Umweg: \\(x^2\\) steht schon fast allein.'],
+    mf: ['um', 'Erlaubt (mit \\(b = 0\\)), aber umständlich: Hier genügen Teilen und Wurzel ziehen.'],
+    binom: ['x', 'Zum Faktorisieren müsste auf einer Seite \\(0\\) stehen — und hier geht es einfacher.'],
+    ergaenzen: KEIN_XGLIED,
+  }),
+  q_x2: st => ({
+    wurzel: ['ok', null, () => wurzelAusf('x', st.n, st.d, 0)],
+    sammeln: ['um', 'Schon geordnet: links \\(x^2\\), rechts die Zahl.'],
+    null: ['um', 'Erlaubt, aber ein Umweg: \\(x^2\\) steht schon allein.'],
+    mf: ['um', 'Erlaubt (mit \\(b = 0\\)), aber umständlich: \\(x^2\\) steht schon allein.'],
+    binom: (st.d === 1 && st.n > 0 && istQuadrat(st.n))
+      ? ['um', 'Erlaubt: \\(x^2 - ' + st.n + ' = (x - ' + Math.sqrt(st.n) + ')(x + ' + Math.sqrt(st.n) + ') = 0\\). Direkter ist es, die Wurzel zu ziehen.']
+      : ['um', 'Erlaubt, aber umständlich: \\(x^2\\) steht schon allein.'],
+    teilen: SCHON_1,
+    ergaenzen: KEIN_XGLIED,
+  }),
+  q_rein: st => {
+    const q = -st.c / st.a;                          // x² = q
+    const r = {
+      sammeln: ['ok', null, () => ({ op: T('\\mid ' + mitVz(String(-st.c))), zeilen: [],
+        next: st.a === 1 ? qX2(-st.c, 1) : qAIso(st.a, -st.c) })],
+      mf: ['um', 'Erlaubt (mit \\(b = 0\\)), aber umständlich. Ohne Glied mit \\(x\\) geht es direkter: Zahl auf die andere Seite, dann Wurzel ziehen.'],
+      wurzel: ['x', 'Zuerst muss \\(x^2\\) allein stehen: Bring die Zahl auf die andere Seite.'],
+      ergaenzen: KEIN_XGLIED,
+      teilen: st.a === 1 ? SCHON_1 : ['um', 'Erlaubt, aber bring zuerst die Zahl auf die andere Seite.'],
+    };
+    if (st.a !== 1 && st.c % st.a === 0)
+      r.teilen = ['ok', null, () => ({ op: teilOp(st.a), zeilen: [], next: qNorm(1, 0, st.c / st.a) })];
+    if (st.a === 1 && -st.c > 0 && istQuadrat(-st.c)) {
+      const s = Math.sqrt(-st.c);
+      r.binom = ['ok', null, () => ({ op: 'faktorisieren', zeilen: [],
+        next: qProd(klammer(-s) + klammer(s) + ' = 0', [linT(1, -s), linT(1, s)], [wz(-s, 0, 1, 1), wz(s, 0, 1, 1)], 'zwei') })];
+    } else if (q < 0) r.binom = ['x', '\\(' + quadT(st.a, 0, st.c) + '\\) lässt sich nicht in Faktoren zerlegen: Beide Glieder haben dasselbe Vorzeichen.'];
+    else r.binom = ['um', 'Erlaubt, aber umständlich. Bring die Zahl auf die andere Seite und zieh die Wurzel.'];
+    return r;
+  },
+  q_ohne_c: st => ({                               // bei negativem a wird -x ausgeklammert
+    ausklammern: ['ok', null, () => {
+      const v = st.a < 0 ? -1 : 1, a = v * st.a, b = v * st.b;
+      return { op: (v < 0 ? '\\(-x\\)' : '\\(x\\)') + ' ausklammern', zeilen: [],
+        next: qProd((v < 0 ? '-x' : 'x') + (a === 1 ? klammer(b) : '(' + linT(a, b) + ')') + ' = 0', ['x', linT(a, b)],
+                    [wz(0, 0, 1, 1), wz(-b, 0, 1, a)], 'x') };
+    }],
+    durchx: ['x', 'Durch \\(x\\) teilen verliert die Lösung \\(x = 0\\) — sie erfüllt die Gleichung, ist danach aber verschwunden.'],
+    mf: ['um', 'Erlaubt (mit \\(c = 0\\)), aber umständlich. Ohne Zahl ohne \\(x\\) geht es ohne Formel.'],
+    binom: ['um', 'Erlaubt im Grunde, aber hier heisst Faktorisieren einfach: \\(x\\) ausklammern.'],
+    sammeln: ['um', 'Erlaubt, aber dann fehlt die \\(0\\) für den Satz vom Nullprodukt.'],
+    wurzel: ['x', 'Neben \\(x^2\\) steht noch ein Glied mit \\(x\\). Wurzel ziehen geht nur, wenn das Quadrat allein steht.'],
+    teilen: st.a === 1 ? SCHON_1 : ['um', 'Erlaubt, aber unnötig: \\(x\\) ausklammern geht auch so.'],
+    ergaenzen: ['um', 'Erlaubt, aber ein Umweg: Ohne Zahl ohne \\(x\\) genügt Ausklammern.'],
+  }),
+  q_fakt: st => {
+    const D = st.b * st.b - 4 * st.c, w = Math.sqrt(D);
+    const x1 = (-st.b - w) / 2, x2 = (-st.b + w) / 2;
+    return {
+      binom: ['ok', null, () => ({ op: 'faktorisieren', zeilen: [],
+        next: qProd(klammer(-x1) + klammer(-x2) + ' = 0', [linT(1, -x1), linT(1, -x2)], [wz(x1, 0, 1, 1), wz(x2, 0, 1, 1)], 'zwei') })],
+      mf: ['ok', null, () => mfAusf(1, st.b, st.c)],
+      ergaenzen: ['um', 'Erlaubt, aber länger. Hier lässt sich faktorisieren — oder nimm die Mitternachtsformel.'],
+      teilen: SCHON_1,
+    };
+  },
+  q_binom: st => {
+    const s = -st.b / 2;
+    return {
+      binom: ['ok', null, () => ({ op: 'Binom', zeilen: [], next: qProd(klammer(-s) + '^2 = 0', [linT(1, -s)], [wz(s, 0, 1, 1)], 'quadrat') })],
+      mf: ['um', 'Erlaubt, aber hier geht es ohne Formel: Schau dir die Zahl ohne \\(x\\) und die Zahl vor \\(x\\) genau an.'],
+      ergaenzen: ['um', 'Erlaubt, aber hier ist das Binom schon vollständig.'],
+      teilen: SCHON_1,
+    };
+  },
+  q_teilbar: st => {
+    const nach = qNorm(1, st.b / st.a, st.c / st.a);
+    const zerlegbar = ['q_fakt', 'q_binom', 'q_ohne_c'].includes(nach.k) || (nach.k === 'q_rein' && -nach.c > 0 && istQuadrat(-nach.c));
+    return {
+      teilen: ['ok', null, () => ({ op: teilOp(st.a), zeilen: [], next: nach })],
+      mf: ['ok', null, () => mfAusf(st.a, st.b, st.c)],
+      binom: zerlegbar ? ['um', 'Erlaubt, aber teile zuerst durch \\(' + st.a + '\\) — dann sieht man die Zerlegung leichter.']
+                       : ['x', 'Auch nach dem Teilen durch \\(' + st.a + '\\) gibt es keine Zerlegung mit ganzen Zahlen.'],
+    };
+  },
+  q_allg: st => ({
+    mf: ['ok', null, () => mfAusf(st.a, st.b, st.c)],
+    binom: st.a === 1
+      ? ['x', 'Gesucht wären zwei ganze Zahlen mit Produkt \\(' + st.c + '\\) und Summe \\(' + st.b + '\\) — die gibt es nicht.']
+      : ['x', 'Der Zweiklammersatz braucht \\(1\\) vor \\(x^2\\), und nach dem Teilen durch \\(' + st.a + '\\) entstehen Brüche. Hier hilft ein Verfahren, das immer geht.'],
+    ergaenzen: ['um', 'Erlaubt und führt zum Ziel, ist aber länger als die Mitternachtsformel.'],
+    teilen: st.a === 1 ? SCHON_1 : ['um', 'Erlaubt, aber dabei entstehen Brüche. Die Mitternachtsformel nimmt \\(a\\) direkt.'],
+  }),
+  q_prod: st => {
+    const r = {
+      nullprodukt: ['ok', null, () => ({ op: 'Satz vom Nullprodukt',
+        zeilen: st.faktoren.length > 1 ? [[st.faktoren.map(f => f + ' = 0').join(' \\quad\\text{oder}\\quad '), '']] : [],
+        next: lsg(st.w) })],
+      klammern: ['um', 'Erlaubt, aber ein Umweg: Das Produkt steht schon da, und rechts steht \\(0\\). Nutze das.'],
+      mf: ['um', 'Erlaubt nach dem Ausmultiplizieren, aber ein Umweg: Die Faktoren stehen schon da.'],
+      binom: ['um', 'Ist schon geschehen — die Faktoren stehen da.'],
+      sammeln: ['um', 'Bringt nichts: Links steht ein Produkt, rechts \\(0\\). Nutze das.'],
+      teilen: ['x', 'Vor dem Produkt steht keine Zahl, durch die man teilen müsste.'],
+      ausklammern: st.art === 'x' ? ['um', 'Ist schon geschehen.'] : ['x', 'Hier gibt es nichts mehr auszuklammern — die Faktoren stehen schon da.'],
+      ergaenzen: ['um', 'Erlaubt, aber ein Umweg: Die Faktoren stehen schon da.'],
+    };
+    if (st.art === 'x') r.durchx = ['x', 'Durch \\(x\\) teilen verliert die Lösung \\(x = 0\\).'];
+    if (st.art === 'quadrat') r.wurzel = ['ok', null, () => ({ op: 'Wurzel ziehen', zeilen: [], next: lsg(st.w) })];
+    return r;
+  },
+  q_br: st => ({
+    brueche: ['ok', null, () => ({ op: T('\\mid \\cdot ' + st.N), zeilen: [], next: st.danach })],
+    sammeln: ['um', 'Erlaubt, aber mit Brüchen rechnet es sich mühsam. Mach sie zuerst weg.'],
+    null: ['um', 'Erlaubt, aber die Brüche bleiben. Mach sie zuerst weg.'],
+    teilen: ['um', 'Erlaubt, aber die Brüche bleiben. Mach sie zuerst weg.'],
+    mf: ['um', 'Erlaubt nach dem Ordnen, aber mit Brüchen rechnet es sich mühsam. Mach sie zuerst weg.'],
+    ergaenzen: ['um', 'Erlaubt, aber mit Brüchen mühsam. Mach sie zuerst weg.'],
+  }),
+  // ── fertig ──
+  wid: st => ({ L: ['ok', null, () => ({ op: '', zeilen: [], next: { k: 'ende', z: st.wahr ? '\\mathbb{L} = \\mathbb{R}' : '\\mathbb{L} = \\{\\,\\}' } })] }),
+  lsg: st => ({ L: ['ok', null, () => ({ op: '', zeilen: [], next: { k: 'ende', z: lsgL(st) } })] }),
+};
+
+function regel(st, id) {
+  const r = REGELN[st.k](st)[id];
+  if (r) return r;
+  const g = GRUPPE[st.k] || 'quad';
+  if (g === 'ende') return ['x', st.k === 'wid'
+    ? '\\(x\\) ist weggefallen — es gibt nichts mehr umzuformen. Entscheide, was das für die Lösungsmenge heisst.'
+    : 'Die Rechnung ist fertig — jetzt bleibt nur, die Lösungsmenge anzugeben.'];
+  return STANDARD[g][id];
+}
+// Die passenden Schritte eines Zustands
+const passend = st => STRAT.map(([id]) => id).filter(id => regel(st, id)[0] === 'ok');
+
+const TIPP = {
+  lin_seiten: 'Ziel ist \\(a \\cdot x = b\\). Was steht noch auf der falschen Seite?',
+  lin_iso: 'Es fehlt nur noch ein Schritt bis \\(x = \\ldots\\). Was stört am \\(x\\)?',
+  lin_kl: 'Was hindert dich daran, die Glieder mit \\(x\\) zu sammeln?',
+  lin_br: 'Was macht das Rechnen hier mühsam?',
+  lin_schein: 'Löse zuerst auf, was das \\(x\\) einschliesst. Erst danach siehst du, welcher Typ die Gleichung ist.',
+  lin_x2: 'Vergleiche die Glieder mit \\(x^2\\) links und rechts.',
+  q_ung: st => st.b === 0 && st.d === 0 ? 'Hier gibt es kein Glied mit \\(x\\) allein. Was muss weg, damit \\(x^2\\) allein steht?'
+                                        : 'Für quadratische Gleichungen braucht es eine Seite mit \\(0\\).',
+  q_kl: 'Rechts steht keine \\(0\\). Darf man da schon den Satz vom Nullprodukt anwenden?',
+  q_erg: 'Links fehlt nur eine Zahl zum Binom \\((x + \\ldots)^2\\). Oder: Bring alles auf eine Seite.',
+  q_quadrat: 'Das Quadrat steht allein. Wie wirst du es los?',
+  q_a_iso: 'Damit du die Wurzel ziehen kannst, muss \\(x^2\\) ganz allein stehen.',
+  q_x2: 'Das Quadrat steht allein. Wie wirst du es los?',
+  q_rein: 'Es fehlt das Glied mit \\(x\\). Was heisst das für den Weg?',
+  q_ohne_c: 'Es fehlt die Zahl ohne \\(x\\). Was haben alle Glieder gemeinsam?',
+  q_fakt: st => 'Gesucht sind zwei ganze Zahlen mit Produkt \\(' + st.c + '\\) und Summe \\(' + st.b + '\\) — oder das Verfahren, das immer geht.',
+  q_binom: st => 'Die Zahl ohne \\(x\\) ist \\(' + st.c + ' = ' + Math.abs(st.b / 2) + '^2\\). Und die Zahl vor \\(x\\)?',
+  q_teilbar: 'Alle Zahlen haben einen gemeinsamen Faktor.',
+  q_allg: 'Alle drei Glieder sind da, und eine Zerlegung mit ganzen Zahlen ist nicht in Sicht. Welches Verfahren geht immer?',
+  q_prod: 'Rechts steht \\(0\\), links ein Produkt. Wann ist ein Produkt \\(0\\)?',
+  q_br: 'Was macht das Rechnen hier mühsam?',
+  wid: st => 'Ist die Aussage \\(' + st.z + '\\) wahr oder falsch — und was heisst das für \\(x\\)?',
+  lsg: 'Die Rechnung ist fertig. Was bleibt zu tun?',
+};
+const tipp = st => { const t = TIPP[st.k]; return typeof t === 'function' ? t(st) : t; };
+
+// ── Aufgaben ──
+// Jede Vorlage liefert { st, f }: st = Anfangszustand, f(x) = linke minus rechte Seite der
+// gestellten Gleichung (zum Nachprüfen der Lösungen im Prüfwerkzeug).
+const VORLAGEN = {
+  lin: [
+    [3, function linSeitenA() {                         // Ax + B = Cx + D
+      const A = nz(2, 9), C = pick([0, 0, nz(-5, 7)]), B = nz(-12, 12);
+      if (C === A || (C === 0 && B === 0)) return null;
+      const D = Math.random() < 0.75 ? (A - C) * nz(-8, 8) + B : nz(-15, 15);
+      return { st: linNorm(A, B, C, D), f: x => A * x + B - (C * x + D) };
+    }],
+    [3, function linKlA() {                             // a(x + p) + q = cx + d
+      const a = pick([2, 3, 4, 5, 6, -2, -3]), p = nz(-7, 7), q = pick([0, nz(-9, 9)]), c = nz(-4, 6);
+      if (c === a) return null;
+      const d = a * p + q + (a - c) * nz(-6, 6);
+      const z = faktor(a, p) + (q ? (q < 0 ? ' - ' : ' + ') + Math.abs(q) : '') + ' = ' + linT(c, d);
+      return { st: linKl(z, a, a * p + q, c, d), f: x => a * (x + p) + q - (c * x + d) };
+    }],
+    [2, function linKlB() {                             // a(x + p) - b(x + r) = d, auch Sonderfälle
+      const a = nz(2, 6), b = pick([a, nz(2, 6)]), p = nz(-6, 6), r = nz(-6, 6);
+      const A = a - b, B = a * p - b * r;
+      const d = A !== 0 ? A * nz(-6, 6) + B : pick([B, B + nz(-5, 5)]);
+      const z = faktor(a, p) + ' - ' + (b === 1 ? '' : b) + klammer(r) + ' = ' + d;
+      const roh = poly([[a, 'x'], [a * p, ''], [-b, 'x'], [-b * r, '']]) + ' = ' + d;
+      return { st: linKl(z, A, B, 0, d, roh), f: x => a * (x + p) - b * (x + r) - d };
+    }],
+    [2, function linBrA() {                             // x/p + q = x/r + s
+      const [p, r] = pick([[2, 3], [3, 4], [2, 5], [4, 6], [3, 6], [2, 6], [3, 5]]).sort(() => Math.random() - 0.5);
+      const N = kgV(p, r), x0 = N * nz(-3, 3), q = nz(-6, 6), s = x0 / p + q - x0 / r;
+      if (s === 0) return null;
+      const z = '\\frac{x}{' + p + '}' + (q < 0 ? ' - ' : ' + ') + Math.abs(q) + ' = \\frac{x}{' + r + '}' + (s < 0 ? ' - ' : ' + ') + Math.abs(s);
+      return { st: { k: 'lin_br', z, N, danach: linNorm(N / p, N * q, N / r, N * s) }, f: x => x / p + q - (x / r + s) };
+    }],
+    [2, function linBrB() {                             // (x + a)/p = (x + b)/r
+      const [p, r] = pick([[2, 3], [3, 4], [2, 5], [4, 6], [3, 2], [5, 3], [6, 4]]);
+      const a = nz(-7, 7), b = nz(-7, 7), N = kgV(p, r), u = N / p, v = N / r;
+      if (a === b) return null;
+      const z = '\\frac{' + linT(1, a) + '}{' + p + '} = \\frac{' + linT(1, b) + '}{' + r + '}';
+      const zN = faktor(u, a) + ' = ' + faktor(v, b);
+      return { st: { k: 'lin_br', z, N, danach: linKl(zN, u, u * a, v, v * b) }, f: x => (x + a) / p - (x + b) / r };
+    }],
+    [3, function linScheinA() {                         // (x + a)² = x² + b  bzw.  (x + a)(x + c) = x² + d
+      const a = nz(-6, 6);
+      if (Math.random() < 0.5) {
+        const b = 2 * a * nz(-6, 6) + a * a;
+        return { st: linSchein(klammer(a) + '^2 = ' + quadT(1, 0, b), 2 * a, a * a, b, quadT(1, 2 * a, a * a) + ' = ' + quadT(1, 0, b)),
+                 f: x => (x + a) ** 2 - (x * x + b) };
+      }
+      const c = nz(-6, 6);
+      if (a + c === 0) return null;
+      const d = (a + c) * nz(-5, 5) + a * c;
+      return { st: linSchein(klammer(a) + klammer(c) + ' = ' + quadT(1, 0, d), a + c, a * c, d, quadT(1, a + c, a * c) + ' = ' + quadT(1, 0, d)),
+               f: x => (x + a) * (x + c) - (x * x + d) };
+    }],
+  ],
+  quad: [
+    [3, function qFakt() {
+      const x1 = nz(-9, 9), x2 = nz(-9, 9);
+      if (x1 === x2 || x1 === -x2) return null;
+      const b = -(x1 + x2), c = x1 * x2;
+      return { st: qNorm(1, b, c), f: x => x * x + b * x + c };
+    }],
+    [2, function qTeilbar() {
+      const k = pick([2, 3, -1, -2, 4, 5]), x1 = nz(-7, 7), x2 = nz(-7, 7);
+      if (x1 === -x2) return null;
+      const b = -(x1 + x2) * k, c = x1 * x2 * k;
+      return { st: qNorm(k, b, c), f: x => k * x * x + b * x + c };
+    }],
+    [2, function qBinom() {
+      const s = nz(-9, 9);
+      return { st: qNorm(1, -2 * s, s * s), f: x => (x - s) ** 2 };
+    }],
+    [2, function qOhneC() {
+      const a = pick([1, 1, 2, 3, -1, 4, 5]), b = nz(-12, 12);
+      return { st: qNorm(a, b, 0), f: x => a * x * x + b * x };
+    }],
+    [2, function qRein() {
+      const a = pick([1, 1, 1, 2, 3, 4, 5]);
+      const c = Math.random() < 0.5 ? -a * nz(1, 9) ** 2 : nz(-40, 30);
+      return { st: qNorm(a, 0, c), f: x => a * x * x + c };
+    }],
+    [3, function qAllg() {
+      const a = pick([1, 1, 2, 3, 4, 5]), b = nz(-9, 9), c = nz(-9, 9), D = b * b - 4 * a * c;
+      if (istQuadrat(D) || (a !== 1 && b % a === 0 && c % a === 0)) return null;
+      return { st: qNorm(a, b, c), f: x => a * x * x + b * x + c };
+    }],
+    [3, function qUngA() {                              // Normalform plus dx + e auf beiden Seiten
+      const x1 = nz(-8, 8), x2 = nz(-8, 8), a = 1;
+      const b = Math.random() < 0.7 ? -(x1 + x2) : nz(-7, 7), c = Math.random() < 0.7 ? x1 * x2 : nz(-9, 9);
+      const d = pick([0, nz(-6, 6)]), e = nz(-12, 12);
+      if (b === 0 && c === 0) return null;
+      return { st: qUng(a, b + d, c + e, d, e), f: x => a * x * x + (b + d) * x + (c + e) - (d * x + e) };
+    }],
+    [2, function qUngB() {                              // ax² = dx  bzw.  ax² + c = e
+      const a = pick([1, 1, 2, 3, 5]);
+      if (Math.random() < 0.5) {
+        const d = nz(-9, 9);
+        return { st: qUng(a, 0, 0, d, 0), f: x => a * x * x - d * x };
+      }
+      const c = nz(-15, 15), e = a * nz(1, 8) ** 2 + c * (Math.random() < 0.8 ? 1 : 0) + (Math.random() < 0.2 ? nz(-5, 5) : 0);
+      if (e === c) return null;
+      return { st: qUng(a, 0, c, 0, e), f: x => a * x * x + c - e };
+    }],
+    [2, function qErgA() {
+      const p = 2 * nz(-5, 5), h = p / 2, r = Math.random() < 0.6 ? nz(1, 9) ** 2 : rnd(2, 30), k = r - h * h;
+      if (k === 0) return null;
+      return { st: qErg(p, k), f: x => x * x + p * x - k };
+    }],
+    [3, function qKlA() {                               // (x + m)(x + n) = r  bzw.  x(x + m) = r
+      const x1 = nz(-7, 7), x2 = nz(-7, 7);
+      if (x1 === x2) return null;
+      const m = nz(-6, 6), n = Math.random() < 0.3 ? 0 : -(x1 + x2) - m;
+      const mm = n === 0 ? -(x1 + x2) : m;
+      const r = mm * n - x1 * x2;
+      if (r === 0 || mm === 0) return null;
+      if (n === 0) return { st: qKl('x' + klammer(mm) + ' = ' + r, mm, 0, r, 'x'), f: x => x * (x + mm) - r };
+      return { st: qKl(klammer(mm) + klammer(n) + ' = ' + r, mm + n, mm * n, r, 'zwei'), f: x => (x + mm) * (x + n) - r };
+    }],
+    [2, function qBrA() {                               // x²/p ± x/r = s, eine Lösung ganzzahlig
+      const p = pick([2, 3, 4, 6]), r = pick([2, 3, 4, 6]), vz = pick([1, -1]);
+      const N = kgV(p, r), A = N / p, B = vz * N / r, x1 = nz(-6, 6);
+      if ((A * x1 * x1 + B * x1) % N !== 0) return null;
+      const s = (A * x1 * x1 + B * x1) / N;
+      if (s === 0) return null;
+      const z = '\\frac{x^2}{' + p + '}' + (vz < 0 ? ' - ' : ' + ') + '\\frac{x}{' + r + '} = ' + s;
+      return { st: { k: 'q_br', z, N, danach: qUng(A, B, 0, 0, N * s) }, f: x => x * x / p + vz * x / r - s };
+    }],
+    [1, function qQuadratA() {
+      const h = nz(-6, 6), r = Math.random() < 0.6 ? nz(1, 8) ** 2 : pick([rnd(2, 30), -rnd(1, 9)]);
+      return { st: qQuadrat(h, r), f: x => (x + h) ** 2 - r };
+    }],
+  ],
+};
+function aufgabe(bereiche) {
+  const liste = [];
+  for (const b of bereiche) for (const [gew, fn] of VORLAGEN[b]) liste.push([gew * (b === 'lin' ? 1.2 : 1), fn]);
+  const summe = liste.reduce((s, [g]) => s + g, 0);
+  for (;;) {
+    let r = Math.random() * summe, fn = liste[0][1];
+    for (const [g, f] of liste) { if ((r -= g) < 0) { fn = f; break; } }
+    const a = fn();
+    if (a) { a.vorlage = fn.name; return a; }
+  }
+}
+// ── KERN:ENDE ───────────────────────────────────────────────────
+
+// ── Oberfläche ──
+const $ = id => document.getElementById(id);
+// Setzen der Reihe nach: Zwei schnelle Klicks dürfen MathJax nicht gleichzeitig laufen lassen.
+let mjKette = Promise.resolve();
+function setzen(el, html) {
+  mjKette = mjKette.then(() => {
+    if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([el]);
+    el.innerHTML = html;
+    if (window.MathJax && MathJax.typesetPromise) return MathJax.typesetPromise([el]);
+  }).catch(() => {});
+}
+const SERIE = 10;
+let bereiche = new Set(['lin', 'quad']);
+let A = null, st = null, zeilen = [], fehl = 0, nr = 0, start = 0, fertig = false, letzteVorlage = '';
+let zaehler = { fehl: 0, um: 0, sauber: 0, verwechslung: {} };
+let tick = null;
+
+const wahl = $('st-wahl');
+STRAT.forEach(([id, text]) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'st-knopf'; b.dataset.s = id; b.innerHTML = text;
+  wahl.appendChild(b);
+});
+
+function zeichneVerlauf() {
+  setzen($('st-verlauf'), zeilen.map(([z, op], i) =>
+    '<div class="st-zeile' + (fertig && i === zeilen.length - 1 ? ' st-ende' : '') + '"><span class="st-gl">\\(\\displaystyle ' + z + '\\)</span><span class="st-op">' + (op || '') + '</span></div>').join(''));
+}
+function knoepfeZuruecksetzen() {
+  wahl.querySelectorAll('.st-knopf').forEach(b => { b.classList.remove('st-falsch', 'st-umweg', 'st-zeigen'); b.disabled = fertig; });
+}
+function zeit() {
+  const s = Math.floor((Date.now() - start) / 1000);
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+function zeigeZahlen() {
+  $('st-z-nr').textContent = Math.min(nr, SERIE) + ' / ' + SERIE;
+  $('st-z-fehl').textContent = zaehler.fehl;
+  $('st-z-um').textContent = zaehler.um;
+  $('st-z-zeit').textContent = zeit();
+  $('st-kurz').textContent = Math.min(nr, SERIE) + '/' + SERIE + ' · ' + zaehler.fehl + ' Fehlgriffe';
+}
+
+let fehlerInAufgabe = 0;
+function neueAufgabe() {
+  if (nr >= SERIE) return bilanz();
+  nr++;
+  let a; do a = aufgabe([...bereiche]); while (a.vorlage === letzteVorlage && Math.random() < 0.8);
+  letzteVorlage = a.vorlage;
+  A = a; st = a.st; zeilen = [[st.z, '']]; fehl = 0; fehlerInAufgabe = 0; fertig = false;
+  $('st-nr').textContent = 'Aufgabe ' + nr + ' / ' + SERIE;
+  $('st-frage').hidden = false;
+  $('st-weiter-box').hidden = true;
+  setzen($('st-rueck'), '');
+  $('st-rueck').className = 'st-rueck';
+  knoepfeZuruecksetzen();
+  zeichneVerlauf();
+  zeigeZahlen();
+}
+function meldung(cls, html) { $('st-rueck').className = 'st-rueck ' + cls; setzen($('st-rueck'), html); }
+
+function waehle(id) {
+  if (fertig || !st) return;
+  const r = regel(st, id);
+  const knopf = wahl.querySelector('[data-s="' + id + '"]');
+  if (r[0] === 'ok') {
+    const aus = r[2]();
+    zeilen[zeilen.length - 1][1] = aus.op;
+    for (const z of aus.zeilen) zeilen.push(z.slice());
+    st = aus.next;
+    zeilen.push([st.z, '']);
+    fehl = 0;
+    if (st.k === 'ende') {
+      fertig = true;
+      if (!fehlerInAufgabe) zaehler.sauber++;
+      $('st-frage').hidden = true;
+      $('st-weiter-box').hidden = false;
+      meldung('richtig', '<p>✓ ' + (fehlerInAufgabe ? 'Gelöst.' : 'Gelöst — ohne Fehlgriff.') + '</p>');
+      $('st-weiter').focus();
+    } else meldung('richtig', '<p>✓ ' + STRAT_NAME[id] + ' — passt.</p>');
+    knoepfeZuruecksetzen();
+    zeichneVerlauf();
+  } else if (r[0] === 'um') {
+    zaehler.um++;
+    knopf.classList.add('st-umweg');
+    meldung('hinweis', '<p>≈ ' + r[1] + '</p>');
+  } else {
+    fehl++; fehlerInAufgabe++; zaehler.fehl++;
+    const richtig = passend(st);
+    const schluessel = id + '→' + richtig[0];
+    zaehler.verwechslung[schluessel] = (zaehler.verwechslung[schluessel] || 0) + 1;
+    knopf.classList.add('st-falsch');
+    let html = '<p>✗ ' + r[1] + '</p>';
+    if (fehl >= 2) html += '<p><strong>Tipp:</strong> ' + tipp(st) + '</p>';
+    if (fehl >= 3) {
+      html += '<p><strong>Passend wäre:</strong> «' + STRAT_NAME[richtig[0]] + '»' + (richtig.length > 1 ? ' (oder «' + STRAT_NAME[richtig[1]] + '»)' : '') + '.</p>';
+      richtig.forEach(r2 => wahl.querySelector('[data-s="' + r2 + '"]').classList.add('st-zeigen'));
+    }
+    meldung('falsch', html);
+  }
+  zeigeZahlen();
+}
+
+function bilanz() {
+  clearInterval(tick);
+  const top = Object.entries(zaehler.verwechslung).sort((u, v) => v[1] - u[1]).slice(0, 3);
+  let html = '<h2>Serie fertig</h2><p>' + zaehler.sauber + ' von ' + SERIE + ' Aufgaben ohne Fehlgriff · '
+    + zaehler.fehl + ' Fehlgriffe · ' + zaehler.um + ' Umwege · Zeit ' + zeit() + '</p>';
+  if (top.length) {
+    html += '<p>Am häufigsten verwechselt:</p><ul>' + top.map(([k, n]) => {
+      const [g, r] = k.split('→');
+      return '<li>«' + STRAT_NAME[g] + '» gewählt, wo «' + STRAT_NAME[r] + '» passte' + (n > 1 ? ' (' + n + '×)' : '') + '</li>';
+    }).join('') + '</ul>';
+  } else html += '<p>Keine Verwechslung — stark.</p>';
+  html += '<div class="st-knoepfe" style="padding:12px 0 0"><button type="button" class="st-btn" id="st-nochmal">Neue Serie</button></div>';
+  $('st-aufgabe').hidden = true;
+  $('st-bilanz').hidden = false;
+  setzen($('st-bilanz'), html);
+  mjKette.then(() => $('st-nochmal').focus());
+}
+function neueSerie() {
+  nr = 0; zaehler = { fehl: 0, um: 0, sauber: 0, verwechslung: {} };
+  start = Date.now();
+  clearInterval(tick); tick = setInterval(zeigeZahlen, 1000);
+  $('st-aufgabe').hidden = false; $('st-bilanz').hidden = true;
+  neueAufgabe();
+}
+
+wahl.addEventListener('click', e => { const b = e.target.closest('.st-knopf'); if (b && !b.disabled) waehle(b.dataset.s); });
+$('st-weiter').addEventListener('click', neueAufgabe);
+$('st-neu').addEventListener('click', neueSerie);
+$('st-bilanz').addEventListener('click', e => { if (e.target.closest('#st-nochmal')) neueSerie(); });
+$('st-bereich').addEventListener('click', e => {
+  const b = e.target.closest('.st-opt'); if (!b) return;
+  const v = b.dataset.b;
+  if (bereiche.has(v) && bereiche.size === 1) return;      // eine Art bleibt immer gewählt
+  if (bereiche.has(v)) bereiche.delete(v); else bereiche.add(v);
+  b.classList.toggle('aktiv', bereiche.has(v));
+  neueSerie();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && fertig && !$('st-weiter-box').hidden && !e.target.closest('button, a, summary')) { e.preventDefault(); neueAufgabe(); }
+});
+
+// Seitenspalte: breit immer offen, schmal eingeklappt über der Karte
+const breit = matchMedia('(min-width: 901px)');
+function seiteOffen() { $('st-seite-det').open = breit.matches; }
+if (breit.addEventListener) breit.addEventListener('change', seiteOffen);
+seiteOffen();
+
+if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(() => { setzen(wahl, wahl.innerHTML); neueSerie(); });
+else window.addEventListener('load', neueSerie);
+</script>
+</body>
+</html>

@@ -89,7 +89,7 @@ GRUNDLINIE = {
     'scripts/build-clips.py': 0.998,   # gemeinsamer Bauer, drei Projektwerte (07.10.2026)
     'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
-    'scripts/build-seo.py': 0.898,         # ohne DATEN gemessen (07.10.2026; mit Daten 0.533)
+    'scripts/build-seo.py': 0.909,   # ohne DATEN; 0.898 -> 0.909 (10.10.2026): Footer-Code aus Mathe, VERSION/VERSION_STAND gleich
     'scripts/schriften-lokal.py': 1.000,
     'scripts/mathjax-lokal.py': 0.870,
     'scripts/verify_mathjax.js': 0.941,
@@ -100,7 +100,7 @@ GRUNDLINIE = {
     '.claude/tools/scan-live.mjs': 0.761,
     '.claude/tools/render-check.mjs': 0.968,
     '.claude/tools/build-bilder.mjs': 0.753,
-    '.claude/skills/preflight/preflight.py': 0.870,   # 0.849 -> 0.870 nach check_sim_wz in beiden Repos (10.10.2026)
+    '.claude/skills/preflight/preflight.py': 0.880,   # 0.849 -> 0.870 nach check_sim_wz in beiden Repos; -> 0.880 Werkzeug-Selbsttests wie Physik (10.10.2026)
     '.claude/skills/preflight/SKILL.md': 0.710,   # 0.680 -> 0.710: Physik ordnet die Stufe-2-Liste wie Mathe (10.10.2026)
     '.claude/settings.json': 0.509,
 }
@@ -137,17 +137,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='build-seo.py: Footer aus einer Quelle (FUSS-Marken, fuss(), Felder ort/fuss, VERSION/VERSION_STAND), 10.10.2026',
-         wie='Physik: Code aus Mathes scripts/build-seo.py uebernehmen (Konstanten VERSION, VERSION_STAND, FUSS_UNTERTITEL; FUSS_AUF/FUSS_ZU; '
-             'fuss(), fuss_ausserhalb(), einsetzen() mit Footer; --check mit Exit 2 fuer site-footer ausserhalb der Marken) und '
-             '.claude/skills/preflight/preflight.py (Exit 2 von build-seo.py = Fehler). Fachdaten bleiben eigene: SEITEN mit ort=/fuss=False, '
-             'FUSS_UNTERTITEL (in DATEN). Ablauf und Zahlen: /home/paps/TODO-fuss-version-physik.md. VERSION/VERSION_STAND gehoeren NICHT '
-             'in DATEN — beide Repos tragen dieselbe Version: VERSION = 2.0, VERSION_STAND = 10. Oktober 2026 (Mathe Teil B). '
-             'feedback.html (KERN, eigener Fuss) traegt dieselbe Zeile «Version 2.0 · Stand 10. Oktober 2026». '
-             'Danach abgleich.py zurueckgeben und diesen Eintrag streichen.'),
-    dict(quelle='Mathe', was='build-clip-ton.py: zwei TAUSCH-Eintraege nach Hoerprobe Runde 6 (Korrekturglied -> Korrektur-Glied, Arkussinus -> Arkus-Sinus), 10.10.2026',
-         wie='Physik: Mathes scripts/build-clip-ton.py uebernehmen. In Physik betroffen: 0 Clips (gezaehlt 10.10.2026), nichts neu vertonen. '
-             'Dazu diese abgleich.py uebernehmen (Grundlinie build-suchindex.py 0.947, OFFEN von Physik abgearbeitet) und diesen Eintrag streichen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

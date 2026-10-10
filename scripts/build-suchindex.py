@@ -339,6 +339,7 @@ ZUSATZSEITEN = [
     ('werkzeuge.html', 'WZ', 'Werkzeuge', 'thema'),
     # Simulationen und Werkzeuge selbst (HOWTO-simulationen.md / HOWTO-werkzeuge.md)
     ('werkzeuge/notationstrainer.html', 'WZ', 'Notationstrainer', 'thema'),
+    ('werkzeuge/strategietrainer.html', 'WZ', 'Strategietrainer', 'thema'),
     ('leitprogramme/quadratische-funktionen.html', '▤',
      'Leitprogramm Quadratische Funktionen', 'thema'),
     ('leitprogramme/lineare-funktionen.html', '▤',

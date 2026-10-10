@@ -130,7 +130,10 @@ Link, nicht mit dem Baustein.
 - **Selbsttest**, sobald das Werkzeug rechnet oder Aufgaben erzeugt: eine Funktion im
   Seitenskript, die jede Aufgabe der Datenstruktur gegen ihre Lösung prüft, und ein Skript
   `scripts/verify_<name>.js`, das die Seite in jsdom lädt und sie aufruft. Muster ist
-  `scripts/verify_einheitentrainer.js` in `tals-physik` (dort im Pre-Flight eingehängt).
+  `scripts/verify_einheitentrainer.js` in `tals-physik` (dort im Pre-Flight eingehängt). In
+  Mathe: `scripts/verify_strategietrainer.js` — es lädt nur den Block zwischen `KERN:ANFANG` und
+  `KERN:ENDE` in `node:vm` (ohne DOM) und spielt Tausende Zufallsaufgaben durch. Neue Selbsttests
+  in die Liste der Werkzeug-Selbsttests in `preflight.py` aufnehmen.
 - **Render-Check** bei 1280 px und 360 px: `node .claude/tools/render-check.mjs
   werkzeuge/<name>.html`. Eingabefelder und Knöpfe bei 360 px bedienbar, kein seitliches
   Scrollen.

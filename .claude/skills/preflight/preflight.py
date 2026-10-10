@@ -8,6 +8,7 @@ Zwei Stufen:
 2. Orchestrierung der vorhandenen, autoritativen Repo-Skripte in scripts/:
    - verify_mathjax.js        (echte MathJax-Render-Prüfung; braucht node_modules/mathjax-full)
    - verify_js_runtime.js     (JS-Laufzeit in jsdom; braucht node_modules/jsdom)
+   - verify_strategietrainer.js (Selbsttest des Werkzeugs; Zufallsaufgaben bis zur Lösungsmenge)
    - build-suchindex.py --check (Suchindex aktuell? veraltet = WARN, kein Blocker)
    - build-seo.py --check      (Metadaten/Footer/sitemap aktuell? veraltet = WARN, Footer ausserhalb der Marken = FEHLER)
    - check_identifier_collisions.py (Symbol-Kollisionen mit mathlib/nav; ohne npm)
@@ -329,6 +330,21 @@ def run_deep(file_args, rep):
                 rep.err("verify_js_runtime.js", f"{m.group(1)} Seite(n) mit JS-Problemen")
             elif not m:
                 rep.warn("verify_js_runtime.js", "Summenzeile nicht erkannt")
+
+    # Selbsttests der Werkzeuge (werkzeuge/*.html), je ein scripts/verify_<name>.js
+    for name in ("strategietrainer",):
+        et = scripts / f"verify_{name}.js"
+        if not et.is_file():
+            continue
+        if not _dep_present("jsdom"):
+            rep.warn(f"verify_{name}.js", "node_modules/jsdom fehlt — `npm install jsdom`")
+        else:
+            r = _run_node(str(et), [], env)
+            out = (r.stdout or "") + (r.stderr or "")
+            print(f"---- verify_{name}.js ----")
+            print(out.rstrip())
+            if r.returncode != 0:
+                rep.err(f"verify_{name}.js", f"Selbsttest {name} fehlgeschlagen (siehe oben)")
 
     si = scripts / "build-suchindex.py"
     if si.is_file():
