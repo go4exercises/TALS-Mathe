@@ -29,11 +29,3 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
-### 08.10.2026 · `clips_bibliothek.py`: Clipnamen mit Grossbuchstaben
-
-**Was.** Die Muster `clips/([a-z0-9-]+)\.html` übersehen Clips mit Grossbuchstaben im Namen; in Mathe fehlten so
-die 12 Clips `g2-M-lp-*` des Leitprogramms Modellieren in `clips.html`. Mathe: `[A-Za-z0-9-]` (Zeilen 67, 69).
-**Wo.** Physik `scripts/clips_bibliothek.py` Zeilen 90, 94, 112 (FACH-Datei, nicht im Abgleich).
-**Warum.** Physik hat heute keinen Drehbuchnamen mit Grossbuchstaben (gezählt 08.10.2026: 0) — der Fehler ist dort
-still, trifft aber den ersten solchen Clip. **Getestet (Mathe).** `build-clips-einbau.py --schreiben`: 12 neue
-Einträge, übrige Bibliothek unverändert.

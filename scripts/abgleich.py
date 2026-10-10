@@ -90,8 +90,8 @@ GRUNDLINIE = {
     'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
     'scripts/build-seo.py': 0.898,         # ohne DATEN gemessen (07.10.2026; mit Daten 0.533)
-    'scripts/schriften-lokal.py': 0.961,
-    'scripts/mathjax-lokal.py': 0.853,
+    'scripts/schriften-lokal.py': 1.000,
+    'scripts/mathjax-lokal.py': 0.870,
     'scripts/verify_mathjax.js': 0.941,
     'scripts/verify_js_runtime.js': 0.942,
     'scripts/check_identifier_collisions.py': 0.940,
@@ -137,6 +137,14 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
+    dict(quelle='Mathe', was='build-clip-ton.py: sieben Aussprache-Eintraege nach Hoerprobe 10.10.2026 (Amontons, isochor, Glycerin, stimulierte, Kacheln/Kachel, parts per million)',
+         wie='Physik: Mathes scripts/build-clip-ton.py uebernehmen (sonst gleich). Betroffene Physik-Clips neu vertonen, nur die Szenen/Fragen '
+             'mit dem Wort (--szenen, build-clip-fragen-ton.py --fragen): p5-3-anim-gasgesetze, p5-3-gas-isochor, p5-3-lp-spezialfaelle (Amontons); '
+             'p5-3-gas-gleichung, p5-3-gas-isochor, p5-3-lp-kontrolle-spezialfaelle, p5-3-lp-spezialfaelle, uebungstest-b2-kuehlschrank (isochor); '
+             'p5-1-lp-aggregat (Glycerin); p6-1-lp-kontrolle-licht, p6-1-lp-licht (stimulierte). '
+             'Zusaetzlich Sprechertext (Entscheid Auftraggeber): bei der ersten Nennung von «ppm» je Clip «ppm, parts per million,» '
+             '(p5-2-anim-treibhaus und die zwei weiteren Clips mit ppm), neu vertonen. Danach clip-zeit in den Leitprogrammen nachfuehren. '
+             'Diesen Eintrag streichen, abgleich.py nach Mathe zurueckgeben.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',
