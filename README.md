@@ -3,7 +3,7 @@
 > **Freies, interaktives Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences (TALS)**
 > Struktur 1:1 nach RLP 2030 · Notation nach *Formeln, Tabellen, Begriffe* (Orell Füssli) · GitHub Pages
 
-**Version 1.0 · Stand 31. August 2026** · [Online-Ausgabe](https://mathe.begreifbar.ch/)
+**Version 2.0 · Stand 10. Oktober 2026** · [Online-Ausgabe](https://mathe.begreifbar.ch/)
 
 ---
 
@@ -16,6 +16,25 @@ Die Inhalte richten sich an Lernende der Berufsmaturität sowie an Lehrpersonen,
 Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TALS-Ergänzungen 3.6 Betragsfunktionen und 4.3d Ebenen (über den RLP hinaus). Das Material wird laufend gepflegt und erweitert.
 
 ---
+
+## Was Version 2.0 dazubringt
+
+- **16 Leitprogramme nach Kapitelmuster** (sichtbar unter *Nachschlagen → Leitprogramme*):
+  Quadratische, lineare, Potenz- und Wurzel-, Polynom-, Exponential- und Logarithmus-,
+  trigonometrische und Betragsfunktionen; lineare und quadratische Gleichungen;
+  Textaufgaben modellieren; Dreiecke, Vierecke, Kreis und Kreisteile, Ähnlichkeit;
+  trigonometrische Berechnungen, Einheitskreis, trigonometrische Gleichungen. Je Kapitel
+  ein Einführungs- und ein Kontrollclip mit Fragen, eine Simulation mit Aufgabenleiste,
+  Übungen mit Rückmeldung; Gesamttest und Bewertungspaket als PDF. Die sechs älteren
+  Leitprogramme stehen vorübergehend unter «Alte Leitprogramme».
+- **Vertonte Clips:** 391 in der Bibliothek, dazu 195 Clips der Leitprogramme und
+  Übungsprüfungen — alle mit Tonspur; die Aussprache der Stimme nach Hörproben abgestimmt.
+- **Simulationen und Werkzeuge** als eigene Rubriken mit Übersicht; der
+  **Notationstrainer** ist nach `werkzeuge/` umgezogen (die alte Adresse leitet weiter).
+- **Keine fremden Hosts:** Schriften und MathJax werden lokal ausgeliefert.
+- **Suche** über Themenseiten, Clips, Leitprogramme, Glossar und Formelsammlung.
+- **Eine Version für das ganze Lehrmittel:** Der Footer jeder Seite wird erzeugt und
+  trägt dieselbe Versionszeile.
 
 ## Was Version 1.0 enthält
 
@@ -251,4 +270,4 @@ Dieses Lernmaterial steht unter der Lizenz
 
 ---
 
-*Zürich, 31. August 2026 · Version 1.0*
+*Zürich, 10. Oktober 2026 · Version 2.0*

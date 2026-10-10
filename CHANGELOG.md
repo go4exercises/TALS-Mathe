@@ -4,7 +4,30 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
-## [Unveröffentlicht] — 10. Oktober 2026 · Aussprache nach Hörprobe
+## [2.0] — 2026-10-10 · **Version 2.0**
+
+Zweite Version des Lehrmittels; alle Seiten tragen jetzt dieselbe Versionszeile «Version 2.0 · Stand
+10. Oktober 2026» (Footer aus `scripts/build-seo.py`). Version 2.0 umfasst alle Abschnitte seit
+Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
+
+- **16 Leitprogramme nach Kapitelmuster** mit Einführungs- und Kontrollclips, Simulationen mit
+  Aufgabenleiste, Übungen mit Rückmeldung, Gesamttest und Bewertungspaket als PDF.
+- **586 vertonte Clips** (391 in der Bibliothek, 195 in Leitprogrammen und Übungsprüfungen),
+  Aussprache nach Hörproben abgestimmt.
+- **Simulationen und Werkzeuge** als eigene Rubriken; Notationstrainer unter `werkzeuge/`.
+- **Umzug auf `mathe.begreifbar.ch`**, Schriften und MathJax lokal, Volltextsuche.
+
+### Geändert
+
+- **Footer aus einer Quelle:** `scripts/build-seo.py` erzeugt ihn zwischen `FUSS`-Marken (Ortszeile
+  über `ort=` in `SEITEN`, Version über `VERSION`/`VERSION_STAND`); einheitliche Titelzeile mit
+  «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
+  `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
+  `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+
+---
+
+## [2.0] — 10. Oktober 2026 · Aussprache nach Hörprobe
 
 ### Geändert
 
@@ -24,7 +47,7 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
-## [Unveröffentlicht] — 10. Oktober 2026 · Simulationen und Werkzeuge
+## [2.0] — 10. Oktober 2026 · Simulationen und Werkzeuge
 
 ### Hinzugefügt
 
@@ -44,7 +67,7 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
-## [Unveröffentlicht] — 08./09. Oktober 2026 · Je Themenseite 5.2a–d ein Leitprogramm
+## [2.0] — 08./09. Oktober 2026 · Je Themenseite 5.2a–d ein Leitprogramm
 
 ### Hinzugefügt
 
@@ -62,7 +85,7 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
   und \(d\) statt der Diagonalennamen (Versatz jetzt \(v\)); Höhe als Lot auf die Gerade durch die Seite.
 - **Clip-Bauer:** `"gleichmaessig": true` an bewegten Kurven aus Physik übernommen (lineare statt weiche Überblendung).
 
-## [Unveröffentlicht] — 08. Oktober 2026 · Leitprogramme Trigonometrie und Textaufgaben
+## [2.0] — 08. Oktober 2026 · Leitprogramme Trigonometrie und Textaufgaben
 
 ### Hinzugefügt
 
@@ -91,7 +114,7 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 - **`clips.html`:** zeigt auch Clips mit Grossbuchstaben im Namen (`g2-M-lp-*`).
 - Sichtbar sind jetzt dreizehn Leitprogramme; Prüfliste §15 um 16 Fehlerklassen erweitert.
 
-## [Unveröffentlicht] — 06./07. Oktober 2026 · Leitprogramme-Seite, Clip-Bibliothek, ein Clip-Bauer
+## [2.0] — 06./07. Oktober 2026 · Leitprogramme-Seite, Clip-Bibliothek, ein Clip-Bauer
 
 ### Geändert
 
@@ -114,7 +137,7 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 - Leitprogramme `lineare-quadratische-gleichungen.html` (GF 2.2, Umformer statt Regler) und
   `planimetrie.html` (GF 5.2, Geometrie-Arbeitsbereich), geprüft und freigeschaltet.
 
-## [Unveröffentlicht] — 30. September bis 5. Oktober 2026 · Leitprogramme nach dem Kapitelmuster
+## [2.0] — 30. September bis 5. Oktober 2026 · Leitprogramme nach dem Kapitelmuster
 
 ### Hinzugefügt
 
@@ -139,7 +162,7 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 - HOWTO-leitprogramme §3: Kapitelmuster bis 5 Lektionen, Kapitel 35–45 min (Entscheid 03.10.2026).
 - Übergrosse Animationen gemessen und als Linkliste festgehalten (`TODO-animationen-hoehe.md`).
 
-## [Unveröffentlicht] — 30. September 2026 · TI-30X: alle Gerätefragen geklärt
+## [2.0] — 30. September 2026 · TI-30X: alle Gerätefragen geklärt
 
 ### Geändert
 
@@ -164,7 +187,7 @@ Gerät bestätigt. Die Datei ist gelöscht, die Belege stehen in `HOWTO-clips.md
 - Leitprogramme Quadratische Gleichungen und Gleichungssysteme: Rechner-Kästen und
   Selbsttest 3b nachgeführt. Sechs Clips geändert, vier neu vertont.
 
-## [Unveröffentlicht] — 29./30. September 2026 · Lerngebiet G2 fachlich und didaktisch geprüft
+## [2.0] — 29./30. September 2026 · Lerngebiet G2 fachlich und didaktisch geprüft
 
 ### Geändert
 
@@ -190,7 +213,7 @@ der Übungsprüfung 1. Rechenfehler gab es keine; die Befunde und ihre Erledigun
 - **Neue Regeln im STYLEGUIDE:** Elemente aufzählender Mengen mit Strichpunkt (§2.11),
   Vertiefungsaufgaben am Ende der Reihe (§5.4).
 
-## [Unveröffentlicht] — 21. September 2026 · Leere Menge als { }
+## [2.0] — 21. September 2026 · Leere Menge als { }
 
 ### Geändert
 
@@ -202,7 +225,7 @@ Sprechertext nennt das Zeichen) und 4 Anki-Decks (g2-1, g2-2a, g2-2b, g2-3; 14 N
 und GUIDs unverändert, damit ein erneuter Import aktualisiert statt verdoppelt). Die
 Schreibvarianten `\{\}`, `\{\ \}`, `\{\;\}` sind mit vereinheitlicht.
 
-## [Unveröffentlicht] — 21. September 2026 · Notationstrainer
+## [2.0] — 21. September 2026 · Notationstrainer
 
 ### Hinzugefügt
 
@@ -226,7 +249,7 @@ klebend, unter 900 px als eingeklappte Zeile über der Karte; Filter nach Fach, 
 beim Laden voreingestellt auf Grundlagenfach · ℝ · Definitionsmenge; Tastatur Leertaste/1/2.
 Alle Lösungen mit Python nachgerechnet.
 
-## [Unveröffentlicht] — 15. September 2026 · Quadratische Gleichungen und Gleichungssysteme: Lücken geschlossen
+## [2.0] — 15. September 2026 · Quadratische Gleichungen und Gleichungssysteme: Lücken geschlossen
 
 Arbeitsliste `todo-Q-GS.md` (30-Lektionen-Planung zu Algebra Kap. 9 und 10) abgearbeitet:
 T1–T7 und T9 umgesetzt, T8 (Leitprogramm-Führungsschicht) auf Entscheid des Auftraggebers
@@ -282,7 +305,7 @@ Anki-Deck (18 Karten, `NEW_DECKS` in `scripts/build_apkg.py`). Eingetragen in `n
 
 ---
 
-## [Unveröffentlicht] — 8. September 2026 · Alle fünf Leitprogramme sichtbar
+## [2.0] — 8. September 2026 · Alle fünf Leitprogramme sichtbar
 
 `leitprogramme.html` zeigte drei von fünf Programmen. Die beiden nach Prüfungsbogen —
 `uebungspruefung-1` und `trigo2` — waren bewusst unverlinkt und damit nur über den
@@ -334,7 +357,7 @@ die *Clips* aus der Bibliothek, nicht die *Seite* aus der Site.
 
 ---
 
-## [Unveröffentlicht] — 8. September 2026 · Elf Clips zum Taschenrechner
+## [2.0] — 8. September 2026 · Elf Clips zum Taschenrechner
 
 Der TI-30X Pro MathPrint war mit **11 Clips** vertreten — Modus, EE/ENG, Brüche,
 Potenzen, `ans`, `poly-solv`, `sys-solv`, Lagemasse, `num-solv`. Ein Abgleich mit dem
@@ -424,7 +447,7 @@ Clips, die inhaltlich nach Physik gehören — allen voran das Konstanten-Menü 
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Zwei Leitprogramme zu den Gleichungen
+## [2.0] — 7. September 2026 · Zwei Leitprogramme zu den Gleichungen
 
 Die Lerngebiete 1 und 2 hatten zwei Leitprogramme — `potenzen.html` und die unverlinkte
 Übungsprüfung. Beide zusammen berührten **quadratische Gleichungen und
@@ -480,7 +503,7 @@ das Lektionsband trägt `white-space:nowrap`. Derselbe Fall wie seinerzeit in de
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · s1-2 Potenzen: sechs Gäste, zwei Neue
+## [2.0] — 7. September 2026 · s1-2 Potenzen: sechs Gäste, zwei Neue
 
 Die Seite hatte keinen einzigen Clip — obwohl das Grundlagenfach zu Potenzen eine ganze
 Reihe besitzt und die Seite denselben Stoff behandelt. **Fünf der sechs Lernziele waren
@@ -528,7 +551,7 @@ werden**. Sonst steht die alte Zuordnung weiter in `clips.json`, und
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Trigonometrische Funktionen: sieben Clips
+## [2.0] — 7. September 2026 · Trigonometrische Funktionen: sieben Clips
 
 `s3-5` war die grösste inhaltliche Lücke des Schwerpunktfachs — die einzige Seite mit
 SF-eigenem Stoff ohne einen einzigen Clip. Jetzt trägt sie eine ganze Reihe.
@@ -584,7 +607,7 @@ Bibliothek **149 Clips (141:52 min)**, Schwerpunktfach von 28 auf **35**. Damit 
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Prioritäten A bis C abgeschlossen
+## [2.0] — 7. September 2026 · Prioritäten A bis C abgeschlossen
 
 Die neunzehn Punkte aus «Priorität A, B und C» einzeln am Repo nachgeprüft statt aus
 dem Gedächtnis abgehakt. **Siebzehn waren erledigt, zwei nicht.**
@@ -630,7 +653,7 @@ Regel «die Bilder trotzdem ansehen» da ist.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Zweitstimme entfernt
+## [2.0] — 7. September 2026 · Zweitstimme entfernt
 
 `g2-2b-quadratisch-c-null` war der **einzige** Clip mit zwei Tonspuren. Die
 Kohler-Fassung ist auf Wunsch des Autors gelöscht; alle 177 Clips laufen jetzt auf
@@ -656,7 +679,7 @@ Zweitstimme entsteht.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Prüfwerkzeug misst den Inhalt
+## [2.0] — 7. September 2026 · Prüfwerkzeug misst den Inhalt
 
 Rückübertrag aus TALS Physik — zum ersten Mal in dieser Richtung.
 
@@ -692,7 +715,7 @@ unabhängig selbst gefunden und im eigenen `HOWTO-clips.md` festgehalten.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Audit gegen den didaktischen Standard
+## [2.0] — 7. September 2026 · Audit gegen den didaktischen Standard
 
 Die zwölf Punkte aus «Priorität I» über alle **177 Drehbücher** geprüft. Der Bericht
 steht in `BERICHT-clip-audit-2026-09-07.md`.
@@ -729,7 +752,7 @@ Die kurzen sind Ein-Gedanken-Clips; sie zu strecken wäre Füllmaterial.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Schwerpunktfach: 21 neue Clips
+## [2.0] — 7. September 2026 · Schwerpunktfach: 21 neue Clips
 
 Die Liste «Priorität H» abgearbeitet — und damit alle Ausbaulisten D bis H. Das
 Schwerpunktfach hatte sieben Clips, alle zu Bruchgleichungen; jetzt sind es
@@ -776,7 +799,7 @@ wurde von G nach H verschoben, weil er nicht ins Grundlagenfach gehört.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Grundlagenfach: die letzten Lücken
+## [2.0] — 7. September 2026 · Grundlagenfach: die letzten Lücken
 
 Die Liste «Priorität G» — zehn Einzelthemen des Grundlagenfachs, die zwischen den
 Lerngebieten durchgefallen sind. **Jeder Punkt zuerst am Drehbuch und am Lehrplan
@@ -819,7 +842,7 @@ als Lernziel.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Datenanalyse: 17 neue Clips
+## [2.0] — 7. September 2026 · Datenanalyse: 17 neue Clips
 
 Die Liste «Priorität F» abgearbeitet. Lerngebiet 4 hatte zwei Clips, jetzt sind es
 neunzehn. Die Bibliothek wächst von 97 auf **114 Clips (111:10 min)**.
@@ -860,7 +883,7 @@ Definitionen jetzt davor stehen.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Geometrie: 16 neue Clips
+## [2.0] — 7. September 2026 · Geometrie: 16 neue Clips
 
 Die Liste «Priorität E» abgearbeitet. Lerngebiet 5 hatte zwei Clips, jetzt sind es
 achtzehn. Die Bibliothek wächst von 81 auf **97 Clips (97:30 min)**.
@@ -894,7 +917,7 @@ Folge 2 gerückt, weil die Definitionen jetzt davor stehen.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Funktionen: 19 neue Clips
+## [2.0] — 7. September 2026 · Funktionen: 19 neue Clips
 
 Lerngebiet 3 hatte einen einzigen Clip. Jetzt sind es zwanzig — die Liste
 «Priorität D» der Clip-Todos, abgearbeitet.
@@ -934,7 +957,7 @@ je einen eigenen Clip über ihre *Bedeutung*.
 
 ---
 
-## [Unveröffentlicht] — 7. September 2026 · Clips fachlich nachgeschärft
+## [2.0] — 7. September 2026 · Clips fachlich nachgeschärft
 
 Durchgang durch eine Prüfliste zu den bestehenden Clips (Prioritäten A, B und C).
 Jeder Punkt wurde am Drehbuch nachgeprüft, statt ihn zu glauben — von 20 Punkten
@@ -1005,7 +1028,7 @@ waren 9 offene Mängel, 8 bereits erledigt und 3 keine.
 
 ---
 
-## [Unveröffentlicht] — 6. September 2026 · Übungsprüfung als Leitprogramm
+## [2.0] — 6. September 2026 · Übungsprüfung als Leitprogramm
 
 Eine zweite Art Leitprogramm: nicht nach dem Stoff gegliedert, sondern nach einem
 Prüfungsbogen. Jede Teilaufgabe bekommt ihren eigenen vertonten Clip.
@@ -1064,7 +1087,7 @@ widersprach. Die Regel steht jetzt im Verifikations-Standard von `CLAUDE.md`.
 
 ---
 
-## [Unveröffentlicht] — 31. August / 1. September 2026 · Leitprogramme
+## [2.0] — 31. August / 1. September 2026 · Leitprogramme
 
 Ein zweites Format neben den Clips: Ein Leitprogramm führt allein durch ein Thema —
 Vorwissenstest, Kapitel mit Beispielen und Aufgaben, eingebettete Clips, Gesamttest mit
@@ -1106,7 +1129,7 @@ Punkteschlüssel.
 
 ---
 
-## [Unveröffentlicht] — 30./31. August 2026 · Clips: von 3 auf 50, alles in LaTeX
+## [2.0] — 30./31. August 2026 · Clips: von 3 auf 50, alles in LaTeX
 
 Aus dem Versuch mit ein paar Animationen ist ein eigenes Format geworden: 50 vertonte
 Clips, zusammen **52:54 min**, 14.3 MB Ton. Dazu die Bibliothek `clips.html`, ein Block auf
@@ -1165,7 +1188,7 @@ jeder Lektionsseite und ein Eintrag je Clip im Suchindex.
 
 ---
 
-## [Unveröffentlicht] — 10. August 2026 · Umzug auf `mathe.begreifbar.ch`
+## [2.0] — 10. August 2026 · Umzug auf `mathe.begreifbar.ch`
 
 Das Lehrmittel liegt jetzt unter einer eigenen Domain. `begreifbar.ch` ist registriert
 (Auto-Renew aktiv), die DNS-Einträge stehen — vier A- und vier AAAA-Records am Apex,
@@ -1215,7 +1238,7 @@ historischen Stand.
 
 ---
 
-## [Unveröffentlicht] — 2./3. August 2026
+## [2.0] — 2./3. August 2026
 
 Nacharbeit nach Version 1.0: das Animations-Audit des Schwerpunktfachs abgeschlossen,
 die Auffindbarkeit eingerichtet und die Einbettung der Animationen vereinheitlicht.

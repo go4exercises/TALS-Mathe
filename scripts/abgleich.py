@@ -142,7 +142,9 @@ OFFEN = [
              'fuss(), fuss_ausserhalb(), einsetzen() mit Footer; --check mit Exit 2 fuer site-footer ausserhalb der Marken) und '
              '.claude/skills/preflight/preflight.py (Exit 2 von build-seo.py = Fehler). Fachdaten bleiben eigene: SEITEN mit ort=/fuss=False, '
              'FUSS_UNTERTITEL (in DATEN). Ablauf und Zahlen: /home/paps/TODO-fuss-version-physik.md. VERSION/VERSION_STAND gehoeren NICHT '
-             'in DATEN — beide Repos tragen dieselbe Version. Danach abgleich.py zurueckgeben und diesen Eintrag streichen.'),
+             'in DATEN — beide Repos tragen dieselbe Version: VERSION = 2.0, VERSION_STAND = 10. Oktober 2026 (Mathe Teil B). '
+             'feedback.html (KERN, eigener Fuss) traegt dieselbe Zeile «Version 2.0 · Stand 10. Oktober 2026». '
+             'Danach abgleich.py zurueckgeben und diesen Eintrag streichen.'),
     dict(quelle='Mathe', was='build-clip-ton.py: zwei TAUSCH-Eintraege nach Hoerprobe Runde 6 (Korrekturglied -> Korrektur-Glied, Arkussinus -> Arkus-Sinus), 10.10.2026',
          wie='Physik: Mathes scripts/build-clip-ton.py uebernehmen. In Physik betroffen: 0 Clips (gezaehlt 10.10.2026), nichts neu vertonen. '
              'Dazu diese abgleich.py uebernehmen (Grundlinie build-suchindex.py 0.947, OFFEN von Physik abgearbeitet) und diesen Eintrag streichen.'),
