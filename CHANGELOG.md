@@ -4,6 +4,26 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 10. Oktober 2026 · Aussprache nach Hörprobe
+
+### Geändert
+
+- **Aussprache der Clip-Stimme** nach einer Hörprobe in sechs Runden über Mathe, Physik und
+  Sek1-Mathe (`~/hoerproben/2026-10-10`): in `scripts/build-clip-ton.py` Lautschrift für Amontons,
+  isochor, Glycerin, stimulierte, Kachel/Kacheln, «parts per million», Worttausch «Korrektur-Glied»
+  und «Arkus-Sinus»; die als «wie bisher» entschiedenen Wörter stehen als Kommentar dabei. Die
+  Tabelle ist in Mathe und Physik dieselbe.
+- **Sprechertexte:** «die Diskriminante» statt «D» und «y s, gleich» (Leitprogramm Quadratische
+  Funktionen), «Die Seite a ist kürzer» (Trigonometrische Berechnungen). Neu vertont nur die
+  betroffenen Szenen und Fragetöne: 12 Clips, darunter `g1-4-anim-faktor-kacheln` und vier
+  Animationsclips zu 5.3–5.5.
+- **`HOWTO-clips.md`**, Abschnitt «Aussprache»: Ergebnis der Hörprobe; Fragetöne verlieren ein
+  leises «sch» am Anfang (Abhilfe «Nun stelle …»), Szenen nicht.
+- **`scripts/abgleich.py`** von Physik übernommen (`geschwister()` hält `sek1-mathe` nicht mehr für
+  das Schwesterrepo), Grundlinie `build-suchindex.py` 0.947.
+
+---
+
 ## [Unveröffentlicht] — 10. Oktober 2026 · Simulationen und Werkzeuge
 
 ### Hinzugefügt
