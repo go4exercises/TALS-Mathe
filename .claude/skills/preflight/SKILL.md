@@ -31,11 +31,16 @@ div/details-Bilanz · doppelte HTML-`id` · kein `ß` · Dezimalkomma in Body-Ma
 - **verify_mathjax.js** — rendert jeden Ausdruck mit `mathjax-full`, findet echte
   TeX-Fehler. Braucht `node_modules/mathjax-full`.
 - **verify_js_runtime.js** — führt den Seiten-JS in jsdom aus, findet Laufzeitfehler.
-  Braucht `node_modules/jsdom`.
+  Braucht `node_modules/jsdom`. Bekommt nur Seiten eine Ebene tief zu sehen
+  (`grundlagen/`, `schwerpunkt/`, `simulationen/`, `werkzeuge/`).
 - **check_identifier_collisions.py** — Inline-Symbole vs. mathlib/nav. Ohne npm.
 - **check_todo_schwester** — liest `TODO-schwesterprojekt.md` im Schwesterrepo
   (Physik liest Mathes; Physik führt keine solche Datei, in Mathe schweigt der
   Check) und meldet offene Einträge unter «## Offen» als `[WARN]`. Schreibt nie.
+- **check_sim_wz** — Seiten in `simulationen/` und `werkzeuge/`: fehlt die Kachel in
+  der Übersicht, zeigt ein Rücklink-Anker ins Leere oder verlinkt eine Themenseite
+  eine Datei, die es nicht gibt, ist das ein **[FEHLER]**; verlinkt keine Themenseite
+  auf die Seite (und steht sie nicht unter «Ausserhalb der Lerngebiete»), ein `[WARN]`.
 
 Fehlt ein npm-Modul, meldet der Pre-Flight das als `[WARN]` und überspringt nur diesen
 Teil. Einmalig installieren mit: `npm install mathjax-full jsdom` (im Repo-Root).

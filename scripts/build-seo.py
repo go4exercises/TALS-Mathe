@@ -96,8 +96,18 @@ SEITEN = {
    titel='Leitprogramme — selbstständig durch ein Thema',
    beschreibung='Leitprogramme der BM-Mathematik: Ein Thema in Kapiteln zum selbstständigen Durcharbeiten, mit Vorwissenstest, Beispielen, Aufgaben und Gesamttest.',
    themen=['Mathematik', 'Leitprogramm', 'Selbststudium', 'Berufsmaturität']),
- 'notationstrainer.html': dict(
-   typ='article', lrt='Lernkartei',
+ 'simulationen.html': dict(
+   typ='article', lrt='Simulation',
+   titel='Simulationen — Mathematik zum Beobachten und Verändern',
+   beschreibung='Simulationen zur Mathematik der Berufsmaturität: eigene Seiten, an denen du ein Modell beobachtest und seine Grössen veränderst, verlinkt von den Themenseiten.',
+   themen=['Mathematik', 'Simulation', 'Berufsmaturität']),
+ 'werkzeuge.html': dict(
+   typ='article', lrt='Werkzeug',
+   titel='Werkzeuge — Mathematik üben und rechnen',
+   beschreibung='Werkzeuge zur Mathematik der Berufsmaturität: Trainer und Rechner für eigene Aufgaben oder Daten, mit Rückmeldung und verlinkt von den Themenseiten.',
+   themen=['Mathematik', 'Werkzeug', 'Übungen', 'Berufsmaturität']),
+ 'werkzeuge/notationstrainer.html': dict(
+   typ='article', lrt=['Werkzeug', 'Lernkartei'],
    titel='Notationstrainer — Definitions- und Lösungsmengen richtig aufschreiben',
    beschreibung='Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit drei Fächern zum Wiederholen.',
    themen=['Mathematik', 'Definitionsmenge', 'Lösungsmenge', 'Intervall', 'Grundmenge', 'Lernkartei']),

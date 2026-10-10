@@ -36,13 +36,22 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `mathlib.js` — Canvas-Bibliothek + globale Helfer (`toggleL` u.a.).
 - `minicheck.js` (Mini-Check-Akkordeon), `anim-hinweise.js` (👁/💡-Rollover, Pflicht bei
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
-- `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html` — vier
-  Nachschlag-Seiten im Repo-Root.
-- `notationstrainer.html` — Lernkartei (3 Fächer, Stand in `localStorage`) zur Notation von
+- `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html`,
+  `simulationen.html`, `werkzeuge.html` — sechs Nachschlag-Seiten im Repo-Root.
+- `simulationen/` und `werkzeuge/` — eigene Seiten neben den Themenseiten, seit 10.10.2026
+  streng getrennt: **Simulation** = ein Modell beobachten und seine Grössen verändern,
+  **Werkzeug** = eigene Aufgaben oder Daten eingeben bzw. üben (Trainer, Rechner). Je eine
+  Übersicht (`simulationen.html`, `werkzeuge.html`), verlinkt aus dem Abschnitt der
+  Themenseite, zu dem sie gehören (Baustein `🛠 Werkzeug:` / `🧪 Simulation:` in
+  `.block-tipp`) — **nicht** am Seitenanfang und **nicht** auf den Kacheln von
+  `index.html`. Anleitung: `HOWTO-simulationen.md`, `HOWTO-werkzeuge.md`; der Pre-Flight
+  prüft mit `check_sim_wz`. Alte Adressen leitet `404.html` weiter (Tabelle `WEITERLEITUNGEN`).
+- `werkzeuge/notationstrainer.html` — Lernkartei (3 Fächer, Stand in `localStorage` unter
+  `tals-mathe-notationstrainer-v1`, in `rechtliches.html` genannt) zur Notation von
   𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
-  nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
-  Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
+  nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Verlinkt aus
+  g2.1 und s2.1 (`#definition`); bis 10.10.2026 lag er als `notationstrainer.html` im Root.
 - `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über

@@ -4,6 +4,26 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 10. Oktober 2026 · Simulationen und Werkzeuge
+
+### Hinzugefügt
+
+- **Zwei Rubriken mit eigenem Ordner und eigener Übersicht:** `simulationen/` mit `simulationen.html`
+  (noch leer) und `werkzeuge/` mit `werkzeuge.html`, je im Menü «Nachschlagen» und auf der Startseite.
+  Anleitungen `HOWTO-simulationen.md` und `HOWTO-werkzeuge.md`, STYLEGUIDE §6.6, Pre-Flight-Check
+  `check_sim_wz`.
+- **`404.html`** mit Tabelle `WEITERLEITUNGEN` für umgezogene Seiten.
+
+### Geändert
+
+- **Notationstrainer** nach `werkzeuge/notationstrainer.html`; die alte Adresse leitet weiter, der
+  gespeicherte Stand (`tals-mathe-notationstrainer-v1`) bleibt. Verlinkt jetzt aus g2.1 und s2.1
+  (Abschnitt `#definition`) statt nur aus dem Menü.
+- **`rechtliches.html`:** nennt den gespeicherten Stand des Notationstrainers — die Seite sagte bisher,
+  es werde kein Lernstand gespeichert.
+
+---
+
 ## [Unveröffentlicht] — 08./09. Oktober 2026 · Je Themenseite 5.2a–d ein Leitprogramm
 
 ### Hinzugefügt

@@ -335,7 +335,10 @@ ZUSATZSEITEN = [
     ('formelsammlung.html', '∑', 'Formelsammlung', 'formeln'),
     ('clips.html', '▶', 'Clips', 'thema'),
     ('leitprogramme.html', '▤', 'Leitprogramme', 'thema'),
-    ('notationstrainer.html', '{ }', 'Notationstrainer', 'thema'),
+    ('simulationen.html', 'SIM', 'Simulationen', 'thema'),
+    ('werkzeuge.html', 'WZ', 'Werkzeuge', 'thema'),
+    # Simulationen und Werkzeuge selbst (HOWTO-simulationen.md / HOWTO-werkzeuge.md)
+    ('werkzeuge/notationstrainer.html', 'WZ', 'Notationstrainer', 'thema'),
     ('leitprogramme/quadratische-funktionen.html', '▤',
      'Leitprogramm Quadratische Funktionen', 'thema'),
     ('leitprogramme/lineare-funktionen.html', '▤',
