@@ -36,11 +36,12 @@ i = alt.index('<script>\n  window.MathJax')
 j = min(k for k in (alt.find('<script>\n/* Leitprogramm Exponential- und Logarithmusfunktionen — Simulationen'),
                     alt.find('<script>\n/* Leitprogramm Trigonometrische Funktionen — Simulationen')) if k > 0)
 basis = alt[i:j]
-fuss = alt[alt.index('<footer class="site-footer">'):]
-fuss = re.sub(r'Version [0-9.]+( \(Probe\))?', 'Version 1.0 (Probe)', fuss)
-fuss = fuss.replace('Schwerpunktfach · Leitprogramm Exponential- und Logarithmusfunktionen', 'Schwerpunktfach · Leitprogramm Trigonometrische Funktionen')
-fuss = fuss.replace('Exponential- und Logarithmusfunktionen', 'Trigonometrische Funktionen')
-fuss = re.sub(r'Stand [0-9]+\. [A-Za-zäöü]+ 2026', 'Stand 5. Oktober 2026', fuss)
+# Footer erzeugt scripts/build-seo.py (seit 10.10.2026): hier nur leere FUSS-Marken; nach dem Bau
+# `python3 scripts/build-seo.py` laufen lassen.
+fuss = alt[alt.index('<!-- FUSS:ANFANG'):] if '<!-- FUSS:ANFANG' in alt else alt[alt.index('<footer class="site-footer">'):]
+fuss = re.sub(r'<!-- FUSS:ANFANG.*?<!-- FUSS:ENDE -->|<footer class="site-footer">.*?</footer>',
+              lambda _: '<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->\n<!-- FUSS:ENDE -->',
+              fuss, count=1, flags=re.S)
 
 CSS = '''
 /* ════════ Trigonometrische Funktionen (05.10.2026) — Kapitelmuster wie Exponential- und Logarithmusfunktionen ════════

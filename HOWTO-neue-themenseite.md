@@ -40,10 +40,8 @@ Das Pflicht-Skelett (laut STYLEGUIDE §6.1):
     </main>
     <aside class="toc-wrap"><div id="toc"></div></aside>
   </div>
-  <footer class="site-footer">
-    <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität …</p>
-    <p>Grundlagenfach <RLP-Nr> <Themenname></p>
-  </footer>
+  <!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+  <!-- FUSS:ENDE -->
   <script src="../nav.js"></script>
   <script src="../mathlib.js"></script>
   <script>buildNav({...});</script>
@@ -156,14 +154,15 @@ Grafik. Verbindlich: STYLEGUIDE §2.10.
 
 Neue Seite in der Tabelle `SEITEN` von `scripts/build-seo.py` eintragen —
 `beschreibung` (140–165 Zeichen, mit den Begriffen, die jemand tatsächlich sucht),
-`themen` (Stichworte) und `tg` (Teilgebiet für `educationalAlignment`; weglassen,
-wenn die Seite keine RLP-Kompetenzbox trägt). Dann:
+`themen` (Stichworte), `tg` (Teilgebiet für `educationalAlignment`; weglassen,
+wenn die Seite keine RLP-Kompetenzbox trägt) und `ort` (zweite Footerzeile,
+z.B. `ort='Grundlagenfach · 3.2 Lineare Funktionen'`). Dann:
 
 ```bash
 python3 scripts/build-seo.py
 ```
 
-Das schreibt den Kopfblock in die Seite und führt `sitemap.xml` nach. Ohne diesen
+Das schreibt den Kopfblock und den Footer (zwischen den FUSS-Marken) in die Seite und führt `sitemap.xml` nach. Ohne diesen
 Schritt hat die Seite keine Beschreibung, keine Link-Vorschau und steht in keiner
 Sitemap — der Pre-Flight meldet das als Warnung.
 
@@ -177,7 +176,7 @@ for f in grundlagen/g*.html schwerpunkt/s*.html; do
   mc=$(grep -c 'main class="content"' "$f")
   bn=$(grep -cE 'buildNav\(\{' "$f")
   toc=$(grep -c 'id="toc"' "$f")
-  sf=$(grep -c '<footer class="site-footer"' "$f")
+  sf=$(grep -c '<footer class="site-footer"' "$f")   # nach build-seo.py: 1
   bad=$(grep -cE 'class="(inhalt|brot|seiten-kopf|rlp\b|rlp-list|rlp-label|seiten-fuss|dl-box|ressourcen-grid|ress|ress-titel|ress-beschr|ress-quelle)"' "$f")
   if [ "$pw" -ne 1 ] || [ "$mc" -ne 1 ] || [ "$bn" -ne 1 ] || [ "$toc" -ne 1 ] || [ "$sf" -ne 1 ] || [ "$bad" -ne 0 ]; then
     printf "%-55s pw=%s mc=%s bn=%s toc=%s sf=%s bad=%s\n" "$(basename $f)" "$pw" "$mc" "$bn" "$toc" "$sf" "$bad"

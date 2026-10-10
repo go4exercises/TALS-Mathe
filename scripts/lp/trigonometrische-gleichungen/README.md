@@ -74,3 +74,9 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/trigonometrische-gleichungen.h
 node .claude/tools/pruef-fragen.mjs g5-5-lp-kontrolle-einheitskreis g5-5-lp-kontrolle-arkus \
      g5-5-lp-kontrolle-tangens g5-5-lp-kontrolle-loesungsmenge
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

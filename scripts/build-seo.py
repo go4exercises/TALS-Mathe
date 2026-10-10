@@ -54,6 +54,13 @@ RLP = ('Rahmenlehrplan für die Berufsmaturität RLP-BM 2030, '
        'Gruppe Technik, Architektur, Life Sciences')
 STAND = '2026-08-02'
 
+# Footer jeder Seite (seit 10.10.2026 erzeugt wie der SEO-Kopf). Eine Version fuer das
+# ganze Lehrmittel; Korrekturen aendern nur VERSION_STAND, eine Gruppe neuer
+# Leitprogramme/Simulationen/Werkzeuge die Nummer (2.1, 2.2 …).
+VERSION = '1.0'
+VERSION_STAND = '1. August 2026'          # Anzeigeform, nicht ISO
+FUSS_UNTERTITEL = 'Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030'
+
 # Lerngebiete je Fachbereich — Quelle: index.html
 GF = 'Grundlagenfach Mathematik'
 SF = 'Schwerpunktfach Mathematik'
@@ -75,6 +82,8 @@ LG_S = {'1': 'Lerngebiet 1 Arithmetik/Algebra',
 #               Grundlagen» gibt es im Grundlagen- UND im Schwerpunktfach.
 # tg:           Teilgebiet fuer educationalAlignment; lg/fach werden aus dem
 #               Dateinamen abgeleitet.
+# ort:          zweite Footerzeile («Grundlagenfach · 2.1 Grundlagen»); fehlt sie, entfaellt die Zeile.
+# fuss:         False fuer Seiten ohne Footer (mit Kommentar warum).
 SEITEN = {
  'index.html': dict(
    typ='website',
@@ -82,36 +91,43 @@ SEITEN = {
    beschreibung='Kostenloses interaktives Mathematik-Lehrmittel für die Berufsmaturität TALS nach RLP-BM 2030: Algebra, Gleichungen, Funktionen, Geometrie und Datenanalyse.',
    themen=['Mathematik', 'Berufsmaturität', 'RLP-BM 2030', 'Lehrmittel', 'Algebra', 'Funktionen', 'Geometrie']),
  'glossar.html': dict(
+   ort='Nachschlagen · Glossar',
    typ='article', lrt='Glossar',
    titel='Glossar — mathematische Begriffe von A bis Z',
    beschreibung='Mathematik-Glossar der Berufsmaturität: die zentralen Begriffe von A bis Z kurz erklärt, jeweils mit Formel und Verweis auf die passende Themenseite.',
    themen=['Mathematik', 'Glossar', 'Fachbegriffe', 'Berufsmaturität']),
  'clips.html': dict(
+   ort='Nachschlagen · Clips',
    typ='article', lrt='Erklärclip',
    titel='Clips — kurze Animationen zu den Rechenwegen',
    beschreibung='Kurze Animationen der BM-Mathematik: Ein Clip baut einen Rechenweg Zeile für Zeile auf, mit Farbführung und Text zum Mitlesen. Nach Lerngebieten geordnet.',
    themen=['Mathematik', 'Erklärclip', 'Animation', 'Berufsmaturität', 'Rechenweg']),
  'leitprogramme.html': dict(
+   ort='Nachschlagen · Leitprogramme',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramme — selbstständig durch ein Thema',
    beschreibung='Leitprogramme der BM-Mathematik: Ein Thema in Kapiteln zum selbstständigen Durcharbeiten, mit Vorwissenstest, Beispielen, Aufgaben und Gesamttest.',
    themen=['Mathematik', 'Leitprogramm', 'Selbststudium', 'Berufsmaturität']),
  'simulationen.html': dict(
+   ort='Nachschlagen · Simulationen',
    typ='article', lrt='Simulation',
    titel='Simulationen — Mathematik zum Beobachten und Verändern',
    beschreibung='Simulationen zur Mathematik der Berufsmaturität: eigene Seiten, an denen du ein Modell beobachtest und seine Grössen veränderst, verlinkt von den Themenseiten.',
    themen=['Mathematik', 'Simulation', 'Berufsmaturität']),
  'werkzeuge.html': dict(
+   ort='Nachschlagen · Werkzeuge',
    typ='article', lrt='Werkzeug',
    titel='Werkzeuge — Mathematik üben und rechnen',
    beschreibung='Werkzeuge zur Mathematik der Berufsmaturität: Trainer und Rechner für eigene Aufgaben oder Daten, mit Rückmeldung und verlinkt von den Themenseiten.',
    themen=['Mathematik', 'Werkzeug', 'Übungen', 'Berufsmaturität']),
  'werkzeuge/notationstrainer.html': dict(
+   ort='Werkzeuge · Notationstrainer',
    typ='article', lrt=['Werkzeug', 'Lernkartei'],
    titel='Notationstrainer — Definitions- und Lösungsmengen richtig aufschreiben',
    beschreibung='Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit drei Fächern zum Wiederholen.',
    themen=['Mathematik', 'Definitionsmenge', 'Lösungsmenge', 'Intervall', 'Grundmenge', 'Lernkartei']),
  'leitprogramme/potenzen.html': dict(
+   ort='Leitprogramm · Potenzen',
    typ='article', lrt='Leitprogramm',
    # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
    noindex=True,
@@ -119,6 +135,7 @@ SEITEN = {
    beschreibung='Leitprogramm Potenzen: die Potenzregeln erst mit natürlichen, dann mit ganzen, dann mit rationalen Exponenten — und Wurzeln ganz ohne Wurzelgesetze.',
    themen=['Mathematik', 'Potenzen', 'Potenzgesetze', 'Wurzeln', 'Leitprogramm']),
  'leitprogramme/quadratische-gleichungen.html': dict(
+   ort='Leitprogramm · Quadratische Gleichungen',
    typ='article', lrt='Leitprogramm',
    # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
    noindex=True,
@@ -126,6 +143,7 @@ SEITEN = {
    beschreibung='Leitprogramm zu den quadratischen Gleichungen: die drei Sonderfälle ohne Formel, quadratische Ergänzung und Mitternachtsformel, Diskriminante, Ungleichungen und Parameter — mit Clips, Selbsttests und Gesamttest.',
    themen=['Mathematik', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Diskriminante', 'Leitprogramm']),
  'leitprogramme/gleichungssysteme.html': dict(
+   ort='Leitprogramm · Gleichungssysteme',
    typ='article', lrt='Leitprogramm',
    # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
    noindex=True,
@@ -133,6 +151,7 @@ SEITEN = {
    beschreibung='Leitprogramm zu den linearen Gleichungssystemen: grafisch, Einsetzen, Gleichsetzen und Addition, dazu die drei möglichen Lösungsanzahlen, drei Variablen und der Schnitt von Gerade und Parabel — mit Clips, Selbsttests und Gesamttest.',
    themen=['Mathematik', 'Gleichungssysteme', 'Additionsverfahren', 'Einsetzverfahren', 'Leitprogramm']),
  'leitprogramme/uebungspruefung-1.html': dict(
+   ort='Leitprogramm · Übungsprüfung 1',
    typ='article', lrt='Leitprogramm',
    # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
    noindex=True,
@@ -140,6 +159,7 @@ SEITEN = {
    beschreibung='Eine vollständige BM2-Übungsprüfung zu Arithmetik, Algebra und linearen Gleichungen: Prüfungsbogen, Musterlösung mit Punkteschlüssel und zu jeder der 26 Teilaufgaben ein vertonter Clip.',
    themen=['Mathematik', 'Übungsprüfung', 'Arithmetik', 'Algebra', 'Lineare Gleichungen', 'Leitprogramm']),
  'leitprogramme/trigo2.html': dict(
+   fuss=False,  # eigener Seitenabschluss (.fuss-eigen) wie ein Pruefungsbogen; ausgeblendet (noindex)
    typ='article', lrt='Leitprogramm',
    # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
    noindex=True,
@@ -147,36 +167,43 @@ SEITEN = {
    beschreibung='Ein Prüfungsbogen zur Trigonometrie mit vollständiger Musterlösung: Sinus, Cosinus und Tangens am rechtwinkligen Dreieck, Kofunktion und trigonometrischer Pythagoras, Fehlersuche an einer Ballonaufgabe und Winkel am Einheitskreis — zu jeder der 9 Teilaufgaben ein vertonter Clip.',
    themen=['Mathematik', 'Trigonometrie', 'Einheitskreis', 'Übungsprüfung', 'Leitprogramm']),
  'leitprogramme/quadratische-funktionen.html': dict(
+   ort='Leitprogramm · Quadratische Funktionen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Quadratische Funktionen — lesen, umformen, aufstellen, optimieren',
    beschreibung='Leitprogramm zu den quadratischen Funktionen nach RLP GF 3.3: Scheitelform lesen, zwischen den drei Formen wechseln, Nullstellen und Scheitel berechnen, Funktionsgleichungen aufstellen und Extremwertaufgaben lösen — mit Clips, Erkundungen und Selbsttests.',
    themen=['Mathematik', 'Quadratische Funktionen', 'Parabel', 'Scheitelform', 'Extremwertaufgaben', 'Leitprogramm']),
  'leitprogramme/lineare-funktionen.html': dict(
+   ort='Leitprogramm · Lineare Funktionen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Lineare Funktionen — lesen, messen, unterscheiden, aufstellen',
    beschreibung='Leitprogramm zu den linearen Funktionen nach RLP GF 3.2: Steigung und y-Achsenabschnitt aus Gleichung und Graph lesen, das Steigungsdreieck und die Nullstelle, Typen und Lagebeziehungen, die Geradengleichung aufstellen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Lineare Funktionen', 'Gerade', 'Steigung', 'Achsenabschnitt', 'Leitprogramm']),
  'leitprogramme/potenz-wurzelfunktionen.html': dict(
+   ort='Leitprogramm · Potenz- und Wurzelfunktionen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Potenz- und Wurzelfunktionen — formen, verschieben, umkehren',
    beschreibung='Leitprogramm zu den Potenz- und Wurzelfunktionen nach RLP SP 3.2: der Exponent und die Symmetrie, Hyperbeln mit ihren Asymptoten, Verschieben und Strecken, die Wurzelfunktion als Umkehrfunktion der Potenzfunktion und ihre Definitionsmenge — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Potenzfunktionen', 'Wurzelfunktionen', 'Umkehrfunktion', 'Hyperbel', 'Leitprogramm']),
  'leitprogramme/polynomfunktionen.html': dict(
+   ort='Leitprogramm · Polynomfunktionen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Polynomfunktionen — Nullstellen, Verlauf, Hoch- und Tiefpunkte',
    beschreibung='Leitprogramm zu den Polynomfunktionen nach RLP SP 3.3: Linearfaktoren und Nullstellen, mehrfache Nullstellen am Graphen, der Globalverlauf aus Grad und Leitkoeffizient, Nullstellen berechnen sowie Hoch- und Tiefpunkte lokal und absolut — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Polynomfunktionen', 'Linearfaktor', 'Nullstellen', 'Extremwerte', 'Leitprogramm']),
  'leitprogramme/exp-log-funktionen.html': dict(
+   ort='Leitprogramm · Exponential- und Logarithmusfunktionen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Exponential- und Logarithmusfunktionen — Wachstum, Zerfall, Sättigung, Umkehrung',
    beschreibung='Leitprogramm zu den Exponential- und Logarithmusfunktionen nach RLP SP 3.4: der Graph von aˣ, Wachstum und Zerfall mit Prozent, Verdopplungs- und Halbwertszeit, e-Funktion und Basiswechsel, Sättigungsprozesse und die Logarithmusfunktion als Umkehrfunktion — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Exponentialfunktion', 'Logarithmusfunktion', 'Wachstum', 'Zerfall', 'Leitprogramm']),
  'leitprogramme/trigonometrische-funktionen.html': dict(
+   ort='Leitprogramm · Trigonometrische Funktionen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Trigonometrische Funktionen — Einheitskreis, Periode, Symmetrie, Parameter',
    beschreibung='Leitprogramm zu den trigonometrischen Funktionen nach RLP SP 3.5: Sinus und Cosinus vom Einheitskreis zur Kurve, Periode und Symmetrie, die Tangenskurve mit ihren Polen, Amplitude, Periode und Verschiebung von y = a·sin(b(x − u)) + v und alle Lösungen von sin x = c über die Symmetrie — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Trigonometrische Funktionen', 'Sinusfunktion', 'Einheitskreis', 'Periode', 'Leitprogramm']),
  'leitprogramme/planimetrie.html': dict(
+   ort='Leitprogramm · Planimetrie',
    typ='article', lrt='Leitprogramm',
    # abgelöst am 08.10.2026 durch je ein Leitprogramm zu 5.2a–d (unter «Alte Leitprogramme»)
    noindex=True,
@@ -184,66 +211,79 @@ SEITEN = {
    beschreibung='Leitprogramm zur Planimetrie nach RLP GF 5.2: Dreiecke beschreiben und ihre Elemente, Dreiecksfläche und zugehörige Höhe, Vierecke mit Mittellinie und Pythagoras, Kreis und Kreisteile, zentrische Streckung, Ähnlichkeit und Strahlensätze — mit Clips, einem Geometrie-Arbeitsbereich zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Planimetrie', 'Dreieck', 'Kreis', 'Ähnlichkeit', 'Leitprogramm']),
  'leitprogramme/lineare-quadratische-gleichungen.html': dict(
+   ort='Leitprogramm · Lineare und quadratische Gleichungen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Lineare und quadratische Gleichungen — umformen, Nullprodukt, Mitternachtsformel, Parameter',
    beschreibung='Leitprogramm zu den linearen und quadratischen Gleichungen nach RLP GF 2.2: Äquivalenzumformungen und die drei Lösungsfälle, Ausklammern und Satz vom Nullprodukt, Wurzelziehen, quadratische Ergänzung und Mitternachtsformel, das passende Verfahren wählen und die Parameterdiskussion — mit Clips, einem Umformer zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Lineare Gleichungen', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Parameterdiskussion', 'Leitprogramm']),
  'leitprogramme/betragsfunktionen.html': dict(
+   ort='Leitprogramm · Betragsfunktionen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Betragsfunktionen — Knick, Umklappen, abschnittsweise, Gleichungen',
    beschreibung='Leitprogramm zu den Betragsfunktionen (Teilgebiet 3.6, Ergänzung TALS): der Betrag als Abstand, das V mit Knickpunkt, y = a·|x − u| + v, das Umklapp-Prinzip für |f(x)|, Betragsterme abschnittsweise schreiben und Betragsgleichungen und -ungleichungen grafisch und rechnerisch lösen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Betragsfunktion', 'Betragsgleichung', 'abschnittsweise definierte Funktion', 'Leitprogramm']),
  'leitprogramme/trigonometrische-berechnungen.html': dict(
+   ort='Leitprogramm · Trigonometrische Berechnungen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Trigonometrische Berechnungen — rechtwinkliges Dreieck, Sinussatz, Cosinussatz',
    beschreibung='Leitprogramm zu den trigonometrischen Berechnungen nach RLP GF 5.3: Sinus, Cosinus und Tangens im rechtwinkligen Dreieck, Winkel mit arcsin, arccos und arctan, Höhen und Distanzen mit Höhen- und Tiefenwinkel, Sinussatz mit dem Fall SSW, Cosinussatz und Dreiecksfläche — mit Clips, einem Geometrie-Arbeitsbereich zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Trigonometrie', 'Sinussatz', 'Cosinussatz', 'rechtwinkliges Dreieck', 'Leitprogramm']),
  'leitprogramme/einheitskreis.html': dict(
+   ort='Leitprogramm · Einheitskreis',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Einheitskreis — Koordinaten, besondere Winkel, Symmetrien, Umkehrung',
    beschreibung='Leitprogramm zum Einheitskreis nach RLP GF 5.4: Sinus und Cosinus als Koordinaten, besondere Winkel ohne Taschenrechner, Tangens und trigonometrischer Pythagoras, Symmetrien, Periode und Umkehroperationen — mit Clips, Simulationen am Einheitskreis, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Einheitskreis', 'Sinus', 'Cosinus', 'trigonometrischer Pythagoras', 'Leitprogramm']),
  'leitprogramme/trigonometrische-gleichungen.html': dict(
+   ort='Leitprogramm · Trigonometrische Gleichungen',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Trigonometrische Gleichungen — Einheitskreis, Arkusfunktion, Lösungsmenge',
    beschreibung='Leitprogramm zu den trigonometrischen Gleichungen nach RLP GF 5.5: sin φ = c, cos φ = c und tan φ = c am Einheitskreis sehen, mit der Arkusfunktion und der Symmetrie lösen, alle Lösungen mit der Periode angeben — mit Clips, Simulationen, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Trigonometrische Gleichung', 'Arkusfunktion', 'Einheitskreis', 'Lösungsmenge', 'Leitprogramm']),
  'leitprogramme/modellieren.html': dict(
+   ort='Leitprogramm · Textaufgaben modellieren',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Textaufgaben modellieren — Zahlenrätsel, Mischen, Verteilen, Zins',
    beschreibung='Leitprogramm zum Modellieren von Textaufgaben nach RLP GF 2.1 und 2.3: Zahlenrätsel, Mischen, Verteilen und Zins Schritt für Schritt vom Text über die Deklaration zum Ansatz, in die Grundform und mit dem TI-30X Pro gelöst — mit Clips, Simulationen, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Textaufgabe', 'Modellieren', 'Deklaration', 'Mischungsaufgabe', 'Zinseszins', 'Gleichungssystem', 'Leitprogramm']),
  'leitprogramme/dreiecke.html': dict(
+   ort='Leitprogramm · Dreiecke',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Dreiecke — Winkel, besondere Linien, Fläche und Pythagoras',
    beschreibung='Leitprogramm Dreiecke nach RLP GF 5.2: Winkelsumme und Aussenwinkel, Höhen, Seiten- und Winkelhalbierende, Mittelsenkrechte mit ihren Schnittpunkten, Fläche, Umfang und Pythagoras — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Dreieck', 'Winkelsumme', 'Höhe', 'Seitenhalbierende', 'Mittelsenkrechte', 'Pythagoras', 'Leitprogramm']),
  'leitprogramme/vierecke.html': dict(
+   ort='Leitprogramm · Vierecke',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Vierecke — Vierecks-Familie, Fläche, Trapez und fehlende Längen',
    beschreibung='Leitprogramm Vierecke nach RLP GF 5.2: Vierecks-Familie und Winkel, Fläche und Umfang von Rechteck, Parallelogramm und Rhombus, Trapez mit Mittellinie und fehlende Längen mit Pythagoras — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Viereck', 'Parallelogramm', 'Rhombus', 'Trapez', 'Mittellinie', 'Diagonale', 'Leitprogramm']),
  'leitprogramme/kreis-kreisteile.html': dict(
+   ort='Leitprogramm · Kreis und Kreisteile',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Kreis und Kreisteile — Linien am Kreis, π, Bogen, Sektor, Segment',
    beschreibung='Leitprogramm zu Kreis und Kreisteilen nach RLP GF 5.2: Sehne, Sekante, Tangente und Abstand, Umfang und Fläche mit π, Bogen und Sektor, Segment und Kreisring — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Kreis', 'Tangente', 'Kreiszahl π', 'Bogenlänge', 'Kreissektor', 'Kreissegment', 'Leitprogramm']),
  'leitprogramme/aehnlichkeit.html': dict(
+   ort='Leitprogramm · Zentrische Streckung und Ähnlichkeit',
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Zentrische Streckung und Ähnlichkeit — Strahlensätze, ähnliche Figuren',
    beschreibung='Leitprogramm zur zentrischen Streckung und Ähnlichkeit nach RLP GF 5.2: Streckung mit Zentrum und Faktor, Strahlensätze, ähnliche Figuren mit k und k², Massstab, Ähnlichkeitssätze und Höhensatz — mit Clips, Geometrie-Arbeitsbereich, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'zentrische Streckung', 'Strahlensatz', 'Ähnlichkeit', 'Massstab', 'Ähnlichkeitssätze', 'Leitprogramm']),
  'formelsammlung.html': dict(
+   ort='Nachschlagen · Formelsammlung',
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
    beschreibung='Alle Formeln der BM-Mathematik auf einer Seite: Arithmetik, Gleichungen, Funktionen, Datenanalyse und Geometrie, geordnet nach den Lerngebieten des RLP-BM 2030.',
    themen=['Mathematik', 'Formelsammlung', 'Formeln', 'Berufsmaturität']),
  'rechtliches.html': dict(
+   ort='Nachschlagen · Rechtliches &amp; Datenschutz',
    typ='website',
    titel='Rechtliches & Datenschutz',
    beschreibung='Verantwortlichkeit, Haftung, Lizenz und Datenschutz von Mathe begreifbar — ohne Cookies, ohne Tracking, alle Inhalte unter CC BY-NC 4.0.',
    themen=['Impressum', 'Datenschutz', 'Lizenz']),
  'feedback.html': dict(
+   fuss=False,  # eigener kleiner Fuss in der Formularkarte; Datei mit Physik geteilt (KERN)
    typ='website',
    titel='Kontakt & Feedback',
    beschreibung='Fehler melden, Verbesserungen vorschlagen oder Rückmeldung geben zu Mathe begreifbar — ohne Anmeldung, Name und E-Mail freiwillig.',
@@ -251,203 +291,250 @@ SEITEN = {
 
  # ── Grundlagenfach ────────────────────────────────────────────────
  'grundlagen/g1-1-grundlagen.html': dict(
+   ort='Grundlagenfach · 1.1 Grundlagen',
    titel='1.1 Grundlagen der Termstruktur — Grundlagenfach — Mathe begreifbar',
    beschreibung='Struktur algebraischer Terme: Hauptoperation erkennen, Strukturbaum lesen, Hierarchie der Operationen und die Rechengesetze für sicheres Umformen.',
    themen=['Term', 'Variable', 'Hauptoperation', 'Hierarchie der Operationen', 'Rechengesetze'],
    tg='1.1 Grundlagen'),
  'grundlagen/g1-2-zahlen-grundoperationen.html': dict(
+   ort='Grundlagenfach · 1.2 Zahlen und zugehörige Grundoperationen',
    beschreibung='Die Zahlenmengen ℕ, ℤ, ℚ und ℝ, Bruch-, Dezimal- und Prozentdarstellung, Vorzeichenregeln, Betrag, Runden und Intervalle auf der Zahlengeraden.',
    themen=['Zahlenmengen', 'Bruchrechnen', 'Vorzeichenregeln', 'Betrag', 'Intervalle', 'Runden'],
    tg='1.2 Zahlen und zugehörige Grundoperationen'),
  'grundlagen/g1-3-algebraische-terme.html': dict(
+   ort='Grundlagenfach · 1.3 Grundoperationen mit algebraischen Termen',
    beschreibung='Rechnen mit algebraischen Termen: gleichartige Glieder zusammenfassen, Klammern auflösen, die binomischen Formeln und das Faktorisieren in Produkte.',
    themen=['Algebraische Terme', 'Binomische Formeln', 'Ausklammern', 'Faktorisieren', 'Klammerregeln'],
    tg='1.3 Grundoperationen mit algebraischen Termen'),
  'grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html': dict(
+   ort='Grundlagenfach · 1.4 Zehnerpotenzen und Quadratwurzeln',
    beschreibung='Zehnerpotenzen und wissenschaftliche Notation, Potenz- und Wurzelgesetze, Quadratwurzeln — und die Hierarchie, wenn Potenzen und Wurzeln zusammentreffen.',
    themen=['Zehnerpotenzen', 'Wissenschaftliche Notation', 'Potenzgesetze', 'Quadratwurzel', 'Wurzelgesetze'],
    tg='1.4 Zehnerpotenzen und Quadratwurzeln'),
  'grundlagen/g2-1-grundlagen.html': dict(
+   ort='Grundlagenfach · 2.1 Grundlagen',
    titel='2.1 Grundlagen der Gleichungslehre — Grundlagenfach — Mathe begreifbar',
    beschreibung='Die Waage als Modell: Sachverhalte als Gleichung oder Ungleichung formulieren, algebraische Äquivalenz, Gleichungstypen erkennen, lösen und Probe machen.',
    themen=['Gleichung', 'Ungleichung', 'Äquivalenzumformung', 'Lösungsmenge', 'Probe'],
    tg='2.1 Grundlagen'),
  'grundlagen/g2-2a-lineare-gleichungen.html': dict(
+   ort='Grundlagenfach · 2.2a Lineare Gleichungen',
    beschreibung='Lineare Gleichungen und Ungleichungen: Normalform, Äquivalenzumformungen, die drei Lösungsfälle, Parameterdiskussion und die grafische Deutung als Gerade.',
    themen=['Lineare Gleichung', 'Äquivalenzumformung', 'Lösungsfälle', 'Parameterdiskussion', 'Lineare Ungleichung'],
    tg='2.2 Lineare und quadratische Gleichungen'),
  'grundlagen/g2-2b-quadratische-gleichungen.html': dict(
+   ort='Grundlagenfach · 2.2b Quadratische Gleichungen',
    beschreibung='Quadratische Gleichungen lösen: Lösungsformel, Faktorisieren, Diskriminante, Parameter, Satz von Vieta, Bruchgleichungen, Substitution und quadratische Ungleichungen.',
    themen=['Quadratische Gleichung', 'Lösungsformel', 'Diskriminante', 'Satz von Vieta', 'Quadratisches Ergänzen', 'Biquadratische Gleichung', 'Quadratische Ungleichung'],
    tg='2.2 Lineare und quadratische Gleichungen'),
  'grundlagen/g2-3-lineare-gleichungssysteme.html': dict(
+   ort='Grundlagenfach · 2.3 Lineare Gleichungssysteme',
    beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetz-, Gleichsetz- und Additionsverfahren, Substitution, die drei Lösungsfälle mit Parameter und ihre grafische Deutung.',
    themen=['Lineares Gleichungssystem', 'Einsetzverfahren', 'Gleichsetzverfahren', 'Additionsverfahren', 'Lösungsfälle', 'Parameter'],
    tg='2.3 Lineare Gleichungssysteme'),
  'grundlagen/g2-modellieren.html': dict(
+   ort='Grundlagenfach · 2.M Textaufgaben modellieren',
    beschreibung='Textaufgaben modellieren: Unbekannte deklarieren, Mengen- und Wertbilanz aufstellen — für Zahlenrätsel, Misch-, Verteil- und Zinsaufgaben, mit Ansatz-Trainer.',
    themen=['Textaufgabe', 'Gleichungssystem aufstellen', 'Mischungsaufgabe', 'Zinsaufgabe', 'Zahlenrätsel', 'Modellieren'],
    tg='2.1 Grundlagen und 2.3 Lineare Gleichungssysteme'),
    # Ergaenzung ohne eigene RLP-Nummer (nav.js: id 'g2-M', nr '2.M'); die Seite
    # vertieft 2.1 (Sachverhalte formulieren) und 2.3 (Gleichungssysteme).
  'grundlagen/g3-1-grundlagen.html': dict(
+   ort='Grundlagenfach · 3.1 Grundlagen',
    titel='3.1 Grundlagen der Funktionenlehre — Grundlagenfach — Mathe begreifbar',
    beschreibung='Was eine Funktion ist: vier Darstellungsformen, Schreibweisen, Definitions- und Wertemenge, Vertikaltest sowie Schnittpunkte mit den Achsen und untereinander.',
    themen=['Funktion', 'Definitionsmenge', 'Wertemenge', 'Funktionsgraph', 'Nullstelle', 'Schnittpunkt'],
    tg='3.1 Grundlagen'),
  'grundlagen/g3-2-lineare-funktionen.html': dict(
+   ort='Grundlagenfach · 3.2 Lineare Funktionen',
    beschreibung='Lineare Funktionen: Steigung und Achsenabschnitt geometrisch deuten, Nullstelle berechnen, Typen unterscheiden und die Funktionsgleichung einer Geraden aufstellen.',
    themen=['Lineare Funktion', 'Steigung', 'y-Achsenabschnitt', 'Gerade', 'Steigungsdreieck'],
    tg='3.2 Lineare Funktionen'),
  'grundlagen/g3-3-quadratische-funktionen.html': dict(
+   ort='Grundlagenfach · 3.3 Quadratische Funktionen',
    beschreibung='Quadratische Funktionen: Grund-, Scheitel- und Produktform, Öffnung, Scheitelpunkt und Nullstellen, Diskriminante sowie Extremwertaufgaben lösen.',
    themen=['Quadratische Funktion', 'Parabel', 'Scheitelform', 'Produktform', 'Diskriminante', 'Extremwertaufgabe'],
    tg='3.3 Quadratische Funktionen'),
  'grundlagen/g4-0-praxisbeispiel-bm2-klasse.html': dict(
+   ort='Grundlagenfach · 4.0 Praxisbeispiel — Datenerhebung in einer BM2-Klasse',
    beschreibung='Datenanalyse an einem durchgehenden Beispiel: Erhebung in einer BM2-Klasse, Urliste, Kennzahlen, alle vier Diagrammtypen, Stichprobe und Datenqualität.',
    themen=['Datenanalyse', 'Urliste', 'Stichprobe', 'Kennzahlen', 'Diagramme', 'Datenqualität']),
    # kein tg: die Seite ist eine TALS-Ergaenzung und traegt keine RLP-Kompetenzbox
  'grundlagen/g4-1-grundlagen.html': dict(
+   ort='Grundlagenfach · 4.1 Grundlagen',
    titel='4.1 Grundlagen der Datenanalyse — Grundlagenfach — Mathe begreifbar',
    beschreibung='Grundbegriffe der Datenanalyse: Grundgesamtheit, Urliste, Stichprobe und Rang, Merkmalstypen, Tabellenkalkulation als Werkzeug und die Frage der Datenqualität.',
    themen=['Datenanalyse', 'Grundgesamtheit', 'Stichprobe', 'Merkmalstypen', 'Tabellenkalkulation'],
    tg='4.1 Grundlagen'),
  'grundlagen/g4-2-diagramme.html': dict(
+   ort='Grundlagenfach · 4.2 Diagramme',
    beschreibung='Diagramme der Datenanalyse: Klassieren, die vier Standarddiagramme, symmetrisch oder schief charakterisieren und bivariate Daten im Streudiagramm.',
    themen=['Diagramm', 'Histogramm', 'Boxplot', 'Streudiagramm', 'Klassieren', 'Bivariate Daten'],
    tg='4.2 Diagramme'),
  'grundlagen/g4-3-masszahlen.html': dict(
+   ort='Grundlagenfach · 4.3 Masszahlen',
    beschreibung='Lage- und Streumasse: Mittelwert, Median und Modus, Standardabweichung und Quartilsdifferenz — und wann der Median die ehrlichere Auskunft gibt.',
    themen=['Mittelwert', 'Median', 'Modus', 'Standardabweichung', 'Quartilsdifferenz', 'Robustheit'],
    tg='4.3 Masszahlen'),
  'grundlagen/g5-1-grundlagen.html': dict(
+   ort='Grundlagenfach · 5.1 Grundlagen',
    titel='5.1 Grundlagen der Geometrie — Grundlagenfach — Mathe begreifbar',
    beschreibung='Geometrische Grundlagen: Winkeltypen und Winkelpaare, Grad und Radiant ineinander umrechnen sowie Skizzieren als Workflow zur Plausibilitätsprüfung.',
    themen=['Winkel', 'Radiant', 'Gradmass', 'Skizze', 'Plausibilität'],
    tg='5.1 Grundlagen'),
  'grundlagen/g5-2a-dreiecke.html': dict(
+   ort='Grundlagenfach · 5.2a Dreiecke',
    beschreibung='Dreiecke: Eckpunkte, Seiten und Winkel, Innenwinkelsumme mit Beweis, spezielle Dreiecke und Transversalen, Umfang, Fläche, Kongruenz und Pythagoras.',
    themen=['Dreieck', 'Innenwinkelsumme', 'Satz des Pythagoras', 'Kongruenz', 'Höhe', 'Mittelsenkrechte'],
    tg='5.2 Ebene Figuren'),
  'grundlagen/g5-2b-vierecke.html': dict(
+   ort='Grundlagenfach · 5.2b Vierecke',
    beschreibung='Vierecke und ihre Hierarchie: Quadrat, Rechteck, Raute, Parallelogramm, Trapez und Drachen — Zerlegung in Dreiecke, Umfang und Flächeninhalt.',
    themen=['Viereck', 'Parallelogramm', 'Trapez', 'Raute', 'Drachenviereck', 'Flächeninhalt'],
    tg='5.2 Ebene Figuren'),
  'grundlagen/g5-2c-kreis-und-kreisteile.html': dict(
+   ort='Grundlagenfach · 5.2c Kreis und Kreisteile',
    beschreibung='Kreis und Kreisteile: Radius, Durchmesser, Sehne, Sekante und Tangente, die Kreiszahl π, Umfang und Fläche sowie Kreissektor und Kreisbogen berechnen.',
    themen=['Kreis', 'Kreiszahl Pi', 'Kreissektor', 'Kreisbogen', 'Tangente', 'Sehne'],
    tg='5.2 Ebene Figuren'),
  'grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html': dict(
+   ort='Grundlagenfach · 5.2d Zentrische Streckung und Ähnlichkeit',
    beschreibung='Zentrische Streckung und Ähnlichkeit: Streckzentrum und Streckfaktor, die Strahlensätze, ähnliche Figuren und die Ähnlichkeitssätze für Dreiecke.',
    themen=['Zentrische Streckung', 'Strahlensatz', 'Ähnlichkeit', 'Streckfaktor', 'Ähnlichkeitssätze'],
    tg='5.2 Ebene Figuren'),
  'grundlagen/g5-3-trigonometrische-berechnungen.html': dict(
+   ort='Grundlagenfach · 5.3 Trigonometrische Berechnungen',
    beschreibung='Trigonometrie am Dreieck: Sinus, Cosinus und Tangens am rechtwinkligen Dreieck, dazu Sinussatz und Cosinussatz für beliebige schiefwinklige Dreiecke.',
    themen=['Trigonometrie', 'Sinus', 'Cosinus', 'Tangens', 'Sinussatz', 'Cosinussatz'],
    tg='5.3 Trigonometrische Berechnungen'),
  'grundlagen/g5-4-einheitskreis.html': dict(
+   ort='Grundlagenfach · 5.4 Einheitskreis',
    beschreibung='Der Einheitskreis: Sinus, Cosinus und Tangens für beliebige Winkel definieren, Funktionswerte ablesen, trigonometrischer Pythagoras und Symmetrien.',
    themen=['Einheitskreis', 'Sinus', 'Cosinus', 'Tangens', 'Trigonometrischer Pythagoras', 'Periodizität'],
    tg='5.4 Einheitskreis'),
  'grundlagen/g5-5-trigonometrische-gleichungen.html': dict(
+   ort='Grundlagenfach · 5.5 Trigonometrische Gleichungen',
    beschreibung='Trigonometrische Gleichungen lösen: die drei Grundtypen, Visualisierung am Einheitskreis und an der Sinuskurve, Arkusfunktionen und die volle Lösungsmenge.',
    themen=['Trigonometrische Gleichung', 'Arkusfunktion', 'Einheitskreis', 'Periodizität', 'Lösungsmenge'],
    tg='5.5 Trigonometrische Gleichungen'),
 
  # ── Schwerpunktfach ───────────────────────────────────────────────
  'schwerpunkt/s1-1-grundlagen.html': dict(
+   ort='Schwerpunktfach · 1.1 Grundlagen',
    titel='1.1 Struktur algebraischer Ausdrücke — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Struktur statt Rezept: warum (a+b)² nicht a²+b² ist, welche Umform-Werkzeuge in welche Richtung wirken und welche Struktur-Regeln wann erlaubt sind.',
    themen=['Termstruktur', 'Umformen', 'Binomische Formeln', 'Rechengesetze', 'Gegenbeispiel'],
    tg='1.1 Grundlagen'),
  'schwerpunkt/s1-2-potenzen.html': dict(
+   ort='Schwerpunktfach · 1.2 Potenzen',
    beschreibung='Potenzen mit ganzzahligen und rationalen Exponenten: die fünf Potenzgesetze, Wurzeln als Potenzen schreiben und die Hierarchie mit Zehnerpotenzen.',
    themen=['Potenzen', 'Potenzgesetze', 'Rationale Exponenten', 'Wurzeln als Potenzen', 'Zehnerpotenzen'],
    tg='1.2 Potenzen'),
  'schwerpunkt/s1-3-logarithmen.html': dict(
+   ort='Schwerpunktfach · 1.3 Logarithmen',
    beschreibung='Logarithmen: Definition und die Spezialbasen lg, ln und ld, die drei Logarithmengesetze, der Basiswechsel und das Lösen von Exponentialgleichungen.',
    themen=['Logarithmus', 'Logarithmengesetze', 'Basiswechsel', 'Natürlicher Logarithmus', 'Exponentialgleichung'],
    tg='1.3 Logarithmen'),
  'schwerpunkt/s2-1-grundlagen.html': dict(
+   ort='Schwerpunktfach · 2.1 Grundlagen',
    titel='2.1 Gleichungstypen bestimmen — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Den Typ einer Gleichung am Ort der Unbekannten erkennen — Landkarte aller Typen, passende Lösungsmethode wählen und das Ergebnis mit der Probe absichern.',
    themen=['Gleichungstypen', 'Unbekannte', 'Lösungsmethode', 'Probe', 'Scheinlösung'],
    tg='2.1 Grundlagen'),
  'schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html': dict(
+   ort='Schwerpunktfach · 2.2a Potenz-, Wurzel- und rationale Gleichungen',
    beschreibung='Potenz-, Wurzel- und rationale Gleichungen lösen: Paritätsregel, Quadrieren mit Probe, Definitionsmenge bei Brüchen und Substitution bei mehrfacher Wurzel.',
    themen=['Potenzgleichung', 'Wurzelgleichung', 'Rationale Gleichung', 'Scheinlösung', 'Substitution'],
    tg='2.2 Gleichungen und Ungleichungen'),
  'schwerpunkt/s2-2b-exponential-logarithmische-gleichungen.html': dict(
+   ort='Schwerpunktfach · 2.2b Exponential- und logarithmische Gleichungen',
    beschreibung='Exponential- und Logarithmusgleichungen: Exponentenvergleich, Logarithmieren, Ausklammern und Substitution — dazu Definitionsmenge und Probe.',
    themen=['Exponentialgleichung', 'Logarithmusgleichung', 'Exponentenvergleich', 'Substitution', 'Definitionsmenge'],
    tg='2.2 Gleichungen und Ungleichungen'),
  'schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html': dict(
+   ort='Schwerpunktfach · 2.2c Betrags- und Polynomgleichungen, Ungleichungen',
    beschreibung='Betrags- und Polynomgleichungen sowie Ungleichungen: Fallunterscheidung, Nullprodukt, Vorzeichentabelle und der Betrag als Abstand auf der Zahlengeraden.',
    themen=['Betragsgleichung', 'Polynomgleichung', 'Ungleichung', 'Vorzeichentabelle', 'Nullprodukt'],
    tg='2.2 Gleichungen und Ungleichungen'),
  'schwerpunkt/s3-1-grundlagen.html': dict(
+   ort='Schwerpunktfach · 3.1 Grundlagen',
    titel='3.1 Elementare Funktionen und Transformationen — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Die Grundgraphen im Steckbrief und ein Transformationsschema für alle Funktionen — dazu Schnittpunkte, Ungleichungen grafisch und Extremwertaufgaben.',
    themen=['Elementare Funktionen', 'Funktionstransformation', 'Verschiebung', 'Streckung', 'Extremwertaufgabe'],
    tg='3.1 Grundlagen'),
  'schwerpunkt/s3-2a-potenzfunktionen.html': dict(
+   ort='Schwerpunktfach · 3.2a Potenzfunktionen',
    beschreibung='Potenzfunktionen y = a·xⁿ: Parabeln und Hyperbeln n-ter Ordnung, Symmetrie über die Parität des Exponenten, Asymptoten und Transformationen.',
    themen=['Potenzfunktion', 'Hyperbel', 'Parabel n-ter Ordnung', 'Asymptote', 'Symmetrie'],
    tg='3.2 Potenz- und Wurzelfunktionen'),
  'schwerpunkt/s3-2b-wurzelfunktionen.html': dict(
+   ort='Schwerpunktfach · 3.2b Wurzelfunktionen',
    beschreibung='Wurzelfunktionen als Umkehrung der Potenzfunktion: Spiegelung an y = x, Definitionsmenge, Eigenschaften, Transformationen und Wurzelgleichungen.',
    themen=['Wurzelfunktion', 'Umkehrfunktion', 'Spiegelung an y = x', 'Definitionsmenge', 'Wurzelgleichung'],
    tg='3.2 Potenz- und Wurzelfunktionen'),
  'schwerpunkt/s3-3-polynomfunktionen.html': dict(
+   ort='Schwerpunktfach · 3.3 Polynomfunktionen',
    beschreibung='Polynomfunktionen: Linearfaktoren und Nullstellen, Vielfachheit am Graphen ablesen, Verlauf aus Grad und Leitkoeffizient sowie Extremalstellen.',
    themen=['Polynomfunktion', 'Linearfaktor', 'Nullstelle', 'Vielfachheit', 'Leitkoeffizient', 'Globalverlauf'],
    tg='3.3 Polynomfunktionen'),
  'schwerpunkt/s3-4a-exponentialfunktionen.html': dict(
+   ort='Schwerpunktfach · 3.4a Exponentialfunktionen',
    beschreibung='Exponentialfunktionen y = aˣ: die Basis bestimmt Wachstum oder Zerfall, Asymptote und der Punkt (0|1), Transformationen und die natürliche e-Funktion.',
    themen=['Exponentialfunktion', 'Wachstum', 'Zerfall', 'e-Funktion', 'Asymptote', 'Halbwertszeit'],
    tg='3.4 Exponential- und Logarithmusfunktionen'),
  'schwerpunkt/s3-4b-logarithmusfunktionen.html': dict(
+   ort='Schwerpunktfach · 3.4b Logarithmusfunktionen',
    beschreibung='Logarithmusfunktionen als Umkehrung der Exponentialfunktion: Spiegelung an y = x, Nullstelle (1|0), senkrechte Asymptote und die ln-Funktion.',
    themen=['Logarithmusfunktion', 'Umkehrfunktion', 'ln-Funktion', 'Asymptote', 'Basiswechsel'],
    tg='3.4 Exponential- und Logarithmusfunktionen'),
  'schwerpunkt/s3-5-trigonometrische-funktionen.html': dict(
+   ort='Schwerpunktfach · 3.5 Trigonometrische Funktionen',
    beschreibung='Sinus, Cosinus und Tangens als Funktionen: vom Einheitskreis zur Kurve, Periodizität und Symmetrie, allgemeine Sinusfunktion und harmonische Schwingungen.',
    themen=['Sinusfunktion', 'Cosinusfunktion', 'Tangensfunktion', 'Periode', 'Amplitude', 'Schwingung'],
    tg='3.5 Trigonometrische Funktionen'),
  'schwerpunkt/s3-6-betragsfunktionen.html': dict(
+   ort='Schwerpunktfach · 3.6 Betragsfunktionen (Ergänzung)',
    beschreibung='Betragsfunktionen: das V verschieben und strecken, das Umklapp-Prinzip für y = |f(x)|, abschnittsweises Schreiben und das grafische Lösen von Gleichungen.',
    themen=['Betragsfunktion', 'Umklapp-Prinzip', 'Knickpunkt', 'Abschnittsweise Definition', 'Betragsungleichung'],
    tg='3.6 Betragsfunktionen (Ergänzung TALS)'),
  'schwerpunkt/s4-1-grundlagen.html': dict(
+   ort='Schwerpunktfach · 4.1 Grundlagen',
    titel='4.1 Grundlagen der Raumgeometrie — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Raumgeometrie in zwei Dimensionen darstellen: Schrägbild und Netz, Lage von Punkt, Gerade und Ebene, Winkel im Raum und die Plausibilitäts-Strategie.',
    themen=['Raumgeometrie', 'Schrägbild', 'Körpernetz', 'Windschief', 'Raumwinkel'],
    tg='4.1 Grundlagen'),
  'schwerpunkt/s4-2a-prismen-zylinder.html': dict(
+   ort='Schwerpunktfach · 4.2a Prismen und Zylinder',
    beschreibung='Prismen und Kreiszylinder: das Prinzip von Cavalieri, Quader und Würfel, Raumdiagonale, Volumen und Oberfläche sowie das Umstellen der Formeln.',
    themen=['Prisma', 'Zylinder', 'Quader', 'Cavalieri', 'Raumdiagonale', 'Volumen'],
    tg='4.2 Körper'),
  'schwerpunkt/s4-2b-pyramiden-kegel-stuempfe.html': dict(
+   ort='Schwerpunktfach · 4.2b Pyramiden, Kegel und Stümpfe',
    beschreibung='Pyramide, Kegel und Stümpfe: warum der Faktor ein Drittel gilt, Mantellinie und Seitenhöhe, Öffnungswinkel, Volumen, Oberfläche und Rückwärtsrechnen.',
    themen=['Pyramide', 'Kegel', 'Pyramidenstumpf', 'Mantellinie', 'Öffnungswinkel', 'Volumen'],
    tg='4.2 Körper'),
  'schwerpunkt/s4-2c-kugel.html': dict(
+   ort='Schwerpunktfach · 4.2c Kugel und zusammengesetzte Körper',
    beschreibung='Kugel und zusammengesetzte Körper: Archimedes und der Zylinder, Volumen und Oberfläche, Kugelkappe, -segment und -sektor sowie Ähnlichkeit und Dichte.',
    themen=['Kugel', 'Kugelkappe', 'Kugelsektor', 'Archimedes', 'Zusammengesetzte Körper', 'Dichte'],
    tg='4.2 Körper'),
  'schwerpunkt/s4-3a-vektorbegriff-komponenten.html': dict(
+   ort='Schwerpunktfach · 4.3a Vektorbegriff und Komponenten',
    beschreibung='Vektoren: Betrag, Gegenvektor und Komponenten, Addition und Skalierung, Polarform mit Betrag und Winkel, Einheitsvektoren und Linearkombinationen.',
    themen=['Vektor', 'Komponenten', 'Betrag', 'Polarform', 'Einheitsvektor', 'Linearkombination'],
    tg='4.3 Vektorgeometrie'),
  'schwerpunkt/s4-3b-skalarprodukt.html': dict(
+   ort='Schwerpunktfach · 4.3b Skalarprodukt',
    beschreibung='Das Skalarprodukt zweier Vektoren: beide Formeln, das Vorzeichen als Winkelaussage, der Nulltest auf Rechtwinkligkeit, Projektion und Winkel in Figuren.',
    themen=['Skalarprodukt', 'Winkel zwischen Vektoren', 'Orthogonalität', 'Projektion', 'Rechtwinkligkeit'],
    tg='4.3 Vektorgeometrie'),
  'schwerpunkt/s4-3c-geraden.html': dict(
+   ort='Schwerpunktfach · 4.3c Geraden',
    beschreibung='Geraden in Parameterform: Punktprobe, gegenseitige Lage von zwei Geraden inklusive windschief, Schnittwinkel und der Abstand Punkt–Gerade über das Lot.',
    themen=['Parametergleichung', 'Gerade', 'Windschief', 'Schnittwinkel', 'Lotfusspunkt', 'Abstand'],
    tg='4.3 Vektorgeometrie'),
  'schwerpunkt/s4-3d-ebenen.html': dict(
+   ort='Schwerpunktfach · 4.3d Ebenen (Ergänzung)',
    beschreibung='Ebenen in Parameterform: aus Punkt und zwei Richtungen oder aus drei Punkten, Punktprobe, Durchstosspunkt einer Geraden und Lagen im Überblick.',
    themen=['Ebene', 'Parametergleichung', 'Durchstosspunkt', 'Punktprobe', 'Lagebeziehung'],
    tg='4.3 Vektorgeometrie (Ergänzung TALS)'),
@@ -455,6 +542,8 @@ SEITEN = {
 
 MARKE_AUF = '<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->'
 MARKE_ZU = '<!-- SEO:ENDE -->'
+FUSS_AUF = '<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->'
+FUSS_ZU = '<!-- FUSS:ENDE -->'
 
 MAKROS = {'cdot': '·', 'Delta': 'Δ', 'delta': 'δ', 'lambda': 'λ', 'alpha': 'α',
           'beta': 'β', 'gamma': 'γ', 'rho': 'ρ', 'omega': 'ω', 'pi': 'π', 'mu': 'µ',
@@ -633,6 +722,34 @@ def block(datei, cfg, seite_html):
     return '\n'.join(z)
 
 
+def fuss(datei, cfg):
+    """Footer der Seite, samt Marken. Fachneutral: was je Fach anders ist, steht in
+    SEITENNAME, FUSS_UNTERTITEL und in SEITEN (ort)."""
+    auf = '../' * datei.count('/')
+    z = [FUSS_AUF, '<footer class="site-footer">',
+         f'  <p><strong>{SEITENNAME}</strong> — {FUSS_UNTERTITEL}</p>']
+    if cfg.get('ort'):
+        z.append(f"  <p>{cfg['ort']}</p>")
+    z.append('  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" '
+             'target="_blank" rel="noopener">CC BY-NC 4.0</a></p>')
+    extra = (f'<a href="{auf}leitprogramme.html">Alle Leitprogramme</a> · <a href="{auf}clips.html">Clips</a> · '
+             if datei.startswith('leitprogramme/') else '')
+    z.append(f'  <p>{extra}<a href="{auf}feedback.html">Kontakt &amp; Feedback</a> · '
+             f'<a href="{auf}rechtliches.html">Rechtliches &amp; Datenschutz</a></p>')
+    z.append(f'  <p>Keine Cookies · Kein Tracking · Version {VERSION} · Stand {VERSION_STAND}</p>')
+    z += ['</footer>', FUSS_ZU]
+    return '\n'.join(z)
+
+
+FUSS_MARKEN = re.compile(re.escape(FUSS_AUF) + r'.*?' + re.escape(FUSS_ZU), re.S)
+FUSS_ALT = re.compile(r'<footer class="site-footer">.*?</footer>', re.S)
+
+
+def fuss_ausserhalb(s):
+    """site-footer, der nicht zwischen den FUSS-Marken steht (fuer --check)."""
+    return bool(FUSS_ALT.search(FUSS_MARKEN.sub('', s)))
+
+
 def einsetzen(datei, cfg):
     pfad = os.path.join(ROOT, datei)
     s = open(pfad, encoding='utf-8').read()
@@ -643,6 +760,12 @@ def einsetzen(datei, cfg):
         m = re.search(r'</title>\n?', s)
         assert m, f'{datei}: kein <title>'
         s2 = s[:m.end()] + neu + '\n' + s[m.end():]
+    if cfg.get('fuss', True):
+        f = fuss(datei, cfg)
+        if FUSS_AUF in s2:
+            s2 = FUSS_MARKEN.sub(lambda _: f, s2, count=1)
+        elif FUSS_ALT.search(s2):                       # einmalige Umstellung
+            s2 = FUSS_ALT.sub(lambda _: f, s2, count=1)
     return s, s2
 
 
@@ -685,13 +808,14 @@ Sitemap: {BASIS}sitemap.xml
 def main(argv):
     ap = argparse.ArgumentParser(
         prog='build-seo.py',
-        description='Setzt die generierten Kopfbloecke in die Seiten und schreibt '
+        description='Setzt die generierten Kopfbloecke und Footer in die Seiten und schreibt '
                     'sitemap.xml und robots.txt. Gepflegt wird die Tabelle SEITEN '
                     'im Skript, nie der Block in der Seite.',
         epilog='Ohne Schalter wird geschrieben.')
     modus = ap.add_mutually_exclusive_group()
     modus.add_argument('--check', action='store_true',
-                       help='nur pruefen, nichts schreiben; Exit 1, wenn etwas veraltet ist '
+                       help='nur pruefen, nichts schreiben; Exit 1, wenn etwas veraltet ist, '
+                            'Exit 2 bei einem Footer ausserhalb der FUSS-Marken '
                             '(so ruft der Pre-Flight das Skript auf)')
     modus.add_argument('--dry-run', action='store_true',
                        help='Trockenlauf: zeigt, was sich aendern wuerde, und schreibt nichts')
@@ -721,9 +845,15 @@ def main(argv):
 
     namen = [n for n, _, _ in aenderungen]
 
+    ausserhalb = [d for d, c in SEITEN.items() if c.get('fuss', True)
+                  and fuss_ausserhalb(open(os.path.join(ROOT, d), encoding='utf-8').read())]
+    if a.check and ausserhalb:
+        print('FEHLER: site-footer ausserhalb der FUSS-Marken:', ', '.join(ausserhalb))
+        return 2                           # Pre-Flight: Fehler, nicht nur Warnung
+
     if a.check:
         if aenderungen:
-            print('SEO-Metadaten VERALTET:', ', '.join(namen))
+            print('SEO-Metadaten/Footer VERALTET:', ', '.join(namen))
             return 1
         print(f'SEO-Metadaten aktuell ({len(SEITEN)} Seiten).')
         return 0

@@ -48,3 +48,9 @@ node .claude/tools/pruef-fragen.mjs g5-2d-lp-kontrolle-streckung g5-2d-lp-kontro
 streckung «Kleiner», «Negativ»; kontrolle-streckung «Frage 5», Frage 2 r1; strahlensaetze «Nur mit Parallelen»;
 kontrolle-strahlensaetze «Frage 3», Frage 3; kontrolle-figuren Frage 1 r0, r2; kontrolle-dreiecke «Frage 1», «Frage 4»,
 Fragen 1 und 4, Frage 2 falsch.
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

@@ -52,3 +52,9 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/exp-log-funktionen.html
 node .claude/tools/pruef-fragen.mjs s3-4-lp-kontrolle-exponentialfunktion s3-4-lp-kontrolle-wachstum \
      s3-4-lp-kontrolle-e-funktion s3-4-lp-kontrolle-saettigung s3-4-lp-kontrolle-logarithmus
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

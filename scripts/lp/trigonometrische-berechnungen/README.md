@@ -41,3 +41,9 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/trigonometrische-berechnungen.
 node .claude/tools/pruef-geo.mjs leitprogramme/trigonometrische-berechnungen.html
 node .claude/tools/pruef-fragen.mjs g5-3-lp-kontrolle-seiten g5-3-lp-kontrolle-winkel g5-3-lp-kontrolle-hoehen g5-3-lp-kontrolle-sinussatz g5-3-lp-kontrolle-cosinussatz
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

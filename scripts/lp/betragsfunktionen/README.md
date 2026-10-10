@@ -52,3 +52,9 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/betragsfunktionen.html
 node .claude/tools/pruef-fragen.mjs s3-6-lp-kontrolle-betragsfunktion s3-6-lp-kontrolle-verschieben \
      s3-6-lp-kontrolle-umklappen s3-6-lp-kontrolle-abschnittsweise s3-6-lp-kontrolle-gleichungen
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

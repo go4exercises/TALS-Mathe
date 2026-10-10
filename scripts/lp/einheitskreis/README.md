@@ -77,3 +77,9 @@ kontrolle-periode-umkehr f2-* und f4-r2.
 Übung «Exakte Werte»: Verteilung mit 20 000 Würfen nachgezählt (Sperrliste angewendet):
 52 verschiedene Aufgaben (vorher 15); Achsenwinkel 16.5 % (vorher 60 %), negative Winkel 30 %, über 360° 36 %,
 Bogenmass 15 %. Nachzählen wie in der Prüfliste (§15): 20 000-mal «Neue Zahlen» und die Schlüssel zählen.
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

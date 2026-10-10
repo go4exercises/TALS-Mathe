@@ -54,3 +54,9 @@ SP=<ablage> node .claude/tools/pruef-clip.mjs clips/s3-3-lp-<name>.html <sekunde
 
 Die Clip-Bilder **ansehen**. Und eine neue Bewegung über `window.__seek(t)` im
 `?render`-Modus an mehreren Zeitpunkten abtasten (HOWTO-leitprogramme §15).
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

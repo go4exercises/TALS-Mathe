@@ -36,3 +36,9 @@ node .claude/tools/pruef-fragen.mjs g3-3-lp-kontrolle-scheitelform g3-3-lp-kontr
 
 `seite.js` setzt dafür die Testhaken `box.__aufgabe` und `box.__typ`; `TYPEN.nullstellen.eingabe(A)`
 liefert die richtige Eingabe, wo `A[feld]` nicht reicht (HOWTO-leitprogramme §14).
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

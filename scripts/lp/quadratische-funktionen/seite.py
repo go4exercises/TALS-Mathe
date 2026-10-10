@@ -18,9 +18,12 @@ if '/* ════════ Fassung 3' in kopf:
 i = alt.index('<script>\n  window.MathJax')
 j = min(k for k in (alt.find('<script>\n/* Leitprogramm Quadratische Funktionen — Simulationen'), alt.find('<script>\n/* Simulationen und Minigrafen')) if k > 0)
 basis = alt[i:j].replace("' Selbsttests erledigt'", "' Aufgabenblöcken bearbeitet'")
-fuss = alt[alt.index('<footer class="site-footer">'):]
-fuss = re.sub(r'Version [0-9.]+( \(Probe\))?', 'Version 1.0', fuss).replace('Quadratische Funktionen (Probe)', 'Quadratische Funktionen')
-fuss = re.sub(r'Stand [0-9]+\. [A-Za-zäöü]+ 2026', 'Stand 2. Oktober 2026', fuss)
+# Footer erzeugt scripts/build-seo.py (seit 10.10.2026): hier nur leere FUSS-Marken; nach dem Bau
+# `python3 scripts/build-seo.py` laufen lassen.
+fuss = alt[alt.index('<!-- FUSS:ANFANG'):] if '<!-- FUSS:ANFANG' in alt else alt[alt.index('<footer class="site-footer">'):]
+fuss = re.sub(r'<!-- FUSS:ANFANG.*?<!-- FUSS:ENDE -->|<footer class="site-footer">.*?</footer>',
+              lambda _: '<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->\n<!-- FUSS:ENDE -->',
+              fuss, count=1, flags=re.S)
 
 CSS = '''
 /* ════════ Fassung 3 (02.10.2026): Aufgaben in der Animation, wenig Text ════════ */

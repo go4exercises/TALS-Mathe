@@ -73,7 +73,8 @@ Vorlage ist `werkzeuge/notationstrainer.html`.
     was gespeichert wird. Ohne diesen Absatz stimmt die Datenschutzerklärung nicht.
 - **Klassen** aus `style.css` kopieren, nicht erfinden; Seiteneigenes im `<style>` mit
   eigenem Präfix (`nt-`).
-- Den SEO-Kopf **nicht** von Hand schreiben: Er entsteht aus `scripts/build-seo.py` (§4).
+- Den SEO-Kopf und den Footer **nicht** von Hand schreiben: Beide entstehen aus `scripts/build-seo.py` (§4);
+  für den Footer nur die leeren FUSS-Marken nach `.page-wrap` setzen (STYLEGUIDE §7).
 
 ## 4 · Eintragen
 
@@ -87,7 +88,8 @@ nicht auffindbar.
    jedem Fach einmal (wie der Notationstrainer). Ohne Themenbereich unter
    `<h2 id="ausserhalb">Ausserhalb der Lerngebiete</h2>`.
 2. **`scripts/build-seo.py`**, Tabelle `SEITEN`: Schlüssel `'werkzeuge/<name>.html'`,
-   `typ='article'`, `lrt=['Werkzeug', …]`, Titel, Beschreibung 140–165 Zeichen, `themen`.
+   `typ='article'`, `lrt=['Werkzeug', …]`, Titel, Beschreibung 140–165 Zeichen, `themen`, `ort`
+   (Footer-Ortszeile, z.B. `ort='Werkzeuge · Notationstrainer'`).
    Dann `python3 scripts/build-seo.py` — nach dem Commit ein zweites Mal und die
    Datumsänderung mitcommitten.
 3. **`scripts/build-suchindex.py`**, Liste `ZUSATZSEITEN`: `('werkzeuge/<name>.html', 'WZ',

@@ -52,3 +52,9 @@ python3 scripts/lp/lineare-funktionen/pruef-graf.py
 liefert mit `fehler(A)` gezielte Falscheingaben samt Stichwort der erwarteten Meldung
 (HOWTO-leitprogramme §14). Die Stichwörter dürfen **kein LaTeX** enthalten — im
 Prüflauf bleibt `\(y\)-Achse` ungesetzt stehen, «y-Achse» passt dann nicht.
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

@@ -146,7 +146,9 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   ein Hinweis, kein Blocker. Dieselbe Datei liegt in beiden Repos; wer eine
   Fassung angleicht, trägt die neue, höhere Grundlinie dort ein.
 - `scripts/build-seo.py` — erzeugt Seiten-Metadaten (Beschreibung, canonical, Open
-  Graph, JSON-LD nach schema.org/LearningResource), `sitemap.xml` und `robots.txt`.
+  Graph, JSON-LD nach schema.org/LearningResource), `sitemap.xml`, `robots.txt` und den
+  **Footer** jeder Seite (zwischen `<!-- FUSS:ANFANG -->` und `<!-- FUSS:ENDE -->`; Ortszeile
+  über `ort=` in `SEITEN`, Version über `VERSION`/`VERSION_STAND` — eine für das ganze Lehrmittel).
   Der Kopfblock zwischen `<!-- SEO:ANFANG -->` und `<!-- SEO:ENDE -->` ist
   **generiert** — gepflegt wird die Tabelle `SEITEN` im Skript. Neue Seite = dort
   eintragen, sonst fehlen ihr Beschreibung und Sitemap-Eintrag. Der Pre-Flight

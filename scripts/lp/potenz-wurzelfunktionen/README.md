@@ -60,3 +60,9 @@ Die Bilder **ansehen**: Der Prüfer meldet Überlappung, nicht Gestaltung. Zwei 
 die er nicht sieht und die hier beide vorkamen: zwei Formeln mit demselben `y`
 (`f(text, y, groesse)` — die dritte Zahl ist die Schriftgrösse, nicht die zweite
 Zeile), und eine `ger(…)` in der Liste `kurven` statt in `geraden`.
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

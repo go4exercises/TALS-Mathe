@@ -447,7 +447,7 @@ Steht in jeder kopierten Vorlage schon richtig; bei einer Datei von aussen §12.
 - **`../style.css` vor dem eigenen `<style>`** — der eigene gewinnt bei gleichem Gewicht.
 - **Tokens erben:** im eigenen `:root` nur Übersetzungen (`--karte:var(--weiss)`) und
   der Dunkelmodus; dieser setzt `--weiss` mit und behandelt `.site-footer` eigens.
-- **Kopf und Fuss der Site:** `<div id="nav-root">`, `.site-footer` nach STYLEGUIDE §7,
+- **Kopf und Fuss der Site:** `<div id="nav-root">`, leere FUSS-Marken (den Footer schreibt `build-seo.py`, STYLEGUIDE §7),
   am Schluss `../mathlib.js`, `../nav.js`, `buildNav({ id: 'leitprogramme' })`.
 - **Clip-Bühne aus `mathlib.js`** (`clipBuehne(quelle, titel)`), `BASIS = '../'`.
 - **`h2` mit `id`** (Suche schneidet an `h2[id]`); keine `id` doppelt zwischen
@@ -481,12 +481,14 @@ Der Reihe nach; in Klammern, woran man merkt, dass der Punkt fehlt.
 | Datei | was |
 |---|---|
 | `leitprogramme.html` | eine Kachel je Leitprogramm unter «Nach Thema» (führt zum Leitprogramm); darauf je Themenseite ihr Titel und die Pille mit ihrer Nummer (`g3.3`, `s3.4a`, führt zur Themenseite); unter Fach und Themenbereich, nach Nummer sortiert (sichtbar sind seit 06.10.2026 nur die Leitprogramme mit Kontrollfragen; die älteren vorübergehend unter «Alte Leitprogramme») |
-| `scripts/build-seo.py` | Eintrag in `SEITEN` (Beschreibung, Sitemap) |
+| `scripts/build-seo.py` | Eintrag in `SEITEN` (Beschreibung, Sitemap, Footer-Ortszeile `ort='Leitprogramm · …'`) |
 | `scripts/build-suchindex.py` | Eintrag in der Liste `ZUSATZSEITEN` (Nachschlagewerke und Leitprogramme) |
 | Themenseite | Kasten nach den Lernzielen: «🧭 Lieber geführt? Leitprogramm *…* (≈ n Lektionen)» |
 | `index.html` | Pille «LP» neben der Karte jeder Themenseite, die das Leitprogramm abdeckt: Karte in `<div class="karte-lp">` legen, `<a class="lp-link">` daneben (seit 06.10.2026) |
 
 Danach `python3 scripts/build-seo.py` und `python3 scripts/build-suchindex.py` (beide schreiben ohne Schalter; `--schreiben` aus der alten Fassung gibt es nicht).
+**Nach jedem Bau mit `scripts/lp/<name>/seite.py` erneut `python3 scripts/build-seo.py`:** Das Bauskript gibt
+seit 10.10.2026 nur leere FUSS-Marken aus, den Footer (eine Version für das ganze Lehrmittel) schreibt `build-seo.py`.
 
 Im Leitprogramm selbst: «Ausführlich»-Link je Kapitel (§4), Vorwissen verweist auf das
 vorausgehende Leitprogramm, der Schluss auf das folgende und auf das bewusst

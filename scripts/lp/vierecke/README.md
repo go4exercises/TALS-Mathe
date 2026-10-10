@@ -67,3 +67,9 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/vierecke.html
 node .claude/tools/pruef-geo.mjs leitprogramme/vierecke.html
 node .claude/tools/pruef-fragen.mjs g5-2b-lp-kontrolle-familie g5-2b-lp-kontrolle-flaeche g5-2b-lp-kontrolle-trapez g5-2b-lp-kontrolle-laengen
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

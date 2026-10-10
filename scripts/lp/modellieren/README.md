@@ -83,3 +83,9 @@ node .claude/tools/pruef-formelsatz.mjs leitprogramme/modellieren.html 60
 node .claude/tools/pruef-leiste.mjs leitprogramme/modellieren.html
 node .claude/tools/pruef-fragen.mjs g2-M-lp-kontrolle-zahlen-1 g2-M-lp-kontrolle-zahlen-2   # usw., in Stapeln
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

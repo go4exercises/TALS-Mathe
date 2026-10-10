@@ -53,3 +53,9 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/trigonometrische-funktionen.ht
 node .claude/tools/pruef-fragen.mjs s3-5-lp-kontrolle-kreis-kurve s3-5-lp-kontrolle-periode-symmetrie \
      s3-5-lp-kontrolle-tangens s3-5-lp-kontrolle-parameter s3-5-lp-kontrolle-gleichungen
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

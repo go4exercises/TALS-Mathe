@@ -71,7 +71,8 @@ selbst eine Animation aus der passenden Themenseite.
 - **Klassen** aus `style.css` und den Themenseiten kopieren, nicht erfinden (CLAUDE.md,
   «Skelett & Klassen»). Seiteneigenes CSS im `<style>` der Seite mit eigenem Präfix
   (Muster: `nt-` im Notationstrainer).
-- Den SEO-Kopf **nicht** von Hand schreiben: Er entsteht aus `scripts/build-seo.py` (§4).
+- Den SEO-Kopf und den Footer **nicht** von Hand schreiben: Beide entstehen aus `scripts/build-seo.py` (§4);
+  für den Footer nur die leeren FUSS-Marken nach `.page-wrap` setzen (STYLEGUIDE §7).
 
 ## 4 · Eintragen
 
@@ -86,7 +87,8 @@ nicht auffindbar.
    `<h2 id="ausserhalb">Ausserhalb der Lerngebiete</h2>`. Den Satz `.ue-leer` löschen,
    sobald die erste Kachel steht.
 2. **`scripts/build-seo.py`**, Tabelle `SEITEN`: Schlüssel `'simulationen/<name>.html'`,
-   `typ='article'`, `lrt='Simulation'`, Titel, Beschreibung 140–165 Zeichen, `themen`.
+   `typ='article'`, `lrt='Simulation'`, Titel, Beschreibung 140–165 Zeichen, `themen`, `ort`
+   (Footer-Ortszeile, z.B. `ort='Simulationen · ⟪Name⟫'`).
    Dann `python3 scripts/build-seo.py` — nach dem Commit ein zweites Mal (Kopfkommentar
    des Skripts) und die Datumsänderung mitcommitten.
 3. **`scripts/build-suchindex.py`**, Liste `ZUSATZSEITEN`: `('simulationen/<name>.html', 'SIM',

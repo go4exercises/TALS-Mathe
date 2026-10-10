@@ -87,3 +87,9 @@ python3 scripts/build-clip-fragen-ton.py g2-2-lp-<name>   # nur Kontrollclips
 python3 scripts/build-clips.py           g2-2-lp-<name>
 python3 scripts/lp/lineare-quadratische-gleichungen/seite.py
 ```
+
+## Footer
+
+Den Footer schreibt `scripts/build-seo.py` (seit 10.10.2026, eine Version für das ganze Lehrmittel):
+`seite.py` gibt nur leere FUSS-Marken aus. **Nach jedem Bau `python3 scripts/build-seo.py`**, sonst fehlt
+der Footer (der Pre-Flight meldet es).

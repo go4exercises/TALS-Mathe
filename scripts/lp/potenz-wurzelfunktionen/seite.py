@@ -38,10 +38,12 @@ i = alt.index('<script>\n  window.MathJax')
 j = min(k for k in (alt.find('<script>\n/* Leitprogramm Lineare Funktionen — Simulationen'),
                     alt.find('<script>\n/* Leitprogramm Potenz- und Wurzelfunktionen — Simulationen')) if k > 0)
 basis = alt[i:j]
-fuss = alt[alt.index('<footer class="site-footer">'):]
-fuss = re.sub(r'Version [0-9.]+( \(Probe\))?', 'Version 1.0 (Probe)', fuss)
-fuss = fuss.replace('Lineare Funktionen', 'Potenz- und Wurzelfunktionen')
-fuss = re.sub(r'Stand [0-9]+\. [A-Za-zäöü]+ 2026', 'Stand 3. Oktober 2026', fuss)
+# Footer erzeugt scripts/build-seo.py (seit 10.10.2026): hier nur leere FUSS-Marken; nach dem Bau
+# `python3 scripts/build-seo.py` laufen lassen.
+fuss = alt[alt.index('<!-- FUSS:ANFANG'):] if '<!-- FUSS:ANFANG' in alt else alt[alt.index('<footer class="site-footer">'):]
+fuss = re.sub(r'<!-- FUSS:ANFANG.*?<!-- FUSS:ENDE -->|<footer class="site-footer">.*?</footer>',
+              lambda _: '<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->\n<!-- FUSS:ENDE -->',
+              fuss, count=1, flags=re.S)
 
 CSS = '''
 /* ════════ Potenz- und Wurzelfunktionen (03.10.2026) — Fassung 4 des Kapitelmusters ════════
