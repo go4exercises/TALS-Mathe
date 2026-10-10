@@ -137,6 +137,9 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
+    dict(quelle='Mathe', was='build-clip-ton.py: zwei TAUSCH-Eintraege nach Hoerprobe Runde 6 (Korrekturglied -> Korrektur-Glied, Arkussinus -> Arkus-Sinus), 10.10.2026',
+         wie='Physik: Mathes scripts/build-clip-ton.py uebernehmen. In Physik betroffen: 0 Clips (gezaehlt 10.10.2026), nichts neu vertonen. '
+             'Dazu diese abgleich.py uebernehmen (Grundlinie build-suchindex.py 0.947, OFFEN von Physik abgearbeitet) und diesen Eintrag streichen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

@@ -992,7 +992,7 @@ Nachgeprüft vom Hauptagenten: H1 (Bild `fest-sim3.png`), GT-Zahlen G1–G7.
 G1(c) gestrichen, Steigung in %, SSW kein/ein Dreieck). Keine Szene neu vertont, Fragetöne Kontrolle Seiten/Höhen neu.
 Nachgetragen 08.10.2026: Sinussatz-Clip Satz zu h = c·sin α, Kontrolle Sinussatz F4 «freien Schenkel» (Teilvertonung).
 Offen nur Hörprobe «a wird länger» (Cosinussatz «Stumpf»), «drei Komma vier vier», «a ist kürzer». Abnahme offen.
-Diese drei samt «Arkussinus» in der Hörprobe Runde 5 (10.10.2026, `~/hoerproben/2026-10-10/runde5`) — Ergebnis offen.
+Hörprobe Runden 5/6 (10.10.2026): «Die Seite a ist kürzer», «Korrektur-Glied», «Arkus-Sinus» umgesetzt; «a wird länger», «drei Komma vier vier» wie bisher.
 
 ### HOCH
 - [x] **H1 · Gesperrte Regler zeigen falsche Werte, teils die gesuchte Grösse** (`seite.js` `werte()`; sim1 A7, sim2 A7, sim3 A7, sim5 A5): Figur zeichnet `fest`, `.sl-val` zeigt den Startwert (sim3 A7 «15 m | 52°» bei h = 14, d = 20, gesucht α). → `.sl-val` aus `w` schreiben, gesuchte Grösse «?».

@@ -1350,10 +1350,12 @@ und Physik auf einer Seite, mit Auswahlknöpfen und «Ergebnis kopieren»; Bausk
 `~/hoerproben/2026-10-10/bauen.py` (Satz aus dem Drehbuch, «bisher» mit der Tabelle des
 jeweiligen Repos, Varianten tauschen nur das Wort; Runden als `runde<n>.py`). Daraus:
 - **In die Tabelle:** Amontons, isochor (Schweizer ch), Glycerin, stimulierte (scht),
-  Kachel/Kacheln (langes ch), «parts per million» — und damit in Physik und Sek1 nachzuziehen.
+  Kachel/Kacheln (langes ch), «parts per million»; in `TAUSCH` «Korrektur-Glied» und
+  «Arkus-Sinus» (sonst verschluckt die Stimme den zweiten Teil) — und damit in Physik und Sek1
+  nachzuziehen.
 - **Als Sprechertext statt Tabelle:** «die Diskriminante» statt «D» (Quadratische
   Funktionen), «y s, gleich» mit Komma (das s ging sonst verloren), «ppm, parts per
-  million,» bei der ersten Nennung (Physik).
+  million,» bei der ersten Nennung (Physik), «Die Seite a ist kürzer» statt «a ist kürzer».
 - **Bewusst wie bisher:** «Komma» in Dezimalzahlen (gesprochen wird nicht «Punkt»), «ein
   Halb», «x s», «y s», Symmetrieachse, Kathete, subtrahiert, Überstand und rund zwanzig
   weitere (Kommentar unter der Tabelle).
