@@ -24,6 +24,9 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **Notationstrainer nur noch Grundlagenfach:** die 25 Karten des Schwerpunktfachs (Wurzel, Log,
+  Betrag, Polynom-Ungleichungen), der Filter «Fach» und das Fach-Etikett auf der Karte entfernt;
+  kein Verweis mehr aus SF 2.1, keine Kachel mehr unter Schwerpunktfach in `werkzeuge.html`.
 
 ---
 

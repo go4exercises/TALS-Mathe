@@ -31,7 +31,7 @@ vorgegebenen Modells → Simulation (`HOWTO-simulationen.md`).
 **Eigene Seite statt Aufgabe auf der Themenseite**, wenn das Werkzeug
 
 - auch ohne die Themenseite benutzt wird (vor der Prüfung, im Unterricht direkt geöffnet),
-- mehrere Themenseiten bedient (der Notationstrainer gilt für GF 2 und SF 2), oder
+- mehrere Themenseiten bedient, oder
 - einen Stand führt, mehrere Modi hat oder mehr als einen Bildschirm braucht.
 
 Ein einzelner Rechner zu einer einzigen Aufgabe bleibt in der Themenseite.
@@ -85,7 +85,7 @@ nicht auffindbar.
    `<!-- WERKZEUGE:ENDE -->`: eine Kachel unter Fach und Themenbereich — `a.karte` über der
    ganzen Kachel, `.lp-kopf` Titel, `.lp-satz` ein Satz, je verweisende Themenseite eine
    `.lp-zeile` mit Pille auf den Abschnitt. Bedient es mehrere Fächer, steht die Kachel in
-   jedem Fach einmal (wie der Notationstrainer). Ohne Themenbereich unter
+   jedem Fach einmal. Ohne Themenbereich unter
    `<h2 id="ausserhalb">Ausserhalb der Lerngebiete</h2>`.
 2. **`scripts/build-seo.py`**, Tabelle `SEITEN`: Schlüssel `'werkzeuge/<name>.html'`,
    `typ='article'`, `lrt=['Werkzeug', …]`, Titel, Beschreibung 140–165 Zeichen, `themen`, `ort`

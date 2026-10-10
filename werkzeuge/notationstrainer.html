@@ -150,8 +150,6 @@ MathJax = {
 .nt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
 .nt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:10px; }
 .nt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.nt-tag.nt-gf { background:var(--blau-hell); color:var(--blau); border-color:var(--blau-rand); }
-.nt-tag.nt-sf { background:var(--lila-hell); color:var(--lila); border-color:var(--lila-rand); }
 .nt-tag.nt-fachtag { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); margin-left:auto; }
 .nt-lage { font-size:1.02rem; }
 .nt-ctx { font-size:.88rem; color:var(--tinte-2); margin-bottom:6px; }
@@ -188,8 +186,7 @@ MathJax = {
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Notationstrainer</h1>
       <p class="pt-untertitel">Lernkartei für die Schreibweise von \(\mathbb{D}\), \(\mathbb{L}\) und Intervallen — gerechnet wird hier nicht.
-        Die Begriffe stehen in <a href="../grundlagen/g2-1-grundlagen.html#definition">2.1 Grundlagen</a>,
-        im Schwerpunktfach in <a href="../schwerpunkt/s2-1-grundlagen.html#definition">SF 2.1 Grundlagen</a>.</p>
+        Die Begriffe stehen in <a href="../grundlagen/g2-1-grundlagen.html#definition">2.1 Grundlagen</a>.</p>
     </div>
 
 <div class="nt-karte" id="nt-karte">
@@ -251,11 +248,6 @@ MathJax = {
           <div id="nt-faecher"></div>
           <div class="nt-meta" id="nt-meta"></div>
         </div>
-        <div class="nt-gruppe" id="nt-bereich">
-          <div class="nt-g-titel">Fach</div>
-          <button type="button" class="nt-opt aktiv" data-b="gf">Grundlagenfach</button>
-          <button type="button" class="nt-opt" data-b="sf">Schwerpunktfach</button>
-        </div>
         <div class="nt-gruppe">
           <div class="nt-g-titel">Grundmenge</div>
           <div class="nt-opt-reihe" id="nt-grund">
@@ -300,16 +292,12 @@ const THEMEN = {
   sonder: 'Sonderfälle',
   ungl:   'Ungleichungen',
   schreib:'Schreibweisen',
-  lgs:    'Gleichungssysteme',
-  weitere:'Betrag, Wurzel, Exponent, Log'
+  lgs:    'Gleichungssysteme'
 };
 const S_G22A = ['../grundlagen/g2-2a-lineare-gleichungen.html', '2.2a Lineare Gleichungen'];
 const S_G22B = ['../grundlagen/g2-2b-quadratische-gleichungen.html', '2.2b Quadratische Gleichungen'];
 const S_G12  = ['../grundlagen/g1-2-zahlen-grundoperationen.html#theorie', '1.2 Zahlen und Grundoperationen'];
 const S_G23  = ['../grundlagen/g2-3-lineare-gleichungssysteme.html', '2.3 Lineare Gleichungssysteme'];
-const S_S22A = ['../schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html', 'SF 2.2a Potenz-, Wurzel- und rationale Gleichungen'];
-const S_S22B = ['../schwerpunkt/s2-2b-exponential-logarithmische-gleichungen.html', 'SF 2.2b Exponential- und logarithmische Gleichungen'];
-const S_S22C = ['../schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html', 'SF 2.2c Betrag, Polynome, Ungleichungen'];
 const R = String.raw;
 const FD = 'Gib die Definitionsmenge \\(\\mathbb{D}\\) an.';
 const FL = 'Gib die Lösungsmenge \\(\\mathbb{L}\\) an.';
@@ -363,32 +351,6 @@ const KARTEN = [
     erg:R`Die Rechnung ergibt \(x = 4\).`, frage:FDL, l:R`\{4\}`, lweg:R`\(4 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = \mathbb{N} \setminus \{3\}`,
     weg:R`Nur die \(3\) liegt in \(\mathbb{N}\); die \(-2\) war ohnehin nicht dabei.`, s:S_G22B },
-  { id:'d10', k:'D', b:'sf', ctx:R`\sqrt{x - 3} = 2`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 3\).`, g:R`\mathbb{R}`,
-    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{D}\).`,
-    a:R`\mathbb{D} = [3;\, +\infty[`,
-    weg:R`«\(\ge\)»: Die \(3\) gehört dazu — Klammer zum Intervall hin. Bei \(+\infty\) immer Klammer nach aussen.`,
-    falle:R`Nicht \([3;\, +\infty]\): \(\infty\) ist keine Zahl und kann nie dazugehören.`, s:S_S22A },
-  { id:'d11', k:'D', b:'sf', ctx:R`\sqrt{5 - 2x} = x`, lage:R`Erlaubt sind alle \(x\) mit \(x \le 2.5\).`, g:R`\mathbb{R}`,
-    erg:R`Nach dem Quadrieren: \(x_1 = -1 - \sqrt{6}\), \(x_2 = -1 + \sqrt{6}\). Die Probe stimmt nur für \(x_2\).`, frage:FDL, l:R`\left\{-1 + \sqrt{6}\right\}`, lweg:R`\(x_1\) liegt zwar in \(\mathbb{D}\), ist aber eine Scheinlösung des Quadrierens.`,
-    a:R`\mathbb{D} = \,]{-\infty};\, 2.5]`,
-    weg:R`Nach links unbeschränkt, die \(2.5\) gehört dazu.`,
-    falle:R`Nicht \((-\infty;\, 2.5]\): Runde Klammern sind die internationale Schreibweise. In diesem Lehrmittel ist die offene Grenze eine eckige Klammer nach aussen.`, s:S_S22A },
-  { id:'d12', k:'D', b:'sf', ctx:R`\sqrt{x + 2} = \sqrt{4 - x}`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge -2\) und zugleich \(x \le 4\).`, g:R`\mathbb{R}`,
-    erg:R`Die Rechnung ergibt \(x = 1\).`, frage:FDL, l:R`\{1\}`, lweg:R`\(1 \in \mathbb{D}\).`,
-    a:R`\mathbb{D} = [-2;\, 4]`,
-    weg:R`«und zugleich» ergibt ein einziges Intervall zwischen den beiden Grenzen, beide dabei.`, s:S_S22A },
-  { id:'d13', k:'D', b:'sf', ctx:R`\log_2(x + 1) = 3`, lage:R`Erlaubt sind alle \(x\) mit \(x \gt -1\).`, g:R`\mathbb{R}`,
-    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{D}\).`,
-    a:R`\mathbb{D} = \,]{-1};\, +\infty[`,
-    weg:R`«\(\gt\)»: Die \(-1\) gehört nicht dazu — Klammer vom Intervall weg.`, s:S_S22B },
-  { id:'d14', k:'D', b:'sf', ctx:R`\lg(x) + \lg(x - 3) = 1`, lage:R`Beide Bedingungen zusammen ergeben: erlaubt sind alle \(x\) mit \(x \gt 3\).`, g:R`\mathbb{R}`,
-    erg:R`Die Rechnung ergibt \(x_1 = -2\) und \(x_2 = 5\).`, frage:FDL, l:R`\{5\}`, lweg:R`\(-2 \notin \mathbb{D}\) — gestrichen.`,
-    a:R`\mathbb{D} = \,]3;\, +\infty[`,
-    weg:R`Die \(3\) ist ausgeschlossen, nach rechts unbeschränkt.`, s:S_S22B },
-  { id:'d15', k:'D', b:'sf', ctx:R`\dfrac{\sqrt{x}}{x - 4} = \dfrac{1}{x - 4}`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 0\), ausser \(x = 4\).`, g:R`\mathbb{R}`,
-    erg:R`Die Rechnung ergibt \(x = 1\).`, frage:FDL, l:R`\{1\}`, lweg:R`\(1 \in \mathbb{D}\).`,
-    a:R`\mathbb{D} = [0;\, +\infty[ \,\setminus \{4\}`,
-    weg:R`Erst das Intervall, dann mit \(\setminus\) die einzelne Zahl herausnehmen. Gleichwertig: \([0;\, 4[ \;\cup\; ]4;\, +\infty[\).`, s:S_S22A },
   { id:'dn2', k:'D', b:'gf', ctx:R`\dfrac{2}{x + 5} = 1`, lage:R`Der Nenner wird null für \(x = -5\).`, g:R`\mathbb{N}`,
     erg:R`Die Rechnung ergibt \(x = -3\).`, frage:FDL, l:R`\{\,\}`, lweg:R`\(-3 \notin \mathbb{N}\). Alle natürlichen Zahlen sind erlaubt, aber keine ist Lösung.`,
     a:R`\mathbb{D} = \mathbb{N}`,
@@ -427,19 +389,6 @@ const KARTEN = [
     erg:R`Die Rechnung ergibt \(x_1 = -1\) und \(x_2 = 1\).`, frage:FDL, l:R`\{-1, 1\}`, lweg:R`Beide rational und erlaubt.`,
     a:R`\mathbb{D} = \mathbb{Q} \setminus \{-0.5, 0.5\}`,
     weg:R`Beide sind rational. Ebenso richtig: \(\mathbb{Q} \setminus \left\{-\tfrac{1}{2}, \tfrac{1}{2}\right\}\).`, s:S_G22B },
-  { id:'d16', k:'D', b:'sf', ctx:R`\sqrt{x - 3} = 2`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 3\).`, g:R`\mathbb{Z}`,
-    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{D}\).`,
-    a:R`\mathbb{D} = \{3, 4, 5, \ldots\}`,
-    weg:R`In \(\mathbb{Z}\) kein Intervall, sondern aufzählen. Ebenso richtig: \(\{x \in \mathbb{Z} \mid x \ge 3\}\).`,
-    falle:R`\([3;\, +\infty[\) enthielte auch \(3.5\) — keine ganze Zahl.`, s:S_S22A },
-  { id:'d17', k:'D', b:'sf', ctx:R`\log_2(x + 1) = 3`, lage:R`Erlaubt sind alle \(x\) mit \(x \gt -1\).`, g:R`\mathbb{N}`,
-    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{N}\).`,
-    a:R`\mathbb{D} = \mathbb{N}`,
-    weg:R`Jede natürliche Zahl ist grösser als \(-1\) — es fällt nichts weg.`, s:S_S22B },
-  { id:'d18', k:'D', b:'sf', ctx:R`\sqrt{5 - 2x} = x`, lage:R`Erlaubt sind alle \(x\) mit \(x \le 2.5\).`, g:R`\mathbb{Z}`,
-    erg:R`Nach dem Quadrieren: \(x_{1,2} = -1 \pm \sqrt{6}\).`, frage:FDL, l:R`\{\,\}`, lweg:R`Beide sind irrational, also nicht in \(\mathbb{Z}\).`,
-    a:R`\mathbb{D} = \{\ldots, 0, 1, 2\}`,
-    weg:R`Nach unten unbeschränkt: die Pünktchen stehen links. Ebenso richtig: \(\{x \in \mathbb{Z} \mid x \le 2\}\).`, s:S_S22A },
 
   // ── Lineare Gleichungen ──
   { id:'l1', k:'lin', b:'gf', ctx:R`3x + 5 = 17`, lage:R`Die Rechnung ergibt \(x = 4\).`, g:R`\mathbb{R}`, frage:FL,
@@ -654,15 +603,6 @@ const KARTEN = [
   { id:'u16', k:'ungl', b:'gf', ctx:R`x^2 \lt 5`, lage:R`Erfüllt sind alle \(x\) mit \(-\sqrt{5} \lt x \lt \sqrt{5}\), ungefähr \(-2.24 \lt x \lt 2.24\).`, g:R`\mathbb{Z}`, frage:FL,
     a:R`\mathbb{L} = \{-2, -1, 0, 1, 2\}`,
     weg:R`In \(\mathbb{Z}\) nur die ganzen Zahlen dazwischen, aufgezählt.`, s:S_G22B },
-  { id:'u17', k:'ungl', b:'sf', ctx:R`|x| \lt 3`, lage:R`Erfüllt sind alle \(x\) mit \(-3 \lt x \lt 3\).`, g:R`\mathbb{R}`, frage:FI,
-    a:R`\mathbb{L} = \,]{-3};\, 3[`,
-    weg:R`Offenes Intervall.`, s:S_S22C },
-  { id:'u18', k:'ungl', b:'sf', ctx:R`|x - 1| \ge 2`, lage:R`Erfüllt sind alle \(x\) mit \(x \le -1\) oder \(x \ge 3\).`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \,]{-\infty};\, -1] \cup [3;\, +\infty[`,
-    weg:R`«oder» → \(\cup\); beide Grenzen dabei.`, s:S_S22C },
-  { id:'u19', k:'ungl', b:'sf', ctx:R`x^3 - 4x \ge 0`, lage:R`Erfüllt sind alle \(x\) mit \(-2 \le x \le 0\) oder \(x \ge 2\).`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = [-2;\, 0] \cup [2;\, +\infty[`,
-    weg:R`Ein beschränktes und ein unbeschränktes Stück, verbunden mit \(\cup\).`, s:S_S22C },
   { id:'un3', k:'ungl', b:'gf', ctx:R`3x \lt 7`, lage:R`Die Rechnung ergibt \(x \lt \tfrac{7}{3} \approx 2.33\).`, g:R`\mathbb{N}`, frage:FL,
     a:R`\mathbb{L} = \{0, 1, 2\}`,
     weg:R`Endlich viele natürliche Zahlen — vollständig aufzählen, ohne Pünktchen.`, s:S_G22A },
@@ -679,12 +619,6 @@ const KARTEN = [
     a:R`\mathbb{L} = \{x \in \mathbb{Q} \mid x \gt 4\}`,
     weg:R`Aufzählen geht nicht (zwischen zwei Brüchen liegen unendlich viele), und ein Intervall meint reelle Zahlen. Darum beschreibend.`,
     falle:R`\(]4;\, +\infty[\) enthielte auch irrationale Zahlen wie \(\sqrt{20}\).`, s:S_G22A },
-  { id:'u20', k:'ungl', b:'sf', ctx:R`|x| \lt 3`, lage:R`Erfüllt sind alle \(x\) mit \(-3 \lt x \lt 3\).`, g:R`\mathbb{Z}`, frage:FL,
-    a:R`\mathbb{L} = \{-2, -1, 0, 1, 2\}`,
-    weg:R`Die Grenzen \(\pm 3\) sind ausgeschlossen; dazwischen die ganzen Zahlen.`, s:S_S22C },
-  { id:'u21', k:'ungl', b:'sf', ctx:R`|x - 1| \ge 2`, lage:R`Erfüllt sind alle \(x\) mit \(x \le -1\) oder \(x \ge 3\).`, g:R`\mathbb{N}`, frage:FL,
-    a:R`\mathbb{L} = \{3, 4, 5, \ldots\}`,
-    weg:R`Das Stück \(x \le -1\) enthält keine natürliche Zahl. Es bleibt nur das rechte Stück.`, s:S_S22C },
 
   // ── Schreibweisen ──
   { id:'s1', k:'schreib', b:'gf', lage:R`\[\{x \in \mathbb{R} \mid -2 \le x \lt 5\}\]`, frage:'Schreib die Menge als Intervall.',
@@ -762,50 +696,13 @@ const KARTEN = [
     a:R`\mathbb{L} = \{(0.75 \mid 0.75)\}`,
     weg:R`Auch mit gleichen Koordinaten: ein Paar, beide Einträge.`,
     falle:R`Nicht \(\{0.75\}\) — die Lösung eines Systems mit zwei Variablen ist immer ein Paar.`, s:S_G23 },
-
-  // ── Betrag, Wurzel, Exponent, Log (Schwerpunktfach) ──
-  { id:'w1', k:'weitere', b:'sf', ctx:R`|x - 2| = 3`, lage:R`Die zwei Fälle ergeben \(x = 5\) und \(x = -1\).`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \{-1, 5\}`,
-    weg:R`Beide Fälle liefern je ein Element derselben Menge.`, s:S_S22C },
-  { id:'w2', k:'weitere', b:'sf', ctx:R`|x + 1| = -2`, lage:R`Ein Betrag ist nie negativ — keine Zahl erfüllt die Gleichung.`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \{\,\}`,
-    weg:R`Leere Menge.`, s:S_S22C },
-  { id:'w3', k:'weitere', b:'sf', ctx:R`\sqrt{x + 6} = x`, lage:R`Nach dem Quadrieren: \(x_1 = -2\), \(x_2 = 3\). Die Probe stimmt nur für \(x_2 = 3\).`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \{3\}`,
-    weg:R`Die Scheinlösung \(-2\) kommt nicht in die Menge.`, s:S_S22A },
-  { id:'w4', k:'weitere', b:'sf', ctx:R`2^x = 5`, lage:R`Die Rechnung ergibt \(x = \log_2 5 \approx 2.32\).`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \{\log_2 5\}`,
-    weg:R`Exakt angeben. Ebenso exakt: \(\left\{\tfrac{\lg 5}{\lg 2}\right\}\).`,
-    falle:R`\(\{2.32\}\) ist gerundet — als Endergebnis nur, wenn ausdrücklich nach einem Näherungswert gefragt ist.`, s:S_S22B },
-  { id:'w5', k:'weitere', b:'sf', ctx:R`2^x = -4`, lage:R`\(2^x\) ist für jedes \(x\) positiv.`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \{\,\}`,
-    weg:R`Leere Menge.`, s:S_S22B },
-  { id:'w6', k:'weitere', b:'sf', ctx:R`\lg(x) + \lg(x - 3) = 1`, lage:R`\(\mathbb{D} = \,]3;\, +\infty[\). Die Rechnung ergibt \(x_1 = 5\) und \(x_2 = -2\).`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \{5\}`,
-    weg:R`\(-2 \notin \mathbb{D}\).`, s:S_S22B },
-  { id:'w7', k:'weitere', b:'sf', ctx:R`x^4 = 16`, lage:R`Die Rechnung ergibt \(x_{1,2} = \pm 2\).`, g:R`\mathbb{R}`, frage:FL,
-    a:R`\mathbb{L} = \{-2, 2\}`,
-    weg:R`Das \(\pm\) in zwei Elemente auflösen.`, s:S_S22A },
-  { id:'w8', k:'weitere', b:'sf', ctx:R`|x - 2| = 3`, lage:R`Die zwei Fälle ergeben \(x = 5\) und \(x = -1\).`, g:R`\mathbb{N}`, frage:FL,
-    a:R`\mathbb{L} = \{5\}`,
-    weg:R`\(-1 \notin \mathbb{N}\).`, s:S_S22C },
-  { id:'w9', k:'weitere', b:'sf', ctx:R`x^4 = 16`, lage:R`Die Rechnung ergibt \(x_{1,2} = \pm 2\).`, g:R`\mathbb{N}`, frage:FL,
-    a:R`\mathbb{L} = \{2\}`,
-    weg:R`Nur \(2\) liegt in \(\mathbb{N}\).`, s:S_S22A },
-  { id:'w10', k:'weitere', b:'sf', ctx:R`2^x = 5`, lage:R`Die Rechnung ergibt \(x = \log_2 5\). Diese Zahl ist irrational.`, g:R`\mathbb{Q}`, frage:FL,
-    a:R`\mathbb{L} = \{\,\}`,
-    weg:R`Irrational heisst: nicht in \(\mathbb{Q}\).`,
-    falle:R`Nicht \(\{2.32\}\): Der gerundete Wert ist zwar rational, aber keine Lösung.`, s:S_S22B },
-  { id:'w11', k:'weitere', b:'sf', ctx:R`\sqrt{x + 6} = x`, lage:R`Nach dem Quadrieren: \(x_1 = -2\), \(x_2 = 3\). Die Probe stimmt nur für \(x_2 = 3\).`, g:R`\mathbb{Z}`, frage:FL,
-    a:R`\mathbb{L} = \{3\}`,
-    weg:R`\(-2\) wäre ganz, ist aber eine Scheinlösung.`, s:S_S22A }
 ];
 
 // ── Zustand (nur in diesem Browser) ──────────────────────────
 const SPEICHER = 'tals-mathe-notationstrainer-v1';
 let fach = {};                                 // id → 1…5
-// Startauswahl: Grundlagenfach, Grundmenge ℝ, Definitionsmenge
-let auswahl = { b: new Set(['gf']), m: new Set(['R']), k: new Set(['D']) };
+// Startauswahl: Grundmenge ℝ, Definitionsmenge
+let auswahl = { m: new Set(['R']), k: new Set(['D']) };
 // Grundmenge einer Karte: erstes \mathbb{…} in g (ℝ × ℝ zählt als ℝ, ℕ × ℕ als ℕ).
 // Schreibweisen-Karten haben kein g — dort zählt die Menge in der Ausgangslage, sonst ℝ.
 function grundVon(c) {
@@ -819,7 +716,7 @@ const fachVon = id => Math.min(FAECHER, fach[id] || 1);   // ältere Stände hat
 
 let aktuell = null, letzte = null;
 
-function imStapel() { return KARTEN.filter(c => auswahl.b.has(c.b) && auswahl.m.has(grundVon(c)) && auswahl.k.has(c.k)); }
+function imStapel() { return KARTEN.filter(c => auswahl.m.has(grundVon(c)) && auswahl.k.has(c.k)); }
 
 // Leitner: Fach 1 kommt viermal so oft wie Fach 3; nie zweimal dieselbe Karte hintereinander.
 function ziehen() {
@@ -866,7 +763,6 @@ function zeigeKarte() {
   const c = aktuell;
   setzen($('nt-kopf'),
     `<span class="nt-tag">${THEMEN[c.k]}</span>` +
-    `<span class="nt-tag ${c.b === 'gf' ? 'nt-gf' : 'nt-sf'}">${c.b === 'gf' ? 'Grundlagenfach' : 'Schwerpunktfach'}</span>` +
     `<span class="nt-tag nt-fachtag">Fach ${fachVon(c.id)}</span>`);
   const art = !c.ctx ? '' : /cases/.test(c.ctx) ? 'Gleichungssystem' : /\\[lg][te]\b/.test(c.ctx) ? 'Ungleichung' : 'Gleichung';
   setzen($('nt-lage'),
@@ -921,7 +817,6 @@ function filterKlick(e, menge, schluessel) {
   letzte = null;
   zeigeKarte();
 }
-$('nt-bereich').addEventListener('click', e => filterKlick(e, auswahl.b, 'b'));
 katLeiste.addEventListener('click', e => filterKlick(e, auswahl.k, 'k'));
 $('nt-grund').addEventListener('click', e => filterKlick(e, auswahl.m, 'm'));
 

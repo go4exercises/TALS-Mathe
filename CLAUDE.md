@@ -51,7 +51,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Verlinkt aus
-  g2.1 und s2.1 (`#definition`); bis 10.10.2026 lag er als `notationstrainer.html` im Root.
+  g2.1 (`#definition`); seit 10.10.2026 nur Grundlagenfach (110 Karten, die 25 des
+  Schwerpunktfachs und der Fach-Filter sind entfernt). Bis 10.10.2026 lag er als `notationstrainer.html` im Root.
 - `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
