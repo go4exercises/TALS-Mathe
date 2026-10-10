@@ -24,10 +24,11 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
-- **Neues Werkzeug: Strategietrainer** (`werkzeuge/strategietrainer.html`, Prototyp): lineare und
-  quadratische Zufallsgleichungen; man wählt den nächsten Schritt aus 13 Strategien, das Werkzeug
+- **Neues Werkzeug: Strategietrainer** (`werkzeuge/strategietrainer.html`): Zufallsaufgaben zu
+  linearen, quadratischen und Bruchgleichungen, Faktorisieren, Bruchtermen, linearen Gleichungssystemen
+  und Systemen mit Parabel (SF); man wählt den nächsten Schritt aus einer festen Liste, das Werkzeug
   rechnet ihn aus oder begründet die Fehlwahl. Selbsttest `scripts/verify_strategietrainer.js` im
-  Pre-Flight; verlinkt aus g2.2a und g2.2b.
+  Pre-Flight; verlinkt aus g1.3, g2.2a, g2.2b, g2.3, s2.2a und s3.1, Vorwahl des Bereichs per `#bereich=`.
 - **`scripts/abgleich.py`** aus Physik übernommen (Footer-Übertrag dort erledigt, `OFFEN` leer);
   Grundlinie `preflight.py` 0.870 → 0.880 (Werkzeug-Selbsttests wie in Physik).
 - **Notationstrainer nur noch Grundlagenfach:** die 25 Karten des Schwerpunktfachs (Wurzel, Log,

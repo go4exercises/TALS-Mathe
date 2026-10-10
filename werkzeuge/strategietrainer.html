@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Strategietrainer — Mathe begreifbar</title>
 <!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
-<meta name="description" content="Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.">
+<meta name="description" content="Strategietrainer zu Gleichungen, Bruchgleichungen, Faktorisieren, Bruchtermen und Gleichungssystemen: Du wählst den Schritt, das Werkzeug rechnet und begründet.">
 <meta name="author" content="Raphael Arnold Kohler">
 <link rel="canonical" href="https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Mathe begreifbar">
 <meta property="og:locale" content="de_CH">
 <meta property="og:title" content="Strategietrainer — den passenden Lösungsschritt wählen">
-<meta property="og:description" content="Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.">
+<meta property="og:description" content="Strategietrainer zu Gleichungen, Bruchgleichungen, Faktorisieren, Bruchtermen und Gleichungssystemen: Du wählst den Schritt, das Werkzeug rechnet und begründet.">
 <meta property="og:url" content="https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html">
 <meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -28,7 +28,7 @@
    "@id": "https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html#inhalt",
    "url": "https://mathe.begreifbar.ch/werkzeuge/strategietrainer.html",
    "name": "Strategietrainer — den passenden Lösungsschritt wählen",
-   "description": "Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.",
+   "description": "Strategietrainer zu Gleichungen, Bruchgleichungen, Faktorisieren, Bruchtermen und Gleichungssystemen: Du wählst den Schritt, das Werkzeug rechnet und begründet.",
    "inLanguage": "de-CH",
    "isAccessibleForFree": true,
    "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
@@ -51,11 +51,23 @@
     },
     {
      "@type": "DefinedTerm",
-     "name": "Lineare Gleichung"
+     "name": "Gleichung"
     },
     {
      "@type": "DefinedTerm",
-     "name": "Quadratische Gleichung"
+     "name": "Bruchgleichung"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Faktorisieren"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Bruchterm"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Gleichungssystem"
     },
     {
      "@type": "DefinedTerm",
@@ -66,7 +78,7 @@
      "name": "Übung"
     }
    ],
-   "keywords": "Mathematik, Lineare Gleichung, Quadratische Gleichung, Lösungsverfahren, Übung",
+   "keywords": "Mathematik, Gleichung, Bruchgleichung, Faktorisieren, Bruchterm, Gleichungssystem, Lösungsverfahren, Übung",
    "learningResourceType": [
     "Werkzeug",
     "Übung"
@@ -106,7 +118,7 @@ MathJax = {
 /* Strategietrainer — seiteneigene Klassen (Präfix st-), Farben aus style.css.
    Orange = Aufgabe und Wahl, Grün = richtig und Lösung, Rot = Fehlgriff, Grau = erlaubter Umweg.
    Seitenspalte und Karte wie im Notationstrainer, der Verlauf wie im Umformer der Leitprogramme. */
-.st-wrap { grid-template-columns:minmax(0, 1fr) 190px; gap:44px; }
+.st-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
 .st-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
 .st-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
   border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
@@ -115,7 +127,8 @@ MathJax = {
 .st-seite details[open] summary::before { content:'▾ '; }
 .st-gruppe { margin-bottom:16px; }
 .st-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
+  border-bottom:1px solid var(--linie); padding-bottom:3px; margin:10px 0 6px; }
+.st-gruppe > .st-g-titel:first-child { margin-top:0; }
 .st-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
   font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
 .st-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
@@ -138,7 +151,8 @@ MathJax = {
 .st-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
 .st-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:10px; }
 .st-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.st-tag.st-grund { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); margin-left:auto; }
+.st-tag.st-auftrag { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
+.st-tag.st-d { background:var(--blau-hell); color:var(--blau); border-color:var(--blau-rand); margin-left:auto; }
 .st-verlauf { display:grid; grid-template-columns:minmax(0,auto) auto; justify-content:start; gap:4px 22px; padding:10px 14px;
   border:1px solid var(--linie); border-radius:9px; background:var(--papier); min-height:2.6em; overflow-x:auto; font-size:1.05rem; }
 .st-zeile { display:contents; }
@@ -169,12 +183,14 @@ MathJax = {
 .st-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
 .st-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
 .st-bilanz ul { margin:6px 0 0 18px; }
+.st-merk h3 { font-size:.95rem; margin:14px 0 4px; }
 [hidden] { display:none !important; }
 @media (max-width:560px) {
   .st-vorne { padding-left:14px; padding-right:14px; }
   .st-wahl { grid-template-columns:minmax(0, 1fr); }
   .st-btn { min-width:0; flex:1 1 60%; }
   .st-taste { display:none; }
+  .st-tag.st-d { margin-left:0; }
 }
 </style>
 </head>
@@ -186,14 +202,16 @@ MathJax = {
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Strategietrainer</h1>
       <p class="pt-untertitel">Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus. Geübt wird das Entscheiden: Welcher Schritt passt hier, und warum passt ein anderer nicht?
-        Der Stoff dazu steht in <a href="../grundlagen/g2-2a-lineare-gleichungen.html">2.2a Lineare Gleichungen</a>
-        und <a href="../grundlagen/g2-2b-quadratische-gleichungen.html">2.2b Quadratische Gleichungen</a>.</p>
+        Der Stoff dazu steht in <a href="../grundlagen/g1-3-algebraische-terme.html#faktorisieren">1.3 Algebraische Terme</a>,
+        <a href="../grundlagen/g2-2a-lineare-gleichungen.html#verfahren">2.2a Lineare Gleichungen</a>,
+        <a href="../grundlagen/g2-2b-quadratische-gleichungen.html#verfahren">2.2b Quadratische Gleichungen</a>
+        und <a href="../grundlagen/g2-3-lineare-gleichungssysteme.html">2.3 Lineare Gleichungssysteme</a>.</p>
     </div>
 
 <div class="st-karte" id="st-karte">
   <div id="st-aufgabe">
     <div class="st-vorne">
-      <div class="st-kopf"><span class="st-tag" id="st-nr"></span><span class="st-tag st-grund">\(\mathbb{G} = \mathbb{R}\)</span></div>
+      <div class="st-kopf"><span class="st-tag" id="st-nr"></span><span class="st-tag st-auftrag" id="st-auftrag"></span><span class="st-tag st-d" id="st-d" hidden></span></div>
       <div class="st-verlauf" id="st-verlauf" aria-live="polite"></div>
       <p class="st-frage" id="st-frage">Was ist der nächste Schritt?</p>
       <div class="st-wahl" id="st-wahl"></div>
@@ -208,21 +226,23 @@ MathJax = {
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert der Trainer</div>
-  <p>Eine Serie hat zehn Zufallsaufgaben. Bei jeder wählst du aus derselben Liste den nächsten Schritt. Passt er, rechnet das Werkzeug ihn aus und schreibt die Umformung rechts daneben — wie im Heft. Am Schluss gibst du die Lösungsmenge an.</p>
+  <p>Eine Serie hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst. Bei jeder wählst du den nächsten Schritt. Passt er, rechnet das Werkzeug ihn aus und schreibt die Umformung rechts daneben — wie im Heft. Am Schluss gibst du die Lösungsmenge an oder erklärst den Term für fertig.</p>
   <ul>
     <li><strong>✓ Passt:</strong> Der Schritt wird ausgeführt. Oft passen zwei Schritte, zum Beispiel Faktorisieren und Mitternachtsformel.</li>
     <li><strong>≈ Erlaubt, aber ein Umweg:</strong> Der Schritt wäre nicht falsch, führt aber nicht schneller ans Ziel. Er zählt nicht als Fehlgriff — wähle neu.</li>
     <li><strong>✗ Passt nicht:</strong> Du erfährst, warum. Beim zweiten Fehlgriff im selben Schritt kommt ein Tipp, beim dritten wird der passende Schritt markiert.</li>
   </ul>
-  <p>Die Liste bleibt immer gleich — auch Schritte, die zu einer ganz anderen Art Gleichung gehören. Genau das ist die Übung: erkennen, was hier passt. Gespeichert wird nichts.</p>
+  <p>Gleichungen, Terme und Gleichungssysteme haben je eine eigene Liste von Schritten. Sie bleibt immer gleich — auch Schritte, die zu einer ganz anderen Art Aufgabe gehören. Genau das ist die Übung: erkennen, was hier passt. Gespeichert wird nichts.</p>
 </div>
 
-<details class="block block-merksatz" style="margin-top:10px">
+<details class="block block-merksatz st-merk" style="margin-top:10px">
   <summary class="block-titel" style="cursor:pointer">⭐ Welcher Schritt wann?</summary>
-  <table class="ftb-tabelle" style="margin-top:8px">
+  <h3>Gleichungen</h3>
+  <table class="ftb-tabelle">
     <thead><tr><th>Schritt</th><th>passt, wenn …</th></tr></thead>
     <tbody>
-      <tr><td style="text-align:left;font-family:var(--sans)">Mit dem Hauptnenner multiplizieren</td><td style="text-align:left;font-family:var(--sans)">Brüche vorkommen — das kommt zuerst.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Definitionsmenge bestimmen</td><td style="text-align:left;font-family:var(--sans)">\(x\) im Nenner steht — als Allererstes.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Mit dem Hauptnenner multiplizieren</td><td style="text-align:left;font-family:var(--sans)">Brüche vorkommen — bei einer Bruchgleichung erst nach \(\mathbb{D}\).</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Klammern auflösen</td><td style="text-align:left;font-family:var(--sans)">\(x\) in einer Klammer steckt und auf der anderen Seite nicht \(0\) steht. Erst danach zeigt sich, ob die Gleichung linear oder quadratisch ist.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Glieder mit \(x\) auf eine Seite, Zahlen auf die andere</td><td style="text-align:left;font-family:var(--sans)">die Gleichung linear ist — oder quadratisch ohne Glied mit \(x\): \(x^2 + 3 = 12\).</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Alles auf eine Seite: \(\ldots = 0\)</td><td style="text-align:left;font-family:var(--sans)">die Gleichung quadratisch ist und noch nicht \(0\) auf einer Seite steht.</td></tr>
@@ -234,7 +254,36 @@ MathJax = {
       <tr><td style="text-align:left;font-family:var(--sans)">Wurzel ziehen</td><td style="text-align:left;font-family:var(--sans)">das Quadrat allein steht: \(x^2 = c\) oder \((x + d)^2 = c\). Beide Vorzeichen!</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Mitternachtsformel</td><td style="text-align:left;font-family:var(--sans)">\(ax^2 + bx + c = 0\) dasteht. Sie geht immer — am meisten lohnt sie sich, wenn nichts anderes passt.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Quadratisch ergänzen</td><td style="text-align:left;font-family:var(--sans)">\(x^2 + px = k\) mit geradem \(p\) dasteht.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Lösungen mit \(\mathbb{D}\) vergleichen</td><td style="text-align:left;font-family:var(--sans)">die Lösungen einer Bruchgleichung dastehen — eine davon kann verboten sein.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Lösungsmenge angeben</td><td style="text-align:left;font-family:var(--sans)">\(x = \ldots\) dasteht oder \(x\) ganz weggefallen ist.</td></tr>
+    </tbody>
+  </table>
+  <h3>Terme</h3>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Schritt</th><th>passt, wenn …</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gemeinsamen Faktor ausklammern</td><td style="text-align:left;font-family:var(--sans)">alle Glieder eine Zahl oder ein \(x\) gemeinsam haben — immer zuerst.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Binomische Formel</td><td style="text-align:left;font-family:var(--sans)">erstes und letztes Glied Quadrate sind und das mittlere das doppelte Produkt: \(x^2 - 6x + 9 = (x - 3)^2\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Differenz von Quadraten</td><td style="text-align:left;font-family:var(--sans)">zwei Quadrate mit Minus dazwischen stehen: \(4x^2 - 9\). Eine Summe zweier Quadrate lässt sich nicht zerlegen.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Zweiklammersatz</td><td style="text-align:left;font-family:var(--sans)">\(x^2 + px + q\) dasteht und es zwei ganze Zahlen mit Produkt \(q\) und Summe \(p\) gibt.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gruppieren</td><td style="text-align:left;font-family:var(--sans)">vier Glieder dastehen, die sich paarweise mit derselben Klammer ausklammern lassen.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Definitionsmenge bestimmen</td><td style="text-align:left;font-family:var(--sans)">der Nenner eines Bruchterms faktorisiert ist — und bevor gekürzt wird.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Vorzeichen umkehren</td><td style="text-align:left;font-family:var(--sans)">sich zwei Klammern oben und unten nur im Vorzeichen unterscheiden: \(3 - x = -(x - 3)\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Kürzen</td><td style="text-align:left;font-family:var(--sans)">Zähler und Nenner Produkte sind und einen gemeinsamen Faktor haben. Aus Summen kürzt man nie.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Fertig</td><td style="text-align:left;font-family:var(--sans)">sich nichts mehr zerlegen oder kürzen lässt — beim Bruchterm mit \(\mathbb{D}\).</td></tr>
+    </tbody>
+  </table>
+  <h3>Gleichungssysteme</h3>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Schritt</th><th>passt, wenn …</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gleichungen ordnen</td><td style="text-align:left;font-family:var(--sans)">eine Variable auf beiden Seiten steht — zuerst die Form \(ax + by = c\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gleichsetzverfahren</td><td style="text-align:left;font-family:var(--sans)">beide Gleichungen nach derselben Variablen aufgelöst sind: \(y = \ldots\) und \(y = \ldots\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Einsetzverfahren</td><td style="text-align:left;font-family:var(--sans)">eine Gleichung nach einer Variablen aufgelöst ist oder vor einer Variablen eine \(1\) steht.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Additionsverfahren</td><td style="text-align:left;font-family:var(--sans)">beide Gleichungen geordnet sind: Mit passenden Faktoren fällt eine Variable weg.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gleichung mit einer Variablen lösen</td><td style="text-align:left;font-family:var(--sans)">nach dem Verfahren nur noch eine Variable übrig ist.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Zurück einsetzen</td><td style="text-align:left;font-family:var(--sans)">eine Variable bekannt ist und die andere fehlt.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Lösungsmenge angeben</td><td style="text-align:left;font-family:var(--sans)">beide Werte bekannt sind — oder eine Variable weggefallen ist (\(0 = 0\) bzw. \(0 = 5\)).</td></tr>
     </tbody>
   </table>
 </details>
@@ -250,13 +299,20 @@ MathJax = {
           <div class="st-zahl"><span>Fehlgriffe</span><b id="st-z-fehl">0</b></div>
           <div class="st-zahl"><span>Umwege</span><b id="st-z-um">0</b></div>
           <div class="st-zahl"><span>Zeit</span><b id="st-z-zeit">0:00</b></div>
+          <div class="st-neu" style="margin-top:6px"><button type="button" id="st-neu">Neue Serie</button></div>
         </div>
         <div class="st-gruppe" id="st-bereich">
           <div class="st-g-titel">Gleichungen</div>
-          <button type="button" class="st-opt aktiv" data-b="lin">Lineare Gleichungen</button>
-          <button type="button" class="st-opt aktiv" data-b="quad">Quadratische Gleichungen</button>
+          <button type="button" class="st-opt" data-b="lin">Lineare Gleichungen</button>
+          <button type="button" class="st-opt" data-b="quad">Quadratische Gleichungen</button>
+          <button type="button" class="st-opt" data-b="bruchgl">Bruchgleichungen</button>
+          <div class="st-g-titel">Terme</div>
+          <button type="button" class="st-opt" data-b="fakt">Faktorisieren</button>
+          <button type="button" class="st-opt" data-b="bruchterm">Bruchterme vereinfachen</button>
+          <div class="st-g-titel">Gleichungssysteme</div>
+          <button type="button" class="st-opt" data-b="lgs">Lineare Systeme</button>
+          <button type="button" class="st-opt" data-b="qgs">Mit Parabel (Schwerpunktfach)</button>
         </div>
-        <div class="st-gruppe st-neu"><button type="button" id="st-neu">Neue Serie</button></div>
       </div>
     </details>
   </aside>
@@ -274,19 +330,23 @@ MathJax = {
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
-// Aufgaben, Zustände und Regeln — ohne DOM, damit .claude/tools/pruef-strategietrainer.mjs
-// den Block mit Tausenden Zufallsaufgaben durchspielen kann.
+// Aufgaben, Zustände und Regeln — ohne DOM, damit scripts/verify_strategietrainer.js den Block
+// mit Tausenden Zufallsaufgaben durchspielen kann.
 //
-// Eine Aufgabe ist eine Folge von Zuständen. Jeder Zustand hat eine Art (k), die Zeile im
-// Verlauf (z, LaTeX) und seine Zahlen. REGELN[k](st) sagt für jede Strategie:
+// Drei Familien mit je eigener, fester Liste von Schritten: Gleichungen (gl), Terme (term),
+// Gleichungssysteme (sys). Eine Aufgabe ist eine Folge von Zuständen. Jeder Zustand hat eine
+// Art (k; Präfix t_ = Term, s_ = System, sonst Gleichung), die Zeile im Verlauf (z, LaTeX) und
+// seine Zahlen. REGELN[k](st) sagt für jeden Schritt:
 //   ['ok', null, () => ({ zeilen:[[LaTeX, Umformung], …], op, next })]  — wird ausgeführt
 //   ['um', Text]   erlaubt, aber ein Umweg — kein Fehlgriff, neu wählen
 //   ['x',  Text]   passt nicht, mit Begründung
-// Was eine Art nicht nennt, kommt aus STANDARD ihrer Gruppe (lin, quad, ende).
+// Was eine Art nicht nennt, kommt aus STANDARD ihrer Gruppe. Ein Ergebnis kann statt einer neuen
+// Zeile die letzte ersetzen (ersetzen) oder gar keine schreiben (bleibt, z.B. 𝔻 bestimmen).
 // Aufgaben werden von hinten gebaut (Lösung → Faktoren → ausmultipliziert): Jeder Schritt ist
-// darum bekannt, gerechnet wird nur mit ganzen Zahlen und exakten Wurzeln.
+// bekannt, gerechnet wird mit ganzen Zahlen und exakten Wurzeln.
 
-const STRAT = [
+const STRAT_GL = [
+  ['D',           'Definitionsmenge bestimmen'],
   ['brueche',     'Mit dem Hauptnenner multiplizieren'],
   ['klammern',    'Klammern auflösen'],
   ['sammeln',     'Glieder mit \\(x\\) auf eine Seite, Zahlen auf die andere'],
@@ -299,9 +359,33 @@ const STRAT = [
   ['wurzel',      'Wurzel ziehen'],
   ['mf',          'Mitternachtsformel'],
   ['ergaenzen',   'Quadratisch ergänzen'],
+  ['vergleich',   'Lösungen mit \\(\\mathbb{D}\\) vergleichen'],
   ['L',           'Lösungsmenge angeben'],
 ];
-const STRAT_NAME = Object.fromEntries(STRAT);
+const STRAT_TERM = [
+  ['faktor',      'Gemeinsamen Faktor ausklammern'],
+  ['binom12',     'Binomische Formel: \\((a \\pm b)^2\\)'],
+  ['binom3',      'Differenz von Quadraten: \\((a + b)(a - b)\\)'],
+  ['zweiklammer', 'Zweiklammersatz: \\((x + r)(x + s)\\)'],
+  ['gruppieren',  'Gruppieren'],
+  ['ausmult',     'Ausmultiplizieren'],
+  ['Dterm',       'Definitionsmenge bestimmen'],
+  ['vorzeichen',  'Vorzeichen umkehren: \\(b - a = -(a - b)\\)'],
+  ['kuerzen',     'Kürzen'],
+  ['fertig',      'Fertig — weiter geht es nicht'],
+];
+const STRAT_SYS = [
+  ['ordnen',       'Gleichungen ordnen: \\(ax + by = c\\)'],
+  ['gleichsetzen', 'Gleichsetzverfahren'],
+  ['einsetzen',    'Einsetzverfahren'],
+  ['addition',     'Additionsverfahren'],
+  ['loesen',       'Gleichung mit einer Variablen lösen'],
+  ['zurueck',      'Zurück einsetzen'],
+  ['Lsys',         'Lösungsmenge angeben'],
+];
+const LISTEN = { gl: STRAT_GL, term: STRAT_TERM, sys: STRAT_SYS };
+const STRAT_NAME = Object.fromEntries([...STRAT_GL, ...STRAT_TERM, ...STRAT_SYS]);
+const familie = st => st.k.startsWith('t_') ? 'term' : st.k.startsWith('s_') ? 'sys' : 'gl';
 
 // ── Zahlen ──
 const ggT = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
@@ -321,6 +405,7 @@ function wz(p, q, m, d) {
   return { p: p / g, q: q / g, m, d: d / g };
 }
 const wzWert = w => (w.p + w.q * Math.sqrt(w.m)) / w.d;
+const wzGanz = w => w.q === 0 && w.d === 1;
 function bruchTex(n, d) {
   if (d < 0) { n = -n; d = -d; }
   const g = ggT(n, d) || 1; n /= g; d /= g;
@@ -340,7 +425,7 @@ function wzTex(w) {
 const kl = n => n < 0 ? '(' + n + ')' : String(n);
 
 // ── Terme schreiben ──
-function poly(cs) {                       // cs = [[Koeffizient, 'x^2' | 'x' | ''], …]
+function poly(cs) {                       // cs = [[Koeffizient, 'x^2' | 'x' | 'y' | ''], …]
   let s = '', erster = true;
   for (const [c, v] of cs) {
     if (c === 0) continue;
@@ -353,21 +438,38 @@ function poly(cs) {                       // cs = [[Koeffizient, 'x^2' | 'x' | '
 }
 const quadT = (a, b, c) => poly([[a, 'x^2'], [b, 'x'], [c, '']]);
 const linT = (a, b) => poly([[a, 'x'], [b, '']]);
+const lin2T = (a, b) => poly([[a, 'x'], [b, 'y']]);
 const mitVz = s => (s[0] === '-' ? s : '+' + s);                  // «\mid +3»
 const klammer = h => '(x ' + (h < 0 ? '-' : '+') + ' ' + Math.abs(h) + ')';
 const faktor = (a, h) => a === 1 ? (h === 0 ? 'x' : 'x ' + (h < 0 ? '-' : '+') + ' ' + Math.abs(h))
                                  : (a === -1 ? '-' : String(a)) + (h === 0 ? 'x' : klammer(h));
+const zahlVor = (c, plus) => (c < 0 ? ' - ' : plus ? ' + ' : '') + (Math.abs(c) === 1 ? '' : Math.abs(c));
 const teilOp = a => '\\(\\mid :' + kl(a) + '\\)';
 const T = s => '\\(' + s + '\\)';
+const dTex = Dw => '\\mathbb{D} = \\mathbb{R} \\setminus \\{' + Dw.slice().sort((u, v) => u - v).join(';\\, ') + '\\}';
 
-// ── Zustände ──
+// Polynome als Koeffizienten [c0, c1, c2, …] (Index = Hochzahl)
+const pNorm = p => { const q = p.slice(); while (q.length > 1 && !q[q.length - 1]) q.pop(); return q; };
+const pGrad = p => { for (let i = p.length - 1; i >= 0; i--) if (p[i]) return i; return -1; };
+const pTerme = p => p.filter(v => v).length;
+const pMul = (p, q) => { const r = Array(p.length + q.length - 1).fill(0); p.forEach((a, i) => q.forEach((b, j) => { r[i + j] += a * b; })); return pNorm(r); };
+const pAdd = (p, q, k = 1) => { const r = Array(Math.max(p.length, q.length)).fill(0); p.forEach((a, i) => { r[i] += a; }); q.forEach((b, i) => { r[i] += k * b; }); return pNorm(r); };
+const pGleich = (p, q) => { p = pNorm(p); q = pNorm(q); return p.length === q.length && p.every((v, i) => v === q[i]); };
+const pNeg = p => p.map(v => -v);
+const pWert = (p, x) => p.reduce((s, c, i) => s + c * x ** i, 0);
+function pTex(p, auf, v = 'x') {          // absteigend, auf = aufsteigend
+  const cs = [];
+  for (let i = p.length - 1; i >= 0; i--) cs.push([p[i] || 0, i === 0 ? '' : i === 1 ? v : v + '^' + i]);
+  return poly(auf ? cs.reverse() : cs);
+}
+
+// ── Zustände: Gleichungen ──
 function lsg(wurzeln, z) {
   const w = wurzeln.slice().sort((u, v) => wzWert(u) - wzWert(v));
   if (!z) z = w.length === 1 ? 'x = ' + wzTex(w[0]) : 'x_1 = ' + wzTex(w[0]) + '; \\quad x_2 = ' + wzTex(w[1]);
   return { k: 'lsg', z, w };
 }
 function lsgL(st) {
-  if (st.alle) return '\\mathbb{L} = \\mathbb{R}';
   if (!st.w.length) return '\\mathbb{L} = \\{\\,\\}';
   return '\\mathbb{L} = \\{' + st.w.map(wzTex).join(';\\, ') + '\\}';
 }
@@ -391,10 +493,10 @@ function qNorm(a, b, c) {
   else st.k = 'q_allg';
   return st;
 }
-function qUng(a, b, c, d, e) {                     // ax² + bx + c = dx + e
-  if (a === 1 && c === 0 && d === 0 && b !== 0 && b % 2 === 0 && e !== 0) return qErg(b, e);
-  if (b === 0 && d === 0 && c === 0) return a === 1 ? qX2(e, 1) : qAIso(a, e);
-  return { k: 'q_ung', a, b, c, d, e, z: quadT(a, b, c) + ' = ' + linT(d, e) };
+function qUng(a, b, c, d, e, f = 0) {             // ax² + bx + c = fx² + dx + e
+  if (f === 0 && a === 1 && c === 0 && d === 0 && b !== 0 && b % 2 === 0 && e !== 0) return qErg(b, e);
+  if (f === 0 && b === 0 && d === 0 && c === 0) return a === 1 ? qX2(e, 1) : qAIso(a, e);
+  return { k: 'q_ung', a, b, c, d, e, f, z: quadT(a, b, c) + ' = ' + quadT(f, d, e) };
 }
 const qErg = (p, k) => ({ k: 'q_erg', p, kk: k, z: quadT(1, p, 0) + ' = ' + k });
 const qQuadrat = (h, r) => ({ k: 'q_quadrat', h, r, z: klammer(h) + '^2 = ' + r });
@@ -405,6 +507,8 @@ const qX2 = (n, d) => { const g = ggT(n, d) || 1; n /= g; d /= g; if (d < 0) { n
 const qProd = (z, faktoren, w, art) => ({ k: 'q_prod', z, faktoren, w, art });
 // Produkt = Zahl ≠ 0: aufgelöst zu x² + B·x + C = r
 const qKl = (z, B, C, r, art) => ({ k: 'q_kl', z, B, C, r, art });
+// Klammern allgemein: aufgelöst zu qUng(…u)
+const qKlg = (z, u) => ({ k: 'q_klg', z, u });
 const linSchein = (z, A, B, D, roh) => ({ k: 'lin_schein', z, A, B, D, roh });   // → x² + Ax + B = x² + D
 const linX2 = (A, B, D, z) => ({ k: 'lin_x2', A, B, D, z });
 
@@ -434,9 +538,10 @@ function wurzelAusf(links, n, d, h) {             // links² = n/d, links = x + 
   return { op: 'Wurzel ziehen', zeilen, next: lsg([wz(-h * d, -k, m, d), wz(-h * d, k, m, d)]) };
 }
 
-// ── Regeln ──
+// ── Regeln: Gleichungen ──
 const KEIN_X2 = 'In der Gleichung kommt kein \\(x^2\\) vor — sie ist linear. Verfahren für quadratische Gleichungen braucht es hier nicht.';
 const NICHT_FERTIG = 'Noch steht \\(x\\) nicht allein — die Lösung lässt sich noch nicht ablesen.';
+const ZUERST_BRUECHE = 'Erlaubt, aber solange \\(x\\) im Nenner steht, kommst du so nicht weiter. Zuerst müssen die Brüche weg.';
 const STANDARD = {
   lin: {
     brueche: ['x', 'Hier stehen keine Brüche.'],
@@ -466,6 +571,7 @@ const GRUPPE = { lin_seiten: 'lin', lin_iso: 'lin', lin_kl: 'lin', lin_br: 'lin'
   wid: 'ende', lsg: 'ende' };                    // alle q_* → quad
 const SCHON_1 = ['x', 'Vor \\(x^2\\) steht schon \\(1\\) — da gibt es nichts zu teilen.'];
 const KEIN_XGLIED = ['x', 'Es gibt kein Glied mit \\(x\\) allein, das man ergänzen könnte.'];
+const istIn = (w, Dw) => wzGanz(w) && Dw.includes(w.p);
 
 const REGELN = {
   // ── linear ──
@@ -522,21 +628,43 @@ const REGELN = {
       durchx: weg, ausklammern: weg, binom: weg, nullprodukt: weg, wurzel: weg, mf: weg, ergaenzen: weg,
     };
   },
+  // ── Bruchgleichung: zuerst 𝔻, dann Hauptnenner ──
+  bruch_gl: st => {
+    const zuerst = ['x', 'Solange \\(x\\) im Nenner steht, ist die Gleichung weder linear noch quadratisch. Zuerst müssen die Brüche weg.'];
+    return {
+      D: st.Dw ? ['um', 'Schon geschehen: \\(' + dTex(st.Dw) + '\\).']
+               : ['ok', null, () => ({ bleibt: true, op: '', zeilen: [], next: Object.assign({}, st, { Dw: st.dW }),
+                   info: (st.dInfo ? '\\(' + st.dInfo + '\\), also ' : '') + '\\(' + dTex(st.dW) + '\\).' })],
+      brueche: st.Dw ? ['ok', null, () => ({ op: T('\\mid \\cdot ' + st.HN), zeilen: [], next: st.danach })]
+                     : ['um', 'Erlaubt, aber bestimme zuerst \\(\\mathbb{D}\\): Beim Multiplizieren mit dem Hauptnenner verschwinden die Nenner — und mit ihnen der Hinweis, welche Zahlen verboten sind.'],
+      klammern: ['um', ZUERST_BRUECHE], sammeln: ['um', ZUERST_BRUECHE], null: ['um', ZUERST_BRUECHE], teilen: ['um', ZUERST_BRUECHE],
+      durchx: ['x', 'Dann steht noch mehr \\(x\\) im Nenner. Gesucht ist das Gegenteil: die Nenner wegmultiplizieren.'],
+      ausklammern: zuerst, binom: zuerst, nullprodukt: zuerst, wurzel: zuerst, mf: zuerst, ergaenzen: zuerst,
+      vergleich: ['x', 'Es gibt noch keine Lösungen, die man vergleichen könnte.'],
+      L: ['x', NICHT_FERTIG],
+    };
+  },
   // ── quadratisch ──
   q_ung: st => {
+    const af = st.a - st.f;
     const r = {
-      null: ['ok', null, () => ({ op: T('\\mid ' + mitVz(poly([[-st.d, 'x'], [-st.e, '']]))), zeilen: [],
-        next: qNorm(st.a, st.b - st.d, st.c - st.e) })],
+      null: ['ok', null, () => {
+        if (af > 0) return { op: T('\\mid ' + mitVz(poly([[-st.f, 'x^2'], [-st.d, 'x'], [-st.e, '']]))), zeilen: [],
+          next: qNorm(af, st.b - st.d, st.c - st.e) };
+        const n = qNorm(-af, st.d - st.b, st.e - st.c);
+        n.z = '0 = ' + quadT(-af, st.d - st.b, st.e - st.c);
+        return { op: T('\\mid ' + mitVz(poly([[-st.a, 'x^2'], [-st.b, 'x'], [-st.c, '']]))), zeilen: [], next: n };
+      }],
       binom: ['x', 'Faktorisieren hilft erst, wenn auf einer Seite \\(0\\) steht. Ordne zuerst.'],
-      teilen: st.a === 1 ? SCHON_1 : ['um', 'Erlaubt, aber ordne zuerst die Gleichung.'],
+      teilen: (st.a === 1 && st.f === 0) ? SCHON_1 : ['um', 'Erlaubt, aber ordne zuerst die Gleichung.'],
     };
-    if (st.b === 0 && st.d === 0) {                // ax² + c = e: ohne Glied mit x
+    if (st.f === 0 && st.b === 0 && st.d === 0) {   // ax² + c = e: ohne Glied mit x
       r.sammeln = ['ok', null, () => ({ op: T('\\mid ' + mitVz(poly([[-st.c, '']]))), zeilen: [],
         next: st.a === 1 ? qX2(st.e - st.c, 1) : qAIso(st.a, st.e - st.c) })];
       r.wurzel = ['x', 'Zuerst muss \\(x^2\\) allein stehen: Bring die Zahl auf die andere Seite.'];
       r.ergaenzen = KEIN_XGLIED;
     }
-    if (st.c === 0 && st.e === 0) {                // ax² + bx = dx
+    if (st.f === 0 && st.c === 0 && st.e === 0) {   // ax² + bx = dx
       r.durchx = ['x', 'Durch \\(x\\) teilen verliert die Lösung \\(x = 0\\). Bringe alles auf eine Seite und klammere \\(x\\) aus.'];
       r.ausklammern = ['um', 'Erlaubt, aber für den Satz vom Nullprodukt muss eine Seite \\(0\\) sein. Bringe zuerst alles auf eine Seite.'];
     }
@@ -552,6 +680,16 @@ const REGELN = {
     sammeln: ['x', 'Die \\(x\\) stecken noch in den Klammern — zuerst auflösen.'],
     teilen: ['x', 'Vor dem Produkt steht keine Zahl, durch die man teilen könnte.'],
   }),
+  q_klg: st => {
+    const zuerst = ['x', 'Zuerst die Klammern auflösen und die Gleichung ordnen.'];
+    return {
+      klammern: ['ok', null, () => ({ op: 'Klammern auflösen', zeilen: [], next: qUng(...st.u) })],
+      sammeln: ['x', 'Das \\(x\\) steckt noch in den Klammern — zuerst auflösen.'],
+      null: ['um', 'Erlaubt, aber die Klammern bleiben stehen. Löse sie zuerst auf.'],
+      teilen: ['um', 'Erlaubt, aber zuerst die Klammern auflösen.'],
+      ausklammern: zuerst, ergaenzen: zuerst,
+    };
+  },
   q_erg: st => ({
     ergaenzen: ['ok', null, () => {
       const h = st.p / 2;
@@ -694,21 +832,397 @@ const REGELN = {
     ergaenzen: ['um', 'Erlaubt, aber mit Brüchen mühsam. Mach sie zuerst weg.'],
   }),
   // ── fertig ──
-  wid: st => ({ L: ['ok', null, () => ({ op: '', zeilen: [], next: { k: 'ende', z: st.wahr ? '\\mathbb{L} = \\mathbb{R}' : '\\mathbb{L} = \\{\\,\\}' } })] }),
-  lsg: st => ({ L: ['ok', null, () => ({ op: '', zeilen: [], next: { k: 'ende', z: lsgL(st) } })] }),
+  wid: st => ({
+    L: ['ok', null, () => ({ op: '', zeilen: [], next: { k: 'ende', z: !st.wahr ? '\\mathbb{L} = \\{\\,\\}'
+      : st.Dw ? '\\mathbb{L} = \\mathbb{R} \\setminus \\{' + st.Dw.slice().sort((u, v) => u - v).join(';\\, ') + '\\}' : '\\mathbb{L} = \\mathbb{R}',
+      gl: { wahr: st.wahr, w: [], Dw: st.Dw } } })],
+    vergleich: ['um', st.wahr ? 'Erlaubt — die Aussage ist wahr, also gilt jede Zahl aus \\(\\mathbb{D}\\). Einzelne Lösungen gibt es nicht zu vergleichen.'
+                              : 'Es gibt keine Lösung, die man vergleichen könnte.'],
+  }),
+  lsg: st => {
+    const offen = st.Dw && !st.dOk && st.w.length;
+    return {
+      L: offen ? ['x', 'Vergleiche die Lösungen zuerst mit \\(\\mathbb{D}\\) — eine davon könnte verboten sein.']
+               : ['ok', null, () => ({ op: '', zeilen: [], next: { k: 'ende', z: lsgL(st), gl: { w: st.w, Dw: st.Dw } } })],
+      vergleich: offen ? ['ok', null, () => {
+          const teile = st.w.map((w, i) => (st.w.length > 1 ? 'x_' + (i + 1) : 'x') + ' = ' + wzTex(w) + (istIn(w, st.Dw) ? ' \\notin' : ' \\in') + ' \\mathbb{D}');
+          const bleibt = st.w.filter(w => !istIn(w, st.Dw));
+          const n = bleibt.length ? lsg(bleibt, bleibt.length === 1 ? 'x = ' + wzTex(bleibt[0]) : null)
+                                  : lsg([], '\\text{keine Lösung in } \\mathbb{D}');
+          n.dOk = true;
+          return { op: 'mit \\(\\mathbb{D}\\) vergleichen', zeilen: [[teile.join('; \\quad '), '']], next: n };
+        }]
+        : ['um', st.Dw ? (st.w.length ? 'Schon geschehen.' : 'Es gibt keine Lösung, die man vergleichen könnte.')
+                       : 'Erlaubt, aber hier ist \\(\\mathbb{D} = \\mathbb{R}\\) — es fällt keine Lösung weg.'],
+    };
+  },
 };
 
+// ── Terme: Produkt = { k: Zahl, f: [{ p: Polynom, tex?: Schreibweise wie gestellt }] } ──
+// analyse(p) nennt den passenden Schritt für einen Faktor (oder null = fertig zerlegt) und das Ergebnis.
+function analyse(p) {
+  p = pNorm(p);
+  const g = pGrad(p), n = pTerme(p);
+  if (g <= 0 || n < 2) return { m: null };
+  let ggt = 0; p.forEach(v => { if (v) ggt = ggT(ggt, v); });
+  let xp = 0; while (!p[xp]) xp++;
+  if (ggt > 1 || xp > 0) {
+    const rest = p.slice(xp).map(v => v / ggt);
+    return { m: 'faktor', k: ggt, f: [...Array(xp).fill([0, 1]), rest], rest };
+  }
+  if (g === 1) return { m: null };
+  if (g === 2) {
+    const [c, b, a] = p;
+    if (b === 0 && a > 0 && c < 0 && istQuadrat(a) && istQuadrat(-c)) {
+      const s = Math.sqrt(a), t = Math.sqrt(-c);
+      return { m: 'binom3', k: 1, f: [[t, s], [-t, s]] };
+    }
+    if (b !== 0 && a > 0 && c > 0 && istQuadrat(a) && istQuadrat(c) && b * b === 4 * a * c) {
+      const s = Math.sqrt(a), t = Math.sqrt(c) * Math.sign(b);
+      return { m: 'binom12', k: 1, f: [[t, s], [t, s]] };
+    }
+    if (a === 1 && istQuadrat(b * b - 4 * c)) {
+      const w = Math.sqrt(b * b - 4 * c), r1 = (-b - w) / 2, r2 = (-b + w) / 2;
+      return { m: 'zweiklammer', k: 1, f: [[-r1, 1], [-r2, 1]] };
+    }
+    return { m: null };
+  }
+  if (g === 3 && n === 4 && p[3] === 1 && p[2] * p[1] === p[0]) return { m: 'gruppieren', k: 1, f: [[p[2], 1], [p[1], 0, 1]] };
+  return { m: null };
+}
+const aktiv = pr => pr.f.filter(fa => analyse(fa.p).m);
+function anwenden(pr, M) {
+  let k = pr.k; const f = [];
+  for (const fa of pr.f) {
+    const an = analyse(fa.p);
+    if (an.m === M) { k *= an.k; for (const q of an.f) f.push({ p: pNorm(q) }); }
+    else f.push(fa);
+  }
+  return { k, f };
+}
+function produktTex(pr, alleinOk = true) {
+  const gruppen = [];
+  const fs = pr.f.slice().sort((u, v) => pTerme(u.p) - pTerme(v.p));      // x zuerst
+  for (const fa of fs) { const g = gruppen.find(g => pGleich(g.p, fa.p)); if (g) g.n++; else gruppen.push({ p: fa.p, tex: fa.tex, n: 1 }); }
+  if (!gruppen.length) return String(pr.k);
+  const allein = alleinOk && pr.k === 1 && gruppen.length === 1 && gruppen[0].n === 1;
+  const s = gruppen.map(g => {
+    const t = g.tex || pTex(g.p);
+    const b = (pTerme(g.p) === 1 || allein) ? t : '(' + t + ')';
+    return g.n > 1 ? b + '^' + g.n : b;
+  }).join(' \\cdot ').replace(/\) \\cdot \(/g, ')(').replace(/^x \\cdot \(/, 'x(').replace(/^(x\^\d) \\cdot \(/, '$1(');
+  return pr.k === 1 ? s : pr.k === -1 ? '-' + s : pr.k + s;
+}
+const prWert = (pr, x) => pr.f.reduce((s, fa) => s * pWert(fa.p, x), pr.k);
+const tFakt = (pr, z) => ({ k: 't_fakt', pr, z: z || '= ' + produktTex(pr) });
+function bruchTermTex(n, d) {
+  if (d.k === 1 && !d.f.length) return produktTex(n);
+  return '\\frac{' + produktTex(n) + '}{' + produktTex(d) + '}';
+}
+const tBruch = (n, d, Dw, z) => ({ k: 't_bruch', n, d, Dw, z: z || '= ' + bruchTermTex(n, d) });
+function gemeinsam(n, d) { return n.f.some(a => d.f.some(b => pGleich(a.p, b.p))) || ggT(n.k, d.k) > 1; }
+function gegen(n, d) {
+  for (let i = 0; i < n.f.length; i++) for (let j = 0; j < d.f.length; j++)
+    if (pTerme(n.f[i].p) > 1 && pGleich(n.f[i].p, pNeg(d.f[j].p))) return [i, j];
+  return null;
+}
+function kuerzen(n0, d0) {
+  const n = { k: n0.k, f: n0.f.slice() }, d = { k: d0.k, f: d0.f.slice() };
+  for (let i = 0; i < n.f.length; i++) {
+    const j = d.f.findIndex(q => pGleich(q.p, n.f[i].p));
+    if (j >= 0) { n.f.splice(i, 1); d.f.splice(j, 1); i--; }
+  }
+  const g = ggT(n.k, d.k); n.k /= g; d.k /= g;
+  if (d.k < 0) { n.k = -n.k; d.k = -d.k; }
+  return [n, d];
+}
+function nennerNullstellen(d) {
+  const w = [];
+  for (const fa of d.f) { const p = pNorm(fa.p); if (pGrad(p) === 1) { const r = -p[0] / p[1]; if (!w.includes(r)) w.push(r); } }
+  return w;
+}
+const fTex = p => '\\(' + pTex(p) + '\\)';
+
+function grundTerm(M, fa, an) {                  // warum Schritt M für diesen Faktor nicht passt
+  const p = pNorm(fa.p), t = fTex(p), n = pTerme(p), g = pGrad(p);
+  if (an.m === 'faktor') {
+    if (M !== 'faktor' && analyse(an.rest).m === M) return ['um', 'Erlaubt, aber klammere zuerst den gemeinsamen Faktor aus — sonst bleibt er in den Klammern stecken.'];
+    return ['x', 'Hier steht zuerst etwas anderes an: Alle Glieder von ' + t + ' haben einen gemeinsamen Faktor.'];
+  }
+  if (M === 'faktor') return ['x', 'In ' + t + ' haben die Glieder keinen gemeinsamen Faktor.'];
+  if (M === 'binom12') {
+    if (g !== 2 || n !== 3) return ['x', t + ' hat nicht die Form \\(a^2 \\pm 2ab + b^2\\): Dafür braucht es drei Glieder mit \\(x^2\\), \\(x\\) und einer Zahl.'];
+    const [c, , a] = p;
+    if (!(a > 0 && c > 0 && istQuadrat(a) && istQuadrat(c))) return ['x', 'Bei ' + t + ' sind das erste und das letzte Glied nicht beide Quadrate mit Pluszeichen.'];
+    return ['x', 'Bei ' + t + ' passt das mittlere Glied nicht: Für ein Binom müsste es \\(\\pm ' + 2 * Math.sqrt(a) * Math.sqrt(c) + 'x\\) sein.'];
+  }
+  if (M === 'binom3') {
+    if (g !== 2 || n !== 2 || p[1] !== 0) return ['x', t + ' ist keine Differenz zweier Quadrate: Dafür braucht es genau zwei Glieder, \\(a^2 - b^2\\).'];
+    if (p[0] > 0) return ['x', t + ' ist eine Summe zweier Quadrate — die lässt sich nicht zerlegen.'];
+    return ['x', 'Bei ' + t + ' sind nicht beide Glieder Quadrate.'];
+  }
+  if (M === 'zweiklammer') {
+    if (g !== 2) return ['x', 'Der Zweiklammersatz gilt für \\(x^2 + px + q\\) — ' + t + ' hat eine andere Form.'];
+    if (p[2] !== 1) return ['x', 'Der Zweiklammersatz braucht \\(x^2\\) mit dem Faktor \\(1\\).'];
+    if (an.m === 'binom3' || an.m === 'binom12') return ['um', 'Geht, aber ' + t + ' ist ein Binom — das sieht man schneller.'];
+    return ['x', 'Gesucht wären zwei ganze Zahlen mit Produkt \\(' + p[0] + '\\) und Summe \\(' + (p[1] || 0) + '\\) — die gibt es nicht.'];
+  }
+  if (M === 'gruppieren') {
+    if (n !== 4) return ['x', 'Gruppieren braucht vier Glieder — ' + t + ' hat ' + n + '.'];
+    return ['x', 'Bei ' + t + ' entsteht beim paarweisen Ausklammern keine gemeinsame Klammer.'];
+  }
+  return null;
+}
+const ZERLEG = ['faktor', 'binom12', 'binom3', 'zweiklammer', 'gruppieren'];
+function regelnZerlegen(teile, weiter) {       // teile: [Produkt, …], weiter(neueTeile, M) → Zustand
+  const r = {};
+  const alle = teile.flatMap(pr => aktiv(pr));
+  for (const M of ZERLEG) {
+    if (alle.some(fa => analyse(fa.p).m === M)) {
+      r[M] = ['ok', null, () => ({ op: STRAT_NAME[M].replace(/:.*$/, '').replace('Gemeinsamen Faktor ausklammern', 'ausklammern'), zeilen: [],
+        next: weiter(teile.map(pr => anwenden(pr, M)), M) })];
+    } else if (alle.length) r[M] = grundTerm(M, alle[0], analyse(alle[0].p));
+    else {
+      const summe = teile.flatMap(pr => pr.f).find(fa => pGrad(fa.p) === 2 && pTerme(fa.p) === 2 && fa.p[0] > 0);
+      r[M] = ['x', 'Hier lässt sich nichts mehr zerlegen.' + (M === 'binom3' && summe ? ' ' + fTex(summe.p) + ' ist eine Summe zweier Quadrate.' : '')];
+    }
+  }
+  r.ausmult = ['um', 'Ausmultiplizieren ist das Gegenteil von Faktorisieren — damit wärst du wieder am Anfang.'];
+  return r;
+}
+const KEIN_BRUCH = 'Hier steht kein Bruch';
+REGELN.t_fakt = st => {
+  const r = regelnZerlegen([st.pr], ([pr]) => tFakt(pr));
+  const rest = aktiv(st.pr);
+  r.Dterm = ['x', KEIN_BRUCH + ' — kein Nenner kann \\(0\\) werden.'];
+  r.vorzeichen = ['x', KEIN_BRUCH + ' — es gibt keine zwei Klammern, die sich gegenseitig aufheben könnten.'];
+  r.kuerzen = ['x', KEIN_BRUCH + ' — es gibt nichts zu kürzen.'];
+  r.fertig = rest.length ? ['x', 'Noch nicht fertig: ' + fTex(rest[0].p) + ' lässt sich weiter zerlegen.']
+                         : ['ok', null, () => ({ op: '', zeilen: [], bleibt: true, next: { k: 'ende', z: st.z, term: { wert: x => prWert(st.pr, x), teile: [st.pr] } } })];
+  return r;
+};
+REGELN.t_bruch = st => {
+  const r = regelnZerlegen([st.n, st.d], ([n, d]) => tBruch(n, d, st.Dw));
+  const akN = aktiv(st.n), akD = aktiv(st.d), ak = akN.concat(akD), gg = gegen(st.n, st.d), gm = gemeinsam(st.n, st.d);
+  r.Dterm = st.Dw ? ['um', 'Schon geschehen: \\(' + dTex(st.Dw) + '\\).']
+    : akD.length ? ['um', 'Erlaubt, aber faktorisiere zuerst den Nenner — dann liest du die verbotenen Werte direkt ab.']
+    : ['ok', null, () => { const Dw = nennerNullstellen(st.d);
+        return { bleibt: true, op: '', zeilen: [], next: Object.assign({}, st, { Dw }), info: '\\(' + dTex(Dw) + '\\).' }; }];
+  r.vorzeichen = gg ? ['ok', null, () => {
+      const [i, j] = gg, n = { k: st.n.k, f: st.n.f.slice() }, d = { k: st.d.k, f: st.d.f.slice() };
+      if (pNorm(d.f[j].p).slice(-1)[0] < 0) { d.f[j] = { p: pNeg(d.f[j].p) }; d.k = -d.k; }
+      else { n.f[i] = { p: pNeg(n.f[i].p) }; n.k = -n.k; }
+      return { op: 'Vorzeichen umkehren', zeilen: [], next: tBruch(n, d, st.Dw) };
+    }]
+    : ['x', 'Keine Klammer im Zähler unterscheidet sich von einer im Nenner nur im Vorzeichen.'];
+  r.kuerzen = ak.length ? ['x', 'Aus Summen kürzt man nicht: ' + (akN.length ? 'Der Zähler' : 'Der Nenner') + ' ist noch eine Summe. Kürzen darf man nur Faktoren — zuerst faktorisieren.']
+    : !gm ? ['x', gg ? 'Die Klammern oben und unten sind nicht gleich — sie unterscheiden sich im Vorzeichen. Das muss zuerst angepasst werden.'
+                     : 'Zähler und Nenner haben keinen gemeinsamen Faktor — es gibt nichts zu kürzen.']
+    : !st.Dw ? ['x', 'Zuerst \\(\\mathbb{D}\\) bestimmen — nach dem Kürzen sieht man nicht mehr, welche Zahlen verboten sind.']
+    : ['ok', null, () => { const [n, d] = kuerzen(st.n, st.d); return { op: 'kürzen', zeilen: [], next: tBruch(n, d, st.Dw) }; }];
+  r.fertig = ak.length ? ['x', 'Noch nicht fertig: ' + fTex(ak[0].p) + ' lässt sich zerlegen.']
+    : !st.Dw ? ['x', 'Es fehlt noch \\(\\mathbb{D}\\) — beim Bruchterm gehört sie zum Ergebnis.']
+    : gm ? ['x', 'Noch nicht fertig: Zähler und Nenner haben einen gemeinsamen Faktor.']
+    : gg ? ['x', 'Noch nicht fertig: Zwei Klammern oben und unten unterscheiden sich nur im Vorzeichen.']
+    : ['ok', null, () => ({ op: '', zeilen: [], ersetzen: st.z + ', \\quad ' + dTex(st.Dw),
+        next: { k: 'ende', z: st.z + ', \\quad ' + dTex(st.Dw), term: { wert: x => prWert(st.n, x) / prWert(st.d, x), teile: [st.n, st.d], Dw: st.Dw } } })];
+  return r;
+};
+
+// ── Gleichungssysteme ──
+// Gleichung: { t:'lin', a, b, c, form:'norm'|'y', roh? }  für ax + by = c (form 'y': b = 1, geschrieben y = −ax + c)
+//            { t:'par', A, B, C }                          für y = Ax² + Bx + C
+const istY = e => !e.roh && (e.t === 'par' || e.form === 'y');
+const yR = e => e.t === 'par' ? [e.C, e.B, e.A] : [e.c, -e.a];          // y als Polynom in x
+function glTex(e) {
+  if (e.roh) return e.roh;
+  if (e.t === 'par') return 'y = ' + quadT(e.A, e.B, e.C);
+  if (e.form === 'y') return 'y = ' + linT(-e.a, e.c);
+  return lin2T(e.a, e.b) + ' = ' + e.c;
+}
+const sysTex = g => '\\begin{aligned} \\text{I:}\\quad & ' + glTex(g[0]) + ' \\\\ \\text{II:}\\quad & ' + glTex(g[1]) + ' \\end{aligned}';
+const sSys = g => ({ k: 's_sys', g, z: sysTex(g) });
+// Nach dem Verfahren: Steht schon «x = 2» oder «0 = 3» da, entfällt der Schritt «lösen».
+function sEins(v, P, z, g) {
+  P = pNorm(P);
+  if (pGrad(P) <= 0 && z === '0 = ' + -(P[0] || 0)) return { k: 's_wid', z, wahr: !(P[0] || 0), g };
+  if (pGrad(P) === 1 && P[1] === 1 && z === v + ' = ' + -P[0]) return { k: 's_teil', v, werte: [-P[0]], z, g };
+  return { k: 's_eins', v, P, z, g };
+}
+const glNorm = e => e.roh ? { t: 'lin', a: e.a, b: e.b, c: e.c, form: 'norm' } : e;
+function einsTex(a, b, Rtex, c, v = 'x') {         // a·v + b·(R) = c
+  let s = a ? poly([[a, v]]) : '';
+  s += (s ? zahlVor(b, true) : (b === -1 ? '-' : Math.abs(b) === 1 ? '' : String(b))) + '(' + Rtex + ')';
+  return s + ' = ' + c;
+}
+function substTex(R, wert) {                       // R(wert) ausgeschrieben, z.B. 2 \cdot 3 - 1
+  let s = '', erster = true;
+  for (let i = R.length - 1; i >= 0; i--) {
+    const c = R[i]; if (!c) continue;
+    const a = Math.abs(c);
+    s += c < 0 ? (erster ? '-' : ' - ') : (erster ? '' : ' + ');
+    if (i === 0) s += a;
+    else s += (a === 1 ? '' : a + ' \\cdot ') + kl(wert) + (i === 2 ? '^2' : '');
+    erster = false;
+  }
+  return s || '0';
+}
+function sysAddition(st) {
+  const [e1, e2] = st.g;
+  const l = kgV(e1.b, e2.b);
+  let k1 = l / e1.b, k2 = -l / e2.b;
+  if (k1 < 0) { k1 = -k1; k2 = -k2; }
+  const al = k1 * e1.a + k2 * e2.a, be = k1 * e1.c + k2 * e2.c;
+  const op = (k1 === 1 ? '' : k1 + ' \\cdot ') + '\\text{I}' + (k2 < 0 ? ' - ' : ' + ') + (Math.abs(k2) === 1 ? '' : Math.abs(k2) + ' \\cdot ') + '\\text{II}';
+  return { op: 'Additionsverfahren: ' + T(op), zeilen: [], next: sEins('x', [-be, al], (al ? linT(al, 0) : '0') + ' = ' + be, st.g) };
+}
+function sysGleich(st, name) {
+  const R1 = yR(st.g[0]), R2 = yR(st.g[1]);
+  return { op: name, zeilen: [], next: sEins('x', pAdd(R1, R2, -1), pTex(R1) + ' = ' + pTex(R2), st.g) };
+}
+function sysEinsetzen(st) {
+  const [e1, e2] = st.g;
+  if (istY(e1) || istY(e2)) {                       // die aufgelöste Gleichung in die andere
+    const ey = istY(e1) ? e1 : e2, eo = ey === e1 ? e2 : e1, R = yR(ey);
+    return { op: 'Einsetzverfahren', zeilen: [], next: sEins('x', pAdd(pAdd([0, eo.a], R.map(v => v * eo.b)), [eo.c], -1), einsTex(eo.a, eo.b, pTex(R), eo.c), st.g) };
+  }
+  let i = [e1, e2].findIndex(e => Math.abs(e.b) === 1);
+  if (i >= 0) {                                     // nach y auflösen
+    const e = st.g[i], o = st.g[1 - i], R = [e.c / e.b, -e.a / e.b];
+    return { op: 'Einsetzverfahren', zeilen: [['\\text{aus ' + (i ? 'II' : 'I') + ':}\\quad y = ' + pTex(R), '']],
+      next: sEins('x', pAdd(pAdd([0, o.a], R.map(v => v * o.b)), [o.c], -1), einsTex(o.a, o.b, pTex(R), o.c), st.g) };
+  }
+  i = [e1, e2].findIndex(e => Math.abs(e.a) === 1);  // nach x auflösen
+  const e = st.g[i], o = st.g[1 - i], S = [e.c / e.a, -e.b / e.a];
+  const tex = (o.a === 1 ? '' : o.a === -1 ? '-' : o.a) + '(' + pTex(S, false, 'y') + ')' + zahlVor(o.b, true) + 'y = ' + o.c;
+  return { op: 'Einsetzverfahren', zeilen: [['\\text{aus ' + (i ? 'II' : 'I') + ':}\\quad x = ' + pTex(S, false, 'y'), '']],
+    next: sEins('y', pAdd(pAdd([0, o.b], S.map(v => v * o.a)), [o.c], -1), tex, st.g) };
+}
+function sysZurueck(st) {                           // andere Variable aus einer passenden Gleichung
+  const andere = st.v === 'x' ? 'y' : 'x';
+  const zeilen = [], paare = [];
+  for (const w of st.werte) {
+    let e = st.g.find(istY), wert, tex;
+    if (st.v === 'x' && e) { const R = yR(e); wert = pWert(R, w); tex = 'y = ' + substTex(R, w) + ' = ' + wert; }
+    else {
+      e = st.g.filter(q => q.t === 'lin').sort((p, q) => Math.abs(st.v === 'x' ? p.b : p.a) - Math.abs(st.v === 'x' ? q.b : q.a))[0];
+      e = glNorm(e);
+      if (st.v === 'x') { wert = (e.c - e.a * w) / e.b; tex = substTex([0, e.a], w) + zahlVor(e.b, true) + 'y = ' + e.c + ' \\;\\Rightarrow\\; y = ' + wert; }
+      else { wert = (e.c - e.b * w) / e.a; tex = poly([[e.a, 'x']]) + (e.b < 0 ? ' - ' : ' + ') + substTex([0, Math.abs(e.b)], w) + ' = ' + e.c + ' \\;\\Rightarrow\\; x = ' + wert; }
+    }
+    zeilen.push([tex, '']);
+    paare.push(st.v === 'x' ? [w, wert] : [wert, w]);
+  }
+  const letzte = zeilen.pop()[0];
+  return { op: 'zurück einsetzen', zeilen, next: { k: 's_lsg', paare, z: letzte, andere } };
+}
+function paarTex(p) { return '(' + p[0] + ' \\mid ' + p[1] + ')'; }
+
+const SYS_FERTIG = ['x', 'Die Rechnung ist fertig — jetzt bleibt nur, die Lösungsmenge anzugeben.'];
+REGELN.s_sys = st => {
+  const [e1, e2] = st.g, roh = e1.roh || e2.roh, y1 = istY(e1), y2 = istY(e2);
+  const r = {
+    loesen: ['x', 'Noch stehen in jeder Gleichung zwei Variablen. Zuerst muss eine davon wegfallen.'],
+    zurueck: ['x', 'Es ist noch keine Variable bekannt, die man einsetzen könnte.'],
+    Lsys: ['x', 'Noch ist keine Variable berechnet.'],
+  };
+  if (roh) {
+    const um = ['um', 'Erlaubt, aber ordne zuerst beide Gleichungen — dann sieht man, welches Verfahren passt.'];
+    r.ordnen = ['ok', null, () => ({ op: 'ordnen', zeilen: [], next: sSys(st.g.map(glNorm)) })];
+    r.einsetzen = um; r.gleichsetzen = um; r.addition = um;
+  } else if (y1 && y2) {
+    r.gleichsetzen = ['ok', null, () => sysGleich(st, 'Gleichsetzverfahren')];
+    r.einsetzen = ['ok', null, () => sysGleich(st, 'Einsetzverfahren')];
+    r.addition = ['um', 'Erlaubt, aber beide Gleichungen sind schon nach \\(y\\) aufgelöst — Gleichsetzen geht direkt.'];
+    r.ordnen = ['um', 'Erlaubt, aber unnötig: Beide Gleichungen sind schon nach \\(y\\) aufgelöst.'];
+  } else if (y1 || y2) {
+    r.einsetzen = ['ok', null, () => sysEinsetzen(st)];
+    r.gleichsetzen = ['um', 'Dafür müsste auch die andere Gleichung nach \\(y\\) aufgelöst sein. Eine ist es schon — setze sie ein.'];
+    r.addition = ['um', 'Erlaubt, aber eine Gleichung ist schon nach \\(y\\) aufgelöst — Einsetzen ist kürzer.'];
+    r.ordnen = ['um', 'Erlaubt, aber unnötig: Eine Gleichung ist schon nach \\(y\\) aufgelöst.'];
+  } else {
+    r.addition = ['ok', null, () => sysAddition(st)];
+    const eins = [e1, e2].some(e => Math.abs(e.b) === 1 || Math.abs(e.a) === 1);
+    r.einsetzen = eins ? ['ok', null, () => sysEinsetzen(st)]
+                       : ['um', 'Erlaubt, aber beim Auflösen nach einer Variablen entstehen Brüche. Hier ist das Additionsverfahren geschickter.'];
+    r.gleichsetzen = ['um', 'Erlaubt, aber dafür müssten beide Gleichungen zuerst nach derselben Variablen aufgelöst werden — ein Umweg.'];
+    r.ordnen = ['um', 'Schon geordnet: Beide Gleichungen haben die Form \\(ax + by = c\\).'];
+  }
+  return r;
+};
+REGELN.s_eins = st => {
+  const schon = ['um', 'Das ist schon geschehen — es bleibt eine Gleichung mit einer Variablen.'];
+  return {
+    loesen: ['ok', null, () => {
+      let P = st.P;
+      const g = pGrad(P);
+      if (g <= 0) return { op: 'zusammenfassen', zeilen: [], next: { k: 's_wid', z: '0 = ' + -(P[0] || 0), wahr: !(P[0] || 0), g: st.g } };
+      if (g === 1) {
+        const w = -P[0] / P[1], zeilen = [];
+        const z1 = poly([[P[1], st.v]]) + ' = ' + -P[0];
+        if (z1 !== st.z && P[1] !== 1) zeilen.push([z1, '']);
+        return { op: 'lösen', zeilen, next: { k: 's_teil', v: st.v, werte: [w], z: st.v + ' = ' + w, g: st.g } };
+      }
+      if (P[2] < 0) P = pNeg(P);
+      const D = P[1] * P[1] - 4 * P[2] * P[0], zeilen = [[pTex(P) + ' = 0', '']];
+      if (D < 0) return { op: 'lösen', zeilen, next: { k: 's_lsg', paare: [], z: 'D \\lt 0 \\;\\Rightarrow\\; \\text{keine Lösung}' } };
+      const s = Math.sqrt(D), x1 = (-P[1] - s) / (2 * P[2]), x2 = (-P[1] + s) / (2 * P[2]);
+      const werte = D === 0 ? [x1] : [x1, x2];
+      return { op: 'lösen', zeilen, next: { k: 's_teil', v: 'x', werte, z: werte.length === 1 ? 'x = ' + x1 : 'x_1 = ' + x1 + '; \\quad x_2 = ' + x2, g: st.g } };
+    }],
+    ordnen: schon, einsetzen: schon, gleichsetzen: schon, addition: schon,
+    zurueck: ['x', 'Zuerst muss \\(' + st.v + '\\) bekannt sein: Löse die Gleichung.'],
+    Lsys: ['x', 'Noch ist keine Variable berechnet.'],
+  };
+};
+REGELN.s_teil = st => {
+  const schon = ['um', 'Schon geschehen: \\(' + st.v + '\\) ist bekannt.'];
+  return {
+    zurueck: ['ok', null, () => sysZurueck(st)],
+    loesen: schon, ordnen: schon, einsetzen: schon, gleichsetzen: schon, addition: schon,
+    Lsys: ['x', 'Es fehlt noch \\(' + (st.v === 'x' ? 'y' : 'x') + '\\). Eine Lösung des Systems ist immer ein Paar.'],
+  };
+};
+REGELN.s_lsg = st => {
+  const r = Object.fromEntries(STRAT_SYS.map(([id]) => [id, SYS_FERTIG]));
+  const p = st.paare.slice().sort((u, v) => u[0] - v[0]);
+  r.Lsys = ['ok', null, () => ({ op: '', zeilen: [], next: { k: 'ende', z: '\\mathbb{L} = ' + (p.length ? '\\{' + p.map(paarTex).join(';\\, ') + '\\}' : '\\{\\,\\}'), sys: { paare: p } } })];
+  return r;
+};
+REGELN.s_wid = st => {
+  const weg = ['x', 'Die Variable ist weggefallen — es gibt nichts mehr zu rechnen. Ist die Aussage wahr oder falsch?'];
+  const r = Object.fromEntries(STRAT_SYS.map(([id]) => [id, weg]));
+  r.Lsys = ['ok', null, () => {
+    if (!st.wahr) return { op: '', zeilen: [], next: { k: 'ende', z: '\\mathbb{L} = \\{\\,\\}', sys: { paare: [] } } };
+    const e = glNorm(st.g.find(q => q.t === 'lin' && q.b));
+    const m = -e.a / e.b, q = e.c / e.b;
+    return { op: '', zeilen: [], next: { k: 'ende', z: '\\mathbb{L} = \\{(t \\mid ' + pTex([q, m], false, 't') + ') \\;|\\; t \\in \\mathbb{R}\\}', sys: { gerade: [m, q] } } };
+  }];
+  return r;
+};
+
+// ── Auswerten ──
 function regel(st, id) {
   const r = REGELN[st.k](st)[id];
   if (r) return r;
+  const fam = familie(st);
+  if (fam !== 'gl') return ['x', 'Dieser Schritt passt hier nicht.'];
+  if (id === 'D') return st.Dw ? ['um', 'Schon geschehen: \\(' + dTex(st.Dw) + '\\).']
+                               : ['um', 'Erlaubt, aber hier steht kein \\(x\\) im Nenner: \\(\\mathbb{D} = \\mathbb{R}\\), es gibt nichts auszuschliessen.'];
+  if (id === 'vergleich') return ['x', 'Es gibt noch keine Lösungen, die man vergleichen könnte.'];
   const g = GRUPPE[st.k] || 'quad';
   if (g === 'ende') return ['x', st.k === 'wid'
     ? '\\(x\\) ist weggefallen — es gibt nichts mehr umzuformen. Entscheide, was das für die Lösungsmenge heisst.'
     : 'Die Rechnung ist fertig — jetzt bleibt nur, die Lösungsmenge anzugeben.'];
   return STANDARD[g][id];
 }
-// Die passenden Schritte eines Zustands
-const passend = st => STRAT.map(([id]) => id).filter(id => regel(st, id)[0] === 'ok');
+// Schritt ausführen; die Definitionsmenge einer Bruchgleichung reist mit
+function ausfuehren(st, id) {
+  const aus = regel(st, id)[2]();
+  if (st.Dw && aus.next && aus.next.k !== 'ende' && aus.next.Dw === undefined && familie(st) === 'gl') aus.next.Dw = st.Dw;
+  return aus;
+}
+const passend = st => LISTEN[familie(st)].map(([id]) => id).filter(id => regel(st, id)[0] === 'ok');
 
 const TIPP = {
   lin_seiten: 'Ziel ist \\(a \\cdot x = b\\). Was steht noch auf der falschen Seite?',
@@ -717,9 +1231,11 @@ const TIPP = {
   lin_br: 'Was macht das Rechnen hier mühsam?',
   lin_schein: 'Löse zuerst auf, was das \\(x\\) einschliesst. Erst danach siehst du, welcher Typ die Gleichung ist.',
   lin_x2: 'Vergleiche die Glieder mit \\(x^2\\) links und rechts.',
-  q_ung: st => st.b === 0 && st.d === 0 ? 'Hier gibt es kein Glied mit \\(x\\) allein. Was muss weg, damit \\(x^2\\) allein steht?'
+  bruch_gl: st => st.Dw ? 'Was macht das Rechnen hier mühsam?' : 'Bei einer Bruchgleichung kommt ein Schritt vor allen anderen: Welche Zahlen darf \\(x\\) nicht annehmen?',
+  q_ung: st => st.f === 0 && st.b === 0 && st.d === 0 ? 'Hier gibt es kein Glied mit \\(x\\) allein. Was muss weg, damit \\(x^2\\) allein steht?'
                                         : 'Für quadratische Gleichungen braucht es eine Seite mit \\(0\\).',
   q_kl: 'Rechts steht keine \\(0\\). Darf man da schon den Satz vom Nullprodukt anwenden?',
+  q_klg: 'Was hindert dich daran, die Gleichung zu ordnen?',
   q_erg: 'Links fehlt nur eine Zahl zum Binom \\((x + \\ldots)^2\\). Oder: Bring alles auf eine Seite.',
   q_quadrat: 'Das Quadrat steht allein. Wie wirst du es los?',
   q_a_iso: 'Damit du die Wurzel ziehen kannst, muss \\(x^2\\) ganz allein stehen.',
@@ -733,13 +1249,48 @@ const TIPP = {
   q_prod: 'Rechts steht \\(0\\), links ein Produkt. Wann ist ein Produkt \\(0\\)?',
   q_br: 'Was macht das Rechnen hier mühsam?',
   wid: st => 'Ist die Aussage \\(' + st.z + '\\) wahr oder falsch — und was heisst das für \\(x\\)?',
-  lsg: 'Die Rechnung ist fertig. Was bleibt zu tun?',
+  lsg: st => st.Dw && !st.dOk && st.w.length ? 'Bei einer Bruchgleichung ist noch nicht jede Lösung auch erlaubt.' : 'Die Rechnung ist fertig. Was bleibt zu tun?',
+  t_fakt: st => tippTerm([st.pr]) || 'Lässt sich noch etwas zerlegen?',
+  t_bruch: st => tippTerm([st.n, st.d])
+    || (!st.Dw ? 'Der Nenner ist zerlegt. Welche Zahlen darf \\(x\\) nicht annehmen?'
+      : gegen(st.n, st.d) ? 'Vergleiche die Klammern oben und unten genau — auch die Reihenfolge.'
+      : gemeinsam(st.n, st.d) ? 'Oben und unten steht derselbe Faktor.' : 'Lässt sich noch etwas tun?'),
+  s_sys: st => {
+    const [e1, e2] = st.g;
+    if (e1.roh || e2.roh) return 'Bevor ein Verfahren greift, sollen beide Gleichungen in der Form \\(ax + by = c\\) dastehen.';
+    if (istY(e1) && istY(e2)) return 'Beide Gleichungen beginnen mit \\(y = \\ldots\\).';
+    if (istY(e1) || istY(e2)) return 'Eine Gleichung ist schon nach \\(y\\) aufgelöst.';
+    return 'Lassen sich die Zahlen vor \\(y\\) zu Gegenzahlen machen?';
+  },
+  s_eins: 'Nur noch eine Variable — was nun?',
+  s_teil: 'Eine Variable ist bekannt. Wie kommst du zur anderen?',
+  s_lsg: 'Beide Werte sind da.',
+  s_wid: 'Die Variable ist weggefallen. Ist die Aussage wahr oder falsch?',
 };
+function tippTerm(teile) {
+  const fa = teile.flatMap(aktiv)[0];
+  if (!fa) return null;
+  const t = fTex(fa.p);
+  return { faktor: 'Was haben alle Glieder von ' + t + ' gemeinsam?',
+           binom12: 'Bei ' + t + ' sind das erste und das letzte Glied Quadrate. Und das mittlere?',
+           binom3: t + ': zwei Glieder, beide Quadrate, dazwischen ein Minus.',
+           zweiklammer: t + ': Gibt es zwei ganze Zahlen mit dem passenden Produkt und der passenden Summe?',
+           gruppieren: t + ' hat vier Glieder. Klammere je zwei davon getrennt aus.' }[analyse(fa.p).m];
+}
 const tipp = st => { const t = TIPP[st.k]; return typeof t === 'function' ? t(st) : t; };
 
 // ── Aufgaben ──
-// Jede Vorlage liefert { st, f }: st = Anfangszustand, f(x) = linke minus rechte Seite der
-// gestellten Gleichung (zum Nachprüfen der Lösungen im Prüfwerkzeug).
+// Jede Vorlage liefert { st, … } mit Prüfdaten für scripts/verify_strategietrainer.js:
+//   Gleichungen: f(x) = linke minus rechte Seite; bei Bruchgleichungen g(x) = f(x)·Hauptnenner und dW
+//   Terme: wert(x) = Wert des gestellten Terms, dW = Nullstellen des Nenners
+//   Systeme: res = [(x, y) → Rest je Gleichung], anzahl = 0 | 1 | 2 | 'unendlich'
+const BEREICHE = {
+  lin: { auftrag: 'Löse in \\(\\mathbb{G} = \\mathbb{R}\\)' }, quad: { auftrag: 'Löse in \\(\\mathbb{G} = \\mathbb{R}\\)' },
+  bruchgl: { auftrag: 'Löse in \\(\\mathbb{G} = \\mathbb{R}\\)' },
+  fakt: { auftrag: 'Faktorisiere vollständig' }, bruchterm: { auftrag: 'Vereinfache' },
+  lgs: { auftrag: 'Löse in \\(\\mathbb{R} \\times \\mathbb{R}\\)' }, qgs: { auftrag: 'Löse in \\(\\mathbb{R} \\times \\mathbb{R}\\)' },
+};
+const bruchT = (z, n) => (z < 0 ? '-' : '') + '\\frac{' + Math.abs(z) + '}{' + n + '}';
 const VORLAGEN = {
   lin: [
     [3, function linSeitenA() {                         // Ax + B = Cx + D
@@ -869,16 +1420,188 @@ const VORLAGEN = {
       return { st: qQuadrat(h, r), f: x => (x + h) ** 2 - r };
     }],
   ],
+  bruchgl: [
+    [3, function bgA() {                                // a/(x − p) = b/(x − q)
+      const p = nz(-6, 6), q = nz(-6, 6), x0 = nz(-8, 8), t = pick([1, -1, 2]);
+      if (p === q || x0 === p || x0 === q) return null;
+      const a = (x0 - p) * t, b = (x0 - q) * t;
+      const z = bruchT(a, linT(1, -p)) + ' = ' + bruchT(b, linT(1, -q));
+      const HN = klammer(-p) + klammer(-q);
+      return { st: { k: 'bruch_gl', z, dW: [p, q], HN, danach: linKl(faktor(a, -q) + ' = ' + faktor(b, -p), a, -a * q, b, -b * p) },
+               f: x => a / (x - p) - b / (x - q), g: x => a * (x - q) - b * (x - p), dW: [p, q] };
+    }],
+    [3, function bgB() {                                // (x² + u)/(x − p) = (vx + w)/(x − p): eine Lösung ist verboten
+      const p = nz(-6, 6), r = nz(-7, 7), w = nz(-9, 9);
+      if (r === p) return null;
+      const v = p + r, u = p * r + w;
+      const nen = linT(1, -p);
+      const z = '\\frac{' + quadT(1, 0, u) + '}{' + nen + '} = \\frac{' + linT(v, w) + '}{' + nen + '}';
+      return { st: { k: 'bruch_gl', z, dW: [p], HN: '(' + nen + ')', danach: qUng(1, 0, u, v, w) },
+               f: x => (x * x + u) / (x - p) - (v * x + w) / (x - p), g: x => x * x + u - v * x - w, dW: [p] };
+    }],
+    [2, function bgC() {                                // a/x + b/(x − p) = 1
+      const p = nz(-5, 5), r1 = nz(-8, 8), r2 = nz(-8, 8);
+      if (r1 === p || r2 === p || r1 === r2 || (r1 * r2) % p !== 0) return null;
+      const a = r1 * r2 / p, b = r1 + r2 - p - a;
+      if (b === 0) return null;
+      const z = bruchT(a, 'x') + (b < 0 ? ' - ' : ' + ') + '\\frac{' + Math.abs(b) + '}{' + linT(1, -p) + '} = 1';
+      const zN = faktor(a, -p) + zahlVor(b, true) + 'x = x' + klammer(-p);
+      return { st: { k: 'bruch_gl', z, dW: [0, p], HN: 'x' + klammer(-p), danach: qKlg(zN, [0, a + b, -a * p, -p, 0, 1]) },
+               f: x => a / x + b / (x - p) - 1, g: x => a * (x - p) + b * x - x * (x - p), dW: [0, p] };
+    }],
+    [2, function bgD() {                                // x/(x − p) = p/(x − p) + c: die einzige Lösung ist verboten
+      const p = nz(-6, 6), c = pick([2, 3, -1, -2, 4]);
+      const nen = linT(1, -p);
+      const z = '\\frac{x}{' + nen + '} = ' + bruchT(p, nen) + (c < 0 ? ' - ' : ' + ') + Math.abs(c);
+      const zN = 'x = ' + p + zahlVor(c, true) + klammer(-p);
+      return { st: { k: 'bruch_gl', z, dW: [p], HN: '(' + nen + ')', danach: linKl(zN, 1, 0, c, p - c * p) },
+               f: x => x / (x - p) - p / (x - p) - c, g: x => x - p - c * (x - p), dW: [p] };
+    }],
+    [2, function bgE() {                                // a/(x − p) + b/(x + p) = c/(x² − p²)
+      const p = rnd(1, 6), a = nz(-5, 5), b = nz(-5, 5);
+      if (a + b === 0) return null;
+      const x0 = Math.random() < 0.25 ? pick([p, -p]) : nz(-7, 7);
+      const c = (a + b) * x0 + (a - b) * p;
+      if (c === 0) return null;
+      const z = bruchT(a, linT(1, -p)) + (b < 0 ? ' - ' : ' + ') + '\\frac{' + Math.abs(b) + '}{' + linT(1, p) + '} = ' + bruchT(c, quadT(1, 0, -p * p));
+      const zN = faktor(a, p) + zahlVor(b, true) + klammer(-p) + ' = ' + c;
+      return { st: { k: 'bruch_gl', z, dW: [p, -p], dInfo: quadT(1, 0, -p * p) + ' = ' + klammer(-p) + klammer(p), HN: '(' + quadT(1, 0, -p * p) + ')',
+                     danach: linKl(zN, a + b, (a - b) * p, 0, c) },
+               f: x => a / (x - p) + b / (x + p) - c / (x * x - p * p), g: x => a * (x + p) + b * (x - p) - c, dW: [p, -p] };
+    }],
+  ],
+  fakt: [
+    [6, function tfA() {                                // k · xᵉ · Kern
+      const k = pick([1, 1, 2, 3, 4, 5]), xp = pick([0, 0, 0, 1]);
+      const kern = pick(['lin', 'b12', 'b3', 'b3', 'zk', 'zk', 'summe', 'irr']);
+      let K;
+      if (kern === 'lin') { const a = pick([1, 2, 3]), c = nz(-9, 9); if (ggT(a, c) !== 1) return null; K = [c, a]; }
+      else if (kern === 'b12') { const s = pick([1, 1, 2, 3]), t = rnd(1, 7) * pick([1, -1]); if (ggT(s, t) !== 1) return null; K = [t * t, 2 * s * t, s * s]; }
+      else if (kern === 'b3') { const s = pick([1, 1, 2, 3]), t = rnd(1, 9); if (ggT(s, t) !== 1) return null; K = [-t * t, 0, s * s]; }
+      else if (kern === 'zk') { const r = nz(-8, 8), s = nz(-8, 8); if (r === s || r === -s) return null; K = [r * s, r + s, 1]; }
+      else if (kern === 'summe') K = [rnd(1, 9) ** 2, 0, 1];
+      else { const b = nz(-7, 7), c = nz(-9, 9); if (istQuadrat(b * b - 4 * c)) return null; K = [c, b, 1]; }
+      let P = K.map(v => v * k); if (xp) P = [0, ...P];
+      if (pGrad(P) > 3) return null;
+      const pr = { k: 1, f: [{ p: P }] };
+      return { st: tFakt(pr, pTex(P)), wert: x => pWert(P, x) };
+    }],
+    [2, function tfB() {                                // Gruppieren: (x + α)(x² + β)
+      const al = nz(-6, 6), be = pick([nz(-9, 9), -pick([1, 4, 9])]);
+      const P = [al * be, be, al, 1];
+      return { st: tFakt({ k: 1, f: [{ p: P }] }, pTex(P)), wert: x => pWert(P, x) };
+    }],
+  ],
+  bruchterm: [
+    [4, function btA() {                                // k1(x − r)(x − s) / k2(x − r)(x − t)
+      const r = rnd(-6, 6), s = rnd(-6, 6), t = rnd(-6, 6), k1 = pick([1, 1, 2, 3]), k2 = pick([1, 1, 1, 2, 3]);
+      if (s === t || (r === 0 && s === 0) || (r === 0 && t === 0)) return null;
+      const N = pMul([k1], pMul([-r, 1], [-s, 1])), D = pMul([k2], pMul([-r, 1], [-t, 1]));
+      return { st: tBruch({ k: 1, f: [{ p: N }] }, { k: 1, f: [{ p: D }] }, undefined, '\\frac{' + pTex(N) + '}{' + pTex(D) + '}'),
+               wert: x => pWert(N, x) / pWert(D, x), dW: [...new Set([r, t])] };
+    }],
+    [2, function btB() {                                // (x + a)/(x + b) oder k(x + a)/(x + a): Summen-Falle
+      const a = nz(-8, 8), b = nz(-8, 8), k = pick([1, 2, 3]);
+      if (k === 1 && a === b) return null;
+      const N = [k * a, k], D = k === 1 ? [b, 1] : [a, 1];
+      return { st: tBruch({ k: 1, f: [{ p: N }] }, { k: 1, f: [{ p: D }] }, undefined, '\\frac{' + pTex(N) + '}{' + pTex(D) + '}'),
+               wert: x => pWert(N, x) / pWert(D, x), dW: [-D[0]] };
+    }],
+    [2, function btC() {                                // Zähler mit (x − r), Nenner r − x
+      const r = nz(-6, 6), k = pick([1, 2, 3, 5]);
+      const N = Math.random() < 0.5 ? [-k * r, k] : [-r * r, 0, 1], D = [r, -1];
+      if (N.length === 3 && r === 0) return null;
+      return { st: tBruch({ k: 1, f: [{ p: N }] }, { k: 1, f: [{ p: D, tex: pTex(D, true) }] }, undefined, '\\frac{' + pTex(N) + '}{' + pTex(D, true) + '}'),
+               wert: x => pWert(N, x) / pWert(D, x), dW: [r] };
+    }],
+    [2, function btD() {                                // (x² + bx)/x  bzw.  (x² + bx)/(x + b)
+      const b = nz(-8, 8), N = [0, b, 1], D = Math.random() < 0.5 ? [0, 1] : [b, 1];
+      return { st: tBruch({ k: 1, f: [{ p: N }] }, { k: 1, f: [{ p: D }] }, undefined, '\\frac{' + pTex(N) + '}{' + pTex(D) + '}'),
+               wert: x => pWert(N, x) / pWert(D, x), dW: [-D[0]] };
+    }],
+  ],
+  lgs: [
+    [2, function sYY() {                                // y = m1 x + q1, y = m2 x + q2
+      const x0 = rnd(-6, 6), y0 = rnd(-6, 6), m1 = nz(-4, 4), m2 = nz(-4, 4);
+      if (m1 === m2) return null;
+      const g = [{ t: 'lin', a: -m1, b: 1, c: y0 - m1 * x0, form: 'y' }, { t: 'lin', a: -m2, b: 1, c: y0 - m2 * x0, form: 'y' }];
+      return { st: sSys(g), anzahl: 1, loes: [x0, y0], g };
+    }],
+    [3, function sYN() {                                // y = mx + q, ax + by = c
+      const x0 = rnd(-6, 6), y0 = rnd(-6, 6), m = nz(-4, 4), a = nz(-6, 6), b = nz(-5, 5);
+      if (a === -m * b) return null;
+      const g = [{ t: 'lin', a: -m, b: 1, c: y0 - m * x0, form: 'y' }, { t: 'lin', a, b, c: a * x0 + b * y0, form: 'norm' }];
+      if (Math.random() < 0.5) g.reverse();
+      return { st: sSys(g), anzahl: 1, loes: [x0, y0], g };
+    }],
+    [3, function sNN() {                                // a1 x + b1 y = c1, a2 x + b2 y = c2
+      const x0 = rnd(-6, 6), y0 = rnd(-6, 6), z = () => pick([2, 3, 4, 5, 6, 7]) * pick([1, -1]);
+      const eins = Math.random() < 0.35;
+      const a1 = eins ? pick([1, -1]) : z(), b1 = z(), a2 = z(), b2 = eins ? z() : z();
+      if (a1 * b2 - a2 * b1 === 0) return null;
+      const g = [{ t: 'lin', a: a1, b: b1, c: a1 * x0 + b1 * y0, form: 'norm' }, { t: 'lin', a: a2, b: b2, c: a2 * x0 + b2 * y0, form: 'norm' }];
+      if (Math.random() < 0.5) g.reverse();
+      return { st: sSys(g), anzahl: 1, loes: [x0, y0], g };
+    }],
+    [2, function sRoh() {                               // y auf beiden Seiten
+      const x0 = rnd(-6, 6), y0 = rnd(-6, 6), a = nz(-5, 5), b = nz(-5, 5), e = nz(-4, 4), a2 = nz(-5, 5), b2 = nz(-5, 5);
+      if (b + e === 0 || a * b2 - a2 * b === 0) return null;
+      const c = a * x0 + b * y0;
+      const e1 = { t: 'lin', a, b, c, form: 'norm', roh: lin2T(a, b + e) + ' = ' + poly([[e, 'y'], [c, '']]) };
+      const e2 = { t: 'lin', a: a2, b: b2, c: a2 * x0 + b2 * y0, form: 'norm' };
+      return { st: sSys([e1, e2]), anzahl: 1, loes: [x0, y0], g: [e1, e2] };
+    }],
+    [2, function sSpez() {                              // parallel oder identisch
+      const m = nz(-4, 4), q = rnd(-6, 6), k = pick([2, 3, -2]), b = pick([1, 1, 2, -1]);
+      const e1 = { t: 'lin', a: -m * b, b, c: q * b, form: 'norm' };
+      const parallel = Math.random() < 0.5;
+      let e2 = { t: 'lin', a: e1.a * k, b: e1.b * k, c: e1.c * k + (parallel ? nz(-5, 5) : 0), form: 'norm' };
+      let g = [e1, e2];
+      if (Math.random() < 0.4) g = [{ t: 'lin', a: -m, b: 1, c: q, form: 'y' }, { t: 'lin', a: -m, b: 1, c: q + (parallel ? nz(-5, 5) : 0), form: 'y' }];
+      if (!parallel && g[0].form === 'y') return null;   // zwei gleiche Gleichungen hinzuschreiben wäre seltsam
+      return { st: sSys(g), anzahl: parallel ? 0 : 'unendlich', g };
+    }],
+  ],
+  qgs: [
+    [3, function sPG() {                                // Parabel und Gerade, beide nach y aufgelöst
+      const A = pick([1, 1, -1, 2]), m = nz(-4, 4), q = rnd(-6, 6), art = pick([2, 2, 2, 1, 0]);
+      let P;
+      if (art === 2) { const x1 = rnd(-5, 5), x2 = rnd(-5, 5); if (x1 === x2) return null; P = pMul([A], pMul([-x1, 1], [-x2, 1])); }
+      else if (art === 1) { const h = rnd(-5, 5); P = pMul([A], pMul([-h, 1], [-h, 1])); }
+      else { const h = rnd(-4, 4), s = rnd(1, 5); P = pMul([A], [h * h + s, -2 * h, 1]); }
+      const par = { t: 'par', A, B: P[1] + m, C: P[0] + q }, ger = { t: 'lin', a: -m, b: 1, c: q, form: 'y' };
+      const g = Math.random() < 0.6 ? [par, ger] : [ger, par];
+      return { st: sSys(g), anzahl: art, g };
+    }],
+    [2, function sPP() {                                // zwei Parabeln
+      const B1 = rnd(-5, 5), C1 = rnd(-6, 6), x1 = rnd(-4, 4), x2 = rnd(-4, 4);
+      if (x1 === x2) return null;
+      const P = pMul([2], pMul([-x1, 1], [-x2, 1]));
+      const g = [{ t: 'par', A: 1, B: B1, C: C1 }, { t: 'par', A: -1, B: B1 - P[1], C: C1 - P[0] }];
+      return { st: sSys(g), anzahl: 2, g };
+    }],
+    [2, function sPN() {                                // Gerade in Normalform und Parabel
+      const a = nz(-4, 4), c = rnd(-6, 6), x1 = rnd(-5, 5), x2 = rnd(-5, 5);
+      if (x1 === x2) return null;
+      const B = -(x1 + x2) - a, C = x1 * x2 + c;
+      const g = [{ t: 'lin', a, b: 1, c, form: 'norm' }, { t: 'par', A: 1, B, C }];
+      return { st: sSys(g), anzahl: 2, g };
+    }],
+  ],
 };
+const resid = e => e.t === 'par' ? (x, y) => y - (e.A * x * x + e.B * x + e.C) : (x, y) => e.a * x + e.b * y - e.c;
 function aufgabe(bereiche) {
   const liste = [];
-  for (const b of bereiche) for (const [gew, fn] of VORLAGEN[b]) liste.push([gew * (b === 'lin' ? 1.2 : 1), fn]);
+  for (const b of bereiche) {                      // jeder gewählte Bereich gleich oft
+    const sb = VORLAGEN[b].reduce((s, [g]) => s + g, 0);
+    for (const [gew, fn] of VORLAGEN[b]) liste.push([gew / sb, fn, b]);
+  }
   const summe = liste.reduce((s, [g]) => s + g, 0);
   for (;;) {
-    let r = Math.random() * summe, fn = liste[0][1];
-    for (const [g, f] of liste) { if ((r -= g) < 0) { fn = f; break; } }
-    const a = fn();
-    if (a) { a.vorlage = fn.name; return a; }
+    let r = Math.random() * summe, wahl = liste[0];
+    for (const l of liste) { if ((r -= l[0]) < 0) { wahl = l; break; } }
+    const a = wahl[1]();
+    if (a) { a.vorlage = wahl[1].name; a.bereich = wahl[2]; a.auftrag = BEREICHE[wahl[2]].auftrag; return a; }
   }
 }
 // ── KERN:ENDE ───────────────────────────────────────────────────
@@ -895,24 +1618,35 @@ function setzen(el, html) {
   }).catch(() => {});
 }
 const SERIE = 10;
-let bereiche = new Set(['lin', 'quad']);
-let A = null, st = null, zeilen = [], fehl = 0, nr = 0, start = 0, fertig = false, letzteVorlage = '';
+const STANDARD_AUSWAHL = ['lin', 'quad', 'bruchgl', 'fakt', 'bruchterm', 'lgs'];
+let bereiche = new Set(STANDARD_AUSWAHL);
+try {                                              // Vorauswahl über #bereich=fakt,bruchterm
+  const m = /bereich=([a-z,]+)/.exec(location.hash);
+  if (m) { const b = m[1].split(',').filter(x => VORLAGEN[x]); if (b.length) bereiche = new Set(b); }
+} catch (e) {}
+document.querySelectorAll('#st-bereich .st-opt').forEach(b => b.classList.toggle('aktiv', bereiche.has(b.dataset.b)));
+
+let A = null, st = null, zeilen = [], fehl = 0, nr = 0, start = 0, fertig = false, letzteVorlage = '', wahlFam = '';
 let zaehler = { fehl: 0, um: 0, sauber: 0, verwechslung: {} };
 let tick = null;
-
 const wahl = $('st-wahl');
-STRAT.forEach(([id, text]) => {
-  const b = document.createElement('button');
-  b.type = 'button'; b.className = 'st-knopf'; b.dataset.s = id; b.innerHTML = text;
-  wahl.appendChild(b);
-});
 
+function baueWahl(fam) {
+  if (fam === wahlFam) return;
+  wahlFam = fam;
+  setzen(wahl, LISTEN[fam].map(([id, text]) => '<button type="button" class="st-knopf" data-s="' + id + '">' + text + '</button>').join(''));
+}
 function zeichneVerlauf() {
   setzen($('st-verlauf'), zeilen.map(([z, op], i) =>
     '<div class="st-zeile' + (fertig && i === zeilen.length - 1 ? ' st-ende' : '') + '"><span class="st-gl">\\(\\displaystyle ' + z + '\\)</span><span class="st-op">' + (op || '') + '</span></div>').join(''));
 }
+function zeigeD() {
+  const el = $('st-d');
+  if (st && st.Dw && st.k !== 'ende') { el.hidden = false; setzen(el, '\\(' + dTex(st.Dw) + '\\)'); }
+  else if (!fertig) el.hidden = true;
+}
 function knoepfeZuruecksetzen() {
-  wahl.querySelectorAll('.st-knopf').forEach(b => { b.classList.remove('st-falsch', 'st-umweg', 'st-zeigen'); b.disabled = fertig; });
+  mjKette.then(() => wahl.querySelectorAll('.st-knopf').forEach(b => { b.classList.remove('st-falsch', 'st-umweg', 'st-zeigen'); b.disabled = fertig; }));
 }
 function zeit() {
   const s = Math.floor((Date.now() - start) / 1000);
@@ -934,12 +1668,15 @@ function neueAufgabe() {
   letzteVorlage = a.vorlage;
   A = a; st = a.st; zeilen = [[st.z, '']]; fehl = 0; fehlerInAufgabe = 0; fertig = false;
   $('st-nr').textContent = 'Aufgabe ' + nr + ' / ' + SERIE;
+  setzen($('st-auftrag'), a.auftrag);
   $('st-frage').hidden = false;
   $('st-weiter-box').hidden = true;
+  baueWahl(familie(st));
   setzen($('st-rueck'), '');
   $('st-rueck').className = 'st-rueck';
   knoepfeZuruecksetzen();
   zeichneVerlauf();
+  zeigeD();
   zeigeZahlen();
 }
 function meldung(cls, html) { $('st-rueck').className = 'st-rueck ' + cls; setzen($('st-rueck'), html); }
@@ -949,11 +1686,14 @@ function waehle(id) {
   const r = regel(st, id);
   const knopf = wahl.querySelector('[data-s="' + id + '"]');
   if (r[0] === 'ok') {
-    const aus = r[2]();
-    zeilen[zeilen.length - 1][1] = aus.op;
-    for (const z of aus.zeilen) zeilen.push(z.slice());
+    const aus = ausfuehren(st, id);
+    if (aus.ersetzen) zeilen[zeilen.length - 1][0] = aus.ersetzen;
+    else if (!aus.bleibt) {
+      zeilen[zeilen.length - 1][1] = aus.op;
+      for (const z of aus.zeilen) zeilen.push(z.slice());
+      zeilen.push([aus.next.z, '']);
+    }
     st = aus.next;
-    zeilen.push([st.z, '']);
     fehl = 0;
     if (st.k === 'ende') {
       fertig = true;
@@ -962,9 +1702,10 @@ function waehle(id) {
       $('st-weiter-box').hidden = false;
       meldung('richtig', '<p>✓ ' + (fehlerInAufgabe ? 'Gelöst.' : 'Gelöst — ohne Fehlgriff.') + '</p>');
       $('st-weiter').focus();
-    } else meldung('richtig', '<p>✓ ' + STRAT_NAME[id] + ' — passt.</p>');
+    } else meldung('richtig', '<p>✓ ' + STRAT_NAME[id] + ' — passt.' + (aus.info ? ' ' + aus.info : '') + '</p>');
     knoepfeZuruecksetzen();
     zeichneVerlauf();
+    zeigeD();
   } else if (r[0] === 'um') {
     zaehler.um++;
     knopf.classList.add('st-umweg');
@@ -1018,7 +1759,7 @@ $('st-bilanz').addEventListener('click', e => { if (e.target.closest('#st-nochma
 $('st-bereich').addEventListener('click', e => {
   const b = e.target.closest('.st-opt'); if (!b) return;
   const v = b.dataset.b;
-  if (bereiche.has(v) && bereiche.size === 1) return;      // eine Art bleibt immer gewählt
+  if (bereiche.has(v) && bereiche.size === 1) return;      // ein Bereich bleibt immer gewählt
   if (bereiche.has(v)) bereiche.delete(v); else bereiche.add(v);
   b.classList.toggle('aktiv', bereiche.has(v));
   neueSerie();
@@ -1033,7 +1774,7 @@ function seiteOffen() { $('st-seite-det').open = breit.matches; }
 if (breit.addEventListener) breit.addEventListener('change', seiteOffen);
 seiteOffen();
 
-if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(() => { setzen(wahl, wahl.innerHTML); neueSerie(); });
+if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(neueSerie);
 else window.addEventListener('load', neueSerie);
 </script>
 </body>

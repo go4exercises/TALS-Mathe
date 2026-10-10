@@ -53,14 +53,17 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Verlinkt aus
   g2.1 (`#definition`); seit 10.10.2026 nur Grundlagenfach (110 Karten, die 25 des
   Schwerpunktfachs und der Fach-Filter sind entfernt). Bis 10.10.2026 lag er als `notationstrainer.html` im Root.
-- `werkzeuge/strategietrainer.html` — Prototyp seit 10.10.2026: Zufallsgleichungen (linear, quadratisch),
-  man wählt aus einer festen Liste von 13 Strategien den nächsten Schritt, das Werkzeug führt ihn aus
-  (✓), weist einen erlaubten Umweg grau ab (≈) oder begründet den Fehlgriff (✗; Tipp beim zweiten,
-  Lösung beim dritten). Aufgaben werden von hinten gebaut, gerechnet wird exakt (Brüche, Wurzeln).
-  Der Kern steht zwischen `KERN:ANFANG`/`KERN:ENDE` und wird von `scripts/verify_strategietrainer.js`
-  (im Pre-Flight) mit Zufallsaufgaben durchgespielt: alle Wege, jede Lösung gegen die gestellte
-  Gleichung. Neue Vorlage oder Regel → dort zuerst grün. Verlinkt aus g2.2a und g2.2b (`#verfahren`).
-  Ausbau (Faktorisieren, Bruchterme, Bruchgleichungen, Gleichungssysteme): `../TODO-trainer-mathe.md`.
+- `werkzeuge/strategietrainer.html` (seit 10.10.2026): Zufallsaufgaben aus sieben Bereichen —
+  lineare, quadratische und Bruchgleichungen, Faktorisieren, Bruchterme, lineare Systeme und Systeme
+  mit Parabel (SF). Man wählt den nächsten Schritt aus einer festen Liste je Familie (Gleichungen 15,
+  Terme 10, Systeme 7); das Werkzeug führt ihn aus (✓), weist einen erlaubten Umweg grau ab (≈) oder
+  begründet den Fehlgriff (✗; Tipp beim zweiten, Lösung beim dritten). Aufgaben werden von hinten
+  gebaut, gerechnet wird exakt (Brüche, Wurzeln, ganzzahlige Paare). Der Kern steht zwischen
+  `KERN:ANFANG`/`KERN:ENDE` und wird von `scripts/verify_strategietrainer.js` (im Pre-Flight) mit
+  Zufallsaufgaben durchgespielt: alle Wege, Lösungen gegen die gestellte Aufgabe, Terme an
+  Zufallsstellen, 𝔻 gegen den Nenner. Neue Vorlage oder Regel → dort zuerst grün. Vorwahl über
+  `#bereich=fakt,bruchterm` (kein `?`: `check_sim_wz` liest die Adresse bis `#` als Dateinamen).
+  Verlinkt aus g1.3, g2.2a, g2.2b, g2.3, s2.2a, s3.1. Weitere Trainer-Ideen: `../TODO-trainer-mathe.md`.
 - `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über

@@ -130,8 +130,8 @@ SEITEN = {
    ort='Werkzeuge · Strategietrainer',
    typ='article', lrt=['Werkzeug', 'Übung'],
    titel='Strategietrainer — den passenden Lösungsschritt wählen',
-   beschreibung='Strategietrainer für lineare und quadratische Gleichungen: Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus und begründet jede Fehlwahl.',
-   themen=['Mathematik', 'Lineare Gleichung', 'Quadratische Gleichung', 'Lösungsverfahren', 'Übung']),
+   beschreibung='Strategietrainer zu Gleichungen, Bruchgleichungen, Faktorisieren, Bruchtermen und Gleichungssystemen: Du wählst den Schritt, das Werkzeug rechnet und begründet.',
+   themen=['Mathematik', 'Gleichung', 'Bruchgleichung', 'Faktorisieren', 'Bruchterm', 'Gleichungssystem', 'Lösungsverfahren', 'Übung']),
  'leitprogramme/potenzen.html': dict(
    ort='Leitprogramm · Potenzen',
    typ='article', lrt='Leitprogramm',
