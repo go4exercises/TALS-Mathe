@@ -262,11 +262,11 @@ MathJax = {
   <table class="ftb-tabelle">
     <thead><tr><th>Schritt</th><th>passt, wenn …</th></tr></thead>
     <tbody>
-      <tr><td style="text-align:left;font-family:var(--sans)">Gemeinsamen Faktor ausklammern</td><td style="text-align:left;font-family:var(--sans)">alle Glieder eine Zahl oder ein \(x\) gemeinsam haben — immer zuerst.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gemeinsamen Faktor ausklammern</td><td style="text-align:left;font-family:var(--sans)">alle Glieder eine Zahl, ein \(x\) oder eine Klammer gemeinsam haben — immer zuerst.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Binomische Formel</td><td style="text-align:left;font-family:var(--sans)">erstes und letztes Glied Quadrate sind und das mittlere das doppelte Produkt: \(x^2 - 6x + 9 = (x - 3)^2\).</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Differenz von Quadraten</td><td style="text-align:left;font-family:var(--sans)">zwei Quadrate mit Minus dazwischen stehen: \(4x^2 - 9\). Eine Summe zweier Quadrate lässt sich nicht zerlegen.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Zweiklammersatz</td><td style="text-align:left;font-family:var(--sans)">\(x^2 + px + q\) dasteht und es zwei ganze Zahlen mit Produkt \(q\) und Summe \(p\) gibt.</td></tr>
-      <tr><td style="text-align:left;font-family:var(--sans)">Gruppieren</td><td style="text-align:left;font-family:var(--sans)">vier Glieder dastehen, die sich paarweise mit derselben Klammer ausklammern lassen.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gruppieren</td><td style="text-align:left;font-family:var(--sans)">vier Glieder dastehen: je zwei getrennt ausklammern, \(x^2(x + 3) + 2(x + 3)\). Danach die gemeinsame Klammer ausklammern.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Definitionsmenge bestimmen</td><td style="text-align:left;font-family:var(--sans)">der Nenner eines Bruchterms faktorisiert ist — und bevor gekürzt wird.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Vorzeichen umkehren</td><td style="text-align:left;font-family:var(--sans)">sich zwei Klammern oben und unten nur im Vorzeichen unterscheiden: \(3 - x = -(x - 3)\).</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Kürzen</td><td style="text-align:left;font-family:var(--sans)">Zähler und Nenner Produkte sind und einen gemeinsamen Faktor haben. Aus Summen kürzt man nie.</td></tr>
@@ -890,13 +890,19 @@ function analyse(p) {
   if (g === 3 && n === 4 && p[3] === 1 && p[2] * p[1] === p[0]) return { m: 'gruppieren', k: 1, f: [[p[2], 1], [p[1], 0, 1]] };
   return { m: null };
 }
-const aktiv = pr => pr.f.filter(fa => analyse(fa.p).m);
+// Gruppieren hat zwei Schritte wie in g1.3: x³ + αx² + βx + αβ → x²(x + α) + β(x + α) (Faktor mit grp),
+// danach wird die gemeinsame Klammer ausgeklammert → (x + α)(x² + β).
+const grpTex = (al, be) => 'x^2' + klammer(al) + ' ' + (be < 0 ? '-' : '+') + ' ' + (Math.abs(be) === 1 ? '' : Math.abs(be)) + klammer(al);
+const analyseF = fa => fa.grp ? { m: 'faktor', k: 1, f: [[fa.grp[0], 1], [fa.grp[1], 0, 1]], grp: true } : analyse(fa.p);
+const faTex = fa => '\\(' + (fa.tex || pTex(fa.p)) + '\\)';
+const aktiv = pr => pr.f.filter(fa => analyseF(fa).m);
 function anwenden(pr, M) {
   let k = pr.k; const f = [];
   for (const fa of pr.f) {
-    const an = analyse(fa.p);
-    if (an.m === M) { k *= an.k; for (const q of an.f) f.push({ p: pNorm(q) }); }
-    else f.push(fa);
+    const an = analyseF(fa);
+    if (an.m !== M) { f.push(fa); continue; }
+    if (M === 'gruppieren') { const [al, be] = [an.f[0][0], an.f[1][0]]; f.push({ p: fa.p, grp: [al, be], tex: grpTex(al, be) }); continue; }
+    k *= an.k; for (const q of an.f) f.push({ p: pNorm(q) });
   }
   return { k, f };
 }
@@ -945,6 +951,8 @@ const fTex = p => '\\(' + pTex(p) + '\\)';
 
 function grundTerm(M, fa, an) {                  // warum Schritt M für diesen Faktor nicht passt
   const p = pNorm(fa.p), t = fTex(p), n = pTerme(p), g = pGrad(p);
+  if (an.grp) return M === 'gruppieren' ? ['um', 'Schon gruppiert. Jetzt steht in beiden Summanden dieselbe Klammer.']
+    : ['x', 'Hier steht zuerst etwas anderes an: Beide Summanden von ' + faTex(fa) + ' enthalten dieselbe Klammer \\(' + klammer(fa.grp[0]) + '\\).'];
   if (an.m === 'faktor') {
     if (M !== 'faktor' && analyse(an.rest).m === M) return ['um', 'Erlaubt, aber klammere zuerst den gemeinsamen Faktor aus — sonst bleibt er in den Klammern stecken.'];
     return ['x', 'Hier steht zuerst etwas anderes an: Alle Glieder von ' + t + ' haben einen gemeinsamen Faktor.'];
@@ -978,10 +986,11 @@ function regelnZerlegen(teile, weiter) {       // teile: [Produkt, …], weiter(
   const r = {};
   const alle = teile.flatMap(pr => aktiv(pr));
   for (const M of ZERLEG) {
-    if (alle.some(fa => analyse(fa.p).m === M)) {
-      r[M] = ['ok', null, () => ({ op: STRAT_NAME[M].replace(/:.*$/, '').replace('Gemeinsamen Faktor ausklammern', 'ausklammern'), zeilen: [],
+    if (alle.some(fa => analyseF(fa).m === M)) {
+      const grp = M === 'faktor' && alle.some(fa => fa.grp);
+      r[M] = ['ok', null, () => ({ op: grp ? 'Klammer ausklammern' : STRAT_NAME[M].replace(/:.*$/, '').replace('Gemeinsamen Faktor ausklammern', 'ausklammern'), zeilen: [],
         next: weiter(teile.map(pr => anwenden(pr, M)), M) })];
-    } else if (alle.length) r[M] = grundTerm(M, alle[0], analyse(alle[0].p));
+    } else if (alle.length) r[M] = grundTerm(M, alle[0], analyseF(alle[0]));
     else {
       const summe = teile.flatMap(pr => pr.f).find(fa => pGrad(fa.p) === 2 && pTerme(fa.p) === 2 && fa.p[0] > 0);
       r[M] = ['x', 'Hier lässt sich nichts mehr zerlegen.' + (M === 'binom3' && summe ? ' ' + fTex(summe.p) + ' ist eine Summe zweier Quadrate.' : '')];
@@ -997,7 +1006,7 @@ REGELN.t_fakt = st => {
   r.Dterm = ['x', KEIN_BRUCH + ' — kein Nenner kann \\(0\\) werden.'];
   r.vorzeichen = ['x', KEIN_BRUCH + ' — es gibt keine zwei Klammern, die sich gegenseitig aufheben könnten.'];
   r.kuerzen = ['x', KEIN_BRUCH + ' — es gibt nichts zu kürzen.'];
-  r.fertig = rest.length ? ['x', 'Noch nicht fertig: ' + fTex(rest[0].p) + ' lässt sich weiter zerlegen.']
+  r.fertig = rest.length ? ['x', 'Noch nicht fertig: ' + faTex(rest[0]) + ' lässt sich weiter zerlegen.']
                          : ['ok', null, () => ({ op: '', zeilen: [], bleibt: true, next: { k: 'ende', z: st.z, term: { wert: x => prWert(st.pr, x), teile: [st.pr] } } })];
   return r;
 };
@@ -1020,7 +1029,7 @@ REGELN.t_bruch = st => {
                      : 'Zähler und Nenner haben keinen gemeinsamen Faktor — es gibt nichts zu kürzen.']
     : !st.Dw ? ['x', 'Zuerst \\(\\mathbb{D}\\) bestimmen — nach dem Kürzen sieht man nicht mehr, welche Zahlen verboten sind.']
     : ['ok', null, () => { const [n, d] = kuerzen(st.n, st.d); return { op: 'kürzen', zeilen: [], next: tBruch(n, d, st.Dw) }; }];
-  r.fertig = ak.length ? ['x', 'Noch nicht fertig: ' + fTex(ak[0].p) + ' lässt sich zerlegen.']
+  r.fertig = ak.length ? ['x', 'Noch nicht fertig: ' + faTex(ak[0]) + ' lässt sich zerlegen.']
     : !st.Dw ? ['x', 'Es fehlt noch \\(\\mathbb{D}\\) — beim Bruchterm gehört sie zum Ergebnis.']
     : gm ? ['x', 'Noch nicht fertig: Zähler und Nenner haben einen gemeinsamen Faktor.']
     : gg ? ['x', 'Noch nicht fertig: Zwei Klammern oben und unten unterscheiden sich nur im Vorzeichen.']
@@ -1270,12 +1279,13 @@ const TIPP = {
 function tippTerm(teile) {
   const fa = teile.flatMap(aktiv)[0];
   if (!fa) return null;
-  const t = fTex(fa.p);
+  const t = faTex(fa);
+  if (fa.grp) return 'Beide Summanden von ' + t + ' enthalten dieselbe Klammer.';
   return { faktor: 'Was haben alle Glieder von ' + t + ' gemeinsam?',
            binom12: 'Bei ' + t + ' sind das erste und das letzte Glied Quadrate. Und das mittlere?',
            binom3: t + ': zwei Glieder, beide Quadrate, dazwischen ein Minus.',
            zweiklammer: t + ': Gibt es zwei ganze Zahlen mit dem passenden Produkt und der passenden Summe?',
-           gruppieren: t + ' hat vier Glieder. Klammere je zwei davon getrennt aus.' }[analyse(fa.p).m];
+           gruppieren: t + ' hat vier Glieder. Klammere je zwei davon getrennt aus.' }[analyseF(fa).m];
 }
 const tipp = st => { const t = TIPP[st.k]; return typeof t === 'function' ? t(st) : t; };
 

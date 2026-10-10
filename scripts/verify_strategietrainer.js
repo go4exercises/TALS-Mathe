@@ -87,7 +87,7 @@ function pruefeTerm(ende, a, wo) {
     if (Dw.some(p => Math.abs(p - x) < 1e-9)) continue;
     if (!nah(d.wert(x), a.wert(x))) { melde('Term: Ergebnis hat einen anderen Wert', wo + ' → ' + ende.z); break; }
   }
-  for (const pr of d.teile) for (const fa of pr.f) if (K.analyse(fa.p).m) melde('Term: nicht vollständig zerlegt', wo + ' → ' + ende.z);
+  for (const pr of d.teile) for (const fa of pr.f) if (K.analyse(fa.p).m || fa.grp) melde('Term: nicht vollständig zerlegt', wo + ' → ' + ende.z);
   if (d.teile.length === 2) {
     if (K.gemeinsam(d.teile[0], d.teile[1])) melde('Bruchterm: noch kürzbar', wo + ' → ' + ende.z);
     if (K.gegen(d.teile[0], d.teile[1])) melde('Bruchterm: Vorzeichen nicht angeglichen', wo + ' → ' + ende.z);
