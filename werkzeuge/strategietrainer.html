@@ -263,8 +263,8 @@ MathJax = {
     <thead><tr><th>Schritt</th><th>passt, wenn …</th></tr></thead>
     <tbody>
       <tr><td style="text-align:left;font-family:var(--sans)">Gemeinsamen Faktor ausklammern</td><td style="text-align:left;font-family:var(--sans)">alle Glieder eine Zahl, ein \(x\) oder eine Klammer gemeinsam haben — immer zuerst.</td></tr>
-      <tr><td style="text-align:left;font-family:var(--sans)">Binomische Formel</td><td style="text-align:left;font-family:var(--sans)">erstes und letztes Glied Quadrate sind und das mittlere das doppelte Produkt: \(x^2 - 6x + 9 = (x - 3)^2\).</td></tr>
-      <tr><td style="text-align:left;font-family:var(--sans)">Differenz von Quadraten</td><td style="text-align:left;font-family:var(--sans)">zwei Quadrate mit Minus dazwischen stehen: \(4x^2 - 9\). Eine Summe zweier Quadrate lässt sich nicht zerlegen.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">1. oder 2. binomische Formel</td><td style="text-align:left;font-family:var(--sans)">erstes und letztes Glied Quadrate sind und das mittlere das doppelte Produkt: \(x^2 - 6x + 9 = (x - 3)^2\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">3. binomische Formel</td><td style="text-align:left;font-family:var(--sans)">zwei Quadrate mit Minus dazwischen stehen: \(4x^2 - 9\). Eine Summe zweier Quadrate lässt sich nicht zerlegen.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Zweiklammersatz</td><td style="text-align:left;font-family:var(--sans)">\(x^2 + px + q\) dasteht und es zwei ganze Zahlen mit Produkt \(q\) und Summe \(p\) gibt.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Gruppieren</td><td style="text-align:left;font-family:var(--sans)">vier Glieder dastehen: je zwei getrennt ausklammern, \(x^2(x + 3) + 2(x + 3)\). Danach die gemeinsame Klammer ausklammern.</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Definitionsmenge bestimmen</td><td style="text-align:left;font-family:var(--sans)">der Nenner eines Bruchterms faktorisiert ist — und bevor gekürzt wird.</td></tr>
@@ -364,8 +364,8 @@ const STRAT_GL = [
 ];
 const STRAT_TERM = [
   ['faktor',      'Gemeinsamen Faktor ausklammern'],
-  ['binom12',     'Binomische Formel: \\((a \\pm b)^2\\)'],
-  ['binom3',      'Differenz von Quadraten: \\((a + b)(a - b)\\)'],
+  ['binom12',     '1. oder 2. binomische Formel: \\((a \\pm b)^2\\)'],
+  ['binom3',      '3. binomische Formel: \\((a + b)(a - b)\\)'],
   ['zweiklammer', 'Zweiklammersatz: \\((x + r)(x + s)\\)'],
   ['gruppieren',  'Gruppieren'],
   ['ausmult',     'Ausmultiplizieren'],
@@ -988,7 +988,10 @@ function regelnZerlegen(teile, weiter) {       // teile: [Produkt, …], weiter(
   for (const M of ZERLEG) {
     if (alle.some(fa => analyseF(fa).m === M)) {
       const grp = M === 'faktor' && alle.some(fa => fa.grp);
-      r[M] = ['ok', null, () => ({ op: grp ? 'Klammer ausklammern' : STRAT_NAME[M].replace(/:.*$/, '').replace('Gemeinsamen Faktor ausklammern', 'ausklammern'), zeilen: [],
+      const b12 = M === 'binom12' && alle.find(fa => analyseF(fa).m === 'binom12');
+      const op = grp ? 'Klammer ausklammern' : b12 ? (pNorm(b12.p)[1] > 0 ? '1.' : '2.') + ' binomische Formel'
+        : STRAT_NAME[M].replace(/:.*$/, '').replace('Gemeinsamen Faktor ausklammern', 'ausklammern');
+      r[M] = ['ok', null, () => ({ op, zeilen: [],
         next: weiter(teile.map(pr => anwenden(pr, M)), M) })];
     } else if (alle.length) r[M] = grundTerm(M, alle[0], analyseF(alle[0]));
     else {
