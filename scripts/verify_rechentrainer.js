@@ -1,0 +1,122 @@
+#!/usr/bin/env node
+// Selbsttest des Rechentrainers (werkzeuge/rechentrainer.html), ohne Browser: Der Block zwischen
+// «KERN:ANFANG» und «KERN:ENDE» wird in node:vm geladen.
+//   node scripts/verify_rechentrainer.js            # 400 Aufgaben je Thema (Pre-Flight)
+//   node scripts/verify_rechentrainer.js 5000       # gründlicher
+// Geprüft wird:
+//   – die Musterlösung wird als richtig angenommen, in der verlangten Form
+//   – jeder hinterlegte Denkfehler-Wert wird als genau dieser Fehler erkannt und nie als richtig
+//   – ein ungekürzter Bruch gilt als «fast», nicht als falsch
+//   – der Lösungsweg endet beim Ergebnis; LaTeX ohne unausgeglichene Klammern, ohne «undefined»
+//   – Gegenrechnung in python3 mit fractions.Fraction: jede Lösung unabhängig nachgerechnet
+//     (Terme mit Pythons eigener Rangfolge, in der −3**2 = −9 gilt; Perioden über die
+//     ausgeschriebene Dezimalzahl; abbrechend/periodisch über die Langdivision)
+// Exit 1 bei einem Befund.
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+const { spawnSync } = require('child_process');
+
+const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'rechentrainer.html'), 'utf8');
+const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
+const ctx = {};
+vm.createContext(ctx);
+vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, pruefe, dezimal, qTex, Q, ggT };', ctx);
+const K = ctx.K;
+const N = +process.argv[2] || 400;
+const befunde = new Map();
+const melde = (art, info) => { if (!befunde.has(art)) befunde.set(art, { n: 0, info }); befunde.get(art).n++; };
+
+function latexOk(z, wo) {
+  let t = 0; for (const ch of z) { if (ch === '{') t++; if (ch === '}') t--; if (t < 0) break; }
+  if (t !== 0) melde('LaTeX: { } unausgeglichen', wo + ': ' + z);
+  let r = 0; for (const ch of z.replace(/\\[a-z]+/g, '')) { if (ch === '(') r++; if (ch === ')') r--; }
+  if (r !== 0) melde('LaTeX: ( ) unausgeglichen', wo + ': ' + z);
+  if (/undefined|NaN|Infinity|null|\[object/.test(z)) melde('Text: undefined/NaN', wo + ': ' + z);
+  if (/[+-] -|\+ \+|- \+/.test(z)) melde('LaTeX: doppeltes Vorzeichen', wo + ': ' + z);
+}
+const alsEingabe = (q, art) => art === 'dezimal' ? K.dezimal(q) : art === 'prozent' ? K.dezimal(q) + '%' : q.d === 1 ? String(q.n) : q.n + '/' + q.d;
+
+const py = [];
+let zahl = 0;
+for (const thema of Object.keys(K.THEMEN)) {
+  for (let i = 0; i < N; i++) {
+    const a = K.THEMEN[thema].neu();
+    if (!a) continue;
+    zahl++;
+    const wo = thema + ' «' + a.ausdruck + '»';
+    latexOk(a.ausdruck, wo);
+    for (const w of a.weg) latexOk(typeof w === 'string' ? w : w.text, wo + ' Weg');
+    if (a.art === 'wahl') {
+      if (K.pruefe(a, a.loesung).status !== 'ok') melde('Musterlösung nicht angenommen', wo);
+      for (const [k] of a.wahl) if (k !== a.loesung && K.pruefe(a, k).status !== 'falsch') melde('Falsche Wahl nicht als falsch erkannt', wo + ' ' + k);
+      if (thema === 'periodisch') py.push({ art: 'abbr', n: a.pruefPy[0], d: a.pruefPy[1], soll: a.loesung, wo });
+      if (thema === 'mengen') py.push({ art: 'menge', wert: a.mengeWert, soll: a.loesung, wo });
+      continue;
+    }
+    const r = K.pruefe(a, alsEingabe(a.loesung, a.art));
+    if (r.status !== 'ok') melde('Musterlösung nicht angenommen', wo + ' → ' + alsEingabe(a.loesung, a.art) + ' ' + JSON.stringify(r));
+    for (const [code, w] of a.diag) {
+      if (!K.FEHLER[code]) melde('Fehlercode ohne Text', code);
+      const e = alsEingabe(w, w.d === 1 || a.art === 'zahl' || a.art === 'bruch' ? 'bruch' : a.art === 'prozent' ? 'prozent' : (Number.isInteger(Math.log10(w.d)) || [2, 4, 5, 8, 16, 20, 25, 40, 50, 80].includes(w.d)) ? 'dezimal' : 'bruch');
+      const p = K.pruefe(a, e);
+      if (p.status === 'ok') melde('Denkfehler-Wert als richtig angenommen', wo + ' ' + code + ' ' + e);
+      else if (p.status === 'falsch' && p.code !== code && !(p.code === 'stellen' && code === 'stellen')) {
+        // derselbe Wert kann zu zwei Fehlern passen; dann zählt der erste der Liste
+        const erster = a.diag.find(([, u]) => u.n === w.n && u.d === w.d)[0];
+        if (erster !== p.code) melde('Denkfehler falsch zugeordnet', wo + ' ' + code + ' → ' + p.code);
+      }
+    }
+    if (a.art === 'bruch' && a.loesung.d !== 1) {
+      const f = K.pruefe(a, (2 * a.loesung.n) + '/' + (2 * a.loesung.d));
+      if (f.status !== 'fast') melde('Ungekürzter Bruch nicht als «fast» erkannt', wo);
+    }
+    const letzte = a.weg.filter(w => typeof w === 'string').pop() || '';
+    const ziel = a.art === 'dezimal' ? K.dezimal(a.loesung) : a.art === 'prozent' ? K.dezimal(a.loesung) + '\\%' : K.qTex(a.loesung);
+    if (!letzte.endsWith(ziel) && !(thema === 'periodisch' && letzte.includes(ziel))) melde('Lösungsweg endet nicht beim Ergebnis', wo + ' → ' + letzte + ' | ' + ziel);
+    py.push({ art: 'wert', ausdruck: a.pyth, n: a.loesung.n, d: a.loesung.d, wo });
+    if (a.pruefPer) py.push({ art: 'periode', per: a.pruefPer, n: a.loesung.n, d: a.loesung.d, wo });
+  }
+}
+
+// Gegenrechnung in python3
+const skript = `
+import sys, json
+from fractions import Fraction
+fehler = []
+for z in json.load(sys.stdin):
+    try:
+        if z['art'] == 'wert':
+            v = eval(z['ausdruck'], {'Fraction': Fraction})
+            if Fraction(v) != Fraction(z['n'], z['d']):
+                fehler.append(['Python rechnet anders', z['wo'] + ' py=' + str(v)])
+        elif z['art'] == 'periode':
+            p = z['per']
+            s = str(p['ganz']) + '.' + p['vor'] + p['per'] * 40
+            if abs(float(s) - z['n'] / z['d']) > 1e-12:
+                fehler.append(['Periode falsch umgerechnet', z['wo']])
+        elif z['art'] == 'abbr':
+            q = Fraction(z['n'], z['d']); r = q.numerator % q.denominator; seen = set(); abbr = True
+            while r:
+                if r in seen: abbr = False; break
+                seen.add(r); r = (r * 10) % q.denominator
+            if ('abbrechend' if abbr else 'periodisch') != z['soll']:
+                fehler.append(['abbrechend/periodisch falsch', z['wo']])
+        elif z['art'] == 'menge':
+            w = z['wert']; ganz = abs(w - round(w)) < 1e-12
+            if z['soll'] in ('N', 'Z') and not ganz: fehler.append(['Menge: Zahl nicht ganz', z['wo']])
+            if z['soll'] == 'N' and w < -1e-12: fehler.append(['Menge: negative Zahl in N', z['wo']])
+            if z['soll'] == 'Z' and w >= 0: fehler.append(['Menge: Z, aber nicht negativ', z['wo']])
+            if z['soll'] in ('Q', 'R') and ganz: fehler.append(['Menge: ganze Zahl in Q/R', z['wo']])
+    except Exception as e:
+        fehler.append(['Python-Fehler', z['wo'] + ' ' + str(e)])
+print(json.dumps(fehler))
+`;
+const p = spawnSync('python3', ['-c', skript], { input: JSON.stringify(py), encoding: 'utf8', maxBuffer: 1 << 28 });
+if (p.status !== 0) melde('python3 nicht gelaufen', (p.stderr || '').slice(0, 300));
+else for (const [art, info] of JSON.parse(p.stdout)) melde(art, info);
+
+console.log(`${Object.keys(K.THEMEN).length} Themen · ${zahl} Aufgaben · ${py.length} Gegenrechnungen in python3`);
+if (!befunde.size) { console.log('✓ keine Befunde'); process.exit(0); }
+for (const [art, { n, info }] of befunde) console.log(`✗ ${art} (${n}×) — z.B. ${info}`);
+process.exit(1);

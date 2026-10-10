@@ -24,6 +24,11 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **Neue Werkzeuge: Rechentrainer und Einheitskreistrainer** (11.10.2026). Rechentrainer: Rechnen ohne
+  Taschenrechner (Reihenfolge, Vorzeichen, Brüche, Bruch–Dezimal–Prozent, Perioden, Zahlenmengen) mit
+  Diagnose des Denkfehlers und Lösungsweg; verlinkt aus g1.1 und g1.2. Einheitskreistrainer: Grad und
+  Bogenmass, exakte Werte mit Herleitung über Quadrant und Referenzwinkel, vom Wert zum Winkel am Kreis;
+  verlinkt aus g5.1 und g5.4. Beide mit Selbsttest im Pre-Flight (Gegenrechnung in python3).
 - **Neues Werkzeug: Strategietrainer** (`werkzeuge/strategietrainer.html`): Zufallsaufgaben zu
   linearen, quadratischen und Bruchgleichungen, Faktorisieren, Bruchtermen, linearen Gleichungssystemen
   und Systemen mit Parabel (SF); man wählt den nächsten Schritt aus einer festen Liste, das Werkzeug

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rechentrainer — Mathe begreifbar</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Rechnen ohne Taschenrechner: Reihenfolge, Vorzeichen, Brüche, Dezimal und Prozent, Perioden, Zahlenmengen. Bei Fehlern nennt der Trainer den Denkfehler.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/werkzeuge/rechentrainer.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Rechentrainer — Rechnen ohne Taschenrechner mit Fehlerdiagnose">
+<meta property="og:description" content="Rechnen ohne Taschenrechner: Reihenfolge, Vorzeichen, Brüche, Dezimal und Prozent, Perioden, Zahlenmengen. Bei Fehlern nennt der Trainer den Denkfehler.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/werkzeuge/rechentrainer.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/werkzeuge/rechentrainer.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/werkzeuge/rechentrainer.html",
+   "name": "Rechentrainer — Rechnen ohne Taschenrechner mit Fehlerdiagnose",
+   "description": "Rechnen ohne Taschenrechner: Reihenfolge, Vorzeichen, Brüche, Dezimal und Prozent, Perioden, Zahlenmengen. Bei Fehlern nennt der Trainer den Denkfehler.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Hierarchie der Operationen"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Vorzeichenregeln"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Bruchrechnen"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Prozent"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Zahlenmengen"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Übung"
+    }
+   ],
+   "keywords": "Mathematik, Hierarchie der Operationen, Vorzeichenregeln, Bruchrechnen, Prozent, Zahlenmengen, Übung",
+   "learningResourceType": [
+    "Werkzeug",
+    "Übung"
+   ],
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<link rel="stylesheet" href="../style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
+  svg: { fontCache:'global', scale:1.05 },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+<style>
+/* Rechentrainer — seiteneigene Klassen (Präfix rt-), Farben aus style.css.
+   Orange = Aufgabe, Grün = richtig und Lösungsweg, Rot = Fehler mit Diagnose, Grau = fast (Form).
+   Seitenspalte und Karte wie im Strategietrainer. */
+.rt-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
+.rt-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
+.rt-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
+  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
+.rt-seite summary::-webkit-details-marker { display:none; }
+.rt-seite summary::before { content:'▸ '; }
+.rt-seite details[open] summary::before { content:'▾ '; }
+.rt-gruppe { margin-bottom:16px; }
+.rt-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
+  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
+.rt-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
+  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
+.rt-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
+  border-radius:3px; background:var(--weiss); }
+.rt-opt.aktiv { color:var(--tinte); }
+.rt-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
+.rt-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
+.rt-opt:hover { color:var(--blau); }
+.rt-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
+.rt-zahl b { color:var(--tinte); font-weight:600; }
+.rt-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
+@media (min-width:901px) { .rt-seite summary { display:none; } }
+@media (max-width:900px) {
+  .rt-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
+  .rt-seite { order:-1; position:static; margin-bottom:-10px; }
+  .rt-seite details[open] > div { padding:12px 4px 0; }
+  .rt-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
+}
+.rt-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
+.rt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
+.rt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:12px; }
+.rt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
+.rt-tag.rt-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
+.rt-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
+.rt-ausdruck { font-size:1.25rem; padding:10px 4px 12px; overflow-x:auto; }
+.rt-eingabe { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.rt-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:12em; max-width:100%;
+  border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
+.rt-eingabe input:focus { outline:none; border-color:var(--orange); }
+.rt-vorschau { font-size:.95rem; color:var(--tinte-2); min-height:1.6em; }
+.rt-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
+  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
+.rt-btn:hover { filter:brightness(.97); }
+.rt-btn.rt-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
+.rt-btn:disabled { opacity:.45; cursor:default; }
+.rt-wahl { display:flex; flex-wrap:wrap; gap:8px; }
+.rt-wahl .rt-btn { min-width:72px; font-size:1.05rem; }
+.rt-wahl .rt-btn.rt-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
+.rt-hinweis { font-family:var(--sans); font-size:.78rem; color:var(--tinte-2); margin-top:6px; }
+.rt-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
+.rt-rueck:empty { display:none; }
+.rt-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
+.rt-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
+.rt-rueck.fast { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
+.rt-rueck p { margin:0; }
+.rt-rueck p + p { margin-top:6px; }
+.rt-weg { margin-top:12px; padding:10px 14px; border:1px solid var(--gruen-rand); border-radius:9px; background:var(--gruen-hell); }
+.rt-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
+.rt-weg .rt-zeile { padding:2px 0; overflow-x:auto; }
+.rt-weg .rt-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
+.rt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
+.rt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
+.rt-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
+.rt-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
+.rt-bilanz ul { margin:6px 0 0 18px; }
+[hidden] { display:none !important; }
+@media (max-width:560px) {
+  .rt-vorne { padding-left:14px; padding-right:14px; }
+  .rt-ausdruck { font-size:1.1rem; }
+  .rt-btn.rt-weiter { min-width:0; flex:1 1 60%; }
+  .rt-taste { display:none; }
+}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap rt-wrap">
+  <main class="content">
+    <div class="page-titel">
+      <div class="pt-bereich">WZ · Werkzeuge</div>
+      <h1 class="pt-h1">Rechentrainer</h1>
+      <p class="pt-untertitel">Rechnen ohne Taschenrechner, wie es der Lehrplan verlangt: Reihenfolge der Operationen, Vorzeichen, Brüche, Bruch–Dezimalzahl–Prozent und Zahlenmengen. Ist ein Ergebnis falsch, sucht das Werkzeug den Denkfehler dahinter.
+        Der Stoff dazu steht in <a href="../grundlagen/g1-1-grundlagen.html#hierarchie">1.1 Grundlagen</a>
+        und <a href="../grundlagen/g1-2-zahlen-grundoperationen.html#definition">1.2 Zahlen und Grundoperationen</a>.</p>
+    </div>
+
+<div class="rt-karte" id="rt-karte">
+  <div id="rt-aufgabe">
+    <div class="rt-vorne">
+      <div class="rt-kopf"><span class="rt-tag" id="rt-nr"></span><span class="rt-tag rt-thema" id="rt-thema"></span></div>
+      <p class="rt-auftrag" id="rt-auftrag"></p>
+      <div class="rt-ausdruck" id="rt-ausdruck"></div>
+      <div id="rt-antwort-eingabe" class="rt-eingabe">
+        <input type="text" id="rt-eingabe" autocomplete="off" inputmode="text" spellcheck="false" aria-label="Deine Antwort">
+        <button type="button" class="rt-btn" id="rt-pruefen">Prüfen<span class="rt-taste">Enter</span></button>
+        <span class="rt-vorschau" id="rt-vorschau" aria-live="polite"></span>
+      </div>
+      <div class="rt-hinweis" id="rt-hinweis"></div>
+      <div id="rt-antwort-wahl" class="rt-wahl" hidden></div>
+      <div class="rt-rueck" id="rt-rueck" aria-live="polite"></div>
+      <div class="rt-weg" id="rt-weg" hidden></div>
+    </div>
+    <div class="rt-knoepfe" id="rt-weiter-box" hidden>
+      <button type="button" class="rt-btn rt-weiter" id="rt-weiter">Nächste Aufgabe →<span class="rt-taste">Enter</span></button>
+    </div>
+  </div>
+  <div class="rt-bilanz" id="rt-bilanz" hidden></div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 So funktioniert der Trainer</div>
+  <p>Eine Runde hat zehn Zufallsaufgaben aus den Themen, die du rechts wählst. Rechne auf Papier, nicht im Kopf allein — und ohne Taschenrechner.</p>
+  <ul>
+    <li><strong>Eingabe:</strong> ganze Zahlen wie <code>-7</code>, Brüche als <code>3/4</code> oder <code>-5/12</code>, Dezimalzahlen mit Punkt wie <code>0.375</code>, Prozent als <code>12.5</code> oder <code>12.5%</code>. Unter dem Feld siehst du, wie die Eingabe gelesen wird.</li>
+    <li><strong>Falsch:</strong> Das Werkzeug rechnet die Aufgabe auch mit den häufigsten Denkfehlern durch. Trifft deine Antwort einen davon, sagt es dir, welcher es ist. Du hast einen zweiten Versuch; danach kommt der Lösungsweg.</li>
+    <li><strong>Fast:</strong> Der Wert stimmt, aber die Form nicht — etwa ein Bruch, der sich noch kürzen lässt. Das zählt nicht als Fehler, du gibst es nochmals ein.</li>
+  </ul>
+  <p>Am Ende der Runde siehst du, welche Denkfehler am häufigsten waren, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
+</div>
+
+<details class="block block-merksatz" style="margin-top:10px">
+  <summary class="block-titel" style="cursor:pointer">⭐ Die Regeln auf einen Blick</summary>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Reihenfolge</td><td style="text-align:left;font-family:var(--sans)">Klammer vor Potenz vor Punkt vor Strich; innerhalb einer Stufe von links nach rechts: \(10 - 3 + 2 = 9\), \(8 : 4 \cdot 2 = 4\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Minus und Potenz</td><td style="text-align:left;font-family:var(--sans)">\(-3^2 = -(3^2) = -9\), aber \((-3)^2 = 9\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Vorzeichen</td><td style="text-align:left;font-family:var(--sans)">\(a - (-b) = a + b\); Produkt und Quotient zweier negativer Zahlen sind positiv; \(-5 - 3 = -8\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Brüche addieren</td><td style="text-align:left;font-family:var(--sans)">zuerst gleichnamig machen (Hauptnenner), dann die Zähler addieren — nie Zähler plus Zähler und Nenner plus Nenner.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Brüche multiplizieren, dividieren</td><td style="text-align:left;font-family:var(--sans)">Zähler mal Zähler, Nenner mal Nenner; durch einen Bruch teilen heisst mit seinem Kehrwert multiplizieren.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Bruch → Dezimalzahl</td><td style="text-align:left;font-family:var(--sans)">auf eine Zehnerpotenz erweitern: \(\frac{3}{8} = \frac{375}{1000} = 0.375\). Abbrechend genau dann, wenn der gekürzte Nenner nur die Primfaktoren 2 und 5 hat.</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Prozent</td><td style="text-align:left;font-family:var(--sans)">«von Hundert»: \(0.045 = 4.5\%\), \(\frac{3}{8} = 37.5\%\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Periode → Bruch</td><td style="text-align:left;font-family:var(--sans)">mit einer Zehnerpotenz malnehmen, bis die Perioden untereinander stehen, dann subtrahieren: \(0.\overline{18} = \frac{18}{99} = \frac{2}{11}\).</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Zahlenmengen</td><td style="text-align:left;font-family:var(--sans)">\(\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}\), \(0 \in \mathbb{N}\). Erst ausrechnen, dann einordnen: \(\sqrt{16} = 4 \in \mathbb{N}\).</td></tr>
+    </tbody>
+  </table>
+</details>
+
+  </main>
+  <aside class="rt-seite">
+    <details id="rt-seite-det">
+      <summary>Runde und Themen · <span id="rt-kurz"></span></summary>
+      <div class="rt-gruppen">
+        <div class="rt-gruppe">
+          <div class="rt-g-titel">Runde</div>
+          <div class="rt-zahl"><span>Aufgabe</span><b id="rt-z-nr"></b></div>
+          <div class="rt-zahl"><span>Auf Anhieb</span><b id="rt-z-ok">0</b></div>
+          <div class="rt-zahl"><span>Fehler</span><b id="rt-z-fehl">0</b></div>
+          <div class="rt-zahl"><span>Zeit</span><b id="rt-z-zeit">0:00</b></div>
+          <div class="rt-neu" style="margin-top:6px"><button type="button" id="rt-neu">Neue Runde</button></div>
+        </div>
+        <div class="rt-gruppe" id="rt-themen">
+          <div class="rt-g-titel">Themen</div>
+        </div>
+      </div>
+    </details>
+  </aside>
+</div>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Werkzeuge · Rechentrainer</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script src="../nav.js"></script>
+<script>buildNav({ id: 'werkzeuge' });</script>
+<script>
+// ── KERN:ANFANG ─────────────────────────────────────────────────
+// Aufgaben und Prüfung — ohne DOM, damit scripts/verify_rechentrainer.js den Block laden kann.
+// Jede Aufgabe: { thema, auftrag, ausdruck (LaTeX), art: 'zahl'|'bruch'|'dezimal'|'prozent'|'wahl',
+//   loesung (Bruch {n, d} oder Wahl-Schlüssel), diag: [[Fehlercode, Wert], …], weg: [LaTeX | {text}],
+//   pyth: Ausdruck für die Gegenrechnung in python3 }
+// diag enthält die Werte, die bei einem bestimmten Denkfehler herauskommen. Trifft die Antwort
+// einen davon, nennt die Rückmeldung den Fehler (FEHLER[code]).
+
+const ggT = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
+const kgV = (a, b) => Math.abs(a * b) / ggT(a, b);
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+// ── Brüche ──
+function Q(n, d = 1) { if (d < 0) { n = -n; d = -d; } const g = ggT(n, d) || 1; return { n: n / g, d: d / g }; }
+const qAdd = (a, b) => Q(a.n * b.d + b.n * a.d, a.d * b.d);
+const qSub = (a, b) => Q(a.n * b.d - b.n * a.d, a.d * b.d);
+const qMul = (a, b) => Q(a.n * b.n, a.d * b.d);
+const qDiv = (a, b) => b.n === 0 ? null : Q(a.n * b.d, a.d * b.n);
+const qPow = (a, e) => Q(a.n ** e, a.d ** e);
+const qNeg = a => Q(-a.n, a.d);
+const qGleich = (a, b) => !!a && !!b && a.n === b.n && a.d === b.d;
+const qWert = a => a.n / a.d;
+const qTex = a => a.d === 1 ? String(a.n) : (a.n < 0 ? '-' : '') + '\\frac{' + Math.abs(a.n) + '}{' + a.d + '}';
+const qPy = a => 'Fraction(' + a.n + ', ' + a.d + ')';
+const nurZweiFuenf = d => { while (d % 2 === 0) d /= 2; while (d % 5 === 0) d /= 5; return d === 1; };
+function dezimal(q) {                       // exakte Dezimalschreibweise, nur für abbrechende Brüche
+  let k = 0; while ((10 ** k) % q.d !== 0) k++;
+  const z = Math.abs(q.n) * (10 ** k) / q.d;
+  let s = String(z).padStart(k + 1, '0');
+  if (k) s = s.slice(0, -k) + '.' + s.slice(-k);
+  if (k) s = s.replace(/0+$/, '').replace(/\.$/, '');
+  return (q.n < 0 ? '-' : '') + s;
+}
+function periodisch(q) {                    // { ganz, vor, per } mit Langdivision, q ≥ 0
+  const ganz = Math.floor(q.n / q.d); let r = q.n % q.d;
+  const ziff = [], gesehen = new Map();
+  while (r && !gesehen.has(r)) { gesehen.set(r, ziff.length); r *= 10; ziff.push(Math.floor(r / q.d)); r %= q.d; }
+  if (!r) return { ganz, vor: ziff.join(''), per: '' };
+  const i = gesehen.get(r);
+  return { ganz, vor: ziff.slice(0, i).join(''), per: ziff.slice(i).join('') };
+}
+const periodeTex = p => p.ganz + '.' + p.vor + (p.per ? '\\overline{' + p.per + '}' : '');
+
+// ── Terme: Parser mit einstellbaren Regeln (für die Denkfehler) ──
+//   lr: Punkt und Strich gleichrangig     rassoc: gleiche Stufe von rechts nach links
+//   negsq: −3² als (−3)²                   klammerPot: (−3)² als −(3²)
+//   potmal: a² als a·2                     ohneKlammer: Klammern übersehen
+//   minusminus: a − (−b) als a − b         prodsign: (−a)·(−b) negativ    negsub: −5 − 3 als −2
+const PREC0 = { '+': 1, '-': 1, '*': 2, ':': 2, '^': 4 };
+const tokens = s => s.replace(/\s+/g, '').match(/\d+|[-+*:^()]/g);
+function parse(s, opt = {}) {
+  let t = tokens(s); if (opt.ohneKlammer) t = t.filter(x => x !== '(' && x !== ')');
+  const P = Object.assign({}, PREC0, opt.lr ? { '*': 1, ':': 1 } : {});
+  let i = 0;
+  function primary() {
+    const x = t[i++];
+    if (x === '(') { const n = expr(0); i++; return Object.assign({}, n, { paren: true }); }
+    if (x === '-') return { t: 'neg', a: opt.negsq ? primary() : expr(3) };
+    return { t: 'num', v: Q(+x) };
+  }
+  function expr(min) {
+    let l = primary();
+    for (;;) {
+      const op = t[i];
+      if (!(op in P) || P[op] < min) return l;
+      i++;
+      const r = expr(op === '^' || opt.rassoc ? P[op] : P[op] + 1);
+      l = { t: 'bin', op, l, r };
+    }
+  }
+  return expr(0);
+}
+const negLit = x => x.t === 'neg' && x.a.t === 'num';
+function rechne(x, opt = {}) {
+  if (!x) return null;
+  if (x.t === 'num') return x.v;
+  if (x.t === 'neg') { const a = rechne(x.a, opt); return a && qNeg(a); }
+  const L = rechne(x.l, opt), R = rechne(x.r, opt);
+  if (!L || !R) return null;
+  switch (x.op) {
+    case '+': return qAdd(L, R);
+    case '-':
+      if (opt.minusminus && x.r.paren && negLit(x.r)) return qAdd(L, R);
+      if (opt.negsub && qWert(L) < 0 && qWert(R) > 0 && !x.r.paren) return qAdd(L, R);
+      return qSub(L, R);
+    case '*': { const p = qMul(L, R); return opt.prodsign && qWert(L) < 0 && qWert(R) < 0 ? qNeg(p) : p; }
+    case ':': { const p = qDiv(L, R); return p && opt.prodsign && qWert(L) < 0 && qWert(R) < 0 ? qNeg(p) : p; }
+    case '^':
+      if (R.d !== 1 || R.n < 0 || R.n > 6) return null;
+      if (opt.potmal) return qMul(L, R);
+      if (opt.klammerPot && x.l.paren && negLit(x.l)) return qNeg(qPow(qNeg(L), R.n));
+      return qPow(L, R.n);
+  }
+  return null;
+}
+// LaTeX: negative Zahl in Klammern, ausser ganz am Anfang; Klammern aus der Aufgabe bleiben
+const OPTEX = { '+': ' + ', '-': ' - ', '*': ' \\cdot ', ':': ' : ' };
+function tex(x, anfang = true) {
+  if (x.paren && x.t !== 'num') return '(' + texInnen(x, true) + ')';
+  return texInnen(x, anfang);
+}
+function texInnen(x, anfang) {
+  if (x.t === 'num') { const s = qTex(x.v); return x.v.n < 0 && !anfang ? '(' + s + ')' : s; }
+  if (x.t === 'neg') {
+    const a = x.a, innen = a.t === 'bin' && !a.paren && (a.op === '+' || a.op === '-') ? '(' + tex(a, true) + ')' : tex(a, false);
+    const s = '-' + innen;
+    return anfang ? s : '(' + s + ')';
+  }
+  if (x.op === '^') {
+    const basis = (x.l.t === 'num' && x.l.v.n >= 0) || x.l.paren ? tex(x.l, false) : '(' + tex(x.l, true) + ')';
+    return basis + '^{' + tex(x.r, true) + '}';
+  }
+  const pl = x.l.t === 'bin' && !x.l.paren && PREC0[x.l.op] < PREC0[x.op];
+  const pr = x.r.t === 'bin' && !x.r.paren && (PREC0[x.r.op] < PREC0[x.op] || (PREC0[x.r.op] === PREC0[x.op] && (x.op === '-' || x.op === ':')));
+  return (pl ? '(' + tex(x.l, true) + ')' : tex(x.l, anfang)) + OPTEX[x.op] + (pr ? '(' + tex(x.r, true) + ')' : tex(x.r, false));
+}
+// Lösungsweg: je Schritt eine Operation — Klammer vor Potenz vor Punkt vor Strich, sonst von links
+function schritte(ast) {
+  let n = JSON.parse(JSON.stringify(ast));
+  const out = [tex(n)];
+  for (let k = 0; k < 40 && n.t !== 'num'; k++) {
+    let best = null, pos = 0;
+    (function walk(x, tiefe, eltern, seite) {
+      if (x.t === 'num') { pos++; return; }
+      const d = tiefe + (x.paren ? 1 : 0);
+      const reif = x.t === 'neg' ? x.a.t === 'num' : x.l.t === 'num' && x.r.t === 'num';
+      if (reif) {
+        const rang = x.t === 'neg' ? 3 : { '^': 3, '*': 2, ':': 2, '+': 1, '-': 1 }[x.op];
+        const key = [d, rang, -pos];
+        if (!best || key[0] > best.key[0] || (key[0] === best.key[0] && (key[1] > best.key[1] || (key[1] === best.key[1] && key[2] > best.key[2]))))
+          best = { x, key, eltern, seite };
+      }
+      if (x.t === 'neg') walk(x.a, d, x, 'a'); else { walk(x.l, d, x, 'l'); walk(x.r, d, x, 'r'); }
+    })(n, 0, null, null);
+    if (!best) break;
+    const v = rechne(best.x);
+    const neu = { t: 'num', v };
+    if (best.eltern) best.eltern[best.seite] = neu; else n = neu;
+    const s = tex(n);
+    if (s !== out[out.length - 1]) out.push(s);
+  }
+  return out.map((s, i) => (i ? '= ' : '') + s);
+}
+const asciiPy = s => s.replace(/:/g, '/').replace(/\^/g, '**').replace(/\d+/g, m => 'Fraction(' + m + ')');
+
+// ── Fehler, die das Werkzeug erkennt ──
+const S11 = ['../grundlagen/g1-1-grundlagen.html#hierarchie', '1.1 Hierarchie der Operationen'];
+const S12V = ['../grundlagen/g1-2-zahlen-grundoperationen.html#theorie', '1.2 Vorzeichenregeln'];
+const S12D = ['../grundlagen/g1-2-zahlen-grundoperationen.html#darstellungen', '1.2 Darstellungen rationaler Zahlen'];
+const S12M = ['../grundlagen/g1-2-zahlen-grundoperationen.html#definition', '1.2 Zahlenmengen'];
+const S13 = ['../grundlagen/g1-3-algebraische-terme.html#klammern', '1.3 Klammern auflösen'];
+const S14 = ['../grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html#hierarchie', '1.4 Potenzen in der Hierarchie'];
+const FEHLER = {
+  lr: ['Strich vor Punkt gerechnet', 'Du hast von links nach rechts gerechnet. Punktrechnung kommt vor Strichrechnung: zuerst \\(\\cdot\\) und \\(:\\), dann \\(+\\) und \\(-\\).', S11],
+  rassoc: ['Gleiche Stufe nicht von links nach rechts', 'Innerhalb derselben Stufe rechnet man von links nach rechts: \\(10 - 3 + 2 = (10 - 3) + 2 = 9\\) und \\(8 : 4 \\cdot 2 = (8 : 4) \\cdot 2 = 4\\).', S11],
+  negsq: ['Minus vor der Potenz', 'Bei \\(-3^2\\) gilt das Minus erst nach der Potenz: \\(-3^2 = -(3^2) = -9\\). Nur \\((-3)^2 = 9\\).', S14],
+  klammerPot: ['Klammer um die negative Basis', 'Die Klammer gehört zur Basis: \\((-3)^2 = (-3) \\cdot (-3) = 9\\).', S14],
+  potmal: ['Potenz als Produkt mit der Hochzahl', 'Die Hochzahl zählt die Faktoren: \\(a^2 = a \\cdot a\\), nicht \\(a \\cdot 2\\).', S14],
+  ohneKlammer: ['Klammer übersehen', 'Die Klammer zählt: Ein Minus davor kehrt jedes Vorzeichen in der Klammer um, \\(a - (b - c) = a - b + c\\).', S13],
+  minusminus: ['Minus einer negativen Zahl', 'Eine negative Zahl abziehen heisst addieren: \\(a - (-b) = a + b\\).', S12V],
+  prodsign: ['Vorzeichen im Produkt', 'Das Produkt und der Quotient zweier negativer Zahlen sind positiv: \\((-4) \\cdot (-3) = 12\\).', S12V],
+  negsub: ['Minus ab einer negativen Zahl', 'Bei \\(-5 - 3\\) geht es auf der Zahlengeraden weiter nach links: \\(-5 - 3 = -8\\), nicht \\(-2\\).', S12V],
+  vz: ['Vorzeichen', 'Der Betrag stimmt, das Vorzeichen nicht. Zähle die Minuszeichen in Produkten und Quotienten.', S12V],
+  zaehlerNenner: ['Zähler plus Zähler, Nenner plus Nenner', 'Brüche addiert und subtrahiert man nicht, indem man Zähler und Nenner getrennt verrechnet. Zuerst gleichnamig machen, dann die Zähler verrechnen.', S12D],
+  nichtErweitert: ['Beim Erweitern den Zähler vergessen', 'Der Hauptnenner stimmt, aber beim Erweitern muss auch der Zähler mit demselben Faktor malgenommen werden.', S12D],
+  kehrwert: ['Kehrwert vergessen', 'Durch einen Bruch teilt man, indem man mit seinem Kehrwert multipliziert: \\(\\frac{a}{b} : \\frac{c}{d} = \\frac{a}{b} \\cdot \\frac{d}{c}\\).', S12D],
+  kehrwertFalsch: ['Falschen Bruch umgedreht', 'Umgedreht wird der zweite Bruch, der Divisor — nicht der erste.', S12D],
+  malKreuz: ['Multiplizieren wie Dividieren', 'Das wäre die Division. Beim Multiplizieren gilt: Zähler mal Zähler, Nenner mal Nenner.', S12D],
+  bruchKomma: ['Bruchstrich als Dezimalpunkt gelesen', 'Der Bruchstrich ist ein Geteilt-Zeichen: \\(\\frac{3}{8} = 3 : 8 = 0.375\\), nicht \\(3.8\\).', S12D],
+  stellen: ['Stellen beim Prozent verschoben', 'Prozent heisst «von Hundert»: Der Dezimalpunkt rückt um genau zwei Stellen, \\(0.045 = 4.5\\%\\) und \\(4.5\\% = 0.045\\).', S12D],
+  periodeAbgebrochen: ['Periode wie eine abbrechende Zahl behandelt', 'Die Periode wiederholt sich unendlich oft: \\(0.\\overline{3} \\ne 0.3 = \\frac{3}{10}\\). Man nimmt mit einer Zehnerpotenz mal und subtrahiert.', S12D],
+  vorperiode: ['Teil vor der Periode vergessen', 'Bei einer gemischt-periodischen Zahl wie \\(0.1\\overline{6}\\) steht vor der Periode eine Ziffer, die nicht wiederholt wird. Sie muss bei der Subtraktion weg.', S12D],
+  nenner: ['Abbrechend oder periodisch', 'Entscheidend ist der gekürzte Nenner: Hat er nur die Primfaktoren 2 und 5, bricht die Dezimalzahl ab, sonst ist sie periodisch. Zuerst kürzen!', S12D],
+  mengeGross: ['Nicht die kleinste Menge', 'Die Zahl liegt zwar auch in dieser Menge, gesucht ist aber die kleinste. Erst ausrechnen, dann einordnen.', S12M],
+  mengeKlein: ['Menge zu klein', 'Die Zahl liegt nicht in dieser Menge.', S12M],
+  sonst: ['ohne erkannten Denkfehler', 'Nachrechnen lohnt sich: Schreib jeden Zwischenschritt auf.', null],
+};
+
+// ── Aufgaben ──
+// Reihenfolge und Vorzeichen: Termvorlagen als ASCII-Text (a·b als «*», geteilt als «:»)
+function termAufgabe(thema, ascii, flags) {
+  const ast = parse(ascii), v = rechne(ast);
+  if (!v || v.d !== 1 || Math.abs(v.n) > 400) return null;
+  const diag = [];
+  for (const f of flags) {
+    const w = rechne(parse(ascii, { [f]: true }), { [f]: true });
+    if (w && !qGleich(w, v) && !diag.some(([, u]) => qGleich(u, w))) diag.push([f, w]);
+  }
+  if (v.n !== 0 && !diag.some(([, u]) => qGleich(u, qNeg(v)))) diag.push(['vz', qNeg(v)]);
+  return { thema, auftrag: 'Berechne ohne Taschenrechner.', ausdruck: tex(ast), rechnen: true, art: 'zahl', loesung: v, diag,
+           weg: schritte(ast), pyth: asciiPy(ascii) };
+}
+const F_REIHE = ['lr', 'rassoc', 'negsq', 'klammerPot', 'potmal', 'ohneKlammer'];
+const F_VZ = ['minusminus', 'prodsign', 'negsub', 'negsq', 'ohneKlammer'];
+const r2 = () => rnd(2, 9), r3 = () => rnd(2, 12);
+const REIHE = [
+  () => `${r3()} + ${r2()} * ${r2()}`,
+  () => `${r3()} - ${r2()} * ${r2()}`,
+  () => `${r2()} * ${r2()} - ${r2()} * ${r2()}`,
+  () => `${rnd(10, 20)} - ${r2()} + ${r2()}`,
+  () => { const b = r2(), c = r2(); return `${b * c * rnd(1, 3)} : ${b} * ${c}`; },
+  () => `${r3()} - (${r2()} - ${r2()})`,
+  () => `${rnd(12, 30)} - ${r2()} - ${r2()}`,
+  () => { const c = r2(); return `${r3()} + ${c * r2()} : ${c} - ${r2()}`; },
+  () => `${r2()} * ${rnd(2, 5)} ^ 2`,
+  () => `-${rnd(2, 6)} ^ 2 + ${r3()}`,
+  () => `(-${rnd(2, 6)}) ^ 2 - ${r3()}`,
+  () => `${r3()} - ${rnd(2, 5)} ^ 2`,
+  () => `(${r2()} + ${r2()}) ^ 2 - ${r3()}`,
+  () => `${r2()} * (${r2()} - ${r2()}) ^ 2`,
+  () => `${rnd(2, 6)} ^ 2 - (${r2()} - ${r2()}) * ${r2()}`,
+  () => { const b = rnd(5, 12), c = rnd(1, b - 1); return `${(b - c) * r2()} : (${b} - ${c}) + ${r2()}`; },
+  () => `${r3()} - ${r2()} * (${r2()} - ${r2()})`,
+  () => `2 ^ 3 - ${r2()} * ${r2()}`,
+];
+const VZ = [
+  () => `(-${r2()}) * (-${r2()}) + ${r3()}`,
+  () => `-${r2()} * (-${r2()})`,
+  () => `${r3()} - (-${r2()})`,
+  () => `(-${r2()}) - (-${r2()}) + ${r2()}`,
+  () => { const b = r2(); return `(-${b * r2()}) : (-${b})`; },
+  () => `-${r2()} - ${r2()}`,
+  () => `(-${r2()}) * ${r2()} - (-${r3()})`,
+  () => `-(-${r2()}) + ${r2()}`,
+  () => `${r2()} * (-${r2()}) - ${r2()} * (-${r2()})`,
+  () => { const b = r2(); return `(-${b * r2()}) : ${b} + (-${r2()})`; },
+  () => `-${r2()} + ${r2()} - (-${r2()})`,
+  () => `-${r3()} - ${r2()} * (-${r2()})`,
+  () => `(-${rnd(2, 5)}) ^ 2 - (-${r2()})`,
+];
+
+// Brüche: zwei Brüche (oder ganze Zahl und Bruch) mit + − · :
+function zufallsBruch(maxN = 12) { for (;;) { const d = rnd(2, maxN), n = rnd(1, 2 * d); if (ggT(n, d) === 1) return Q(n, d); } }
+function bruchAufgabe() {
+  const op = pick(['+', '+', '-', '-', '*', ':']);
+  const a = Math.random() < 0.2 ? Q(rnd(1, 4)) : zufallsBruch(), b = zufallsBruch();
+  const v = op === '+' ? qAdd(a, b) : op === '-' ? qSub(a, b) : op === '*' ? qMul(a, b) : qDiv(a, b);
+  const diag = [];
+  const push = (code, w) => { if (w && !qGleich(w, v) && !diag.some(([, u]) => qGleich(u, w))) diag.push([code, w]); };
+  const N = kgV(a.d, b.d);
+  const weg = [];
+  const A = qTex(a), B = qTex(b), opT = { '+': ' + ', '-': ' - ', '*': ' \\cdot ', ':': ' : ' }[op];
+  weg.push(A + opT + B);
+  if (op === '+' || op === '-') {
+    const s = op === '+' ? 1 : -1;
+    if (a.d + s * b.d !== 0) push('zaehlerNenner', Q(a.n + s * b.n, a.d + s * b.d));
+    push('nichtErweitert', Q(a.n + s * b.n, N));
+    const za = a.n * (N / a.d), zb = b.n * (N / b.d);
+    weg.push({ text: 'Hauptnenner \\(' + N + '\\): beide Brüche erweitern.' });
+    const zs = za + s * zb, roh = (zs < 0 ? '-' : '') + '\\frac{' + Math.abs(zs) + '}{' + N + '}';
+    weg.push('= \\frac{' + za + '}{' + N + '}' + opT + '\\frac{' + zb + '}{' + N + '} = ' + roh + (v.d === N ? '' : ' = ' + qTex(v)));
+  } else if (op === '*') {
+    push('malKreuz', Q(a.n * b.d, a.d * b.n));
+    weg.push('= \\frac{' + a.n + ' \\cdot ' + b.n + '}{' + a.d + ' \\cdot ' + b.d + '} = \\frac{' + a.n * b.n + '}{' + a.d * b.d + '}' + (a.n * b.n === v.n && a.d * b.d === v.d ? '' : ' = ' + qTex(v)));
+  } else {
+    push('kehrwert', Q(a.n * b.n, a.d * b.d));
+    push('kehrwertFalsch', Q(a.d * b.n, a.n * b.d));
+    const z = a.n * b.d, n = a.d * b.n;
+    weg.push('= ' + A + ' \\cdot ' + qTex(Q(b.d, b.n)) + ' = ' + (n === 1 ? z : '\\frac{' + z + '}{' + n + '}') + (z === v.n && n === v.d ? '' : ' = ' + qTex(v)));
+  }
+  if (v.n !== 0) push('vz', qNeg(v));
+  return { thema: 'brueche', auftrag: 'Berechne und gib das Ergebnis als gekürzten Bruch an.', ausdruck: weg[0], rechnen: true, art: 'bruch', loesung: v, diag,
+           weg, pyth: qPy(a) + ' ' + ({ '*': '*', ':': '/' }[op] || op) + ' ' + qPy(b) };
+}
+
+// Bruch, Dezimalzahl, Prozent
+const ABBRECHEND = [2, 4, 5, 8, 10, 16, 20, 25, 40, 50];
+function abbrechenderBruch() { for (;;) { const d = pick(ABBRECHEND), n = rnd(1, Math.min(2 * d, 60)); if (ggT(n, d) === 1) return Q(n, d); } }
+function erweiterWeg(q) {
+  let k = 0; while ((10 ** k) % q.d !== 0) k++;
+  const f = (10 ** k) / q.d;
+  return f === 1 ? '\\frac{' + q.n + '}{' + q.d + '} = ' + dezimal(q)
+    : '\\frac{' + q.n + '}{' + q.d + '} = \\frac{' + q.n + ' \\cdot ' + f + '}{' + q.d + ' \\cdot ' + f + '} = \\frac{' + q.n * f + '}{' + 10 ** k + '} = ' + dezimal(q);
+}
+function umwandelnAufgabe() {
+  const typ = pick(['b2d', 'b2d', 'd2b', 'zuProzent', 'zuProzent', 'p2b', 'p2d']);
+  const q = abbrechenderBruch();
+  if (typ === 'b2d') {
+    const L = String(q.d).length, komma = Q(q.n * 10 ** L + q.d, 10 ** L);   // «3/8» als 3.8 gelesen
+    const a = { thema: 'umwandeln', auftrag: 'Schreibe als Dezimalzahl.', ausdruck: qTex(q), art: 'dezimal', loesung: q, diag: [], weg: [erweiterWeg(q)], pyth: qPy(q) };
+    if (!qGleich(komma, q)) a.diag.push(['bruchKomma', komma]);
+    return a;
+  }
+  if (typ === 'd2b') {
+    if (q.d === 1) return null;
+    let k = 0; while ((10 ** k) % q.d !== 0) k++;
+    return { thema: 'umwandeln', auftrag: 'Schreibe als gekürzten Bruch.', ausdruck: dezimal(q), art: 'bruch', loesung: q, diag: [],
+             weg: [dezimal(q) + ' = \\frac{' + q.n * (10 ** k) / q.d + '}{' + 10 ** k + '} = ' + qTex(q)], pyth: 'Fraction("' + dezimal(q) + '")' };
+  }
+  const p = qMul(q, Q(100));                 // Prozentwert
+  if (typ === 'zuProzent') {
+    if (p.d !== 1 && !nurZweiFuenf(p.d)) return null;
+    const vonDez = Math.random() < 0.5;
+    const a = { thema: 'umwandeln', auftrag: 'Schreibe in Prozent.', ausdruck: vonDez ? dezimal(q) : qTex(q), art: 'prozent', loesung: p, diag: [],
+                weg: [(vonDez ? dezimal(q) : qTex(q) + ' = ' + dezimal(q)) + ' = \\frac{' + dezimal(p) + '}{100} = ' + dezimal(p) + '\\%'], pyth: (vonDez ? 'Fraction("' + dezimal(q) + '")' : qPy(q)) + ' * 100' };
+    for (const w of [qMul(p, Q(10)), qMul(p, Q(1, 10)), q]) if (!qGleich(w, p) && !a.diag.some(([, u]) => qGleich(u, w))) a.diag.push(['stellen', w]);
+    return a;
+  }
+  if (p.d !== 1 && !nurZweiFuenf(p.d)) return null;
+  if (typ === 'p2b') {
+    if (q.d === 1) return null;
+    return { thema: 'umwandeln', auftrag: 'Schreibe als gekürzten Bruch.', ausdruck: dezimal(p) + '\\%', art: 'bruch', loesung: q, diag: [],
+             weg: [dezimal(p) + '\\% = \\frac{' + dezimal(p) + '}{100} = ' + qTex(q)], pyth: 'Fraction("' + dezimal(p) + '") / 100' };
+  }
+  const a = { thema: 'umwandeln', auftrag: 'Schreibe als Dezimalzahl.', ausdruck: dezimal(p) + '\\%', art: 'dezimal', loesung: q, diag: [],
+              weg: [dezimal(p) + '\\% = \\frac{' + dezimal(p) + '}{100} = ' + dezimal(q)], pyth: 'Fraction("' + dezimal(p) + '") / 100' };
+  for (const w of [qMul(q, Q(10)), qMul(q, Q(1, 10)), p]) if (!qGleich(w, q) && !a.diag.some(([, u]) => qGleich(u, w))) a.diag.push(['stellen', w]);
+  return a;
+}
+
+// Periodische Dezimalzahlen
+function periodeAufgabe() {
+  if (Math.random() < 0.4) {                 // abbrechend oder periodisch?
+    let q, roh;
+    for (;;) {
+      const d = rnd(3, 30), n = rnd(1, d - 1), g = pick([1, 1, 2, 3]);
+      roh = [n * g, d * g]; q = Q(n, d);
+      if (roh[1] <= 40) break;
+    }
+    const abbr = nurZweiFuenf(q.d), pp = periodisch(q);
+    const weg = [];
+    if (roh[1] !== q.d) weg.push('\\frac{' + roh[0] + '}{' + roh[1] + '} = ' + qTex(q));
+    weg.push({ text: 'Gekürzter Nenner \\(' + q.d + '\\)' + (abbr ? ' hat nur die Primfaktoren 2 und 5' : ' hat einen Primfaktor ausser 2 und 5') + ' — die Dezimalzahl ' + (abbr ? 'bricht ab' : 'ist periodisch') + '.' });
+    weg.push(qTex(q) + ' = ' + (abbr ? dezimal(q) : periodeTex(pp)));
+    return { thema: 'periodisch', auftrag: 'Bricht die Dezimalzahl ab, oder ist sie periodisch?', ausdruck: '\\frac{' + roh[0] + '}{' + roh[1] + '}',
+             art: 'wahl', wahl: [['abbrechend', 'abbrechend'], ['periodisch', 'periodisch']], loesung: abbr ? 'abbrechend' : 'periodisch',
+             diag: [[abbr ? 'periodisch' : 'abbrechend', 'nenner']], weg, pyth: '"' + (abbr ? 'abbrechend' : 'periodisch') + '"', pruefPy: [roh[0], roh[1]] };
+  }
+  // periodisch → Bruch: rein (Periode 1 oder 2 Ziffern) oder gemischt (eine Ziffer vor der Periode)
+  const art = pick(['rein1', 'rein2', 'gemischt', 'gemischt']);
+  let ganz = Math.random() < 0.2 ? rnd(1, 3) : 0, vor = '', per;
+  if (art === 'rein1') per = String(rnd(1, 8));
+  else if (art === 'rein2') { do per = String(rnd(1, 9)) + String(rnd(0, 9)); while (per[0] === per[1]); }
+  else { per = String(rnd(1, 8)); do vor = String(rnd(0, 9)); while (vor === per); }
+  const L = per.length, V = vor.length;
+  const q = Q(ganz * (10 ** V) * (10 ** L - 1) + (+(vor + per) - (V ? +vor : 0)), (10 ** V) * (10 ** L - 1));
+  const pz = { ganz, vor, per }, t = periodeTex(pz);
+  const diag = [];
+  const push = (code, w) => { if (w && !qGleich(w, q) && !diag.some(([, u]) => qGleich(u, w))) diag.push([code, w]); };
+  push('periodeAbgebrochen', Q(ganz * 10 ** (V + L) + +(vor + per), 10 ** (V + L)));
+  if (V) { push('vorperiode', Q(ganz * 99 + +(vor + per), 99)); push('vorperiode', Q(ganz * 90 + +(vor + per), 90)); }
+  const gross = 10 ** (V + L), klein = 10 ** V;
+  const weg = [
+    'x = ' + t,
+    gross + 'x = ' + (ganz * gross + +(vor + per)) + '.\\overline{' + per + '}',
+  ];
+  if (V) weg.push(klein + 'x = ' + (ganz * klein + +vor) + '.\\overline{' + per + '}');
+  const diff = gross - klein, zDiff = (ganz * gross + +(vor + per)) - (V ? ganz * klein + +vor : ganz);
+  weg.push({ text: 'Untereinander stehen dieselben Perioden — subtrahieren:' });
+  weg.push(diff + 'x = ' + zDiff + ' \\quad\\Rightarrow\\quad x = \\frac{' + zDiff + '}{' + diff + '}' + (q.n === zDiff && q.d === diff ? '' : ' = ' + qTex(q)));
+  return { thema: 'periodisch', auftrag: 'Schreibe als gekürzten Bruch.', ausdruck: t, art: 'bruch', loesung: q, diag, weg,
+           pyth: 'Fraction(' + zDiff + ', ' + diff + ')', pruefPer: pz };
+}
+
+// Zahlenmengen: kleinste Standardmenge
+const MENGEN = [['N', '\\(\\mathbb{N}\\)'], ['Z', '\\(\\mathbb{Z}\\)'], ['Q', '\\(\\mathbb{Q}\\)'], ['R', '\\(\\mathbb{R}\\)']];
+function mengenAufgabe() {
+  const k = rnd(2, 12), n = rnd(1, 20), a = rnd(2, 9);
+  const nq = [2, 3, 5, 6, 7, 8, 10, 11, 12][rnd(0, 8)];
+  const pool = [
+    () => [String(n), 'N', '\\(' + n + '\\) ist eine natürliche Zahl.', n],
+    () => ['0', 'N', 'In diesem Lehrmittel gehört die Null zu \\(\\mathbb{N} = \\{0;\\, 1;\\, 2;\\, \\ldots\\}\\).', 0],
+    () => ['-' + n, 'Z', 'Negative ganze Zahlen liegen in \\(\\mathbb{Z}\\), nicht in \\(\\mathbb{N}\\).', -n],
+    () => ['\\sqrt{' + k * k + '}', 'N', '\\(\\sqrt{' + k * k + '} = ' + k + '\\) — erst ausrechnen, dann einordnen.', k],
+    () => ['-\\sqrt{' + k * k + '}', 'Z', '\\(-\\sqrt{' + k * k + '} = -' + k + '\\) ist eine negative ganze Zahl.', -k],
+    () => ['\\frac{' + a * k + '}{' + a + '}', 'N', '\\(\\frac{' + a * k + '}{' + a + '} = ' + k + '\\) — ein Bruch, der sich zu einer natürlichen Zahl kürzen lässt.', k],
+    () => ['-\\frac{' + a * k + '}{' + a + '}', 'Z', '\\(-\\frac{' + a * k + '}{' + a + '} = -' + k + '\\).', -k],
+    () => { const q = zufallsBruch(9); return q.d === 1 ? null : ['\\frac{' + q.n + '}{' + q.d + '}', 'Q', 'Ein gekürzter Bruch mit Nenner \\(\\ne 1\\) ist rational, aber nicht ganz.', qWert(q)]; },
+    () => { const q = Q(-rnd(1, 99), pick([2, 4, 5, 10, 20])); return q.d === 1 ? null : [dezimal(q), 'Q', 'Eine abbrechende Dezimalzahl ist ein Bruch: \\(' + dezimal(q) + ' = ' + qTex(q) + '\\).', qWert(q)]; },
+    () => { const p = String(rnd(1, 8)); return ['0.\\overline{' + p + '}', 'Q', 'Eine periodische Dezimalzahl ist ein Bruch: \\(0.\\overline{' + p + '} = ' + qTex(Q(+p, 9)) + '\\).', +p / 9]; },
+    () => ['\\sqrt{' + nq + '}', 'R', '\\(\\sqrt{' + nq + '}\\) ist irrational: \\(' + nq + '\\) ist keine Quadratzahl. Die Dezimalzahl bricht nie ab und ist nicht periodisch.', Math.sqrt(nq)],
+    () => ['\\pi', 'R', '\\(\\pi\\) ist irrational.', Math.PI],
+    () => ['3.14', 'Q', '\\(3.14 = \\frac{314}{100}\\) ist eine abbrechende Dezimalzahl — nur eine Näherung von \\(\\pi\\), selbst aber rational.', 3.14],
+    () => ['1.4142', 'Q', '\\(1.4142\\) bricht ab, ist also ein Bruch. Erst \\(\\sqrt{2}\\) selbst ist irrational.', 1.4142],
+    () => ['\\sqrt{0.25}', 'Q', '\\(\\sqrt{0.25} = 0.5 = \\frac{1}{2}\\).', 0.5],
+    () => { const z = rnd(1, 4), m = z + rnd(1, 4); return ggT(z, m) !== 1 ? null : ['\\sqrt{\\frac{' + z * z + '}{' + m * m + '}}', 'Q', '\\(\\sqrt{\\frac{' + z * z + '}{' + m * m + '}} = \\frac{' + z + '}{' + m + '}\\).', z / m]; },
+    () => ['(\\sqrt{' + nq + '})^2', 'N', '\\((\\sqrt{' + nq + '})^2 = ' + nq + '\\): Quadrieren hebt die Wurzel auf.', nq],
+    () => { const m = pick([2, 3, 5]), s = rnd(2, 4); return ['\\frac{\\sqrt{' + m * s * s + '}}{\\sqrt{' + m + '}}', 'N', '\\(\\frac{\\sqrt{' + m * s * s + '}}{\\sqrt{' + m + '}} = \\sqrt{' + s * s + '} = ' + s + '\\).', s]; },
+    () => ['-\\pi', 'R', '\\(-\\pi\\) ist irrational — das Vorzeichen ändert daran nichts.', -Math.PI],
+  ];
+  let e; do e = pick(pool)(); while (!e);
+  const [t, menge, erkl, wert] = e;
+  return { thema: 'mengen', auftrag: 'Zu welcher kleinsten Standard-Zahlenmenge gehört die Zahl?', ausdruck: t, art: 'wahl', wahl: MENGEN, loesung: menge,
+           diag: [], weg: [{ text: erkl }], pyth: '"' + menge + '"', mengeWert: wert };
+}
+
+const THEMEN = {
+  reihenfolge: { name: 'Reihenfolge der Operationen', neu: () => termAufgabe('reihenfolge', pick(REIHE)(), F_REIHE) },
+  vorzeichen:  { name: 'Vorzeichen', neu: () => termAufgabe('vorzeichen', pick(VZ)(), F_VZ) },
+  brueche:     { name: 'Brüche rechnen', neu: bruchAufgabe },
+  umwandeln:   { name: 'Bruch, Dezimalzahl, Prozent', neu: umwandelnAufgabe },
+  periodisch:  { name: 'Periodische Dezimalzahlen', neu: periodeAufgabe },
+  mengen:      { name: 'Zahlenmengen', neu: mengenAufgabe },
+};
+function aufgabe(themen) {
+  for (;;) { const a = THEMEN[pick(themen)].neu(); if (a) return a; }
+}
+
+// ── Eingabe lesen ──
+function lies(s) {
+  s = String(s).trim().replace(/[−–]/g, '-').replace(/\s+/g, '');
+  if (!s) return { leer: true };
+  let prozent = false;
+  if (s.endsWith('%')) { prozent = true; s = s.slice(0, -1); }
+  if (/,/.test(s)) return { fehler: 'Schreibe den Dezimalpunkt, nicht das Komma: \\(0.375\\) statt 0,375.' };
+  let m;
+  if ((m = /^([+-]?)(\d+)\/(\d+)$/.exec(s))) {
+    const z = (m[1] === '-' ? -1 : 1) * +m[2], n = +m[3];
+    if (!n) return { fehler: 'Der Nenner darf nicht \\(0\\) sein.' };
+    return { q: Q(z, n), roh: [z, n], art: 'bruch', prozent };
+  }
+  if ((m = /^([+-]?)(\d*)\.(\d+)$/.exec(s)) && (m[2] || m[3])) {
+    const k = m[3].length, z = (m[1] === '-' ? -1 : 1) * +(m[2] + m[3]);
+    return { q: Q(z, 10 ** k), art: 'dezimal', prozent };
+  }
+  if ((m = /^([+-]?)(\d+)$/.exec(s))) return { q: Q((m[1] === '-' ? -1 : 1) * +m[2]), art: 'ganz', prozent };
+  return { fehler: 'Diese Eingabe verstehe ich nicht. Beispiele: <code>-7</code>, <code>3/4</code>, <code>0.375</code>, <code>12.5%</code>.' };
+}
+function vorschau(s) {
+  const l = lies(s);
+  if (l.leer || l.fehler) return '';
+  return '\\(' + (l.art === 'bruch' ? (l.roh[0] < 0 ? '-' : '') + '\\frac{' + Math.abs(l.roh[0]) + '}{' + l.roh[1] + '}' : l.art === 'dezimal' ? dezimal(l.q) : String(l.q.n)) + (l.prozent ? '\\%' : '') + '\\)';
+}
+// → { status: 'ok' | 'fast' | 'falsch' | 'format', code?, text? }
+function pruefe(a, eingabe) {
+  if (a.art === 'wahl') {
+    if (eingabe === a.loesung) return { status: 'ok' };
+    if (a.thema === 'mengen') {
+      const rang = { N: 0, Z: 1, Q: 2, R: 3 };
+      return { status: 'falsch', code: rang[eingabe] > rang[a.loesung] ? 'mengeGross' : 'mengeKlein' };
+    }
+    const d = a.diag.find(([w]) => w === eingabe);
+    return { status: 'falsch', code: d ? d[1] : 'sonst' };
+  }
+  const l = lies(eingabe);
+  if (l.leer) return { status: 'format', text: 'Gib zuerst eine Antwort ein.' };
+  if (l.fehler) return { status: 'format', text: l.fehler };
+  let q = l.q;
+  if (a.art !== 'prozent' && l.prozent) return { status: 'format', text: 'Hier ist keine Prozentangabe gefragt.' };
+  if (qGleich(q, a.loesung)) {
+    if (a.art === 'bruch' && l.art === 'dezimal') return { status: 'fast', text: 'Der Wert stimmt — gefragt ist aber ein Bruch.' };
+    if (a.art === 'bruch' && l.art === 'bruch' && (ggT(l.roh[0], l.roh[1]) !== 1 || l.roh[1] === 1))
+      return { status: 'fast', text: 'Der Wert stimmt, aber der Bruch ist noch nicht gekürzt: \\(\\frac{' + Math.abs(l.roh[0]) + '}{' + l.roh[1] + '} = ' + qTex(Q(Math.abs(l.roh[0]), l.roh[1])) + '\\).' };
+    if (a.art === 'dezimal' && l.art === 'bruch') return { status: 'fast', text: 'Der Wert stimmt — gefragt ist aber die Dezimalzahl.' };
+    if (a.art === 'zahl' && l.art === 'bruch' && l.roh[1] !== 1 && ggT(l.roh[0], l.roh[1]) !== 1) return { status: 'fast', text: 'Der Wert stimmt — schreib das Ergebnis als ganze Zahl.' };
+    return { status: 'ok' };
+  }
+  const d = a.diag.find(([, w]) => qGleich(w, q));
+  return { status: 'falsch', code: d ? d[0] : 'sonst' };
+}
+// ── KERN:ENDE ───────────────────────────────────────────────────
+
+// ── Oberfläche ──
+const $ = id => document.getElementById(id);
+let mjKette = Promise.resolve();
+function setzen(el, html) {
+  mjKette = mjKette.then(() => {
+    if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([el]);
+    el.innerHTML = html;
+    if (window.MathJax && MathJax.typesetPromise) return MathJax.typesetPromise([el]);
+  }).catch(() => {});
+}
+const RUNDE = 10;
+let themen = new Set(Object.keys(THEMEN));
+try {
+  const m = /thema=([a-z,]+)/.exec(location.hash);
+  if (m) { const t = m[1].split(',').filter(x => THEMEN[x]); if (t.length) themen = new Set(t); }
+} catch (e) {}
+const themenBox = $('rt-themen');
+for (const [k, t] of Object.entries(THEMEN)) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'rt-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  themenBox.appendChild(b);
+}
+
+let A = null, nr = 0, versuch = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, letztes = '';
+let stand = { ok: 0, fehl: 0, codes: {} };
+
+function zeit() { const s = Math.floor((Date.now() - start) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+function zeigeZahlen() {
+  $('rt-z-nr').textContent = Math.min(nr, RUNDE) + ' / ' + RUNDE;
+  $('rt-z-ok').textContent = stand.ok;
+  $('rt-z-fehl').textContent = stand.fehl;
+  $('rt-z-zeit').textContent = zeit();
+  $('rt-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
+}
+function wegHtml(a) {
+  return '<div class="rt-weg-titel">Lösungsweg</div>' + a.weg.map(w => typeof w === 'string'
+    ? '<div class="rt-zeile">\\(\\displaystyle ' + w + '\\)</div>'
+    : '<div class="rt-text">' + w.text + '</div>').join('');
+}
+function neueAufgabe() {
+  if (nr >= RUNDE) return bilanz();
+  nr++;
+  let a; do a = aufgabe([...themen]); while (a.ausdruck === letztes);
+  A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0;
+  $('rt-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
+  $('rt-thema').textContent = THEMEN[a.thema].name;
+  $('rt-auftrag').textContent = a.auftrag;
+  setzen($('rt-ausdruck'), '\\[' + a.ausdruck + (a.rechnen ? ' = \\;?' : '') + '\\]');
+  const wahl = a.art === 'wahl';
+  $('rt-antwort-eingabe').hidden = wahl;
+  $('rt-antwort-wahl').hidden = !wahl;
+  $('rt-hinweis').textContent = wahl ? '' : { zahl: 'Ganze Zahl, z.B. -7', bruch: 'Gekürzter Bruch, z.B. -5/12 (oder ganze Zahl)', dezimal: 'Dezimalzahl mit Punkt, z.B. 0.375', prozent: 'Prozentzahl, z.B. 12.5 oder 12.5%' }[a.art];
+  if (wahl) setzen($('rt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="rt-btn" data-w="' + k + '">' + t + '</button>').join(''));
+  const inp = $('rt-eingabe'); inp.value = ''; inp.disabled = false; $('rt-pruefen').disabled = false;
+  setzen($('rt-vorschau'), '');
+  setzen($('rt-rueck'), ''); $('rt-rueck').className = 'rt-rueck';
+  $('rt-weg').hidden = true; $('rt-weiter-box').hidden = true;
+  zeigeZahlen();
+  if (!wahl) inp.focus();
+}
+function meldung(cls, html) { $('rt-rueck').className = 'rt-rueck ' + cls; setzen($('rt-rueck'), html); }
+function abschliessen(gut) {
+  fertig = true;
+  $('rt-eingabe').disabled = true; $('rt-pruefen').disabled = true;
+  mjKette.then(() => $('rt-antwort-wahl').querySelectorAll('button').forEach(b => { b.disabled = true; }));
+  $('rt-weg').hidden = false; setzen($('rt-weg'), wegHtml(A));
+  $('rt-weiter-box').hidden = false;
+  if (gut && !fehlerInAufgabe) stand.ok++;
+  zeigeZahlen();
+  $('rt-weiter').focus();
+}
+function antwort(eingabe) {
+  if (fertig || !A) return;
+  const r = pruefe(A, eingabe);
+  if (r.status === 'format' || r.status === 'fast') { meldung('fast', '<p>' + (r.status === 'fast' ? '≈ ' : '') + r.text + '</p>'); return; }
+  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
+  versuch++; fehlerInAufgabe++; stand.fehl++;
+  stand.codes[r.code] = (stand.codes[r.code] || 0) + 1;
+  const f = FEHLER[r.code];
+  let html = '<p>✗ ' + (r.code === 'sonst' ? 'Noch nicht. ' : '<strong>' + f[0] + '.</strong> ') + f[1] + '</p>';
+  if (A.art === 'wahl') {
+    const b = $('rt-antwort-wahl').querySelector('[data-w="' + eingabe + '"]'); if (b) b.classList.add('rt-falsch');
+  }
+  if (versuch >= 2 || (A.art === 'wahl' && A.wahl.length === 2)) {
+    html += '<p>Richtig ist ' + (A.art === 'wahl' ? A.wahl.find(([k]) => k === A.loesung)[1] : '\\(' + ergebnisTex(A) + '\\)') + '.</p>';
+    meldung('falsch', html);
+    return abschliessen(false);
+  }
+  html += '<p>Versuch es nochmals.</p>';
+  meldung('falsch', html);
+  if (A.art !== 'wahl') { $('rt-eingabe').select(); }
+}
+function ergebnisTex(a) {
+  if (a.art === 'dezimal') return dezimal(a.loesung);
+  if (a.art === 'prozent') return dezimal(a.loesung) + '\\%';
+  return qTex(a.loesung);
+}
+function bilanz() {
+  clearInterval(tick);
+  const top = Object.entries(stand.codes).filter(([c]) => c !== 'sonst').sort((u, v) => v[1] - u[1]).slice(0, 3);
+  let html = '<h2>Runde fertig</h2><p>' + stand.ok + ' von ' + RUNDE + ' auf Anhieb richtig · ' + stand.fehl + ' Fehler · Zeit ' + zeit() + '</p>';
+  if (top.length) html += '<p>Erkannte Denkfehler:</p><ul>' + top.map(([c, n]) => {
+    const f = FEHLER[c];
+    return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + (f[2] ? ' — nachlesen in <a href="' + f[2][0] + '">' + f[2][1] + '</a>' : '') + '</li>';
+  }).join('') + '</ul>';
+  else if (!stand.fehl) html += '<p>Keine Fehler — stark.</p>';
+  html += '<div class="rt-knoepfe" style="padding:12px 0 0"><button type="button" class="rt-btn rt-weiter" id="rt-nochmal">Neue Runde</button></div>';
+  $('rt-aufgabe').hidden = true; $('rt-bilanz').hidden = false;
+  setzen($('rt-bilanz'), html);
+  mjKette.then(() => $('rt-nochmal').focus());
+}
+function neueRunde() {
+  nr = 0; stand = { ok: 0, fehl: 0, codes: {} }; letztes = '';
+  start = Date.now(); clearInterval(tick); tick = setInterval(zeigeZahlen, 1000);
+  $('rt-aufgabe').hidden = false; $('rt-bilanz').hidden = true;
+  neueAufgabe();
+}
+
+$('rt-pruefen').addEventListener('click', () => antwort($('rt-eingabe').value));
+$('rt-eingabe').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); antwort($('rt-eingabe').value); } });
+$('rt-eingabe').addEventListener('input', () => setzen($('rt-vorschau'), vorschau($('rt-eingabe').value)));
+$('rt-antwort-wahl').addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (b && !b.disabled && !b.classList.contains('rt-falsch')) antwort(b.dataset.w); });
+$('rt-weiter').addEventListener('click', neueAufgabe);
+$('rt-neu').addEventListener('click', neueRunde);
+$('rt-bilanz').addEventListener('click', e => { if (e.target.closest('#rt-nochmal')) neueRunde(); });
+themenBox.addEventListener('click', e => {
+  const b = e.target.closest('.rt-opt'); if (!b) return;
+  const t = b.dataset.t;
+  if (themen.has(t) && themen.size === 1) return;
+  if (themen.has(t)) themen.delete(t); else themen.add(t);
+  b.classList.toggle('aktiv', themen.has(t));
+  neueRunde();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && fertig && !$('rt-weiter-box').hidden && !e.target.closest('input, button, a, summary')) { e.preventDefault(); neueAufgabe(); }
+});
+const breit = matchMedia('(min-width: 901px)');
+function seiteOffen() { $('rt-seite-det').open = breit.matches; }
+if (breit.addEventListener) breit.addEventListener('change', seiteOffen);
+seiteOffen();
+if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(neueRunde);
+else window.addEventListener('load', neueRunde);
+</script>
+</body>
+</html>

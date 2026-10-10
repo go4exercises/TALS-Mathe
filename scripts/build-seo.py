@@ -132,6 +132,18 @@ SEITEN = {
    titel='Strategietrainer — den passenden Lösungsschritt wählen',
    beschreibung='Strategietrainer zu Gleichungen, Bruchgleichungen, Faktorisieren, Bruchtermen und Gleichungssystemen: Du wählst den Schritt, das Werkzeug rechnet und begründet.',
    themen=['Mathematik', 'Gleichung', 'Bruchgleichung', 'Faktorisieren', 'Bruchterm', 'Gleichungssystem', 'Lösungsverfahren', 'Übung']),
+ 'werkzeuge/rechentrainer.html': dict(
+   ort='Werkzeuge · Rechentrainer',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Rechentrainer — Rechnen ohne Taschenrechner mit Fehlerdiagnose',
+   beschreibung='Rechnen ohne Taschenrechner: Reihenfolge, Vorzeichen, Brüche, Dezimal und Prozent, Perioden, Zahlenmengen. Bei Fehlern nennt der Trainer den Denkfehler.',
+   themen=['Mathematik', 'Hierarchie der Operationen', 'Vorzeichenregeln', 'Bruchrechnen', 'Prozent', 'Zahlenmengen', 'Übung']),
+ 'werkzeuge/einheitskreistrainer.html': dict(
+   ort='Werkzeuge · Einheitskreistrainer',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Einheitskreistrainer — exakte Werte, Bogenmass und Umkehrung',
+   beschreibung='Einheitskreis ohne Taschenrechner: Grad und Bogenmass, exakte Werte von sin, cos und tan, vom Wert zum Winkel — mit Quadrant, Referenzwinkel und Skizze.',
+   themen=['Mathematik', 'Einheitskreis', 'Bogenmass', 'Sinus', 'Cosinus', 'Tangens', 'Übung']),
  'leitprogramme/potenzen.html': dict(
    ort='Leitprogramm · Potenzen',
    typ='article', lrt='Leitprogramm',

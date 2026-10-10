@@ -64,6 +64,18 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   Zufallsstellen, 𝔻 gegen den Nenner. Neue Vorlage oder Regel → dort zuerst grün. Vorwahl über
   `#bereich=fakt,bruchterm` (kein `?`: `check_sim_wz` liest die Adresse bis `#` als Dateinamen).
   Verlinkt aus g1.3, g2.2a, g2.2b, g2.3, s2.2a, s3.1. Weitere Trainer-Ideen: `../TODO-trainer-mathe.md`.
+- `werkzeuge/rechentrainer.html` (seit 11.10.2026): Rechnen ohne Taschenrechner (GF 1.1/1.2) in sechs
+  Themen — Reihenfolge, Vorzeichen, Brüche, Bruch–Dezimal–Prozent, Perioden, Zahlenmengen. Kern ist die
+  **Fehlerdiagnose**: Jede Aufgabe wird zusätzlich mit typischen Denkfehlern gerechnet (Parser mit
+  umschaltbaren Regeln: Strich vor Punkt, −3² als 9, a − (−b) als a − b …); trifft die Antwort einen
+  davon, nennt die Rückmeldung den Fehler mit Link (`FEHLER`). Lösungsweg Stufe für Stufe nach g1.1.
+  Vorwahl `#thema=reihenfolge,vorzeichen`. Selbsttest `scripts/verify_rechentrainer.js` rechnet jede
+  Aufgabe in `python3` mit `Fraction` nach.
+- `werkzeuge/einheitskreistrainer.html` (seit 11.10.2026): Grad ↔ Bogenmass, exakte Werte von sin/cos/tan
+  (Palette, Diagnose: Vorzeichen, sin/cos bzw. 30°/60° vertauscht, Kehrwert, «nicht definiert»), vom Wert
+  zum Winkel (Punkte am Kreis anklicken). Werte aus Quadrant und Referenzwinkel, Herleitung mit Skizze.
+  Anzeige Grad/Bogenmass/gemischt; Vorwahl `#teil=werte&mass=rad`. Selbsttest
+  `scripts/verify_einheitskreistrainer.js` mit Gegenrechnung in `python3`.
 - `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
