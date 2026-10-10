@@ -1,6 +1,6 @@
 # TALS-Mathematik · Styleguide
 
-**Version 1.15 · Stand: 27. August 2026** · (1.15: §2.1 `·` nur als Multiplikationszeichen, nie als Trennzeichen; 1.14: Zusatzmaterial ohne Formelauszug, Animations-Hinweise ohne Vorlese-Knopf, neuer Beschriftungs-Helfer `beschriftung()` und `drawGrid`-Optionen §2.9; 1.13: §11 Nachschlagen-Seiten Glossar/Formelsammlung; 1.12: §10.4 verbindliche Färbe-Regel präzisiert)
+**Version 1.16 · Stand: 10. Oktober 2026** · (1.16: §7 Footer wird von `scripts/build-seo.py` erzeugt, eine Version für das ganze Lehrmittel; 1.15: §2.1 `·` nur als Multiplikationszeichen, nie als Trennzeichen; 1.14: Zusatzmaterial ohne Formelauszug, Animations-Hinweise ohne Vorlese-Knopf, neuer Beschriftungs-Helfer `beschriftung()` und `drawGrid`-Optionen §2.9; 1.13: §11 Nachschlagen-Seiten Glossar/Formelsammlung; 1.12: §10.4 verbindliche Färbe-Regel präzisiert)
 
 Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrmittels „TALS-Mathematik". Er sichert Konsistenz in Notation, Aufbau, Sprache und visuellem Design — kapitelübergreifend und chatübergreifend.
 

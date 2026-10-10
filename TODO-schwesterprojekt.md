@@ -33,3 +33,15 @@ Ein erledigter Eintrag wird künftig gelöscht, nicht als «erledigt» markiert.
 in `scripts/abgleich.py`.
 
 ## Offen
+
+### 10.10.2026 · `build-seo.py`: Footer aus einer Quelle, Version 2.0 (auch in `OFFEN`)
+
+**Was.** `build-seo.py` erzeugt den Footer zwischen `<!-- FUSS:ANFANG … -->` und `<!-- FUSS:ENDE -->`
+(Funktionen `fuss()`, `fuss_ausserhalb()`, `einsetzen()` mit Footer; Konstanten `VERSION = '2.0'`,
+`VERSION_STAND = '10. Oktober 2026'`, `FUSS_UNTERTITEL`; Felder `ort=`/`fuss=False` in `SEITEN`; `--check` mit
+Exit 2 für einen `site-footer` ausserhalb der Marken). `preflight.py`: Exit 2 von `build-seo.py` = Fehler.
+**Wo.** Physik `scripts/build-seo.py` (KERN, Code aus Mathe übernehmen, Fachdaten bleiben), `.claude/skills/preflight/
+preflight.py`, `feedback.html` (eigener Fuss, Versionszeile von Hand), Bauskripte `scripts/lp/*/seite.py` (nur
+leere Marken ausgeben), STYLEGUIDE §7, HOWTOs. Ablauf und gezählte Physik-Zahlen: `/home/paps/TODO-fuss-version-physik.md`.
+**Warum.** Entscheid des Auftraggebers: eine Version für das ganze Lehrmittel, in beiden Repos dieselbe (2.0, gleiches Datum).
+
