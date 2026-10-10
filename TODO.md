@@ -161,10 +161,11 @@ noch ausdrücklich, R setzt Fragen zurück (`FRAGEN_JS`); 4 Clips neu vertont (1
 
 ## Abnahme durch den Auftraggeber
 
-- [ ] **Hörprobe** der 10 Leitprogramm-Clips: Aussprache von «x s», «y s», «x plus eins in
-  Klammern», «null Komma fünf», «D», «Symmetrieachse»; in den 5 Kontrollclips je eine Frage
-  absichtlich falsch beantworten, damit auch die Rückmeldungen zu hören sind. Fundstellen
-  (Clip, Sekunde) melden → Sprechertext bzw. Aussprachetabelle anpassen, neu vertonen.
+- [x] **Aussprache** «x s», «y s», «x plus eins in der Klammer», «null Komma fünf», «D», «Symmetrieachse»:
+  Hörprobe 10.10.2026 (`~/hoerproben/2026-10-10`). Umgesetzt `6d9571b`: «die Diskriminante» statt «D»,
+  «y s, gleich» mit Komma; übrige wie bisher.
+- [ ] **Hörprobe** der Kontrollclips: je eine Frage absichtlich falsch beantworten, damit auch die
+  Rückmeldungen zu hören sind. Fundstellen (Clip, Sekunde) melden → Sprechertext bzw. Tabelle, neu vertonen.
 - [ ] **KI-Bewertung durchspielen**: eine echte (oder realistisch fehlerhafte) Schülerlösung
   des Gesamttests zusammen mit `bewertungspaket.pdf` einer KI geben; prüfen, ob Punkte,
   Folgefehler und Rückmeldung stimmen. Kriterien danach schärfen.
@@ -991,6 +992,7 @@ Nachgeprüft vom Hauptagenten: H1 (Bild `fest-sim3.png`), GT-Zahlen G1–G7.
 G1(c) gestrichen, Steigung in %, SSW kein/ein Dreieck). Keine Szene neu vertont, Fragetöne Kontrolle Seiten/Höhen neu.
 Nachgetragen 08.10.2026: Sinussatz-Clip Satz zu h = c·sin α, Kontrolle Sinussatz F4 «freien Schenkel» (Teilvertonung).
 Offen nur Hörprobe «a wird länger» (Cosinussatz «Stumpf»), «drei Komma vier vier», «a ist kürzer». Abnahme offen.
+Diese drei samt «Arkussinus» in der Hörprobe Runde 5 (10.10.2026, `~/hoerproben/2026-10-10/runde5`) — Ergebnis offen.
 
 ### HOCH
 - [x] **H1 · Gesperrte Regler zeigen falsche Werte, teils die gesuchte Grösse** (`seite.js` `werte()`; sim1 A7, sim2 A7, sim3 A7, sim5 A5): Figur zeichnet `fest`, `.sl-val` zeigt den Startwert (sim3 A7 «15 m | 52°» bei h = 14, d = 20, gesucht α). → `.sl-val` aus `w` schreiben, gesuchte Grösse «?».
@@ -1145,7 +1147,7 @@ Die Befunde unten fangen die Werkzeuge nicht. Nachgeprüft vom Hauptagenten: Vie
 (Dreiecke 25 P mit Schwerpunkt und h = 2A/g, Umkehrung Pythagoras als Ziel gestrichen; Vierecke neu 24 P, G1–G6;
 Kreis 25 P mit Segment über 180°; Ähnlichkeit 25 P, G6 «Laras Fehler», Lochkamera mit Abständen vorher geübt).
 Raster je mit einer Regel für (E)-/Folgezeilen und «unmöglich». Zeiten: Dreiecke 210, Vierecke 200, Kreis 215,
-Ähnlichkeit 220 min. Bewusst gelassen: Aussprache «Kathete», «subtrahiert» (geteiltes `aussprache()`, Hörprobe),
+Ähnlichkeit 220 min. Bewusst gelassen: Aussprache «Kathete», «subtrahiert» (Hörprobe 10.10.2026: wie bisher, auch «Überstand»),
 Schenkel «s» (wie Themenseite), Ähnlichkeit G3 (c) reine Ergebniszeile. Neu vertonte Szenen und Fragetöne:
 Berichte der Bearbeiter (Hörprobe offen).
 
