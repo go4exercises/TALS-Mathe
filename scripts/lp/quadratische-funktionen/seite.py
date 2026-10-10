@@ -264,8 +264,8 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 12, [
 ])
 k3 = kapitel(3, 'nullstellen-und-scheitel', 'Nullstellen und Scheitel berechnen', 'K1 · K2', 40,
     'Du bestimmst aus der Grundform Scheitel und Nullstellen und sagst mit der Diskriminante \\(D = b^2 - 4ac\\) voraus, wie viele es gibt.',
-    ('g3-3-lp-achse-bleibt', 'Parabel sehen: c hebt, die Symmetrieachse bleibt', 'Einführung', '1:12'),
-    sim3, ('g3-3-lp-kontrolle-nullstellen', 'Kontrollfragen zu Nullstellen und Scheitel', '', '0:52'),
+    ('g3-3-lp-achse-bleibt', 'Parabel sehen: c hebt, die Symmetrieachse bleibt', 'Einführung', '1:14'),
+    sim3, ('g3-3-lp-kontrolle-nullstellen', 'Kontrollfragen zu Nullstellen und Scheitel', '', '0:54'),
     fest3, [uebung('grund-scheitel', 'Scheitel aus der Grundform'), uebung('nullstellen', 'Nullstellen bestimmen')],
     auf3, f'<a href="{TS}#diskriminante">Themenseite 3.3, Diskriminante</a>')
 
