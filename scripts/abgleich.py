@@ -85,7 +85,7 @@ GRUNDLINIE = {
     'downloads/print.css': 0.900,
     'feedback.html': 0.977,
     'LICENSE': 0.955,
-    'scripts/build-suchindex.py': 0.957,   # ohne DATEN gemessen; 0.963 -> 0.957: Physik liest LP-Titel aus <title> (07.10.2026, auf Mathes Vorschlag)
+    'scripts/build-suchindex.py': 0.947,   # ohne DATEN; 0.957 -> 0.947 (10.10.2026): Seitenliste bewusst verschieden — Kopfkommentare «ABWEICHUNG ZUR PHYSIK-FASSUNG» (Mathe) und «ABWEICHUNG ZUR MATHE-FASSUNG» (Physik)
     'scripts/build-clips.py': 0.998,   # gemeinsamer Bauer, drei Projektwerte (07.10.2026)
     'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
@@ -100,8 +100,8 @@ GRUNDLINIE = {
     '.claude/tools/scan-live.mjs': 0.761,
     '.claude/tools/render-check.mjs': 0.968,
     '.claude/tools/build-bilder.mjs': 0.753,
-    '.claude/skills/preflight/preflight.py': 0.849,
-    '.claude/skills/preflight/SKILL.md': 0.680,
+    '.claude/skills/preflight/preflight.py': 0.870,   # 0.849 -> 0.870 nach check_sim_wz in beiden Repos (10.10.2026)
+    '.claude/skills/preflight/SKILL.md': 0.710,   # 0.680 -> 0.710: Physik ordnet die Stufe-2-Liste wie Mathe (10.10.2026)
     '.claude/settings.json': 0.509,
 }
 
@@ -137,14 +137,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='build-clip-ton.py: sieben Aussprache-Eintraege nach Hoerprobe 10.10.2026 (Amontons, isochor, Glycerin, stimulierte, Kacheln/Kachel, parts per million)',
-         wie='Physik: Mathes scripts/build-clip-ton.py uebernehmen (sonst gleich). Betroffene Physik-Clips neu vertonen, nur die Szenen/Fragen '
-             'mit dem Wort (--szenen, build-clip-fragen-ton.py --fragen): p5-3-anim-gasgesetze, p5-3-gas-isochor, p5-3-lp-spezialfaelle (Amontons); '
-             'p5-3-gas-gleichung, p5-3-gas-isochor, p5-3-lp-kontrolle-spezialfaelle, p5-3-lp-spezialfaelle, uebungstest-b2-kuehlschrank (isochor); '
-             'p5-1-lp-aggregat (Glycerin); p6-1-lp-kontrolle-licht, p6-1-lp-licht (stimulierte). '
-             'Zusaetzlich Sprechertext (Entscheid Auftraggeber): bei der ersten Nennung von «ppm» je Clip «ppm, parts per million,» '
-             '(p5-2-anim-treibhaus und die zwei weiteren Clips mit ppm), neu vertonen. Danach clip-zeit in den Leitprogrammen nachfuehren. '
-             'Diesen Eintrag streichen, abgleich.py nach Mathe zurueckgeben.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',
@@ -182,12 +174,13 @@ def geschwister(root, vorgabe=None):
     hier = 'physiklib.js' if os.path.exists(os.path.join(root, 'physiklib.js')) else 'mathlib.js'
     dort = 'mathlib.js' if hier == 'physiklib.js' else 'physiklib.js'
     neben = os.path.dirname(root)
-    for name in sorted(os.listdir(neben)):
-        kandidat = os.path.join(neben, name)
-        if kandidat != root and os.path.isdir(kandidat) \
-                and os.path.exists(os.path.join(kandidat, dort)):
-            return kandidat
-    return None
+    treffer = [os.path.join(neben, name) for name in sorted(os.listdir(neben))
+               if os.path.join(neben, name) != root
+               and os.path.exists(os.path.join(neben, name, dort))]
+    # Gleicher Namensanfang zuerst (tals-): sek1-mathe hat auch eine mathlib.js
+    vorn = os.path.basename(root).split('-')[0] + '-'
+    treffer.sort(key=lambda k: not os.path.basename(k).startswith(vorn))
+    return treffer[0] if treffer else None
 
 
 def ohne_daten(zeilen, namen):

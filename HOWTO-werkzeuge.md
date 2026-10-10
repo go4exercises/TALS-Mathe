@@ -135,7 +135,7 @@ Link, nicht mit dem Baustein.
 - **Gespeicherten Stand** einmal im privaten Fenster prüfen: Die Seite muss ohne Speicher
   funktionieren.
 
-## 7 · Verschieben oder umbenennen
+## 7 · Verschieben und Umbenennen
 
 Eine veröffentlichte Adresse steht in Lesezeichen und Unterrichtsunterlagen. Wird eine Seite
 verschoben oder umbenannt:

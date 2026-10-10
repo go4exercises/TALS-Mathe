@@ -131,7 +131,7 @@ mit einem gewöhnlichen Link, nicht mit dem Baustein.
   Regler bei 360 px bedienbar.
 - **Clips** sind freiwillig; wenn, dann nach `HOWTO-clips.md`.
 
-## 7 · Verschieben oder umbenennen
+## 7 · Verschieben und Umbenennen
 
 Eine veröffentlichte Adresse steht in Lesezeichen und Unterrichtsunterlagen. Wird eine Seite
 verschoben oder umbenannt:
