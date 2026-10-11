@@ -54,8 +54,9 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `statistics`). Verlinkt aus g4.3 (`#darstellungen`).
 - `simulationen/boxplot.html` (seit 11.10.2026): 4–15 ganze Werte (0–20) im Punktdiagramm, gemeinsam für sechs Schritte —
   sortierte Liste mit Plätzen von \(Q_0\)…\(Q_4\) (Median der Hälften), Boxplot Teil für Teil, vier Teile mit gleich vielen
-  Werten (nach Rang; Plätze genau auf einer Grenze zählen zu keinem Teil) und Form (`form()`), Ausreisser nach der
-  Faustregel \(1.5 \cdot \text{QD}\) aus g4.3, Vergleich mit einer Gruppe B. Selbsttest `scripts/verify_boxplot.js` (python3
+  Werten (nach Rang; Plätze genau auf einer Grenze zählen zu keinem Teil, Whisker dort immer bis Min/Max) und Form (`form()`),
+  Ausreisser nach der Faustregel \(1.5 \cdot \text{QD}\) aus g4.3 — standardmässig einzeln gezeichnet, Whisker bis zum letzten Wert
+  davor; Schalter «Whisker» in Schritt 3, 5, 6 auf «bis Min und Max» wie in g4.2, Vergleich mit einer Gruppe B. Selbsttest `scripts/verify_boxplot.js` (python3
   `statistics`, prüft auch die Aussagen «drei Viertel ≤ \(Q_3\)» und «Hälfte ≥ Median»). Verlinkt aus g4.2 und g4.3 (`#darstellungen`).
 - `werkzeuge/notationstrainer.html` — Lernkartei (3 Fächer, Stand in `localStorage` unter
   `tals-mathe-notationstrainer-v1`, in `rechtliches.html` genannt) zur Notation von

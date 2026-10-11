@@ -140,8 +140,6 @@ MathJax = {
 .bp-kachel { border:1px solid var(--linie); border-left:4px solid var(--linie); border-radius:8px; padding:8px 12px; background:var(--papier); font-family:var(--sans); }
 .bp-kachel b { display:block; font-family:var(--mono); font-size:1.3rem; font-weight:600; color:var(--tinte); }
 .bp-kachel span { font-size:.78rem; color:var(--tinte-2); }
-.bp-schalter { display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:8px; font-family:var(--sans); font-size:.86rem; }
-.bp-schalter label { display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
 @media (max-width:560px) {
   .bp-steuer .bp-luecke { display:none; }
   .bp-btn { font-size:.8rem; padding:6px 9px; }
@@ -242,7 +240,7 @@ MathJax = {
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Der Boxplot ersetzt die einzelnen Punkte durch fünf Zahlen: Die Whisker enden bei \(Q_0 = x_{\min}\) und \(Q_4 = x_{\max}\), die Box reicht von \(Q_1\) bis \(Q_3\), der Strich in der Box ist der Median. Die Box umfasst die mittlere Hälfte der Werte, ihre Breite ist die Quartilsdifferenz \(\text{QD}\), die ganze Länge die Spannweite \(R\).</div>
+          <div class="ah-text">Der Boxplot ersetzt die einzelnen Punkte durch fünf Zahlen: Die Whisker reichen bis zum kleinsten und zum grössten Wert, der kein Ausreisser ist; Ausreisser stehen als einzelne Punkte daneben. Ohne Ausreisser enden die Whisker bei \(Q_0 = x_{\min}\) und \(Q_4 = x_{\max}\). Die Box reicht von \(Q_1\) bis \(Q_3\), der Strich in der Box ist der Median. Die Box umfasst die mittlere Hälfte der Werte, ihre Breite ist die Quartilsdifferenz \(\text{QD}\), die ganze Länge die Spannweite \(R\).</div>
         </div>
       </div>
     </div>
@@ -252,6 +250,11 @@ MathJax = {
       <button type="button" class="bp-btn" id="bp-weiter">▶ Nächster Teil</button>
       <button type="button" class="bp-btn" id="bp-vorn">↺ Von vorn</button>
       <span class="bp-hinweis" id="bp-phase-nr"></span>
+    </div>
+    <div class="bp-steuer" role="group" aria-label="Whisker">
+      <span class="bp-hinweis">Whisker:</span>
+      <button type="button" class="bp-btn bp-wmodus" data-zaun="1" aria-pressed="true">Ausreisser einzeln</button>
+      <button type="button" class="bp-btn bp-wmodus" data-zaun="0" aria-pressed="false">bis Min und Max</button>
     </div>
     <svg class="bp-svg bp-zieh" id="bp-s3" role="img" aria-label="Punktdiagramm und darunter der Boxplot derselben Werte, Teil für Teil aufgebaut"></svg>
     <div class="bp-dyn" id="bp-f3" aria-live="polite"></div>
@@ -280,7 +283,7 @@ MathJax = {
   <div class="widget-body">
     <svg class="bp-svg bp-zieh" id="bp-s4" role="img" aria-label="Boxplot in vier farbigen Teilen mit der Anzahl Werte und der Länge jedes Teils"></svg>
     <div class="bp-dyn" id="bp-f4"></div>
-    <p class="bp-cap">Punkte in den Whiskern <span class="tx-rand">orange</span>, in der Box <span class="tx-box">blau</span>. Grau umrandete Punkte liegen genau auf \(Q_1\), dem Median oder \(Q_3\) und zählen zu keinem Teil.</p>
+    <p class="bp-cap">Hier reichen die Whisker immer bis \(Q_0\) und \(Q_4\), auch bei Ausreissern: So umfasst jeder Teil ein Viertel der Werte. Punkte in den Whiskern <span class="tx-rand">orange</span>, in der Box <span class="tx-box">blau</span>. Grau umrandete Punkte liegen genau auf \(Q_1\), dem Median oder \(Q_3\) und zählen zu keinem Teil.</p>
   </div>
 </div>
 
@@ -292,20 +295,22 @@ MathJax = {
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Wähle oben «mit Ausreisser» und ziehe hier den grössten Wert hin und her. Was bewegt sich im Boxplot, was bleibt stehen? Beobachte auch \(\bar{x}\). Schalte dann die Faustregel ein.</div>
+          <div class="ah-text">Wähle oben «mit Ausreisser» und ziehe hier den grössten Wert hin und her. Ab wann wird er als einzelner Punkt gezeichnet? Was bleibt im Boxplot stehen, und was macht \(\bar{x}\)? Schalte dann auf «bis Min und Max» um.</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Ein Ausreisser verlängert nur seinen Whisker. Box und Median bleiben stehen, weil sie nur auf die Plätze in der Mitte der sortierten Liste schauen; der Mittelwert dagegen wandert mit. Nach der Faustregel aus 4.3 gilt ein Wert als Ausreisser, wenn er mehr als \(1.5 \cdot \text{QD}\) über \(Q_3\) oder unter \(Q_1\) liegt. Viele Programme zeichnen ihn dann als einzelnen Punkt, und der Whisker endet beim letzten Wert davor.</div>
+          <div class="ah-text">Nach der Faustregel aus 4.3 ist ein Wert ein Ausreisser, wenn er mehr als \(1.5 \cdot \text{QD}\) über \(Q_3\) oder unter \(Q_1\) liegt. Er wird als einzelner Punkt gezeichnet, der Whisker endet beim letzten Wert davor. So fällt er sofort auf, statt den Whisker aufzublähen. Box und Median bleiben stehen, wohin er auch wandert, weil sie nur auf die Plätze in der Mitte der sortierten Liste schauen; der Mittelwert dagegen wandert mit. Zeichnet man die Whisker bis Min und Max (wie in 4.2), verrät nur ihre Länge den Ausreisser.</div>
         </div>
       </div>
     </div>
   </div>
   <div class="widget-body">
-    <div class="bp-schalter">
-      <label><input type="checkbox" id="bp-zaun"> <span>Faustregel: Ausreisser (mehr als \(1.5 \cdot \text{QD}\) ausserhalb der Box) einzeln zeichnen</span></label>
+<div class="bp-steuer" role="group" aria-label="Whisker">
+      <span class="bp-hinweis">Whisker:</span>
+      <button type="button" class="bp-btn bp-wmodus" data-zaun="1" aria-pressed="true">Ausreisser einzeln</button>
+      <button type="button" class="bp-btn bp-wmodus" data-zaun="0" aria-pressed="false">bis Min und Max</button>
     </div>
     <svg class="bp-svg bp-zieh" id="bp-s5" role="img" aria-label="Punktdiagramm und Boxplot mit Mittelwert, wahlweise mit den Grenzen der Faustregel für Ausreisser"></svg>
     <div class="bp-kacheln" id="bp-kacheln"></div>
@@ -340,6 +345,11 @@ MathJax = {
       <button type="button" class="bp-btn bp-bspB" data-werte="8,9,9,10,10,10,11,11,12" aria-pressed="false">eng beisammen</button>
       <button type="button" class="bp-btn bp-bspB" data-werte="2,3,3,4,4,5,5,6,7,9,12,17" aria-pressed="false">rechtsschief</button>
     </div>
+<div class="bp-steuer" role="group" aria-label="Whisker">
+      <span class="bp-hinweis">Whisker:</span>
+      <button type="button" class="bp-btn bp-wmodus" data-zaun="1" aria-pressed="true">Ausreisser einzeln</button>
+      <button type="button" class="bp-btn bp-wmodus" data-zaun="0" aria-pressed="false">bis Min und Max</button>
+    </div>
     <svg class="bp-svg" id="bp-s6" role="img" aria-label="Boxplots der Gruppen A und B untereinander auf derselben Achse"></svg>
     <div class="bp-eingabe">
       <label for="bp-wertB">Werte B</label>
@@ -358,7 +368,7 @@ MathJax = {
   <li><strong>Lage:</strong> der Median, der Strich in der Box.</li>
   <li><strong>Streuung:</strong> die Breite der Box ist die Quartilsdifferenz \(\text{QD} = Q_3 - Q_1\), die ganze Länge die Spannweite \(R = Q_4 - Q_0\).</li>
   <li><strong>Form:</strong> Sind die beiden Seiten gleich lang, ist die Verteilung ungefähr symmetrisch; ist eine Seite deutlich länger, ist sie schief, und zwar zu dieser Seite hin.</li>
-  <li><strong>Ausreisser:</strong> ein auffällig langer Whisker, bei der Faustregel ein einzelner Punkt.</li>
+  <li><strong>Ausreisser:</strong> meist als einzelner Punkt neben dem Whisker (Faustregel \(1.5 \cdot \text{QD}\)). Es gibt auch Boxplots, deren Whisker bis Min und Max reichen, wie in 4.2; dort verrät nur ein auffällig langer Whisker den Ausreisser. Beim Lesen darum zuerst schauen, ob einzelne Punkte eingezeichnet sind.</li>
 </ul>
 
 <p>Nicht sichtbar sind die einzelnen Werte, ihre Anzahl \(n\) und der Mittelwert. Auch Gipfel zeigt der Boxplot nicht: Wähle in Schritt 1 «zwei Gruppen». Der Boxplot sieht unauffällig aus, und der Median liegt mitten in der Lücke, wo es gar keine Werte gibt. Wer das wissen will, braucht das Punktdiagramm oder ein Histogramm.</p>
@@ -449,9 +459,9 @@ const gerundet = (x, d = 2) => Math.abs(Math.round(x * 10 ** d) / 10 ** d - x) >
 // ── Oberfläche ──
 const $ = id => document.getElementById(id);
 const FARBE = { rand: '#b85c00', box: '#1a4f8a', mitte: '#5b2d8e', median: '#1c1a17', punkt: '#4a463f', grau: '#8a8278',
-  gitter: '#e6e1d6', achse: '#8a8278', text: '#4a463f', hellRand: '#fdefd8', hellBox: '#ddeaf8', B: '#1f6b3a', hellB: '#d8f0e2' };
+  gitter: '#e6e1d6', achse: '#8a8278', text: '#4a463f', hellRand: '#fdefd8', hellBox: '#ddeaf8', B: '#1f6b3a', hellB: '#d8f0e2', aus: '#b3261e' };
 const Q_NAME = ['Q₀', 'Q₁', 'Q₂', 'Q₃', 'Q₄'], Q_FARBE = [FARBE.rand, FARBE.box, FARBE.median, FARBE.box, FARBE.rand];
-let daten = [3, 5, 6, 7, 8, 8, 9, 11, 12, 15], datenB = [8, 10, 11, 12, 12, 13, 14, 14, 15, 16, 18], phase = 5, mitZaun = false;
+let daten = [3, 5, 6, 7, 8, 8, 9, 11, 12, 15], datenB = [8, 10, 11, 12, 12, 13, 14, 14, 15, 16, 18], phase = 5, mitZaun = true;
 const minus = t => String(t).replace(/^-/, '−');
 const NS = 'http://www.w3.org/2000/svg';
 function el(name, attr, text) {
@@ -519,9 +529,10 @@ function reihen(items, W) {
   });
   return Math.max(1, ende.length);
 }
-// Boxplot um die Mittellinie y; o.phase 0–5 baut ihn auf, o.wu/o.wo Whiskerenden, o.teile färbt die vier Teile
+// Boxplot um die Mittellinie y; o.phase 0–5 baut ihn auf, o.teile färbt die vier Teile,
+// o.zaun (aus zaeune()): fertiger Boxplot mit Whiskern bis zum letzten Wert innerhalb und Ausreissern als Kreisen
 function boxplot(svg, k, x, y, h, o = {}) {
-  const ph = o.phase === undefined ? 5 : o.phase, wu = o.wu === undefined ? k.q0 : o.wu, wo = o.wo === undefined ? k.q4 : o.wo;
+  const ph = o.phase === undefined ? 5 : o.phase, z = ph >= 5 ? o.zaun : null, wu = z ? z.wu : k.q0, wo = z ? z.wo : k.q4;
   const fBox = o.farbe || FARBE.box, fRand = o.farbe || FARBE.rand, hell = o.hell || FARBE.hellBox;
   if (ph >= 5) {
     const st = o.teile ? { stroke: FARBE.rand, 'stroke-width': 5, opacity: 0.85 } : { stroke: fRand, 'stroke-width': 2, 'stroke-dasharray': '5 4' };
@@ -532,6 +543,7 @@ function boxplot(svg, k, x, y, h, o = {}) {
   if (ph >= 1) for (const v of [wu, wo]) svg.appendChild(el('line', { x1: x(v), y1: y - h / 4, x2: x(v), y2: y + h / 4, stroke: fRand, 'stroke-width': 2.5 }));
   if (ph >= 3 && ph < 4) for (const v of [k.q1, k.q3]) svg.appendChild(el('line', { x1: x(v), y1: y - h / 2, x2: x(v), y2: y + h / 2, stroke: fBox, 'stroke-width': 2.5 }));
   if (ph >= 2) svg.appendChild(el('line', { x1: x(k.q2), y1: y - h / 2, x2: x(k.q2), y2: y + h / 2, stroke: o.farbe || FARBE.median, 'stroke-width': 3.5 }));
+  if (z) z.aus.forEach(v => svg.appendChild(el('circle', { cx: x(v), cy: y, r: 5, fill: '#fff', stroke: o.farbe || FARBE.aus, 'stroke-width': 2.5 })));
 }
 // Die fünf Zahlen unter dem Boxplot beschriften; welche = Indizes 0–4
 function fuenfZahlen(svg, k, x, y, W, welche) {
@@ -627,12 +639,16 @@ function zeichne3() {
     const ro = rolle(k, rang, phase);
     return ro < 0 ? { fill: '#fff', stroke: phase ? FARBE.grau : FARBE.punkt } : { fill: Q_FARBE[ro], stroke: Q_FARBE[ro] };
   }, true);
-  boxplot(svg, k, x, yBox, hBox, { phase });
+  const z = zaeune(daten);
+  boxplot(svg, k, x, yBox, hBox, { phase, zaun: mitZaun ? z : null });
   const hT = welche.length ? fuenfZahlen(svg, k, x, yBox + hBox / 2 + 2, W, welche) : 0;
   svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (yBox + hBox / 2 + hT + 8));
   $('bp-weiter').disabled = phase >= 5;
   $('bp-phase-nr').textContent = 'Teil ' + phase + ' von 5';
   let t = '<p>' + PHASEN[phase] + '</p>';
+  if (phase === 5 && z.aus.length) t += mitZaun
+    ? '<p>' + (z.aus.length === 1 ? 'Der Wert ' + z.aus[0] + ' ist' : 'Die Werte ' + z.aus.join(', ') + ' sind') + ' nach der Faustregel ein Ausreisser (Schritt 5) und ' + (z.aus.length === 1 ? 'steht' : 'stehen') + ' als einzelner Punkt da. Die Whisker enden bei ' + z.wu + ' und ' + z.wo + ', den äussersten Werten davor.</p>'
+    : '<p>Die Whisker reichen bis Min und Max, auch zum Ausreisser ' + z.aus.join(', ') + '.</p>';
   if (phase === 5) t += '<p>\\(R = ' + k.q4 + ' - ' + k.q0 + ' = ' + zahl(k.R) + '\\), \\(\\text{QD} = ' + zahl(k.q3) + ' - ' + zahl(k.q1) + ' = ' + zahl(k.QD) + '\\).</p>';
   setzeTex('bp-f3', t);
 }
@@ -691,10 +707,9 @@ function zeichne5() {
   });
   achse(svg, x, yB, W);
   const ausRang = new Set(); const rg = raenge(daten);
-  if (mitZaun) daten.forEach((v, i) => { if (v < z.u || v > z.o) ausRang.add(rg[i]); });
+  daten.forEach((v, i) => { if (v < z.u || v > z.o) ausRang.add(rg[i]); });
   punkte(svg, daten, x, yB, r, rang => ausRang.has(rang) ? { fill: '#fde2e2', stroke: '#b3261e' } : { fill: '#fff', stroke: FARBE.punkt }, true);
-  boxplot(svg, k, x, yBox, hBox, mitZaun ? { wu: z.wu, wo: z.wo } : {});
-  if (mitZaun) z.aus.forEach(v => svg.appendChild(el('circle', { cx: x(v), cy: yBox, r: 5, fill: '#fff', stroke: '#b3261e', 'stroke-width': 2.5 })));
+  boxplot(svg, k, x, yBox, hBox, { zaun: mitZaun ? z : null });
   const xm = x(k.m);
   svg.appendChild(el('path', { d: 'M' + xm + ' ' + (yBox + hBox / 2 + 4) + ' l6 7 l-6 7 l-6 -7 z', fill: FARBE.mitte }));
   svg.appendChild(el('text', { x: Math.min(W - 40, Math.max(40, xm)), y: yBox + hBox / 2 + 34, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.mitte }, 'x̄ ' + (gerundet(k.m) ? '≈ ' : '= ') + zahl(k.m)));
@@ -707,8 +722,8 @@ function zeichne5() {
   let t = '<p>Faustregel: Ausreisser liegen unter \\(Q_1 - 1.5 \\cdot \\text{QD} = ' + zahl(k.q1) + ' - 1.5 \\cdot ' + zahl(k.QD) + ' = ' + minus(zahl(z.u)) +
     '\\) oder über \\(Q_3 + 1.5 \\cdot \\text{QD} = ' + zahl(k.q3) + ' + 1.5 \\cdot ' + zahl(k.QD) + ' = ' + zahl(z.o) + '\\). ';
   t += z.aus.length ? (z.aus.length === 1 ? 'Ausreisser ist der Wert ' : 'Ausreisser sind die Werte ') + z.aus.join(', ') + '.' : 'Bei deinen Daten gibt es keinen Ausreisser.';
-  if (z.aus.length && !mitZaun) t += ' Schalte die Faustregel oben ein, um ' + (z.aus.length === 1 ? 'ihn' : 'sie') + ' einzeln zu sehen.';
-  if (mitZaun && z.aus.length) t += ' Die Whisker reichen nur noch bis ' + z.wu + ' und ' + z.wo + ', die letzten Werte innerhalb der Grenzen.';
+  if (z.aus.length) t += mitZaun ? ' Die Whisker reichen nur bis ' + z.wu + ' und ' + z.wo + ', den letzten Werten innerhalb der Grenzen.'
+    : ' Mit «bis Min und Max» steckt ' + (z.aus.length === 1 ? 'er' : 'stecken sie') + ' im Whisker; nur seine Länge fällt auf.';
   setzeTex('bp-f5', t + '</p>');
 }
 
@@ -719,8 +734,8 @@ function zeichne6() {
   svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (yAx + 28)); leer(svg);
   for (let t = X_MIN; t <= X_MAX; t += 2) svg.appendChild(el('line', { x1: x(t), y1: 8, x2: x(t), y2: yAx, stroke: FARBE.gitter }));
   achse(svg, x, yAx, W);
-  boxplot(svg, a, x, yA, hBox, {});
-  boxplot(svg, b, x, yBb, hBox, { farbe: FARBE.B, hell: FARBE.hellB });
+  boxplot(svg, a, x, yA, hBox, { zaun: mitZaun ? zaeune(daten) : null });
+  boxplot(svg, b, x, yBb, hBox, { farbe: FARBE.B, hell: FARBE.hellB, zaun: mitZaun ? zaeune(datenB) : null });
   const marke = (k, y, name, f) => {
     const links = x(k.q0) > 40;
     svg.appendChild(el('text', { x: links ? x(k.q0) - 8 : x(k.q4) + 8, y: y + 5, 'font-size': 14, 'font-weight': 700, 'text-anchor': links ? 'end' : 'start', fill: f }, name));
@@ -800,7 +815,11 @@ document.querySelectorAll('.bp-bspB').forEach(b => b.addEventListener('click', (
 }));
 $('bp-weiter').addEventListener('click', () => { phase = Math.min(5, phase + 1); zeichne3(); });
 $('bp-vorn').addEventListener('click', () => { phase = 0; zeichne3(); });
-$('bp-zaun').addEventListener('change', e => { mitZaun = e.target.checked; zeichne5(); });
+document.querySelectorAll('.bp-wmodus').forEach(b => b.addEventListener('click', () => {
+  mitZaun = b.dataset.zaun === '1';
+  document.querySelectorAll('.bp-wmodus').forEach(x => x.setAttribute('aria-pressed', String((x.dataset.zaun === '1') === mitZaun)));
+  zeichne3(); zeichne5(); zeichne6();
+}));
 let groesseUhr = null;
 window.addEventListener('resize', () => { clearTimeout(groesseUhr); groesseUhr = setTimeout(() => alles(false), 150); });
 $('bp-wertB').value = datenB.join(', ');
