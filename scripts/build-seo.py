@@ -159,8 +159,8 @@ SEITEN = {
  'werkzeuge/systemtrainer.html': dict(
    ort='Werkzeuge · Systemtrainer',
    typ='article', lrt=['Werkzeug', 'Übung'],
-   titel='Systemtrainer — lineare Gleichungssysteme lösen mit Probe und Skizze',
-   beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen ohne Taschenrechner lösen, auch ohne oder mit unendlich vielen Lösungen — mit Probe, Diagnose und Skizze.',
+   titel='Systemtrainer — das Vorgehen bei linearen Gleichungssystemen üben',
+   beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen Schritt für Schritt: Verfahren wählen, Gleichungen vorbereiten, anwenden, Lösungsfall deuten — das Werkzeug rechnet.',
    themen=['Mathematik', 'Lineare Gleichungssysteme', 'Einsetzverfahren', 'Additionsverfahren', 'Lösungsmenge', 'Übung']),
  'simulationen/boxplot.html': dict(
    ort='Simulationen · Boxplot',

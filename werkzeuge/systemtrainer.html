@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Systemtrainer — Mathe begreifbar</title>
 <!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
-<meta name="description" content="Lineare Gleichungssysteme mit zwei und drei Variablen ohne Taschenrechner lösen, auch ohne oder mit unendlich vielen Lösungen — mit Probe, Diagnose und Skizze.">
+<meta name="description" content="Lineare Gleichungssysteme mit zwei und drei Variablen Schritt für Schritt: Verfahren wählen, Gleichungen vorbereiten, anwenden, Lösungsfall deuten — das Werkzeug rechnet.">
 <meta name="author" content="Raphael Arnold Kohler">
 <link rel="canonical" href="https://mathe.begreifbar.ch/werkzeuge/systemtrainer.html">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -14,8 +14,8 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Mathe begreifbar">
 <meta property="og:locale" content="de_CH">
-<meta property="og:title" content="Systemtrainer — lineare Gleichungssysteme lösen mit Probe und Skizze">
-<meta property="og:description" content="Lineare Gleichungssysteme mit zwei und drei Variablen ohne Taschenrechner lösen, auch ohne oder mit unendlich vielen Lösungen — mit Probe, Diagnose und Skizze.">
+<meta property="og:title" content="Systemtrainer — das Vorgehen bei linearen Gleichungssystemen üben">
+<meta property="og:description" content="Lineare Gleichungssysteme mit zwei und drei Variablen Schritt für Schritt: Verfahren wählen, Gleichungen vorbereiten, anwenden, Lösungsfall deuten — das Werkzeug rechnet.">
 <meta property="og:url" content="https://mathe.begreifbar.ch/werkzeuge/systemtrainer.html">
 <meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -27,8 +27,8 @@
    "@type": "WebPage",
    "@id": "https://mathe.begreifbar.ch/werkzeuge/systemtrainer.html#inhalt",
    "url": "https://mathe.begreifbar.ch/werkzeuge/systemtrainer.html",
-   "name": "Systemtrainer — lineare Gleichungssysteme lösen mit Probe und Skizze",
-   "description": "Lineare Gleichungssysteme mit zwei und drei Variablen ohne Taschenrechner lösen, auch ohne oder mit unendlich vielen Lösungen — mit Probe, Diagnose und Skizze.",
+   "name": "Systemtrainer — das Vorgehen bei linearen Gleichungssystemen üben",
+   "description": "Lineare Gleichungssysteme mit zwei und drei Variablen Schritt für Schritt: Verfahren wählen, Gleichungen vorbereiten, anwenden, Lösungsfall deuten — das Werkzeug rechnet.",
    "inLanguage": "de-CH",
    "isAccessibleForFree": true,
    "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
@@ -145,25 +145,27 @@ MathJax = {
 .sy-tag.sy-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
 .sy-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
 .sy-ausdruck { font-size:1.2rem; padding:8px 4px 12px; overflow-x:auto; }
-.sy-faelle { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
-.sy-faelle .sy-btn { font-weight:500; }
-.sy-faelle .sy-btn[aria-pressed="true"] { background:var(--orange); color:var(--weiss); border-color:var(--orange); }
-.sy-faelle .sy-btn.sy-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
-.sy-eingabe { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; }
-.sy-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:6.5em; max-width:100%;
-  border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
-.sy-eingabe input.sy-lang { width:11em; }
-#sy-felder:empty { display:none; }
-.sy-eingabe input:focus { outline:none; border-color:var(--orange); }
-.sy-feld { display:inline-flex; align-items:center; gap:6px; }
-.sy-feld label { font-size:1rem; }
-.sy-vorschau { font-size:1.05rem; color:var(--tinte); min-height:2em; margin:2px 0 8px; overflow-x:auto; }
+.sy-phasen { display:flex; flex-wrap:wrap; gap:4px 6px; margin:0 0 10px; }
+.sy-phasen:empty { display:none; }
+.sy-phase { font-family:var(--mono); font-size:.68rem; padding:2px 9px; border-radius:20px; border:1px solid var(--linie); color:var(--tinte-2); background:var(--papier-2); }
+.sy-phase.jetzt { background:var(--orange-hell); color:var(--orange); border-color:var(--orange-rand); font-weight:600; }
+.sy-phase.erledigt { background:var(--gruen-hell); color:var(--gruen); border-color:var(--gruen-rand); }
+.sy-frage { font-family:var(--sans); font-size:.95rem; font-weight:600; color:var(--tinte); margin:14px 0 6px; }
+.sy-wahl-titel { margin:10px 0 6px; }
+.sy-wahlen { display:flex; flex-direction:column; gap:6px; }
+.sy-wahl { display:flex; gap:10px; align-items:baseline; text-align:left; font-family:var(--sans); font-size:.92rem; line-height:1.35;
+  padding:8px 12px; border-radius:8px; cursor:pointer; border:1.5px solid var(--orange-rand); background:var(--weiss); color:var(--tinte); }
+.sy-wahl:hover:not(:disabled) { background:var(--orange-hell); }
+.sy-wahl:focus-visible { outline:2px solid var(--orange); outline-offset:1px; }
+.sy-wahl .sy-nr { font-family:var(--mono); font-size:.7rem; color:var(--orange); min-width:1em; }
+.sy-wahl:disabled { cursor:default; }
+.sy-wahl.sy-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
+.sy-wahl.sy-um { border-color:var(--linie); background:var(--papier-2); color:var(--tinte-2); }
 .sy-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
   border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
 .sy-btn:hover { filter:brightness(.97); }
 .sy-btn.sy-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
 .sy-btn:disabled { opacity:.45; cursor:default; }
-.sy-hinweis { font-family:var(--sans); font-size:.78rem; color:var(--tinte-2); margin-top:6px; }
 .sy-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
 .sy-rueck:empty { display:none; }
 .sy-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
@@ -192,7 +194,6 @@ MathJax = {
   .sy-ausdruck { font-size:1.05rem; }
   .sy-btn.sy-weiter { min-width:0; flex:1 1 60%; }
   .sy-taste { display:none; }
-  .sy-faelle .sy-btn { flex:1 1 30%; padding:8px 6px; font-size:.85rem; }
 }
 </style>
 </head>
@@ -203,7 +204,7 @@ MathJax = {
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Systemtrainer</h1>
-      <p class="pt-untertitel">Lineare Gleichungssysteme mit zwei und drei Variablen ohne Taschenrechner lösen: Lösungsfall bestimmen, Lösungsmenge angeben, und bei Fehlern sehen, wo es klemmt. Bei 2×2-Systemen zeigt das Werkzeug danach die beiden Geraden.
+      <p class="pt-untertitel">Lineare Gleichungssysteme mit zwei und drei Variablen: Hier übst du das Vorgehen, nicht das Rechnen. Du wählst das Verfahren, bereitest die Gleichungen vor, wendest das Verfahren an und deutest das Ergebnis. Das Werkzeug rechnet jeden Schritt aus. Bei 2×2-Systemen zeigt es am Schluss die beiden Geraden.
         Der Stoff dazu steht in <a href="../grundlagen/g2-3-lineare-gleichungssysteme.html#verfahren">2.3 Lineare Gleichungssysteme</a>.</p>
     </div>
 
@@ -213,21 +214,13 @@ MathJax = {
       <div class="sy-kopf"><span class="sy-tag" id="sy-nr"></span><span class="sy-tag sy-thema" id="sy-thema"></span></div>
       <p class="sy-auftrag" id="sy-auftrag"></p>
       <div class="sy-ausdruck" id="sy-ausdruck"></div>
-      <div class="sy-faelle" id="sy-faelle" role="group" aria-label="Lösungsfall">
-        <button type="button" class="sy-btn" data-f="eine" aria-pressed="false">genau eine Lösung</button>
-        <button type="button" class="sy-btn" data-f="keine" aria-pressed="false">keine Lösung</button>
-        <button type="button" class="sy-btn" data-f="unendlich" aria-pressed="false">unendlich viele</button>
-      </div>
-      <div id="sy-antwort">
-        <div class="sy-vorschau" id="sy-vorschau" aria-live="polite"></div>
-        <div class="sy-eingabe">
-          <span id="sy-felder" class="sy-eingabe"></span>
-          <button type="button" class="sy-btn" id="sy-pruefen">Prüfen<span class="sy-taste">Enter</span></button>
-        </div>
-        <div class="sy-hinweis" id="sy-hinweis"></div>
+      <div class="sy-phasen" id="sy-phasen"></div>
+      <div class="sy-weg" id="sy-weg" hidden></div>
+      <div class="sy-schritt" id="sy-schritt">
+        <p class="sy-frage" id="sy-frage"></p>
+        <div id="sy-optionen" role="group" aria-label="Nächster Schritt"></div>
       </div>
       <div class="sy-rueck" id="sy-rueck" aria-live="polite"></div>
-      <div class="sy-weg" id="sy-weg" hidden></div>
     </div>
     <div class="sy-knoepfe" id="sy-weiter-box" hidden>
       <button type="button" class="sy-btn sy-weiter" id="sy-weiter">Nächste Aufgabe →<span class="sy-taste">Enter</span></button>
@@ -238,15 +231,16 @@ MathJax = {
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert der Trainer</div>
-  <p>Eine Runde hat zehn Zufallsaufgaben aus den Themen, die du rechts wählst. Rechne auf Papier und gib nur das Ergebnis ein.</p>
+  <p>Eine Runde hat zehn Zufallsaufgaben aus den Themen, die du rechts wählst. Du entscheidest bei jedem Schritt, wie es weitergeht. Das Werkzeug führt den Schritt aus und schreibt ihn in «Dein Weg».</p>
   <ul>
-    <li><strong>Lösungsfall wählen:</strong> genau eine Lösung, keine Lösung oder unendlich viele. Danach erscheinen die passenden Felder, und darüber siehst du deine Lösungsmenge so, wie man sie aufschreibt.</li>
-    <li><strong>Genau eine Lösung:</strong> je eine Zahl für \(x\), \(y\) (und \(z\)), als ganze Zahl, Bruch wie <code>3/2</code> oder Dezimalzahl mit Punkt.</li>
-    <li><strong>Unendlich viele:</strong> \(x\) ist frei wählbar. Gib \(y\) (und \(z\)) als Ausdruck in \(x\) ein, z.B. <code>2x - 3</code> oder <code>(6 - 2x)/3</code>. Jede gleichwertige Schreibweise zählt.</li>
-    <li><strong>Falsch:</strong> Das Werkzeug macht mit deiner Antwort die Probe und erkennt typische Fehler, etwa vertauschte Werte, ein falsches Vorzeichen oder \(0 = 0\) als Widerspruch gelesen. Du hast einen zweiten Versuch, danach kommt der Lösungsweg.</li>
+    <li><strong>Verfahren und Vorbereitung:</strong> Wähle Einsetz-, Gleichsetz- oder Additionsverfahren. Du kannst auch zuerst umformen und erst dann das Verfahren wählen: eine Gleichung ordnen, nach einer Variablen auflösen oder beide so vervielfachen, dass vor einer Variablen gleiche Beträge stehen.</li>
+    <li><strong>Anwenden:</strong> einsetzen, gleichsetzen, addieren oder subtrahieren.</li>
+    <li><strong>Lösen:</strong> Es bleibt eine Gleichung. Steht noch eine Variable da, löst du nach ihr auf. Ist sie weggefallen, entscheidest du: Widerspruch wie \(0 = 5\) oder immer wahr wie \(0 = 0\)?</li>
+    <li><strong>Zurück einsetzen:</strong> Wähle eine Gleichung, aus der sich die zweite Variable berechnen lässt. Bei 3×3-Systemen eliminierst du vorher eine Variable und wählst die Gleichung, mit der du sie aus den beiden anderen entfernst.</li>
+    <li><strong>Rückmeldung:</strong> ✓ Der Schritt passt und wird ausgeführt. ≈ Erlaubt, aber ein Umweg: Das Werkzeug sagt, was kürzer ist, und du wählst neu. Das zählt nicht als Fehler. ✗ Der Schritt passt nicht, mit Begründung. Beim zweiten Fehlgriff im selben Schritt kommt ein Tipp, beim dritten zeigt das Werkzeug den Schritt.</li>
     <li><strong>Lösungsfall erkennen:</strong> Hier entscheidest du nur, wie viele Lösungen es gibt. Am schnellsten geht das, wenn du beide Gleichungen nach \(y\) auflöst und Steigung und Achsenabschnitt vergleichst.</li>
   </ul>
-  <p>Am Ende der Runde siehst du, welche Fehler am häufigsten waren, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
+  <p>Die Schritte wählst du mit der Maus oder mit den Zifferntasten. Am Ende der Runde siehst du, wo es am häufigsten geklemmt hat, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
 </div>
 
 <details class="block block-merksatz" style="margin-top:10px">
@@ -298,10 +292,10 @@ MathJax = {
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
 // Alles zwischen KERN:ANFANG und KERN:ENDE läuft ohne DOM; scripts/verify_systemtrainer.js lädt genau
-// diesen Block in node:vm, spielt Zufallsaufgaben durch und rechnet jede Zeile in python3 nach.
+// diesen Block in node:vm, geht Zufallsaufgaben auf zufälligen Wegen durch und rechnet jede Zeile in python3 nach.
 //
 // Gleichung = { k:[a, b(, c)], r } für a·x + b·y (+ c·z) = r, alle Zahlen ganz.
-// Eine Aufgabe trägt ihre Gleichungen, die Anzeigeform (std | y | x: nach y bzw. x aufgelöst),
+// Eine Aufgabe trägt ihre Gleichungen, die Anzeigeform (std | y | x: nach y bzw. x aufgelöst | roh: a·x = −b·y + r),
 // den Lösungsfall (eine | keine | unendlich) und die Lösung: bei «eine» das Tupel, bei «unendlich»
 // die übrigen Variablen als lineare Ausdrücke in x ([m, q] für m·x + q, rational).
 
@@ -361,6 +355,7 @@ const glTex = (g, nm = VAR) => termTex(g.k, nm) + ' = ' + g.r;
 function zeigeGl(g, form) {
   if (form === 'y') return 'y &= {' + linTex(Q(-g.k[0], g.k[1]), Q(g.r, g.k[1])) + '}';
   if (form === 'x') return 'x &= {' + linTex(Q(-g.k[1], g.k[0]), Q(g.r, g.k[0]), 'y') + '}';
+  if (form === 'roh') return '{' + glied(g.k[0], 'x') + '} &= {' + summe([[-g.k[1], 'y'], [g.r, '']]) + '}';
   return '{' + termTex(g.k) + '} &= ' + g.r;
 }
 function systemTex(a) {
@@ -397,200 +392,414 @@ function loese(gl) {
   return { fall: 'unendlich', loes: ex };
 }
 
-// ── Lösungsweg ──
-// Zeile: { z: Tex einer Gleichung (Kette mit = erlaubt), k: Kommentar } oder { text }.
-// Ein 2×2-Weg liefert neben den Zeilen das Ergebnis: { fall, werte:[Q,Q] } bzw. bei «unendlich»
-// den Ausdruck der zweiten Variablen in der ersten.
-function setzeEin(g, idx, wert, nm) {                 // g mit eingesetztem Wert der Variablen idx
-  return summe(g.k.map((c, i) => [c, i === idx ? { zahl: wertTex(wert) } : nm[i]])) + ' = ' + g.r;
+// ── Schritte ──
+// Geübt wird das Vorgehen, gerechnet wird vom Werkzeug. Ein Zustand S trägt das Arbeitssystem und die Phase:
+//   2×2 (auch das Teilsystem IV, V eines 3×3): start (Verfahren wählen oder umformen, in beliebiger Reihenfolge)
+//   → vorb (das gewählte Verfahren vorbereiten) → anw (anwenden) → eins (Gleichung mit einer Variablen deuten)
+//   → zurueck (zweite Variable) → ende;  3×3 davor: var (welche Variable eliminieren) → pivot (mit welcher
+//   Gleichung), danach zurueck3;  Thema «lage»: nur die Phase lage.
+// optionen(S) liefert die angebotenen Schritte { id, gruppe, label, st, grund, code, tun }:
+//   st 'ok' = passt, tun(S) führt ihn aus und schreibt den Verlauf; 'um' = erlaubt, aber ein Umweg (wird nicht
+//   ausgeführt, kein Fehler); 'x' = passt nicht, mit Begründung (zählt als Fehler, Code für die Bilanz).
+// Arbeitsgleichung = { k:[a, b], r, form, name }, form: std | roh (a·x = −b·y + r) | s0 | s1 (nach der ersten
+// bzw. zweiten Variablen aufgelöst). k und r bleiben ganz; Vervielfachen schreibt nur Zeilen in den Verlauf.
+const zahlTex = q => (q.n < 0 ? '(' + qTex(q) + ')' : qTex(q));          // eingesetzter Wert
+const FORM = { std: 'std', roh: 'roh', x: 's0', y: 's1' };
+const geloest = e => (e.form === 's0' ? 0 : e.form === 's1' ? 1 : -1);
+const ausdruck = (e, s) => [Q(-e.k[1 - s], e.k[s]), Q(e.r, e.k[s])];  // e nach s aufgelöst: m·t + q
+const glatt = (e, v) => e.k[v] !== 0 && e.k[1 - v] % e.k[v] === 0 && e.r % e.k[v] === 0;
+function eqTex(e, nm) {
+  const s = geloest(e);
+  if (s >= 0) { const [m, q] = ausdruck(e, s); return nm[s] + ' = ' + linTex(m, q, nm[1 - s]); }
+  if (e.form === 'roh') return glied(e.k[0], nm[0]) + ' = ' + summe([[-e.k[1], nm[1]], [e.r, '']]);
+  return termTex(e.k, nm) + ' = ' + e.r;
 }
-function nachAufloesen(g, idx, nm, wert, wegZ, kom) {
-  // g enthält nach dem Einsetzen von «wert» (Index 1 - idx) nur noch Variable idx
-  const j = 1 - idx, c = g.k[idx], rest = g.r - g.k[j] * wert;
-  wegZ.push({ z: setzeEin(g, j, wert, nm), k: kom });
-  if (c !== 1) wegZ.push({ z: glied(c, nm[idx]) + ' = ' + rest });
-  wegZ.push({ z: nm[idx] + ' = ' + qTex(Q(rest, c)), k: c !== 1 ? ': ' + wertTex(c) : '' });
-  return Q(rest, c);
+const VERF = { E: 'Einsetzverfahren', G: 'Gleichsetzverfahren', A: 'Additionsverfahren' };
+const T = s => '\\(' + s + '\\)';
+const tupel = S => (S.n === 2 ? 'Paar' : 'Tripel');
+function zeile(S, z, k) {                                              // doppelte Zeilen auslassen
+  const l = S.verlauf[S.verlauf.length - 1];
+  if (l && l.z === z) return;
+  S.verlauf.push(k ? { z, k } : { z });
 }
-function einfachste(gl) { let b = 0; gl.forEach((g, i) => { if (g.k.reduce((s, c) => s + Math.abs(c), 0) + Math.abs(g.r) / 10 < gl[b].k.reduce((s, c) => s + Math.abs(c), 0) + Math.abs(gl[b].r) / 10) b = i; }); return b; }
+const text = (S, t) => S.verlauf.push({ text: t });
 
-function weg2(gl, form, nm, namen) {
-  // gl: zwei Gleichungen in zwei Variablen (k der Länge 2), nm: Variablennamen, namen: ['I','II'] o.ä.
-  const z = [];
-  const ende = (fall, extra) => ({ zeilen: z, fall, ...extra });
-  // eine Gleichung enthält nur eine Variable → direkt lösen
-  for (let i = 0; i < 2; i++) for (let v = 0; v < 2; v++) if (gl[i].k[1 - v] === 0 && gl[i].k[v] !== 0) {
-    const o = gl[1 - i];
-    z.push({ text: namen[i] + ' enthält nur \\(' + nm[v] + '\\).' });
-    const w = Q(gl[i].r, gl[i].k[v]);
-    if (gl[i].k[v] !== 1) z.push({ z: nm[v] + ' = ' + qTex(w), k: namen[i] + ' : ' + wertTex(gl[i].k[v]) });
-    if (w.d !== 1 || o.k[1 - v] === 0) return null;              // kommt bei ganzzahligen Aufgaben nicht vor
-    const w2 = nachAufloesen(o, 1 - v, nm, w.n, z, 'in ' + namen[1 - i]);
-    const werte = []; werte[v] = w; werte[1 - v] = w2;
-    return ende('eine', { werte });
+function zustand(a) {
+  const S = { a, n: a.n, verlauf: [], phase: null, fall: null, werte: null };
+  if (a.art === 'lage') S.phase = 'lage';
+  else if (a.n === 2) setze2(S, a.gl.map((g, i) => ({ k: g.k.slice(), r: g.r, form: FORM[a.form[i]], name: ROEM[i] })), ['x', 'y'], [0, 1]);
+  else S.phase = 'var';
+  return S;
+}
+function setze2(S, eq, nm, idx) { Object.assign(S, { eq, nm, idx, methode: null, phase: 'start', fak: [1, 1], eins: null, wert: null }); }
+
+// nach dem Wählen eines Verfahrens oder einer Umformung: Ist das Verfahren schon anwendbar?
+function weiterNachVorb(S) {
+  if (!S.methode) { S.phase = 'start'; return; }
+  const l = S.eq.map(geloest);
+  if (S.methode === 'E') S.phase = l.some(s => s >= 0) ? 'anw' : 'vorb';
+  else if (S.methode === 'G') S.phase = l[0] >= 0 && l[0] === l[1] ? 'anw' : 'vorb';
+  else S.phase = 'vorb';
+}
+// Variable, vor der in beiden Gleichungen schon derselbe Betrag steht (sonst −1)
+const gleicherBetrag = S => [1, 0].find(v => S.eq[0].k[v] !== 0 && Math.abs(S.eq[0].k[v]) === Math.abs(S.eq[1].k[v])) ?? -1;
+
+// ── Optionen im 2×2 ──
+function optAufloesen(S, i, v) {
+  const e = S.eq[i], o = S.eq[1 - i], so = geloest(o), nm = S.nm;
+  const label = e.name + ' nach ' + T(nm[v]) + ' auflösen';
+  const tun = S => {
+    e.form = v ? 's1' : 's0';
+    zeile(S, eqTex(e, nm), e.name + ' nach ' + nm[v] + ' aufgelöst');
+    weiterNachVorb(S);
+  };
+  const r = (st, grund) => ({ id: 'U' + i + v, gruppe: 'Umformen', label, st, grund, code: 'vorbereitung', tun });
+  if (S.eq.some(q => q.form === 'roh')) return r('um', 'Ordne zuerst ' + S.eq.find(q => q.form === 'roh').name + ': die Variablen links, die Zahl rechts. Dann sieht man, welcher Weg passt.');
+  if (so >= 0) {
+    if (S.methode === 'G') return v === so ? r('ok') : r('x', 'Zum Gleichsetzen müssen beide Gleichungen nach derselben Variablen aufgelöst sein, hier nach ' + T(nm[so]) + '.');
+    return r('um', 'Nicht nötig: ' + o.name + ' ist schon nach ' + T(nm[so]) + ' aufgelöst. Setze sie direkt ein.');
   }
-  const aufg = form.findIndex(f => f === 'y' || f === 'x');
-  if (form[0] === form[1] && aufg >= 0) {
-    // Gleichsetzen: beide nach derselben Variablen aufgelöst
-    const s = form[0] === 'y' ? 1 : 0, t = 1 - s;
-    const ex = gl.map(g => [Q(-g.k[t], g.k[s]), Q(g.r, g.k[s])]);
-    z.push({ text: 'Beide Gleichungen sind nach \\(' + nm[s] + '\\) aufgelöst: gleichsetzen.' });
-    z.push({ z: linTex(ex[0][0], ex[0][1], nm[t]) + ' = ' + linTex(ex[1][0], ex[1][1], nm[t]), k: namen[0] + ' = ' + namen[1] });
-    const A = qSub(ex[0][0], ex[1][0]), B = qSub(ex[1][1], ex[0][1]);
-    if (A.n === 0) {
-      z.push({ z: '0 = ' + qTex(B), k: nm[t] + ' fällt weg' });
-      if (B.n !== 0) return ende('keine');
-      return ende('unendlich', { ausdruck: ex[0], frei: t });
+  const einer = S.eq.some(q => glatt(q, 0) || glatt(q, 1));
+  if (!glatt(e, v)) return r('um', 'Geht, aber dabei entstehen Brüche: vor ' + T(nm[v]) + ' steht ' + T(e.k[v]) + '. ' + (einer ? 'Nimm eine Variable, vor der 1 steht.' : 'Hier ist das Additionsverfahren geschickter.'));
+  if (S.methode === 'G' && !glatt(o, v)) return r('um', 'Geht, aber danach müsste auch ' + o.name + ' nach ' + T(nm[v]) + ' aufgelöst werden, und dabei entstehen Brüche.');
+  return r('ok');
+}
+function optOrdnen(S, i) {
+  const e = S.eq[i];
+  return { id: 'O' + i, gruppe: 'Umformen', label: e.name + ' ordnen: ' + T('ax + by = c'), st: 'ok', code: 'vorbereitung',
+    tun: S => { e.form = 'std'; zeile(S, eqTex(e, S.nm), e.name + ' geordnet'); weiterNachVorb(S); } };
+}
+function faktoren(S, v) { const c = S.eq.map(e => Math.abs(e.k[v])), l = kgV(c[0], c[1]); return [l / c[0], l / c[1]]; }
+const malText = (p, name) => (p !== 1 ? name + ' · ' + p : '');
+function optVervielfachen(S, v) {
+  const nm = S.nm, p = faktoren(S, v);
+  const was = [malText(p[0], S.eq[0].name), malText(p[1], S.eq[1].name)].filter(Boolean).join(', ');
+  const tun = S => {
+    if (!S.methode) { S.methode = 'A'; text(S, 'Additionsverfahren:'); }
+    S.fak = p;
+    S.eq.forEach((e, i) => { if (p[i] !== 1) zeile(S, termTex(e.k.map(c => c * p[i]), nm) + ' = ' + e.r * p[i], e.name + ' \\cdot ' + p[i]); });
+    S.phase = 'anw';
+  };
+  const r = (st, grund) => ({ id: 'V' + v, gruppe: 'Umformen', label: 'Vor ' + T(nm[v]) + ' gleiche Beträge schaffen' + (was ? ': ' + was : ''), st, grund, code: 'vorbereitung', tun });
+  const g = gleicherBetrag(S);
+  if (g === v) return r('um', 'Nicht nötig: Vor ' + T(nm[v]) + ' stehen schon ' + (S.eq[0].k[v] === S.eq[1].k[v] ? 'gleiche Zahlen' : 'Gegenzahlen') + '. ' + (S.methode ? 'Rechne direkt.' : 'Wähle das Additionsverfahren und rechne direkt.'));
+  if (g >= 0) return r('um', 'Geht, aber vor ' + T(nm[g]) + ' stehen schon gleiche Beträge. Ohne Vervielfachen ist es kürzer.');
+  return r('ok');
+}
+function optMethode(S, m) {
+  const [e0, e1] = S.eq, nm = S.nm, l = S.eq.map(geloest);
+  const r = (st, grund) => ({ id: 'M' + m, gruppe: 'Verfahren', label: VERF[m], st, grund, code: 'methode',
+    tun: S => { S.methode = m; text(S, VERF[m] + ':'); weiterNachVorb(S); } });
+  if (S.eq.some(q => q.form === 'roh')) return r('um', 'Ordne zuerst ' + S.eq.find(q => q.form === 'roh').name + ': die Variablen links, die Zahl rechts. Dann sieht man, welches Verfahren passt.');
+  if (l[0] >= 0 && l[1] >= 0) {
+    if (l[0] === l[1]) {
+      if (m === 'A') return r('um', 'Beide Gleichungen sind schon nach ' + T(nm[l[0]]) + ' aufgelöst. Gleichsetzen geht direkt.');
+      return r('ok');
     }
-    z.push({ z: summe([[A, nm[t]]]) + ' = ' + qTex(B) });
-    const w = qDiv(B, A);
-    if (!(A.n === 1 && A.d === 1)) z.push({ z: nm[t] + ' = ' + qTex(w), k: ': ' + wertTex(qTex(A)) });
-    const ws = qAdd(qMul(ex[0][0], w), ex[0][1]);
-    z.push({ z: nm[s] + ' = ' + summe([[ex[0][0], { zahl: wertTex(qTex(w)) }], [ex[0][1], '']]) + ' = ' + qTex(ws), k: 'in ' + namen[0] });
-    const werte = []; werte[t] = w; werte[s] = ws;
-    return ende('eine', { werte });
+    if (m === 'E') return r('ok');
+    return r('um', 'Die Gleichungen sind nach verschiedenen Variablen aufgelöst. Setze eine in die andere ein.');
   }
-  if (aufg >= 0) {
-    // Einsetzen: Gleichung «aufg» ist nach s aufgelöst
-    const s = form[aufg] === 'y' ? 1 : 0, t = 1 - s, g = gl[aufg], o = gl[1 - aufg];
-    const m = Q(-g.k[t], g.k[s]), q = Q(g.r, g.k[s]);
-    z.push({ text: namen[aufg] + ' ist nach \\(' + nm[s] + '\\) aufgelöst: in ' + namen[1 - aufg] + ' einsetzen.' });
-    const kl = '(' + linTex(m, q, nm[t]) + ')';
-    const glieder = []; glieder[t] = [o.k[t], nm[t]]; glieder[s] = [o.k[s], kl];
-    z.push({ z: summe(glieder) + ' = ' + o.r, k: namen[aufg] + ' in ' + namen[1 - aufg] });
-    const A = qAdd(Q(o.k[t]), qMul(Q(o.k[s]), m)), B = qMul(Q(o.k[s]), q);
-    z.push({ z: summe([[A, nm[t]], [B, '']]) + ' = ' + o.r, k: A.n === 0 ? 'ausmultiplizieren, ' + nm[t] + ' fällt weg' : 'ausmultiplizieren' });
-    const R = qSub(Q(o.r), B);
-    if (A.n === 0) {
-      if (R.n !== 0) return ende('keine');
-      return ende('unendlich', { ausdruck: [m, q], frei: t });
-    }
-    if (B.n !== 0) z.push({ z: summe([[A, nm[t]]]) + ' = ' + qTex(R), k: (B.n > 0 ? '-' : '+') + ' ' + qTex(Q(Math.abs(B.n), B.d)) });
-    const w = qDiv(R, A);
-    if (!(A.n === 1 && A.d === 1)) z.push({ z: nm[t] + ' = ' + qTex(w), k: ': ' + wertTex(qTex(A)) });
-    const ws = qAdd(qMul(m, w), q);
-    z.push({ z: nm[s] + ' = ' + summe([[m, { zahl: wertTex(qTex(w)) }], [q, '']]) + ' = ' + qTex(ws), k: 'in ' + namen[aufg] });
-    const werte = []; werte[t] = w; werte[s] = ws;
-    return ende('eine', { werte });
+  if (l[0] >= 0 || l[1] >= 0) {
+    const j = l[0] >= 0 ? 0 : 1, s = l[j];
+    if (m === 'E') return r('ok');
+    if (m === 'G') return r('um', 'Geht, aber dafür müsste zuerst auch ' + S.eq[1 - j].name + ' nach ' + T(nm[s]) + ' aufgelöst werden. Kürzer: ' + S.eq[j].name + ' direkt einsetzen.');
+    return r('um', S.eq[j].name + ' ist schon nach ' + T(nm[s]) + ' aufgelöst. Einsetzen ist kürzer.');
   }
-  // Additionsverfahren: die Variable mit dem kleineren kgV eliminieren (bei Gleichstand y)
-  const l = [0, 1].map(v => kgV(gl[0].k[v], gl[1].k[v]));
-  const e = l[0] < l[1] ? 0 : 1, b = 1 - e;
-  const p1 = l[e] / Math.abs(gl[0].k[e]), p2 = l[e] / Math.abs(gl[1].k[e]);
-  const minus = Math.sign(gl[0].k[e]) === Math.sign(gl[1].k[e]);
-  z.push({ text: 'Additionsverfahren: \\(' + nm[e] + '\\) eliminieren' + (p1 === 1 && p2 === 1 ? (minus ? ', die Zahlen vor \\(' + nm[e] + '\\) sind gleich.' : ', die Zahlen vor \\(' + nm[e] + '\\) sind Gegenzahlen.') : ', dazu die Zahlen vor \\(' + nm[e] + '\\) auf ' + l[e] + ' bringen.') });
-  const mal = (g, p) => ({ k: g.k.map(c => c * p), r: g.r * p });
-  const G1 = mal(gl[0], p1), G2 = mal(gl[1], p2);
-  if (p1 !== 1) z.push({ z: glTex(G1, nm), k: namen[0] + ' \\cdot ' + p1 });
-  if (p2 !== 1) z.push({ z: glTex(G2, nm), k: namen[1] + ' \\cdot ' + p2 });
-  const sg = minus ? -1 : 1;
-  const H = { k: G1.k.map((c, i) => c + sg * G2.k[i]), r: G1.r + sg * G2.r };
-  const kom = (p1 !== 1 ? p1 + ' \\cdot ' : '') + namen[0] + (minus ? ' - ' : ' + ') + (p2 !== 1 ? p2 + ' \\cdot ' : '') + namen[1];
-  if (H.k[b] === 0) {
-    z.push({ z: '0 = ' + H.r, k: kom });
-    if (H.r !== 0) return ende('keine');
-    // unendlich: nach der zweiten Variablen auflösen (Gleichung mit Koeffizient ≠ 0)
-    const i = gl[0].k[1] !== 0 ? 0 : 1, g = gl[i];
-    const m = Q(-g.k[0], g.k[1]), q = Q(g.r, g.k[1]);
-    return ende('unendlich', { ausdruck: [m, q], frei: 0, aus: i });
+  const einer = S.eq.some(q => glatt(q, 0) || glatt(q, 1));
+  if (m === 'E') return einer ? r('ok') : r('um', 'Beim Auflösen nach einer Variablen entstehen hier Brüche, denn vor keiner Variablen steht 1. Das Additionsverfahren ist geschickter.');
+  if (m === 'G') {
+    if ([0, 1].some(v => glatt(e0, v) && glatt(e1, v))) return r('ok');
+    return r('um', 'Dafür müssten beide Gleichungen nach derselben Variablen aufgelöst werden, und dabei entstehen Brüche.' + (einer ? ' Einsetzen ist kürzer.' : ' Das Additionsverfahren ist geschickter.'));
   }
-  z.push({ z: glied(H.k[b], nm[b]) + ' = ' + H.r, k: kom });
-  const w = Q(H.r, H.k[b]);
-  if (H.k[b] !== 1) z.push({ z: nm[b] + ' = ' + qTex(w), k: ': ' + wertTex(H.k[b]) });
-  if (w.d !== 1) return null;
-  const i = einfachste(gl), g = gl[i];
-  if (g.k[e] === 0) return null;
-  const we = nachAufloesen(g, e, nm, w.n, z, 'in ' + namen[i]);
-  const werte = []; werte[b] = w; werte[e] = we;
-  return ende('eine', { werte });
+  return r('ok');
+}
+function optStart(S) {
+  const o = ['E', 'G', 'A'].map(m => optMethode(S, m));
+  S.eq.forEach((e, i) => { if (e.form === 'roh') o.push(optOrdnen(S, i)); });
+  S.eq.forEach((e, i) => { if (e.form === 'std') for (const v of [1, 0]) if (e.k[v] !== 0) o.push(optAufloesen(S, i, v)); });
+  if (S.eq.every(e => e.form === 'std')) for (const v of [1, 0]) if (S.eq.every(e => e.k[v] !== 0)) o.push(optVervielfachen(S, v));
+  return o;
+}
+function optVorb(S) {
+  const o = [], nm = S.nm;
+  if (S.methode === 'A') {
+    for (const v of [1, 0]) if (S.eq.every(e => e.k[v] !== 0)) o.push(optVervielfachen(S, v));
+    const g = gleicherBetrag(S);
+    o.push({ id: 'D', gruppe: 'Umformen', label: 'Ohne Vervielfachen weiter', code: 'vorbereitung',
+      st: g >= 0 ? 'ok' : 'x', grund: g >= 0 ? '' : 'Vor keiner Variablen stehen gleiche Beträge. Beim Addieren oder Subtrahieren fiele keine weg.',
+      tun: S => { S.fak = [1, 1]; text(S, 'Vor ' + T(nm[g]) + ' stehen schon ' + (S.eq[0].k[g] === S.eq[1].k[g] ? 'gleiche Zahlen.' : 'Gegenzahlen.')); S.phase = 'anw'; } });
+    return o;
+  }
+  S.eq.forEach((e, i) => { if (e.form === 'std') for (const v of [1, 0]) if (e.k[v] !== 0) o.push(optAufloesen(S, i, v)); });
+  o.push(S.methode === 'E'
+    ? { id: 'D', gruppe: 'Umformen', label: 'Direkt einsetzen', st: 'x', code: 'vorbereitung', grund: 'Noch ist keine Gleichung nach einer Variablen aufgelöst. Was würdest du einsetzen?' }
+    : { id: 'D', gruppe: 'Umformen', label: 'Direkt gleichsetzen', st: 'x', code: 'vorbereitung', grund: 'Zum Gleichsetzen müssen beide Gleichungen nach derselben Variablen aufgelöst sein.' });
+  return o;
+}
+// Ergebnis des Anwendens: A·t = R in der Variablen t (A = 0: t ist weggefallen)
+function nachEins(S, t, A, R) { S.eins = { t, A, R }; S.phase = 'eins'; }
+function sortiert(S, t, A, R, kom) { zeile(S, A.n === 0 ? '0 = ' + qTex(R) : glied(A, S.nm[t]) + ' = ' + qTex(R), kom); }
+function einsetzen(S, j, kom0) {
+  const e = S.eq[j], o = S.eq[1 - j], nm = S.nm, s = geloest(e), t = 1 - s, so = geloest(o);
+  const [m, q] = ausdruck(e, s), kom = kom0 || e.name + ' in ' + o.name;
+  const kl = m.n === 0 ? { zahl: zahlTex(q) } : '(' + linTex(m, q, nm[t]) + ')';
+  if (so === s) {                                                    // beide nach s: das ist Gleichsetzen
+    const [m2, q2] = ausdruck(o, s);
+    zeile(S, linTex(m, q, nm[t]) + ' = ' + linTex(m2, q2, nm[t]), kom);
+    const A = qSub(m, m2), R = qSub(q2, q);
+    sortiert(S, t, A, R, A.n === 0 ? nm[t] + ' fällt weg' : 'sortieren');
+    return nachEins(S, t, A, R);
+  }
+  if (so === t) {                                                    // o: t = M·s + P
+    const [M, P] = ausdruck(o, t);
+    zeile(S, nm[t] + ' = ' + summe([[M, kl], [P, '']]), kom);
+    const m3 = qMul(M, m), q3 = qAdd(qMul(M, q), P);
+    zeile(S, nm[t] + ' = ' + linTex(m3, q3, nm[t]), 'ausmultiplizieren');
+    const A = qSub(Q(1), m3);
+    sortiert(S, t, A, q3, A.n === 0 ? nm[t] + ' fällt weg' : 'sortieren');
+    return nachEins(S, t, A, q3);
+  }
+  const gl = []; gl[t] = [o.k[t], nm[t]]; gl[s] = [o.k[s], kl];
+  zeile(S, summe(gl) + ' = ' + o.r, kom);
+  const A = qAdd(Q(o.k[t]), qMul(Q(o.k[s]), m)), B = qMul(Q(o.k[s]), q), R = qSub(Q(o.r), B);
+  zeile(S, summe([[A, nm[t]], [B, '']]) + ' = ' + o.r, m.n === 0 ? 'ausrechnen' : 'ausmultiplizieren');
+  if (B.n !== 0) sortiert(S, t, A, R, (B.n > 0 ? '-' : '+') + ' ' + qTex(Q(Math.abs(B.n), B.d)));
+  return nachEins(S, t, A, R);
+}
+function addieren(S, sg) {
+  const [e0, e1] = S.eq, p = S.fak, nm = S.nm;
+  const H = { k: e0.k.map((c, i) => c * p[0] + sg * e1.k[i] * p[1]), r: e0.r * p[0] + sg * e1.r * p[1] };
+  zeile(S, termTex(H.k, nm) + ' = ' + H.r, addLabel(S, sg));
+  const t = H.k[0] !== 0 ? 0 : H.k[1] !== 0 ? 1 : null;
+  nachEins(S, t, Q(t === null ? 0 : H.k[t]), Q(H.r));
+}
+const addLabel = (S, sg) => (S.fak[0] !== 1 ? S.fak[0] + ' \\cdot ' : '') + S.eq[0].name + (sg > 0 ? ' + ' : ' - ') + (S.fak[1] !== 1 ? S.fak[1] + ' \\cdot ' : '') + S.eq[1].name;
+function optAnw(S) {
+  const nm = S.nm, o = [];
+  if (S.methode === 'E') {
+    const J = [0, 1].filter(j => geloest(S.eq[j]) >= 0);
+    J.forEach(j => {
+      const s = geloest(S.eq[j]);
+      o.push({ id: 'E' + j, gruppe: 'Anwenden', label: 'Den Ausdruck für ' + T(nm[s]) + ' aus ' + S.eq[j].name + ' in ' + S.eq[1 - j].name + ' einsetzen', st: 'ok', code: 'anwendung', tun: S => einsetzen(S, j) });
+    });
+    const j = J[0], s = geloest(S.eq[j]);
+    o.push({ id: 'Ex', gruppe: 'Anwenden', label: 'Den Ausdruck für ' + T(nm[s]) + ' aus ' + S.eq[j].name + ' in ' + S.eq[j].name + ' einsetzen', st: 'x', code: 'anwendung',
+      grund: 'Setzt man einen Ausdruck in die Gleichung ein, aus der er stammt, entsteht nur ' + T('0 = 0') + '. Eingesetzt wird in die andere Gleichung.' });
+    return o;
+  }
+  if (S.methode === 'G') {
+    const s = geloest(S.eq[0]);
+    o.push({ id: 'G', gruppe: 'Anwenden', label: 'Die beiden Ausdrücke für ' + T(nm[s]) + ' gleichsetzen', st: 'ok', code: 'anwendung', tun: S => einsetzen(S, 0, S.eq[0].name + ' = ' + S.eq[1].name) });
+    o.push({ id: 'Gx', gruppe: 'Anwenden', label: 'Die beiden Gleichungen addieren', st: 'x', code: 'anwendung',
+      grund: 'Beim Addieren fällt ' + T(nm[s]) + ' nicht weg: Aus ' + T(nm[s]) + ' und ' + T(nm[s]) + ' wird ' + T('2' + nm[s]) + '.' });
+    return o;
+  }
+  for (const sg of [1, -1]) {
+    const k = S.eq[0].k.map((c, i) => c * S.fak[0] + sg * S.eq[1].k[i] * S.fak[1]);
+    const weg = k.some((c, i) => c === 0 && (S.eq[0].k[i] !== 0 || S.eq[1].k[i] !== 0));   // eine vorhandene Variable fällt weg
+    const v = [0, 1].find(i => Math.abs(S.eq[0].k[i] * S.fak[0]) === Math.abs(S.eq[1].k[i] * S.fak[1]));
+    o.push({ id: sg > 0 ? 'A+' : 'A-', gruppe: 'Anwenden', label: T(addLabel(S, sg)), st: weg ? 'ok' : 'x', code: 'anwendung',
+      grund: weg ? '' : sg > 0 ? 'Vor ' + T(nm[v]) + ' steht in beiden Gleichungen dasselbe Vorzeichen. Beim Addieren verdoppelt sich ' + T(nm[v]) + ', statt wegzufallen. Subtrahiere.'
+                               : 'Vor ' + T(nm[v]) + ' stehen Gegenzahlen. Beim Subtrahieren verdoppelt sich ' + T(nm[v]) + ', statt wegzufallen. Addiere.',
+      tun: S => addieren(S, sg) });
+  }
+  return o;
+}
+function optEins(S) {
+  const { t, A, R } = S.eins, nm = S.nm, weg = A.n === 0;
+  const vor = weg ? '' : 'Es steht noch ' + T(nm[t]) + ' in der Gleichung. Löse zuerst nach ' + T(nm[t]) + ' auf.';
+  return [
+    { id: 'L1', gruppe: 'Lösen', label: 'Nach der verbliebenen Variablen auflösen', st: weg ? 'x' : 'ok', code: 'fall',
+      grund: 'Es ist keine Variable mehr übrig, nach der man auflösen könnte. Ist die Aussage wahr oder falsch?',
+      tun: S => {
+        const w = qDiv(R, A);
+        if (!(A.n === 1 && A.d === 1)) zeile(S, nm[t] + ' = ' + qTex(w), ': ' + zahlTex(A));
+        S.wert = { t, w }; S.phase = 'zurueck';
+      } },
+    { id: 'L2', gruppe: 'Lösen', label: 'Widerspruch: keine Lösung', st: weg && R.n !== 0 ? 'ok' : 'x', code: 'fall',
+      grund: vor || T('0 = 0') + ' ist immer wahr, kein Widerspruch. Keine Lösung gibt es nur bei einer falschen Aussage wie ' + T('0 = 5') + '.',
+      tun: S => { S.fall = 'keine'; ende(S); } },
+    { id: 'L3', gruppe: 'Lösen', label: 'Immer wahr: unendlich viele Lösungen', st: weg && R.n === 0 ? 'ok' : 'x', code: 'fall',
+      grund: vor || T('0 = ' + qTex(R)) + ' ist falsch, ganz gleich, welche Zahlen man wählt. Das ist ein Widerspruch.',
+      tun: S => { S.fall = 'unendlich'; ende(S); } },
+  ];
+}
+// bekannten Wert w der Variablen t in e einsetzen und nach der anderen Variablen auflösen
+function wertEinsetzen(S, e, t, w, kom) {
+  const nm = S.nm, s = 1 - t, g = geloest(e);
+  if (g === s) {
+    const [m, q] = ausdruck(e, s), v = qAdd(qMul(m, w), q);
+    zeile(S, nm[s] + ' = ' + (m.n === 0 ? '' : summe([[m, { zahl: zahlTex(w) }], [q, '']]) + ' = ') + qTex(v), kom);
+    return v;
+  }
+  if (g === t) {
+    const [M, P] = ausdruck(e, t), rest = qSub(w, P);
+    zeile(S, qTex(w) + ' = ' + linTex(M, P, nm[s]), kom);
+    if (P.n !== 0) zeile(S, glied(M, nm[s]) + ' = ' + qTex(rest));
+    const v = qDiv(rest, M);
+    if (!(M.n === 1 && M.d === 1)) zeile(S, nm[s] + ' = ' + qTex(v), ': ' + zahlTex(M));
+    return v;
+  }
+  const rest = qSub(Q(e.r), qMul(Q(e.k[t]), w)), c = e.k[s];
+  zeile(S, summe(e.k.map((c, i) => [c, i === t ? { zahl: zahlTex(w) } : nm[i]])) + ' = ' + e.r, kom);
+  if (!(e.k[t] === 0 && c === 1)) zeile(S, glied(c, nm[s]) + ' = ' + qTex(rest));
+  const v = qDiv(rest, Q(c));
+  if (c !== 1) zeile(S, nm[s] + ' = ' + qTex(v), ': ' + zahlTex(Q(c)));
+  return v;
+}
+function optZurueck(S) {
+  const { t, w } = S.wert, nm = S.nm, s = 1 - t;
+  const o = S.eq.map((e, i) => ({ id: 'Z' + i, gruppe: 'Zurück einsetzen', label: T(nm[t] + ' = ' + qTex(w)) + ' in ' + e.name + ' einsetzen',
+    st: e.k[s] !== 0 ? 'ok' : 'x', code: 'zurueck', grund: e.name + ' enthält ' + T(nm[s]) + ' nicht. Daraus lässt sich ' + T(nm[s]) + ' nicht berechnen.',
+    tun: S => {
+      const v = wertEinsetzen(S, e, t, w, 'in ' + e.name);
+      const sub = []; sub[t] = w; sub[s] = v;
+      if (S.n === 2) { S.werte = sub; S.fall = 'eine'; ende(S); }
+      else { S.sub = sub; S.phase = 'zurueck3'; }
+    } }));
+  o.push({ id: 'Zx', gruppe: 'Zurück einsetzen', label: 'Lösungsmenge angeben', st: 'x', code: 'zurueck',
+    grund: 'Es fehlt noch ' + T(nm[s]) + (S.n === 2 ? '. Eine Lösung des Systems ist ein Paar.' : ' (und danach ' + T(VAR[S.v]) + '). Eine Lösung des Systems ist ein Tripel.') });
+  return o;
 }
 
-// Weg für «unendlich» im 2×2: aus der Gleichung nach y auflösen
-function yAusdruckWeg(g, z, name) {
-  const m = Q(-g.k[0], g.k[1]), q = Q(g.r, g.k[1]);
-  z.push({ text: 'Jedes \\(x\\) passt. Für \\(y\\) nach ' + name + ' auflösen:' });
-  if (g.k[0] !== 0) z.push({ z: glied(g.k[1], 'y') + ' = ' + summe([[-g.k[0], 'x'], [g.r, '']]), k: (g.k[0] > 0 ? '-' : '+') + ' ' + glied(Math.abs(g.k[0]), 'x') });
-  if (g.k[1] !== 1) z.push({ z: 'y = ' + linTex(m, q), k: ': ' + wertTex(g.k[1]) });
-  return [m, q];
+// ── Optionen im 3×3 ──
+function kostenP(gl, v, p) { return gl.reduce((s, g, i) => s + (i === p || g.k[v] === 0 ? 0 : kgV(g.k[v], gl[p].k[v])), 0); }
+function kostenV(gl, v) { const k = [0, 1, 2].filter(p => gl[p].k[v] !== 0).map(p => kostenP(gl, v, p)); return k.length ? Math.min(...k) : Infinity; }
+function optVar(S) {
+  const gl = S.a.gl, best = Math.min(...[0, 1, 2].map(v => kostenV(gl, v)));
+  return [0, 1, 2].filter(v => gl.some(g => g.k[v] !== 0)).map(v => ({
+    id: 'W' + v, gruppe: 'Eliminieren', label: T(VAR[v]) + ' eliminieren', code: 'drei',
+    st: kostenV(gl, v) <= 1.5 * best ? 'ok' : 'um',
+    grund: 'Geht, aber die Zahlen werden gross. Am einfachsten ist eine Variable, vor der in einer Gleichung 1 steht oder die in einer Gleichung fehlt.',
+    tun: S => { S.v = v; text(S, T(VAR[v]) + ' eliminieren:'); S.phase = 'pivot'; } }));
 }
-
-function wegDrei(a) {
-  const gl = a.gl, z = [];
-  const kand = [];
-  for (let v = 0; v < 3; v++) {
-    if (a.fall === 'unendlich' && v === 0) continue;
-    const mit = [0, 1, 2].filter(i => gl[i].k[v] !== 0);
-    if (!mit.length) continue;
-    const p = mit.reduce((u, i) => (Math.abs(gl[i].k[v]) < Math.abs(gl[u].k[v]) ? i : u), mit[0]);
-    const kosten = gl.reduce((s, g, i) => s + (i === p || g.k[v] === 0 ? 0 : kgV(g.k[v], gl[p].k[v])), 0);
-    kand.push({ v, p, kosten });
-  }
-  kand.sort((u, w) => u.kosten - w.kosten || w.v - u.v);
-  const { v, p } = kand[0];
-  const rest = [0, 1, 2].filter(i => i !== v);        // verbleibende Variablen
-  const nm = rest.map(i => VAR[i]);
-  z.push({ text: '\\(' + VAR[v] + '\\) eliminieren: ' + ROEM[p] + ' mit jeder anderen Gleichung verrechnen, dann bleibt ein System mit \\(' + nm[0] + '\\) und \\(' + nm[1] + '\\).' });
+function optPivot(S) {
+  const gl = S.a.gl, v = S.v;
+  const best = Math.min(...[0, 1, 2].filter(p => gl[p].k[v] !== 0).map(p => kostenP(gl, v, p)));
+  return [0, 1, 2].map(p => ({
+    id: 'P' + p, gruppe: 'Eliminieren', label: ROEM[p] + ' mit den beiden anderen Gleichungen verrechnen', code: 'drei',
+    st: gl[p].k[v] === 0 ? 'x' : kostenP(gl, v, p) <= 1.5 * best ? 'ok' : 'um',
+    grund: gl[p].k[v] === 0 ? ROEM[p] + ' enthält ' + T(VAR[v]) + ' nicht. Damit lässt sich ' + T(VAR[v]) + ' aus den anderen nicht eliminieren.'
+                            : 'Geht, aber mit einer Gleichung, in der vor ' + T(VAR[v]) + ' eine kleinere Zahl steht, bleiben die Zahlen kleiner.',
+    tun: S => eliminieren(S, p) }));
+}
+function eliminieren(S, p) {
+  const gl = S.a.gl, v = S.v, P = gl[p];
+  const rest = [0, 1, 2].filter(i => i !== v), nm = rest.map(i => VAR[i]);
+  S.p = p;
   const neu = [];
   [0, 1, 2].filter(i => i !== p).forEach((i, n) => {
-    const g = gl[i], P = gl[p], name = ROEM[3 + n];
-    if (g.k[v] === 0) { neu.push({ k: rest.map(j => g.k[j]), r: g.r }); z.push({ z: termTex(neu[n].k, nm) + ' = ' + g.r, k: name + ' = ' + ROEM[i] + ' (ohne ' + VAR[v] + ')' }); return; }
-    const l = kgV(g.k[v], P.k[v]), pg = l / Math.abs(g.k[v]), pp = l / Math.abs(P.k[v]);
-    const minus = Math.sign(g.k[v]) === Math.sign(P.k[v]), sg = minus ? -1 : 1;
-    const H = { k: g.k.map((c, j) => c * pg + sg * P.k[j] * pp), r: g.r * pg + sg * P.r * pp };
-    const kk = rest.map(j => H.k[j]);
-    z.push({ z: termTex(kk, nm) + ' = ' + H.r, k: name + ' = ' + (pg !== 1 ? pg + ' \\cdot ' : '') + ROEM[i] + (minus ? ' - ' : ' + ') + (pp !== 1 ? pp + ' \\cdot ' : '') + ROEM[p] });
-    // gemeinsamen Faktor wegteilen (Vorzeichen so, dass vorne kein Minus steht)
-    let t = ggT(ggT(kk[0], kk[1]), H.r) || 1;
-    if ((kk[0] || kk[1]) < 0) t = -t;
-    if (Math.abs(t) > 1 && (kk[0] || kk[1])) {
-      z.push({ z: termTex(kk.map(c => c / t), nm) + ' = ' + H.r / t, k: name + ' : ' + wertTex(t) });
-      neu.push({ k: kk.map(c => c / t), r: H.r / t });
-    } else neu.push({ k: kk, r: H.r });
+    const g = gl[i], name = ROEM[3 + n];
+    let kk, r;
+    if (g.k[v] === 0) { kk = rest.map(j => g.k[j]); r = g.r; zeile(S, termTex(kk, nm) + ' = ' + r, name + ' = ' + ROEM[i] + ' (ohne ' + VAR[v] + ')'); }
+    else {
+      const l = kgV(g.k[v], P.k[v]), pg = l / Math.abs(g.k[v]), pp = l / Math.abs(P.k[v]);
+      const minus = Math.sign(g.k[v]) === Math.sign(P.k[v]), sg = minus ? -1 : 1;
+      kk = rest.map(j => g.k[j] * pg + sg * P.k[j] * pp); r = g.r * pg + sg * P.r * pp;
+      zeile(S, termTex(kk, nm) + ' = ' + r, name + ' = ' + (pg !== 1 ? pg + ' \\cdot ' : '') + ROEM[i] + (minus ? ' - ' : ' + ') + (pp !== 1 ? pp + ' \\cdot ' : '') + ROEM[p]);
+    }
+    let f = ggT(ggT(kk[0], kk[1]), r) || 1;                          // gemeinsamen Faktor wegteilen, vorne kein Minus
+    if ((kk[0] || kk[1]) < 0) f = -f;
+    if (Math.abs(f) > 1 && (kk[0] || kk[1])) { kk = kk.map(c => c / f); r /= f; zeile(S, termTex(kk, nm) + ' = ' + r, name + ' : ' + wertTex(f)); }
+    // nur noch eine Variable mit 1 davor: steht schon aufgelöst da
+    const form = kk[0] === 0 && kk[1] === 1 ? 's1' : kk[1] === 0 && kk[0] === 1 ? 's0' : 'std';
+    neu.push({ k: kk, r, form, name });
   });
-  // eine der neuen Gleichungen ohne Variable?
   const leer = neu.findIndex(g => g.k[0] === 0 && g.k[1] === 0);
-  let r2;
-  if (leer >= 0) {
-    if (neu[leer].r !== 0) { z.push({ text: ROEM[3 + leer] + ' ist ein Widerspruch: Es gibt keine Lösung.' }); return { zeilen: z, fall: 'keine' }; }
-    z.push({ text: ROEM[3 + leer] + ' ist immer wahr (\\(0 = 0\\)): Es bleibt nur eine Gleichung mit zwei Variablen.' });
-    r2 = { fall: 'unendlich', aus: 1 - leer };
-  } else {
-    r2 = weg2(neu, ['std', 'std'], nm, ['IV', 'V']);
-    if (!r2) return null;
-    z.push(...r2.zeilen);
+  setze2(S, neu, nm, rest);
+  if (leer >= 0) nachEins(S, null, Q(0), Q(neu[leer].r));
+}
+function optZurueck3(S) {
+  const gl = S.a.gl, v = S.v, bek = S.idx.map((j, n) => T(VAR[j] + ' = ' + qTex(S.sub[n]))).join(' und ');
+  return [0, 1, 2].map(p => ({
+    id: 'R' + p, gruppe: 'Zurück einsetzen', label: bek + ' in ' + ROEM[p] + ' einsetzen', code: 'zurueck',
+    st: gl[p].k[v] !== 0 ? 'ok' : 'x', grund: ROEM[p] + ' enthält ' + T(VAR[v]) + ' nicht. Daraus lässt sich ' + T(VAR[v]) + ' nicht berechnen.',
+    tun: S => {
+      const P = gl[p], w = []; S.idx.forEach((j, n) => { w[j] = S.sub[n]; });
+      zeile(S, summe(P.k.map((c, j) => [c, j === v ? VAR[v] : { zahl: zahlTex(w[j]) }])) + ' = ' + P.r, 'in ' + ROEM[p]);
+      const R = S.idx.reduce((s, j) => qSub(s, qMul(Q(P.k[j]), w[j])), Q(P.r));
+      zeile(S, glied(P.k[v], VAR[v]) + ' = ' + qTex(R));
+      w[v] = qDiv(R, Q(P.k[v]));
+      if (P.k[v] !== 1) zeile(S, VAR[v] + ' = ' + qTex(w[v]), ': ' + wertTex(P.k[v]));
+      S.werte = w; S.fall = 'eine'; ende(S);
+    } }));
+}
+function optLage(S) {
+  const a = S.a;
+  return ['eine', 'keine', 'unendlich'].map(f => ({
+    id: 'F' + f, gruppe: 'Lösungsfall', label: FALL_NAME[f], st: f === a.fall ? 'ok' : 'x', code: 'lage',
+    grund: f === a.fall ? '' : FALL_GRUND[f + '>' + a.fall],
+    tun: S => { S.verlauf = lageWeg(a); S.fall = a.fall; ende(S); } }));
+}
+function optionen(S) {
+  return { start: optStart, vorb: optVorb, anw: optAnw, eins: optEins, zurueck: optZurueck, var: optVar, pivot: optPivot, zurueck3: optZurueck3, lage: optLage }[S.phase](S);
+}
+const FRAGE = {
+  start: S => 'Wie gehst du vor? Wähle ein Verfahren oder forme zuerst um.',
+  vorb: S => 'Wie bereitest du das ' + VERF[S.methode] + ' vor?',
+  anw: S => 'Wie wendest du das ' + VERF[S.methode] + ' an?',
+  eins: S => 'Wie geht es weiter?',
+  zurueck: S => T(S.nm[S.wert.t] + ' = ' + qTex(S.wert.w)) + ' ist bekannt. Wie kommst du zu ' + T(S.nm[1 - S.wert.t]) + '?',
+  var: S => 'Welche Variable eliminierst du zuerst?',
+  pivot: S => 'Mit welcher Gleichung eliminierst du ' + T(VAR[S.v]) + ' aus den beiden anderen?',
+  zurueck3: S => 'Es fehlt noch ' + T(VAR[S.v]) + '. Wo setzt du ein?',
+  lage: S => 'Wie viele Lösungen hat das System?',
+};
+const TIPP = {
+  start: 'Ist eine Gleichung schon nach einer Variablen aufgelöst? Steht vor einer Variablen eine 1? Sonst führt das Additionsverfahren ohne Brüche zum Ziel.',
+  vorb: S => S.methode === 'A' ? 'Ziel: Vor einer Variablen steht in beiden Gleichungen derselbe Betrag.' : S.methode === 'E' ? 'Löse eine Gleichung nach der Variablen auf, vor der 1 steht.' : 'Löse beide Gleichungen nach derselben Variablen auf.',
+  anw: S => S.methode === 'A' ? 'Gleiche Vorzeichen: subtrahieren. Gegenzahlen: addieren.' : S.methode === 'E' ? 'Eingesetzt wird immer in die andere Gleichung.' : 'Zwei Ausdrücke für dieselbe Variable sind gleich.',
+  eins: 'Steht noch eine Variable da? Wenn nicht: Ist die Aussage wahr oder falsch?',
+  zurueck: 'Nimm eine Gleichung, in der die gesuchte Variable vorkommt.',
+  var: 'Suche eine Variable, vor der 1 steht oder die in einer Gleichung fehlt.',
+  pivot: 'Die Gleichung muss die Variable enthalten, am besten mit 1 davor.',
+  zurueck3: 'Nimm eine Gleichung, in der die gesuchte Variable vorkommt.',
+};
+const tipp = S => { const t = TIPP[S.phase]; return typeof t === 'function' ? t(S) : t; };
+
+// Abschluss: Lösungsfall und Lösung gegen die Gauss-Kontrolle, dann die Lösungsmenge
+const STATISTIK = { widerspruch: 0, beispiel: '' };
+function widerspruch(S, wie) { STATISTIK.widerspruch++; STATISTIK.beispiel = wie + ' ' + JSON.stringify(S.a.gl) + ' ' + S.a.form; S.kaputt = true; }
+function ende(S) {
+  const a = S.a;
+  S.phase = 'ende';
+  if (S.fall !== a.fall) widerspruch(S, 'Fall ' + S.fall + ' statt ' + a.fall);
+  if (a.art !== 'lage') {
+    if (S.fall === 'eine' && a.fall === 'eine' && !S.werte.every((q, i) => qGleich(q, Q(a.loes[i])))) widerspruch(S, 'Werte');
+    if (S.fall === 'keine') text(S, 'Ein Widerspruch: Kein ' + tupel(S) + ' erfüllt alle Gleichungen.');
+    if (S.fall === 'unendlich' && a.fall === 'unendlich' && a.n === 2) {
+      const iy = S.eq.findIndex(e => geloest(e) === 1);
+      let ex;
+      if (iy >= 0) { ex = ausdruck(S.eq[iy], 1); text(S, 'Jedes ' + T('x') + ' passt, ' + T('y') + ' steht schon in ' + S.eq[iy].name + ': ' + T('y = ' + linTex(ex[0], ex[1])) + '.'); }
+      else { const gi = einfachste(a.gl); ex = yAusdruckWeg(a.gl[gi], S, ROEM[gi]); }
+      if (!qGleich(ex[0], a.loes[0][0]) || !qGleich(ex[1], a.loes[0][1])) widerspruch(S, 'Ausdruck');
+      text(S, 'Beide Gleichungen beschreiben dieselbe Gerade.');
+    }
+    if (S.fall === 'unendlich' && a.fall === 'unendlich' && a.n === 3) {
+      text(S, 'Es bleiben nur zwei Bedingungen für drei Variablen. Mit ' + T('x') + ' als freier Variable, nach ' + T('y') + ' und ' + T('z') + ' aufgelöst:');
+      a.loes.forEach(([m, q], i) => zeile(S, VAR[i + 1] + ' = ' + linTex(m, q)));
+      text(S, 'Die drei Ebenen schneiden sich in einer Geraden.');
+    }
   }
-  if (r2.fall === 'keine') return { zeilen: z, fall: 'keine' };
-  if (r2.fall === 'eine') {
-    // zurück in die Pivotgleichung
-    const P = gl[p], w = []; rest.forEach((j, n) => { w[j] = r2.werte[n]; });
-    if (w.some(q => q && q.d !== 1)) return null;
-    const glieder = P.k.map((c, j) => [c, j === v ? VAR[v] : { zahl: wertTex(w[j].n) }]);
-    z.push({ z: summe(glieder) + ' = ' + P.r, k: 'in ' + ROEM[p] });
-    const R = P.r - rest.reduce((s, j) => s + P.k[j] * w[j].n, 0);
-    if (P.k[v] !== 1) z.push({ z: glied(P.k[v], VAR[v]) + ' = ' + R });
-    w[v] = Q(R, P.k[v]);
-    z.push({ z: VAR[v] + ' = ' + qTex(w[v]), k: P.k[v] !== 1 ? ': ' + wertTex(P.k[v]) : '' });
-    return { zeilen: z, fall: 'eine', werte: w };
+  S.verlauf.push({ L: true });
+}
+function einfachste(gl) { let b = 0; gl.forEach((g, i) => { if (g.k.reduce((s, c) => s + Math.abs(c), 0) + Math.abs(g.r) / 10 < gl[b].k.reduce((s, c) => s + Math.abs(c), 0) + Math.abs(gl[b].r) / 10) b = i; }); return b; }
+function yAusdruckWeg(g, S, name) {
+  const m = Q(-g.k[0], g.k[1]), q = Q(g.r, g.k[1]);
+  text(S, 'Jedes ' + T('x') + ' passt. Für ' + T('y') + ' nach ' + name + ' auflösen:');
+  if (g.k[0] !== 0) zeile(S, glied(g.k[1], 'y') + ' = ' + summe([[-g.k[0], 'x'], [g.r, '']]), (g.k[0] > 0 ? '-' : '+') + ' ' + glied(Math.abs(g.k[0]), 'x'));
+  if (g.k[1] !== 1) zeile(S, 'y = ' + linTex(m, q), ': ' + wertTex(g.k[1]));
+  return [m, q];
+}
+// Musterweg: an jeder Stelle der erste passende Schritt
+function musterweg(a) {
+  const S = zustand(a);
+  for (let i = 0; i < 40 && S.phase !== 'ende'; i++) {
+    const o = optionen(S).find(x => x.st === 'ok');
+    if (!o) { widerspruch(S, 'Sackgasse in ' + S.phase); return null; }
+    o.tun(S);
   }
-  // unendlich: x frei; die andere verbleibende Variable aus der übrigen Gleichung, dann v aus P
-  const g2 = neu[r2.aus !== undefined ? r2.aus : 0];
-  const wi = rest[1];                                   // rest[0] ist x
-  if (g2.k[1] === 0) return null;
-  z.push({ text: 'Jedes \\(x\\) passt. Nach \\(' + VAR[wi] + '\\) auflösen:' });
-  const m = Q(-g2.k[0], g2.k[1]), q = Q(g2.r, g2.k[1]);
-  if (g2.k[0] !== 0) z.push({ z: glied(g2.k[1], VAR[wi]) + ' = ' + summe([[-g2.k[0], 'x'], [g2.r, '']]) });
-  if (g2.k[1] !== 1) z.push({ z: VAR[wi] + ' = ' + linTex(m, q), k: ': ' + wertTex(g2.k[1]) });
-  const P = gl[p];
-  const glieder = P.k.map((c, j) => [c, j === v ? VAR[v] : j === 0 ? 'x' : '(' + linTex(m, q) + ')']);
-  z.push({ z: summe(glieder) + ' = ' + P.r, k: 'in ' + ROEM[p] });
-  // P: px·x + pw·(m x + q) + pv·v = r  →  v = (r − pw q − (px + pw m) x) / pv
-  const A = qAdd(Q(P.k[0]), qMul(Q(P.k[wi]), m)), B = qMul(Q(P.k[wi]), q);
-  z.push({ z: summe([[A, 'x'], [B, ''], [P.k[v], VAR[v]]]) + ' = ' + P.r, k: 'ausmultiplizieren' });
-  const mv = qDiv(qMul(Q(-1), A), Q(P.k[v])), qv = qDiv(qSub(Q(P.r), B), Q(P.k[v]));
-  if (P.k[v] !== 1) z.push({ z: glied(P.k[v], VAR[v]) + ' = ' + summe([[qMul(Q(-1), A), 'x'], [qSub(Q(P.r), B), '']]) });
-  z.push({ z: VAR[v] + ' = ' + linTex(mv, qv), k: P.k[v] !== 1 ? ': ' + wertTex(P.k[v]) : '' });
-  const ausdr = []; ausdr[wi] = [m, q]; ausdr[v] = [mv, qv];
-  return { zeilen: z, fall: 'unendlich', ausdruck: [ausdr[1], ausdr[2]] };
+  return S.phase === 'ende' && !S.kaputt ? S : null;
 }
 
 // ── Aufgaben ──
@@ -601,28 +810,31 @@ const THEMEN = {
   lage: { name: 'Lösungsfall erkennen' },
 };
 const gleichung = (k, r) => ({ k, r });
-function zufallsForm(n, fall) {
-  // Anzeigeform je Gleichung: meist Normalform, manchmal nach y aufgelöst
+function zufallsForm() {
+  // Anzeigeform je Gleichung: meist Normalform, manchmal nach y oder x aufgelöst oder ungeordnet
   const r = Math.random();
-  if (r < 0.5) return ['std', 'std'];
-  if (r < 0.75) return wahl([['y', 'std'], ['std', 'y']]);
-  if (r < 0.85) return wahl([['x', 'std'], ['std', 'x']]);
+  if (r < 0.4) return ['std', 'std'];
+  if (r < 0.52) return wahl([['roh', 'std'], ['std', 'roh']]);
+  if (r < 0.74) return wahl([['y', 'std'], ['std', 'y']]);
+  if (r < 0.86) return wahl([['x', 'std'], ['std', 'x']]);
   return ['y', 'y'];
 }
 function passtForm(g, f) {                              // nach y (x) aufgelöst ganzzahlig darstellbar?
   if (f === 'y') return g.k[1] === 1;
   if (f === 'x') return g.k[0] === 1;
+  if (f === 'roh') return Math.abs(g.k[0]) >= 2 && g.k[1] !== 0;
   return true;
 }
 function zwei(fall) {
-  const form = zufallsForm(2, fall);
+  const form = zufallsForm();
   // Gleichung in einer Form erzeugen: nach y aufgelöst → k = [−m, 1]
   const neueGl = f => {
     if (f === 'y') return [-nichtNull(-4, 4), 1];
     if (f === 'x') return [1, -nichtNull(-4, 4)];
+    if (f === 'roh') return [wahl([-1, 1]) * zuf(2, 6), nichtNull(-6, 6)];
     return [nichtNull(-6, 6), nichtNull(-6, 6)];
   };
-  let gl, loes = null;
+  let gl;
   if (fall === 'eine') {
     const x0 = zuf(-6, 6), y0 = zuf(-6, 6);
     const k1 = neueGl(form[0]), k2 = neueGl(form[1]);
@@ -630,14 +842,13 @@ function zwei(fall) {
     gl = [gleichung(k1, k1[0] * x0 + k1[1] * y0), gleichung(k2, k2[0] * x0 + k2[1] * y0)];
     if (gl.some(g => Math.abs(g.r) > 45)) return null;
     if (ggT(ggT(k1[0], k1[1]), gl[0].r) > 1 || ggT(ggT(k2[0], k2[1]), gl[1].r) > 1) return null;
-    loes = [Q(x0), Q(y0)];
   } else {
     // zweite Gleichung: Vielfaches der ersten links; rechts gleich (unendlich) oder verschoben (keine)
     const k1 = neueGl(form[0]);
     if (ggT(k1[0], k1[1]) > 1) return null;
     const r1 = zuf(-12, 12);
     let f;
-    if (form[1] === 'std') f = wahl([-3, -2, 2, 3, -1]);
+    if (form[1] === 'std' || form[1] === 'roh') f = wahl([-3, -2, 2, 3, -1]);
     else f = form[1] === 'y' ? (k1[1] === 0 ? 0 : 1 / k1[1]) : (k1[0] === 0 ? 0 : 1 / k1[0]);
     if (!f || !Number.isInteger(f)) return null;
     const k2 = k1.map(c => c * f);
@@ -646,7 +857,7 @@ function zwei(fall) {
     if (form[0] === 'std' && form[1] === 'std' && Math.random() < 0.5) gl.reverse();
     if (gl.some(g => Math.abs(g.r) > 45 || g.k[1] === 0)) return null;
     if (fall === 'keine' && Math.abs(gl[0].r / gl[0].k[1] - gl[1].r / gl[1].k[1]) < 1.5) return null;
-    if (ggT(ggT(gl[1].k[0], gl[1].k[1]), gl[1].r) > 1 && form[1] !== 'std') return null;
+    if (ggT(ggT(gl[1].k[0], gl[1].k[1]), gl[1].r) > 1 && form[1] !== 'std' && form[1] !== 'roh') return null;
   }
   if (!gl.every((g, i) => passtForm(g, form[i]))) return null;
   return { n: 2, gl, form };
@@ -674,7 +885,7 @@ function drei(fall) {
 }
 
 const AUFTRAG = {
-  loesen: 'Löse das Gleichungssystem und gib die Lösungsmenge an.',
+  loesen: 'Plane den Lösungsweg Schritt für Schritt. Das Werkzeug rechnet, du entscheidest.',
   lage: 'Wie viele Lösungen hat das System? Entscheide ohne ganz durchzurechnen.',
 };
 function aufgabe(themen) {
@@ -692,16 +903,15 @@ function aufgabe(themen) {
     a.loes = fall === 'eine' ? k.loes.map(q => q.n) : fall === 'unendlich' ? k.loes : null;
     if (fall === 'eine' && k.loes.some(q => q.d !== 1)) continue;
     if (fall === 'unendlich' && a.n === 2 && a.gl.some(g => g.k[1] === 0)) continue;
-    // Lösungsweg
-    const weg = bauWeg(a);
-    if (!weg) continue;
-    a.weg = weg;
+    a.art = thema === 'lage' ? 'lage' : 'loesen';
     a.ausdruck = systemTex(a);
     a.loesTex = loesTex(a);
-    a.auftrag = thema === 'lage' ? AUFTRAG.lage : AUFTRAG.loesen;
-    a.art = thema === 'lage' ? 'lage' : 'loesen';
-    // Zahlen im Weg begrenzen
-    if ((weg.map(w => w.z || '').join(' ').match(/\d+/g) || []).some(t => +t > 150)) continue;
+    a.auftrag = AUFTRAG[a.art];
+    // Musterweg: muss ohne Sackgasse beim richtigen Ergebnis enden, mit kleinen Zahlen
+    const S = musterweg(a);
+    if (!S) continue;
+    if ((S.verlauf.map(w => w.z || '').join(' ').match(/\d+/g) || []).some(t => +t > 150)) continue;
+    a.muster = S.verlauf;
     return a;
   }
   throw new Error('keine Aufgabe gefunden');
@@ -719,228 +929,28 @@ function lageWeg(a) {
   return z;
 }
 
-// Zähler für den Selbsttest: Ein Weg, der nicht beim richtigen Ergebnis endet, ist ein Fehler im Werkzeug,
-// kein Grund, die Aufgabe still zu verwerfen.
-const STATISTIK = { widerspruch: 0, beispiel: '' };
-function widerspruch(a) { STATISTIK.widerspruch++; STATISTIK.beispiel = JSON.stringify(a.gl); return null; }
-function bauWeg(a) {
-  if (a.art === 'lage' || a.thema === 'lage') {
-    const z = lageWeg(a);
-    z.push({ L: true });
-    return z;
-  }
-  let r;
-  if (a.n === 2) {
-    r = weg2(a.gl, a.form, ['x', 'y'], ['I', 'II']);
-    if (!r) return null;
-    if (r.fall !== a.fall) return widerspruch(a);
-    if (r.fall === 'eine' && !r.werte.every((q, i) => q.d === 1 && q.n === a.loes[i])) return widerspruch(a);
-    if (r.fall === 'unendlich') {
-      const iy = a.form.indexOf('y');
-      let ex;
-      if (iy >= 0) {
-        ex = [Q(-a.gl[iy].k[0], a.gl[iy].k[1]), Q(a.gl[iy].r, a.gl[iy].k[1])];
-        r.zeilen.push({ text: 'Jedes \\(x\\) passt, \\(y\\) steht schon in ' + ROEM[iy] + ': \\(y = ' + linTex(ex[0], ex[1]) + '\\).' });
-      } else {
-        const gi = einfachste(a.gl);
-        ex = yAusdruckWeg(a.gl[gi], r.zeilen, ROEM[gi]);
-      }
-      if (!qGleich(ex[0], a.loes[0][0]) || !qGleich(ex[1], a.loes[0][1])) return widerspruch(a);
-    }
-  } else {
-    r = wegDrei(a);
-    if (!r) return null;
-    if (r.fall !== a.fall) return widerspruch(a);
-    if (r.fall === 'eine' && !r.werte.every((q, i) => q.d === 1 && q.n === a.loes[i])) return widerspruch(a);
-    if (r.fall === 'unendlich' && !r.ausdruck.every((e, i) => qGleich(e[0], a.loes[i][0]) && qGleich(e[1], a.loes[i][1]))) return widerspruch(a);
-  }
-  const z = r.zeilen;
-  if (a.fall === 'keine') z.push({ text: 'Ein Widerspruch: Kein ' + (a.n === 2 ? 'Paar' : 'Tripel') + ' erfüllt alle Gleichungen.' });
-  if (a.fall === 'unendlich' && a.n === 2) z.push({ text: 'Beide Gleichungen beschreiben dieselbe Gerade.' });
-  if (a.fall === 'unendlich' && a.n === 3) z.push({ text: 'Die drei Ebenen schneiden sich in einer Geraden.' });
-  z.push({ L: true });
-  return z;
-}
-
-// ── Eingabe lesen: Zahl oder linearer Ausdruck in x ──
-// Ergebnis { m, q } (m·x + q) oder { fehler: Text }.
-function liesLin(s) {
-  if (typeof s !== 'string') return { fehler: 'leer' };
-  let t = s.replace(/[−–]/g, '-').replace(/·|×/g, '*').replace(/:/g, '/').replace(/X/g, 'x')
-    .replace(/^\s*[xyz]\s*=/, '');                    // «y = 2x - 3» wie im Feld davor
-  if (/\d,\d/.test(t)) return { fehler: 'Dezimalzahlen mit Punkt schreiben, z.B. 2.5' };
-  if (/\d\s+\d/.test(t)) return { fehler: 'Zwischen zwei Zahlen fehlt ein Rechenzeichen.' };
-  t = t.replace(/\s+/g, '');
-  if (!t) return { fehler: 'leer' };
-  if (/[^0-9x.+\-*/()]/.test(t)) return { fehler: 'Erlaubt sind Zahlen, x, + − * / und Klammern.' };
-  let i = 0;
-  const fehler = msg => { throw new Error(msg); };
-  const zahl = () => {
-    const m = /^\d+(\.\d+)?|^\.\d+/.exec(t.slice(i));
-    if (!m) fehler('unverständlich');
-    i += m[0].length;
-    const [g, f = ''] = m[0].split('.');
-    return { m: Q(0), q: Q(Number((g || '0') + f), 10 ** f.length) };
-  };
-  const mul = (u, v) => {
-    if (u.m.n !== 0 && v.m.n !== 0) fehler('x · x ist nicht linear.');
-    return { m: qAdd(qMul(u.m, v.q), qMul(u.q, v.m)), q: qMul(u.q, v.q) };
-  };
-  const div = (u, v) => {
-    if (v.m.n !== 0) fehler('Durch x teilen geht hier nicht.');
-    if (v.q.n === 0) fehler('Division durch 0.');
-    return { m: qDiv(u.m, v.q), q: qDiv(u.q, v.q) };
-  };
-  function faktor() {
-    const c = t[i];
-    if (c === '-') { i++; const f = faktor(); return { m: qMul(Q(-1), f.m), q: qMul(Q(-1), f.q) }; }
-    if (c === '+') { i++; return faktor(); }
-    if (c === '(') { i++; const e = ausdruck(); if (t[i] !== ')') fehler('Klammer nicht geschlossen.'); i++; return e; }
-    if (c === 'x') { i++; return { m: Q(1), q: Q(0) }; }
-    if (c && /[\d.]/.test(c)) return zahl();
-    fehler('unverständlich');
-  }
-  function produkt() {
-    let e = faktor();
-    for (;;) {
-      const c = t[i];
-      if (c === '*') { i++; e = mul(e, faktor()); }
-      else if (c === '/') { i++; e = div(e, faktor()); }
-      else if (c === 'x' || c === '(' || (c && /[\d.]/.test(c) && /[x)]/.test(t[i - 1]))) e = mul(e, faktor());
-      else return e;
-    }
-  }
-  function ausdruck() {
-    let e = produkt();
-    while (t[i] === '+' || t[i] === '-') {
-      const c = t[i++]; const f = produkt();
-      e = c === '+' ? { m: qAdd(e.m, f.m), q: qAdd(e.q, f.q) } : { m: qSub(e.m, f.m), q: qSub(e.q, f.q) };
-    }
-    return e;
-  }
-  try {
-    const e = ausdruck();
-    if (i < t.length) fehler(t[i] === ')' ? 'Eine Klammer zu viel.' : 'unverständlich');
-    return e;
-  } catch (err) { return { fehler: err.message }; }
-}
-
-// ── Prüfen ──
-const L_DEF = ['../grundlagen/g2-3-lineare-gleichungssysteme.html#definition', '2.3 Lösungsmenge'];
+// ── Fehler für die Bilanz ──
 const L_VERF = ['../grundlagen/g2-3-lineare-gleichungssysteme.html#verfahren', '2.3 Lösungsverfahren'];
 const L_FAELLE = ['../grundlagen/g2-3-lineare-gleichungssysteme.html#loesungsfaelle', '2.3 Drei Lösungsfälle'];
 const L_DREI = ['../grundlagen/g2-3-lineare-gleichungssysteme.html#dreidim', '2.3 3×3-Systeme'];
 const FEHLER = {
-  vertauscht: ['Reihenfolge im Tupel', 'Deine Zahlen stimmen, stehen aber am falschen Platz. Im Paar \\((x \\mid y)\\) steht zuerst \\(x\\), dann \\(y\\), im Tripel \\((x \\mid y \\mid z)\\).', L_DEF],
-  vorzeichen: ['Vorzeichen', 'Der Betrag stimmt, das Vorzeichen nicht. Das passiert leicht, wenn man zwei Gleichungen subtrahiert oder ein Glied auf die andere Seite bringt.', L_VERF],
-  zurueck: ['Beim Zurückeinsetzen verrechnet', 'Ein Teil deiner Lösung stimmt, der Rest nicht. Setze den gefundenen Wert in eine der gegebenen Gleichungen ein, am besten in die einfachste, und mach am Schluss die Probe.', L_VERF],
-  teilProbe: ['Nicht alle Gleichungen erfüllt', 'Eine Lösung muss alle Gleichungen gleichzeitig erfüllen. Mach die Probe in jeder Gleichung, nicht nur in der, aus der du den Wert berechnet hast.', L_DEF],
-  eineStattKeine: ['Widerspruch übersehen', 'Die linken Seiten passen nicht zusammen: Beim Eliminieren fallen alle Variablen weg, und es bleibt ein Widerspruch wie \\(0 = 5\\). Es gibt keine Lösung, \\(\\mathbb{L} = \\{\\,\\}\\).', L_FAELLE],
-  eineStattUnendlich: ['Nur eine von unendlich vielen Lösungen', 'Die Gleichungen hängen voneinander ab: Beim Eliminieren bleibt \\(0 = 0\\). Jeder Punkt der gemeinsamen Geraden ist eine Lösung, nicht nur einer.', L_FAELLE],
-  sonderStattEine: ['Sonderfall, wo keiner ist', 'Hier gibt es genau eine Lösung: Keine Gleichung ist ein Vielfaches einer anderen oder eine Kombination der anderen. Ist bei dir \\(0 = 0\\) oder ein Widerspruch entstanden, steckt ein Rechenfehler darin.', L_FAELLE],
-  keineStattUnendlich: ['\\(0 = 0\\) ist kein Widerspruch', '\\(0 = 0\\) ist immer wahr: Die Gleichungen sagen dasselbe, es gibt unendlich viele Lösungen. Keine Lösung gibt es nur bei einem Widerspruch wie \\(0 = 5\\).', L_FAELLE],
-  unendlichStattKeine: ['Widerspruch als «immer wahr» gelesen', 'Am Ende steht ein Widerspruch wie \\(0 = 5\\): Keine Wahl von \\(x\\) erfüllt alle Gleichungen. Parallele Geraden haben keinen gemeinsamen Punkt, \\(\\mathbb{L} = \\{\\,\\}\\).', L_FAELLE],
-  umstellenVz: ['Beim Umstellen das Vorzeichen verloren', 'Bringt man ein Glied auf die andere Seite, wechselt sein Vorzeichen: \\(2x + 3y = 6 \\;\\Rightarrow\\; 3y = 6 - 2x\\).', L_FAELLE],
-  nichtGeteilt: ['Nicht durch die Zahl vor der Variablen geteilt', 'Nach dem Umstellen steht noch eine Zahl vor der Variablen. Teile die ganze rechte Seite durch sie: \\(3y = 6 - 2x \\;\\Rightarrow\\; y = 2 - \\tfrac{2}{3}x\\).', L_FAELLE],
-  teilGerade: ['Ausdruck nur zum Teil richtig', 'Ein Teil deines Ausdrucks stimmt, der Rest nicht. Prüfe mit zwei Werten: Setze \\(x = 0\\) und \\(x = 1\\) in deinen Ausdruck und in die Gleichungen ein.', L_FAELLE],
-  sonst: ['Noch nicht', '', null],
-};
-const FALL_CODE = {
-  'eine>keine': 'eineStattKeine', 'eine>unendlich': 'eineStattUnendlich',
-  'keine>eine': 'sonderStattEine', 'unendlich>eine': 'sonderStattEine',
-  'keine>unendlich': 'keineStattUnendlich', 'unendlich>keine': 'unendlichStattKeine',
+  methode: ['Verfahren gewählt, das hier nicht passt', L_VERF],
+  vorbereitung: ['Vorbereitung passt nicht zum Verfahren', L_VERF],
+  anwendung: ['Verfahren falsch angewendet', L_VERF],
+  fall: ['Gleichung mit einer Variablen falsch gedeutet', L_FAELLE],
+  zurueck: ['Beim Zurückeinsetzen', L_VERF],
+  drei: ['Eliminieren im 3×3-System', L_DREI],
+  lage: ['Lösungsfall falsch erkannt', L_FAELLE],
 };
 const FALL_NAME = { eine: 'genau eine Lösung', keine: 'keine Lösung', unendlich: 'unendlich viele Lösungen' };
-
-function probe(a, werte) {
-  // welche Gleichungen erfüllt das eingegebene Tupel?
-  return a.gl.map(g => qGleich(g.k.reduce((s, c, i) => qAdd(s, qMul(Q(c), werte[i])), Q(0)), Q(g.r)));
-}
-function probeText(a, werte) {
-  const ok = probe(a, werte);
-  const z = ok.map((o, i) => ROEM[i]).filter((_, i) => ok[i]), n = ok.map((o, i) => ROEM[i]).filter((_, i) => !ok[i]);
-  if (!z.length) return 'Probe: Dein ' + (a.n === 2 ? 'Paar' : 'Tripel') + ' erfüllt keine der Gleichungen.';
-  return 'Probe: Dein ' + (a.n === 2 ? 'Paar' : 'Tripel') + ' erfüllt ' + z.join(' und ') + ', aber nicht ' + n.join(' und ') + '.';
-}
-function permutationen(n) { return n === 2 ? [[1, 0]] : [[0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]; }
-
-function pruefe(a, ant) {
-  // ant: { fall, w:[Texte] }
-  if (a.art === 'lage') {
-    if (ant.fall === a.fall) return { status: 'ok' };
-    return { status: 'falsch', code: FALL_CODE[ant.fall + '>' + a.fall] };
-  }
-  const n = a.n;
-  if (ant.fall === 'eine') {
-    const w = [];
-    for (let i = 0; i < n; i++) {
-      const l = liesLin(ant.w[i]);
-      if (l.fehler) return { status: 'format', text: l.fehler === 'leer' ? 'Trage für \\(' + VAR[i] + '\\) eine Zahl ein.' : '\\(' + VAR[i] + '\\): ' + l.fehler };
-      if (l.m.n !== 0) return { status: 'format', text: 'Bei genau einer Lösung gehört für \\(' + VAR[i] + '\\) eine Zahl hin, kein Ausdruck mit \\(x\\).' };
-      w.push(l.q);
-    }
-    if (a.fall !== 'eine') {
-      const r = { status: 'falsch', code: FALL_CODE['eine>' + a.fall] };
-      if (a.fall === 'unendlich' && probe(a, w).every(Boolean)) r.text = 'Dein ' + (n === 2 ? 'Paar' : 'Tripel') + ' ist eine Lösung, aber nicht die einzige.';
-      else r.text = probeText(a, w);
-      return r;
-    }
-    const soll = a.loes.map(v => Q(v));
-    const gleich = w.map((q, i) => qGleich(q, soll[i]));
-    if (gleich.every(Boolean)) return { status: 'ok' };
-    if (permutationen(n).some(p => p.every((j, i) => qGleich(w[i], soll[j])))) return { status: 'falsch', code: 'vertauscht' };
-    const pt = probeText(a, w);
-    if (w.every((q, i) => gleich[i] || qGleich(q, qMul(Q(-1), soll[i])))) return { status: 'falsch', code: 'vorzeichen', text: pt };
-    if (gleich.some(Boolean)) return { status: 'falsch', code: 'zurueck', text: pt };
-    if (probe(a, w).some(Boolean)) return { status: 'falsch', code: 'teilProbe', text: pt };
-    return { status: 'falsch', code: 'sonst', text: pt };
-  }
-  if (ant.fall === 'keine') {
-    if (a.fall === 'keine') return { status: 'ok' };
-    return { status: 'falsch', code: FALL_CODE['keine>' + a.fall] };
-  }
-  // unendlich: Ausdrücke in x
-  const e = [];
-  for (let i = 1; i < n; i++) {
-    const l = liesLin(ant.w[i - 1]);
-    if (l.fehler) return { status: 'format', text: l.fehler === 'leer' ? 'Trage für \\(' + VAR[i] + '\\) einen Ausdruck in \\(x\\) ein, z.B. 2x - 3.' : '\\(' + VAR[i] + '\\): ' + l.fehler };
-    e.push(l);
-  }
-  if (a.fall !== 'unendlich') return { status: 'falsch', code: FALL_CODE['unendlich>' + a.fall] };
-  const gleich = e.map((l, i) => qGleich(l.m, a.loes[i][0]) && qGleich(l.q, a.loes[i][1]));
-  if (gleich.every(Boolean)) return { status: 'ok' };
-  // typische Fehler beim Auflösen nach y (2×2): aus einer der Gleichungen
-  if (n === 2) {
-    const l = e[0];
-    for (const g of a.gl) {
-      if (g.k[1] === 0) continue;
-      const vz = [Q(g.k[0], g.k[1]), Q(g.r, g.k[1])];                  // y = (r + a x)/b
-      const vz2 = [Q(-g.k[0], g.k[1]), Q(-g.r, g.k[1])];               // y = (−r − a x)/b
-      if ((qGleich(l.m, vz[0]) && qGleich(l.q, vz[1])) || (qGleich(l.m, vz2[0]) && qGleich(l.q, vz2[1]))) return { status: 'falsch', code: 'umstellenVz' };
-      if (g.k[1] !== 1 && qGleich(l.m, Q(-g.k[0])) && qGleich(l.q, Q(g.r))) return { status: 'falsch', code: 'nichtGeteilt' };
-    }
-  }
-  const teil = e.some((l, i) => qGleich(l.m, a.loes[i][0]) || qGleich(l.q, a.loes[i][1]));
-  if (teil) {
-    const t = n === 2
-      ? (qGleich(e[0].m, a.loes[0][0]) ? 'Die Steigung stimmt, der Achsenabschnitt nicht.' : 'Der Achsenabschnitt stimmt, die Steigung nicht.')
-      : e.map((l, i) => '\\(' + VAR[i + 1] + '\\) ' + (gleich[i] ? 'stimmt' : 'stimmt nicht')).join(', ') + '.';
-    return { status: 'falsch', code: 'teilGerade', text: t };
-  }
-  return { status: 'falsch', code: 'sonst', text: 'Setze z.B. \\(x = 0\\) ein: Dein Ausdruck ergibt ' + (n === 2 ? '\\(y = ' + qTex(e[0].q) + '\\)' : '\\(y = ' + qTex(e[0].q) + '\\), \\(z = ' + qTex(e[1].q) + '\\)') + ', das ' + (n === 2 ? 'Paar' : 'Tripel') + ' erfüllt nicht alle Gleichungen.' };
-}
-
-// Vorschau der Eingabe als Lösungsmenge
-function vorschauTex(a, fall, w) {
-  if (fall === 'keine') return '\\mathbb{L} = \\{\\,\\}';
-  const teile = [];
-  if (fall === 'eine') {
-    for (let i = 0; i < a.n; i++) { const l = liesLin(w[i] || ''); teile.push(l.fehler || l.m.n !== 0 ? '\\;?\\;' : qTex(l.q)); }
-    return '\\mathbb{L} = \\{(' + teile.join(' \\mid ') + ')\\}';
-  }
-  for (let i = 0; i < a.n - 1; i++) { const l = liesLin(w[i] || ''); teile.push(l.fehler ? '\\;?\\;' : linTex(l.m, l.q)); }
-  return '\\mathbb{L} = \\{(x \\mid ' + teile.join(' \\mid ') + ') : x \\in \\mathbb{R}\\}';
-}
+const FALL_GRUND = {
+  'eine>keine': 'Die linken Seiten sind Vielfache voneinander, die rechten nicht: Die Geraden sind parallel.',
+  'eine>unendlich': 'Die eine Gleichung ist ein Vielfaches der anderen: Beide beschreiben dieselbe Gerade.',
+  'keine>eine': 'Keine Gleichung ist ein Vielfaches der anderen: Die Steigungen sind verschieden, die Geraden schneiden sich.',
+  'unendlich>eine': 'Keine Gleichung ist ein Vielfaches der anderen: Die Steigungen sind verschieden, die Geraden schneiden sich.',
+  'keine>unendlich': 'Die eine Gleichung ist ein Vielfaches der anderen, auch rechts: Beide beschreiben dieselbe Gerade.',
+  'unendlich>keine': 'Gleiche Steigung, aber verschiedener Achsenabschnitt: Die Geraden sind parallel und haben keinen gemeinsamen Punkt.',
+};
 // ── KERN:ENDE ───────────────────────────────────────────────────
 
 
@@ -1014,9 +1024,19 @@ for (const [k, t] of Object.entries(THEMEN)) {
   themenBox.appendChild(b);
 }
 
-let A = null, nr = 0, versuch = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, letztes = '', fall = 'eine';
+let A = null, S = null, OPT = [], nr = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, fehlerSchritt = 0, letztes = '';
 let stand = { ok: 0, fehl: 0, codes: {} };
 const kommentar = k => k.replace(/ \\cdot /g, ' · ').replace(/-/g, '−');
+// Phasen als Leiste: 3×3 beginnt mit dem Eliminieren
+const PHASEN2 = ['Verfahren und Vorbereitung', 'Anwenden', 'Lösen', 'Zurück einsetzen'];
+const PHASE_NR = { start: 0, vorb: 0, anw: 1, eins: 2, zurueck: 3, ende: 4 };
+function phasenHtml() {
+  if (A.art === 'lage') return '';
+  const liste = A.n === 3 ? ['Eliminieren', ...PHASEN2] : PHASEN2;
+  let i = S.phase === 'var' || S.phase === 'pivot' ? 0 : S.phase === 'zurueck3' ? liste.length - 1 : PHASE_NR[S.phase] + (A.n === 3 ? 1 : 0);
+  if (S.phase === 'ende') i = liste.length;
+  return liste.map((p, j) => '<span class="sy-phase' + (j === i ? ' jetzt' : j < i ? ' erledigt' : '') + '">' + p + '</span>').join('');
+}
 
 function zeit() { const s = Math.floor((Date.now() - start) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
 function zeigeZahlen() {
@@ -1026,98 +1046,91 @@ function zeigeZahlen() {
   $('sy-z-zeit').textContent = zeit();
   $('sy-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-function wegHtml(a) {
-  let html = '<div class="sy-weg-text"><div class="sy-weg-titel">' + (a.art === 'lage' ? 'Begründung' : 'Lösungsweg') + '</div>';
-  for (const w of a.weg) {
+function wegHtml() {
+  let html = '<div class="sy-weg-text"><div class="sy-weg-titel">' + (A.art === 'lage' ? 'Begründung' : 'Dein Weg') + '</div>';
+  for (const w of S.verlauf) {
     if (w.text) html += '<div class="sy-text">' + w.text + '</div>';
-    else if (w.L) html += '<div class="sy-zeile">\\(\\displaystyle ' + a.loesTex + '\\)</div>';
+    else if (w.L) html += '<div class="sy-zeile">\\(\\displaystyle ' + A.loesTex + '\\)</div>';
     else html += '<div class="sy-zeile">\\(\\displaystyle ' + w.z + '\\)' + (w.k ? '<span class="sy-k">' + kommentar(w.k) + '</span>' : '') + '</div>';
   }
   html += '</div>';
-  if (a.n === 2) html += '<div class="sy-bild">' + skizze(a) + '</div>';
+  if (S.phase === 'ende' && A.n === 2) html += '<div class="sy-bild">' + skizze(A) + '</div>';
   return html;
 }
-const felder = () => [...$('sy-felder').querySelectorAll('input')];
-const werte = () => felder().map(i => i.value);
-function zeigeVorschau() { if (A && A.art !== 'lage') setzen($('sy-vorschau'), '\\(\\displaystyle ' + vorschauTex(A, fall, werte()) + '\\)'); }
-const feldHtml = (v, kl) => '<span class="sy-feld"><label for="sy-f-' + v + '">\\(' + v + ' =\\)</label><input type="text"' + (kl ? ' class="' + kl + '"' : '') + ' id="sy-f-' + v + '" autocomplete="off" autocapitalize="off" spellcheck="false"></span>';
-function waehleFall(f, fokus) {
-  fall = f;
-  $('sy-faelle').querySelectorAll('[data-f]').forEach(b => b.setAttribute('aria-pressed', String(A.art !== 'lage' && b.dataset.f === f)));
-  const vars = VAR.slice(0, A.n);
-  let html = '', hinweis = '';
-  if (f === 'eine') {
-    html = vars.map(v => feldHtml(v, '')).join('');
-    hinweis = 'Ganze Zahl, Bruch wie 3/2 oder Dezimalzahl mit Punkt wie 2.5';
-  } else if (f === 'unendlich') {
-    html = vars.slice(1).map(v => feldHtml(v, 'sy-lang')).join('');
-    hinweis = '\\(x\\) ist frei wählbar. ' + (A.n === 2 ? '\\(y\\)' : '\\(y\\) und \\(z\\)') + ' als Ausdruck in \\(x\\), z.B. 2x - 3 oder (6 - 2x)/3';
-  } else hinweis = 'Kein ' + (A.n === 2 ? 'Paar' : 'Tripel') + ' erfüllt alle Gleichungen.';
-  setzen($('sy-felder'), html);
-  setzen($('sy-hinweis'), hinweis);
-  zeigeVorschau();
-  mjKette.then(() => { const i = felder()[0]; if (fokus) (i || $('sy-pruefen')).focus(); });
+function zeigeSchritt() {
+  $('sy-weg').hidden = !S.verlauf.length;
+  if (S.verlauf.length) setzen($('sy-weg'), wegHtml());
+  $('sy-phasen').innerHTML = phasenHtml();
+  if (S.phase === 'ende') { $('sy-schritt').hidden = true; return; }
+  $('sy-schritt').hidden = false;
+  OPT = optionen(S);
+  setzen($('sy-frage'), FRAGE[S.phase](S));
+  const gruppen = [...new Set(OPT.map(o => o.gruppe))];
+  let html = '';
+  for (const g of gruppen) {
+    if (gruppen.length > 1) html += '<div class="sy-g-titel sy-wahl-titel">' + g + '</div>';
+    html += '<div class="sy-wahlen">' + OPT.map((o, i) => o.gruppe !== g ? '' : '<button type="button" class="sy-wahl" data-i="' + i + '">' + (i < 9 ? '<span class="sy-nr">' + (i + 1) + '</span>' : '') + '<span>' + o.label + '</span></button>').join('') + '</div>';
+  }
+  setzen($('sy-optionen'), html);
+  mjKette.then(() => { const b = $('sy-optionen').querySelector('.sy-wahl'); if (b) b.focus({ preventScroll: true }); });
 }
 function neueAufgabe() {
   if (nr >= RUNDE) return bilanz();
   nr++;
   let a; do a = aufgabe([...themen]); while (a.ausdruck === letztes);
-  A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0;
+  A = a; S = zustand(a); letztes = a.ausdruck; fertig = false; fehlerInAufgabe = 0; fehlerSchritt = 0;
   $('sy-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('sy-thema').textContent = THEMEN[a.thema].name;
   $('sy-auftrag').textContent = a.auftrag;
   setzen($('sy-ausdruck'), '\\[' + a.ausdruck + '\\]');
-  $('sy-faelle').querySelectorAll('button').forEach(b => { b.disabled = false; b.classList.remove('sy-falsch'); });
-  $('sy-antwort').hidden = a.art === 'lage';
-  $('sy-pruefen').disabled = false;
   setzen($('sy-rueck'), ''); $('sy-rueck').className = 'sy-rueck';
-  $('sy-weg').hidden = true; $('sy-weiter-box').hidden = true;
-  if (a.art === 'lage') { fall = null; $('sy-faelle').querySelectorAll('[data-f]').forEach(b => b.setAttribute('aria-pressed', 'false')); mjKette.then(() => $('sy-faelle').querySelector('button').focus()); }
-  else waehleFall('eine', true);
+  $('sy-weiter-box').hidden = true;
+  zeigeSchritt();
   zeigeZahlen();
 }
-function meldung(cls, html) { $('sy-rueck').className = 'sy-rueck ' + cls; setzen($('sy-rueck'), html); }
-function abschliessen(gut) {
+function meldung(cls, html) { $('sy-rueck').className = 'sy-rueck' + (cls ? ' ' + cls : ''); setzen($('sy-rueck'), html); }
+function abschliessen() {
   fertig = true;
-  felder().forEach(i => { i.disabled = true; }); $('sy-pruefen').disabled = true;
-  $('sy-faelle').querySelectorAll('button').forEach(b => { b.disabled = true; });
-  $('sy-weg').hidden = false; setzen($('sy-weg'), wegHtml(A));
+  zeigeSchritt();
   $('sy-weiter-box').hidden = false;
-  if (gut && !fehlerInAufgabe) stand.ok++;
+  if (!fehlerInAufgabe) stand.ok++;
   zeigeZahlen();
-  $('sy-weiter').focus();
+  mjKette.then(() => $('sy-weiter').focus());
 }
-function antwort() {
-  if (fertig || !A) return;
-  const r = pruefe(A, { fall, w: werte() });
-  if (r.status === 'format') { meldung('fast', '<p>' + r.text + '</p>'); return; }
-  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
-  versuch++; fehlerInAufgabe++; stand.fehl++;
-  stand.codes[r.code] = (stand.codes[r.code] || 0) + 1;
-  const f = FEHLER[r.code];
-  let html = '<p>✗ ' + (r.code === 'sonst' ? 'Noch nicht.' : '<strong>' + f[0] + '.</strong> ' + f[1]) + '</p>';
-  if (r.text) html += '<p>' + r.text + '</p>';
-  if (A.art === 'lage') {
-    const b = $('sy-faelle').querySelector('[data-f="' + fall + '"]'); if (b) b.classList.add('sy-falsch');
+function ausfuehren(o, vorher) {
+  o.tun(S); fehlerSchritt = 0;
+  if (S.phase === 'ende') {
+    meldung(fehlerInAufgabe ? 'fast' : 'richtig', (vorher || '') + '<p>' + (fehlerInAufgabe ? 'Fertig, mit ' + fehlerInAufgabe + ' Fehlgriff' + (fehlerInAufgabe > 1 ? 'en' : '') + '.' : '✓ Fertig — jeder Schritt auf Anhieb.') + '</p>');
+    return abschliessen();
   }
-  if (versuch >= 2 || A.art === 'lage') {
-    html += '<p>Richtig ist ' + (A.art === 'lage' ? '«' + FALL_NAME[A.fall] + '»: ' : '') + '\\(' + A.loesTex + '\\).</p>';
-    meldung('falsch', html);
-    return abschliessen(false);
-  }
-  html += '<p>Versuch es nochmals.</p>';
+  if (vorher) meldung('falsch', vorher); else meldung('', '');
+  zeigeSchritt();
+}
+function waehle(i) {
+  const o = OPT[i], b = $('sy-optionen').querySelector('[data-i="' + i + '"]');
+  if (!o || fertig || !b || b.disabled) return;
+  if (o.st === 'ok') return ausfuehren(o);
+  b.disabled = true;
+  if (o.st === 'um') { b.classList.add('sy-um'); meldung('fast', '<p>≈ ' + o.grund + '</p>'); return; }
+  b.classList.add('sy-falsch');
+  fehlerSchritt++; fehlerInAufgabe++; stand.fehl++;
+  stand.codes[o.code] = (stand.codes[o.code] || 0) + 1;
+  let html = '<p>✗ ' + o.grund + '</p>';
+  const richtig = OPT.find(x => x.st === 'ok');
+  if (A.art === 'lage') return ausfuehren(richtig, html + '<p>Richtig ist «' + FALL_NAME[A.fall] + '»: \\(' + A.loesTex + '\\).</p>');
+  if (fehlerSchritt >= 3) return ausfuehren(richtig, html + '<p>So geht es weiter: ' + richtig.label + '.</p>');
+  if (fehlerSchritt === 2) html += '<p>Tipp: ' + tipp(S) + '</p>';
   meldung('falsch', html);
-  const i = felder()[0]; if (i) i.select();
 }
 function bilanz() {
   clearInterval(tick);
-  const top = Object.entries(stand.codes).filter(([c]) => c !== 'sonst').sort((u, v) => v[1] - u[1]).slice(0, 3);
-  let html = '<h2>Runde fertig</h2><p>' + stand.ok + ' von ' + RUNDE + ' auf Anhieb richtig · ' + stand.fehl + ' Fehler · Zeit ' + zeit() + '</p>';
-  if (top.length) html += '<p>Erkannte Fehler:</p><ul>' + top.map(([c, n]) => {
+  const top = Object.entries(stand.codes).sort((u, v) => v[1] - u[1]).slice(0, 3);
+  let html = '<h2>Runde fertig</h2><p>' + stand.ok + ' von ' + RUNDE + ' ohne Fehlgriff · ' + stand.fehl + ' Fehlgriffe · Zeit ' + zeit() + '</p>';
+  if (top.length) html += '<p>Wo es geklemmt hat:</p><ul>' + top.map(([c, n]) => {
     const f = FEHLER[c];
-    return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + (f[2] ? ' — nachlesen in <a href="' + f[2][0] + '">' + f[2][1] + '</a>' : '') + '</li>';
+    return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + ' — nachlesen in <a href="' + f[1][0] + '">' + f[1][1] + '</a></li>';
   }).join('') + '</ul>';
-  else if (!stand.fehl) html += '<p>Keine Fehler — stark.</p>';
+  else html += '<p>Keine Fehlgriffe — stark.</p>';
   html += '<div class="sy-knoepfe" style="padding:12px 0 0"><button type="button" class="sy-btn sy-weiter" id="sy-nochmal">Neue Runde</button></div>';
   $('sy-aufgabe').hidden = true; $('sy-bilanz').hidden = false;
   setzen($('sy-bilanz'), html);
@@ -1130,20 +1143,7 @@ function neueRunde() {
   neueAufgabe();
 }
 
-$('sy-faelle').addEventListener('click', e => {
-  const b = e.target.closest('[data-f]'); if (!b || b.disabled || fertig || !A) return;
-  if (A.art === 'lage') { fall = b.dataset.f; antwort(); return; }
-  if (b.dataset.f !== fall) waehleFall(b.dataset.f, true);
-});
-$('sy-pruefen').addEventListener('click', antwort);
-$('sy-felder').addEventListener('keydown', e => {
-  if (e.key !== 'Enter' || !e.target.matches('input')) return;
-  e.preventDefault();
-  const f = felder(), j = f.indexOf(e.target);
-  if (j < f.length - 1 && !f[j + 1].value) f[j + 1].focus(); else antwort();
-});
-let vorschauUhr = null;
-$('sy-felder').addEventListener('input', () => { clearTimeout(vorschauUhr); vorschauUhr = setTimeout(zeigeVorschau, 200); });
+$('sy-optionen').addEventListener('click', e => { const b = e.target.closest('.sy-wahl'); if (b) waehle(+b.dataset.i); });
 $('sy-weiter').addEventListener('click', neueAufgabe);
 $('sy-neu').addEventListener('click', neueRunde);
 $('sy-bilanz').addEventListener('click', e => { if (e.target.closest('#sy-nochmal')) neueRunde(); });
@@ -1157,7 +1157,9 @@ themenBox.addEventListener('click', e => {
   neueRunde();
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && fertig && !$('sy-weiter-box').hidden && !e.target.closest('input, button, a, summary')) { e.preventDefault(); neueAufgabe(); }
+  if (e.target.closest('input, textarea') || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === 'Enter' && fertig && !$('sy-weiter-box').hidden && !e.target.closest('button, a, summary')) { e.preventDefault(); neueAufgabe(); return; }
+  if (!fertig && /^[1-9]$/.test(e.key) && $('sy-aufgabe').hidden === false) { e.preventDefault(); waehle(+e.key - 1); }
 });
 const breit = matchMedia('(min-width: 901px)');
 function seiteOffen() { $('sy-seite-det').open = breit.matches; }

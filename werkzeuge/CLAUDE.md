@@ -46,11 +46,14 @@ in der Haupt-`CLAUDE.md` (Projektstruktur), Aufbau und Eintragen in `HOWTO-werkz
   (`expo(x, 'p1mal')` …), dazu «Regel prüfen» (`FALLEN`). Selbsttest `scripts/verify_gesetzetrainer.js` rechnet
   in `python3` unabhängig nach (Wurzeln als `(x**m)**(1/n)`, `math.log`).
 - `werkzeuge/systemtrainer.html` (seit 11.10.2026): lineare Gleichungssysteme (GF 2.3) in vier Themen — 2×2 lösen,
-  Sonderfälle 2×2, 3×3 lösen, Lösungsfall erkennen (`#thema=zwei,sonder,drei,lage`). Man wählt den Lösungsfall und gibt
-  𝕃 ein: Zahlen bzw. bei unendlich vielen Lösungen \(y\) (und \(z\)) als Ausdruck in \(x\), Schreibweise
-  \(\{(x \mid \ldots) : x \in \mathbb{R}\}\) wie in g2.3 und im Notationstrainer. Die Prüfung macht die Probe und
-  erkennt vertauschte Werte, Vorzeichen, falschen Lösungsfall, Fehler beim Auflösen nach y. Lösungsweg nach Form
-  (Einsetzen, Gleichsetzen, Addieren mit kleinerem kgV; 3×3: eliminieren, 2×2, zurück), bei 2×2 Skizze der Geraden (SVG).
-  Selbsttest `scripts/verify_systemtrainer.js`: python3 löst jedes System selbst und prüft, dass jede Wegzeile aus dem
-  System folgt (Zeilenraum der erweiterten Matrix); `STATISTIK.widerspruch` muss 0 bleiben, sonst verwirft der
-  Erzeuger kaputte Wege still.
+  Sonderfälle 2×2, 3×3 lösen, Lösungsfall erkennen (`#thema=zwei,sonder,drei,lage`). Seit 11.10.2026 ein **Trainer für
+  das Vorgehen, nicht für das Rechnen**: Man wählt konkrete Schritte, das Werkzeug führt sie aus. Phasen: Verfahren
+  wählen oder zuerst umformen (ordnen, nach einer Variablen auflösen, vervielfachen; beide Reihenfolgen gehen) →
+  vorbereiten → anwenden (einsetzen, gleichsetzen, I ± II) → Gleichung mit einer Variablen deuten (auflösen,
+  Widerspruch, immer wahr) → zurück einsetzen; bei 3×3 davor Variable und Gleichung zum Eliminieren. Bewertung wie
+  im Strategietrainer: ok / um (Umweg, grau, kein Fehler) / x (Begründung, Code für die Bilanz), Tipp beim zweiten,
+  Schritt beim dritten Fehlgriff. Die Eingabe von 𝕃 gibt es nicht mehr; 𝕃 schreibt das Werkzeug ans Ende des Wegs.
+  Erzeuger mit Formen std, roh (ungeordnet), nach x oder y aufgelöst. Selbsttest `scripts/verify_systemtrainer.js`:
+  je Aufgabe vier Zufallswege über passende Schritte, nie eine Sackgasse, Ende beim Gauss-Ergebnis, jede Art von
+  Schritt und Fehlgriff kommt vor; python3 prüft jede Zeile jedes Wegs gegen den Zeilenraum.
+  `STATISTIK.widerspruch` muss 0 bleiben, sonst verwirft der Erzeuger kaputte Wege still.

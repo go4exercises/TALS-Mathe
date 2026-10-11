@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 // Selbsttest des Systemtrainers (werkzeuge/systemtrainer.html), ohne Browser: Der Block zwischen
 // «KERN:ANFANG» und «KERN:ENDE» wird in node:vm geladen.
-//   node scripts/verify_systemtrainer.js          # 600 Aufgaben je Thema (Pre-Flight)
-//   node scripts/verify_systemtrainer.js 5000     # gründlicher
+//   node scripts/verify_systemtrainer.js          # 400 Aufgaben je Thema, je 4 Zufallswege (Pre-Flight)
+//   node scripts/verify_systemtrainer.js 3000     # gründlicher
 // Geprüft wird:
-//   – Lösungsfall und Lösung der Aufgabe; die Musterlösung wird in mehreren Schreibweisen angenommen
-//   – jeder falsche Lösungsfall bekommt seinen Fehlercode; vertauschte Werte, ein Vorzeichen, ein falscher
-//     Wert beim Zurückeinsetzen, Fehler beim Auflösen nach y werden als genau dieser Fehler erkannt
-//   – kein Fehlerwert ist zufällig richtig; Fehleingaben werden als Format abgewiesen
+//   – jede Aufgabe hat einen Musterweg; auf jedem Zufallsweg (an jeder Stelle ein zufälliger passender Schritt)
+//     gibt es an jeder Stelle mindestens einen passenden Schritt, und der Weg endet beim richtigen Lösungsfall
+//     und bei der richtigen Lösung (STATISTIK.widerspruch bleibt 0)
+//   – jeder Umweg und jeder Fehlgriff trägt eine Begründung, jeder Fehlgriff einen Code der Bilanz; Fehlgriffe
+//     beim Addieren eliminieren wirklich keine Variable; jede Phase hat Frage und Tipp
+//   – jede Art von Schritt kommt als passend vor, die Fehlgriffe ebenso (verschwindet eine, ist ihr Zweig kaputt)
 //   – LaTeX ohne unausgeglichene Klammern, ohne «undefined», ohne doppeltes Vorzeichen, ohne «1x»
 //   – Gegenrechnung in python3 mit fractions.Fraction, unabhängig von der Rechnung des Werkzeugs:
-//     Gauss löst jedes System selbst (Fall und Lösung); jede Zeile des Lösungswegs wird aus ihrem Tex
-//     gelesen und muss aus dem System folgen (ihre Gleichung liegt im Zeilenraum der erweiterten Matrix);
-//     der Weg endet beim richtigen Fall; die Gerade der Skizze schneidet sich im Fenster
+//     Gauss löst jedes System selbst (Fall und Lösung); jede Zeile jedes Wegs wird aus ihrem Tex gelesen und
+//     muss aus dem System folgen (ihre Gleichung liegt im Zeilenraum der erweiterten Matrix)
 // Exit 1 bei einem Befund.
 const fs = require('fs');
 const path = require('path');
@@ -23,9 +24,9 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'systemtrai
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, aufgabe, pruefe, liesLin, loese, qTex, Q, vorschauTex, STATISTIK };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, FRAGE, aufgabe, zustand, optionen, tipp, Q, STATISTIK };', ctx);
 const K = ctx.K;
-const N = +process.argv[2] || 600;
+const N = +process.argv[2] || 400, WEGE = 4;
 const befunde = new Map();
 const melde = (art, info) => { if (!befunde.has(art)) befunde.set(art, { n: 0, info }); befunde.get(art).n++; };
 function latexOk(z, wo) {
@@ -37,96 +38,63 @@ function latexOk(z, wo) {
   if (/(^|[^0-9.])1[xyz]/.test(z) || /-0\b(?!\.)/.test(z)) melde('LaTeX: 1x oder -0', wo + ': ' + z);
   if (/ß/.test(z)) melde('Text: ß', wo);
 }
-const zahlText = q => (q.d === 1 ? String(q.n) : q.n + '/' + q.d);
-const linText = ([m, q]) => zahlText(m) + '*x+' + zahlText(q);
-
+const art = id => (/^[UOVPRWZE]\d/.test(id) ? id[0] : id);   // U01 → U, Z1 → Z, E0 → E
 const py = [];
-let zahl = 0;
-const stat = {}, verfahren = {};
+let zahl = 0, schritte = 0, laengste = 0;
+const stat = {}, gewaehlt = {}, angeboten = {};
 for (const thema of Object.keys(K.THEMEN)) for (let i = 0; i < N; i++) {
   const a = K.aufgabe([thema]);
   zahl++;
   stat[thema + ' · ' + a.fall] = (stat[thema + ' · ' + a.fall] || 0) + 1;
-  for (const w of a.weg) for (const v of ['einsetzen', 'gleichsetzen', 'Additionsverfahren', 'eliminieren: ', 'enthält nur', 'Jedes \\(x\\) passt']) if ((w.text || '').includes(v)) verfahren[v] = (verfahren[v] || 0) + 1;
-  const wo = thema + ' ' + a.fall + ' «' + a.gl.map(g => g.k.join(',') + '=' + g.r).join('; ') + '»';
+  const wo = thema + ' ' + a.fall + ' ' + a.form.join(',') + ' «' + a.gl.map(g => g.k.join(',') + '=' + g.r).join('; ') + '»';
   latexOk(a.ausdruck, wo); latexOk(a.loesTex, wo + ' Lösung');
-  a.weg.forEach(w => latexOk(w.text || w.z || '', wo + ' Weg'));
-  if (a.weg[a.weg.length - 1].L !== true) melde('Weg endet nicht mit der Lösungsmenge', wo);
-  // bei genau einer Lösung steht der Wert jeder Variablen in einer eigenen Zeile «v = Wert» (auch als Kette)
-  if (a.fall === 'eine' && a.art !== 'lage') a.loes.forEach((v, i) => {
-    const re = new RegExp('^' + 'xyz'[i] + ' = (.* = )?' + String(v).replace('-', '\\-') + '$');
-    if (!a.weg.some(w => w.z && re.test(w.z))) melde('Wert einer Variablen fehlt im Weg', wo + ' ' + 'xyz'[i] + ' = ' + v);
-  });
-  const n = a.n, faelle = ['eine', 'keine', 'unendlich'];
-  // Musterlösung
-  if (a.art === 'lage') {
-    if (K.pruefe(a, { fall: a.fall }).status !== 'ok') melde('Lage: richtige Wahl nicht angenommen', wo);
-    for (const f of faelle) if (f !== a.fall) { const r = K.pruefe(a, { fall: f }); if (r.status !== 'falsch' || !K.FEHLER[r.code] || r.code === 'sonst') melde('Lage: falsche Wahl ohne Fehlercode', wo + ' ' + f); }
-  } else if (a.fall === 'eine') {
-    const s = a.loes;
-    for (const w of [s.map(String), s.map(v => v + '.0'), s.map(v => (2 * v) + '/2'), s.map(v => ' ' + v + ' ')]) {
-      const r = K.pruefe(a, { fall: 'eine', w });
-      if (r.status !== 'ok') melde('Musterlösung nicht angenommen', wo + ' ' + JSON.stringify(w) + ' ' + JSON.stringify(r));
+  if (!a.muster || a.muster[a.muster.length - 1].L !== true) melde('Musterweg endet nicht mit der Lösungsmenge', wo);
+  for (let w = 0; w < WEGE; w++) {
+    const S = K.zustand(a), pfad = [];
+    for (let n = 0; S.phase !== 'ende'; n++) {
+      if (n > 60) { melde('Weg endet nicht', wo + ' ' + pfad.join(' ')); break; }
+      const opt = K.optionen(S), ph = S.phase;
+      latexOk(K.FRAGE[ph](S), wo + ' Frage ' + ph);
+      if (ph !== 'lage' && !K.tipp(S)) melde('Phase ohne Tipp', ph);
+      if (new Set(opt.map(o => o.id)).size !== opt.length) melde('Doppelte Schritte', wo + ' ' + ph + ' ' + opt.map(o => o.id));
+      for (const o of opt) {
+        latexOk(o.label, wo + ' ' + o.id);
+        angeboten[art(o.id) + ':' + o.st] = (angeboten[art(o.id) + ':' + o.st] || 0) + 1;
+        if (o.st !== 'ok') { if (!o.grund) melde('Umweg oder Fehlgriff ohne Begründung', wo + ' ' + ph + ' ' + o.id); else latexOk(o.grund, wo + ' ' + o.id); }
+        if (o.st === 'x' && !K.FEHLER[o.code]) melde('Fehlgriff ohne Code der Bilanz', o.id + ' ' + o.code);
+        if (o.st === 'ok' && typeof o.tun !== 'function') melde('Passender Schritt ohne Ausführung', o.id);
+        // Fehlgriff beim Addieren: wirklich keine Variable weg
+        if (ph === 'anw' && S.methode === 'A' && o.st === 'x') {
+          const sg = o.id === 'A+' ? 1 : -1, k = S.eq[0].k.map((c, j) => c * S.fak[0] + sg * S.eq[1].k[j] * S.fak[1]);
+          if (k.some((c, j) => c === 0 && (S.eq[0].k[j] || S.eq[1].k[j]))) melde('Addieren als Fehlgriff, eliminiert aber', wo);
+        }
+      }
+      const ok = opt.filter(o => o.st === 'ok');
+      if (!ok.length) { melde('Sackgasse: kein passender Schritt', wo + ' ' + ph + ' nach ' + pfad.join(' ')); break; }
+      const o = ok[Math.floor(Math.random() * ok.length)];
+      gewaehlt[art(o.id)] = (gewaehlt[art(o.id)] || 0) + 1;
+      pfad.push(o.id);
+      o.tun(S);
     }
-    for (const f of ['keine', 'unendlich']) { const r = K.pruefe(a, { fall: f, w: n === 2 ? ['x'] : ['x', 'x'] }); if (r.code !== 'sonderStattEine') melde('Falscher Fall nicht erkannt', wo + ' ' + f + ' ' + JSON.stringify(r)); }
-    // vertauscht
-    if (n === 2 && s[0] !== s[1]) { const r = K.pruefe(a, { fall: 'eine', w: [s[1], s[0]].map(String) }); if (r.code !== 'vertauscht') melde('Vertauscht nicht erkannt', wo + ' ' + JSON.stringify(r)); }
-    if (n === 3 && s[0] !== s[2]) { const r = K.pruefe(a, { fall: 'eine', w: [s[2], s[1], s[0]].map(String) }); if (r.code !== 'vertauscht') melde('Vertauscht nicht erkannt', wo + ' ' + JSON.stringify(r)); }
-    // Vorzeichen eines Werts
-    const j = s.findIndex(v => v !== 0);
-    if (j >= 0) {
-      const w = s.map((v, i) => String(i === j ? -v : v));
-      const perm = n === 2 ? (-s[j] === s[1 - j] && s[1 - j] === s[j]) : false;
-      const r = K.pruefe(a, { fall: 'eine', w });
-      if (r.status !== 'falsch') melde('Vorzeichenfehler angenommen', wo);
-      else if (r.code !== 'vorzeichen' && r.code !== 'vertauscht' && !perm) melde('Vorzeichen nicht erkannt', wo + ' ' + JSON.stringify(r));
-    }
-    // ein Wert falsch (zurück eingesetzt): letzter Wert +1
-    const w2 = s.map((v, i) => String(i === n - 1 ? v + 1 : v));
-    const r2 = K.pruefe(a, { fall: 'eine', w: w2 });
-    if (r2.status !== 'falsch' || !['zurueck', 'vertauscht', 'vorzeichen'].includes(r2.code)) melde('Teilweise richtig nicht erkannt', wo + ' ' + JSON.stringify(r2));
-    if (!r2.text || !/Probe/.test(r2.text)) melde('Keine Probe in der Rückmeldung', wo);
-  } else if (a.fall === 'keine') {
-    if (K.pruefe(a, { fall: 'keine', w: [] }).status !== 'ok') melde('Musterlösung nicht angenommen', wo);
-    const r = K.pruefe(a, { fall: 'unendlich', w: n === 2 ? ['x'] : ['x', 'x'] });
-    if (r.code !== 'unendlichStattKeine') melde('Falscher Fall nicht erkannt', wo + ' ' + JSON.stringify(r));
-    const r1 = K.pruefe(a, { fall: 'eine', w: n === 2 ? ['0', '0'] : ['0', '0', '0'] });
-    if (r1.code !== 'eineStattKeine') melde('Falscher Fall nicht erkannt', wo + ' eine ' + JSON.stringify(r1));
-  } else {
-    const ok = [a.loes.map(linText), a.loes.map(([m, q]) => '(' + (m.n * q.d) + '*x + ' + (q.n * m.d) + ')/' + (m.d * q.d)), a.loes.map(([m, q]) => zahlText(q) + (m.n < 0 ? '-' : '+') + zahlText(K.Q(Math.abs(m.n), m.d)) + 'x')];
-    for (const w of ok) { const r = K.pruefe(a, { fall: 'unendlich', w }); if (r.status !== 'ok') melde('Musterlösung nicht angenommen', wo + ' ' + JSON.stringify(w) + ' ' + JSON.stringify(r)); }
-    const r = K.pruefe(a, { fall: 'keine', w: [] });
-    if (r.code !== 'keineStattUnendlich') melde('Falscher Fall nicht erkannt', wo + ' ' + JSON.stringify(r));
-    // ein Punkt der Lösungsmenge als «genau eine»
-    const pkt = [K.Q(2), ...a.loes.map(([m, q]) => K.Q(m.n * 2 * q.d + q.n * m.d, m.d * q.d))];
-    const r1 = K.pruefe(a, { fall: 'eine', w: pkt.map(zahlText) });
-    if (r1.code !== 'eineStattUnendlich' || !/nicht die einzige/.test(r1.text || '')) melde('Punkt der Lösung als «eine» nicht erkannt', wo + ' ' + JSON.stringify(r1));
-    // Fehler beim Auflösen nach y (2×2): Vorzeichen, nicht geteilt
-    if (n === 2) for (const g of a.gl) {
-      const vz = '(' + g.r + ' + ' + g.k[0] + '*x)/(' + g.k[1] + ')';
-      const rv = K.pruefe(a, { fall: 'unendlich', w: [vz] });
-      if (g.k[0] !== 0 && rv.code !== 'umstellenVz') melde('Umstellen-Vorzeichen nicht erkannt', wo + ' ' + vz + ' ' + JSON.stringify(rv));
-      if (Math.abs(g.k[1]) !== 1) { const ng = g.r + ' - ' + g.k[0] + '*x'; const rn = K.pruefe(a, { fall: 'unendlich', w: [ng] }); if (rn.status === 'ok' || (rn.code !== 'nichtGeteilt' && rn.code !== 'teilGerade')) melde('Nicht geteilt nicht erkannt', wo + ' ' + ng + ' ' + JSON.stringify(rn)); }
-    }
-    // nur ein Teil stimmt
-    const [m0, q0] = a.loes[0];
-    const halb = [zahlText(m0) + '*x+' + zahlText(K.Q(q0.n + q0.d, q0.d)), ...a.loes.slice(1).map(linText)];
-    const rh = K.pruefe(a, { fall: 'unendlich', w: halb });
-    if (rh.status !== 'falsch' || !['teilGerade', 'umstellenVz', 'nichtGeteilt'].includes(rh.code)) melde('Teilweise richtiger Ausdruck nicht erkannt', wo + ' ' + JSON.stringify(rh));
+    schritte += pfad.length; laengste = Math.max(laengste, pfad.length);
+    if (S.phase !== 'ende') continue;
+    if (S.kaputt) melde('Weg endet beim falschen Ergebnis', wo + ' ' + pfad.join(' '));
+    if (S.verlauf[S.verlauf.length - 1].L !== true) melde('Weg endet nicht mit der Lösungsmenge', wo);
+    S.verlauf.forEach(z => latexOk(z.text || z.z || '', wo + ' Weg'));
+    if (a.fall === 'eine' && a.art !== 'lage') a.loes.forEach((v, j) => {
+      const re = new RegExp('^' + 'xyz'[j] + ' = (.* = )?' + String(v).replace('-', '\\-') + '$');
+      if (!S.verlauf.some(z => z.z && re.test(z.z))) melde('Wert einer Variablen fehlt im Weg', wo + ' ' + 'xyz'[j] + ' = ' + v + ' · ' + pfad.join(' '));
+    });
+    py.push({ gl: a.gl.map(g => [...g.k, g.r]), fall: a.fall, loes: a.fall === 'eine' ? a.loes : a.fall === 'unendlich' ? a.loes.map(([m, q]) => [[m.n, m.d], [q.n, q.d]]) : null, weg: S.verlauf.filter(z => z.z).map(z => z.z), wo: wo + ' ' + pfad.join(' ') });
   }
-  py.push({ gl: a.gl.map(g => [...g.k, g.r]), fall: a.fall, loes: a.fall === 'eine' ? a.loes : a.fall === 'unendlich' ? a.loes.map(([m, q]) => [[m.n, m.d], [q.n, q.d]]) : null, weg: a.weg.filter(w => w.z).map(w => w.z), wo });
 }
-// Kein Weg darf beim falschen Ergebnis enden (der Erzeuger würde die Aufgabe sonst still verwerfen)
-if (K.STATISTIK.widerspruch) melde('Lösungsweg endet beim falschen Ergebnis', K.STATISTIK.widerspruch + '× z.B. ' + K.STATISTIK.beispiel);
-// Jedes Verfahren kommt vor (verschwindet eines, ist sein Weg kaputt)
-for (const v of ['einsetzen', 'gleichsetzen', 'Additionsverfahren', 'eliminieren: ', 'enthält nur', 'Jedes \\(x\\) passt']) if (!(verfahren[v] > 0)) melde('Verfahren kommt nie vor', v);
+if (K.STATISTIK.widerspruch) melde('Weg endet beim falschen Ergebnis oder in einer Sackgasse (Erzeuger)', K.STATISTIK.widerspruch + '× z.B. ' + K.STATISTIK.beispiel);
+// Jede Art von Schritt kommt als passend vor, jeder Fehlgriff wird angeboten
+for (const id of ['ME', 'MG', 'MA', 'U', 'O', 'V', 'D', 'E', 'G', 'A+', 'A-', 'L1', 'L2', 'L3', 'Z', 'W', 'P', 'R', 'Feine', 'Fkeine', 'Funendlich'])
+  if (!(gewaehlt[id] > 0)) melde('Schritt kommt nie als passend vor', id);
+for (const id of ['U:um', 'ME:um', 'MG:um', 'MA:um', 'V:um', 'D:x', 'Ex:x', 'Gx:x', 'A+:x', 'A-:x', 'L1:x', 'L2:x', 'L3:x', 'Zx:x', 'Z:x', 'W:um', 'P:x', 'P:um', 'R:x'])
+  if (!(angeboten[id] > 0)) melde('Umweg oder Fehlgriff kommt nie vor', id);
 for (const [k, v] of Object.entries(stat)) if (v < N * 0.04) melde('Thema/Fall zu selten', k + ' ' + v);
-// Leser
-for (const [e, m, q] of [['2x-3', 2, -3], ['(6-2x)/3', -2 / 3, 2], ['-x/2+1', -0.5, 1], ['0.5x - 1', 0.5, -1], ['3(x+1)', 3, 3], ['x', 1, 0], ['−4', 0, -4], ['2*x', 2, 0], ['(x)(3)', 3, 0], ['1/2x', 0.5, 0], ['y = 2x+1', 2, 1], ['x=3', 0, 3]]) {
-  const l = K.liesLin(e);
-  if (l.fehler || Math.abs(l.m.n / l.m.d - m) > 1e-12 || Math.abs(l.q.n / l.q.d - q) > 1e-12) melde('Leser liest falsch', e + ' → ' + JSON.stringify(l));
-}
-for (const e of ['', '2,5', 'x^2', 'x*x', '2 3', '(x+1', 'x+1)', '3/0', '1/x', 'y', '?']) if (!K.liesLin(e).fehler) melde('Fehleingabe nicht abgefangen', e);
 
 const skript = `
 import sys, json, re, random
@@ -193,7 +161,7 @@ const p = spawnSync('python3', ['-c', skript], { input: JSON.stringify(py), enco
 if (p.status !== 0) melde('python3 nicht gelaufen', (p.stderr || '').slice(0, 600));
 else for (const [art, info] of JSON.parse(p.stdout)) melde(art, info);
 
-console.log(`${Object.keys(K.THEMEN).length} Themen · ${zahl} Aufgaben · ${py.length} Gegenrechnungen in python3`);
+console.log(`${Object.keys(K.THEMEN).length} Themen · ${zahl} Aufgaben · ${py.length} Wege (Ø ${(schritte / py.length).toFixed(1)} Schritte, höchstens ${laengste}) in python3 nachgerechnet`);
 console.log('  ' + Object.entries(stat).map(([k, v]) => k + ' ' + v).join(' · '));
 if (!befunde.size) { console.log('✓ keine Befunde'); process.exit(0); }
 for (const [art, { n, info }] of befunde) console.log(`✗ ${art} (${n}×) — z.B. ${info}`);
