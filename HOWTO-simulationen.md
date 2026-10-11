@@ -51,9 +51,11 @@ Erkundungen ebenfalls «Simulationen». Das bleibt so. Ist von der Rubrik die Re
 
 ## 3 · Seitenaufbau
 
-Es gibt noch keine Simulationsseite in Mathe. Vorlage ist darum der Kopf von
-`werkzeuge/notationstrainer.html` (gleiche Tiefe, gleiche Einbindungen) und für die Animation
-selbst eine Animation aus der passenden Themenseite.
+Vorbild ist `simulationen/standardabweichung.html` (seit 11.10.2026, die erste Simulationsseite in
+Mathe): Kopf und Einbindungen, je Schritt ein `.widget` mit 👁/💡, SVG in der echten Breite gezeichnet
+(1 Einheit = 1 px, damit Schrift und Ziehpunkte am Handy lesbar bleiben), Formeln mit MathJax,
+gesammelt neu gesetzt. Rechnet sie, steht die Rechnung zwischen `KERN:ANFANG`/`KERN:ENDE` und hat einen
+Selbsttest `scripts/verify_<name>.js` (im Pre-Flight eingetragen).
 
 - **Einbindungen**, alle relativ eine Ebene hinauf und **kein fremder Host**:
   `../schriften.css`, `../style.css`, `../vendor/mathjax/tex-svg.js`, `../mathlib.js`

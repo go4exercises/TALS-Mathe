@@ -46,6 +46,12 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `.block-tipp`) — **nicht** am Seitenanfang und **nicht** auf den Kacheln von
   `index.html`. Anleitung: `HOWTO-simulationen.md`, `HOWTO-werkzeuge.md`; der Pre-Flight
   prüft mit `check_sim_wz`. Alte Adressen leitet `404.html` weiter (Tabelle `WEITERLEITUNGEN`).
+- `simulationen/standardabweichung.html` (seit 11.10.2026, erste Simulationsseite): eine Stichprobe (2–8 Werte, 0–20)
+  ziehen oder eintippen, in sechs Schritten von den Abweichungen über ihre Quadrate (flächengetreu) zu Varianz und
+  \(s\) (Standard \(n - 1\) wie g4.3, umschaltbar auf \(\sigma\)), dann \(R\), \(\text{QD}\) (Median der Hälften) und
+  \(\bar{x} \pm s\) im Vergleich und «ohne den äussersten Wert». Variationskoeffizient nur als Zusatz (nicht im RLP).
+  Aus einer externen Vorlage übernommen und angepasst. Selbsttest `scripts/verify_standardabweichung.js` (python3
+  `statistics`). Verlinkt aus g4.3 (`#darstellungen`).
 - `werkzeuge/notationstrainer.html` — Lernkartei (3 Fächer, Stand in `localStorage` unter
   `tals-mathe-notationstrainer-v1`, in `rechtliches.html` genannt) zur Notation von
   𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`

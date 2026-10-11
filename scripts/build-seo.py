@@ -162,6 +162,12 @@ SEITEN = {
    titel='Systemtrainer — lineare Gleichungssysteme lösen mit Probe und Skizze',
    beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen ohne Taschenrechner lösen, auch ohne oder mit unendlich vielen Lösungen — mit Probe, Diagnose und Skizze.',
    themen=['Mathematik', 'Lineare Gleichungssysteme', 'Einsetzverfahren', 'Additionsverfahren', 'Lösungsmenge', 'Übung']),
+ 'simulationen/standardabweichung.html': dict(
+   ort='Simulationen · Standardabweichung',
+   typ='article', lrt='Simulation',
+   titel='Standardabweichung — Simulation: von den Abweichungen zur Formel',
+   beschreibung='Messwerte verschieben und sehen, woher die Standardabweichung kommt: Abweichungen, Quadrate als Flächen, Varianz, Wurzel — dazu Spannweite und Quartilsdifferenz.',
+   themen=['Mathematik', 'Standardabweichung', 'Varianz', 'Streumasse', 'Quartilsdifferenz', 'Simulation']),
  'leitprogramme/potenzen.html': dict(
    ort='Leitprogramm · Potenzen',
    typ='article', lrt='Leitprogramm',

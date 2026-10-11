@@ -24,6 +24,12 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **Erste Simulationsseite: Standardabweichung** (11.10.2026, `simulationen/standardabweichung.html`): Messwerte
+  ziehen und in sechs Schritten sehen, woher die Formel kommt: Abweichungen, Summe 0, Quadrate als Flächen,
+  Varianz und Wurzel, Vergleich mit Spannweite und Quartilsdifferenz, dazu die Wirkung des äussersten Werts.
+  Aus einer externen Vorlage übernommen und an das Lehrmittel angepasst: Formeln in MathJax, Dezimalpunkt,
+  \(s\) mit \(n - 1\) als Standard und Begriffe wie in g4.3, ehrliche Aussage zur Robustheit bei kleinem \(n\).
+  Kachel in `simulationen.html`, Baustein in g4.3, Selbsttest im Pre-Flight.
 - **Neues Werkzeug: Systemtrainer** (11.10.2026, Trainer 3 aus `../TODO-trainer-mathe.md`): lineare
   Gleichungssysteme 2×2 und 3×3 mit ganzzahligen Lösungen, gezielt auch keine und unendlich viele Lösungen, dazu
   «Lösungsfall erkennen». Lösungsfall wählen, 𝕃 eingeben (bei unendlich vielen Lösungen als Ausdruck in \(x\));

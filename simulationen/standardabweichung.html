@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Standardabweichung — Mathe begreifbar</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Messwerte verschieben und sehen, woher die Standardabweichung kommt: Abweichungen, Quadrate als Flächen, Varianz, Wurzel — dazu Spannweite und Quartilsdifferenz.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/simulationen/standardabweichung.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Standardabweichung — Simulation: von den Abweichungen zur Formel">
+<meta property="og:description" content="Messwerte verschieben und sehen, woher die Standardabweichung kommt: Abweichungen, Quadrate als Flächen, Varianz, Wurzel — dazu Spannweite und Quartilsdifferenz.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/simulationen/standardabweichung.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/simulationen/standardabweichung.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/simulationen/standardabweichung.html",
+   "name": "Standardabweichung — Simulation: von den Abweichungen zur Formel",
+   "description": "Messwerte verschieben und sehen, woher die Standardabweichung kommt: Abweichungen, Quadrate als Flächen, Varianz, Wurzel — dazu Spannweite und Quartilsdifferenz.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Standardabweichung"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Varianz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Streumasse"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Quartilsdifferenz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Simulation"
+    }
+   ],
+   "keywords": "Mathematik, Standardabweichung, Varianz, Streumasse, Quartilsdifferenz, Simulation",
+   "learningResourceType": "Simulation",
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<link rel="stylesheet" href="../style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
+  svg: { fontCache:'global', scale:1.05 },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+<style>
+/* Standardabweichung — seiteneigene Klassen (Präfix sd-), Farben aus style.css.
+   Werte über dem Mittelwert blau, darunter orange (Reglerfarben), Mittelwert lila,
+   Standardabweichung grün. Eine Datenreihe für alle Schritte. */
+.sd-wrap { grid-template-columns:minmax(0, 1fr); grid-template-areas:"content"; max-width:980px; }
+.sd-steuer { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+.sd-steuer .sd-luecke { flex:1 1 12px; }
+.sd-hinweis { font-family:var(--sans); font-size:.8rem; color:var(--tinte-2); }
+.sd-btn { font-family:var(--sans); font-size:.85rem; padding:6px 12px; border-radius:8px; cursor:pointer;
+  border:1px solid var(--linie); background:var(--weiss); color:var(--tinte); }
+.sd-btn:hover { border-color:var(--blau-rand); }
+.sd-btn:disabled { opacity:.4; cursor:default; }
+.sd-btn[aria-pressed="true"] { background:var(--lila); border-color:var(--lila); color:var(--weiss); }
+.sd-svg { display:block; width:100%; height:auto; }
+#sd-s1 { touch-action:none; }
+#sd-s1 .sd-pt { cursor:grab; }
+#sd-s1 .sd-pt:focus { outline:none; stroke-width:4.5; }
+.sd-werte { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 4px; }
+.sd-wert { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--linie); border-radius:8px; padding:4px 8px; background:var(--papier); }
+.sd-wert label { font-family:var(--mono); font-size:.72rem; color:var(--tinte-2); }
+.sd-wert input { width:3.2em; border:none; background:transparent; font-family:var(--mono); font-size:.95rem; color:var(--tinte); text-align:right; }
+.sd-wert input:focus { outline:1.5px solid var(--blau-rand); border-radius:4px; }
+.sd-cap { font-family:var(--sans); font-size:.82rem; color:var(--tinte-2); margin-top:8px; }
+.tx-ueber { color:#1a4f8a; font-weight:600; }
+.tx-unter { color:#b85c00; font-weight:600; }
+.tx-mitte { color:var(--lila); font-weight:600; }
+.tx-s { color:var(--gruen); font-weight:600; }
+.sd-formel { overflow-x:auto; padding:2px 0; }
+.sd-tabelle { overflow-x:auto; margin:6px 0 4px; }
+.sd-tabelle table { width:100%; }
+.sd-tabelle td { font-family:var(--mono); font-size:.9rem; }
+.sd-modus { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 10px; }
+.sd-kacheln { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-top:10px; }
+.sd-kachel { border:1px solid var(--linie); border-left:4px solid var(--linie); border-radius:8px; padding:8px 12px; background:var(--papier); font-family:var(--sans); }
+.sd-kachel b { display:block; font-family:var(--mono); font-size:1.3rem; font-weight:600; color:var(--tinte); }
+.sd-kachel span { font-size:.78rem; color:var(--tinte-2); }
+.sd-schalter { display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:8px; font-family:var(--sans); font-size:.86rem; }
+.sd-schalter label { display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+.sd-dyn { font-family:var(--sans); }
+@media (max-width:560px) {
+  .sd-steuer .sd-luecke { display:none; }
+  .sd-btn { font-size:.8rem; padding:6px 9px; }
+}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap sd-wrap">
+  <main class="content">
+    <div class="page-titel">
+      <div class="pt-bereich">SIM · Simulationen</div>
+      <h1 class="pt-h1">Standardabweichung</h1>
+      <p class="pt-untertitel">Verschiebe die Messwerte und beobachte Schritt für Schritt, woher die Formel der Standardabweichung kommt: Abweichungen vom Mittelwert, ihre Quadrate, Varianz und Wurzel, und wie sich die Standardabweichung von Spannweite und Quartilsdifferenz unterscheidet.
+        Der Stoff dazu steht in <a href="../grundlagen/g4-3-masszahlen.html#darstellungen">4.3 Masszahlen</a>.</p>
+    </div>
+
+<p>Alle Schritte rechnen mit derselben kleinen Stichprobe. Ändere sie oben, indem du die Punkte ziehst oder die Zahlen eintippst. Alles weiter unten rechnet sofort mit.</p>
+
+<!-- ════════ Schritt 1 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-daten">Schritt 1 · Die Daten und ihr Mittelwert</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Ziehe einen einzelnen Punkt weit nach rechts. Wohin wandert die lila Linie des Mittelwerts \(\bar{x}\), und wie ändern sich die farbigen Strecken der <em>anderen</em> Punkte?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Mittelwert hängt von jedem Wert ab. Verschiebt sich ein Punkt, wandert \(\bar{x}\) mit, um ein \(n\)-tel der Verschiebung, und damit ändern sich die Abweichungen \(x_i - \bar{x}\) <em>aller</em> Werte. Diese Abweichungen sind der Rohstoff der Standardabweichung.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="sd-steuer">
+      <button type="button" class="sd-btn" id="sd-plus">+ Wert</button>
+      <button type="button" class="sd-btn" id="sd-minus">− Wert</button>
+      <span class="sd-luecke"></span>
+      <span class="sd-hinweis">Beispiele:</span>
+      <button type="button" class="sd-btn sd-bsp" data-werte="9,10,10,11,10">wenig Streuung</button>
+      <button type="button" class="sd-btn sd-bsp" data-werte="6,8,10,12,14">mittlere</button>
+      <button type="button" class="sd-btn sd-bsp" data-werte="2,6,10,14,18">grosse</button>
+      <button type="button" class="sd-btn sd-bsp" data-werte="3,4,5,16,17,18">zwei Gruppen</button>
+      <button type="button" class="sd-btn sd-bsp" data-werte="8,9,10,10,11,12,19">mit Ausreisser</button>
+    </div>
+    <svg class="sd-svg" id="sd-s1" role="img" aria-label="Zahlenstrahl mit verschiebbaren Messwerten und dem Mittelwert"></svg>
+    <div class="sd-werte" id="sd-werte"></div>
+    <p class="sd-cap">Jeder Punkt ist ein Messwert zwischen 0 und 20 (ziehen, eintippen oder mit Tab anwählen und mit den Pfeiltasten schieben). Werte über dem Mittelwert sind <span class="tx-ueber">blau</span>, darunter <span class="tx-unter">orange</span>; die farbige Strecke ist die <strong>Abweichung</strong> \(x_i - \bar{x}\) vom Mittelwert. Zwei bis acht Werte.</p>
+  </div>
+</div>
+
+<!-- ════════ Schritt 2 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-summe">Schritt 2 · Warum man die Abweichungen nicht einfach addiert</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle oben «wenig Streuung», dann «grosse». Vergleiche jedes Mal den blauen und den orangen Balken der Bilanz und die Summe darunter.</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Summe der Abweichungen ist immer \(0\), egal wie stark die Werte streuen: Der Mittelwert ist der Schwerpunkt der Daten, die Abweichungen nach oben und nach unten gleichen sich genau aus. Als Streumass taugt diese Summe darum nicht.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <svg class="sd-svg" id="sd-s2" role="img" aria-label="Abweichungen als Balken links und rechts des Mittelwerts mit Bilanz"></svg>
+    <div class="sd-formel" id="sd-f2"></div>
+    <p class="sd-cap">Positive und negative Abweichungen heben sich auf. Gesucht ist eine Grösse, die das Vorzeichen loswird, ohne dass sich alles aufhebt.</p>
+  </div>
+</div>
+
+<!-- ════════ Schritt 3 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-quadrate">Schritt 3 · Quadrieren: aus Abweichungen werden Flächen</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle oben «mittlere»: Die Werte 12 und 14 liegen 2 und 4 über dem Mittelwert. Vergleiche die Seiten und die Flächen ihrer Quadrate. Ziehe dann einen Punkt weit hinaus und beobachte das grüne Quadrat ganz rechts.</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Ein Quadrat ist nie negativ, darum hebt sich nichts mehr auf. Doppelte Abweichung heisst vierfache Fläche: Weit entfernte Werte zählen beim Quadrieren besonders stark. Das grüne Quadrat hat die Fläche \(s^2\), seine Seite ist die Standardabweichung \(s\), die typische Abweichung vom Mittelwert.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <svg class="sd-svg" id="sd-s3" role="img" aria-label="Flächengetreue Quadrate der Abweichungen und das Quadrat der Varianz"></svg>
+    <p class="sd-cap" id="sd-cap3"></p>
+  </div>
+</div>
+
+<!-- ════════ Schritt 4 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-formel">Schritt 4 · Varianz und Standardabweichung</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Folge der Tabelle Spalte für Spalte und finde jede Zahl in der Rechnung darunter wieder. Schalte dann zwischen «Stichprobe» und «ganze Grundgesamtheit» um: Welche Zahl ändert sich, welche nicht?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Rechnung geht immer gleich: Mittelwert, Abweichungen, Quadrate summieren, durch \(n - 1\) teilen, Wurzel ziehen. Die Wurzel bringt die Einheit der Daten zurück. Die Summe der Quadrate hängt nicht vom Nenner ab; durch \(n\) statt \(n - 1\) geteilt wird das Ergebnis etwas kleiner, und zwar umso weniger, je grösser \(n\) ist.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="sd-modus" role="group" aria-label="Nenner der Varianz">
+      <button type="button" class="sd-btn" data-modus="s" aria-pressed="true">Stichprobe: durch \(n - 1\), \(s\)</button>
+      <button type="button" class="sd-btn" data-modus="sigma" aria-pressed="false">ganze Grundgesamtheit: durch \(n\), \(\sigma\)</button>
+    </div>
+    <div class="sd-tabelle">
+      <table class="ftb-tabelle">
+        <thead><tr><th>\(x_i\)</th><th>\(x_i - \bar{x}\)</th><th>\((x_i - \bar{x})^2\)</th></tr></thead>
+        <tbody id="sd-tab"></tbody>
+      </table>
+    </div>
+    <div class="sd-formel" id="sd-f4"></div>
+    <details style="margin-top:8px">
+      <summary class="sd-hinweis" style="cursor:pointer">Warum bei einer Stichprobe durch \(n - 1\)?</summary>
+      <p class="sd-cap">Meist sind die Daten eine <strong>Stichprobe</strong>, und man möchte etwas über die Streuung der ganzen Grundgesamtheit wissen. Die Abweichungen werden aber vom Mittelwert \(\bar{x}\) der Stichprobe aus gemessen, und um diesen Wert liegen die Stichprobenwerte von allen möglichen Mittelpunkten am engsten. Die Summe der Quadrate fällt darum im Schnitt etwas zu klein aus; der kleinere Nenner \(n - 1\) gleicht das aus. So rechnen das Lehrmittel und die Tabellenkalkulation (STABW.S). Kennt man dagegen <em>alle</em> Werte der Grundgesamtheit, teilt man durch \(n\) und schreibt \(\sigma\).</p>
+    </details>
+  </div>
+</div>
+
+<!-- ════════ Schritt 5 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-vergleich">Schritt 5 · Drei Streumasse auf demselben Zahlenstrahl</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle oben «mit Ausreisser» und ziehe den grössten Wert weiter nach rechts. Welche der drei Strecken wächst mit, welche bleibt fast stehen?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Spannweite \(R\) wächst mit dem Ausreisser eins zu eins, die Standardabweichung \(s\) deutlich, weil er quadriert zählt. Die Quartilsdifferenz \(\text{QD}\) bleibt stehen: Sie schaut nur auf die mittleren 50 % der Werte. Bei sehr wenigen Werten (\(n \le 5\)) stimmt das nicht mehr, dann gehört der äusserste Wert selbst zur Hälfte, aus der \(Q_1\) bzw. \(Q_3\) entsteht.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="sd-schalter" id="sd-schalter">
+      <label><input type="checkbox" data-mass="R" checked> <span style="color:var(--orange);font-weight:600">Spannweite \(R\)</span></label>
+      <label><input type="checkbox" data-mass="QD" checked> <span style="color:var(--blau);font-weight:600">Quartilsdifferenz \(\text{QD}\)</span></label>
+      <label><input type="checkbox" data-mass="s" checked> <span class="tx-s">Standardabweichung als Band \(\bar{x} \pm s\)</span></label>
+    </div>
+    <svg class="sd-svg" id="sd-s5" role="img" aria-label="Spannweite, Quartilsdifferenz und das Band Mittelwert plus minus Standardabweichung auf dem Zahlenstrahl"></svg>
+    <div class="sd-kacheln" id="sd-kacheln"></div>
+    <p class="sd-cap">Spannweite und Quartilsdifferenz liegen an ihrer echten Stelle in den Daten: von \(Q_0\) bis \(Q_4\) bzw. von \(Q_1\) bis \(Q_3\) (Median der Hälften, wie in 4.3). Die Standardabweichung ist als Band um den Mittelwert gezeichnet.</p>
+  </div>
+</div>
+
+<!-- ════════ Schritt 6 ════════ -->
+<h2 id="welches-mass">Welches Mass wann?</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Bei deinen Daten</div>
+  <div class="sd-dyn" id="sd-dyn"></div>
+</div>
+
+<ul>
+  <li><strong>Spannweite \(R = Q_4 - Q_0\)</strong>: am einfachsten, benutzt aber nur die zwei äussersten Werte. Ein einziger Ausreisser bläht sie auf.</li>
+  <li><strong>Quartilsdifferenz \(\text{QD} = Q_3 - Q_1\)</strong>: die Breite der mittleren 50 % der Werte, die Box im Boxplot. Sie ist <strong>robust</strong>: Die Werte am Rand gehen nicht ein, sobald genügend Werte da sind.</li>
+  <li><strong>Standardabweichung \(s\)</strong>: nutzt alle Werte und beschreibt die typische Abweichung vom Mittelwert, in der Einheit der Daten. Weit entfernte Werte zählen durch das Quadrieren besonders stark.</li>
+</ul>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Faustregel</div>
+  <p>Daten ohne Ausreisser und ungefähr symmetrisch: Mittelwert und Standardabweichung. Ausreisser oder schiefe Daten: Median und Quartilsdifferenz. Die Spannweite nur als schneller erster Blick.</p>
+</div>
+
+<details class="block block-tipp" style="margin-top:10px">
+  <summary class="block-titel" style="cursor:pointer">💡 Zusatz: der Variationskoeffizient (nicht im Lehrplan)</summary>
+  <p style="margin-top:8px">Eine Standardabweichung von 2 ist bei Werten um 10 viel, bei Werten um 1000 wenig. Der Variationskoeffizient setzt die Streuung ins Verhältnis zum Mittelwert, \(v = \frac{s}{\bar{x}}\), und hat keine Einheit. Damit lassen sich Datenreihen auf verschiedenem Niveau vergleichen. Sinnvoll ist er nur für positive Grössen mit echtem Nullpunkt, etwa Längen, Massen oder Zeiten.</p>
+  <div class="sd-formel" id="sd-fv"></div>
+</details>
+
+  </main>
+</div>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Simulationen · Standardabweichung</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script src="../mathlib.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script src="../nav.js"></script>
+<script>buildNav({ id: 'simulationen' });</script>
+<script>
+// ── KERN:ANFANG ─────────────────────────────────────────────────
+// Statistik ohne DOM; scripts/verify_standardabweichung.js lädt diesen Block in node:vm und rechnet in python3 nach.
+const X_MIN = 0, X_MAX = 20, N_MIN = 2, N_MAX = 8;
+const mittel = a => a.reduce((s, x) => s + x, 0) / a.length;
+const sortiert = a => a.slice().sort((u, v) => u - v);
+function median(a) { const s = sortiert(a), n = s.length, m = Math.floor(n / 2); return n % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+// Quartile nach 4.3: Median der unteren bzw. oberen Hälfte; bei ungeradem n ohne den Median selbst
+function quartile(a) {
+  const s = sortiert(a), n = s.length, m = Math.floor(n / 2);
+  const unten = s.slice(0, m), oben = s.slice(n % 2 ? m + 1 : m);
+  return { q0: s[0], q1: median(unten), q2: median(s), q3: median(oben), q4: s[n - 1] };
+}
+function kennzahlen(a, modus) {
+  const n = a.length, m = mittel(a), ss = a.reduce((t, x) => t + (x - m) ** 2, 0);
+  const nenner = modus === 'sigma' ? n : n - 1, varianz = ss / nenner, q = quartile(a);
+  return { n, m, ss, nenner, varianz, s: Math.sqrt(varianz), sigmaN: Math.sqrt(ss / n), ...q, R: q.q4 - q.q0, QD: q.q3 - q.q1 };
+}
+// Der Wert, der am weitesten vom Median liegt, und die Kennzahlen ohne ihn
+function ohneAeussersten(a, modus) {
+  if (a.length < 4) return null;
+  const med = median(a);
+  let j = 0; a.forEach((x, i) => { if (Math.abs(x - med) > Math.abs(a[j] - med)) j = i; });
+  const rest = a.filter((_, i) => i !== j);
+  return { wert: a[j], vorher: kennzahlen(a, modus), nachher: kennzahlen(rest, modus) };
+}
+// Zahlen: höchstens d Nachkommastellen, Dezimalpunkt; gerundet() sagt, ob «≈» nötig ist
+function zahl(x, d = 2) { const r = Math.round(x * 10 ** d) / 10 ** d; return String(Object.is(r, -0) ? 0 : r); }
+const gerundet = (x, d = 2) => Math.abs(Math.round(x * 10 ** d) / 10 ** d - x) > 1e-9;
+const gl = (x, d = 2) => (gerundet(x, d) ? ' \\approx ' : ' = ') + zahl(x, d);
+// ── KERN:ENDE ───────────────────────────────────────────────────
+
+// ── Oberfläche ──
+const $ = id => document.getElementById(id);
+const FARBE = { ueber: '#1a4f8a', unter: '#b85c00', null: '#8a8278', mitte: '#5b2d8e', s: '#1f6b3a', R: '#b85c00', QD: '#1a4f8a',
+  gitter: '#e6e1d6', achse: '#8a8278', text: '#4a463f', hellUeber: '#ddeaf8', hellUnter: '#fdefd8', hellS: '#d8f0e2' };
+let daten = [6, 8, 10, 12, 14], modus = 's';
+const zeige = { R: true, QD: true, s: true };
+const minus = t => String(t).replace(/^-/, '−');
+const farbe = d => (Math.abs(d) < 1e-9 ? FARBE.null : d > 0 ? FARBE.ueber : FARBE.unter);
+const NS = 'http://www.w3.org/2000/svg';
+function el(name, attr, text) {
+  const e = document.createElementNS(NS, name);
+  // Beschriftungen mit weissem Rand, damit sie über Linien lesbar bleiben
+  if (name === 'text') { e.setAttribute('stroke', '#fff'); e.setAttribute('stroke-width', '4'); e.setAttribute('stroke-linejoin', 'round'); e.setAttribute('paint-order', 'stroke'); }
+  for (const k in attr) e.setAttribute(k, attr[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+const leer = svg => { while (svg.firstChild) svg.removeChild(svg.firstChild); };
+// Gezeichnet wird in der echten Breite (1 Einheit = 1 px), damit Schrift und Punkte auch am Handy lesbar bleiben
+const breite = svg => Math.max(300, Math.round(svg.getBoundingClientRect().width) || 680);
+
+// MathJax: Formeln nach dem Ziehen gesammelt neu setzen (höchstens alle 150 ms)
+let mjKette = Promise.resolve(), mjUhr = null;
+const mjWarte = new Map();
+function setzeTex(id, html) {
+  mjWarte.set(id, html);
+  if (mjUhr) return;
+  mjUhr = setTimeout(() => {
+    mjUhr = null;
+    const jetzt = [...mjWarte]; mjWarte.clear();
+    mjKette = mjKette.then(() => {
+      const els = jetzt.map(([i, h]) => { const e = $(i); if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([e]); e.innerHTML = h; return e; });
+      if (window.MathJax && MathJax.typesetPromise) return MathJax.typesetPromise(els);
+    }).catch(() => {});
+  }, 150);
+}
+
+// Schritt 1: Zahlenstrahl mit ziehbaren Punkten
+const L = { links: 40, rechts: 20, oben: 30, zeile: 34, achse: 34, W: 680 };
+const px = v => L.links + (v - X_MIN) / (X_MAX - X_MIN) * (L.W - L.links - L.rechts);
+const wertAus = p => X_MIN + (p - L.links) / (L.W - L.links - L.rechts) * (X_MAX - X_MIN);
+function zeichne1() {
+  const svg = $('sd-s1'), k = kennzahlen(daten, modus), H = L.oben + daten.length * L.zeile + L.achse;
+  L.W = breite(svg);
+  svg.setAttribute('viewBox', '0 0 ' + L.W + ' ' + H); leer(svg);
+  const y0 = L.oben, y1 = L.oben + daten.length * L.zeile;
+  for (let t = X_MIN; t <= X_MAX; t += 2) {
+    svg.appendChild(el('line', { x1: px(t), y1: y0, x2: px(t), y2: y1, stroke: FARBE.gitter }));
+    if (L.W < 460 && t % 4) continue;
+    svg.appendChild(el('text', { x: px(t), y: y1 + 18, 'font-size': 12, 'text-anchor': 'middle', fill: FARBE.text }, t));
+  }
+  svg.appendChild(el('line', { x1: L.links, y1: y1, x2: L.W - L.rechts, y2: y1, stroke: FARBE.achse, 'stroke-width': 1.5 }));
+  const mx = px(k.m);
+  svg.appendChild(el('line', { x1: mx, y1: y0 - 8, x2: mx, y2: y1, stroke: FARBE.mitte, 'stroke-width': 2, 'stroke-dasharray': '5 4' }));
+  svg.appendChild(el('text', { x: Math.min(L.W - 50, Math.max(50, mx)), y: y0 - 12, 'font-size': 13, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.mitte }, 'x̄ ' + (gerundet(k.m) ? '≈ ' : '= ') + zahl(k.m)));
+  daten.forEach((v, i) => {
+    const y = y0 + i * L.zeile + L.zeile / 2, x = px(v), f = farbe(v - k.m);
+    svg.appendChild(el('line', { x1: L.links, y1: y, x2: L.W - L.rechts, y2: y, stroke: FARBE.gitter, 'stroke-dasharray': '1 5' }));
+    svg.appendChild(el('line', { x1: mx, y1: y, x2: x, y2: y, stroke: f, 'stroke-width': 3, 'stroke-linecap': 'round' }));
+    const c = el('circle', { cx: x, cy: y, r: 10, fill: '#fff', stroke: f, 'stroke-width': 3, class: 'sd-pt', 'data-i': i, tabindex: 0, role: 'slider',
+      'aria-label': 'Wert ' + (i + 1), 'aria-valuemin': X_MIN, 'aria-valuemax': X_MAX, 'aria-valuenow': v });
+    svg.appendChild(c);
+    // Zahl auf der Seite, die vom Mittelwert weg zeigt
+    const aussen = v - k.m < 0;
+    svg.appendChild(el('text', { x: aussen ? x - 15 : x + 15, y: y + 4, 'font-size': 12, 'text-anchor': aussen ? 'end' : 'start', fill: FARBE.text }, v));
+  });
+}
+let zug = null;
+$('sd-s1').addEventListener('pointerdown', e => {
+  const c = e.target.closest('.sd-pt'); if (!c) return;
+  e.preventDefault(); zug = +c.dataset.i; c.focus();
+});
+window.addEventListener('pointermove', e => {
+  if (zug === null) return;
+  const r = $('sd-s1').getBoundingClientRect();
+  const v = Math.max(X_MIN, Math.min(X_MAX, Math.round(wertAus((e.clientX - r.left) / r.width * L.W))));
+  if (v !== daten[zug]) { daten[zug] = v; alles(false); const c = $('sd-s1').querySelector('[data-i="' + zug + '"]'); if (c) c.focus(); }
+});
+window.addEventListener('pointerup', () => { zug = null; });
+$('sd-s1').addEventListener('keydown', e => {
+  const c = e.target.closest('.sd-pt'); if (!c) return;
+  const i = +c.dataset.i, d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
+  if (!d) return;
+  e.preventDefault();
+  daten[i] = Math.max(X_MIN, Math.min(X_MAX, daten[i] + d)); alles(false);
+  const n = $('sd-s1').querySelector('[data-i="' + i + '"]'); if (n) n.focus();
+});
+function felder() {
+  const box = $('sd-werte'); box.innerHTML = '';
+  daten.forEach((v, i) => {
+    const w = document.createElement('span'); w.className = 'sd-wert';
+    w.innerHTML = '<label for="sd-x' + i + '">x' + '₁₂₃₄₅₆₇₈'[i] + '</label><input type="text" inputmode="numeric" id="sd-x' + i + '" value="' + v + '">';
+    box.appendChild(w);
+  });
+}
+$('sd-werte').addEventListener('input', e => {
+  const i = +e.target.id.slice(4), v = parseInt(e.target.value, 10);
+  if (!Number.isNaN(v)) { daten[i] = Math.max(X_MIN, Math.min(X_MAX, v)); alles(false); }
+});
+$('sd-werte').addEventListener('change', e => { e.target.value = daten[+e.target.id.slice(4)]; });
+
+// Schritt 2: Abweichungen als Balken, Bilanz
+function zeichne2() {
+  const svg = $('sd-s2'), k = kennzahlen(daten, modus), W = breite($('sd-s2')), links = 52, rechts = 52, oben = 22, zeile = 26;
+  let pos = 0, neg = 0; daten.forEach(v => { const d = v - k.m; if (d > 0) pos += d; else neg -= d; });
+  const cx = W / 2, halb = (W - links - rechts) / 2, max = Math.max(pos, neg, 1e-9), mass = max > 1e-9 ? halb / max : 0;
+  const yZ = oben + daten.length * zeile, yB = yZ + 36, H = yB + 52;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); leer(svg);
+  svg.appendChild(el('line', { x1: cx, y1: oben - 6, x2: cx, y2: yZ + 4, stroke: FARBE.mitte, 'stroke-width': 2, 'stroke-dasharray': '5 4' }));
+  svg.appendChild(el('text', { x: cx, y: oben - 9, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.mitte }, 'x̄ (Abweichung 0)'));
+  daten.forEach((v, i) => {
+    const d = v - k.m, y = oben + i * zeile + zeile / 2, x = cx + d * mass, f = farbe(d);
+    svg.appendChild(el('line', { x1: cx, y1: y, x2: x, y2: y, stroke: f, 'stroke-width': 7, 'stroke-linecap': 'round', opacity: 0.85 }));
+    svg.appendChild(el('text', { x: d >= 0 ? x + 8 : x - 8, y: y + 4, 'font-size': 12, 'font-weight': 600, 'text-anchor': d >= 0 ? 'start' : 'end', fill: f }, minus(zahl(d))));
+  });
+  const pw = pos * mass, nw = neg * mass;
+  svg.appendChild(el('text', { x: 4, y: yB - 20, 'font-size': 12, fill: FARBE.text }, W < 460 ? 'Bilanz' : 'Bilanz: alle Abweichungen aneinandergereiht'));
+  svg.appendChild(el('rect', { x: cx, y: yB - 14, width: Math.max(pw, 0.5), height: 28, fill: FARBE.hellUeber, stroke: FARBE.ueber, 'stroke-width': 1.5, rx: 3 }));
+  svg.appendChild(el('rect', { x: cx - nw, y: yB - 14, width: Math.max(nw, 0.5), height: 28, fill: FARBE.hellUnter, stroke: FARBE.unter, 'stroke-width': 1.5, rx: 3 }));
+  svg.appendChild(el('line', { x1: cx, y1: yB - 20, x2: cx, y2: yB + 20, stroke: FARBE.mitte, 'stroke-width': 2 }));
+  svg.appendChild(el('text', { x: Math.min(W - 4, cx + pw + 8), y: yB + 4, 'font-size': 12, 'font-weight': 600, fill: FARBE.ueber, 'text-anchor': cx + pw + 8 > W - 50 ? 'end' : 'start' }, '+' + zahl(pos)));
+  svg.appendChild(el('text', { x: Math.max(4, cx - nw - 8), y: yB + 4, 'font-size': 12, 'font-weight': 600, fill: FARBE.unter, 'text-anchor': cx - nw - 8 < 50 ? 'start' : 'end' }, '−' + zahl(neg)));
+  svg.appendChild(el('text', { x: cx, y: yB + 40, 'font-size': 13, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.text }, 'gleich lang: Summe = 0'));
+  const glieder = daten.map(v => { const d = v - k.m, t = zahl(d); return d < 0 && t !== '0' ? '(' + t + ')' : t; });
+  const rund = daten.some(v => gerundet(v - k.m));
+  // schmal: drei Glieder je Zeile, sonst alle in einer Zeile
+  const je = W < 460 ? 3 : 8, zeilen = [];
+  for (let i = 0; i < glieder.length; i += je) zeilen.push(glieder.slice(i, i + je).join(' + '));
+  setzeTex('sd-f2', '\\[ \\begin{aligned} \\sum_{i=1}^{' + k.n + '} (x_i - \\bar{x}) &' + (rund ? '\\approx ' : '= ') + zeilen.join(' \\\\ &\\quad {} + ') + (zeilen.length > 1 ? ' \\\\ &= 0' : ' = 0') + ' \\end{aligned} \\]' +
+    (rund ? '<p class="sd-cap">Die Abweichungen sind auf zwei Stellen gerundet; ihre Summe ist genau \\(0\\).</p>' : ''));
+}
+
+// Schritt 3: flächengetreue Quadrate, dazu das Quadrat mit der Fläche s² bzw. σ²
+function zeichne3() {
+  const svg = $('sd-s3'), k = kennzahlen(daten, modus), n = daten.length, W = breite(svg), rand = 12, abstand = 12;
+  // Plätze: n Quadrate und das grüne; so viele je Reihe, dass jede Beschriftung (etwa 64 px) Platz hat
+  const plaetze = n + 1, jeReihe = Math.min(plaetze, Math.max(3, Math.floor((W - 2 * rand + abstand) / (64 + abstand))));
+  const reihen = Math.ceil(plaetze / jeReihe), bw = (W - 2 * rand - abstand * (jeReihe - 1)) / jeReihe;
+  let dmax = k.s; daten.forEach(v => { dmax = Math.max(dmax, Math.abs(v - k.m)); });
+  const seiteMax = Math.min(140, bw), mass = dmax > 1e-9 ? seiteMax / dmax : 0;   // ein Massstab für alle: flächengetreu
+  const hoehe = seiteMax + 48, H = rand + reihen * hoehe;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); leer(svg);
+  const platz = j => { const z = Math.floor(j / jeReihe), sp = j % jeReihe; return { cx: rand + sp * (bw + abstand) + bw / 2, yB: rand + z * hoehe + seiteMax }; };
+  for (let z = 0; z < reihen; z++) { const yB = rand + z * hoehe + seiteMax; svg.appendChild(el('line', { x1: rand, y1: yB, x2: W - rand, y2: yB, stroke: FARBE.achse, 'stroke-width': 1.5 })); }
+  daten.forEach((v, i) => {
+    const d = v - k.m, a = Math.abs(d) * mass, { cx, yB } = platz(i), f = farbe(d);
+    if (a > 0.6) svg.appendChild(el('rect', { x: cx - a / 2, y: yB - a, width: a, height: a, fill: d > 0 ? FARBE.hellUeber : FARBE.hellUnter, stroke: f, 'stroke-width': 2 }));
+    else svg.appendChild(el('circle', { cx, cy: yB - 3, r: 2.5, fill: FARBE.null }));
+    const t = zahl(d), basis = d < 0 && t !== '0' ? '(' + minus(t) + ')' : t;
+    svg.appendChild(el('text', { x: cx, y: yB + 16, 'font-size': 12, 'text-anchor': 'middle', fill: FARBE.text }, basis + '²'));
+    svg.appendChild(el('text', { x: cx, y: yB + 32, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.text }, (gerundet(d * d) ? '≈ ' : '= ') + zahl(d * d)));
+  });
+  const { cx, yB } = platz(n), a = Math.min(k.s * mass, bw);
+  if (a > 0.6) svg.appendChild(el('rect', { x: cx - a / 2, y: yB - a, width: a, height: a, fill: FARBE.hellS, stroke: FARBE.s, 'stroke-width': 2.5, 'stroke-dasharray': '6 4' }));
+  const sym = modus === 'sigma' ? 'σ' : 's';
+  svg.appendChild(el('text', { x: cx, y: yB + 16, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.s }, sym + '²'));
+  svg.appendChild(el('text', { x: cx, y: yB + 32, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.s }, (gerundet(k.varianz) ? '≈ ' : '= ') + zahl(k.varianz)));
+  setzeTex('sd-cap3', 'Seite \\(|x_i - \\bar{x}|\\), Fläche \\((x_i - \\bar{x})^2\\), alle im selben Massstab. Das <span class="tx-s">grüne</span> Quadrat hat die Fläche ' +
+    (modus === 'sigma'
+      ? '\\(\\sigma^2\\): genau der <strong>Durchschnitt</strong> der Flächen (Summe geteilt durch \\(n = ' + n + '\\)).'
+      : '\\(s^2\\): die Summe der Flächen geteilt durch \\(n - 1 = ' + (n - 1) + '\\), also etwas mehr als ihr Durchschnitt (Schritt 4 sagt, warum).') +
+    ' Seine Seite ist die Standardabweichung \\(' + (modus === 'sigma' ? '\\sigma' : 's') + gl(k.s) + '\\).');
+}
+
+// Schritt 4: Tabelle und Rechnung
+function zeichne4() {
+  const k = kennzahlen(daten, modus), sym = modus === 'sigma' ? '\\sigma' : 's', nen = modus === 'sigma' ? 'n' : 'n - 1';
+  $('sd-tab').innerHTML = daten.map(v => {
+    const d = v - k.m, f = Math.abs(d) < 1e-9 ? '' : d > 0 ? ' class="tx-ueber"' : ' class="tx-unter"';
+    return '<tr><td>' + v + '</td><td' + f + '>' + minus(zahl(d)) + '</td><td>' + zahl(d * d) + '</td></tr>';
+  }).join('') + '<tr><td><strong>Summe ' + daten.reduce((s, v) => s + v, 0) + '</strong></td><td><strong>0</strong></td><td><strong>' + zahl(k.ss) + '</strong></td></tr>';
+  const summe = daten.reduce((s, v) => s + v, 0);
+  const schmal = breite($('sd-s1')) < 460;
+  setzeTex('sd-f4',
+    '\\[ \\bar{x} = \\frac{' + (schmal ? '\\sum x_i' : daten.join(' + ')) + '}{' + (schmal ? 'n' : k.n) + '} = \\frac{' + summe + '}{' + k.n + '}' + gl(k.m) + ' \\]' +
+    '\\[ ' + sym + '^2 = \\frac{\\sum (x_i - \\bar{x})^2}{' + nen + '}' + (gerundet(k.ss) ? ' \\approx ' : ' = ') + '\\frac{' + zahl(k.ss) + '}{' + k.nenner + '}' + gl(k.varianz) + ' \\]' +
+    '\\[ ' + sym + ' = \\sqrt{' + sym + '^2}' + (gerundet(k.varianz) ? ' \\approx ' : ' = ') + '\\sqrt{' + zahl(k.varianz) + '}' + gl(k.s) + ' \\]');
+}
+
+// Schritt 5: R, QD und x̄ ± s auf dem Zahlenstrahl
+function zeichne5() {
+  const svg = $('sd-s5'), k = kennzahlen(daten, modus), W = breite(svg);
+  const a = Math.min(X_MIN, Math.floor((k.m - k.s) / 2) * 2), b = Math.max(X_MAX, Math.ceil((k.m + k.s) / 2) * 2);
+  const x = v => 40 + (v - a) / (b - a) * (W - 60);
+  const balken = [];
+  if (zeige.R) balken.push([k.q0, k.q4, FARBE.R, 'R = ' + zahl(k.R)]);
+  if (zeige.QD) balken.push([k.q1, k.q3, FARBE.QD, 'QD = ' + zahl(k.QD)]);
+  if (zeige.s) balken.push([k.m - k.s, k.m + k.s, FARBE.s, 'x̄ ± ' + (modus === 'sigma' ? 'σ' : 's') + ', ' + (modus === 'sigma' ? 'σ' : 's') + (gerundet(k.s) ? ' ≈ ' : ' = ') + zahl(k.s)]);
+  const yA = 26, H = yA + 30 + Math.max(1, balken.length) * 34;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); leer(svg);
+  for (let t = a; t <= b; t += 2) {
+    svg.appendChild(el('line', { x1: x(t), y1: yA, x2: x(t), y2: yA + 5, stroke: FARBE.achse }));
+    if (W < 460 && t % 4) continue;
+    svg.appendChild(el('text', { x: x(t), y: yA - 8, 'font-size': 12, 'text-anchor': 'middle', fill: FARBE.text }, minus(t)));
+  }
+  svg.appendChild(el('line', { x1: x(a), y1: yA, x2: x(b), y2: yA, stroke: FARBE.achse, 'stroke-width': 1.5 }));
+  daten.forEach(v => svg.appendChild(el('circle', { cx: x(v), cy: yA, r: 4, fill: FARBE.text })));
+  svg.appendChild(el('line', { x1: x(k.m), y1: yA - 4, x2: x(k.m), y2: H - 6, stroke: FARBE.mitte, 'stroke-width': 1.5, 'stroke-dasharray': '4 4', opacity: 0.7 }));
+  balken.forEach(([u, v, f, t], i) => {
+    const y = yA + 40 + i * 34, x1 = x(u), x2 = x(v);
+    svg.appendChild(el('line', { x1, y1: y, x2, y2: y, stroke: f, 'stroke-width': 3.5, 'stroke-linecap': 'round' }));
+    svg.appendChild(el('line', { x1, y1: y - 6, x2: x1, y2: y + 6, stroke: f, 'stroke-width': 3 }));
+    svg.appendChild(el('line', { x1: x2, y1: y - 6, x2, y2: y + 6, stroke: f, 'stroke-width': 3 }));
+    const mitte = Math.min(W - 70, Math.max(70, (x1 + x2) / 2));
+    svg.appendChild(el('text', { x: mitte, y: y - 9, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: f }, t));
+  });
+  if (!balken.length) svg.appendChild(el('text', { x: W / 2, y: yA + 44, 'font-size': 12, 'text-anchor': 'middle', fill: FARBE.text }, 'Alle Masse ausgeschaltet.'));
+  const sym = modus === 'sigma' ? '\\sigma' : 's';
+  setzeTex('sd-kacheln',
+    '<div class="sd-kachel" style="border-left-color:' + FARBE.R + '"><span>Spannweite</span><b>' + zahl(k.R) + '</b><span>\\(R = Q_4 - Q_0 = ' + k.q4 + ' - ' + k.q0 + '\\)</span></div>' +
+    '<div class="sd-kachel" style="border-left-color:' + FARBE.QD + '"><span>Quartilsdifferenz</span><b>' + zahl(k.QD) + '</b><span>\\(\\text{QD} = Q_3 - Q_1 = ' + zahl(k.q3) + ' - ' + zahl(k.q1) + '\\)</span></div>' +
+    '<div class="sd-kachel" style="border-left-color:' + FARBE.s + '"><span>Standardabweichung</span><b>' + (gerundet(k.s) ? '≈ ' : '') + zahl(k.s) + '</b><span>\\(' + sym + '\\), typische Abweichung vom Mittelwert</span></div>');
+}
+
+// Schritt 6: Beobachtung an den aktuellen Daten
+function zeichne6() {
+  const k = kennzahlen(daten, modus), sym = modus === 'sigma' ? '\\sigma' : 's';
+  let t = '<p>Mit deinen ' + k.n + ' Werten: \\(R = ' + zahl(k.R) + '\\), \\(\\text{QD} = ' + zahl(k.QD) + '\\), \\(' + sym + gl(k.s) + '\\).</p>';
+  const o = ohneAeussersten(daten, modus);
+  if (k.R === 0) t += '<p>Alle Werte sind gleich: keine Streuung, jedes Mass ist \\(0\\).</p>';
+  else if (!o) t += '<p>Für den Vergleich ohne den äussersten Wert braucht es mindestens vier Werte.</p>';
+  else {
+    const v = o.vorher, w = o.nachher;
+    t += '<p>Lässt du den Wert, der am weitesten vom Median liegt (\\(' + o.wert + '\\)), weg, wird \\(R\\) ' + (w.R === v.R ? 'nicht kleiner' : 'von ' + zahl(v.R) + ' zu ' + zahl(w.R)) +
+      ', \\(\\text{QD}\\) ' + (Math.abs(w.QD - v.QD) < 1e-9 ? 'bleibt ' + zahl(v.QD) : 'wird von ' + zahl(v.QD) + ' zu ' + zahl(w.QD)) +
+      ' und \\(' + sym + '\\) von ' + zahl(v.s) + ' zu ' + zahl(w.s) + '.</p>';
+    if (k.n <= 5) t += '<p>Bei nur ' + k.n + ' Werten hat jede Hälfte höchstens zwei Werte. Dann geht der äusserste Wert selbst in \\(Q_1\\) oder \\(Q_3\\) ein, und auch die Quartilsdifferenz reagiert auf ihn. Robust ist sie erst bei mehr Werten.</p>';
+  }
+  setzeTex('sd-dyn', t);
+  const fv = k.m > 0 ? '\\[ v = \\frac{' + sym + '}{\\bar{x}}' + (gerundet(k.s) || gerundet(k.m) ? ' \\approx ' : ' = ') + '\\frac{' + zahl(k.s) + '}{' + zahl(k.m) + '}' + gl(k.s / k.m * 100, 1) + '\\,\\% \\]'
+    : '<p class="sd-cap">Für \\(\\bar{x} = 0\\) ist \\(v\\) nicht definiert.</p>';
+  setzeTex('sd-fv', fv);
+}
+
+function alles(mitFeldern = true) {
+  if (mitFeldern) felder();
+  else daten.forEach((v, i) => { const f = $('sd-x' + i); if (f && document.activeElement !== f) f.value = v; });
+  zeichne1(); zeichne2(); zeichne3(); zeichne4(); zeichne5(); zeichne6();
+  $('sd-plus').disabled = daten.length >= N_MAX; $('sd-minus').disabled = daten.length <= N_MIN;
+}
+$('sd-plus').addEventListener('click', () => { if (daten.length < N_MAX) { daten.push(Math.round(mittel(daten))); alles(); } });
+$('sd-minus').addEventListener('click', () => { if (daten.length > N_MIN) { daten.pop(); alles(); } });
+document.querySelectorAll('.sd-bsp').forEach(b => b.addEventListener('click', () => { daten = b.dataset.werte.split(',').map(Number); alles(); }));
+document.querySelectorAll('[data-modus]').forEach(b => b.addEventListener('click', () => {
+  modus = b.dataset.modus;
+  document.querySelectorAll('[data-modus]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  alles(false);
+}));
+$('sd-schalter').addEventListener('change', e => { const m = e.target.dataset.mass; if (m) { zeige[m] = e.target.checked; zeichne5(); } });
+let groesseUhr = null;
+window.addEventListener('resize', () => { clearTimeout(groesseUhr); groesseUhr = setTimeout(() => alles(false), 150); });
+alles();
+</script>
+</body>
+</html>
