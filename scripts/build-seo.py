@@ -156,6 +156,12 @@ SEITEN = {
    titel='Gesetzetrainer — Potenzen, Wurzeln und Logarithmen ohne Taschenrechner',
    beschreibung='Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner üben, nach Bereich wählbar — mit Lösungsweg und der verwechselten Regel bei jedem Fehler.',
    themen=['Mathematik', 'Potenzgesetze', 'Wurzelgesetze', 'Logarithmengesetze', 'Rationale Exponenten', 'Basiswechsel', 'Übung']),
+ 'werkzeuge/systemtrainer.html': dict(
+   ort='Werkzeuge · Systemtrainer',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Systemtrainer — lineare Gleichungssysteme lösen mit Probe und Skizze',
+   beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen ohne Taschenrechner lösen, auch ohne oder mit unendlich vielen Lösungen — mit Probe, Diagnose und Skizze.',
+   themen=['Mathematik', 'Lineare Gleichungssysteme', 'Einsetzverfahren', 'Additionsverfahren', 'Lösungsmenge', 'Übung']),
  'leitprogramme/potenzen.html': dict(
    ort='Leitprogramm · Potenzen',
    typ='article', lrt='Leitprogramm',

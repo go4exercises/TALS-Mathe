@@ -344,6 +344,7 @@ ZUSATZSEITEN = [
     ('werkzeuge/einheitskreistrainer.html', 'WZ', 'Einheitskreistrainer', 'thema'),
     ('werkzeuge/termtrainer.html', 'WZ', 'Termtrainer', 'thema'),
     ('werkzeuge/gesetzetrainer.html', 'WZ', 'Gesetzetrainer', 'thema'),
+    ('werkzeuge/systemtrainer.html', 'WZ', 'Systemtrainer', 'thema'),
     ('leitprogramme/quadratische-funktionen.html', '▤',
      'Leitprogramm Quadratische Funktionen', 'thema'),
     ('leitprogramme/lineare-funktionen.html', '▤',

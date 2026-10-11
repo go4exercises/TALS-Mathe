@@ -88,6 +88,15 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `x^{{n}}`, `{k}\sqrt{{r}}`); Potenzterme als Exponentenbäume, Denkfehler durch umgeschaltete Regeln
   (`expo(x, 'p1mal')` …), dazu «Regel prüfen» (`FALLEN`). Selbsttest `scripts/verify_gesetzetrainer.js` rechnet
   in `python3` unabhängig nach (Wurzeln als `(x**m)**(1/n)`, `math.log`).
+- `werkzeuge/systemtrainer.html` (seit 11.10.2026): lineare Gleichungssysteme (GF 2.3) in vier Themen — 2×2 lösen,
+  Sonderfälle 2×2, 3×3 lösen, Lösungsfall erkennen (`#thema=zwei,sonder,drei,lage`). Man wählt den Lösungsfall und gibt
+  𝕃 ein: Zahlen bzw. bei unendlich vielen Lösungen \(y\) (und \(z\)) als Ausdruck in \(x\), Schreibweise
+  \(\{(x \mid \ldots) : x \in \mathbb{R}\}\) wie in g2.3 und im Notationstrainer. Die Prüfung macht die Probe und
+  erkennt vertauschte Werte, Vorzeichen, falschen Lösungsfall, Fehler beim Auflösen nach y. Lösungsweg nach Form
+  (Einsetzen, Gleichsetzen, Addieren mit kleinerem kgV; 3×3: eliminieren, 2×2, zurück), bei 2×2 Skizze der Geraden (SVG).
+  Selbsttest `scripts/verify_systemtrainer.js`: python3 löst jedes System selbst und prüft, dass jede Wegzeile aus dem
+  System folgt (Zeilenraum der erweiterten Matrix); `STATISTIK.widerspruch` muss 0 bleiben, sonst verwirft der
+  Erzeuger kaputte Wege still.
 - `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über

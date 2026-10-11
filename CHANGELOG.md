@@ -24,6 +24,11 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **Neues Werkzeug: Systemtrainer** (11.10.2026, Trainer 3 aus `../TODO-trainer-mathe.md`): lineare
+  Gleichungssysteme 2×2 und 3×3 mit ganzzahligen Lösungen, gezielt auch keine und unendlich viele Lösungen, dazu
+  «Lösungsfall erkennen». Lösungsfall wählen, 𝕃 eingeben (bei unendlich vielen Lösungen als Ausdruck in \(x\));
+  Probe und Fehlerdiagnose, Lösungsweg nach Form des Systems, bei 2×2 Skizze der beiden Geraden. Verlinkt aus g2.3
+  (`#verfahren`, `#loesungsfaelle`, `#dreidim`), Kachel in `werkzeuge.html`, Selbsttest im Pre-Flight.
 - **Mathe-Trainer geprüft und korrigiert** (11.10.2026): alle sechs Trainer auf fachliche Richtigkeit
   und Didaktik durchgesehen (Befunde in `TODO-trainer-korrekturen.md`, alle erledigt). Kein fachlicher
   Fehler; korrigiert wurden Bewertung und Rückmeldung. Richtige Eingaben, die als falsch galten (gemischte
