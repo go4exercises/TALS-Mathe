@@ -137,6 +137,13 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
+    dict(quelle='Mathe', was='Kacheln in werkzeuge.html und simulationen.html kompakt (11.10.2026, Mathe d42e34b)',
+         wie='.lp-satz nur noch ein kurzer Satz (eine Zeile); statt je Themenseite einer .lp-zeile mit .k-tit-Text '
+             'eine Zeile .lp-pillen mit nur den .ts-link-Pillen, eine Pille je Themenseite (erster Abschnitt). '
+             'CSS: .lp-zeile und .lp-zeile .k-tit ersetzen durch .lp-pillen { position:relative; z-index:1; '
+             'pointer-events:none; display:flex; flex-wrap:wrap; gap:4px; }. HOWTO-werkzeuge.md und '
+             'HOWTO-simulationen.md (Beispielkachel) nachfuehren. leitprogramme.html bleibt. '
+             'Zahlen und Ablauf in TODO-schwesterprojekt.md (Mathe). Danach diesen Eintrag streichen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

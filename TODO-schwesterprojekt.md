@@ -34,6 +34,35 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
+### 11.10.2026 · Übersichten Werkzeuge und Simulationen: kompakte Kacheln (auch in `OFFEN`)
+
+**Was.** Entscheid des Auftraggebers: Die Kacheln von `werkzeuge.html` und `simulationen.html` werden viel kompakter.
+- **Satz:** `.lp-satz` hat nur noch einen kurzen Satz (eine Zeile), etwa «Einheiten umrechnen üben.».
+- **Pillen statt Zeilen:** Die `.lp-zeile` mit `.k-tit`-Text fallen weg. Stattdessen stehen in einer Zeile `.lp-pillen`
+  nur die `.ts-link`-Pillen ohne Text, eine Pille je Themenseite, die auf den ersten Abschnitt zeigt. Das
+  `title` der Pille nennt weiter die Themenseite.
+- **CSS:** `.lp-zeile` und `.lp-zeile .k-tit` werden ersetzt durch
+  `.lp-pillen { position:relative; z-index:1; pointer-events:none; display:flex; flex-wrap:wrap; gap:4px; }`.
+
+Mathe-Commit `d42e34b`. Dort ist es mit einem kleinen Python-Skript umgestellt (Regex je `.karte-lp`-Block).
+
+**Wo (Physik, gezählt am 11.10.2026):**
+- `werkzeuge.html`: 6 Kacheln, 12 `.lp-zeile`. Je Kachel Zeilen → Themenseiten:
+  - Einheitentrainer 3 → 3
+  - Formeln umstellen 1 → 1
+  - Bewegungsdiagramme 2 → 1
+  - Fall und Wurf 2 → 1
+  - Freischneiden 2 → 2
+  - Schaltungen zusammenfassen 2 → 1
+  - Danach also 9 Pillen.
+- `simulationen.html`: 1 Kachel (Sonnenfinsternis, unter `#ausserhalb`), keine `.lp-zeile`, nur der Satz kürzen.
+- CSS in beiden Dateien: je Zeile 103 und 104.
+- Beispielkacheln: `HOWTO-werkzeuge.md` Z. 104 (mit dem Satz «Je Themenseite … eine Zeile mit Pille»)
+  und `HOWTO-simulationen.md` Z. 84.
+- `leitprogramme.html` (14 Kacheln, 16 `.lp-zeile`) bleibt, wie in Mathe.
+
+**Warum.** Die Übersicht soll auf einen Blick lesbar sein. Der Abschnittsname steht schon auf der Themenseite.
+
 ### 11.10.2026 · Werkzeuge: Selbsttest prüft auch Rückmeldung und gleichwertige Eingaben
 
 **Was.** In Mathe hat eine Prüfung aller sechs Trainer (`TODO-trainer-korrekturen.md`, Commits `7ed2ed8`,
