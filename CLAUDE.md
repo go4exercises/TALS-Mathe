@@ -76,6 +76,17 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   zum Winkel (Punkte am Kreis anklicken). Werte aus Quadrant und Referenzwinkel, Herleitung mit Skizze.
   Anzeige Grad/Bogenmass/gemischt; Vorwahl `#teil=werte&mass=rad`. Selbsttest
   `scripts/verify_einheitskreistrainer.js` mit Gegenrechnung in `python3`.
+- `werkzeuge/termtrainer.html` (seit 11.10.2026): Terme umformen (GF 1.3, SF 1.1) in sieben Themen — Zusammenfassen,
+  Klammern, Klammer mal Klammer, binomische Formeln, Ausklammern, Faktorisieren, Bruchterme kürzen. Die Eingabe
+  (`3x^2-2x+1`, `2x(x+3)(x-3)`, `(x-3)/(x+3)`) wird exakt als Quotient zweier Polynome verglichen; die Form
+  (ausmultipliziert, vollständig faktorisiert, gekürzt) am Syntaxbaum. Aufgaben stehen als Eingabetext,
+  Lösungsweg und Denkfehler ebenso (`diag`, `FEHLER`). Vorwahl `#thema=binome,faktorisieren`. Selbsttest
+  `scripts/verify_termtrainer.js` wertet alles in `python3` mit `Fraction` aus und prüft Unzerlegbarkeit.
+- `werkzeuge/gesetzetrainer.html` (seit 11.10.2026): Potenz-, Wurzel- und Logarithmengesetze (GF 1.4, SF 1.2, 1.3),
+  Bereiche wählbar (`#bereich=potenzen,wurzeln,logarithmen`). Antwort in Feldern einer Zielform (`ziel`, z.B.
+  `x^{{n}}`, `{k}\sqrt{{r}}`); Potenzterme als Exponentenbäume, Denkfehler durch umgeschaltete Regeln
+  (`expo(x, 'p1mal')` …), dazu «Regel prüfen» (`FALLEN`). Selbsttest `scripts/verify_gesetzetrainer.js` rechnet
+  in `python3` unabhängig nach (Wurzeln als `(x**m)**(1/n)`, `math.log`).
 - `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über

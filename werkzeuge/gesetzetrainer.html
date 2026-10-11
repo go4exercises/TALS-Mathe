@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gesetzetrainer — Mathe begreifbar</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner üben, nach Bereich wählbar — mit Lösungsweg und der verwechselten Regel bei jedem Fehler.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/werkzeuge/gesetzetrainer.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Gesetzetrainer — Potenzen, Wurzeln und Logarithmen ohne Taschenrechner">
+<meta property="og:description" content="Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner üben, nach Bereich wählbar — mit Lösungsweg und der verwechselten Regel bei jedem Fehler.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/werkzeuge/gesetzetrainer.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/werkzeuge/gesetzetrainer.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/werkzeuge/gesetzetrainer.html",
+   "name": "Gesetzetrainer — Potenzen, Wurzeln und Logarithmen ohne Taschenrechner",
+   "description": "Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner üben, nach Bereich wählbar — mit Lösungsweg und der verwechselten Regel bei jedem Fehler.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Potenzgesetze"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Wurzelgesetze"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Logarithmengesetze"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Rationale Exponenten"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Basiswechsel"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Übung"
+    }
+   ],
+   "keywords": "Mathematik, Potenzgesetze, Wurzelgesetze, Logarithmengesetze, Rationale Exponenten, Basiswechsel, Übung",
+   "learningResourceType": [
+    "Werkzeug",
+    "Übung"
+   ],
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<link rel="stylesheet" href="../style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
+  svg: { fontCache:'global', scale:1.05 },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+<style>
+/* Gesetzetrainer — seiteneigene Klassen (Präfix gt-), Farben aus style.css.
+   Orange = Aufgabe, Grün = richtig und Lösungsweg, Rot = Fehler mit Diagnose, Grau = fast (Form).
+   Aufbau wie im Rechentrainer; die Antwort steht in Feldern, die Vorschau setzt sie in die Zielform ein. */
+.gt-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
+.gt-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
+.gt-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
+  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
+.gt-seite summary::-webkit-details-marker { display:none; }
+.gt-seite summary::before { content:'▸ '; }
+.gt-seite details[open] summary::before { content:'▾ '; }
+.gt-gruppe { margin-bottom:16px; }
+.gt-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
+  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
+.gt-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
+  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
+.gt-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
+  border-radius:3px; background:var(--weiss); }
+.gt-opt.aktiv { color:var(--tinte); }
+.gt-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
+.gt-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
+.gt-opt:hover { color:var(--blau); }
+.gt-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
+.gt-zahl b { color:var(--tinte); font-weight:600; }
+.gt-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
+@media (min-width:901px) { .gt-seite summary { display:none; } }
+@media (max-width:900px) {
+  .gt-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
+  .gt-seite { order:-1; position:static; margin-bottom:-10px; }
+  .gt-seite details[open] > div { padding:12px 4px 0; }
+  .gt-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
+}
+.gt-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
+.gt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
+.gt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:12px; }
+.gt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
+.gt-tag.gt-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
+.gt-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
+.gt-ausdruck { font-size:1.25rem; padding:10px 4px 12px; overflow-x:auto; }
+.gt-eingabe { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.gt-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:6.5em; max-width:100%;
+  border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
+.gt-eingabe input:focus { outline:none; border-color:var(--orange); }
+.gt-vorschau { font-size:1.05rem; color:var(--tinte); min-height:2em; margin:2px 0 8px; overflow-x:auto; }
+.gt-feld { display:inline-flex; align-items:center; gap:6px; }
+.gt-feld label { font-size:1rem; }
+.gt-weg .gt-k { font-family:var(--sans); font-size:.8rem; color:var(--tinte-2); margin-left:10px; }
+.gt-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
+  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
+.gt-btn:hover { filter:brightness(.97); }
+.gt-btn.gt-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
+.gt-btn:disabled { opacity:.45; cursor:default; }
+.gt-wahl { display:flex; flex-wrap:wrap; gap:8px; }
+.gt-wahl .gt-btn { min-width:72px; font-size:1.05rem; }
+.gt-wahl .gt-btn.gt-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
+.gt-hinweis { font-family:var(--sans); font-size:.78rem; color:var(--tinte-2); margin-top:6px; }
+.gt-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
+.gt-rueck:empty { display:none; }
+.gt-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
+.gt-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
+.gt-rueck.fast { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
+.gt-rueck p { margin:0; }
+.gt-rueck p + p { margin-top:6px; }
+.gt-weg { margin-top:12px; padding:10px 14px; border:1px solid var(--gruen-rand); border-radius:9px; background:var(--gruen-hell); }
+.gt-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
+.gt-weg .gt-zeile { padding:2px 0; overflow-x:auto; }
+.gt-weg .gt-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
+.gt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
+.gt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
+.gt-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
+.gt-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
+.gt-bilanz ul { margin:6px 0 0 18px; }
+[hidden] { display:none !important; }
+@media (max-width:560px) {
+  .gt-vorne { padding-left:14px; padding-right:14px; }
+  .gt-ausdruck { font-size:1.1rem; }
+  .gt-btn.gt-weiter { min-width:0; flex:1 1 60%; }
+  .gt-taste { display:none; }
+}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap gt-wrap">
+  <main class="content">
+    <div class="page-titel">
+      <div class="pt-bereich">WZ · Werkzeuge</div>
+      <h1 class="pt-h1">Gesetzetrainer</h1>
+      <p class="pt-untertitel">Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner anwenden: Terme auf eine Potenz bringen, Wurzeln teilweise ziehen und als Potenzen schreiben, Logarithmen berechnen, zerlegen und zusammenfassen. Rechts wählst du, was du üben willst. Bei einem Fehler nennt das Werkzeug die verwechselte Regel.
+        Der Stoff dazu steht in <a href="../grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html#potenzgesetze">1.4 Zehnerpotenzen und Quadratwurzeln</a>,
+        <a href="../schwerpunkt/s1-2-potenzen.html#potenzgesetze">SF 1.2 Potenzen</a>
+        und <a href="../schwerpunkt/s1-3-logarithmen.html#logarithmengesetze">SF 1.3 Logarithmen</a>.</p>
+    </div>
+
+<div class="gt-karte" id="gt-karte">
+  <div id="gt-aufgabe">
+    <div class="gt-vorne">
+      <div class="gt-kopf"><span class="gt-tag" id="gt-nr"></span><span class="gt-tag gt-thema" id="gt-thema"></span></div>
+      <p class="gt-auftrag" id="gt-auftrag"></p>
+      <div class="gt-ausdruck" id="gt-ausdruck"></div>
+      <div id="gt-antwort-eingabe">
+        <div class="gt-vorschau" id="gt-vorschau" aria-live="polite"></div>
+        <div class="gt-eingabe">
+          <span id="gt-felder" class="gt-eingabe"></span>
+          <button type="button" class="gt-btn" id="gt-pruefen">Prüfen<span class="gt-taste">Enter</span></button>
+        </div>
+        <div class="gt-hinweis" id="gt-hinweis">Ganze Zahl, Bruch wie 3/2 oder -1/2, Dezimalzahl mit Punkt wie 2.5</div>
+      </div>
+      <div id="gt-antwort-wahl" class="gt-wahl" hidden></div>
+      <div class="gt-rueck" id="gt-rueck" aria-live="polite"></div>
+      <div class="gt-weg" id="gt-weg" hidden></div>
+    </div>
+    <div class="gt-knoepfe" id="gt-weiter-box" hidden>
+      <button type="button" class="gt-btn gt-weiter" id="gt-weiter">Nächste Aufgabe →<span class="gt-taste">Enter</span></button>
+    </div>
+  </div>
+  <div class="gt-bilanz" id="gt-bilanz" hidden></div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 So funktioniert der Trainer</div>
+  <p>Eine Runde hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst: Potenzen, Wurzeln, Logarithmen — einzeln oder gemischt. Die Logarithmen gehören zum Schwerpunktfach.</p>
+  <ul>
+    <li><strong>Antwort in Feldern:</strong> Über den Feldern steht die Form, die verlangt ist, etwa \(x^{\,n}\) oder \(k\sqrt{r}\). Du tippst nur die Zahlen ein: ganze Zahlen, Brüche wie <code>3/2</code> oder <code>-1/2</code>, Dezimalzahlen mit Punkt. Die Vorschau setzt sie gleich in die Form ein.</li>
+    <li><strong>Regel prüfen:</strong> Manche Aufgaben zeigen eine «Regel». Du entscheidest, ob sie für alle zulässigen Werte gilt. Danach siehst du ein Gegenbeispiel oder die Begründung.</li>
+    <li><strong>Falsch:</strong> Das Werkzeug rechnet jede Aufgabe auch mit den typischen Verwechslungen, etwa Exponenten multipliziert statt addiert oder Basis und Zahl im Logarithmus vertauscht. Trifft deine Antwort eine davon, nennt es sie; sonst gibt es einen Tipp. Nach dem zweiten Versuch kommt der Lösungsweg mit dem Gesetz zu jedem Schritt.</li>
+    <li><strong>Fast:</strong> Der Wert stimmt, aber die Form nicht, etwa ein ungekürzter Bruch oder eine Quadratzahl unter der Wurzel. Das zählt nicht als Fehler.</li>
+  </ul>
+  <p>Am Ende der Runde siehst du, welche Regeln du am häufigsten verwechselt hast, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
+</div>
+
+<details class="block block-merksatz" style="margin-top:10px">
+  <summary class="block-titel" style="cursor:pointer">⭐ Die Gesetze auf einen Blick</summary>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Potenzen (P1–P7)</td><td style="text-align:left;font-family:var(--sans)">\(a^m \cdot a^n = a^{m+n}\), \(\frac{a^m}{a^n} = a^{m-n}\), \((a^m)^n = a^{m \cdot n}\), \((ab)^n = a^n b^n\), \(\left(\frac{a}{b}\right)^n = \frac{a^n}{b^n}\), \(a^0 = 1\), \(a^{-n} = \frac{1}{a^n}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Wurzeln</td><td style="text-align:left;font-family:var(--sans)">\(\sqrt[n]{a^m} = a^{\frac{m}{n}}\), \(\sqrt{a} \cdot \sqrt{b} = \sqrt{ab}\), \(\frac{\sqrt{a}}{\sqrt{b}} = \sqrt{\frac{a}{b}}\), \(\sqrt{a^2} = |a|\); keine Regel für \(\sqrt{a + b}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Logarithmus</td><td style="text-align:left;font-family:var(--sans)">\(a^x = b \Leftrightarrow x = \log_a(b)\); \(\log_a(1) = 0\), \(\log_a(a) = 1\), \(\log_a\left(a^k\right) = k\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Logarithmengesetze</td><td style="text-align:left;font-family:var(--sans)">\(\log(uv) = \log(u) + \log(v)\), \(\log\left(\frac{u}{v}\right) = \log(u) - \log(v)\), \(\log\left(u^k\right) = k \cdot \log(u)\); keine Regel für \(\log(u + v)\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Basiswechsel</td><td style="text-align:left;font-family:var(--sans)">\(\log_a(b) = \frac{\lg(b)}{\lg(a)} = \frac{\ln(b)}{\ln(a)}\)</td></tr>
+    </tbody>
+  </table>
+</details>
+
+  </main>
+  <aside class="gt-seite">
+    <details id="gt-seite-det">
+      <summary>Runde und Bereiche · <span id="gt-kurz"></span></summary>
+      <div class="gt-gruppen">
+        <div class="gt-gruppe">
+          <div class="gt-g-titel">Runde</div>
+          <div class="gt-zahl"><span>Aufgabe</span><b id="gt-z-nr"></b></div>
+          <div class="gt-zahl"><span>Auf Anhieb</span><b id="gt-z-ok">0</b></div>
+          <div class="gt-zahl"><span>Fehler</span><b id="gt-z-fehl">0</b></div>
+          <div class="gt-zahl"><span>Zeit</span><b id="gt-z-zeit">0:00</b></div>
+          <div class="gt-neu" style="margin-top:6px"><button type="button" id="gt-neu">Neue Runde</button></div>
+        </div>
+        <div class="gt-gruppe" id="gt-bereiche">
+          <div class="gt-g-titel">Bereiche</div>
+        </div>
+      </div>
+    </details>
+  </aside>
+</div>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Werkzeuge · Gesetzetrainer</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script src="../nav.js"></script>
+<script>buildNav({ id: 'werkzeuge' });</script>
+<script>
+// ── KERN:ANFANG ─────────────────────────────────────────────────
+// Aufgaben und Prüfung ohne DOM; scripts/verify_gesetzetrainer.js lädt genau diesen Block in node:vm.
+// Jede Aufgabe: { bereich, typ, auftrag, ausdruck (LaTeX), felder: [{ id, tex }], ziel (LaTeX mit {id}
+//   als Platzhalter), loesung: [Bruch …] oder Wahl-Schlüssel, diag: [[Fehlercode, [Bruch|null …]], …],
+//   weg: [LaTeX | { text }], tipp, py: { links, rechts } für die Gegenrechnung in python3 }
+// diag enthält die Antworten, die bei einem bestimmten Denkfehler herauskommen (für jeden Denkfehler
+// wird die Aufgabe mit der falschen Regel neu gerechnet). Trifft die Antwort einen, nennt die
+// Rückmeldung den Fehler (FEHLER[code]).
+const ggT = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const nz = (a, b) => { for (;;) { const v = rnd(a, b); if (v) return v; } };
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// ── Brüche ──
+function Q(n, d = 1) { if (d < 0) { n = -n; d = -d; } const g = ggT(n, d) || 1; return { n: n / g, d: d / g }; }
+const qAdd = (a, b) => Q(a.n * b.d + b.n * a.d, a.d * b.d);
+const qSub = (a, b) => Q(a.n * b.d - b.n * a.d, a.d * b.d);
+const qMul = (a, b) => Q(a.n * b.n, a.d * b.d);
+const qDiv = (a, b) => (b.n === 0 ? null : Q(a.n * b.d, a.d * b.n));
+const qPow = (a, e) => (e >= 0 ? Q(a.n ** e, a.d ** e) : Q(a.d ** -e, a.n ** -e));
+const qNeg = a => Q(-a.n, a.d);
+const qAbs = a => Q(Math.abs(a.n), a.d);
+const qGleich = (a, b) => !!a && !!b && a.n === b.n && a.d === b.d;
+const qWert = a => a.n / a.d;
+const qTex = a => (a.d === 1 ? String(a.n) : (a.n < 0 ? '-' : '') + '\\frac{' + Math.abs(a.n) + '}{' + a.d + '}');
+const qKl = a => (a.n < 0 ? '(' + qTex(a) + ')' : qTex(a));          // negative Zahl in einer Rechnung: in Klammern
+const qPy = a => 'Fraction(' + a.n + ', ' + a.d + ')';
+const qStr = a => a.n + '/' + a.d;
+function dezimal(q) {                       // exakte Dezimalschreibweise, nur für abbrechende Brüche
+  let k = 0; while ((10 ** k) % q.d !== 0) k++;
+  const z = Math.abs(q.n) * (10 ** k) / q.d;
+  let s = String(z).padStart(k + 1, '0');
+  if (k) s = s.slice(0, -k) + '.' + s.slice(-k);
+  return (q.n < 0 ? '-' : '') + s;
+}
+const abbrechend = q => { let d = q.d; while (d % 2 === 0) d /= 2; while (d % 5 === 0) d /= 5; return d === 1; };
+const zahlTex = q => (q.d !== 1 && abbrechend(q) && q.d <= 1000 && q.d % 10 === 0 ? dezimal(q) : qTex(q));
+
+// ── Rückmeldungen ──
+const G14 = '../grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html', S12 = '../schwerpunkt/s1-2-potenzen.html', S13 = '../schwerpunkt/s1-3-logarithmen.html';
+const L_PG = [G14 + '#potenzgesetze', '1.4 Potenzgesetze'];
+const L_WN = [G14 + '#wissenschaftlich', '1.4 Wissenschaftliche Notation'];
+const L_WG = [G14 + '#wurzelgesetze', '1.4 Wurzelgesetze'];
+const L_SD = [S12 + '#definition', 'SF 1.2 Ganzzahlige Exponenten'];
+const L_SR = [S12 + '#rationale-exponenten', 'SF 1.2 Rationale Exponenten'];
+const L_SH = [S12 + '#hierarchie', 'SF 1.2 Hierarchie'];
+const L_LD = [S13 + '#definition', 'SF 1.3 Definition des Logarithmus'];
+const L_LG = [S13 + '#logarithmengesetze', 'SF 1.3 Logarithmengesetze'];
+const L_LB = [S13 + '#basiswechsel', 'SF 1.3 Basiswechsel'];
+const L_LE = [S13 + '#exponentialgleichungen', 'SF 1.3 Exponentialgleichungen'];
+const L_ST = ['../schwerpunkt/s1-1-grundlagen.html#typen', 'SF 1.1 Struktur-Regeln'];
+const FEHLER = {
+  p1mal:        ['Exponenten multipliziert statt addiert', 'Gleiche Basis multiplizieren heisst Exponenten <em>addieren</em>: \\(a^m \\cdot a^n = a^{m+n}\\) (P1). Multipliziert werden Exponenten nur bei der Potenz einer Potenz.', L_PG],
+  p3plus:       ['Exponenten addiert statt multipliziert', 'Potenz einer Potenz heisst Exponenten <em>multiplizieren</em>: \\((a^m)^n = a^{m \\cdot n}\\) (P3). \\((x^2)^3 = x^2 \\cdot x^2 \\cdot x^2 = x^6\\).', L_PG],
+  p2div:        ['Exponenten dividiert statt subtrahiert', 'Gleiche Basis dividieren heisst Exponenten <em>subtrahieren</em>: \\(\\frac{a^m}{a^n} = a^{m-n}\\) (P2).', L_PG],
+  p2vz:         ['Subtraktion in der falschen Reihenfolge', 'Bei \\(\\frac{a^m}{a^n} = a^{m-n}\\) rechnet man Exponent des Zählers minus Exponent des Nenners.', L_PG],
+  minusminus:   ['Minus eines negativen Exponenten', 'Ein negativer Exponent im Nenner wird abgezogen: \\(\\frac{a^3}{a^{-2}} = a^{3-(-2)} = a^{5}\\). Minus mal Minus gibt Plus.', L_PG],
+  p4erste:      ['Potenz nur auf den ersten Faktor', 'Ein Produkt wird potenziert, indem man jeden Faktor potenziert: \\((a \\cdot b)^n = a^n \\cdot b^n\\) (P4).', L_PG],
+  negBasis:     ['Negativer Exponent als negative Zahl', 'Ein negativer Exponent bildet den Kehrwert, er macht die Zahl nicht negativ: \\(2^{-3} = \\frac{1}{2^3} = \\frac{1}{8}\\).', L_SD],
+  basisMal:     ['Basis mal Exponent', '\\(a^n\\) ist ein Produkt aus \\(n\\) gleichen Faktoren: \\(2^3 = 2 \\cdot 2 \\cdot 2 = 8\\), nicht \\(2 \\cdot 3\\).', L_SD],
+  nullExp:      ['\\(a^0\\) als \\(0\\)', 'Für \\(a \\neq 0\\) gilt \\(a^0 = 1\\): Auf der Treppe \\(2^2 = 4\\), \\(2^1 = 2\\), \\(2^0 = 1\\) teilt jeder Schritt durch die Basis.', L_SD],
+  negsq:        ['Vorzeichen vor der Potenz', 'Die Potenz bindet stärker als das Vorzeichen: \\(-2^4 = -(2^4) = -16\\). Nur \\((-2)^4 = 16\\).', L_SH],
+  negKlammer:   ['Klammer um die negative Basis übersehen', '\\((-2)^3 = (-2) \\cdot (-2) \\cdot (-2) = -8\\), aber \\((-2)^4 = 16\\): Bei einem geraden Exponenten wird das Ergebnis positiv.', L_SH],
+  kehrVergessen:['Kehrwert vergessen', 'Ein negativer Exponent bildet den Kehrwert: \\(\\left(\\frac{2}{3}\\right)^{-2} = \\left(\\frac{3}{2}\\right)^{2} = \\frac{9}{4}\\).', L_SD],
+  basenVerschieden: ['Verschiedene Basen wie gleiche behandelt', 'Exponenten addiert werden nur bei gleicher Basis. Bei gleichem Exponenten gilt dagegen \\(a^n \\cdot b^n = (ab)^n\\) (P4): \\(5^3 \\cdot 2^3 = 10^3\\).', L_PG],
+  zehnerMal:    ['Zehnerexponenten multipliziert', 'Beim Multiplizieren werden die Exponenten der Zehnerpotenzen addiert: \\(10^4 \\cdot 10^3 = 10^7\\) (P1).', L_WN],
+  zehnerVz:     ['Zehnerexponenten falsch subtrahiert', 'Beim Dividieren rechnet man Exponent des Zählers minus Exponent des Nenners: \\(\\frac{10^{3}}{10^{-2}} = 10^{3-(-2)} = 10^{5}\\).', L_WN],
+  wurzelNichtGezogen: ['Wurzel aus dem Quadrat nicht gezogen', 'Beim teilweisen Wurzelziehen wird aus dem Quadrat die Wurzel gezogen: \\(\\sqrt{72} = \\sqrt{36 \\cdot 2} = \\sqrt{36} \\cdot \\sqrt{2} = 6\\sqrt{2}\\).', L_WG],
+  radikandAddiert: ['Radikanden addiert', 'Unter einer Wurzel wird nicht addiert: \\(\\sqrt{a} + \\sqrt{b} \\neq \\sqrt{a + b}\\). Zusammenfassen lassen sich nur gleichartige Wurzeln, also gleiche Radikanden: \\(3\\sqrt{2} + 5\\sqrt{2} = 8\\sqrt{2}\\).', L_WG],
+  summeWurzel:  ['Wurzel einer Summe aufgeteilt', '\\(\\sqrt{a + b} \\neq \\sqrt{a} + \\sqrt{b}\\): Die Wurzel wirkt wie eine Klammer, zuerst wird addiert. \\(\\sqrt{9 + 16} = \\sqrt{25} = 5\\), nicht \\(3 + 4\\).', L_WG],
+  wurzelMal:    ['Radikanden addiert statt multipliziert', '\\(\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{a \\cdot b}\\) (W1): Die Radikanden werden multipliziert.', L_WG],
+  nennerVergessen: ['Nur den Zähler erweitert', 'Erweitern heisst Zähler <em>und</em> Nenner mit \\(\\sqrt{a}\\) multiplizieren. Im Nenner steht dann \\(\\sqrt{a} \\cdot \\sqrt{a} = a\\).', L_WG],
+  wurzelVertauscht: ['Wurzel- und Potenzexponent vertauscht', '\\(\\sqrt[n]{a^m} = a^{\\frac{m}{n}}\\): Der Wurzelexponent kommt in den Nenner, der Exponent unter der Wurzel in den Zähler.', L_SR],
+  bruchAddiert: ['Bruchexponenten falsch addiert', 'Brüche addiert man über den Hauptnenner: \\(\\frac12 + \\frac13 = \\frac36 + \\frac26 = \\frac56\\), nicht Zähler plus Zähler und Nenner plus Nenner.', L_SR],
+  ratMal:       ['Bruchexponent als Faktor', '\\(a^{\\frac{m}{n}}\\) heisst \\(\\left(\\sqrt[n]{a}\\right)^m\\), nicht \\(a \\cdot \\frac{m}{n}\\): \\(8^{\\frac23} = \\left(\\sqrt[3]{8}\\right)^2 = 4\\).', L_SR],
+  logQuot:      ['Logarithmus als Quotient', '\\(\\log_a(b)\\) fragt: «\\(a\\) hoch wie viel gibt \\(b\\)?» Das ist ein Exponent, kein Quotient \\(b : a\\).', L_LD],
+  logVz:        ['Vorzeichen des Logarithmus', 'Zahlen zwischen \\(0\\) und \\(1\\) haben einen negativen Logarithmus: \\(\\frac{1}{9} = 3^{-2}\\), also \\(\\log_3\\left(\\frac19\\right) = -2\\).', L_LD],
+  log1:         ['\\(\\log_a(1)\\) und \\(\\log_a(a)\\) verwechselt', 'Weil \\(a^0 = 1\\) und \\(a^1 = a\\) gilt, ist \\(\\log_a(1) = 0\\) und \\(\\log_a(a) = 1\\).', L_LD],
+  logKehr:      ['Basis und Zahl vertauscht', 'Gesucht ist der Exponent zur Basis: \\(\\log_8(4) = \\frac23\\), denn \\(8^{\\frac23} = 4\\). Der Kehrwert \\(\\frac32\\) wäre \\(\\log_4(8)\\).', L_LD],
+  logWurzel:    ['Wurzel nicht als Exponent \\(\\frac12\\)', 'Eine Quadratwurzel ist die Potenz mit Exponent \\(\\frac12\\): \\(\\sqrt{5} = 5^{\\frac12}\\), also \\(\\log_5\\left(\\sqrt{5}\\right) = \\frac12\\).', L_LD],
+  logGekuerzt:  ['Den Logarithmus gekürzt', '\\(\\frac{\\lg(8)}{\\lg(2)}\\) ist nicht \\(\\frac{8}{2}\\): \\(\\lg\\) ist kein Faktor, den man kürzen kann. Mit Gesetz 3: \\(\\frac{\\lg(2^3)}{\\lg(2)} = \\frac{3\\lg(2)}{\\lg(2)} = 3\\).', L_LG],
+  logZerlVz:    ['Nenner mit falschem Vorzeichen', 'Quotient → Differenz (Gesetz 2): Was im Nenner steht, wird abgezogen: \\(\\lg\\left(\\frac{u}{v}\\right) = \\lg(u) - \\lg(v)\\).', L_LG],
+  logKonst:     ['Konstante nicht logarithmiert', 'Auch die Zahl im Argument wird logarithmiert: \\(\\lg(100 \\cdot x) = \\lg(100) + \\lg(x) = 2 + \\lg(x)\\).', L_LG],
+  logExpFaktor: ['Exponent nicht als Faktor', 'Potenz → Faktor (Gesetz 3): Der Exponent «fällt herunter», \\(\\lg(x^3) = 3\\lg(x)\\). Bei einer Wurzel ist der Exponent ein Bruch: \\(\\lg(\\sqrt{y}) = \\frac12\\lg(y)\\).', L_LG],
+  logFaktorExp: ['Faktor nicht zum Exponenten gemacht', 'Rückwärts gelesen macht Gesetz 3 aus dem Faktor einen Exponenten: \\(2\\lg(x) = \\lg(x^2)\\). Ein Minus davor heisst: in den Nenner, also Exponent negativ.', L_LG],
+  basisOben:    ['Basis im Zähler', 'Basiswechsel: \\(\\log_a(b) = \\frac{\\lg(b)}{\\lg(a)}\\). Die Basis \\(a\\) steht im Nenner.', L_LB],
+  expVersch:    ['Verschiebung im Exponenten vergessen', 'Zuerst den ganzen Exponenten bestimmen, dann nach \\(x\\) auflösen: \\(2^{x + 1} = 16 = 2^4\\) heisst \\(x + 1 = 4\\), also \\(x = 3\\).', L_LE],
+  falleGeglaubt:['Falsche Regel für richtig gehalten', 'Eine Regel muss für <em>alle</em> zulässigen Werte gelten; ein einziges Gegenbeispiel widerlegt sie. Richtig sind die Regeln für Produkte, Quotienten und Potenzen, nicht für Summen.', L_ST],
+  falleVerworfen:['Richtige Regel für falsch gehalten', 'Diese Regel gilt für alle zulässigen Werte. Prüfe sie mit zwei, drei Zahlen nach: Sie stimmt jedes Mal.', L_ST],
+  sonst:        ['Noch nicht', '', null],
+};
+
+// ── Exponentenbäume: Potenzterme mit einer oder mehreren Basen ──
+// Blatt { t:'b', e: { x: Bruch, … }, wz?: [m, n] } (wz: als Wurzel \sqrt[n]{x^m} geschrieben),
+// { t:'mul', a, b }, { t:'div', a, b }, { t:'pow', a, k } (k ganz)
+const blatt = e => ({ t: 'b', e });
+const vars = v => Object.keys(v).sort();
+function expo(x, fl = '') {             // Exponentenvektor; fl schaltet eine falsche Regel ein
+  if (x.t === 'b') return x.e;
+  if (x.t === 'pow') { const a = expo(x.a, fl), r = {}; for (const v in a) r[v] = fl === 'p3plus' ? qAdd(a[v], Q(x.k)) : qMul(a[v], Q(x.k)); return r; }
+  const a = expo(x.a, fl), b = expo(x.b, fl), r = { ...a };
+  for (const v in b) {
+    if (!(v in a)) { r[v] = x.t === 'mul' ? b[v] : qNeg(b[v]); continue; }
+    if (x.t === 'mul') r[v] = fl === 'p1mal' ? qMul(a[v], b[v]) : qAdd(a[v], b[v]);
+    else if (fl === 'p2div' && b[v].n) r[v] = qDiv(a[v], b[v]);
+    else if (fl === 'p2vz') r[v] = qSub(b[v], a[v]);
+    else if (fl === 'minusminus' && b[v].n < 0) r[v] = qAdd(a[v], b[v]);
+    else r[v] = qSub(a[v], b[v]);
+  }
+  return r;
+}
+function potTex(v, e) { return qGleich(e, Q(1)) ? v : v + '^{' + qTex(e) + '}'; }
+function vekTex(e) { const s = vars(e).filter(v => e[v].n).map(v => potTex(v, e[v])).join(' '); return s || '1'; }
+function baumTex(x) {
+  if (x.t === 'b') {
+    if (x.wz) { const [m, n] = x.wz, v = vars(x.e)[0], innen = m === 1 ? v : v + '^{' + m + '}'; return n === 2 ? '\\sqrt{' + innen + '}' : '\\sqrt[' + n + ']{' + innen + '}'; }
+    return vekTex(x.e);
+  }
+  if (x.t === 'mul') return baumTex(x.a) + ' \\cdot ' + baumTex(x.b);
+  if (x.t === 'div') return '\\frac{' + baumTex(x.a) + '}{' + baumTex(x.b) + '}';
+  return '\\left(' + baumTex(x.a) + '\\right)^{' + x.k + '}';
+}
+function baumPy(x) {
+  if (x.t === 'b') return x.wz ? '((x**' + x.wz[0] + ')**(1/' + x.wz[1] + '))' : '(' + vars(x.e).map(v => v + '**' + qPy(x.e[v])).join('*') + ')';
+  if (x.t === 'mul') return '(' + baumPy(x.a) + '*' + baumPy(x.b) + ')';
+  if (x.t === 'div') return '(' + baumPy(x.a) + '/' + baumPy(x.b) + ')';
+  return '(' + baumPy(x.a) + '**(' + x.k + '))';
+}
+const vekPy = e => '(' + (vars(e).map(v => v + '**' + qPy(e[v])).join('*') || '1') + ')';
+// Lösungsweg: Wurzeln als Potenzen schreiben, dann Stufe für Stufe — zuerst die Rechnung im Exponenten, dann ihr Ergebnis
+function baumWeg(x) {
+  const weg = [];
+  const ohneWz = y => (y.t === 'b' ? blatt(y.e) : y.t === 'pow' ? { ...y, a: ohneWz(y.a) } : { ...y, a: ohneWz(y.a), b: ohneWz(y.b) });
+  const hatWz = y => (y.t === 'b' ? !!y.wz : hatWz(y.a) || (y.b ? hatWz(y.b) : false));
+  if (hatWz(x)) { x = ohneWz(x); weg.push({ z: baumTex(x), k: 'Wurzeln als Potenzen: \\(\\sqrt[n]{x^m} = x^{\\frac{m}{n}}\\)' }); }
+  const GES = { mul: 'P1: gleiche Basis multiplizieren — Exponenten addieren', div: 'P2: gleiche Basis dividieren — Exponenten subtrahieren', pow: 'P3: Potenz einer Potenz — Exponenten multiplizieren' };
+  while (x.t !== 'b') {
+    const gesetze = new Set();
+    const rechnung = y => {                     // LaTeX mit offener Rechnung im Exponenten
+      if (y.t === 'b') return baumTex(y);
+      if (y.t === 'pow' && y.a.t === 'b') { gesetze.add('pow'); if (vars(y.a.e).length > 1) gesetze.add('p4'); return vars(y.a.e).map(v => v + '^{' + qKl(y.a.e[v]) + ' \\cdot ' + (y.k < 0 ? '(' + y.k + ')' : y.k) + '}').join(' '); }
+      if (y.t !== 'pow' && y.a.t === 'b' && y.b.t === 'b') {
+        gesetze.add(y.t);
+        return vars({ ...y.a.e, ...y.b.e }).map(v => {
+          const a = y.a.e[v], b = y.b.e[v];
+          if (!b) return potTex(v, a);
+          if (!a) return v + '^{' + (y.t === 'mul' ? qTex(b) : qTex(qNeg(b))) + '}';
+          return v + '^{' + qTex(a) + (y.t === 'mul' ? ' + ' : ' - ') + qKl(b) + '}';
+        }).join(' ');
+      }
+      if (y.t === 'pow') return '\\left(' + rechnung(y.a) + '\\right)^{' + y.k + '}';
+      if (y.t === 'mul') return rechnung(y.a) + ' \\cdot ' + rechnung(y.b);
+      return '\\frac{' + rechnung(y.a) + '}{' + rechnung(y.b) + '}';
+    };
+    const schritt = y => {
+      if (y.t === 'b') return y;
+      if ((y.t === 'pow' && y.a.t === 'b') || (y.t !== 'pow' && y.a.t === 'b' && y.b.t === 'b')) return blatt(expo(y));
+      return y.t === 'pow' ? { ...y, a: schritt(y.a) } : { ...y, a: schritt(y.a), b: schritt(y.b) };
+    };
+    const r = rechnung(x);
+    x = schritt(x);
+    const k = [...gesetze].filter(g => GES[g]).map(g => GES[g]).concat(gesetze.has('p4') ? ['P4: jeden Faktor potenzieren'] : []).join('; ');
+    weg.push({ z: r, k }, { z: baumTex(x) });
+  }
+  return weg;
+}
+
+// ── Wurzeln k·√r ──
+const quadratfrei = r => { for (let p = 2; p * p <= r; p++) if (r % (p * p) === 0) return false; return true; };
+function teilweise(n) { let k = 1, r = n; for (let p = 2; p * p <= r; p++) while (r % (p * p) === 0) { r /= p * p; k *= p; } return [k, r]; }
+const wzTex = (k, r) => (r === 1 ? qTex(k) : (qGleich(k, Q(1)) ? '' : qTex(k)) + '\\sqrt{' + r + '}');
+const wzKey = ([k, r]) => (r && r.d === 1 && r.n > 0 ? qStr(qMul(qMul(k, qAbs(k)), r)) : 'x');   // k·|k|·r: gleicher Wert ⇔ gleicher Schlüssel
+
+// ── Aufgaben ──
+const F = (id, tex) => ({ id, tex: tex || id });
+const zeile = (z, k) => ({ z, k });
+const aequi = (z, k) => ({ z, k, gl: true });             // Zeile einer Gleichung: mit ⇔ statt =
+const kurz = s => s.replace(/\\cdot 1(?![0-9])/g, '');
+
+// Potenzen: ein Term mit gleicher Basis wird zu einer Potenz
+function eineBasis() {
+  const v = 'x', e = () => blatt({ [v]: Q(nz(-5, 7)) }), k = () => pick([2, 3, 4, -1, -2]);
+  const form = pick(['mul', 'div', 'pow', 'muldiv', 'powmul', 'divpow', 'powdiv']);
+  const x = {
+    mul: () => ({ t: 'mul', a: e(), b: e() }),
+    div: () => ({ t: 'div', a: e(), b: e() }),
+    pow: () => ({ t: 'pow', a: e(), k: k() }),
+    muldiv: () => ({ t: 'div', a: { t: 'mul', a: e(), b: e() }, b: e() }),
+    powmul: () => ({ t: 'mul', a: { t: 'pow', a: e(), k: k() }, b: e() }),
+    divpow: () => ({ t: 'div', a: e(), b: { t: 'pow', a: e(), k: rnd(2, 3) } }),
+    powdiv: () => ({ t: 'pow', a: { t: 'div', a: e(), b: e() }, k: rnd(2, 3) }),
+  }[form]();
+  return baumAufgabe(x, 'potenzen', 'Eine Potenz', 'Schreibe als eine einzige Potenz von \\(x\\).', [F('n')], 'x^{{n}}');
+}
+// Potenzen: zwei Basen, je ein Exponent
+function zweiBasen() {
+  const e = () => blatt({ a: Q(nz(-4, 6)), b: Q(nz(-4, 6)) });
+  const form = pick(['div', 'pow', 'powdiv']);
+  const x = form === 'div' ? { t: 'div', a: e(), b: e() }
+    : form === 'pow' ? { t: 'pow', a: e(), k: pick([2, 3, -1, -2]) }
+    : { t: 'div', a: { t: 'pow', a: e(), k: pick([2, 3]) }, b: e() };
+  const A = baumAufgabe(x, 'potenzen', 'Zwei Basen', 'Vereinfache so weit wie möglich. Ein Exponent darf negativ sein.', [F('m'), F('n')], 'a^{{m}} \\cdot b^{{n}}');
+  if (A && form !== 'div') {                // Potenz nur auf den ersten Faktor
+    const p = x.t === 'pow' ? x : x.a;
+    const halb = blatt({ a: qMul(p.a.e.a, Q(p.k)), b: p.a.e.b });
+    const y = x.t === 'pow' ? halb : { ...x, a: halb };
+    const w = expo(y);
+    if (!(qGleich(w.a, A.loesung[0]) && qGleich(w.b, A.loesung[1]))) A.diag.push(['p4erste', [w.a, w.b]]);
+  }
+  return A;
+}
+function baumAufgabe(x, bereich, typ, auftrag, felder, ziel) {
+  const r = expo(x), vs = felder.length === 1 ? ['x'] : ['a', 'b'];
+  if (vs.some(v => !r[v] || r[v].n === 0)) return null;           // Ergebnis x⁰ = 1: keine schöne Aufgabe
+  if (vs.some(v => Math.abs(qWert(r[v])) > 24)) return null;
+  const loesung = vs.map(v => r[v]);
+  const diag = [];
+  for (const fl of ['p1mal', 'p3plus', 'p2div', 'p2vz', 'minusminus']) {
+    let w; try { w = expo(x, fl); } catch (er) { continue; }
+    const werte = vs.map(v => w[v] || Q(0));
+    if (werte.some(q => !q)) continue;
+    if (!werte.every((q, j) => qGleich(q, loesung[j]))) diag.push([fl, werte]);
+  }
+  const weg = baumWeg(x);
+  return { bereich, typ, auftrag, ausdruck: baumTex(x), felder, ziel, loesung, diag, weg, loesTex: vs.map(v => potTex(v, r[v])).join(' \\cdot '),
+    tipp: 'Arbeite von innen nach aussen und wende je Schritt ein Potenzgesetz an: P1 addieren, P2 subtrahieren, P3 multiplizieren.',
+    py: { links: baumPy(x), rechts: vekPy(r), vars: vs } };
+}
+
+// Potenzen: Wert ohne Taschenrechner (ganzzahlige Exponenten)
+function potenzWert() {
+  const art = pick(['neg', 'neg', 'bruchneg', 'null', 'vorzeichen', 'gesetz', 'p4']);
+  const A = { bereich: 'potenzen', typ: 'Wert einer Potenz', auftrag: 'Berechne ohne Taschenrechner. Gib das Ergebnis als ganze Zahl oder gekürzten Bruch an.', felder: [F('w', '\\text{Wert}')], ziel: '{w}' };
+  if (art === 'neg') {                                     // aⁿ mit negativem n
+    const a = pick([2, 2, 3, 4, 5, 10]), n = -rnd(1, a === 2 ? 5 : a === 10 ? 4 : 3), w = qPow(Q(a), n);
+    return { ...A, ausdruck: a + '^{' + n + '}', loesung: [w], py: { links: a + '**(' + n + ')', rechts: qPy(w) },
+      diag: [['negBasis', [Q(-(a ** -n))]], ['basisMal', [Q(a * n)]], ['negBasis', [qNeg(w)]]],
+      weg: [zeile('\\frac{1}{' + a + '^{' + -n + '}}', 'negativer Exponent: Kehrwert'), zeile(qTex(w))], tipp: '\\(a^{-n} = \\frac{1}{a^n}\\).' };
+  }
+  if (art === 'bruchneg') {                                // (p/q)^(−n)
+    const [p, q] = pick([[2, 3], [3, 4], [1, 2], [2, 5], [3, 2], [1, 3], [4, 3]]), n = -rnd(1, p * q > 8 ? 2 : 3), w = qPow(Q(p, q), n);
+    return { ...A, ausdruck: '\\left(\\frac{' + p + '}{' + q + '}\\right)^{' + n + '}', loesung: [w], py: { links: 'Fraction(' + p + ', ' + q + ')**(' + n + ')', rechts: qPy(w) },
+      diag: [['kehrVergessen', [qPow(Q(p, q), -n)]], ['negBasis', [qNeg(qPow(Q(p, q), -n))]], ['negBasis', [qNeg(w)]]],
+      weg: [zeile('\\left(\\frac{' + q + '}{' + p + '}\\right)^{' + -n + '}', 'negativer Exponent: Kehrwert der Basis'), zeile(qTex(w))], tipp: 'Ein negativer Exponent beim Bruch: Kehrwert der Basis, dann mit positivem Exponenten rechnen.' };
+  }
+  if (art === 'null') {                                    // a⁰, auch (−a)⁰ und a⁰ in Summe
+    const a = rnd(2, 99), form = pick(['a', 'summe', 'neg']);
+    const aus = form === 'a' ? a + '^{0}' : form === 'neg' ? '-' + a + '^{0}' : a + '^{0} + ' + a + '^{1}';
+    const w = Q(form === 'a' ? 1 : form === 'neg' ? -1 : 1 + a);
+    return { ...A, ausdruck: aus, loesung: [w], py: { links: form === 'a' ? a + '**0' : form === 'neg' ? '-' + a + '**0' : a + '**0 + ' + a + '**1', rechts: qPy(w) },
+      diag: [['nullExp', [Q(form === 'a' ? 0 : form === 'neg' ? 0 : a)]], ['negsq', [Q(1)]]].filter(([c]) => c !== 'negsq' || form === 'neg'),
+      weg: [zeile(form === 'summe' ? '1 + ' + a : form === 'neg' ? '-1' : '1', '\\(a^0 = 1\\)' + (form === 'neg' ? '; das Minus steht vor der Potenz' : '')), zeile(qTex(w))], tipp: '\\(a^0 = 1\\) für \\(a \\neq 0\\).' };
+  }
+  if (art === 'vorzeichen') {                              // −aⁿ und (−a)ⁿ
+    const a = rnd(2, 5), n = rnd(2, a > 3 ? 3 : 4), mitKl = Math.random() < 0.5;
+    const w = Q(mitKl ? (-a) ** n : -(a ** n));
+    return { ...A, ausdruck: mitKl ? '(-' + a + ')^{' + n + '}' : '-' + a + '^{' + n + '}', loesung: [w], py: { links: mitKl ? '(-' + a + ')**' + n : '-' + a + '**' + n, rechts: qPy(w) },
+      diag: [[mitKl ? 'negKlammer' : 'negsq', [qNeg(w)]], ['basisMal', [Q(-a * n)]]],
+      weg: [zeile(mitKl ? Array(n).fill('(-' + a + ')').join(' \\cdot ') : '-(' + Array(n).fill(a).join(' \\cdot ') + ')', mitKl ? 'die Klammer macht \\(-' + a + '\\) zur Basis' : 'die Potenz bindet stärker als das Vorzeichen'), zeile(qTex(w))],
+      tipp: 'Ohne Klammer gehört das Minus nicht zur Basis: \\(-a^n = -(a^n)\\).' };
+  }
+  if (art === 'gesetz') {                                  // aᵐ · aⁿ bzw. aᵐ / aⁿ mit kleinem Ergebnis
+    const a = pick([2, 3, 5, 10]), m = nz(-4, 7), n = nz(-6, 6), div = Math.random() < 0.5;
+    const s = div ? m - n : m + n;
+    if (Math.abs(s) > (a === 2 ? 6 : 3) || m === n) return null;
+    const w = qPow(Q(a), s);
+    const aus = div ? '\\frac{' + a + '^{' + m + '}}{' + a + '^{' + n + '}}' : a + '^{' + m + '} \\cdot ' + a + '^{' + n + '}';
+    const d = [];
+    if (!div && m * n !== s && Math.abs(m * n) <= 8) d.push(['p1mal', [qPow(Q(a), m * n)]]);
+    if (!div && Math.abs(s) <= 4) d.push(['basenVerschieden', [qPow(Q(a * a), s)]]);
+    if (div && n - m !== s) d.push(['p2vz', [qPow(Q(a), n - m)]]);
+    if (div && n < 0) d.push(['minusminus', [qPow(Q(a), m + n)]]);
+    return { ...A, ausdruck: aus, loesung: [w], py: { links: div ? a + '**(' + m + ')/' + a + '**(' + n + ')' : a + '**(' + m + ')*' + a + '**(' + n + ')', rechts: qPy(w) }, diag: d,
+      weg: [zeile(a + '^{' + m + (div ? ' - ' : ' + ') + (n < 0 ? '(' + n + ')' : n) + '}', div ? 'P2: Exponenten subtrahieren' : 'P1: Exponenten addieren'), zeile(a + '^{' + s + '}'), zeile(qTex(w))],
+      tipp: 'Gleiche Basis: zuerst die Exponenten verrechnen, erst am Schluss den Wert bestimmen.' };
+  }
+  // P4/P5 rückwärts: aⁿ · bⁿ = (ab)ⁿ, aⁿ / bⁿ = (a/b)ⁿ
+  const [a, b, n, div] = pick([[5, 2, 3, false], [2, 5, 4, false], [25, 4, 2, false], [4, 25, 3, false], [6, 3, 4, true], [15, 5, 3, true], [12, 4, 3, true], [20, 4, 2, true], [5, 20, 2, false], [8, 4, 5, true]]);
+  const basis = div ? Q(a, b) : Q(a * b), w = qPow(basis, n);
+  return { ...A, ausdruck: div ? '\\frac{' + a + '^{' + n + '}}{' + b + '^{' + n + '}}' : a + '^{' + n + '} \\cdot ' + b + '^{' + n + '}', loesung: [w],
+    py: { links: div ? 'Fraction(' + a + ')**' + n + '/Fraction(' + b + ')**' + n : a + '**' + n + '*' + b + '**' + n, rechts: qPy(w) },
+    diag: div ? [['p2div', [basis]], ['basenVerschieden', [Q(1)]]] : [['basenVerschieden', [qPow(basis, 2 * n)]]],
+    weg: [zeile(div ? '\\left(\\frac{' + a + '}{' + b + '}\\right)^{' + n + '}' : '(' + a + ' \\cdot ' + b + ')^{' + n + '}', div ? 'P5 rückwärts: gleicher Exponent, Basen dividieren' : 'P4 rückwärts: gleicher Exponent, Basen multiplizieren'), zeile(qTex(basis) + '^{' + n + '}'), zeile(qTex(w))],
+    tipp: 'Gleicher Exponent: zuerst die Basen zusammenfassen (P4, P5).' };
+}
+
+// Potenzen: wissenschaftliche Notation
+function wissenschaftlich() {
+  const M = [Q(12, 10), Q(15, 10), Q(2), Q(25, 10), Q(3), Q(4), Q(5), Q(6), Q(8), Q(16, 10), Q(75, 10)];
+  const m1 = pick(M), m2 = pick(M), k1 = nz(-9, 9), k2 = nz(-9, 9), div = Math.random() < 0.4;
+  let m = div ? qDiv(m1, m2) : qMul(m1, m2), k = div ? k1 - k2 : k1 + k2;
+  if (!abbrechend(m) || m.d > 100) return null;
+  const roh = [m, k];
+  while (qWert(m) >= 10) { m = qDiv(m, Q(10)); k++; }
+  while (qWert(m) < 1) { m = qMul(m, Q(10)); k--; }
+  const zt = (mm, kk) => dezimal(mm) + ' \\cdot 10^{' + kk + '}';
+  const aus = div ? '\\frac{' + zt(m1, k1) + '}{' + zt(m2, k2) + '}' : '\\left(' + zt(m1, k1) + '\\right) \\cdot \\left(' + zt(m2, k2) + '\\right)';
+  const weg = [zeile((div ? '\\frac{' + dezimal(m1) + '}{' + dezimal(m2) + '}' : dezimal(m1) + ' \\cdot ' + dezimal(m2)) + ' \\cdot 10^{' + k1 + (div ? ' - ' : ' + ') + (k2 < 0 ? '(' + k2 + ')' : k2) + '}', 'Mantissen und Zehnerpotenzen getrennt rechnen'),
+    zeile(zt(roh[0], roh[1]))];
+  if (!qGleich(roh[0], m)) weg.push(zeile(zt(m, k), 'Mantisse zwischen 1 und 10 bringen'));
+  const wert = (mm, kk) => qMul(mm, qPow(Q(10), kk));
+  const diag = div ? [['zehnerVz', [m, k - (k1 - k2) + (k2 - k1)]]] : [['zehnerMal', [m, k - (k1 + k2) + k1 * k2]]];
+  return { bereich: 'potenzen', typ: 'Wissenschaftliche Notation', loesTex: zt(m, k), auftrag: 'Berechne und gib das Ergebnis in wissenschaftlicher Notation an (Mantisse zwischen 1 und 10).',
+    ausdruck: aus, felder: [F('m'), F('k')], ziel: '{m} \\cdot 10^{{k}}', loesung: [m, k].map(q => (typeof q === 'number' ? Q(q) : q)), diag: diag.map(([c, [mm, kk]]) => [c, [mm, Q(kk)]]), weg,
+    vergleich: (w) => {
+      if (w[1].d !== 1) return null;
+      if (!qGleich(wert(w[0], w[1].n), wert(m, k))) return null;
+      if (qWert(qAbs(w[0])) < 1 || qWert(qAbs(w[0])) >= 10) return 'Der Wert stimmt, aber die Mantisse muss zwischen \\(1\\) und \\(10\\) liegen: Schiebe den Dezimalpunkt und passe den Exponenten an.';
+      return 'ok';
+    },
+    tipp: 'Mantissen multiplizieren bzw. dividieren, Exponenten addieren bzw. subtrahieren, zum Schluss die Mantisse zwischen 1 und 10 bringen.',
+    py: { links: div ? '(' + qPy(m1) + '*10**(' + k1 + '))/(' + qPy(m2) + '*10**(' + k2 + '))' : '(' + qPy(m1) + '*10**(' + k1 + '))*(' + qPy(m2) + '*10**(' + k2 + '))', rechts: qPy(m) + '*Fraction(10)**(' + k + ')' } };
+}
+
+// Wurzeln: teilweise Wurzel ziehen
+const QFREI = [2, 3, 5, 6, 7, 10, 11, 13, 14, 15];
+function wurzelAufgabe(art) {
+  const A = { bereich: 'wurzeln', felder: [F('k'), F('r')], ziel: '{k}\\sqrt{{r}}' };
+  const vergleich = (k, r) => w => {
+    if (w[1].d !== 1 || w[1].n < 1 || w[0].n <= 0) return null;
+    if (wzKey([w[0], w[1]]) !== wzKey([k, Q(r)])) return null;
+    if (!quadratfrei(w[1].n)) return 'Der Wert stimmt, aber unter der Wurzel steckt noch ein Quadrat: \\(' + w[1].n + ' = ' + teilweise(w[1].n)[0] ** 2 + ' \\cdot ' + teilweise(w[1].n)[1] + '\\). Zieh auch daraus die Wurzel.';
+    return 'ok';
+  };
+  if (art === 'teilweise') {
+    const s = rnd(2, 10), r = pick(QFREI.slice(0, 7)), c = Math.random() < 0.25 ? rnd(2, 4) : 1, n = s * s * r;
+    if (n > 500) return null;
+    const k = Q(c * s);
+    return { ...A, typ: 'Teilweise Wurzel ziehen', auftrag: 'Ziehe die Wurzel teilweise: Unter der Wurzel soll keine Quadratzahl mehr stecken.',
+      ausdruck: (c > 1 ? c : '') + '\\sqrt{' + n + '}', loesung: [k, Q(r)], loesTex: wzTex(k, r), vergleich: vergleich(k, r),
+      diag: [['wurzelNichtGezogen', [Q(c * s * s), Q(r)]]],
+      weg: [zeile((c > 1 ? c + ' \\cdot ' : '') + '\\sqrt{' + s * s + ' \\cdot ' + r + '}', 'grösste Quadratzahl abspalten'), zeile((c > 1 ? c + ' \\cdot ' : '') + '\\sqrt{' + s * s + '} \\cdot \\sqrt{' + r + '}', 'W4: Produkt unter der Wurzel'), zeile(wzTex(k, r))],
+      tipp: 'Zerlege den Radikanden in eine möglichst grosse Quadratzahl mal eine Zahl ohne quadratischen Teiler.',
+      py: { links: c + '*math.sqrt(' + n + ')', rechts: qPy(k) + '*math.sqrt(' + r + ')' } };
+  }
+  if (art === 'produkt') {                                 // √a · √b oder √a / √b
+    const r = pick(QFREI.slice(0, 6)), p = rnd(1, 4), q = rnd(1, 5), div = Math.random() < 0.4;
+    if (p === q) return null;
+    const a = p * p * r * (div ? q * q : 1), b = div ? r : q * q * r;           // div: √(p²q²r) / √r = pq; mul: √(p²r)·√(q²r) = pqr
+    const erg = div ? Q(p * q) : Q(p * q * r);
+    const aus = div ? '\\frac{\\sqrt{' + a + '}}{\\sqrt{' + b + '}}' : '\\sqrt{' + a + '} \\cdot \\sqrt{' + b + '}';
+    const summe = div ? a - b : a + b, [sk, sr] = teilweise(summe);
+    return { ...A, typ: div ? 'Quotient von Wurzeln' : 'Produkt von Wurzeln', auftrag: 'Berechne ohne Taschenrechner.', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
+      ausdruck: aus, loesung: [erg], diag: summe > 0 && sr === 1 ? [['wurzelMal', [Q(sk)]]] : [],
+      weg: [zeile(div ? '\\sqrt{\\frac{' + a + '}{' + b + '}}' : '\\sqrt{' + a + ' \\cdot ' + b + '}', div ? 'W2: Quotientenwurzel' : 'W1: Produktwurzel'), zeile('\\sqrt{' + (div ? a / b : a * b) + '}'), zeile(qTex(erg))],
+      tipp: div ? '\\(\\frac{\\sqrt{a}}{\\sqrt{b}} = \\sqrt{\\frac{a}{b}}\\) (W2).' : '\\(\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{a \\cdot b}\\) (W1).',
+      py: { links: div ? 'math.sqrt(' + a + ')/math.sqrt(' + b + ')' : 'math.sqrt(' + a + ')*math.sqrt(' + b + ')', rechts: qPy(erg) } };
+  }
+  if (art === 'summe') {                                   // √(s²r) ± √(t²r) = (s ± t)√r
+    const r = pick(QFREI.slice(0, 5)), s = rnd(1, 6), t = rnd(1, 6), minus = Math.random() < 0.35;
+    if (s === t || (minus && s < t)) return null;
+    const a = s * s * r, b = t * t * r, k = Q(minus ? s - t : s + t);
+    const diag = [];
+    const [sk, sr] = teilweise(minus ? a - b : a + b);
+    diag.push(['radikandAddiert', [Q(sk), Q(sr)]]);
+    return { ...A, typ: 'Wurzeln addieren', auftrag: 'Fasse zusammen. Ziehe dazu zuerst die Wurzeln teilweise.',
+      ausdruck: '\\sqrt{' + a + '} ' + (minus ? '-' : '+') + ' \\sqrt{' + b + '}', loesung: [k, Q(r)], loesTex: wzTex(k, r), vergleich: vergleich(k, r), diag,
+      weg: [zeile(wzTex(Q(s), r) + (minus ? ' - ' : ' + ') + wzTex(Q(t), r), 'teilweise Wurzel ziehen — jetzt sind die Wurzeln gleichartig'), zeile('(' + s + (minus ? ' - ' : ' + ') + t + ')\\sqrt{' + r + '}', 'ausklammern wie bei \\(' + s + 'x ' + (minus ? '-' : '+') + ' ' + t + 'x\\)'), zeile(wzTex(k, r))],
+      tipp: 'Addieren lassen sich nur gleichartige Wurzeln (gleicher Radikand). Ziehe zuerst die Wurzeln teilweise.',
+      py: { links: 'math.sqrt(' + a + ')' + (minus ? '-' : '+') + 'math.sqrt(' + b + ')', rechts: qPy(k) + '*math.sqrt(' + r + ')' } };
+  }
+  if (art === 'summeTrap') {                               // √(a + b) mit pythagoreischem Tripel
+    const [a, b, c] = pick([[9, 16, 5], [36, 64, 10], [25, 144, 13], [64, 36, 10], [81, 144, 15], [144, 25, 13], [16, 9, 5], [225, 64, 17]]);
+    return { ...A, typ: 'Wurzel einer Summe', auftrag: 'Berechne ohne Taschenrechner.', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
+      ausdruck: '\\sqrt{' + a + ' + ' + b + '}', loesung: [Q(c)], diag: [['summeWurzel', [Q(Math.sqrt(a) + Math.sqrt(b))]]],
+      weg: [zeile('\\sqrt{' + (a + b) + '}', 'zuerst unter der Wurzel addieren'), zeile(String(c))],
+      tipp: 'Die Wurzel wirkt wie eine Klammer: Zuerst wird gerechnet, was darunter steht.',
+      py: { links: 'math.sqrt(' + a + ' + ' + b + ')', rechts: String(c) } };
+  }
+  // Nenner rational machen: c/√r = (c/r)·√r
+  const r = pick(QFREI.slice(0, 7)), c = pick([1, 2, 3, 4, 5, 6, 10, 12, 14, 15].filter(x => x !== r));
+  const k = Q(c, r);
+  return { ...A, typ: 'Nenner rational machen', auftrag: 'Mache den Nenner wurzelfrei. Der Faktor \\(k\\) darf ein Bruch sein, z.B. 1/2.',
+    ausdruck: '\\frac{' + c + '}{\\sqrt{' + r + '}}', loesung: [k, Q(r)], loesTex: wzTex(k, r), vergleich: vergleich(k, r), diag: [['nennerVergessen', [Q(c), Q(r)]]],
+    weg: [zeile('\\frac{' + c + ' \\cdot \\sqrt{' + r + '}}{\\sqrt{' + r + '} \\cdot \\sqrt{' + r + '}}', 'mit \\(\\sqrt{' + r + '}\\) erweitern'), zeile('\\frac{' + c + '\\sqrt{' + r + '}}{' + r + '}', 'W8: \\((\\sqrt{a})^2 = a\\)'), zeile(wzTex(k, r))],
+    tipp: 'Erweitere den Bruch mit der Wurzel aus dem Nenner.',
+    py: { links: c + '/math.sqrt(' + r + ')', rechts: qPy(k) + '*math.sqrt(' + r + ')' } };
+}
+// Wurzeln als Potenzen mit rationalem Exponenten
+function wurzelPotenz() {
+  const wz = (m, n) => ({ t: 'b', e: { x: Q(m, n) }, wz: [m, n] });
+  const pot = e => blatt({ x: e });
+  const form = pick(['eine', 'kehr', 'mal', 'zwei', 'quot', 'wzwz']);
+  let x, extra = [];
+  const n = rnd(2, 5), m = pick([1, 1, 2, 3, 4, 5].filter(v => v !== n && ggT(v, n) === 1));
+  if (form === 'eine') x = wz(m, n);
+  else if (form === 'kehr') x = { t: 'div', a: pot(Q(1)), b: wz(m, n) };
+  else if (form === 'mal') x = { t: 'mul', a: pot(Q(rnd(1, 3))), b: wz(m, n) };
+  else if (form === 'zwei') { const n2 = pick([2, 3, 4].filter(v => v !== n)); x = { t: 'mul', a: wz(1, n), b: wz(pick([1, 2].filter(v => ggT(v, n2) === 1)), n2) }; }
+  else if (form === 'quot') { const n2 = pick([2, 3].filter(v => v !== n)); x = { t: 'div', a: wz(m, n), b: wz(1, n2) }; }
+  if (form === 'wzwz') {                                    // √(∛x) = x^(1/6): als Potenz einer Potenz mit Bruchexponent
+    const a = pick([2, 3]), b = pick([2, 3, 4]);
+    const loes = Q(1, a * b);
+    const aus = (b === 2 ? '\\sqrt{' : '\\sqrt[' + b + ']{') + (a === 2 ? '\\sqrt{x}' : '\\sqrt[' + a + ']{x}') + '}';
+    return { bereich: 'wurzeln', typ: 'Wurzel als Potenz', auftrag: 'Schreibe als eine Potenz von \\(x\\) (für \\(x > 0\\)).', ausdruck: aus, felder: [F('n')], ziel: 'x^{{n}}', loesung: [loes],
+      diag: [['p3plus', [qAdd(Q(1, a), Q(1, b))]], ['wurzelVertauscht', [Q(a * b)]]],
+      weg: [zeile('\\left(x^{\\frac{1}{' + a + '}}\\right)^{\\frac{1}{' + b + '}}', 'Wurzeln als Potenzen'), zeile('x^{\\frac{1}{' + a + '} \\cdot \\frac{1}{' + b + '}}', 'P3: Exponenten multiplizieren'), zeile('x^{' + qTex(loes) + '}')],
+      tipp: 'Die \\(n\\)-te Wurzel ist die Potenz mit Exponent \\(\\frac{1}{n}\\); dann P3.',
+      py: { links: (b === 2 ? 'math.sqrt' : '(lambda t: t**(1/' + b + '))') + '(' + (a === 2 ? 'math.sqrt(x)' : 'x**(1/' + a + ')') + ')', rechts: 'x**' + qPy(loes), vars: ['x'] } };
+  }
+  const A = baumAufgabe(x, 'wurzeln', 'Wurzel als Potenz', 'Schreibe als eine Potenz von \\(x\\) (für \\(x > 0\\)).', [F('n')], 'x^{{n}}');
+  if (!A) return null;
+  // Wurzel- und Potenzexponent vertauscht, Brüche falsch addiert
+  const tausch = y => (y.t === 'b' ? (y.wz ? { ...y, e: { x: Q(y.wz[1], y.wz[0]) } } : y) : y.t === 'pow' ? { ...y, a: tausch(y.a) } : { ...y, a: tausch(y.a), b: tausch(y.b) });
+  const wv = expo(tausch(x)).x;
+  if (!qGleich(wv, A.loesung[0])) A.diag.push(['wurzelVertauscht', [wv]]);
+  if (form === 'zwei' || form === 'mal') {
+    const e1 = expo(x.a).x, e2 = expo(x.b).x, falsch = Q(e1.n + e2.n, e1.d + e2.d);
+    if (e1.d > 1 || e2.d > 1) if (!qGleich(falsch, A.loesung[0])) A.diag.push(['bruchAddiert', [falsch]]);
+  }
+  A.tipp = 'Schreibe jede Wurzel als Potenz, \\(\\sqrt[n]{x^m} = x^{\\frac{m}{n}}\\), und verrechne dann die Exponenten mit den Potenzgesetzen.';
+  return A;
+}
+// Rationale Exponenten: Wert
+function ratWert() {
+  const c = rnd(2, 5), n = pick([2, 3, 4, 5].filter(v => c ** v <= 1000 && v !== 1)), m = pick([1, 2, 3, -1, -2].filter(v => ggT(v, n) === 1 && Math.abs(v) <= 3 && c ** Math.abs(v) <= 200));
+  if (!n || m === undefined) return null;
+  const bruch = Math.random() < 0.25, q = bruch ? rnd(c + 1, 5) : 1;
+  if (bruch && (q ** n > 1000 || ggT(c, q) > 1)) return null;
+  const basis = bruch ? Q(c ** n, q ** n) : Q(c ** n), w = qPow(Q(c, q), m), e = Q(m, n);
+  if (n === 1) return null;
+  const bt = qTex(basis), btK = bruch ? '\\left(' + bt + '\\right)' : bt;
+  const wz = (n === 2 ? '\\sqrt{' : '\\sqrt[' + n + ']{') + bt + '}';
+  const diag = [['ratMal', [qMul(basis, e)]]];
+  if (m < 0) diag.push(['negBasis', [qNeg(w)]], ['kehrVergessen', [qPow(Q(c, q), -m)]]);
+  return { bereich: 'wurzeln', typ: 'Rationaler Exponent', auftrag: 'Berechne ohne Taschenrechner.', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
+    ausdruck: btK + '^{' + qTex(e) + '}', loesung: [w], diag,
+    weg: [zeile((m < 0 ? '\\frac{1}{' : '') + (Math.abs(m) === 1 ? wz : '\\left(' + wz + '\\right)^{' + Math.abs(m) + '}') + (m < 0 ? '}' : ''), Math.abs(m) === 1 ? 'Exponent \\(\\frac{1}{' + n + '}\\) heisst ' + n + '-te Wurzel' + (m < 0 ? '; negativer Exponent: Kehrwert' : '') : 'erst die Wurzel ziehen, dann potenzieren' + (m < 0 ? '; negativer Exponent: Kehrwert' : '')),
+      zeile((m < 0 ? '\\frac{1}{' : '') + (bruch ? '\\left(\\frac{' + c + '}{' + q + '}\\right)' : c) + (Math.abs(m) === 1 ? '' : '^{' + Math.abs(m) + '}') + (m < 0 ? '}' : '')), zeile(qTex(w))],
+    tipp: '\\(a^{\\frac{m}{n}} = \\left(\\sqrt[n]{a}\\right)^m\\) — zuerst die Wurzel, dann die Potenz.',
+    py: { links: qPy(basis) + '**(' + m + '/' + n + ')', rechts: qPy(w) } };
+}
+
+// Logarithmen
+function logTex(basis, arg) { return basis === 10 ? '\\lg\\left(' + arg + '\\right)' : basis === 'e' ? '\\ln\\left(' + arg + '\\right)' : '\\log_{' + basis + '}\\left(' + arg + '\\right)'; }
+function logPy(basis, argPy) { return basis === 10 ? 'math.log10(' + argPy + ')' : basis === 'e' ? 'math.log(' + argPy + ')' : 'math.log(' + argPy + ', ' + basis + ')'; }
+// Zahl c^q als LaTeX und Python: ganze Zahl, Bruch, Dezimalzahl (Basis 10), Wurzel
+function cPot(c, q) {
+  if (c === 'e') {
+    const t = q.d === 2 ? (q.n === 1 ? '\\sqrt{e}' : q.n === -1 ? '\\frac{1}{\\sqrt{e}}' : null) : q.n === 0 ? '1' : q.n === 1 ? 'e' : q.n > 0 ? 'e^{' + q.n + '}' : '\\frac{1}{e' + (q.n === -1 ? '' : '^{' + -q.n + '}') + '}';
+    return t && { tex: t, py: 'math.e**(' + q.n + '/' + q.d + ')' };
+  }
+  if (q.d === 1) { const w = qPow(Q(c), q.n); return { tex: c === 10 && q.n < 0 ? dezimal(w) : qTex(w), py: qPy(w) }; }
+  if (q.d === 2) { const w = qPow(Q(c), (q.n - 1) / 2); if (q.n === 1) return { tex: '\\sqrt{' + c + '}', py: 'math.sqrt(' + c + ')' }; if (q.n === -1) return { tex: '\\frac{1}{\\sqrt{' + c + '}}', py: '1/math.sqrt(' + c + ')' }; if (q.n === 3) return { tex: c + '\\sqrt{' + c + '}', py: c + '*math.sqrt(' + c + ')' }; return null; }
+  if (q.d === 3 && q.n === 1) return { tex: '\\sqrt[3]{' + c + '}', py: c + '**(1/3)' };
+  return null;
+}
+function logWert() {
+  const c = pick([2, 2, 3, 3, 5, 10, 10, 'e']);
+  const p = c === 'e' || c === 10 ? 1 : pick([1, 1, 1, 2, 3].filter(v => c ** v <= 125));
+  const q = pick([Q(nz(-3, 5)), Q(nz(-3, 5)), Q(0), Q(1, 2), Q(-1, 2), Q(3, 2), Q(1, 3)].filter(x => !(c === 'e' && x.d === 3)));
+  const arg = cPot(c, q);
+  if (!arg || (c !== 'e' && c !== 10 && Math.abs(qWert(qMul(q, Q(1)))) * Math.log10(c) > 3.1)) return null;
+  const basis = c === 'e' ? 'e' : c ** p, w = qDiv(q, Q(p));
+  if (c === 10 && q.d !== 1) return null;
+  const diag = [];
+  if (w.n) diag.push(['logVz', [qNeg(w)]]);
+  if (q.n === 0) diag.push(['log1', [Q(1)]]);
+  if (qGleich(q, Q(p))) diag.push(['log1', [Q(0)]]);
+  if (w.n && !qGleich(qDiv(Q(1), w), w)) diag.push(['logKehr', [qDiv(Q(1), w)]]);
+  if (q.d === 2) diag.push(['logWurzel', [qMul(Q(q.n), Q(2, p))]]);
+  if (c !== 'e' && q.d === 1) { const b = qPow(Q(c), q.n); const quot = qDiv(b, Q(basis)); if (!qGleich(quot, w)) diag.push(['logQuot', [quot]]); }
+  const bt = c === 'e' ? 'e' : String(basis);
+  const weg = c === 'e'
+    ? [zeile('\\ln\\left(e^{' + qTex(q) + '}\\right)', 'als Potenz von \\(e\\) schreiben'), zeile(qTex(w), '\\(\\ln(e^k) = k\\)')]
+    : p === 1
+      ? [{ text: 'Gesucht ist der Exponent: \\(' + bt + '^{\\,?} = ' + arg.tex + '\\).' }, zeile(logTex(basis, c + '^{' + qTex(q) + '}'), 'als Potenz von \\(' + c + '\\) schreiben'), zeile(qTex(w))]
+      : [{ text: 'Gesucht ist \\(x\\) mit \\(' + bt + '^{x} = ' + arg.tex + '\\). Beide Zahlen sind Potenzen von \\(' + c + '\\): \\((' + c + '^{' + p + '})^{x} = ' + c + '^{' + qTex(q) + '}\\).' },
+        { text: 'Exponenten vergleichen: \\(' + p + 'x = ' + qTex(q) + '\\), also \\(x = ' + qTex(w) + '\\).' }, zeile(qTex(w))];
+  return { bereich: 'logarithmen', typ: 'Wert eines Logarithmus', auftrag: 'Berechne ohne Taschenrechner. Gib das Ergebnis exakt an (ganze Zahl oder Bruch).', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
+    ausdruck: logTex(basis, arg.tex), loesung: [w], diag, weg,
+    tipp: '\\(\\log_a(b)\\) ist der Exponent, mit dem man \\(a\\) potenzieren muss, um \\(b\\) zu erhalten. Schreibe beide Zahlen als Potenz derselben Basis.',
+    py: { links: logPy(basis === 'e' ? 'e' : basis, arg.py), rechts: qPy(w) } };
+}
+function expGleichung() {
+  const c = pick([2, 2, 3, 3, 5, 10]), p = pick([1, 1, 2].filter(v => c ** v <= 25)), q = nz(-4, c === 2 ? 7 : 4), d = Math.random() < 0.4 ? nz(-3, 3) : 0;
+  const a = c ** p, b = qPow(Q(c), q), x = qSub(Q(q, p), Q(d));
+  const bt = c === 10 && q < 0 ? dezimal(b) : qTex(b);
+  const expo_ = d ? 'x ' + (d > 0 ? '+ ' + d : '- ' + -d) : 'x';
+  const diag = [];
+  if (d) diag.push(['expVersch', [Q(q, p)]]);
+  if (q > 0 && b.d === 1 && !qGleich(Q(b.n, a), x)) diag.push(['logQuot', [qSub(Q(b.n, a), Q(d))]]);
+  if (q !== 0 && p > 1) diag.push(['logKehr', [qSub(Q(p, q), Q(d))]]);
+  diag.push(['logVz', [qSub(Q(-q, p), Q(d))]]);
+  return { bereich: 'logarithmen', typ: 'Exponentialgleichung', auftrag: 'Löse exakt, ohne Taschenrechner.', felder: [F('x')], ziel: 'x = {x}',
+    ausdruck: a + '^{' + expo_ + '} = ' + bt, loesung: [x], diag: diag.filter(([, [v]]) => !qGleich(v, x)),
+    weg: [aequi((p === 1 ? c : '\\left(' + c + '^{' + p + '}\\right)') + '^{' + expo_ + '} = ' + c + '^{' + q + '}', 'beide Seiten als Potenz von \\(' + c + '\\)'),
+      aequi((p === 1 ? '' : p) + (d && p > 1 ? '(' + expo_ + ')' : expo_) + ' = ' + q, 'gleiche Basis: Exponenten gleichsetzen'), aequi('x = ' + qTex(x))],
+    tipp: 'Schreibe beide Seiten als Potenz derselben Basis und setze die Exponenten gleich. Das ist \\(x = \\log_a(b)\\).',
+    py: { links: 'math.log(' + qPy(b) + ', ' + a + ')' + (d ? ' - ' + d : ''), rechts: qPy(x) } };
+}
+function logGesetze() {
+  const art = pick(['summe', 'differenz', 'faktor', 'quotient', 'wurzel']);
+  const A = { bereich: 'logarithmen', typ: 'Logarithmengesetze', auftrag: 'Berechne ohne Taschenrechner mit den Logarithmengesetzen.', felder: [F('w', '\\text{Wert}')], ziel: '{w}' };
+  if (art === 'summe') {
+    const [u, v, k] = pick([[2, 5, 1], [4, 25, 2], [20, 5, 2], [50, 2, 2], [8, 125, 3], [25, 40, 3], [4, 250, 3], [200, 5, 3], [16, 625, 4]]);
+    return { ...A, ausdruck: '\\lg(' + u + ') + \\lg(' + v + ')', loesung: [Q(k)], diag: [],
+      weg: [zeile('\\lg(' + u + ' \\cdot ' + v + ')', 'Gesetz 1: Summe → Produkt'), zeile('\\lg(' + u * v + ')'), zeile(String(k), '\\(10^{' + k + '} = ' + u * v + '\\)')],
+      tipp: 'Gesetz 1 rückwärts: \\(\\lg(u) + \\lg(v) = \\lg(u \\cdot v)\\).', py: { links: 'math.log10(' + u + ')+math.log10(' + v + ')', rechts: String(k) } };
+  }
+  if (art === 'differenz') {
+    const a = pick([2, 3, 5]), k = rnd(1, a === 2 ? 5 : 2), v = pick([3, 5, 6, 7].filter(x => x % a)), u = v * a ** k;
+    return { ...A, ausdruck: '\\log_{' + a + '}(' + u + ') - \\log_{' + a + '}(' + v + ')', loesung: [Q(k)], diag: [],
+      weg: [zeile('\\log_{' + a + '}\\left(\\frac{' + u + '}{' + v + '}\\right)', 'Gesetz 2: Differenz → Quotient'), zeile('\\log_{' + a + '}(' + u / v + ')'), zeile(String(k), '\\(' + a + '^{' + k + '} = ' + u / v + '\\)')],
+      tipp: 'Gesetz 2 rückwärts: \\(\\log_a(u) - \\log_a(v) = \\log_a\\left(\\frac{u}{v}\\right)\\).', py: { links: 'math.log(' + u + ', ' + a + ')-math.log(' + v + ', ' + a + ')', rechts: String(k) } };
+  }
+  if (art === 'faktor') {
+    const [f, u, v, k] = pick([[2, 5, 4, 2], [2, 2, 25, 2], [3, 2, 125, 3], [2, 50, 4, 4], [3, 5, 8, 3], [2, 20, 25, 4]]);
+    return { ...A, ausdruck: f + '\\lg(' + u + ') + \\lg(' + v + ')', loesung: [Q(k)], diag: [],
+      weg: [zeile('\\lg\\left(' + u + '^{' + f + '}\\right) + \\lg(' + v + ')', 'Gesetz 3: Faktor → Exponent'), zeile('\\lg(' + u ** f + ' \\cdot ' + v + ')', 'Gesetz 1'), zeile('\\lg(' + u ** f * v + ')'), zeile(String(k))],
+      tipp: 'Zuerst mit Gesetz 3 den Faktor als Exponent ins Argument holen, dann Gesetz 1.', py: { links: f + '*math.log10(' + u + ')+math.log10(' + v + ')', rechts: String(k) } };
+  }
+  if (art === 'quotient') {                                // lg(cᵏ)/lg(c) bzw. log_b(cᵏ)/log_b(c)
+    const c = pick([2, 3, 5]), k = rnd(2, c === 2 ? 6 : 3), b = pick([10, 10, 'e', 7]);
+    const lt = z => (b === 10 ? '\\lg(' + z + ')' : b === 'e' ? '\\ln(' + z + ')' : '\\log_{' + b + '}(' + z + ')');
+    return { ...A, ausdruck: '\\frac{' + lt(c ** k) + '}{' + lt(c) + '}', loesung: [Q(k)], diag: [['logGekuerzt', [Q(c ** (k - 1))]]],
+      weg: [zeile('\\frac{' + lt(c + '^{' + k + '}') + '}{' + lt(c) + '}', c ** k + ' als Potenz von ' + c), zeile('\\frac{' + k + ' \\cdot ' + lt(c) + '}{' + lt(c) + '}', 'Gesetz 3'), zeile(String(k), 'kürzen: Jetzt ist \\(' + lt(c) + '\\) ein Faktor')],
+      tipp: 'Schreibe die Zahl im Zähler als Potenz der Zahl im Nenner und wende Gesetz 3 an.', py: { links: logPy(b, c ** k) + '/' + logPy(b, c), rechts: String(k) } };
+  }
+  const a = pick([2, 3, 5, 10]), m = rnd(1, 5), n = pick([2, 3].filter(x => ggT(x, m) === 1));
+  const w = Q(m, n), lt = z => (a === 10 ? '\\lg\\left(' + z + '\\right)' : '\\log_{' + a + '}\\left(' + z + '\\right)');
+  const innen = (n === 2 ? '\\sqrt{' : '\\sqrt[' + n + ']{') + (m === 1 ? a : a + '^{' + m + '}') + '}';
+  return { ...A, ausdruck: lt(innen), loesung: [w], diag: [['logWurzel', [Q(m * n)]], ['wurzelVertauscht', [Q(n, m)]]].filter(([, [v]]) => !qGleich(v, w)),
+    weg: [zeile(lt(a + '^{' + qTex(w) + '}'), 'Wurzel als Potenz: \\(\\sqrt[n]{a^m} = a^{\\frac{m}{n}}\\)'), zeile(qTex(w), 'Gesetz 3: \\(\\frac{' + m + '}{' + n + '} \\cdot ' + lt(a) + '\\), und \\(' + lt(a) + ' = 1\\)')],
+    tipp: 'Schreibe die Wurzel als Potenz mit Bruchexponent.', py: { links: logPy(a === 10 ? 10 : a, a + '**(' + m + '/' + n + ')'), rechts: qPy(w) } };
+}
+function logZerlegen() {
+  const basis = pick([10, 10, 2, 3]), k = nz(-3, 3), lt = z => (basis === 10 ? '\\lg' : '\\log_{' + basis + '}') + (z ? '\\left(' + z + '\\right)' : '');
+  const px = pick([Q(1), Q(2), Q(3), Q(1, 2), Q(3, 2)]), qy = pick([Q(1), Q(2), Q(1, 2), Q(1, 3), Q(3)]);
+  const tx = px.d === 1 ? (px.n === 1 ? 'x' : 'x^{' + px.n + '}') : px.n === 1 ? '\\sqrt{x}' : '\\sqrt{x^{' + px.n + '}}';
+  const ty = qy.d === 1 ? (qy.n === 1 ? 'y' : 'y^{' + qy.n + '}') : (qy.d === 2 ? '\\sqrt{y}' : '\\sqrt[3]{y}');
+  // Konstante im Zähler (k > 0) oder im Nenner (k < 0)
+  const kAbs = basis ** Math.abs(k);
+  const zaehler = (k > 0 ? kAbs + ' ' : '') + tx, nenner = (k < 0 ? kAbs + ' ' : '') + ty;
+  const arg = '\\frac{' + zaehler + '}{' + nenner + '}';
+  const c = Q(k), p = px, q = qNeg(qy);
+  const kf = (z, l) => (qGleich(z, Q(1)) ? '' : qTex(z) + ' \\cdot ') + l;
+  const loesTex = qTex(c) + ' + ' + kf(p, lt('x')) + ' - ' + kf(qy, lt('y'));
+  const diag = [['logZerlVz', [c, p, qy]], ['logKonst', [k > 0 ? Q(kAbs) : Q(-kAbs), p, q]]];
+  if (px.d > 1 || qy.d > 1) diag.push(['logExpFaktor', [c, Q(px.d > 1 ? 1 : px.n), Q(qy.d > 1 ? -1 : -qy.n)]]);
+  else if (px.n > 1 || qy.n > 1) diag.push(['logExpFaktor', [c, Q(1), Q(-1)]]);
+  return { bereich: 'logarithmen', typ: 'Logarithmus zerlegen', auftrag: 'Zerlege mit den Logarithmengesetzen (für \\(x, y > 0\\)).',
+    ausdruck: lt(arg), felder: [F('c'), F('p'), F('q')], ziel: '{c} + {p} \\cdot ' + lt('x') + ' + {q} \\cdot ' + lt('y'), loesung: [c, p, q], diag,
+    weg: [zeile(lt((k > 0 ? kAbs + ' \\cdot ' : '') + tx) + ' - ' + lt((k < 0 ? kAbs + ' \\cdot ' : '') + ty), 'Gesetz 2: Quotient → Differenz'),
+      zeile(k > 0 ? lt(kAbs) + ' + ' + lt(tx) + ' - ' + lt(ty) : lt(tx) + ' - ' + lt(kAbs) + ' - ' + lt(ty), 'Gesetz 1: Produkt → Summe'),
+      zeile(k > 0 ? lt(potTex(String(basis), Q(k))) + ' + ' + lt(potTex('x', px)) + ' - ' + lt(potTex('y', qy)) : lt(potTex('x', px)) + ' - ' + lt(potTex(String(basis), Q(-k))) + ' - ' + lt(potTex('y', qy)), 'Zahl und Wurzeln als Potenzen'),
+      zeile(loesTex, 'Gesetz 3: Exponent → Faktor')], loesTex,
+    tipp: 'Zuerst Gesetz 2 (Bruchstrich), dann Gesetz 1 (Produkt), dann Gesetz 3 (Exponenten als Faktoren). Eine Wurzel ist ein Bruchexponent.',
+    py: { links: logPy(basis, '(' + (k > 0 ? kAbs + '*' : '') + 'x**' + qPy(px) + ')/(' + (k < 0 ? kAbs + '*' : '') + 'y**' + qPy(qy) + ')'), rechts: qPy(c) + '+' + qPy(p) + '*' + logPy(basis, 'x') + '+' + qPy(q) + '*' + logPy(basis, 'y'), vars: ['x', 'y'] } };
+}
+function logZusammenfassen() {
+  const basis = pick([10, 'e', 2]), lt = z => (basis === 10 ? '\\lg' : basis === 'e' ? '\\ln' : '\\log_{2}') + '\\left(' + z + '\\right)';
+  const m = pick([Q(1), Q(2), Q(3), Q(1, 2)]), n = pick([Q(-1), Q(-2), Q(-3), Q(-1, 2), Q(1), Q(2)]);
+  if (qGleich(m, Q(1)) && qGleich(n, Q(1))) return null;
+  const glied = (f, v, erst) => {
+    const a = qAbs(f), fak = qGleich(a, Q(1)) ? '' : a.d === 1 ? a.n + '' : '\\frac{' + a.n + '}{' + a.d + '}';
+    return (f.n < 0 ? (erst ? '-' : ' - ') : erst ? '' : ' + ') + fak + lt(v);
+  };
+  const aus = glied(m, 'x', true) + glied(n, 'y', false);
+  const diag = [['logFaktorExp', [Q(1), Q(n.n < 0 ? -1 : 1)]], ['logZerlVz', [m, qAbs(n)]], ['logZerlVz', [m, qNeg(n)]]];
+  return { bereich: 'logarithmen', typ: 'Zu einem Logarithmus zusammenfassen', auftrag: 'Schreibe als einen einzigen Logarithmus (für \\(x, y > 0\\)). Ein Faktor im Nenner hat einen negativen Exponenten.',
+    ausdruck: aus, felder: [F('m'), F('n')], ziel: lt('x^{{m}} \\cdot y^{{n}}'), loesung: [m, n], diag: diag.filter(([, w]) => !(qGleich(w[0], m) && qGleich(w[1], n))),
+    weg: [zeile(lt('x^{' + qTex(m) + '}') + (n.n < 0 ? ' - ' : ' + ') + lt('y^{' + qTex(qAbs(n)) + '}'), 'Gesetz 3 rückwärts: Faktor → Exponent'),
+      zeile(n.n < 0 ? lt('\\frac{x^{' + qTex(m) + '}}{y^{' + qTex(qAbs(n)) + '}}') : lt('x^{' + qTex(m) + '} \\cdot y^{' + qTex(n) + '}'), n.n < 0 ? 'Gesetz 2: Differenz → Quotient' : 'Gesetz 1: Summe → Produkt'),
+      zeile(lt('x^{' + qTex(m) + '} \\cdot y^{' + qTex(n) + '}'), n.n < 0 ? 'P7: im Nenner heisst negativer Exponent' : '')],
+    tipp: 'Zuerst jeden Faktor als Exponenten ins Argument holen (Gesetz 3), dann Summe → Produkt, Differenz → Quotient.',
+    py: { links: (m.n < 0 ? '' : '') + qPy(m) + '*' + logPy(basis, 'x') + '+' + qPy(n) + '*' + logPy(basis, 'y'), rechts: logPy(basis, 'x**' + qPy(m) + '*y**' + qPy(n)), vars: ['x', 'y'] } };
+}
+function basiswechsel() {
+  const a = pick([2, 3, 5, 6, 7]), b = pick([5, 7, 10, 11, 12, 17, 20, 30].filter(x => x !== a && x % a !== 0 && a % x !== 0)), lnB = Math.random() < 0.5;
+  const L = z => (lnB ? '\\ln(' + z + ')' : '\\lg(' + z + ')');
+  return { bereich: 'logarithmen', typ: 'Basiswechsel', auftrag: 'Schreibe mit dem Basiswechsel so, wie man es in den Taschenrechner tippt.',
+    ausdruck: '\\log_{' + a + '}(' + b + ')', felder: [F('u'), F('v')], ziel: '\\frac{' + L('{u}') + '}{' + L('{v}') + '}', loesung: [Q(b), Q(a)],
+    vergleich: w => {
+      if (w.some(q => q.n <= 0) || w.some(q => qGleich(q, Q(1)))) return null;
+      return Math.abs(Math.log(qWert(w[0])) / Math.log(qWert(w[1])) - Math.log(b) / Math.log(a)) < 1e-12 ? 'ok' : null;
+    },
+    diag: [['basisOben', [Q(a), Q(b)]]],
+    weg: [zeile('\\frac{' + L(b) + '}{' + L(a) + '}', 'Basiswechsel: Zahl oben, Basis unten'), { text: 'Kontrolle: \\(' + a + '^{' + Math.floor(Math.log(b) / Math.log(a)) + '} \\le ' + b + ' < ' + a + '^{' + (Math.floor(Math.log(b) / Math.log(a)) + 1) + '}\\), also liegt der Wert zwischen \\(' + Math.floor(Math.log(b) / Math.log(a)) + '\\) und \\(' + (Math.floor(Math.log(b) / Math.log(a)) + 1) + '\\); der Rechner gibt \\(' + (Math.log(b) / Math.log(a)).toFixed(4) + '\\ldots\\)' }],
+    tipp: '\\(\\log_a(b) = \\frac{\\lg(b)}{\\lg(a)} = \\frac{\\ln(b)}{\\ln(a)}\\).',
+    py: { links: 'math.log(' + b + ', ' + a + ')', rechts: (lnB ? 'math.log(' + b + ')/math.log(' + a + ')' : 'math.log10(' + b + ')/math.log10(' + a + ')') } };
+}
+
+// Fallen: Gilt die Regel für alle zulässigen Werte? Gegenbeispiel bzw. Begründung im Lösungsweg
+const FALLEN = {
+  potenzen: [
+    ['a^m + a^n = a^{m+n}', false, 'a = 2,\\ m = 1,\\ n = 2', '2^1 + 2^2 = 6', '2^{3} = 8', 'Für Summen von Potenzen gibt es kein Gesetz; man kann höchstens ausklammern.', ['2**1+2**2', '2**3']],
+    ['a^m \\cdot a^n = a^{m+n}', true, '', '', '', 'P1: Die Faktoren werden aneinandergereiht, \\(m + n\\) Stück.', ['a**m*a**n', 'a**(m+n)']],
+    ['(a^m)^n = a^{m+n}', false, 'a = 2,\\ m = 2,\\ n = 3', '(2^2)^3 = 4^3 = 64', '2^{5} = 32', 'Richtig ist \\((a^m)^n = a^{m \\cdot n}\\) (P3).', ['(2**2)**3', '2**5']],
+    ['(a + b)^2 = a^2 + b^2', false, 'a = 3,\\ b = 4', '(3 + 4)^2 = 49', '3^2 + 4^2 = 25', 'Es fehlt das doppelte Produkt: \\((a + b)^2 = a^2 + 2ab + b^2\\).', ['(3+4)**2', '3**2+4**2']],
+    ['(a \\cdot b)^n = a^n \\cdot b^n', true, '', '', '', 'P4: Ein Produkt wird potenziert, indem man jeden Faktor potenziert.', ['(a*b)**n', 'a**n*b**n']],
+    ['a^{-n} = -a^n', false, 'a = 2,\\ n = 1', '2^{-1} = \\frac{1}{2}', '-2^{1} = -2', 'Richtig ist \\(a^{-n} = \\frac{1}{a^n}\\): Kehrwert, nicht Gegenzahl.', ['2**(-1)', '-2**1']],
+    ['a^n \\cdot b^n = (a b)^n', true, '', '', '', 'P4 rückwärts: Bei gleichem Exponenten werden die Basen multipliziert.', ['a**n*b**n', '(a*b)**n']],
+    ['a^n \\cdot b^m = (a b)^{n + m}', false, 'a = 2,\\ b = 3,\\ n = 1,\\ m = 2', '2^1 \\cdot 3^2 = 18', '6^{3} = 216', 'Verschiedene Basen und verschiedene Exponenten: Kein Potenzgesetz greift.', ['2**1*3**2', '6**3']],
+    ['(-a)^2 = -a^2', false, 'a = 3', '(-3)^2 = 9', '-3^2 = -9', 'Ohne Klammer bindet die Potenz stärker als das Vorzeichen.', ['(-3)**2', '-3**2']],
+    ['\\frac{a^n}{b^n} = \\left(\\frac{a}{b}\\right)^n', true, '', '', '', 'P5: Ein Quotient wird potenziert, indem man Zähler und Nenner potenziert.', ['a**n/b**n', '(a/b)**n']],
+  ],
+  wurzeln: [
+    ['\\sqrt{a + b} = \\sqrt{a} + \\sqrt{b}', false, 'a = 9,\\ b = 16', '\\sqrt{9 + 16} = 5', '\\sqrt{9} + \\sqrt{16} = 7', 'Wurzelgesetze gibt es nur für Produkte und Quotienten.', ['math.sqrt(9+16)', 'math.sqrt(9)+math.sqrt(16)']],
+    ['\\sqrt{a \\cdot b} = \\sqrt{a} \\cdot \\sqrt{b}', true, '', '', '', 'W4: Für \\(a, b \\ge 0\\) darf man die Wurzel auf die Faktoren verteilen.', ['math.sqrt(a*b)', 'math.sqrt(a)*math.sqrt(b)']],
+    ['\\sqrt{a^2} = a', false, 'a = -3', '\\sqrt{(-3)^2} = \\sqrt{9} = 3', '-3', 'Richtig ist \\(\\sqrt{a^2} = |a|\\) (W9): Die Wurzel ist nie negativ.', ['math.sqrt((-3)**2)', '-3']],
+    ['\\left(\\sqrt{a}\\right)^2 = a', true, '', '', '', 'W8: Für \\(a \\ge 0\\) macht das Quadrat die Wurzel rückgängig.', ['math.sqrt(a)**2', 'a']],
+    ['\\sqrt{a} + \\sqrt{a} = 2\\sqrt{a}', true, '', '', '', 'Gleichartige Wurzeln fasst man zusammen wie \\(x + x = 2x\\).', ['math.sqrt(a)+math.sqrt(a)', '2*math.sqrt(a)']],
+    ['\\sqrt{a} \\cdot \\sqrt[3]{a} = \\sqrt[6]{a}', false, 'a = 64', '\\sqrt{64} \\cdot \\sqrt[3]{64} = 8 \\cdot 4 = 32', '\\sqrt[6]{64} = 2', 'Als Potenzen: \\(a^{\\frac12} \\cdot a^{\\frac13} = a^{\\frac56}\\) — die Exponenten werden addiert, nicht multipliziert.', ['math.sqrt(64)*64**(1/3)', '64**(1/6)']],
+    ['\\sqrt[n]{a^m} = a^{\\frac{m}{n}}', true, '', '', '', 'So sind Potenzen mit rationalem Exponenten definiert (für \\(a > 0\\)).', ['(a**m)**(1/n)', 'a**(m/n)']],
+    ['\\frac{1}{\\sqrt{a}} = \\frac{\\sqrt{a}}{a}', true, '', '', '', 'Erweitern mit \\(\\sqrt{a}\\): \\(\\frac{1 \\cdot \\sqrt{a}}{\\sqrt{a} \\cdot \\sqrt{a}} = \\frac{\\sqrt{a}}{a}\\) (für \\(a > 0\\)).', ['1/math.sqrt(a)', 'math.sqrt(a)/a']],
+    ['\\sqrt{a^2 + b^2} = a + b', false, 'a = 3,\\ b = 4', '\\sqrt{9 + 16} = 5', '3 + 4 = 7', 'Die Wurzel einer Summe lässt sich nicht aufteilen.', ['math.sqrt(3**2+4**2)', '3+4']],
+  ],
+  logarithmen: [
+    ['\\log(u + v) = \\log(u) + \\log(v)', false, 'u = v = 10', '\\lg(10 + 10) = \\lg(20) \\approx 1.30', '\\lg(10) + \\lg(10) = 2', 'Für Summen gibt es kein Logarithmengesetz.', ['math.log10(20)', 'math.log10(10)+math.log10(10)']],
+    ['\\log(u \\cdot v) = \\log(u) + \\log(v)', true, '', '', '', 'Gesetz 1: Weil sich Exponenten beim Multiplizieren addieren, wird aus dem Produkt eine Summe.', ['math.log10(u*v)', 'math.log10(u)+math.log10(v)']],
+    ['\\log\\left(\\frac{u}{v}\\right) = \\frac{\\log(u)}{\\log(v)}', false, 'u = 100,\\ v = 10', '\\lg\\left(\\frac{100}{10}\\right) = \\lg(10) = 1', '\\frac{\\lg(100)}{\\lg(10)} = 2', 'Richtig ist Gesetz 2: \\(\\log\\left(\\frac{u}{v}\\right) = \\log(u) - \\log(v)\\).', ['math.log10(100/10)', 'math.log10(100)/math.log10(10)']],
+    ['\\log\\left(u^k\\right) = \\left(\\log(u)\\right)^k', false, 'u = 1000,\\ k = 2', '\\lg\\left(1000^2\\right) = \\lg\\left(10^6\\right) = 6', '\\left(\\lg(1000)\\right)^2 = 9', 'Richtig ist Gesetz 3: \\(\\log\\left(u^k\\right) = k \\cdot \\log(u)\\).', ['math.log10(1000**2)', 'math.log10(1000)**2']],
+    ['k \\cdot \\log(u) = \\log\\left(u^k\\right)', true, '', '', '', 'Gesetz 3 rückwärts: Der Faktor wird zum Exponenten.', ['k*math.log10(u)', 'math.log10(u**k)']],
+    ['\\frac{\\lg(u)}{\\lg(v)} = \\lg\\left(\\frac{u}{v}\\right)', false, 'u = 100,\\ v = 10', '\\frac{\\lg(100)}{\\lg(10)} = 2', '\\lg(10) = 1', 'Ein Quotient von Logarithmen ist ein Basiswechsel: \\(\\frac{\\lg(u)}{\\lg(v)} = \\log_v(u)\\).', ['math.log10(100)/math.log10(10)', 'math.log10(100/10)']],
+    ['\\log_a(b) = \\frac{\\lg(b)}{\\lg(a)}', true, '', '', '', 'Basiswechsel: \\(a^x = b\\) logarithmieren gibt \\(x \\cdot \\lg(a) = \\lg(b)\\).', ['math.log(u, v)', 'math.log10(u)/math.log10(v)']],
+    ['\\log_a(b) \\cdot \\log_b(a) = 1', true, '', '', '', 'Mit dem Basiswechsel: \\(\\frac{\\lg(b)}{\\lg(a)} \\cdot \\frac{\\lg(a)}{\\lg(b)} = 1\\).', ['math.log(u, v)*math.log(v, u)', '1']],
+    ['\\log_a(1) = 1', false, 'a = 10', '\\lg(1) = 0', '1', 'Weil \\(a^0 = 1\\) ist, gilt \\(\\log_a(1) = 0\\).', ['math.log10(1)', '1']],
+    ['\\lg\\left(10^{k}\\right) = k', true, '', '', '', 'Direkt aus der Definition: \\(10\\) hoch \\(k\\) gibt \\(10^k\\).', ['math.log10(10**k)', 'k']],
+  ],
+};
+function falle(bereich) {
+  const [regel, gilt, bsp, li, re, warum, py] = pick(FALLEN[bereich]);
+  const weg = gilt ? [{ text: '✓ Die Regel gilt. ' + warum }] : [{ text: '✗ Die Regel gilt nicht. Gegenbeispiel mit \\(' + bsp + '\\): links \\(' + li + '\\), rechts \\(' + re + '\\). ' + warum }];
+  return { bereich, typ: 'Regel prüfen', auftrag: 'Gilt diese Regel für alle zulässigen Werte?', ausdruck: regel, art: 'wahl', loesung: gilt ? 'gilt' : 'nicht',
+    wahl: [['gilt', 'gilt immer'], ['nicht', 'gilt nicht immer']], diag: [[gilt ? 'falleVerworfen' : 'falleGeglaubt', gilt ? 'nicht' : 'gilt']], weg,
+    py: { falle: true, gilt, links: py[0], rechts: py[1] } };
+}
+
+const BEREICHE = {
+  potenzen:    { name: 'Potenzen', vorlagen: [[eineBasis, 3], [zweiBasen, 2], [potenzWert, 3], [wissenschaftlich, 1], [() => falle('potenzen'), 1]] },
+  wurzeln:     { name: 'Wurzeln', vorlagen: [[() => wurzelAufgabe('teilweise'), 2], [() => wurzelAufgabe('produkt'), 1], [() => wurzelAufgabe('summe'), 1], [() => wurzelAufgabe('summeTrap'), 1], [() => wurzelAufgabe('nenner'), 1], [wurzelPotenz, 3], [ratWert, 2], [() => falle('wurzeln'), 1]] },
+  logarithmen: { name: 'Logarithmen (SF)', vorlagen: [[logWert, 3], [expGleichung, 2], [logGesetze, 2], [logZerlegen, 2], [logZusammenfassen, 1], [basiswechsel, 1], [() => falle('logarithmen'), 1]] },
+};
+function aufgabe(bereiche) {
+  for (;;) {
+    const v = BEREICHE[pick(bereiche)].vorlagen, summe = v.reduce((s, [, g]) => s + g, 0);
+    let z = Math.random() * summe, f = v[0][0];
+    for (const [g, w] of v) { z -= w; if (z < 0) { f = g; break; } }
+    const a = f();
+    if (!a) continue;
+    if (a.art !== 'wahl') {                 // Denkfehler, die zufällig die richtige Antwort geben oder doppelt sind, fallen weg
+      const key = a.vergleich ? null : JSON.stringify(a.loesung.map(qStr));
+      a.diag = a.diag.filter(([, w], j) => (key ? JSON.stringify(w.map(q => (q ? qStr(q) : '*'))) !== key : a.vergleich(w) !== 'ok')
+        && a.diag.findIndex(([, u]) => JSON.stringify(u) === JSON.stringify(w)) === j);
+    }
+    return a;
+  }
+}
+
+// ── Eingabe lesen ──
+function lies(s) {
+  s = String(s).trim().replace(/[−–]/g, '-').replace(/\s+/g, '');
+  if (!s) return { leer: true };
+  if (/,/.test(s)) return { fehler: 'Schreibe den Dezimalpunkt, nicht das Komma.' };
+  let m;
+  if ((m = /^([+-]?)(\d+)\/(\d+)$/.exec(s))) {
+    const z = (m[1] === '-' ? -1 : 1) * +m[2], n = +m[3];
+    if (!n) return { fehler: 'Der Nenner darf nicht \\(0\\) sein.' };
+    return { q: Q(z, n), roh: [z, n], art: 'bruch' };
+  }
+  if ((m = /^([+-]?)(\d*)\.(\d+)$/.exec(s)) && (m[2] || m[3])) return { q: Q((m[1] === '-' ? -1 : 1) * +(m[2] + m[3]), 10 ** m[3].length), art: 'dezimal' };
+  if ((m = /^([+-]?)(\d+)$/.exec(s))) return { q: Q((m[1] === '-' ? -1 : 1) * +m[2]), art: 'ganz' };
+  return { fehler: 'Diese Eingabe verstehe ich nicht. Beispiele: <code>-3</code>, <code>3/2</code>, <code>0.25</code>.' };
+}
+function einsetzenZiel(a, zahlen) {          // Platzhalter {id} durch Zahlen ersetzen; «+ {q}» mit negativem q wird «- …»
+  let t = a.ziel;
+  a.felder.forEach((f, j) => {
+    const z = zahlen[j];
+    if (z.neg && t.includes('+ {' + f.id + '}')) t = t.split('+ {' + f.id + '}').join('- {' + z.abs + '}');
+    else t = t.split('{' + f.id + '}').join('{' + z.tex + '}');
+  });
+  return t;
+}
+function zielTex(a, eingaben) {               // Vorschau: das Ziel mit den eingetippten Zahlen
+  return einsetzenZiel(a, a.felder.map((f, j) => {
+    const l = lies(eingaben[j] || '');
+    if (!l.q) return { tex: '\\boxed{\\,' + f.tex + '\\,}' };
+    const t = q => (l.art === 'bruch' ? '\\frac{' + Math.abs(l.roh[0]) + '}{' + l.roh[1] + '}' : l.art === 'dezimal' ? dezimal(qAbs(q)) : String(Math.abs(q.n)));
+    return { tex: (l.q.n < 0 ? '-' : '') + t(l.q), neg: l.q.n < 0, abs: t(l.q) };
+  }));
+}
+// → { status: 'ok' | 'fast' | 'falsch' | 'format', code?, text?, felder? }
+function pruefe(a, eingabe) {
+  if (a.art === 'wahl') return eingabe === a.loesung ? { status: 'ok' } : { status: 'falsch', code: a.diag[0][0] };
+  const ls = a.felder.map((f, j) => lies(eingabe[j]));
+  const leer = a.felder.filter((f, j) => ls[j].leer);
+  if (leer.length) return { status: 'format', text: leer.length === a.felder.length ? 'Gib zuerst eine Antwort ein.' : 'Fülle auch das Feld \\(' + leer[0].tex + '\\) aus.' };
+  const fe = ls.findIndex(l => l.fehler);
+  if (fe >= 0) return { status: 'format', text: (a.felder.length > 1 ? 'Feld \\(' + a.felder[fe].tex + '\\): ' : '') + ls[fe].fehler };
+  const w = ls.map(l => l.q);
+  const ungekuerzt = ls.findIndex(l => l.art === 'bruch' && (ggT(l.roh[0], l.roh[1]) !== 1 || l.roh[1] === 1));
+  const passt = (u, v) => u.every((q, j) => !v[j] || qGleich(q, v[j]));
+  let ok;
+  if (a.vergleich) {
+    const v = a.vergleich(w);
+    if (v && v !== 'ok') return { status: 'fast', text: v };
+    ok = v === 'ok';
+  } else ok = passt(w, a.loesung);
+  if (ok) {
+    if (ungekuerzt >= 0) return { status: 'fast', text: 'Der Wert stimmt, aber der Bruch ist noch nicht gekürzt: \\(\\frac{' + Math.abs(ls[ungekuerzt].roh[0]) + '}{' + ls[ungekuerzt].roh[1] + '} = ' + qTex(qAbs(w[ungekuerzt])) + '\\).' };
+    return { status: 'ok' };
+  }
+  const dg = a.diag.find(([, v]) => (a.vergleich && a.felder.length === 2 && a.ziel.includes('sqrt') ? wzKey(w) === wzKey(v) : passt(w, v)));
+  if (dg) return { status: 'falsch', code: dg[0] };
+  const richtig = a.felder.length > 1 && !a.vergleich ? a.felder.filter((f, j) => qGleich(w[j], a.loesung[j])).map(f => '\\(' + f.tex + '\\)') : [];
+  return { status: 'falsch', code: 'sonst', text: (richtig.length ? richtig.join(' und ') + (richtig.length > 1 ? ' stimmen' : ' stimmt') + ' schon. ' : '') + 'Tipp: ' + a.tipp };
+}
+function loesungTex(a) {
+  if (a.art === 'wahl') return a.wahl.find(([k]) => k === a.loesung)[1];
+  if (a.loesTex) return a.loesTex;
+  return einsetzenZiel(a, a.loesung.map(q => ({ tex: qTex(q), neg: q.n < 0, abs: qTex(qAbs(q)) })));
+}
+// ── KERN:ENDE ───────────────────────────────────────────────────
+
+
+// ── Oberfläche ──
+const $ = id => document.getElementById(id);
+let mjKette = Promise.resolve();
+function setzen(el, html) {
+  mjKette = mjKette.then(() => {
+    if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([el]);
+    el.innerHTML = html;
+    if (window.MathJax && MathJax.typesetPromise) return MathJax.typesetPromise([el]);
+  }).catch(() => {});
+}
+const RUNDE = 10;
+let bereiche = new Set(Object.keys(BEREICHE));
+try {
+  const m = /bereich=([a-z,]+)/.exec(location.hash);
+  if (m) { const t = m[1].split(',').filter(x => BEREICHE[x]); if (t.length) bereiche = new Set(t); }
+} catch (e) {}
+const bereichBox = $('gt-bereiche');
+for (const [k, t] of Object.entries(BEREICHE)) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'gt-opt' + (bereiche.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  bereichBox.appendChild(b);
+}
+
+let A = null, nr = 0, versuch = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, letztes = '';
+let stand = { ok: 0, fehl: 0, codes: {} };
+
+function zeit() { const s = Math.floor((Date.now() - start) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+function zeigeZahlen() {
+  $('gt-z-nr').textContent = Math.min(nr, RUNDE) + ' / ' + RUNDE;
+  $('gt-z-ok').textContent = stand.ok;
+  $('gt-z-fehl').textContent = stand.fehl;
+  $('gt-z-zeit').textContent = zeit();
+  $('gt-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
+}
+function wegHtml(a) {
+  let html = '<div class="gt-weg-titel">' + (a.art === 'wahl' ? 'Begründung' : 'Lösungsweg') + '</div>';
+  if (a.art !== 'wahl') html += '<div class="gt-zeile">\\(\\displaystyle ' + a.ausdruck + '\\)</div>';
+  let vorher = a.ausdruck;
+  for (const w of a.weg) {
+    if (w.text) { html += '<div class="gt-text">' + w.text + '</div>'; continue; }
+    if (w.z === vorher) continue;
+    vorher = w.z;
+    html += '<div class="gt-zeile">\\(\\displaystyle ' + (w.gl ? '\\Leftrightarrow\\; ' : '= ') + w.z + '\\)' + (w.k ? '<span class="gt-k">' + w.k + '</span>' : '') + '</div>';
+  }
+  return html;
+}
+const felder = () => [...$('gt-felder').querySelectorAll('input')];
+const werte = () => felder().map(i => i.value);
+function zeigeVorschau() { if (A && A.art !== 'wahl' && A.ziel === '{w}') setzen($('gt-vorschau'), ''); else if (A && A.art !== 'wahl') setzen($('gt-vorschau'), '\\(\\displaystyle ' + zielTex(A, werte()) + '\\)'); }
+function neueAufgabe() {
+  if (nr >= RUNDE) return bilanz();
+  nr++;
+  let a; do a = aufgabe([...bereiche]); while (a.ausdruck === letztes);
+  A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0;
+  $('gt-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
+  $('gt-thema').textContent = BEREICHE[a.bereich].name.replace(/ \(SF\)$/, '') + ' · ' + a.typ;
+  setzen($('gt-auftrag'), a.auftrag);
+  setzen($('gt-ausdruck'), '\\[' + a.ausdruck + (a.art === 'wahl' ? '' : a.felder.length === 1 && a.ziel === '{w}' ? ' = \\;?' : '') + '\\]');
+  const wahl = a.art === 'wahl';
+  $('gt-antwort-eingabe').hidden = wahl;
+  $('gt-antwort-wahl').hidden = !wahl;
+  if (wahl) setzen($('gt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="gt-btn" data-w="' + k + '">' + t + '</button>').join(''));
+  else {
+    setzen($('gt-felder'), a.felder.map(f => '<span class="gt-feld"><label for="gt-f-' + f.id + '">\\(' + f.tex + ' =\\)</label><input type="text" id="gt-f-' + f.id + '" autocomplete="off" inputmode="text" spellcheck="false" aria-label="' + f.id + '"></span>').join(''));
+    $('gt-pruefen').disabled = false;
+    mjKette.then(() => { const f = felder(); if (f[0]) f[0].focus(); });
+    zeigeVorschau();
+  }
+  setzen($('gt-rueck'), ''); $('gt-rueck').className = 'gt-rueck';
+  $('gt-weg').hidden = true; $('gt-weiter-box').hidden = true;
+  zeigeZahlen();
+}
+function meldung(cls, html) { $('gt-rueck').className = 'gt-rueck ' + cls; setzen($('gt-rueck'), html); }
+function abschliessen(gut) {
+  fertig = true;
+  felder().forEach(i => { i.disabled = true; }); $('gt-pruefen').disabled = true;
+  mjKette.then(() => $('gt-antwort-wahl').querySelectorAll('button').forEach(b => { b.disabled = true; }));
+  $('gt-weg').hidden = false; setzen($('gt-weg'), wegHtml(A));
+  $('gt-weiter-box').hidden = false;
+  if (gut && !fehlerInAufgabe) stand.ok++;
+  zeigeZahlen();
+  $('gt-weiter').focus();
+}
+function antwort(eingabe) {
+  if (fertig || !A) return;
+  const r = pruefe(A, eingabe);
+  if (r.status === 'format' || r.status === 'fast') { meldung('fast', '<p>' + (r.status === 'fast' ? '≈ ' : '') + r.text + '</p>'); return; }
+  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
+  versuch++; fehlerInAufgabe++; stand.fehl++;
+  stand.codes[r.code] = (stand.codes[r.code] || 0) + 1;
+  const f = FEHLER[r.code];
+  let html = '<p>✗ ' + (r.code === 'sonst' ? 'Noch nicht. ' + (r.text || '') : '<strong>' + f[0] + '.</strong> ' + f[1]) + '</p>';
+  if (A.art === 'wahl') {
+    const b = $('gt-antwort-wahl').querySelector('[data-w="' + eingabe + '"]'); if (b) b.classList.add('gt-falsch');
+  }
+  if (versuch >= 2 || A.art === 'wahl') {
+    html += '<p>Richtig ist ' + (A.art === 'wahl' ? '«' + loesungTex(A) + '»' : '\\(' + loesungTex(A) + '\\)') + '.</p>';
+    meldung('falsch', html);
+    return abschliessen(false);
+  }
+  html += '<p>Versuch es nochmals.</p>';
+  meldung('falsch', html);
+  const i = felder()[0]; if (i) i.select();
+}
+function bilanz() {
+  clearInterval(tick);
+  const top = Object.entries(stand.codes).filter(([c]) => c !== 'sonst').sort((u, v) => v[1] - u[1]).slice(0, 3);
+  let html = '<h2>Runde fertig</h2><p>' + stand.ok + ' von ' + RUNDE + ' auf Anhieb richtig · ' + stand.fehl + ' Fehler · Zeit ' + zeit() + '</p>';
+  if (top.length) html += '<p>Erkannte Verwechslungen:</p><ul>' + top.map(([c, n]) => {
+    const f = FEHLER[c];
+    return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + (f[2] ? ' — nachlesen in <a href="' + f[2][0] + '">' + f[2][1] + '</a>' : '') + '</li>';
+  }).join('') + '</ul>';
+  else if (!stand.fehl) html += '<p>Keine Fehler — stark.</p>';
+  html += '<div class="gt-knoepfe" style="padding:12px 0 0"><button type="button" class="gt-btn gt-weiter" id="gt-nochmal">Neue Runde</button></div>';
+  $('gt-aufgabe').hidden = true; $('gt-bilanz').hidden = false;
+  setzen($('gt-bilanz'), html);
+  mjKette.then(() => $('gt-nochmal').focus());
+}
+function neueRunde() {
+  nr = 0; stand = { ok: 0, fehl: 0, codes: {} }; letztes = '';
+  start = Date.now(); clearInterval(tick); tick = setInterval(zeigeZahlen, 1000);
+  $('gt-aufgabe').hidden = false; $('gt-bilanz').hidden = true;
+  neueAufgabe();
+}
+
+$('gt-pruefen').addEventListener('click', () => antwort(werte()));
+$('gt-felder').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || !e.target.matches('input')) return;
+  e.preventDefault();
+  const f = felder(), j = f.indexOf(e.target);
+  if (j < f.length - 1 && !f[j + 1].value) f[j + 1].focus(); else antwort(werte());
+});
+let vorschauUhr = null;
+$('gt-felder').addEventListener('input', () => { clearTimeout(vorschauUhr); vorschauUhr = setTimeout(zeigeVorschau, 200); });
+$('gt-antwort-wahl').addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (b && !b.disabled) antwort(b.dataset.w); });
+$('gt-weiter').addEventListener('click', neueAufgabe);
+$('gt-neu').addEventListener('click', neueRunde);
+$('gt-bilanz').addEventListener('click', e => { if (e.target.closest('#gt-nochmal')) neueRunde(); });
+bereichBox.addEventListener('click', e => {
+  const b = e.target.closest('.gt-opt'); if (!b) return;
+  const t = b.dataset.t;
+  if (bereiche.has(t) && bereiche.size === 1) return;
+  if (bereiche.has(t)) bereiche.delete(t); else bereiche.add(t);
+  b.classList.toggle('aktiv', bereiche.has(t));
+  neueRunde();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && fertig && !$('gt-weiter-box').hidden && !e.target.closest('input, button, a, summary')) { e.preventDefault(); neueAufgabe(); }
+});
+const breit = matchMedia('(min-width: 901px)');
+function seiteOffen() { $('gt-seite-det').open = breit.matches; }
+if (breit.addEventListener) breit.addEventListener('change', seiteOffen);
+seiteOffen();
+if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(neueRunde);
+else window.addEventListener('load', neueRunde);
+</script>
+</body>
+</html>

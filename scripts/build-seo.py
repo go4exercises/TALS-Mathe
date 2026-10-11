@@ -144,6 +144,18 @@ SEITEN = {
    titel='Einheitskreistrainer — exakte Werte, Bogenmass und Umkehrung',
    beschreibung='Einheitskreis ohne Taschenrechner: Grad und Bogenmass, exakte Werte von sin, cos und tan, vom Wert zum Winkel — mit Quadrant, Referenzwinkel und Skizze.',
    themen=['Mathematik', 'Einheitskreis', 'Bogenmass', 'Sinus', 'Cosinus', 'Tangens', 'Übung']),
+ 'werkzeuge/termtrainer.html': dict(
+   ort='Werkzeuge · Termtrainer',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Termtrainer — Terme umformen mit Formprüfung und Fehlerdiagnose',
+   beschreibung='Termtrainer: Klammern auflösen, binomische Formeln, ausklammern, faktorisieren und Bruchterme kürzen — mit Prüfung der Form und Diagnose des Denkfehlers.',
+   themen=['Mathematik', 'Terme', 'Binomische Formeln', 'Faktorisieren', 'Ausklammern', 'Bruchterm', 'Übung']),
+ 'werkzeuge/gesetzetrainer.html': dict(
+   ort='Werkzeuge · Gesetzetrainer',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Gesetzetrainer — Potenzen, Wurzeln und Logarithmen ohne Taschenrechner',
+   beschreibung='Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner üben, nach Bereich wählbar — mit Lösungsweg und der verwechselten Regel bei jedem Fehler.',
+   themen=['Mathematik', 'Potenzgesetze', 'Wurzelgesetze', 'Logarithmengesetze', 'Rationale Exponenten', 'Basiswechsel', 'Übung']),
  'leitprogramme/potenzen.html': dict(
    ort='Leitprogramm · Potenzen',
    typ='article', lrt='Leitprogramm',

@@ -8,7 +8,8 @@ Zwei Stufen:
 2. Orchestrierung der vorhandenen, autoritativen Repo-Skripte in scripts/:
    - verify_mathjax.js        (echte MathJax-Render-Prüfung; braucht node_modules/mathjax-full)
    - verify_js_runtime.js     (JS-Laufzeit in jsdom; braucht node_modules/jsdom)
-   - verify_strategietrainer.js, verify_rechentrainer.js, verify_einheitskreistrainer.js (Selbsttests der Werkzeuge)
+   - verify_strategietrainer.js, verify_rechentrainer.js, verify_einheitskreistrainer.js,
+     verify_termtrainer.js, verify_gesetzetrainer.js (Selbsttests der Werkzeuge)
    - build-suchindex.py --check (Suchindex aktuell? veraltet = WARN, kein Blocker)
    - build-seo.py --check      (Metadaten/Footer/sitemap aktuell? veraltet = WARN, Footer ausserhalb der Marken = FEHLER)
    - check_identifier_collisions.py (Symbol-Kollisionen mit mathlib/nav; ohne npm)
@@ -332,7 +333,7 @@ def run_deep(file_args, rep):
                 rep.warn("verify_js_runtime.js", "Summenzeile nicht erkannt")
 
     # Selbsttests der Werkzeuge (werkzeuge/*.html), je ein scripts/verify_<name>.js
-    for name in ("strategietrainer", "rechentrainer", "einheitskreistrainer"):
+    for name in ("strategietrainer", "rechentrainer", "einheitskreistrainer", "termtrainer", "gesetzetrainer"):
         et = scripts / f"verify_{name}.js"
         if not et.is_file():
             continue

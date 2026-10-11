@@ -24,6 +24,14 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **Neue Werkzeuge: Termtrainer und Gesetzetrainer** (11.10.2026). Termtrainer: Zufallsterme zum
+  Zusammenfassen, Auflösen von Klammern, Ausmultiplizieren, zu binomischen Formeln, zum Ausklammern,
+  Faktorisieren und Kürzen von Bruchtermen; die Eingabe wird exakt auf Gleichwertigkeit und auf die
+  verlangte Form geprüft («fast»: nicht vollständig faktorisiert, nicht gekürzt …), typische Denkfehler
+  werden benannt, sonst zeigt eine Zahlenprobe den Unterschied. Gesetzetrainer: Potenzen, Wurzeln und
+  Logarithmen (einzeln oder gemischt wählbar), Antwort in Feldern der Zielform, Diagnose der
+  verwechselten Regel, «Regel prüfen» mit Gegenbeispiel. Verlinkt aus g1.3, g1.4, s1.1, s1.2, s1.3;
+  Selbsttests `verify_termtrainer.js` und `verify_gesetzetrainer.js` im Pre-Flight.
 - **Neue Werkzeuge: Rechentrainer und Einheitskreistrainer** (11.10.2026). Rechentrainer: Rechnen ohne
   Taschenrechner (Reihenfolge, Vorzeichen, Brüche, Bruch–Dezimal–Prozent, Perioden, Zahlenmengen) mit
   Diagnose des Denkfehlers und Lösungsweg; verlinkt aus g1.1 und g1.2. Einheitskreistrainer: Grad und
