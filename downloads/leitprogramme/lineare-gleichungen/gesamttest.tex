@@ -1,0 +1,102 @@
+% Gesamttest «Lineare Gleichungen» (GF 2.2a) — Quelle des PDFs (python3 scripts/build-lp-pdf.py /lineare-gleichungen/).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (11.10.2026).
+% Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
+% Teile nach Kapitel = Kompetenz; alles ohne Rechner (RLP «auch ohne Hilfsmittel»). Kombinationen statt Kapitelmodelle:
+% Klammer und Minus, Bruch mit Zahl, Fehler in fremder Lösung (dazu: Faktor ändern → Lösung 0), Normalform mit
+% Tabelle, Tarife mit Schnittpunkt neben dem Gitter (t = 10/3, die Übung «Wann gleich teuer?» hat ganzzahlige t),
+% sortieren und binomische Formel, k auf beiden Seiten mit Faktor vor k (geübt in 5c und der Übung «Das k zur Lösung»).
+% Nach der Prüfung 11.10.2026 (TODO.md M6, M8, M9) G3(b), G5, G6 umgestellt.
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Lineare Gleichungen}
+\renewcommand{\lpteilgebiet}{2.2a}
+\renewcommand{\lpbereich}{Grundlagenfach}
+\renewcommand{\lpfuss}{Gesamttest · 23 Punkte}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 23
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 25 Minuten. \textbf{Hilfsmittel:} in allen Teilen keine — kein Taschenrechner (RLP 2.2: «auch ohne Hilfsmittel»).
+Schreib zu jeder Aufgabe den \textbf{Rechenweg} auf — bewertet wird der Weg. Gib Lösungen als Lösungsmenge $\mathbb{L}$ an, z.\,B. $\mathbb{L} = \{4\}$, $\mathbb{L} = \{\,\}$ oder $\mathbb{L} = \mathbb{R}$.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Teil A · Umformen, Klammern und Brüche}{Kapitel 1 und 2 · ohne Hilfsmittel · 6 Punkte}
+
+\begin{lpaufgabe}{G1}{Klammern auflösen und lösen}{3 P}
+Löse und mach die Probe: $\;5x - 3(x - 4) = 2(x + 3) + x$
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Gleichung mit Brüchen}{3 P}
+Löse: $\;\dfrac{x - 2}{6} = \dfrac{x}{4} - 1$
+\lpplatz{6}
+\end{lpaufgabe}
+
+\lpteil{Teil B · Lösungsfälle}{Kapitel 3 · ohne Hilfsmittel · 3 Punkte}
+
+\begin{lpaufgabe}{G3}{Eine fremde Lösung prüfen}{3 P}
+Jemand löst $2(x - 3) + 4 = 2x - 2$ so: «$2x - 6 + 4 = 2x - 2 \;\Rightarrow\; 0 = 0 \;\Rightarrow\; \mathbb{L} = \{0\}$».
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Was stimmt am Schluss nicht? Gib die richtige Lösungsmenge an und begründe.
+\item Ändere nur den Faktor $2$ vor $x$ auf der rechten Seite (die Zahl $-2$ bleibt), sodass die Gleichung genau eine Lösung hat. Gib diese Lösung an und begründe.
+\end{enumerate}
+\lpplatz{6}
+\end{lpaufgabe}
+
+\lpteil{Teil C · Normalform, Tabelle und Graph}{Kapitel 4 · ohne Hilfsmittel · 7 Punkte}
+
+\begin{lpaufgabe}{G4}{Normalform und Wertetabelle}{4 P}
+Gegeben ist $3x + 2 = 9 - 2x$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Bring die Gleichung auf die Normalform $a \cdot x + b = 0$ und gib $a$ und $b$ an.
+\item Gib die Lösung exakt an.
+\item Berechne beide Seiten für $x = 1$ und $x = 2$. Was zeigen die beiden Zeilen über die Lösung, und warum findet man sie mit einer Wertetabelle für ganze $x$ nicht genau?
+\end{enumerate}
+\lpplatz{7}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G5}{Zwei Tarife}{3 P}
+\begin{minipage}[t]{0.52\linewidth}\vspace{0pt}
+Ein Velo-Verleih bietet zwei Tarife an:
+\[ K_A(t) = 4t + 10, \qquad K_B(t) = 7t \]
+($t$ in Stunden, $K$ in CHF). Das Bild zeigt beide Geraden.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Lies ab, zwischen welchen ganzen Stunden die Mietdauer liegt, bei der beide Tarife gleich viel kosten.
+\item Berechne diese Mietdauer und den Preis genau.
+\item Welcher Tarif ist für 5 Stunden günstiger? Begründe.
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.44\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}
+\begin{axis}[width=6.4cm,height=5.6cm,axis lines=middle,xmin=-0.6,xmax=9.6,ymin=-4,ymax=62,
+  xtick={1,...,8},ytick={10,20,...,60},grid=both,grid style={lplinie},tick label style={font=\scriptsize},
+  xlabel={$t$ [h]},ylabel={$K$ [CHF]},xlabel style={anchor=south east},ylabel style={anchor=south west},
+  yticklabel style={fill=white,inner sep=1pt},xticklabel style={fill=white,inner sep=1pt}]
+\addplot[lpblau,very thick,domain=0:8] {4*x+10} node[pos=0.95,below right,font=\scriptsize] {$A$};
+\addplot[lporange,very thick,domain=0:8.4] {7*x} node[pos=0.9,above left,font=\scriptsize] {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{5}
+\end{lpaufgabe}
+
+\lpteil{Teil D · Parameterdiskussion}{Kapitel 5 · ohne Hilfsmittel · 7 Punkte}
+
+\begin{lpaufgabe}{G6}{Lineare Gleichung mit Parameter}{4 P}
+Löse $k \cdot x + 4 = 2x + k^2$ nach $x$ auf ($k \in \mathbb{R}$). Unterscheide die Fälle, gib jeweils die Lösungsmenge an und vereinfache die Lösung so weit wie möglich.
+\lpplatz{8}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Parameter bestimmen}{3 P}
+Gegeben ist $(2k - 1) \cdot x = k + 4$ ($k \in \mathbb{R}$).
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Für welches $k$ hat die Gleichung keine Lösung? Begründe.
+\item Für welches $k$ ist $x = 3$ die Lösung?
+\end{enumerate}
+\lpplatz{7}
+\end{lpaufgabe}
+\end{document}

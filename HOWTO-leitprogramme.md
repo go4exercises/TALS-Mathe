@@ -621,6 +621,12 @@ gegen sie und darüber hinaus.
 - **Rechneranzeige nur so weit belegt wie die Quelle**: «poly-solv zeigt den Bruch» ist nur für ganzzahlige
   Koeffizienten belegt. Grundform ganzzahlig machen (mit einem Faktor erweitern) oder die Anzeigeform nicht nennen.
 
+- **Allaussagen über Lösungsfälle an Gegenbeispielen lesen** (Gleichungen 2.2a/2.3, 12.10.2026): «das Zeichen kippt
+  von \(\lt\) über \(=\) zu \(\gt\)» (auch umgekehrt), «mal 0 ändert die Lösungsmenge» (bei \(\mathbb{L} = \mathbb{R}\) nicht),
+  «gleiche oder entgegengesetzte Zahlen: addieren» (gleiche: subtrahieren), «\(0 = 0\): unendlich viele Lösungen» (im 3×3
+  nur ohne weiteren Widerspruch), «nach \(y\) auflösen, Steigungen vergleichen» (nur, wenn \(y\) vorkommt). Zwei davon
+  standen auch auf der Themenseite.
+
 - **Gegenbeispiel-Texte für jede Klasse prüfen** (Vierecke 08.10.2026): «Es hat keine rechten Winkel» stimmt für ein
   Parallelogramm, nicht für jedes Trapez. Eine Rückmeldung «Denk an X» nennt besser ein bestimmtes, gezeigtes X.
 - **Definition über eine Eigenschaft, die eine Oberklasse auch hat** (gleichschenkliges Trapez über b = d — gilt für
@@ -673,6 +679,13 @@ gegen sie und darüber hinaus.
 - **Anker nicht auf Zahlwörter legen**: Whisper schreibt «sechzehntausend» als «16 000», der Anker fällt stumm auf
   eine Schätzung zurück. Nachbarwort wählen. Nach Teilvertonung die Szenendauer prüfen (Stille am Ende).
 
+- **Ein Anker trifft das erste gleichlautende Wort** (2.2a/2.2b/2.3, 12.10.2026): `@bleibt` fiel auf «stehen bleibt»,
+  `~Plus` auf das erste «plus», «drei» auf «minus drei mal» — Ergebnisse standen 2–6 s vor ihrer Herleitung, in einer
+  Frage-Szene sogar vor der Ausgangsgleichung. Nach jeder Vertonung jede Einblendung gegen ihre Wortzeit legen
+  (`sprechzeiten.py`), `#2` oder ein längerer Anker; in Frage-Szenen nichts vor 1.0 s.
+- **Ein bewegter Punkt, der seine Koordinaten anschreibt, muss die Gleichung erfüllen**: \(x\) und \(y\) je für sich
+  gerundet gab «(2.6 | 1.3)» auf \(y = 2x - 4\) — \(y\) aus dem gerundeten \(x\) berechnen.
+
 - **Verdeckte Grössen verraten sich** über das Karo, einen gesperrten Regler am Anschlag oder eine massstäbliche
   Figur im PDF (Vierecke 08.10.2026). Karo aus, Regler ausblenden, im Test bewusst verzerrt zeichnen.
 - **Würfe mit gegebenen Seiten und Höhen auf Existenz prüfen** (h_a < b, Dreiecksungleichung, 2·Schenkel > Basis)
@@ -688,6 +701,12 @@ gegen sie und darüber hinaus.
   vorigen Aufgabe (Reglerstellung) das neue Ziel nicht schon erfüllen — `pruef-leiste` prüft nur
   den Startzustand. Im `setup` die Regler zurücksetzen — oder allgemein in der Leiste: `gehe(j)`
   setzt alle `input[type=range]` auf `defaultValue` (Vorbild `exp-log-funktionen/seite.js`).
+- **Auch die Auswahl (Familie, Modus) setzt der Wechsel zurück** (Gleichungssysteme 12.10.2026): `aufraeumen` stellte
+  die Familie auf A, die nächste Aufgabe sagte «Familie B: …» — unlösbar, ohne dass man es merkt. Einmal alle Aufgaben
+  der Reihe nach im Browser lösen, nicht nur `pruef-leiste` (prüft nur den Startzustand).
+- **Das Bildfenster deckt den ganzen Reglerbereich** (Quadratische Gleichungen 12.10.2026): Ab \(k = 3.5\) lag eine
+  Lösung links ausserhalb — das Bild zeigte «eine Lösung», wo die Leiste nach genau dieser Fehlvorstellung fragte.
+  Für jeden Reglerwert Lösungen, Scheitel und Schnittpunkte gegen das Fenster rechnen (Fenster je Familie).
 - **Periodische Ziele haben mehrere Lösungen.** Ein Leistenziel «triff die Kurve» mit
   \(u = \tfrac{\pi}{6}\) wird auch von \(u = -\tfrac{5\pi}{6}\) getroffen (Periode \(\pi\)). Kurven
   vergleichen (an einigen Stellen auswerten), nicht Reglerwerte.

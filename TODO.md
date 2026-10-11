@@ -192,6 +192,13 @@ noch ausdrücklich, R setzt Fragen zurück (`FRAGEN_JS`); 4 Clips neu vertont (1
   und nächstgelegene Falle gewinnt; `kreis`-Begleiter beschriftet P; Text-Figuren folgen einem bewegten Punkt;
   Achsenzahlen neben statt auf dem Einheitskreis; Bogen entlang des Kreises statt linear; Farbe je Zeitabschnitt in
   `bewegung`; eigene Strichart für `asymptoten`; Kurven direkt in Grad; Beschriftungen weichen einander aus.
+- [ ] Werkzeug-Wünsche aus den LPs 2.2a/2.2b/2.3 (12.10.2026, ohne Auftrag offen): `.claude/tools/pruef-umformer.mjs`
+  bricht bei Lücken mit eigener Prüffunktion ohne `beispiel` mit TypeError ab (sprechende Meldung) und kennt keine
+  Lösungen als Paare/Tripel (Behelf `scripts/lp/gleichungssysteme/pruef-lgs-umformer.mjs`, Figuren `figure.lgs-umformer`,
+  die der geteilte Prüfer nicht sieht); Wortausrichtung Sprechertext ↔ Whisper statt Ankersuche
+  (`scripts/lp/quadratische-gleichungen/clips.py`) als gemeinsames Werkzeug; Fragekasten mit Rückmeldung und zwei
+  Knopfreihen ragt über die Bühne (gemessen am freigeschalteten `g2-2-lp-kontrolle-umformen`: 1133 von 1080 px).
+  Geteiltes Werkzeug — bei Umsetzung auch `TODO-schwesterprojekt.md` und `OFFEN`.
 
 ## Ältere Leitprogramme ans Vorbild angleichen
 
@@ -1209,3 +1216,111 @@ Berichte der Bearbeiter (Hörprobe offen).
 - [x] g5-2d: **k < 0 «gegensinnig»/«gespiegelt»** (Z. 487, Live-Anzeige Z. 1619, 1628, 3122) — falsch, Drehung um 180°, gleichsinnig; Verhältnistreue «gleich k» (Z. 490), «Längen mit k» (Z. 935, Fehlerkasten) → |k|, |k|³.
 - [x] g5-2b: Anim 4 Schenkel «e / f» und «U = a+c+e+f» (Z. 837–838; e, f sind Diagonalen), Legende ohne «≈»; «Animation 4/5» → 6/7 (Z. 588, 605); A7 Drachen d₁, d₂ statt e, f (Z. 1275); A = a·h vs. g·h; Clip `g5-2b-anim-umformung` «zwei Trapeze ergeben das Rechteck» (zuerst Parallelogramm).
 - [x] g5-2a: «Lot auf die Gegenseite/Grundseite» statt «auf die Gerade durch …» (Z. 711, 792); A7 «5√5 m»; «Waagerechte»; «SsW/sSW» vs. 5.3 «SSW».
+
+## Prüfung Lineare Gleichungen (11.10.2026)
+
+Skill `/lp-pruefung leitprogramme/lineare-gleichungen.html`, Stand ungemeldet (vor der Freischaltung, nicht committet).
+`seite.*`/`clips.py` = `scripts/lp/lineare-gleichungen/`, `GT`/`BP` = `downloads/leitprogramme/lineare-gleichungen/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** (Vortest, 1a–5f, Festhalten, Umformer-Knoten, Leistenziele Sim 4/5, 10 Clips samt Geradenstützpunkten,
+25 Kontrollfragen, GT G1–G7 samt Folgefehlern, Punkte 12 / 13·14·13·12·15 / 23, Zeit 235 min). Werkzeuge grün
+(`pruef-uebungen` 10 × 2000, `pruef-formelsatz`, `pruef-leiste` 5, `pruef-umformer` 18, `pruef-fragen` 5 × 9/9, `pruef-clip`).
+Nachgeprüft vom Hauptagenten: H1 (Zeile 991 und Themenseite Z. 381), H3/H4 (Anker `clips.py:340, 927`), M1 (`'!'` = rote Meldung).
+
+**Behoben 12.10.2026** (Bau-Agent): alle HOCH/MITTEL, NIEDRIG fast alle. Bewusst nicht: Vorwissensclip «1:08» (Dauer der Themenseite, HOWTO §7), 4c Telefonbeispiel (dort Ungleichung), GT Seite 4. Neu vertont: 16 Szenen in umformen, kontrolle-umformen, klammern, faelle, kontrolle-faelle, sichten, parameter + 2 Fragetöne; Clipzeit 12:46. Themenseite g2-2a Z. 381 mitkorrigiert.
+
+### HOCH
+- [x] **H1 · Festhalten Kap. 4: «Vergleichszeichen kippt von \(\lt\) über \(=\) zu \(\gt\)» gilt nicht allgemein** (`seite.py:370`; Sim 4 A2/A3 kippen von \(\gt\) zu \(\lt\)). → «kippt (von \(\lt\) zu \(\gt\) oder umgekehrt), dazwischen \(=\)». Gleicher Satz auf der Themenseite `g2-2a` Z. 381 (Kasten «Erkenntnis») — dort mitkorrigieren (§2d).
+- [x] **H2 · Umformer Kap. 3 A2, Knopf «mal 0» bei \(6x+2=6x+2\): Meldung «Die Lösungsmenge ändert sich» ist hier falsch** (ℝ → ℝ; `seite.js:433`, Text Z. 294; ebenso Lösung 1e). → «kann sich ändern; hier zufällig nicht — schliessen darf man daraus nichts», eigene Meldung für diesen Knoten.
+- [x] **H3 · Clip umformen «Minus vor x»: \(-x=-6\) erscheint 3 s vor der Umformung** (`clips.py:340`, `'@bleibt'` trifft «stehen bleibt»). → `'@bleibt#2'`.
+- [x] **H4 · Clip parameter «Zweites Beispiel»: Bild fährt auf \(k=3\), Ton spricht von \(k=2\)** (`clips.py:927/930`). → direkt von \(k=4\) auf \(k=2\) oder Satz zu \(k=3\) einfügen (Neuvertonung der Szene).
+- [x] **H5 · Kontrolle-umformen F4: \(7-2\cdot3=1\) beim Erscheinen der Frage schon lesbar** (`clips.py:397`, `ein=0.29`, Frage 0.3). → Anker ≥ 1.0.
+
+### MITTEL
+- [x] M1 · Umformer Kap. 1: acht gültige Umwege rot als Fehler (`seite.js` 304–340: «+7», «+2x», «+9», «+5x», «−0.5» …) — Prüfliste «Gültige Umwege sind keine Fehler». → `?` mit grauer Meldung «erlaubt, aber …».
+- [x] M2 · Kap. 3 «lineare Gleichung im Sinne der Definition (\(a\neq0\))» vor der Definition (erst Festhalten Kap. 4). → Definition vorziehen.
+- [x] M3 · Clip parameter «Sortieren»: Schritt \(kx-2x=3k-6\) / «x ausklammern» fehlt (auch Festhalten Kap. 5), Kontrolle-parameter F3 fragt ihn ab.
+- [x] M4 · Kontrolle-klammern F1/F4/F5 (und Kontrolle-umformen F2): Ergebniszeile vor der Ausgangsgleichung (`ein` 0.76–0.82 vor 1.0, `clips.py:522/542/548`). → Anker auf Ergebniswörter.
+- [x] M5 · Kontrolle-umformen F3: «Alle anderen Umformungen lassen sich umkehren» zu weit (`clips.py:391`). → «Die beiden anderen …».
+- [x] M6 · GT G5 wiederholt das Modell der Übung «Wann gleich teuer?» und von 4c (Kommentar GT:4–6 behauptet das Gegenteil). → Schnittpunkt nicht auf dem Gitter, z. B. \(K_A=4t+10\), \(K_B=7t\), \(t=10/3\).
+- [x] M7 · BP: (E) auf Ergebnissen aus eigenen Zwischenwerten (G1, G2, G4b, G6 «Allg. Fall», G7b) widerspricht der Folgepunkt-Regel (§15 Prüfliste). → als Folgezeilen ohne (E).
+- [x] M8 · BP G6 «Ungekürzt zählt voll (dann Faktorisieren-Zeile 0)» widersprüchlich; Faktorisieren von \(c(k)\) nur in der Vertiefung 5d geübt. → «vereinfache so weit wie möglich» in die Aufgabe, Raster eindeutig.
+- [x] M9 · GT G7 (\(2k-1\), kritischer Wert Bruch, \(k\) auf beiden Seiten) vorher nicht geübt; G3/G7 nahe an 3c/3d/5c. → 5c oder Übung `param-wert` um \(a(k)=pk+q\) erweitern, G7(a)/G3(b) umformulieren.
+- [x] M10 · Übung `param-wert`: \(|r|=1\) in 25 % der Würfe → Diagnosen «mal statt teilen»/«Faktor vergessen» blind. → \(r\in\{\pm2,\pm3,\pm4\}\).
+- [x] M11 · Lange Stille am Szenenende (3–6 s) in 11 Szenen der Einführungsclips (`dauer` aus der geschätzten Ankerlage). → `dauer` kürzen bzw. neu vertonen, danach `seite.py` (clip-zeit).
+
+### NIEDRIG
+- [x] Seite: Meldung «samt Vorzeichen» bei positivem Teiler irreführend (`zweischritt`, `linear-loesen`); Sim 4 «Normalform: 2 = 0» bei \(a=0\); «Identität» in Lösung 5a; Minigraf 3f C Geraden deckungsgleich; «x» als Text in Rückmeldungen (Z. 666/791/794); Sim 5 «𝕃 = {≈ 0.333}» → Bruch; 5d nicht als Vertiefung markiert; 4c = Telefonbeispiel der Themenseite.
+- [x] Clips: Notiz «1. Klammern · 2. Brüche» vs. Beispiel Bruchstrich; Rückmeldungen Kontrolle-klammern F5 / Kontrolle-sichten F1 verraten fast die Lösung; Text ≠ Ton (Kontrolle-parameter F3 «Welche Form ist richtig?», «nachfolgende Animation»); «nie mal null» fehlt im Merkbild; Gerade \(y=0\) auf der x-Achse unsichtbar (sichten «Normalform»); Sachbereich \(x\ge0\) nicht genannt; Rot für korrekten Term (klammern); Ergebniszeile vor der Erklärung (klammern «Brüche»); Vorwissensclip «1:08» → «1:07»; Kontrolle-sichten F5 Option «rundet weniger».
+- [x] PDFs: «unendlich viele Lösungen», Vielfache der Normalform, \(5x=7\) als gleichwertig regeln; G2 «Bruchstrich» welcher Zeile 0; G3 «nur 𝕃 = ℝ» vs. (E); G6 Sortierfehler \(k^2+4\) regeln; G5(c) «Begründe»; G5 Linien knapp, Seite 4 nur G7.
+
+## Prüfung Quadratische Gleichungen (12.10.2026)
+
+Skill `/lp-pruefung leitprogramme/quadratische-gleichungen.html` (neue Fassung, ersetzt das alte LP gleichen Namens; nicht committet).
+`seite.*`/`clips.py` = `scripts/lp/quadratische-gleichungen/`, `GT`/`BP` = `downloads/leitprogramme/quadratische-gleichungen/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** (Vortest, 1a–5f, Festhalten, 24 Umformer-Aufgaben, Leistenziele Sim 5, 10 Clips samt Parabelstützpunkten,
+25 Kontrollfragen, GT G1–G7 samt Fehlerwerten, Punkte 11 / 13·13·15·13·16 / 25). Werkzeuge grün (`pruef-uebungen` 14 × 2000,
+`pruef-formelsatz`, `pruef-leiste` 5, `pruef-umformer` 24, `pruef-fragen` 5 × 9/9, `pruef-clip` 58 Bilder, `zahlen.py`).
+Nachgeprüft vom Hauptagenten: H1 (Fenster `seite.js:517`, linke Lösung −4.21 bei k = 3.5), H2 (Anker `clips.py:645`).
+
+**Behoben 12.10.2026** (Bau-Agent): alle HOCH/MITTEL, NIEDRIG fast alle. GT G1, G2(a), G3, G5(a)(ii), G6, G7 neu; 3e (Herleitung, Kap. 3 jetzt 16 P), Übung «Exakt mit Wurzel», Vortest √12; Vorwissensclips jetzt `g1-3-binome-erkennen` + `g1-3-zweiklammersatz`. Bewusst nicht: Stille «Die fehlende Ecke»/«Zuerst a prüfen», Vieta-Notiz ungesprochen, Bild zur gliedweisen Wurzel, Kap. 3 bleibt 45 min. Kopfzeile «2.2B» zentral in `lp-druck.sty`. Neu vertont: 7 Szenen + Fragetöne F3 kontrolle-verfahren; Clipzeit 11:58.
+
+### HOCH
+- [x] **H1 · Sim 5 Familie B: ab k = 3.5 liegt die linke Lösung ausserhalb des Fensters** (`seite.js:517`, x ab −4); Leistenaufgabe 4 verlangt «über den ganzen Bereich … nur eine Lösung?» — das Bild zeigt dann genau die Fehlvorstellung. → Fenster je Familie (B etwa x −7…4, y −13…8) oder Regler für B begrenzen.
+- [x] **H2 · Clip formel «Ergänzen»: `| +16` und \(x^2+6x=16\) 2.8 s zu früh** (`clips.py:645/646/653`, `'~Plus'` greift das erste «plus»); ebenso «Beispiel» \(a=2, b=-5, c=-3\) 1.6 s vor «a ist zwei».
+- [x] **H3 · Kontrolle-faktorisieren F2: \(\mathbb{L}=\{0;4\}\) erscheint vor seiner Herleitung** (Anker `~verloren`). → auf «~Richtig» oder später.
+- [x] **H4 · Clip parameter «Zuerst a prüfen»: Ton «für grössere m zwei» ohne «ausser null»** (bei \(m=0\) linear, eine Lösung). → Ton ergänzen (Neuvertonung der Szene).
+
+### MITTEL
+- [x] M1 · GT G3 / G6 / G7 wiederholen die Modelle von 3a / 5a / 5d (Kommentar GT behauptet «Kombinationen»); G2(a) ≈ Kontrolle-faktorisieren F2, G1 = Beispiel aus Festhalten/Clip Kap. 2. → Vorschläge im Prüfbericht: G3 mit Ordnen \(x(x+6)=-2\); G6 \(x^2+kx+k=0\) (\(D=k(k-4)\)); G7 \(kx^2+4x+k=0\) (\(D=16-4k^2\)).
+- [x] M2 · Kapitelziele ohne Prüfung: «Typ bestimmen / Normalform» (Kap. 1/4) und «erklären, woher die Mitternachtsformel kommt» (Kap. 3, K3) — weder Kapitelaufgabe noch GT. → Aufgabe ergänzen (z. B. G5(a)(iv) \((x+2)^2=x^2+8\); allgemeine Ergänzung \(x^2+6x+c\)) oder Ziel abschwächen.
+- [x] M3 · BP: (E) auf Lösungszeilen aus eigenen Zwischenwerten (G3, G4, G5b, G6, G7) widerspricht der Folgepunkt-Regel und «nur einmal abgezogen». → Folgezeilen ohne (E) (wie bei Lineare Gleichungen M7).
+- [x] M4 · BP: anderer Weg in G4 (Faktorisieren \((2x-3)(x+1)\)) ungeregelt, obwohl der KI-Auftrag darauf verweist; G5(a)(iii) «ein Grund genügt?» offen, «Ergänzung nach :3 gleichwertig» widerspricht «schnellstes Verfahren»; G3 «+36 statt +9» und G1 «gliedweise» unentscheidbar formuliert; G7 Fehler «Fall \(k=0\) statt \(k=-2\)» fehlt.
+- [x] M5 · Exakte irrationale Lösungen (\(\sqrt{20}=2\sqrt5\), Kürzen) in 3c, 4a(d) und GT G3 verlangt, aber nirgends eingeführt/geübt (Übung würfelt nur Quadratzahl-D). → Festhalten Kap. 3 + Vortest \(\sqrt{12}\) + Übungsanteil.
+- [x] M6 · Zufallsübungen mit Sonderwerten, die Fehler verdecken: «Quadratisch ergänzen» \(h=\pm1, \pm2\) (⅓ der Würfe), «Wurzel ziehen» \(r=1\); «Parameter vor x» Beispiel `{2; -2}` = Lösung bei \(c=1\) (17 %). Sperre fehlt für `pq|-8` (≈ G6) und `pv|4|1` (≈ G7); Sim-5-Ziele = 3f/2e.
+- [x] M7 · Umformer 4.5: «Faktorisieren» bei \(5x^2-3x-2\) rot, ist aber gültig (\((5x+2)(x-1)\)). → `?` mit grauem Hinweis.
+- [x] M8 · Mitternachtsformel ohne \(D\ge0\) («gilt für jede quadratische Gleichung», «geht immer»; Clips formel/verfahren), Zweiklammersatz im Festhalten 2 ohne Bedingung.
+- [x] M9 · Zweiklammersatz «zwei Zahlen mit Summe 7» für \(x^2-7x+12\) widerspricht der Abmachung von GF 1.3 (\(r+s=p\)); Vorwissensclip `g1-3-faktorisieren-strategie` deckt 0a/0c/0d/0e nicht und verweist auf «den nächsten Clip». → «die beiden Lösungen: Produkt 12, Summe 7» + Vorzeichenhinweis; Clipwahl prüfen.
+
+### NIEDRIG
+- [x] Seite: Umformer 2.1 Meldung bei −7 missverständlich; Proben 1.3/1.5 setzen den Klammerwert statt x ein; Ziel Kap. 1 «\((x-u)^2=r\)» mit unbekanntem u; Übung «Ausklammern» \(w=0\) (\(5x^2=0\)); Vorwissensclip «0:52» → «0:51»; toter Code `seite.js:649`; 5f wiederholt das Festhalten-Beispiel Kap. 5; Kap. 3 (45 min) eher knapp.
+- [x] Clips: lange Stille (formel «Die fehlende Ecke» 2.9 s, parameter «Zuerst a prüfen» 2.7 s); unsortierte Stützpunkte `kontrolle-parameter` F5 (`clips.py:1037`); k-Anzeige bei bewegter Parabel fehlt; Optionen mit/ohne «𝕃 =» (kontrolle-wurzel F3/F4); «nachfolgende Animation» ≠ Bildtext; Vieta-Notiz nicht gesprochen; «zwei ganze Zahlen» ohne «Normalform»; Rückmeldung kontrolle-verfahren F3 verrät fast; gliedweise Wurzel ohne Bild; Grün für Ergänzungszahl.
+- [x] PDFs: Teil A «Kapitel 1 und 2» vs. Zuordnung G2 → 2 und 4; Selbsteinschätzung «schwächster Teil»; G5(a) Schreibfläche knapp; Kopfzeile «2.2B» (`\MakeUppercase` in `lp-druck.sty`, betrifft alle Teilgebiete mit Buchstaben).
+
+## Prüfung Lineare Gleichungssysteme (12.10.2026)
+
+Skill `/lp-pruefung leitprogramme/gleichungssysteme.html` (neue Fassung, ersetzt das alte LP gleichen Namens; nicht committet).
+`seite.*`/`umformer.py`/`clips.py` = `scripts/lp/gleichungssysteme/`, `GT`/`BP` = `downloads/leitprogramme/gleichungssysteme/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** (Vortest, 1a–5f, Festhalten, alle Umformer-Knoten, Punkt-Sucher, Labor A/B/C, 10 Clips samt Geraden,
+25 Kontrollfragen, GT G1–G8 samt Fehlerwerten, Punkte 12 / 12·15·16·15·14 / 25). Werkzeuge grün (`pruef-lgs-umformer` 32 Wege,
+`pruef-uebungen` 10 × 2000, `pruef-formelsatz`, `pruef-leiste` 5, `pruef-fragen` 5 × 9/9, `pruef-clip`, `zahlen.py`).
+Nachgeprüft vom Hauptagenten: H1 (`clips.py:616`), H3 (`seite.js:411` `fam.value = 'A'` in `aufraeumen`).
+
+**Behoben 12.10.2026** (Bau-Agent): alle HOCH/MITTEL, NIEDRIG fast alle. Neue Szene «Subtrahieren» (addition); GT G3(a), G4 (Gleichsetzen), G7 (k in beiden Gleichungen), G8(b) (3×3-Widerspruch) neu; 4f neu (Kap. 4 jetzt 16 P); Vortest 0c Gerade zeichnen; Kap. 2/3 je 45 min (gesamt 255 min). Bewusst nicht: grüne Summengerade 3e, «rechte Seite vergessen» nur eine Vorzeichenlage, k-Marke in faelle, Farben des Vorwissensclips. Alle 10 Clips neu vertont (Anker gemessen); Clipzeit 12:30. Themenseite g2-3 (3×3-Fälle) mitkorrigiert; die Notationspunkte unten bleiben offen.
+
+### HOCH
+- [x] **H1 · Clip addition «Welches Verfahren?»: «gleiche oder entgegengesetzte Zahlen: addieren»** — bei gleichen Zahlen fällt nichts weg (Beispiel gibt \(6x=8\)); Subtrahieren nie gezeigt, aber in kontrolle-addition F3 verlangt. → «gleiche: subtrahieren» + Schritt im Clip.
+- [x] **H2 · 3×3 «\(0=0\): unendlich viele Lösungen» gilt nicht allgemein** (Clip drei «Wenn nichts übrig bleibt», Seite Z. 1199, Themenseite g2-3 Z. 894; Gegenbeispiel mit zweitem Widerspruch). → «\(0=0\) und nirgends ein Widerspruch …; mindestens eine Variable frei».
+- [x] **H3 · Labor Kap. 4: «Nächste» setzt die Familie auf A zurück, Aufgaben 4 und 6 sagen «Familie B/C:»** (im Browser bestätigt; `pruef-leiste` sieht nur den Startzustand). → Familie im `setup` setzen oder Text «Wähle wieder …».
+- [x] **H4 · Bild vor Ton: Ergebnisse 2–6 s vor ihrer Herleitung** — drei «Das 2×2-System» \(y=2\) (Anker «drei» zu früh), drei «Die Probe» (II) vor (I), faelle «Mit Parameter» \(0=9+3k\) mit dem System; Muster «⇒ x = …» in einsetzen «Lösen»/«Gleichsetzen», kontrolle-einsetzen F1/F2, kontrolle-addition F2.
+- [x] **H5 · BP G8 bestraft einen gültigen Weg** (y zweimal eliminieren, wie in kontrolle-drei F1 gelehrt). → Fehler nur, wenn mit (III) ohne Elimination weitergerechnet wird; Begründung «y eliminieren» gleichwertig.
+
+### MITTEL
+- [x] M1 · «Warum das erlaubt ist» (Z. 978, Lösung 3f): Faktor \(\neq0\) und Umkehrbarkeit fehlen.
+- [x] M2 · «Nach y auflösen / Steigungen vergleichen» ohne Bedingung «y kommt vor» (Z. 1095, 761, 764; Gegenbeispiele 3e \(x=3\), Labor C \(k=0\)); kontrolle-faelle «Mitnehmen» ebenso.
+- [x] M3 · BP Folgepunkt-Regeln wie im Schwesterpaket `lineare-gleichungen/bewertungspaket.tex` Z. 50–52 übernehmen ((E) nur direkt aus den Angaben, Folgezeilen, Begriffsfehler einmal); (E) auf Rückeinsetzschritten G4/G5/G8; G1(b) Ablesen (A) und Bestätigen trennen, Fall «Bestätigung richtig gerechnet»; G2 «0 = 0 als Widerspruch» regeln.
+- [x] M4 · GT G7 = 4e (gleiche Bauart, \(k=6\), gleiche Fragen; Kommentar HTML Z. 580 behauptet das Gegenteil); G4 ≈ 3d(a), G1 ≈ 1b, G2 ≈ 4b, G8 ≈ 5d. → G7 auf Familie C (k in beiden Gleichungen) oder «für welches k Lösung …».
+- [x] M5 · Kapitelziele ohne Testaufgabe: Gleichsetzen (Kap. 2; in G4 sogar 0 P), 3×3-Widerspruch (Kap. 5), Lösungsfall am Bild (Kap. 4).
+- [x] M6 · Kontrolle-drei F3 Rückmeldung zu «5» falsch begründet («x = 2 statt −2»; richtig: Vorzeichen beim Freistellen von z); kontrolle-addition F2 «mit −2» ist mit Subtrahieren auch richtig → «beim Addieren» in die Frage.
+- [x] M7 · Läufer-Beschriftung erfüllt die Gleichung nicht (faelle «Unendlich viele» «(2.6 | 1.3)», kontrolle-faelle F3; 50–67 % der Laufzeit). → \(y\) aus gerundetem \(x\).
+- [x] M8 · Lange Stille (3.2–5.0 s) in 9 Szenen (faelle, addition, schnittpunkt, kontrolle-schnittpunkt F4, kontrolle-einsetzen F3/F4, drei, einsetzen).
+- [x] M9 · «Steigung»/«Gerade zeichnen» vorgezogen (GF 3 kommt später), aber nicht im Vortest (§15). → Vortestaufgabe «Zeichne \(y=-2x+3\)».
+- [x] M10 · Lösungen 2a–3c machen die Probe nur in einer Gleichung, gegen den eigenen Warnkasten Z. 772. → beide Proben oder einmal begründen.
+
+### NIEDRIG
+- [x] Seite: 1a «Beide stimmen: 𝕃 = …» schliesst ohne Begründung auf die ganze Menge (auch Live-Zeile Punkt-Sucher); Umformer Kap. 5 A1 Knoten c «in (II) einsetzen» rot, ist gültig (`umformer.py:277`); Diagnose «Nach y auflösen» bei \(b\lt0\) falsch zugeordnet (`seite.js:518`); «proportional» nicht eingeführt (`seite.js:678`, 4e) → «Vielfaches»; «rechte Seite vergessen» nur bei \(+k\) erkannt; 3e Summengerade grün; Definition ohne «a, b nicht beide 0»; «ohne zu rechnen» → «ohne das System zu lösen»; Zeiten Kap. 2/3 knapp.
+- [x] Clips: gesprochene Gleichungen ohne Klammern (kontrolle-addition F3, kontrolle-drei F1 auch im Text); «\(6x+3y=9 = 3\cdot(…)\)» als Kette (kontrolle-faelle F2); «null gleich fünf» vs. Beispiel \(0=2\); «heissen gleiche Steigung»; orange Gerade ohne \(k\)-Marke (faelle); C5 Klammer beim Einsetzen fehlt in der richtigen Antwort; «wandert»; (I)/(II) im Fragetext kontrolle-schnittpunkt F1; «Lösungsmenge ist eins und zwei»; «|+2» fehlt (einsetzen «Lösen»); \(7=7\) zu spät; Vorwissensclip-Farben blau/orange anders belegt.
+- [x] PDFs: G3 Zeile 1 verlangt alle drei Lagen, Begründung über Eliminieren streichen; G4 «am kürzesten» knapp (Addition gleich kurz) — begründete Addition regeln; G1(b) «Verfahren deiner Wahl» vs. Probe; G5 Probe in geordneter Form; G6 Probe allein als Begründung; G7(b) Folgepunkt nach falschem k; Selbsteinschätzung ohne K1/K2; Layout Seite 3 halb leer, G8 allein, G1 wenig Linien.
+- [ ] Themenseite g2-3 (beim Bau gemeldet, nicht Teil des LP): 3×3-Beispiel schreibt \(\{(t \mid t \mid 6-2t) \mid t\in\mathbb{R}\}\) statt Doppelpunkt mit x; dasselbe Beispiel «mit dem Additionsverfahren» rechnet mit Einsetzen; Beschriftung G1/G2/G3 vs. (I)/(II) gemischt.

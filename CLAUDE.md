@@ -54,20 +54,20 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   einen Zähler, der 0 bleiben muss (Muster `STATISTIK.widerspruch` im Systemtrainer), sonst sieht der Selbsttest den
   Fehler nie. Notationstrainer: Karten nennen das Ergebnis, jede Lösung vor dem Eintrag mit `python3` nachrechnen;
   sein `localStorage`-Schlüssel ist in `rechtliches.html` genannt.
-- `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 23 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt. **Seit dem 06.10.2026 sind dort nur die
-  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** (Liste in `leitprogramme.html`). Die sechs älteren (`potenzen`, `quadratische-gleichungen`,
-  `gleichungssysteme`, `uebungspruefung-1`, `trigo2` und seit 08.10.2026 `planimetrie`, abgelöst durch je ein
-  Leitprogramm zu 5.2a–d) bleiben als Dateien bestehen, ihre
+  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** (Liste in `leitprogramme.html`). Die fünf älteren (`potenzen`, `uebungspruefung-1`, `trigo2`, seit 08.10.2026 `planimetrie`, abgelöst durch je ein
+  Leitprogramm zu 5.2a–d, und seit 12.10.2026 `lineare-quadratische-gleichungen`, abgelöst durch je eines zu 2.2a und
+  2.2b; `quadratische-gleichungen` und `gleichungssysteme` sind seither neu gebaut und sichtbar) bleiben als Dateien bestehen, ihre
   Kärtchen stehen vorübergehend unter «Alte Leitprogramme (werden demnächst ersetzt)»
   am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
   im Suchindex. Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine
   kleine Pille «LP» (`.karte-lp`/`.lp-link` in `index.html`). Die zwei Arten:
-  - *nach Thema* (20, Liste in `leitprogramme.html`)
+  - *nach Thema* (21, davon 18 sichtbar, Liste in `leitprogramme.html`)
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,

@@ -185,19 +185,15 @@ SEITEN = {
  'leitprogramme/quadratische-gleichungen.html': dict(
    ort='Leitprogramm · Quadratische Gleichungen',
    typ='article', lrt='Leitprogramm',
-   # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
-   noindex=True,
-   titel='Leitprogramm Quadratische Gleichungen — erst die Sonderfälle, dann die Formel',
-   beschreibung='Leitprogramm zu den quadratischen Gleichungen: die drei Sonderfälle ohne Formel, quadratische Ergänzung und Mitternachtsformel, Diskriminante, Ungleichungen und Parameter — mit Clips, Selbsttests und Gesamttest.',
-   themen=['Mathematik', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Diskriminante', 'Leitprogramm']),
+   titel='Leitprogramm Quadratische Gleichungen — Wurzelziehen, Nullprodukt, Mitternachtsformel, Parameter',
+   beschreibung='Leitprogramm zu den quadratischen Gleichungen nach RLP GF 2.2b: Wurzelziehen, Satz vom Nullprodukt und Faktorisieren, quadratische Ergänzung, Mitternachtsformel und Diskriminante, das passende Verfahren wählen und die Parameterdiskussion — mit Clips, einem Umformer zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Diskriminante', 'Parameterdiskussion', 'Leitprogramm']),
  'leitprogramme/gleichungssysteme.html': dict(
-   ort='Leitprogramm · Gleichungssysteme',
+   ort='Leitprogramm · Lineare Gleichungssysteme',
    typ='article', lrt='Leitprogramm',
-   # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
-   noindex=True,
-   titel='Leitprogramm Gleichungssysteme — vier Wege zum Schnittpunkt',
-   beschreibung='Leitprogramm zu den linearen Gleichungssystemen: grafisch, Einsetzen, Gleichsetzen und Addition, dazu die drei möglichen Lösungsanzahlen, drei Variablen und der Schnitt von Gerade und Parabel — mit Clips, Selbsttests und Gesamttest.',
-   themen=['Mathematik', 'Gleichungssysteme', 'Additionsverfahren', 'Einsetzverfahren', 'Leitprogramm']),
+   titel='Leitprogramm Lineare Gleichungssysteme — Schnittpunkt, Einsetzen, Addieren, drei Variablen',
+   beschreibung='Leitprogramm zu den linearen Gleichungssystemen nach RLP GF 2.3: die Lösung als Schnittpunkt, Einsetz-, Gleichsetz- und Additionsverfahren, keine oder unendlich viele Lösungen grafisch deuten und Systeme mit drei Variablen — mit Clips, einem Umformer zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Gleichungssysteme', 'Additionsverfahren', 'Einsetzverfahren', 'Lösungsmenge', 'Leitprogramm']),
  'leitprogramme/uebungspruefung-1.html': dict(
    ort='Leitprogramm · Übungsprüfung 1',
    typ='article', lrt='Leitprogramm',
@@ -258,9 +254,17 @@ SEITEN = {
    titel='Leitprogramm Planimetrie — Dreiecke, Vierecke, Kreis und Ähnlichkeit',
    beschreibung='Leitprogramm zur Planimetrie nach RLP GF 5.2: Dreiecke beschreiben und ihre Elemente, Dreiecksfläche und zugehörige Höhe, Vierecke mit Mittellinie und Pythagoras, Kreis und Kreisteile, zentrische Streckung, Ähnlichkeit und Strahlensätze — mit Clips, einem Geometrie-Arbeitsbereich zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Planimetrie', 'Dreieck', 'Kreis', 'Ähnlichkeit', 'Leitprogramm']),
+ 'leitprogramme/lineare-gleichungen.html': dict(
+   ort='Leitprogramm · Lineare Gleichungen',
+   typ='article', lrt='Leitprogramm',
+   titel='Leitprogramm Lineare Gleichungen — umformen, Klammern und Brüche, Lösungsfälle, Parameter',
+   beschreibung='Leitprogramm zu den linearen Gleichungen nach RLP GF 2.2a: Äquivalenzumformungen und Probe, Klammern und Brüche, die drei Lösungsfälle, Normalform, Tabelle und Graph und die Parameterdiskussion — mit Clips, einem Umformer zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Lineare Gleichungen', 'Äquivalenzumformung', 'Parameterdiskussion', 'Leitprogramm']),
  'leitprogramme/lineare-quadratische-gleichungen.html': dict(
    ort='Leitprogramm · Lineare und quadratische Gleichungen',
    typ='article', lrt='Leitprogramm',
+   # abgelöst am 12.10.2026 durch je ein Leitprogramm zu 2.2a und 2.2b (unter «Alte Leitprogramme»)
+   noindex=True,
    titel='Leitprogramm Lineare und quadratische Gleichungen — umformen, Nullprodukt, Mitternachtsformel, Parameter',
    beschreibung='Leitprogramm zu den linearen und quadratischen Gleichungen nach RLP GF 2.2: Äquivalenzumformungen und die drei Lösungsfälle, Ausklammern und Satz vom Nullprodukt, Wurzelziehen, quadratische Ergänzung und Mitternachtsformel, das passende Verfahren wählen und die Parameterdiskussion — mit Clips, einem Umformer zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Lineare Gleichungen', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Parameterdiskussion', 'Leitprogramm']),

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Quadratische Gleichungen lösen: das passende Verfahren</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;gap:14px;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Gleichungen · quadratisch</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>11.10.2026</span></div>
+<div class="l m row" data-at="0.30" data-out="19.06" data-anim="rise" style="left:150px;top:250px;font-size:50px"><span>\((x - 1)^2 = x^2 + 7\)</span></div>
+<div class="l m row" data-at="10.66" data-out="19.06" data-anim="rise" style="left:150px;top:340px;font-size:46px"><span>\(x^2 - 2x + 1 = x^2 + 7\)</span></div>
+<div class="l m row" data-at="11.24" data-out="19.06" data-anim="rise" style="left:700px;top:340px;font-size:44px"><span>\(\fb{\mid -x^2}\)</span></div>
+<div class="l m row" data-at="13.00" data-out="19.06" data-anim="rise" style="left:150px;top:430px;font-size:50px"><span>\(-2x + 1 = 7\)</span></div>
+<div class="l m row" data-at="16.84" data-out="19.06" data-anim="rise" style="left:150px;top:520px;font-size:50px"><span>\(x = \fc{-3}\)</span></div>
+<div class="l graf" data-at="0.30" data-t0="0.00" data-out="19.06" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="82.4" y1="0" x2="82.4" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="156.8" y1="0" x2="156.8" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="231.2" y1="0" x2="231.2" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="305.6" y1="0" x2="305.6" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="528.8" y1="0" x2="528.8" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="603.2" y1="0" x2="603.2" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="677.6" y1="0" x2="677.6" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="549.1" x2="760" y2="549.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="413.8" x2="760" y2="413.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="278.5" x2="760" y2="278.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="143.3" x2="760" y2="143.3" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="684.4" x2="760" y2="684.4" stroke="#1c1a17" stroke-width="3"/><line x1="454.4" y1="760" x2="454.4" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,684.4 742.0,675.4 742.0,693.4" fill="#1c1a17"/><polygon points="454.4,0 445.4,18 463.4,18" fill="#1c1a17"/><text x="734.0" y="670.4" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="468.4" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="82.4" y1="677.4" x2="82.4" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="82.4" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−5</text><line x1="156.8" y1="677.4" x2="156.8" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="156.8" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="231.2" y1="677.4" x2="231.2" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="231.2" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−3</text><line x1="305.6" y1="677.4" x2="305.6" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="305.6" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="380.0" y1="677.4" x2="380.0" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="380.0" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="528.8" y1="677.4" x2="528.8" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="528.8" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="603.2" y1="677.4" x2="603.2" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="603.2" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="677.6" y1="677.4" x2="677.6" y2="691.4" stroke="#1c1a17" stroke-width="2.5"/><text x="677.6" y="716.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="447.4" y1="549.1" x2="461.4" y2="549.1" stroke="#1c1a17" stroke-width="2.5"/><text x="441.4" y="557.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="447.4" y1="413.8" x2="461.4" y2="413.8" stroke="#1c1a17" stroke-width="2.5"/><text x="441.4" y="421.8" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">8</text><line x1="447.4" y1="278.5" x2="461.4" y2="278.5" stroke="#1c1a17" stroke-width="2.5"/><text x="441.4" y="286.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">12</text><line x1="447.4" y1="143.3" x2="461.4" y2="143.3" stroke="#1c1a17" stroke-width="2.5"/><text x="441.4" y="151.3" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">16</text><path data-bew="[[0, 1, -2, 1], [11.24, 1, -2, 1], [12.84, 0, -2, 1]]" data-paar="bew0" data-fenster="-6,4,-2,20,760,760,8" data-normal="1" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><path data-bew="[[0, 1, 0, 7], [11.24, 1, 0, 7], [12.84, 0, 0, 7]]" data-paar="bew1" data-fenster="-6,4,-2,20,760,760,8" data-normal="1" fill="none" stroke="#b85c00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><path data-fenster="-6,4,-2,20,760,760,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="16.84" data-out="19.06" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><circle cx="231.2" cy="447.6" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="231.2" cy="447.6" r="5" fill="#1f6b3a"/><text x="208.9" y="495.0" font-size="29" font-weight="600" fill="#1f6b3a" text-anchor="end">(−3 | 7)</text></svg></div>
+<div class="l m row" data-at="21.70" data-out="36.91" data-anim="rise" style="left:150px;top:260px;font-size:48px"><span>\(3x^2 - 48 = 0\)</span></div>
+<div class="l m row" data-at="22.50" data-out="36.91" data-anim="rise" style="left:640px;top:260px;font-size:44px"><span>\(\to\ \text{Wurzel ziehen}\)</span></div>
+<div class="l m row" data-at="23.26" data-out="36.91" data-anim="rise" style="left:150px;top:360px;font-size:48px"><span>\(x^2 + 9x = 0\)</span></div>
+<div class="l m row" data-at="24.06" data-out="36.91" data-anim="rise" style="left:640px;top:360px;font-size:44px"><span>\(\to\ \text{ausklammern}\)</span></div>
+<div class="l m row" data-at="24.54" data-out="36.91" data-anim="rise" style="left:150px;top:460px;font-size:48px"><span>\(x^2 - 8x + 15 = 0\)</span></div>
+<div class="l m row" data-at="29.28" data-out="36.91" data-anim="rise" style="left:640px;top:460px;font-size:44px"><span>\(\to\ \text{faktorisieren}\)</span></div>
+<div class="l m row" data-at="29.93" data-out="36.91" data-anim="rise" style="left:150px;top:560px;font-size:48px"><span>\(3x^2 + 2x - 2 = 0\)</span></div>
+<div class="l m row" data-at="30.88" data-out="36.91" data-anim="rise" style="left:640px;top:560px;font-size:44px"><span>\(\to\ \text{Formel}\)</span></div>
+<div class="l hand" data-at="32.06" data-out="36.91" data-anim="rise" style="left:150px;top:680px;font-size:42px;color:var(--blau)">Die Formel geht immer — bei \(D \lt 0\) zeigt sie: keine Lösung.</div>
+<div class="l m row" data-at="37.21" data-out="50.92" data-anim="rise" style="left:150px;top:260px;font-size:48px"><span>\(x^2 - 8x + 15 = (x - 3)(x - 5)\)</span></div>
+<div class="l hand" data-at="43.78" data-out="50.92" data-anim="rise" style="left:150px;top:380px;font-size:46px;color:var(--blau)">\(3 + 5 = 8 = -p\) ✓</div>
+<div class="l hand" data-at="45.76" data-out="50.92" data-anim="rise" style="left:150px;top:470px;font-size:46px;color:var(--blau)">\(3 \cdot 5 = 15 = q\) ✓</div>
+<div class="l graf" data-at="37.21" data-t0="36.91" data-out="50.92" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="194.0" y1="0" x2="194.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="287.0" y1="0" x2="287.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="473.0" y1="0" x2="473.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="566.0" y1="0" x2="566.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="659.0" y1="0" x2="659.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="659.0" x2="760" y2="659.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="380.0" x2="760" y2="380.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="194.0" x2="760" y2="194.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="566.0" x2="760" y2="566.0" stroke="#1c1a17" stroke-width="3"/><line x1="101.0" y1="760" x2="101.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,566.0 742.0,557.0 742.0,575.0" fill="#1c1a17"/><polygon points="101.0,0 92.0,18 110.0,18" fill="#1c1a17"/><text x="734.0" y="552.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="115.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="194.0" y1="559.0" x2="194.0" y2="573.0" stroke="#1c1a17" stroke-width="2.5"/><text x="194.0" y="598.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="287.0" y1="559.0" x2="287.0" y2="573.0" stroke="#1c1a17" stroke-width="2.5"/><text x="287.0" y="598.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="380.0" y1="559.0" x2="380.0" y2="573.0" stroke="#1c1a17" stroke-width="2.5"/><text x="380.0" y="598.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="473.0" y1="559.0" x2="473.0" y2="573.0" stroke="#1c1a17" stroke-width="2.5"/><text x="473.0" y="598.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="566.0" y1="559.0" x2="566.0" y2="573.0" stroke="#1c1a17" stroke-width="2.5"/><text x="566.0" y="598.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">5</text><line x1="659.0" y1="559.0" x2="659.0" y2="573.0" stroke="#1c1a17" stroke-width="2.5"/><text x="659.0" y="598.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">6</text><line x1="94.0" y1="659.0" x2="108.0" y2="659.0" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="667.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="94.0" y1="380.0" x2="108.0" y2="380.0" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="388.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="94.0" y1="194.0" x2="108.0" y2="194.0" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="202.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><path data-bew="[[0, 1, 4, -1]]" data-paar="bew0" data-fenster="-1,7,-2,6,760,760,8" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><g class="bew-n bew-n1" data-zu="bew0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g><text font-size="29" font-weight="600" fill="#1f6b3a" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g><g class="bew-n bew-n2" data-zu="bew0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g><text font-size="29" font-weight="600" fill="#1f6b3a" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g><path data-fenster="-1,7,-2,6,760,760,8" d="" fill="none"/></svg></div>
+<div class="l m row" data-at="51.22" data-out="69.63" data-anim="rise" style="left:150px;top:250px;font-size:50px"><span>\(x(x + 4) = 12\)</span></div>
+<div class="l hand" data-at="56.34" data-out="69.63" data-anim="rise" style="left:150px;top:340px;font-size:42px;color:var(--rot)">kein Nullprodukt: rechts steht \(12\)</div>
+<div class="l m row" data-at="57.78" data-out="69.63" data-anim="rise" style="left:150px;top:430px;font-size:50px"><span>\(x^2 + 4x - 12 = 0\)</span></div>
+<div class="l m row" data-at="63.02" data-out="69.63" data-anim="rise" style="left:150px;top:520px;font-size:50px"><span>\((x + 6)(x - 2) = 0\)</span></div>
+<div class="l m row" data-at="66.54" data-out="69.63" data-anim="rise" style="left:150px;top:620px;font-size:50px"><span>\(\mathbb{L} = \{\fc{-6};\ \fc{2}\}\)</span></div>
+<div class="l graf" data-at="51.22" data-t0="50.92" data-out="69.63" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="70.0" y1="0" x2="70.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="132.0" y1="0" x2="132.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="194.0" y1="0" x2="194.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="256.0" y1="0" x2="256.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="318.0" y1="0" x2="318.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="442.0" y1="0" x2="442.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="566.0" y1="0" x2="566.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="628.0" y1="0" x2="628.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="690.0" y1="0" x2="690.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="684.4" x2="760" y2="684.4" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="413.8" x2="760" y2="413.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="278.5" x2="760" y2="278.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="143.3" x2="760" y2="143.3" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="549.1" x2="760" y2="549.1" stroke="#1c1a17" stroke-width="3"/><line x1="504.0" y1="760" x2="504.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,549.1 742.0,540.1 742.0,558.1" fill="#1c1a17"/><polygon points="504.0,0 495.0,18 513.0,18" fill="#1c1a17"/><text x="734.0" y="535.1" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="518.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="70.0" y1="542.1" x2="70.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="70.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−7</text><line x1="132.0" y1="542.1" x2="132.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="132.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−6</text><line x1="194.0" y1="542.1" x2="194.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="194.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−5</text><line x1="256.0" y1="542.1" x2="256.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="256.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="318.0" y1="542.1" x2="318.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="318.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−3</text><line x1="380.0" y1="542.1" x2="380.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="380.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="442.0" y1="542.1" x2="442.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="442.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="566.0" y1="542.1" x2="566.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="566.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="628.0" y1="542.1" x2="628.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="628.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="690.0" y1="542.1" x2="690.0" y2="556.1" stroke="#1c1a17" stroke-width="2.5"/><text x="690.0" y="581.1" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="497.0" y1="684.4" x2="511.0" y2="684.4" stroke="#1c1a17" stroke-width="2.5"/><text x="491.0" y="692.4" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="497.0" y1="413.8" x2="511.0" y2="413.8" stroke="#1c1a17" stroke-width="2.5"/><text x="491.0" y="421.8" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="497.0" y1="278.5" x2="511.0" y2="278.5" stroke="#1c1a17" stroke-width="2.5"/><text x="491.0" y="286.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">8</text><line x1="497.0" y1="143.3" x2="511.0" y2="143.3" stroke="#1c1a17" stroke-width="2.5"/><text x="491.0" y="151.3" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">12</text><path data-bew="[[0, 1, -2, -4]]" data-paar="bew0" data-fenster="-8,4,-6,16,760,760,8" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><polyline points="8.0,143.3 9.6,143.3 11.1,143.3 12.7,143.3 14.2,143.3 15.8,143.3 17.3,143.3 18.8,143.3 20.4,143.3 21.9,143.3 23.5,143.3 25.1,143.3 26.6,143.3 28.2,143.3 29.7,143.3 31.2,143.3 32.8,143.3 34.3,143.3 35.9,143.3 37.4,143.3 39.0,143.3 40.6,143.3 42.1,143.3 43.7,143.3 45.2,143.3 46.8,143.3 48.3,143.3 49.8,143.3 51.4,143.3 52.9,143.3 54.5,143.3 56.1,143.3 57.6,143.3 59.2,143.3 60.7,143.3 62.2,143.3 63.8,143.3 65.3,143.3 66.9,143.3 68.4,143.3 70.0,143.3 71.6,143.3 73.1,143.3 74.7,143.3 76.2,143.3 77.8,143.3 79.3,143.3 80.8,143.3 82.4,143.3 83.9,143.3 85.5,143.3 87.1,143.3 88.6,143.3 90.2,143.3 91.7,143.3 93.2,143.3 94.8,143.3 96.3,143.3 97.9,143.3 99.4,143.3 101.0,143.3 102.6,143.3 104.1,143.3 105.7,143.3 107.2,143.3 108.8,143.3 110.3,143.3 111.8,143.3 113.4,143.3 114.9,143.3 116.5,143.3 118.1,143.3 119.6,143.3 121.2,143.3 122.7,143.3 124.2,143.3 125.8,143.3 127.3,143.3 128.9,143.3 130.4,143.3 132.0,143.3 133.6,143.3 135.1,143.3 136.7,143.3 138.2,143.3 139.8,143.3 141.3,143.3 142.8,143.3 144.4,143.3 145.9,143.3 147.5,143.3 149.1,143.3 150.6,143.3 152.2,143.3 153.7,143.3 155.2,143.3 156.8,143.3 158.3,143.3 159.9,143.3 161.4,143.3 163.0,143.3 164.6,143.3 166.1,143.3 167.7,143.3 169.2,143.3 170.8,143.3 172.3,143.3 173.8,143.3 175.4,143.3 176.9,143.3 178.5,143.3 180.1,143.3 181.6,143.3 183.2,143.3 184.7,143.3 186.2,143.3 187.8,143.3 189.3,143.3 190.9,143.3 192.4,143.3 194.0,143.3 195.6,143.3 197.1,143.3 198.7,143.3 200.2,143.3 201.8,143.3 203.3,143.3 204.8,143.3 206.4,143.3 207.9,143.3 209.5,143.3 211.1,143.3 212.6,143.3 214.2,143.3 215.7,143.3 217.2,143.3 218.8,143.3 220.3,143.3 221.9,143.3 223.4,143.3 225.0,143.3 226.6,143.3 228.1,143.3 229.7,143.3 231.2,143.3 232.8,143.3 234.3,143.3 235.8,143.3 237.4,143.3 238.9,143.3 240.5,143.3 242.1,143.3 243.6,143.3 245.2,143.3 246.7,143.3 248.2,143.3 249.8,143.3 251.3,143.3 252.9,143.3 254.4,143.3 256.0,143.3 257.6,143.3 259.1,143.3 260.6,143.3 262.2,143.3 263.8,143.3 265.3,143.3 266.8,143.3 268.4,143.3 269.9,143.3 271.5,143.3 273.1,143.3 274.6,143.3 276.1,143.3 277.7,143.3 279.2,143.3 280.8,143.3 282.3,143.3 283.9,143.3 285.4,143.3 287.0,143.3 288.6,143.3 290.1,143.3 291.7,143.3 293.2,143.3 294.8,143.3 296.3,143.3 297.9,143.3 299.4,143.3 300.9,143.3 302.5,143.3 304.1,143.3 305.6,143.3 307.2,143.3 308.7,143.3 310.2,143.3 311.8,143.3 313.3,143.3 314.9,143.3 316.4,143.3 318.0,143.3 319.6,143.3 321.1,143.3 322.6,143.3 324.2,143.3 325.8,143.3 327.3,143.3 328.8,143.3 330.4,143.3 331.9,143.3 333.5,143.3 335.1,143.3 336.6,143.3 338.2,143.3 339.7,143.3 341.2,143.3 342.8,143.3 344.4,143.3 345.9,143.3 347.4,143.3 349.0,143.3 350.6,143.3 352.1,143.3 353.7,143.3 355.2,143.3 356.8,143.3 358.3,143.3 359.8,143.3 361.4,143.3 362.9,143.3 364.5,143.3 366.1,143.3 367.6,143.3 369.1,143.3 370.7,143.3 372.2,143.3 373.8,143.3 375.3,143.3 376.9,143.3 378.4,143.3 380.0,143.3 381.6,143.3 383.1,143.3 384.6,143.3 386.2,143.3 387.8,143.3 389.3,143.3 390.8,143.3 392.4,143.3 393.9,143.3 395.5,143.3 397.1,143.3 398.6,143.3 400.2,143.3 401.7,143.3 403.2,143.3 404.8,143.3 406.3,143.3 407.9,143.3 409.4,143.3 411.0,143.3 412.6,143.3 414.1,143.3 415.7,143.3 417.2,143.3 418.8,143.3 420.3,143.3 421.9,143.3 423.4,143.3 424.9,143.3 426.5,143.3 428.1,143.3 429.6,143.3 431.1,143.3 432.7,143.3 434.2,143.3 435.8,143.3 437.3,143.3 438.9,143.3 440.4,143.3 442.0,143.3 443.6,143.3 445.1,143.3 446.7,143.3 448.2,143.3 449.8,143.3 451.3,143.3 452.8,143.3 454.4,143.3 455.9,143.3 457.5,143.3 459.1,143.3 460.6,143.3 462.2,143.3 463.7,143.3 465.2,143.3 466.8,143.3 468.4,143.3 469.9,143.3 471.4,143.3 473.0,143.3 474.6,143.3 476.1,143.3 477.6,143.3 479.2,143.3 480.8,143.3 482.3,143.3 483.8,143.3 485.4,143.3 486.9,143.3 488.5,143.3 490.1,143.3 491.6,143.3 493.2,143.3 494.7,143.3 496.2,143.3 497.8,143.3 499.3,143.3 500.9,143.3 502.4,143.3 504.0,143.3 505.6,143.3 507.1,143.3 508.6,143.3 510.2,143.3 511.8,143.3 513.3,143.3 514.9,143.3 516.4,143.3 518.0,143.3 519.5,143.3 521.0,143.3 522.6,143.3 524.1,143.3 525.7,143.3 527.2,143.3 528.8,143.3 530.4,143.3 531.9,143.3 533.4,143.3 535.0,143.3 536.6,143.3 538.1,143.3 539.6,143.3 541.2,143.3 542.8,143.3 544.3,143.3 545.9,143.3 547.4,143.3 548.9,143.3 550.5,143.3 552.1,143.3 553.6,143.3 555.1,143.3 556.7,143.3 558.2,143.3 559.8,143.3 561.4,143.3 562.9,143.3 564.5,143.3 566.0,143.3 567.5,143.3 569.1,143.3 570.6,143.3 572.2,143.3 573.8,143.3 575.3,143.3 576.9,143.3 578.4,143.3 579.9,143.3 581.5,143.3 583.1,143.3 584.6,143.3 586.1,143.3 587.7,143.3 589.2,143.3 590.8,143.3 592.4,143.3 593.9,143.3 595.4,143.3 597.0,143.3 598.6,143.3 600.1,143.3 601.6,143.3 603.2,143.3 604.8,143.3 606.3,143.3 607.9,143.3 609.4,143.3 611.0,143.3 612.5,143.3 614.0,143.3 615.6,143.3 617.1,143.3 618.7,143.3 620.2,143.3 621.8,143.3 623.4,143.3 624.9,143.3 626.4,143.3 628.0,143.3 629.6,143.3 631.1,143.3 632.6,143.3 634.2,143.3 635.8,143.3 637.3,143.3 638.9,143.3 640.4,143.3 641.9,143.3 643.5,143.3 645.1,143.3 646.6,143.3 648.1,143.3 649.7,143.3 651.2,143.3 652.8,143.3 654.4,143.3 655.9,143.3 657.5,143.3 659.0,143.3 660.5,143.3 662.1,143.3 663.6,143.3 665.2,143.3 666.8,143.3 668.3,143.3 669.9,143.3 671.4,143.3 672.9,143.3 674.5,143.3 676.1,143.3 677.6,143.3 679.1,143.3 680.7,143.3 682.2,143.3 683.8,143.3 685.4,143.3 686.9,143.3 688.4,143.3 690.0,143.3 691.6,143.3 693.1,143.3 694.6,143.3 696.2,143.3 697.8,143.3 699.3,143.3 700.9,143.3 702.4,143.3 704.0,143.3 705.5,143.3 707.0,143.3 708.6,143.3 710.1,143.3 711.7,143.3 713.2,143.3 714.8,143.3 716.4,143.3 717.9,143.3 719.4,143.3 721.0,143.3 722.6,143.3 724.1,143.3 725.6,143.3 727.2,143.3 728.8,143.3 730.3,143.3 731.9,143.3 733.4,143.3 734.9,143.3 736.5,143.3 738.1,143.3 739.6,143.3 741.1,143.3 742.7,143.3 744.2,143.3 745.8,143.3 747.4,143.3 748.9,143.3 750.5,143.3 752.0,143.3" fill="none" stroke="#b85c00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 10"/><path data-fenster="-8,4,-6,16,760,760,8" d="" fill="none"/></svg></div>
+<div class="l graf" data-at="66.54" data-out="69.63" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><circle cx="132.0" cy="143.3" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="132.0" cy="143.3" r="5" fill="#1f6b3a"/><text x="150.6" y="89.2" font-size="29" font-weight="600" fill="#1f6b3a" text-anchor="start">(−6 | 12)</text><circle cx="628.0" cy="143.3" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="628.0" cy="143.3" r="5" fill="#1f6b3a"/><text x="609.4" y="89.2" font-size="29" font-weight="600" fill="#1f6b3a" text-anchor="end">(2 | 12)</text></svg></div>
+<div class="l hand mitte" data-at="70.03" data-out="77.46" data-anim="rise" style="left:150px;top:240px;font-size:76px;font-weight:600;color:var(--tinte)">Zum Mitnehmen</div>
+<div class="l hand" data-at="70.83" data-out="77.46" data-anim="rise" style="left:150px;top:380px;font-size:42px;color:var(--blau)">ordnen, Typ bestimmen<br>\(b = 0\): Wurzel; \(c = 0\): ausklammern<br>zerlegbar: faktorisieren; sonst: Formel<br>Probe oder Vieta</div>
+<div class="l hand mitte" data-at="77.86" data-out="81.45" data-anim="rise" style="left:150px;top:280px;font-size:86px;font-weight:600;color:var(--tinte)">Jetzt du</div>
+<div class="l hand" data-at="78.06" data-out="81.45" data-anim="rise" style="left:150px;top:430px;font-size:50px;color:var(--blau)">Löse die Aufgaben<br>im Umformer unter dem Clip.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-2b-lp-verfahren.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 81.45;
+const SPRECHER = [{"bei": 0.4, "text": "Bevor du ein Verfahren wählst: ausmultiplizieren und alles auf eine Seite. Erst dann siehst du den Typ. Klammer x minus eins, im Quadrat, gleich x Quadrat plus sieben. Ausmultipliziert heben sich die x Quadrat weg. Es bleibt minus zwei x plus eins gleich sieben, eine lineare Gleichung. x ist minus drei."}, {"bei": 19.46, "text": "Steht rechts null, entscheidet die Form. Fehlt b, zieh die Wurzel. Fehlt c, klammere aus. Hat die Normalform zwei ganzzahlige Lösungen, die du über Produkt und Summe findest, faktorisiere. Sonst nimm die Mitternachtsformel. Sie geht immer; ist D negativ, zeigt sie, dass es keine Lösung gibt."}, {"bei": 37.31, "text": "Kontrolliere am Schluss. Bei x Quadrat minus acht x plus fünfzehn sind die Lösungen drei und fünf. Summe acht, das ist minus p. Produkt fünfzehn, das ist q. Beides stimmt. Das ist der Satz von Vieta."}, {"bei": 51.32, "text": "Und nie ein Verfahren, bevor rechts null steht. x mal Klammer x plus vier gleich zwölf ist kein Nullprodukt. Ausmultiplizieren und minus zwölf: x Quadrat plus vier x minus zwölf gleich null. Faktorisiert: Klammer x plus sechs mal Klammer x minus zwei. Die Lösungen sind minus sechs und zwei."}, {"bei": 70.03, "text": "Zum Mitnehmen: Ordnen, den Typ bestimmen, dann das kürzeste passende Verfahren. Am Schluss die Probe oder Vieta."}, {"bei": 77.86, "text": "Jetzt du: Löse die Aufgaben im Umformer unter dem Clip."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
+}
+
+const RUHIG = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
+  t0: parseFloat(L.dataset.t0),
+  teile: [...L.querySelectorAll('[data-bew]')].map(p => ({
+    art: 'p', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number) }))
+    .concat([...L.querySelectorAll('[data-bewg]')].map(p => ({
+      art: 'g', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewg), f: p.dataset.fenster.split(',').map(Number) })))
+    .concat([...L.querySelectorAll('[data-bewk]')].map(p => ({
+      art: 'k', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewk), f: p.dataset.fenster.split(',').map(Number),
+      stufen: p.dataset.stufen === '1', poly: p.dataset.poly === '1', el: p.dataset.el || '', lin: p.dataset.gleich === '1' })))
+    .concat([...L.querySelectorAll('[data-fkl]')].map(p => ({
+      art: 'f', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fkl), f: p.dataset.fenster.split(',').map(Number),
+      tab: JSON.parse(p.dataset.tab), ab: parseFloat(p.dataset.ab), bis: parseFloat(p.dataset.bis) })))
+    .concat([...L.querySelectorAll('[data-fp]')].map(p => {
+      const namen = p.dataset.namen.split(',');
+      return { art: 'fp', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fp), f: p.dataset.fenster.split(',').map(Number),
+        fn: new Function('x', ...namen, 'return ' + p.dataset.js), namen };
+    }))
+}));
+// Formelkurve mit Parametern ("parameter", seit 07.10.2026): die Formel kommt als JavaScript aus
+// dem Bauer (formel_js), die Buchstaben aus der Zeit. Luecken (NaN, Pole) brechen den Zug ab.
+function bewegeFormel(T, t, px, py, x0, x1, y0, y1) {
+  const P = bewZustand(T.k, t - T.t0);
+  const f = x => { const y = T.fn(x, ...P); return isFinite(y) ? y : null; };
+  const a0 = Math.max(x0, parseFloat(T.p.dataset.von)), a1 = Math.min(x1, parseFloat(T.p.dataset.bis));
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y === null || y < y0 || y > y1) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    const fx = g._fx || (g._fx = new Function(...T.namen, 'return ' + g.dataset.xjs));
+    const x = fx(...P), y = f(x);
+    const ok = y !== null && x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    g.style.display = ok ? '' : 'none';
+    if (!ok) continue;
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); });
+    const tx = g.querySelector(':scope > text'); if (!tx) continue;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18)); tx.setAttribute('y', py(y) < 60 ? py(y) + 44 : py(y) - 22);
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+  }
+}
+// Zuletzt die Beschriftungen der mitfahrenden Punkte (seit 07.10.2026): "lage" setzt sie fest
+// (oben, unten, links, rechts, auch zwei davon), und keine ragt ueber den Rand des Bildes.
+function beschriftungenRichten() {
+  for (const L of document.querySelectorAll('[data-t0]'))
+    for (const g of L.querySelectorAll('[data-zu], .fk-l')) {
+      if (g.style.display === 'none') continue;
+      const tx = g.querySelector(':scope > text'), c = g.querySelector('.bew-pt circle');
+      if (!tx || !c || !tx.textContent) continue;
+      const X = parseFloat(c.getAttribute('cx')), Y = parseFloat(c.getAttribute('cy'));
+      if (g.dataset.lage) {
+        const w = g.dataset.lage.split(/\s+/), li = w.includes('links'), re = w.includes('rechts');
+        const ob = w.includes('oben'), un = w.includes('unten');
+        tx.setAttribute('x', X + (li ? -18 : re ? 18 : 0));
+        tx.setAttribute('y', ob ? Y - 22 : un ? Y + 44 : Y + 10);
+        tx.setAttribute('text-anchor', li ? 'end' : re ? 'start' : 'middle');
+      }
+      let w;
+      try { w = tx.getComputedTextLength(); } catch (e) { continue; }
+      const svg = tx.ownerSVGElement; if (!w || !svg) continue;
+      const B = svg.viewBox.baseVal && svg.viewBox.baseVal.width || svg.width.baseVal.value;
+      const x = parseFloat(tx.getAttribute('x')), an = tx.getAttribute('text-anchor') || 'start';
+      const l = an === 'start' ? x : an === 'end' ? x - w : x - w / 2;
+      // Seitlich stehende Beschriftung auf die andere Seite des Punkts klappen, mittige schieben
+      if (l + w > B - 4) {
+        if (an === 'start' && X - 18 - w >= 4) { tx.setAttribute('x', X - 18); tx.setAttribute('text-anchor', 'end'); }
+        else tx.setAttribute('x', x - (l + w - (B - 4)));
+      } else if (l < 4) {
+        if (an === 'end' && X + 18 + w <= B - 4) { tx.setAttribute('x', X + 18); tx.setAttribute('text-anchor', 'start'); }
+        else tx.setAttribute('x', x + (4 - l));
+      }
+    }
+}
+// Laeufer auf einer festen Formelkurve: x aus der Bahn, y linear aus der Wertetabelle.
+function laufeFest(T, t, px, py, x0, x1, y0, y1) {
+  const x = bewZustand(T.k, t - T.t0)[0], n = T.tab.length - 1;
+  const q = (x - T.ab) / (T.bis - T.ab) * n, i = Math.min(n - 1, Math.max(0, Math.floor(q)));
+  const ya = T.tab[i], yb = T.tab[i + 1];
+  const y = ya === null || yb === null ? null : ya + (yb - ya) * (q - i);
+  const ok = y !== null && q >= 0 && q <= n && x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  T.p.style.display = ok ? '' : 'none';
+  if (!ok) return;
+  T.p.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); });
+  const tx = T.p.querySelector(':scope > text'); if (!tx) return;
+  const rechts = x > x1 - (x1 - x0) * 0.25;
+  tx.setAttribute('x', px(x) + (rechts ? -18 : 18)); tx.setAttribute('y', py(y) < 60 ? py(y) + 44 : py(y) - 22);
+  tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+  tx.textContent = T.p.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+}
+// Zwischen zwei Stuetzpunkten weich (lin: gleichmaessig). Wie viele Zahlen ein Stuetzpunkt traegt, sagt er
+// selbst: [t, a, u, v] bei einer Parabel, [t, m, q] bei einer Geraden, [t, x] bei einer Bahn.
+function bewZustand(k, t, lin) {
+  const n = k[0].length - 1;
+  if (t <= k[0][0]) return k[0].slice(1);
+  for (let i = 0; i < k.length - 1; i++) {
+    if (t < k[i + 1][0]) {
+      let q = (t - k[i][0]) / (k[i + 1][0] - k[i][0]);
+      q = RUHIG ? 0 : lin ? q : q * q * (3 - 2 * q);
+      const aus = [];
+      for (let j = 1; j <= n; j++) aus.push(k[i][j] + (k[i + 1][j] - k[i][j]) * q);
+      return aus;
+    }
+  }
+  return k[k.length - 1].slice(1);
+}
+// Eine Nachkommastelle — ausser der Wert hat genau zwei (−0.75, −1.25): dann beide, sonst
+// stuende an einem ruhenden Punkt eine falsch gerundete Zahl (seit 07.10.2026). Waehrend einer
+// Bewegung sind die Werte krumm und bleiben bei einer Stelle.
+const bewZahl = x => {
+  const z = Math.round(x * 100);
+  const r = Math.abs(x * 100 - z) < 1e-6 && z % 10 !== 0 ? z / 100 : Math.round(x * 10) / 10;
+  return (r < 0 ? '−' : '') + Math.abs(r);
+};
+// Eine bewegte Gerade y = m x + q: am Fenster abgeschnitten, dazu ihre Begleiter.
+function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
+  const [m, q] = bewZustand(T.k, t - T.t0);
+  if (T.p.dataset.ab !== undefined) x0 = Math.max(x0, parseFloat(T.p.dataset.ab));
+  const f = x => m * x + q, innen = (x, y) => x >= x0 - 1e-9 && x <= x1 + 1e-9 && y >= y0 - 1e-9 && y <= y1 + 1e-9;
+  const pt = [];
+  for (const x of [x0, x1]) { const y = f(x); if (y >= y0 - 1e-9 && y <= y1 + 1e-9) pt.push([x, y]); }
+  if (Math.abs(m) > 1e-9) for (const y of [y0, y1]) { const x = (y - q) / m; if (x >= x0 - 1e-9 && x <= x1 + 1e-9) pt.push([x, y]); }
+  pt.sort((u, v) => u[0] - v[0]);
+  T.p.setAttribute('d', pt.length > 1
+    ? 'M' + px(pt[0][0]).toFixed(1) + ',' + py(pt[0][1]).toFixed(1) +
+      'L' + px(pt[pt.length - 1][0]).toFixed(1) + ',' + py(pt[pt.length - 1][1]).toFixed(1)
+    : '');
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (m > 0 ? 44 : -18)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  const fuell = (v, x, y) => v.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y))
+                              .replace('{m}', bewZahl(m)).replace('{q}', bewZahl(q));
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-gy')) {
+      setze(g, 0, q); beschrifte(g, 0, q, '(0 | ' + bewZahl(q) + ')');
+    } else if (g.classList.contains('bew-gn')) {
+      if (Math.abs(m) < 1e-9) { g.style.display = 'none'; continue; }
+      const xn = -q / m; setze(g, xn, 0); beschrifte(g, xn, 0, '(' + bewZahl(xn) + ' | 0)');
+    } else if (g.classList.contains('bew-gm')) {
+      const x = parseFloat(g.dataset.x);
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gl')) {
+      const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+      const x = bewZustand(bahn, t - T.t0)[0];
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gs-tab')) {
+      // Schnittpunkte mit einer festen Kurve (Tabelle): Vorzeichenwechsel von Kurve − Gerade,
+      // dazu Beruehrstellen (|Differenz| lokal minimal und fast null).
+      const tab = g._tab || (g._tab = JSON.parse(g.dataset.tab));
+      const ab = parseFloat(g.dataset.ab), bis = parseFloat(g.dataset.bis), n = tab.length - 1;
+      const X = i => ab + (bis - ab) * i / n, d = i => tab[i] === null ? null : tab[i] - f(X(i));
+      const eps = (y1 - y0) * 2e-3, sn = [];
+      for (let i = 0; i < n; i++) {
+        const da = d(i), db = d(i + 1);
+        if (da === null || db === null) continue;
+        if (da === 0) sn.push(X(i));
+        else if (da * db < 0) sn.push(X(i) + (X(i + 1) - X(i)) * da / (da - db));
+        else if (i > 0 && d(i - 1) !== null && Math.abs(da) < eps && Math.abs(da) <= Math.abs(d(i - 1)) && Math.abs(da) <= Math.abs(db)) sn.push(X(i));
+      }
+      const gs = [];
+      for (const x of sn) if (!gs.length || x - gs[gs.length - 1] > (bis - ab) / n * 1.5) gs.push(x);
+      T._gs = gs;
+    } else if (g.classList.contains('bew-gs')) {
+      const x = (T._gs || [])[parseInt(g.dataset.i)];
+      if (x === undefined) { g.style.display = 'none'; continue; }
+      setze(g, x, f(x)); beschrifte(g, x, f(x), '(' + bewZahl(x) + ' | ' + bewZahl(f(x)) + ')');
+      // abwechselnd ueber und unter der Geraden, sonst stossen nahe Beschriftungen zusammen
+      const tx = g.querySelector(':scope > text');
+      if (tx) { tx.setAttribute('y', py(f(x)) + (parseInt(g.dataset.i) % 2 ? 44 : -18));
+        tx.setAttribute('text-anchor', 'middle'); tx.setAttribute('x', px(x)); }
+    } else if (g.classList.contains('bew-gd')) {
+      // Steigungsdreieck: von (x | f(x)) nach rechts, dann senkrecht auf die Gerade.
+      let xa, dx;
+      if (g.dataset.bahn) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+        [xa, dx] = bewZustand(bahn, t - T.t0);
+      } else { xa = parseFloat(g.dataset.x); dx = parseFloat(g.dataset.dx); }
+      const xb = xa + dx;
+      // dx = 0: kein Dreieck, auch keine Beschriftung «Δx = 0» (es waechst erst noch)
+      const ya = f(xa), yb = f(xb), sichtbar = Math.abs(dx) > 1e-9 && innen(xa, ya) && innen(xb, yb);
+      g.style.display = sichtbar ? '' : 'none';
+      if (!sichtbar) continue;
+      g.querySelector('.bew-gd-w').setAttribute('d', 'M' + px(xa) + ',' + py(ya) + 'L' + px(xb) + ',' + py(ya));
+      g.querySelector('.bew-gd-s').setAttribute('d', 'M' + px(xb) + ',' + py(ya) + 'L' + px(xb) + ',' + py(yb));
+      const tx = g.querySelector('.bew-gd-tx'), ty = g.querySelector('.bew-gd-ty');
+      tx.setAttribute('x', px((xa + xb) / 2)); tx.setAttribute('y', py(ya) + (m > 0 ? 36 : -14));
+      tx.textContent = 'Δx = ' + bewZahl(dx);
+      // dx < 0: die senkrechte Kathete steht links, ihre Beschriftung auch (sonst liegt sie
+      // auf der Geraden oder der y-Achse)
+      ty.setAttribute('x', px(xb) + (dx < 0 ? -12 : 12)); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      ty.setAttribute('text-anchor', dx < 0 ? 'end' : 'start');
+      ty.textContent = 'Δy = ' + bewZahl(yb - ya);
+    }
+  }
+}
+// Eine bewegte Potenz- oder Wurzelkurve y = a*(x-u)^p + v, am Fenster abgeschnitten.
+// Wo es keinen Wert gibt (Pol, negative Basis mit gebrochenem Exponenten), bricht der
+// Streckenzug ab und beginnt danach neu — genau so entstehen Aeste und Definitionsluecken.
+// x einer Marke an einer bewegten Kurve: fest (data-x) oder aus einer Bahn [[t, x], …] (Laeufer).
+function kmX(g, T) {
+  if (!g.dataset.bahn) return parseFloat(g.dataset.x);
+  const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+  return bewZustand(bahn, T._t - T.t0, T.lin)[0];
+}
+// Definitionsbereich einer bewegten Kurve: fest (data-von/data-bis) oder mitwandernd
+// ("grenzen": [[t, von, bis], …], seit 07.10.2026 — Einschraenken, ein Intervall zieht sich zu).
+function kGrenzen(T) {
+  if (!T.p.dataset.grenzen) return [parseFloat(T.p.dataset.von), parseFloat(T.p.dataset.bis)];
+  const gr = T._gr || (T._gr = JSON.parse(T.p.dataset.grenzen));
+  return bewZustand(gr, T._t - T.t0, T.lin);
+}
+function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
+  T._t = t;
+  const Z = bewZustand(T.k, t - T.t0, T.lin);
+  if (T.poly) return bewegePolynom(T, Z, px, py, x0, x1, y0, y1);
+  if (T.el === 's' || T.el === 't') return bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1);
+  if (T.el === 'v') return bewegeBetrag(T, Z, px, py, x0, x1, y0, y1);
+  if (T.el) return bewegeExpLog(T, Z, px, py, x0, x1, y0, y1);
+  const [a, p0, u, v] = Z;
+  const p = T.stufen ? Math.round(p0) : p0;
+  // Negative Basis: Math.pow(-8, 1/3) ist NaN, die dritte Wurzel aus -8 ist -2.
+  // Bei ungeradem Wurzelexponenten (1/p ganz und ungerade) gibt es den Wert, bei
+  // geradem nicht — genau dort endet die Definitionsmenge.
+  const pot = b => {
+    if (b >= 0 || Number.isInteger(p)) return Math.pow(b, p);
+    const q = Math.round(1 / p);
+    return (Math.abs(1 / p - q) < 1e-9 && q % 2 !== 0) ? -Math.pow(-b, p) : NaN;
+  };
+  const f = x => { const y = a * pot(x - u) + v;
+    return (isFinite(y) && !isNaN(y)) ? y : null; };
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  const zug = (abx, aby) => {           // abx/aby: wie der Punkt auf die Achsen faellt
+    let d = '', an = false;
+    if (a1 <= a0) return '';
+    for (let i = 0; i <= 600; i++) {
+      const x = a0 + (a1 - a0) * i / 600, y = f(x);
+      if (y === null) { an = false; continue; }
+      const sx = abx(x, y), sy = aby(x, y);
+      if (sx < -5 || sx > 1e5 || sy < -5 || sy > 1e5) { an = false; continue; }
+      if (!(abx === px ? (y >= y0 && y <= y1) : (y >= x0 && y <= x1 && x >= y0 && x <= y1))) { an = false; continue; }
+      d += (an ? 'L' : 'M') + sx.toFixed(1) + ',' + sy.toFixed(1); an = true;
+    }
+    return d;
+  };
+  T.p.setAttribute('d', zug(px, (x, y) => py(y)));
+  // Spiegelkurve an y = x: aus (x | y) wird (y | x) — die Umkehrfunktion.
+  const sp = T.L.querySelector('[data-spiegel="' + T.p.dataset.paar + '"]');
+  if (sp) sp.setAttribute('d', zug((x, y) => px(y), (x, y) => py(x)));
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (a > 0 ? 44 : -18)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ks')) {
+      setze(g, u, v); beschrifte(g, u, v, '(' + bewZahl(u) + ' | ' + bewZahl(v) + ')');
+    } else if (g.classList.contains('bew-ka')) {
+      // Polgerade x = u und waagrechte Asymptote y = v
+      g.querySelector('.bew-ka-s').setAttribute('d',
+        (u >= x0 && u <= x1) ? 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1) : '');
+      g.querySelector('.bew-ka-w').setAttribute('d',
+        (v >= y0 && v <= y1) ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Exponentialkurve y = c*a^x + v (el 'e') oder Logarithmuskurve y = c*log_a(x) + v (el 'l');
+// Z = [c, a, v]. Die Spiegelkurve an y = x ist die Umkehrfunktion.
+function bewegeExpLog(T, Z, px, py, x0, x1, y0, y1) {
+  const [c, a, v] = Z, ex = T.el === 'e';
+  const f = x => { if (ex) return c * Math.pow(a, x) + v;
+    if (x <= 0 || Math.abs(Math.log(a)) < 1e-9) return null; return c * Math.log(x) / Math.log(a) + v; };
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  const zug = (abx, aby, imBild) => {
+    let d = '', an = false;
+    for (let i = 0; i <= 800; i++) {
+      // Nahe x = 0 fein abtasten, sonst endet die Logarithmuskurve weit über der Asymptote.
+      const q = i / 800, x = a0 + (a1 - a0) * (T.el === 'l' ? q * q : q), y = f(x);
+      if (y === null || !isFinite(y) || !imBild(x, y)) { an = false; continue; }
+      d += (an ? 'L' : 'M') + abx(x, y).toFixed(1) + ',' + aby(x, y).toFixed(1); an = true;
+    }
+    return d;
+  };
+  const H = y1 - y0;
+  T.p.setAttribute('d', zug(px, (x, y) => py(y), (x, y) => y >= y0 - H && y <= y1 + H));
+  const sp = T.L.querySelector('[data-spiegel="' + T.p.dataset.paar + '"]');
+  if (sp) sp.setAttribute('d', zug((x, y) => px(y), (x, y) => py(x), (x, y) => y >= x0 - 1 && y <= x1 + 1 && x >= y0 - 1 && x <= y1 + 1));
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  // Beschriftung auf die Seite, auf der die Kurve nicht verläuft: rechts unter dem Punkt bei
+  // steigender, rechts über ihm bei fallender Kurve (sonst kreuzt die Kurve den Text).
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    const ya = f(x - 1e-3), yb = f(x + 1e-3), steigt = ya !== null && yb !== null && yb > ya;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + ((steigt !== rechts) ? 44 : -18));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      g.querySelector('.bew-ka-s').setAttribute('d', ex ? '' : 'M' + px(0) + ',' + py(y0) + 'L' + px(0) + ',' + py(y1));
+      g.querySelector('.bew-ka-w').setAttribute('d', ex && v >= y0 && v <= y1 ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-ks')) {
+      const x = ex ? 0 : 1, y = f(x); setze(g, x, y); beschrifte(g, x, y, '(' + bewZahl(x) + ' | ' + bewZahl(y) + ')');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Betragskurve y = a*|x - u| + v (el 'v'); Z = [a, u, v]. Begleiter: Knickpunkt (startpunkt),
+// Symmetrieachse x = u (asymptoten), Marken.
+function bewegeBetrag(T, Z, px, py, x0, x1, y0, y1) {
+  const [a, u, v] = Z;
+  const f = x => a * Math.abs(x - u) + v;
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  // Drei Punkte genügen: linker Rand, Knick, rechter Rand — der Knick bleibt scharf.
+  const xs = [a0, Math.min(Math.max(u, a0), a1), a1];
+  T.p.setAttribute('d', a1 > a0 ? xs.map((x, i) => (i ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(f(x)).toFixed(1)).join('') : '');
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    // Unter dem Knick eines V (a > 0) ist Platz, über dem Knick eines Dachs (a < 0).
+    tx.setAttribute('y', py(y) + (Math.abs(x - u) < 1e-9 ? (a > 0 ? 44 : -22) : (a > 0 ? -22 : 44)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      g.querySelector('.bew-ka-s').setAttribute('d', u >= x0 && u <= x1 ? 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1) : '');
+      g.querySelector('.bew-ka-w').setAttribute('d', '');
+    } else if (g.classList.contains('bew-ks')) {
+      setze(g, u, v); beschrifte(g, u, v, '(' + bewZahl(u) + ' | ' + bewZahl(v) + ')');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Sinus- oder Tangenskurve y = a*sin(b(x-u)) + v (el 's') bzw. a*tan(b(x-u)) + v (el 't');
+// Z = [a, b, u, v]. Begleiter: Mittellinie bzw. Pole, Marken, Einheitskreis mit Läufer.
+function bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1) {
+  const [a, b, u, v] = Z, tg = T.el === 't';
+  const f = x => { const w = b * (x - u);
+    if (tg) { if (Math.abs(Math.cos(w)) < 1e-4) return null; return a * Math.tan(w) + v; }
+    return a * Math.sin(w) + v; };
+  const kk = T.L.querySelector('.bew-kk[data-zu="' + T.p.dataset.paar + '"]');
+  let th = null;
+  if (kk) { const bahn = kk._bahn || (kk._bahn = JSON.parse(kk.dataset.bahn)); th = bewZustand(bahn, t - T.t0, T.lin)[0]; }
+  const kg_ = kGrenzen(T), vx = kg_[0];
+  let bx = kg_[1];
+  if (kk && kk.dataset.spur === '1') bx = Math.min(bx, th);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx), H = y1 - y0;
+  let d = '', an = false, yl = null;
+  for (let i = 0; i <= 900 && a1 > a0; i++) {
+    const x = a0 + (a1 - a0) * i / 900, y = f(x);
+    if (y === null || !isFinite(y) || y < y0 - H || y > y1 + H) { an = false; yl = null; continue; }
+    // Am Pol springt der Tangens von oben nach unten: dort neu ansetzen, nicht verbinden.
+    if (tg && yl !== null && Math.abs(y - yl) > H) an = false;
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true; yl = y;
+  }
+  T.p.setAttribute('d', d);
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.25;
+    const ya = f(x - 1e-3), yb = f(x + 1e-3), steigt = ya !== null && yb !== null && yb > ya;
+    const oben = y > v + 1e-9 || (Math.abs(y - v) < 1e-9 && !steigt);
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (oben ? -22 : 44));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      let pole = '';
+      if (tg && Math.abs(b) > 1e-9) {
+        const per = Math.PI / Math.abs(b), start = u + per / 2;
+        for (let k = Math.ceil((x0 - start) / per); start + k * per <= x1; k++) {
+          const xp = start + k * per;
+          pole += 'M' + px(xp).toFixed(1) + ',' + py(y0) + 'L' + px(xp).toFixed(1) + ',' + py(y1);
+        }
+      }
+      g.querySelector('.bew-ka-s').setAttribute('d', pole);
+      g.querySelector('.bew-ka-w').setAttribute('d', !tg && Math.abs(v) > 1e-9 && v >= y0 && v <= y1
+        ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    } else if (g.classList.contains('bew-kk')) {
+      // Einheitskreis: Pixelradius aus der y-Teilung, Mittelpunkt (mx | 0).
+      const r = Math.abs(py(1) - py(0)), cx = px(parseFloat(g.dataset.mx)), cy = py(0);
+      const P = [cx + r * Math.cos(th), cy - r * Math.sin(th)];
+      const k = g.querySelector('.kk-kreis'); k.setAttribute('cx', cx); k.setAttribute('cy', cy); k.setAttribute('r', r);
+      const lin = (c, xa, ya, xb, yb) => { const l = g.querySelector(c);
+        l.setAttribute('x1', xa); l.setAttribute('y1', ya); l.setAttribute('x2', xb); l.setAttribute('y2', yb); };
+      // "projektion": false — nur der Kreis, ohne Strecke zur Kurve (Winkel zeigen).
+      const yq = f(th), sichtbar = yq !== null && innen(th, yq) && g.dataset.proj !== '0';
+      if (tg) {
+        // Tangente x = 1 am Kreis; der Strahl durch P trifft sie in T = (1 | tan th).
+        // Ueber den Fensterrand hinaus: die Strecke am Rand abschneiden (seit 07.10.2026), nicht
+        // ausblenden — «waechst ueber alle Grenzen» soll man sehen. Die Projektion faellt dann weg.
+        const ty0 = Math.tan(th), drin = ty0 >= y0 && ty0 <= y1, ty = Math.min(y1, Math.max(y0, ty0));
+        const T_ = [cx + r, cy - r * ty], ok = Math.abs(Math.cos(th)) > 1e-4;
+        lin('.kk-tang', cx + r, py(y0), cx + r, py(y1));
+        // P links der y-Achse (2. und 3. Quadrant): der Strahl geht von P durch M zur Tangente,
+        // sonst haengt P neben der Linie.
+        const vonP = ok && Math.cos(th) < 0;
+        // abgeschnitten: der Strahl endet am Fensterrand, auf seiner eigenen Richtung
+        const R_ = drin ? T_ : [cx + r * ty / ty0, cy - r * ty];
+        lin('.kk-radius', vonP ? P[0] : cx, vonP ? P[1] : cy, ok ? R_[0] : P[0], ok ? R_[1] : P[1]);
+        lin('.kk-hoehe', cx + r, cy, ok ? T_[0] : cx + r, ok ? T_[1] : cy);
+        lin('.kk-proj', ok ? T_[0] : 0, ok ? T_[1] : 0, ok && drin && sichtbar ? px(th) : (ok ? T_[0] : 0), ok ? T_[1] : 0);
+        const q = g.querySelector('.kk-q'); q.style.display = ok && drin && sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', py(ty));
+      } else if (g.dataset.art === 'cos') {
+        // Cosinus: die waagrechte Koordinate von P als Strecke auf der Achse, ohne Projektion.
+        lin('.kk-tang', 0, 0, 0, 0);
+        lin('.kk-radius', cx, cy, P[0], P[1]);
+        lin('.kk-hoehe', cx, cy, P[0], cy);
+        lin('.kk-proj', P[0], P[1], P[0], cy);
+        const q = g.querySelector('.kk-q'); q.style.display = sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', sichtbar ? py(yq) : 0);
+      } else {
+        lin('.kk-tang', 0, 0, 0, 0);
+        lin('.kk-radius', cx, cy, P[0], P[1]);
+        lin('.kk-hoehe', P[0], cy, P[0], P[1]);
+        lin('.kk-proj', P[0], P[1], sichtbar ? px(th) : P[0], P[1]);
+        const q = g.querySelector('.kk-q'); q.style.display = sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', sichtbar ? py(yq) : 0);
+      }
+      // Der Bogen vom Start (1 | 0) bis P — seine Länge ist der Winkel im Bogenmass.
+      const gross = Math.abs(th) > Math.PI ? 1 : 0, dreh = th >= 0 ? 0 : 1;
+      g.querySelector('.kk-bogen').setAttribute('d', Math.abs(th) < 1e-6 ? '' :
+        Math.abs(th) >= 2 * Math.PI - 1e-6
+          ? 'M' + (cx + r) + ',' + cy + 'A' + r + ',' + r + ' 0 1 0 ' + (cx - r) + ',' + cy + 'A' + r + ',' + r + ' 0 1 0 ' + (cx + r) + ',' + cy
+          : 'M' + (cx + r) + ',' + cy + 'A' + r + ',' + r + ' 0 ' + gross + ' ' + dreh + ' ' + P[0].toFixed(1) + ',' + P[1].toFixed(1));
+      const pp = g.querySelector('.kk-p'); pp.setAttribute('cx', P[0]); pp.setAttribute('cy', P[1]);
+    }
+  }
+}
+// Polynom in Linearfaktordarstellung y = a*(x-x1)*(x-x2)*…; Z = [a, x1, x2, …].
+function bewegePolynom(T, Z, px, py, x0, x1, y0, y1) {
+  const a = Z[0], r = Z.slice(1);
+  const f = x => r.reduce((s, q) => s * (x - q), a);
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y < y0 - (y1 - y0) || y > y1 + (y1 - y0)) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  // Extrempunkte: Vorzeichenwechsel der Steigung, verfeinert durch Halbieren.
+  const ex = [];
+  const df = x => (f(x + 1e-5) - f(x - 1e-5)) / 2e-5;
+  for (let i = 0; i < 800; i++) {
+    let p = a0 + (a1 - a0) * i / 800, q = a0 + (a1 - a0) * (i + 1) / 800;
+    const dp = df(p), dq = df(q);
+    // Faellt ein Gitterpunkt genau auf die Extremstelle, ist dort df = 0 — darum
+    // «bis einschliesslich null», sonst geht der Scheitel x = 3 von (x−1)(x−5) verloren.
+    if ((dp > 0 && dq <= 0) || (dp < 0 && dq >= 0)) {
+      const hoch = dp > 0;
+      for (let k = 0; k < 40; k++) { const m = (p + q) / 2; if ((df(m) > 0) === (df(p) > 0)) p = m; else q = m; }
+      ex.push([(p + q) / 2, hoch]);
+    }
+  }
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text, unten) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (unten ? 44 : -18));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-kn')) {
+      const i = +g.dataset.i, x = r[i];
+      // Zusammenfallende Nullstellen zeigen nur einen Punkt — den ersten.
+      if (r.slice(0, i).some(q => Math.abs(q - x) < 0.05)) { g.style.display = 'none'; continue; }
+      setze(g, x, 0);
+      // Beschriftungen abwechselnd ueber und unter der x-Achse, nach der Lage von
+      // links nach rechts — sonst laufen zwei nahe Nullstellen ineinander.
+      const rang = [...new Set(r.map(q => Math.round(q * 20)))].sort((p, q) => p - q).indexOf(Math.round(x * 20));
+      beschrifte(g, x, 0, '(' + bewZahl(x) + ' | 0)', rang % 2 === 1);
+    } else if (g.classList.contains('bew-ke')) {
+      const e = ex[+g.dataset.i];
+      if (!e) { g.style.display = 'none'; continue; }
+      const y = f(e[0]); setze(g, e[0], y);
+      beschrifte(g, e[0], y, (e[1] ? 'H' : 'T') + '(' + bewZahl(e[0]) + ' | ' + bewZahl(y) + ')', !e[1]);
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)), a < 0);
+    }
+  }
+}
+function bewegen(t) {
+  for (const L of BEW) for (const T of L.teile) {
+    const [x0, x1, y0, y1, b, h, rd] = T.f;
+    const px = x => rd + (x - x0) / (x1 - x0) * (b - 2 * rd);
+    const py = y => h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd);
+    if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'f') { laufeFest(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'fp') { bewegeFormel(T, t, px, py, x0, x1, y0, y1); continue; }
+    // Scheitelform [a, u, v] oder Normalform [a, b, c] (data-normal); f ist die Kurve,
+    // u und v der Scheitel (bei a = 0 keiner: NaN).
+    const Z = bewZustand(T.k, t - L.t0), normal = T.p.dataset.normal === '1';
+    const a = Z[0];
+    const f = normal ? (x => a * x * x + Z[1] * x + Z[2]) : (x => a * (x - Z[1]) * (x - Z[1]) + Z[2]);
+    const u = normal ? (Math.abs(a) > 1e-9 ? -Z[1] / (2 * a) : NaN) : Z[1];
+    const v = normal ? f(u) : Z[2];
+    const xa = T.p.dataset.ab !== undefined ? Math.max(x0, parseFloat(T.p.dataset.ab)) : x0;
+    const xb = T.p.dataset.bis !== undefined ? Math.min(x1, parseFloat(T.p.dataset.bis)) : x1;
+    let d = '', zug = false;
+    for (let i = 0; i <= 240; i++) {
+      const x = xa + (xb - xa) * i / 240, y = f(x);
+      if (y >= y0 && y <= y1) { d += (zug ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); zug = true; }
+      else zug = false;
+    }
+    T.p.setAttribute('d', d);
+    const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+      g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+    const beschrifte = (g, x, y, text, unten) => {
+      const tx = g.querySelector(':scope > text'); if (!tx) return;
+      const rechts = x > x1 - (x1 - x0) * 0.3;
+      tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+      tx.setAttribute('y', py(y) + (unten ? 44 : -18));
+      tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+      tx.textContent = text;
+    };
+    const fuell = (vorlage, x, y) => vorlage.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+    for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+      if (g.classList.contains('bew-a')) {
+        g.style.display = isNaN(u) || u < x0 || u > x1 ? 'none' : '';
+        g.querySelector('path').setAttribute('d', 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1));
+      } else if (g.classList.contains('bew-s')) {
+        if (isNaN(u)) { g.style.display = 'none'; continue; }
+        setze(g, u, v); beschrifte(g, u, v, 'S(' + bewZahl(u) + ' | ' + bewZahl(v) + ')', a > 0);
+      } else if (g.classList.contains('bew-n')) {
+        let xn;
+        if (isNaN(u)) {
+          // a = 0 (nur Normalform): eine Gerade b x + c, hoechstens eine Nullstelle (als n1)
+          if (g.classList.contains('bew-n2') || Math.abs(Z[1]) < 1e-9) { g.style.display = 'none'; continue; }
+          xn = -Z[2] / Z[1];
+        } else {
+          const q = a !== 0 ? -v / a : -1, w = q >= 0 ? Math.sqrt(q) : NaN;
+          if (isNaN(w)) { g.style.display = 'none'; continue; }
+          xn = g.classList.contains('bew-n1') ? u - w : u + w;
+        }
+        setze(g, xn, 0);
+        if (g.querySelector(':scope > text')) {
+          const tx = g.querySelector(':scope > text'), links = g.classList.contains('bew-n1') && !isNaN(u) && Math.abs(xn - u) > 1e-9;
+          tx.setAttribute('x', px(xn) + (links ? -16 : 16)); tx.setAttribute('y', py(0) + (a > 0 ? -18 : 44));
+          tx.setAttribute('text-anchor', links ? 'end' : 'start'); tx.textContent = '(' + bewZahl(xn) + ' | 0)';
+        }
+      } else if (g.classList.contains('bew-y')) {
+        setze(g, 0, f(0)); beschrifte(g, 0, f(0), '(0 | ' + bewZahl(f(0)) + ')', false);
+      } else if (g.classList.contains('bew-m')) {
+        const x = parseFloat(g.dataset.x);
+        setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)), false);
+      } else if (g.classList.contains('bew-l')) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn).map(b => [b[0], b[1], 0, 0]));
+        const x = bewZustand(bahn, t - L.t0)[0], y = f(x);
+        setze(g.querySelector('.bew-pt'), x, y);
+        g.style.display = innen(x, y) ? '' : 'none';
+        const gs = g.querySelector('.bew-geist');
+        if (gs) { const xs = 2 * u - x; gs.style.display = !isNaN(u) && Math.abs(xs - x) > 0.05 && innen(xs, f(xs)) ? '' : 'none';
+          gs.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(xs)); c.setAttribute('cy', py(f(xs))); }); }
+        beschrifte(g, x, y, fuell(g.dataset.text, x, y), a > 0 && Math.abs(x - u) < (x1 - x0) * 0.15);
+      }
+    }
+  }
+}
+const seekOhneBewegung = seek;
+seek = function (t) { seekOhneBewegung(t); bewegen(t); beschriftungenRichten(); };
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
+  document.addEventListener('keydown', e => {
+    const ziel = e.target && e.target.closest ? e.target : null;
+    if (ziel && ziel.closest('input, select, textarea')) return;
+    if (e.code === 'Space' && ziel && ziel.closest('button, a, summary')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

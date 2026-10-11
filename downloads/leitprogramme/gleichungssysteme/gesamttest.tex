@@ -1,0 +1,105 @@
+% Gesamttest «Lineare Gleichungssysteme» — Quelle des PDFs (python3 scripts/build-lp-pdf.py gleichungssysteme).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (scripts/lp/gleichungssysteme/zahlen.py, 11.10.2026).
+% Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
+% Jede Aufgabe kombiniert Geübtes neu (HOWTO-leitprogramme §15): zeichnen und rechnerisch bestätigen (G1), Dezimalzahl und
+% Lösungsmenge einer Geraden (G2), Lösungsfall am Bild und Begründung (G3), Gleichsetzen bei nach x aufgelösten Gleichungen mit
+% Wahl des Verfahrens (G4), ordnen und beide Gleichungen vervielfachen (G5), Fehler in einer fremden Lösung (G6), k in beiden
+% Gleichungen und Lösung für k = 0 (G7, geübt in 4f und im Labor C), 3×3 mit einer Gleichung ohne z und Widerspruch mit Zahl c (G8).
+% Überarbeitet nach der Prüfung vom 12.10.2026 (TODO.md M4, M5). Ganz ohne Taschenrechner (RLP 2.3, «auch ohne Hilfsmittel»).
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Lineare Gleichungssysteme}
+\renewcommand{\lpteilgebiet}{2.3}
+\renewcommand{\lpbereich}{Grundlagenfach}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 25 Minuten. \textbf{Hilfsmittel:} keine — kein Taschenrechner, in allen drei Teilen (RLP 2.3: «auch ohne Hilfsmittel»).
+Schreib zu jeder Aufgabe den \textbf{Rechenweg} auf — bewertet wird der Weg. Gib Lösungen als Lösungsmenge an, ein Paar zum Beispiel als
+$\mathbb{L} = \{(2 \mid 3)\}$, keine Lösung als $\mathbb{L} = \{\,\}$.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Teil A · Lösungen im Bild}{Kapitel 1 und 4 · ohne Hilfsmittel · 8 Punkte}
+
+\begin{lpaufgabe}{G1}{Zeichnen und bestätigen}{3 P}
+Gegeben ist das System $\;x + 2y = 6\;$ und $\;x - y = 3$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Löse beide Gleichungen nach $y$ auf und zeichne die beiden Geraden ins Koordinatensystem.
+\item Lies die Lösung ab und bestätige sie rechnerisch — mit der Probe in beiden Gleichungen oder mit einem Verfahren.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8.2cm,height=7.2cm,axis lines=middle,xmin=-2.5,xmax=7.5,ymin=-3.5,ymax=5.5,
+  xtick={-2,...,7},ytick={-3,...,5},grid=both,grid style={lplinie},xlabel={$x$},ylabel={$y$},
+  xlabel style={anchor=west},ylabel style={anchor=south},tick label style={font=\scriptsize},axis line style={-latex}]
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Lösungsmenge und Lage}{3 P}
+Bestimme die Lösungsmenge von $\;0.5x + y = 4\;$ und $\;2x + 4y = 16\;$ und beschreibe, wie die beiden Geraden zueinander liegen.
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G3}{Lösungsfall am Bild}{2 P}
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Beim Eliminieren bleibt bei drei Systemen am Schluss (1)~$0 = 5$, (2)~$0 = 0$, (3)~$x = 2$. Welches Bild gehört zu welchem System?
+\item Kann ein System aus zwei linearen Gleichungen mit zwei Variablen genau zwei Lösungen haben? Begründe mit den Geraden.
+\end{enumerate}
+\begin{center}
+\newcommand{\minibild}[3]{\begin{tikzpicture}\begin{axis}[width=4.3cm,height=4.3cm,axis lines=middle,xmin=-1.5,xmax=4.5,ymin=-1.5,ymax=4.5,
+  xtick=\empty,ytick=\empty,grid=none,axis line style={-latex},title={#1},title style={font=\small\bfseries}]#2#3\end{axis}\end{tikzpicture}}
+\minibild{A}{\addplot[lpblau,thick,domain=-1.5:4.5]{0.5*x+0.5};}{\addplot[lporange,thick,domain=-1.5:4.5]{0.5*x+2};}\hspace{4mm}%
+\minibild{B}{\addplot[lpblau,thick,domain=-1.5:4.5]{x};}{\addplot[lporange,thick,domain=-1.5:4.5]{-x+4};}\hspace{4mm}%
+\minibild{C}{\addplot[lpblau,line width=3pt,opacity=0.5,domain=-1.5:4.5]{-0.5*x+3};}{\addplot[lporange,thick,dashed,domain=-1.5:4.5]{-0.5*x+3};}
+\end{center}
+\lpplatz{3}
+\end{lpaufgabe}
+
+\lpteil{Teil B · Rechnerisch lösen}{Kapitel 2 und 3 · ohne Hilfsmittel · 8 Punkte}
+
+\begin{lpaufgabe}{G4}{Verfahren wählen}{3 P}
+Gegeben ist $\;x = 4 - y\;$ und $\;x = 2y - 5$. Welches Verfahren ist hier am kürzesten? Begründe in einem Satz und löse das System.
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G5}{Erst ordnen}{3 P}
+Löse mit dem Additionsverfahren und mach die Probe: $\;3y = 1 - 5x\;$ und $\;2x = 19 + 5y$.
+\lpplatz{7}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G6}{Fehler finden}{2 P}
+Jemand löst $\;3x + 2y = 8\;$ und $\;x - 2y = 0\;$ so: «(I) $-$ (II) ergibt $2x = 8$, also $x = 4$, und mit (II) $y = 2$.»
+Was ist falsch? Löse richtig.
+\lpplatz{4}
+\end{lpaufgabe}
+
+\lpteil{Teil C · Parameter und drei Variablen}{Kapitel 4 und 5 · ohne Hilfsmittel · 9 Punkte}
+
+\begin{lpaufgabe}{G7}{Parameter in beiden Gleichungen}{3 P}
+Gegeben ist $\;kx + 4y = 8\;$ und $\;x + ky = 4\;$ ($k \in \mathbb{R}$).
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Für welche $k$ haben die beiden Geraden dieselbe Steigung?
+\item Welcher Lösungsfall liegt bei diesen $k$ jeweils vor? Begründe.
+\item Bestimme die Lösung für $k = 0$.
+\end{enumerate}
+\lpplatz{7}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G8}{Drei Variablen}{6 P}
+\[ \begin{cases} x + y + z = 3 & \text{(I)} \\ 2x - y + z = 8 & \text{(II)} \\ x + 3y = -5 & \text{(III)} \end{cases} \]
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Löse das System und mach die Probe. Begründe kurz, welche Variable du eliminierst.
+\item Ersetze (III) durch $\;3x + 2z = c$. Für welche Zahlen $c$ hat das System dann keine Lösung? Was gilt für $c = 11$?
+\end{enumerate}
+\lpplatz{11}
+\end{lpaufgabe}
+\end{document}
