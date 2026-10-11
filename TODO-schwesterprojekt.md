@@ -28,68 +28,21 @@ Aussprache-Einträge) — in Physik umgesetzt (`1aca43e`; nachgesehen: `build-cl
 **Abgeräumt am 08.10.2026 (zweiter Durchgang):** die zwei Einträge vom 08.10.2026 (`build-clips.py` dritte Runde;
 Teilvertonung `--szenen`/`--fragen`) — in Physik umgesetzt (Eintrag in `OFFEN`, Quelle Physik, 08.10.2026;
 nachgesehen: `build-clip-ton.py` byte-gleich, `abgleich.py` meldet keine Drift in `build-clips.py`).
+**Abgeräumt am 11.10.2026:** die drei Einträge vom 10.10.2026 («Footer aus einer Quelle») und 11.10.2026 (Selbsttest
+prüft auch Rückmeldung; kompakte Kacheln) — in Physik umgesetzt (Eintrag in `OFFEN`, Quelle Physik; nachgesehen:
+`VERSION = '2.0'` und `fuss()` in Physiks `build-seo.py`, neun `verify_*.js`, `.lp-pillen` in `werkzeuge.html`,
+`simulationen.html` und beiden HOWTOs, keine `.lp-zeile` mehr; Physiks `abgleich.py` hier übernommen).
 Ein erledigter Eintrag wird künftig gelöscht, nicht als «erledigt» markiert.
 Übertrage an geteiltem Werkzeug laufen zusätzlich über die Warteschlange `OFFEN`
 in `scripts/abgleich.py`.
 
 ## Offen
 
-### 11.10.2026 · Übersichten Werkzeuge und Simulationen: kompakte Kacheln (auch in `OFFEN`)
+### 11.10.2026 · HOWTO-simulationen / HOWTO-werkzeuge: Marken wörtlich kopieren (auch in `OFFEN`)
 
-**Was.** Entscheid des Auftraggebers: Die Kacheln von `werkzeuge.html` und `simulationen.html` werden viel kompakter.
-- **Satz:** `.lp-satz` hat nur noch einen kurzen Satz (eine Zeile), etwa «Einheiten umrechnen üben.».
-- **Pillen statt Zeilen:** Die `.lp-zeile` mit `.k-tit`-Text fallen weg. Stattdessen stehen in einer Zeile `.lp-pillen`
-  nur die `.ts-link`-Pillen ohne Text, eine Pille je Themenseite, die auf den ersten Abschnitt zeigt. Das
-  `title` der Pille nennt weiter die Themenseite.
-- **CSS:** `.lp-zeile` und `.lp-zeile .k-tit` werden ersetzt durch
-  `.lp-pillen { position:relative; z-index:1; pointer-events:none; display:flex; flex-wrap:wrap; gap:4px; }`.
-
-Mathe-Commit `d42e34b`. Dort ist es mit einem kleinen Python-Skript umgestellt (Regex je `.karte-lp`-Block).
-
-**Wo (Physik, gezählt am 11.10.2026):**
-- `werkzeuge.html`: 6 Kacheln, 12 `.lp-zeile`. Je Kachel Zeilen → Themenseiten:
-  - Einheitentrainer 3 → 3
-  - Formeln umstellen 1 → 1
-  - Bewegungsdiagramme 2 → 1
-  - Fall und Wurf 2 → 1
-  - Freischneiden 2 → 2
-  - Schaltungen zusammenfassen 2 → 1
-  - Danach also 9 Pillen.
-- `simulationen.html`: 1 Kachel (Sonnenfinsternis, unter `#ausserhalb`), keine `.lp-zeile`, nur der Satz kürzen.
-- CSS in beiden Dateien: je Zeile 103 und 104.
-- Beispielkacheln: `HOWTO-werkzeuge.md` Z. 104 (mit dem Satz «Je Themenseite … eine Zeile mit Pille»)
-  und `HOWTO-simulationen.md` Z. 84.
-- `leitprogramme.html` (14 Kacheln, 16 `.lp-zeile`) bleibt, wie in Mathe.
-
-**Warum.** Die Übersicht soll auf einen Blick lesbar sein. Der Abschnittsname steht schon auf der Themenseite.
-
-### 11.10.2026 · Werkzeuge: Selbsttest prüft auch Rückmeldung und gleichwertige Eingaben
-
-**Was.** In Mathe hat eine Prüfung aller sechs Trainer (`TODO-trainer-korrekturen.md`, Commits `7ed2ed8`,
-`042a671`) keinen Fachfehler gefunden, aber 21 Fehlbewertungen, die die Selbsttests nicht sahen:
-- Denkfehler-Texte, die zur Aufgabe nicht passen.
-- Ein Denkfehler-Wert, der zufällig der Lösung oder ihrer Gegenzahl entspricht.
-- Richtige Eingaben, die abgelehnt werden: gemischte Zahl, `*` an jeder Stelle.
-- Halbfertige Formen, die als richtig gelten: Doppelbruch, unvereinfachte Klammer.
-
-Mathe `HOWTO-werkzeuge.md` §6 nennt diese vier Prüfungen jetzt.
-
-**Wo.** Physik `HOWTO-werkzeuge.md` (Abschnitt «Selbsttest», um Z. 71). Gezählt am 11.10.2026: Physik hat 6
-Werkzeuge unter `werkzeuge/` (bewegungsdiagramme, einheitentrainer, fall-und-wurf, formeln-umstellen,
-freischneiden, schaltungen-zusammenfassen), aber nur einen Selbsttest, `scripts/verify_einheitentrainer.js`.
-Rückmeldungen mit Denkfehler-Texten haben vor allem `bewegungsdiagramme.html` und `einheitentrainer.html`.
-
-**Warum.** Dieselbe Lücke ist in Physik zu erwarten. Vorschlag: denselben Prüfdurchgang machen, ein
-Agent je Werkzeug, nur lesen, Befunde in ein TODO.
-
-### 10.10.2026 · `build-seo.py`: Footer aus einer Quelle, Version 2.0 (auch in `OFFEN`)
-
-**Was.** `build-seo.py` erzeugt den Footer zwischen `<!-- FUSS:ANFANG … -->` und `<!-- FUSS:ENDE -->`
-(Funktionen `fuss()`, `fuss_ausserhalb()`, `einsetzen()` mit Footer; Konstanten `VERSION = '2.0'`,
-`VERSION_STAND = '10. Oktober 2026'`, `FUSS_UNTERTITEL`; Felder `ort=`/`fuss=False` in `SEITEN`; `--check` mit
-Exit 2 für einen `site-footer` ausserhalb der Marken). `preflight.py`: Exit 2 von `build-seo.py` = Fehler.
-**Wo.** Physik `scripts/build-seo.py` (KERN, Code aus Mathe übernehmen, Fachdaten bleiben), `.claude/skills/preflight/
-preflight.py`, `feedback.html` (eigener Fuss, Versionszeile von Hand), Bauskripte `scripts/lp/*/seite.py` (nur
-leere Marken ausgeben), STYLEGUIDE §7, HOWTOs. Ablauf und gezählte Physik-Zahlen: `/home/paps/TODO-fuss-version-physik.md`.
-**Warum.** Entscheid des Auftraggebers: eine Version für das ganze Lehrmittel, in beiden Repos dieselbe (2.0, gleiches Datum).
-
+**Was.** Ein Satz in §3: Die SEO- und FUSS-Marken wörtlich aus der Vorlage kopieren, samt «— generiert von
+scripts/build-seo.py, nicht von Hand ändern».
+**Wo.** Physik `HOWTO-simulationen.md` Z.37 und `HOWTO-werkzeuge.md` Z.39 (beide «leere FUSS-Marken»). Physiks
+`build-seo.py` sucht dieselben vollen Marken (`MARKE_AUF` Z.502, `FUSS_AUF` Z.504).
+**Warum.** Beim Bau von `simulationen/boxplot.html` (Mathe 84f1a7f) standen nackte Marken in der Seite:
+`build-seo.py` setzte einen zweiten SEO-Kopf davor und liess den Footer leer.

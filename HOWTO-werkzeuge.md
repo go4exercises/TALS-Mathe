@@ -74,7 +74,9 @@ Vorlage ist `werkzeuge/notationstrainer.html`.
 - **Klassen** aus `style.css` kopieren, nicht erfinden; Seiteneigenes im `<style>` mit
   eigenem Präfix (`nt-`).
 - Den SEO-Kopf und den Footer **nicht** von Hand schreiben: Beide entstehen aus `scripts/build-seo.py` (§4);
-  für den Footer nur die leeren FUSS-Marken nach `.page-wrap` setzen (STYLEGUIDE §7).
+  für den Footer nur die leeren FUSS-Marken nach `.page-wrap` setzen (STYLEGUIDE §7). Die Marken wörtlich aus
+  der Vorbildseite kopieren, samt «— generiert von scripts/build-seo.py, nicht von Hand ändern»: Ein nacktes
+  `<!-- SEO:ANFANG -->` erkennt das Skript nicht und setzt einen zweiten Kopf davor.
 
 ## 4 · Eintragen
 

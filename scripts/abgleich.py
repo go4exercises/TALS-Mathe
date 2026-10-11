@@ -137,13 +137,11 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='Kacheln in werkzeuge.html und simulationen.html kompakt (11.10.2026, Mathe d42e34b)',
-         wie='.lp-satz nur noch ein kurzer Satz (eine Zeile); statt je Themenseite einer .lp-zeile mit .k-tit-Text '
-             'eine Zeile .lp-pillen mit nur den .ts-link-Pillen, eine Pille je Themenseite (erster Abschnitt). '
-             'CSS: .lp-zeile und .lp-zeile .k-tit ersetzen durch .lp-pillen { position:relative; z-index:1; '
-             'pointer-events:none; display:flex; flex-wrap:wrap; gap:4px; }. HOWTO-werkzeuge.md und '
-             'HOWTO-simulationen.md (Beispielkachel) nachfuehren. leitprogramme.html bleibt. '
-             'Zahlen und Ablauf in TODO-schwesterprojekt.md (Mathe). Danach diesen Eintrag streichen.'),
+    dict(quelle='Mathe', was='HOWTO-simulationen/-werkzeuge: SEO- und FUSS-Marken woertlich (11.10.2026, Mathe 84f1a7f)',
+         wie='build-seo.py erkennt nur die vollen Marken mit «— generiert von scripts/build-seo.py, nicht von Hand '
+             'aendern». Ein nacktes <!-- SEO:ANFANG --> in einer neuen Seite liess es einen zweiten Kopf davor setzen, '
+             'nackte FUSS-Marken blieben leer. In Physik HOWTO-simulationen.md Z.37 und HOWTO-werkzeuge.md Z.39 '
+             '(«leere FUSS-Marken») einen Satz anfuegen: Marken woertlich aus der Vorlage kopieren. Danach streichen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',
