@@ -24,6 +24,9 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **g4.2 Boxplot: Ausreisser umschaltbar** (11.10.2026): im Tab «Boxplot» ein zweites Beispiel mit Rohdaten
+  (11 Lernzeiten, Ausreisser 12 nach der Faustregel \(1.5 \cdot \text{QD}\) aus g4.3), Knöpfe «bis Min und Max» /
+  «Ausreisser einzeln» (`gm-btn`), dazu der Hinweis, dass die zweite Form mehr als die fünf Kennzahlen braucht.
 - **Simulation Boxplot** (11.10.2026, `simulationen/boxplot.html`): 4–15 Werte im Punktdiagramm ziehen oder
   eintippen und in sechs Schritten verfolgen: sortierte Liste mit den Plätzen von Median und Quartilen (Median der
   Hälften wie g4.3), Boxplot Teil für Teil aus dem Punktdiagramm, vier Teile mit gleich vielen Werten und die Form
