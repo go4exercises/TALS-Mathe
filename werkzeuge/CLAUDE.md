@@ -3,6 +3,13 @@
 Lädt nur, wenn Claude an Dateien in `werkzeuge/` arbeitet. Die Regeln für alle Simulationen und Werkzeuge stehen
 in der Haupt-`CLAUDE.md` (Projektstruktur), Aufbau und Eintragen in `HOWTO-werkzeuge.md`. Hier: die einzelnen Seiten.
 
+**Alle sieben Trainer laufen im gemeinsamen Rahmen** `trainer.css` + `trainer.js` (Klassen `tr-`, HOWTO-werkzeuge §3
+«Trainer-Rahmen», Vorbild `systemtrainer.html`): Karte bis zum unteren Bildschirmrand, «Nächster Schritt» oben rechts
+im Kopf, Lösung wächst in der Arbeitsfläche unter der Aufgabe, Bedienleiste unten. Geprüft bei 1280×800 und 360×740:
+Karte ganz im Fenster, Seite scrollt nicht. Seiteneigenes `<style>` nur noch für Besonderheiten (Palette, Kreis,
+Phasen, Verlauf). Was mehrere Trainer brauchen, gehört in `trainer.css`, nicht in die Seiten. In Zeichenketten im
+Skript `'</div>'` nicht unausgeglichen notieren — die div-Bilanz des Pre-Flights zählt sie mit.
+
 **Alle sieben Trainer haben die Taste «Nächster Schritt»** (seit 11.10.2026): Sie deckt die Lösung Schritt für Schritt
 auf, jeder Schritt mit Kopf «Schritt n · Bezeichnung» (Regel bzw. Operation, nie nur «Schritt 2»). Zählt nicht als
 Fehler, aber nicht mehr als «auf Anhieb»; nach dem letzten Schritt ist die Aufgabe abgeschlossen (Notationstrainer:

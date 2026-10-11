@@ -102,6 +102,7 @@
 <!-- SEO:ENDE -->
 <link rel="stylesheet" href="../schriften.css">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="trainer.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
@@ -111,62 +112,28 @@ MathJax = {
 </script>
 <script src="../vendor/mathjax/tex-svg.js"></script>
 <style>
-/* Einheitskreistrainer — seiteneigene Klassen (Präfix ek-), Farben aus style.css.
-   Orange = Aufgabe, Grün = richtig und Herleitung, Rot = Fehler mit Diagnose, Grau = fast.
+/* Einheitskreistrainer — Rahmen aus trainer.css, hier nur Seiteneigenes (Präfix ek-).
    Im Kreis: Blau = cos (x-Koordinate), Orange = sin (y-Koordinate), wie auf Themenseite 5.4. */
-.ek-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
-.ek-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
-.ek-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
-  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
-.ek-seite summary::-webkit-details-marker { display:none; }
-.ek-seite summary::before { content:'▸ '; }
-.ek-seite details[open] summary::before { content:'▾ '; }
-.ek-gruppe { margin-bottom:16px; }
-.ek-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
-.ek-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
-  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
-.ek-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
-  border-radius:3px; background:var(--weiss); }
-.ek-opt.ek-rund::before { border-radius:50%; }
-.ek-opt.aktiv { color:var(--tinte); }
-.ek-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
-.ek-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
-.ek-opt:hover { color:var(--blau); }
-.ek-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
-.ek-zahl b { color:var(--tinte); font-weight:600; }
-.ek-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
-@media (min-width:901px) { .ek-seite summary { display:none; } }
-@media (max-width:900px) {
-  .ek-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
-  .ek-seite { order:-1; position:static; margin-bottom:-10px; }
-  .ek-seite details[open] > div { padding:12px 4px 0; }
-  .ek-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
-}
-.ek-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
-.ek-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
-.ek-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:12px; }
-.ek-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.ek-tag.ek-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
-.ek-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
-.ek-ausdruck { font-size:1.3rem; padding:8px 4px 12px; overflow-x:auto; }
-.ek-eingabe { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-.ek-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:12em; max-width:100%;
-  border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
-.ek-eingabe input:focus { outline:none; border-color:var(--orange); }
+.tr-opt.ek-rund::before { border-radius:50%; }
 .ek-vorschau { font-size:.95rem; color:var(--tinte-2); min-height:1.6em; }
-.ek-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
-  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
-.ek-btn:hover { filter:brightness(.97); }
-.ek-btn.ek-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
-.ek-btn:disabled { opacity:.45; cursor:default; }
-.ek-palette { display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); gap:6px; max-width:560px; }
-.ek-palette .ek-btn { padding:6px 4px; font-size:1rem; min-height:46px; }
-.ek-palette .ek-btn.ek-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
-.ek-palette .ek-nd { font-size:.72rem; line-height:1.15; }
-.ek-hinweis { font-family:var(--sans); font-size:.78rem; color:var(--tinte-2); margin-top:6px; }
-.ek-kreiswahl { display:flex; flex-wrap:wrap; gap:16px; align-items:center; }
-.ek-kreiswahl svg.ek-skizze { width:300px; max-width:100%; height:auto; touch-action:manipulation; }
+/* Palette der exakten Werte in der Leiste: zwei Reihen, oben 0 und die positiven, unten «nicht definiert» und die negativen */
+.ek-palette { display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); gap:5px; max-width:560px; }
+.ek-palette .tr-btn { padding:4px 3px; font-size:1.05rem; min-height:40px; font-weight:400; color:var(--tinte); background:var(--weiss); }
+.ek-palette .tr-btn:hover:not(:disabled) { background:var(--orange-hell); }
+.ek-palette .tr-btn.ek-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
+.ek-palette .ek-nd { font-size:.7rem; line-height:1.15; font-family:var(--sans); }
+/* Kreis zum Anklicken: Teil der Aufgabe in der Arbeitsfläche, Grösse setzt kreisGroesse() */
+.ek-arbeit.ek-mitkreis .ek-kreiswahl { margin:0 auto 6px; width:300px; max-width:100%; }
+.ek-kreis-hinweis { margin-top:0; }
+/* mit Kreis: Gleichung enger setzen, damit der Kreis gross bleibt */
+.ek-kreismodus .tr-ausdruck { padding:0 2px 2px; }
+.ek-kreismodus .tr-ausdruck mjx-container[display] { margin:.35em 0 !important; }
+.ek-kreiswahl svg.ek-skizze { display:block; width:100%; height:auto; touch-action:manipulation; }
+@media (min-width:720px) {
+  .ek-arbeit.ek-mitkreis { display:flex; gap:20px; align-items:flex-start; }
+  .ek-arbeit.ek-mitkreis .ek-kreiswahl { flex:none; margin:0; }
+  .ek-arbeit.ek-mitkreis .tr-weg { flex:1 1 auto; min-width:0; margin-top:0; }
+}
 .ek-punkt { cursor:pointer; }
 .ek-punkt circle.ek-p { fill:var(--weiss); stroke:var(--tinte-2); stroke-width:1.5; }
 .ek-punkt:hover circle.ek-p, .ek-punkt:focus circle.ek-p { stroke:var(--orange); stroke-width:2.5; outline:none; }
@@ -175,108 +142,79 @@ MathJax = {
 .ek-punkt.fehlt circle.ek-p { fill:var(--weiss); stroke:var(--gruen); stroke-width:3; stroke-dasharray:3 2; }
 .ek-punkt.zuviel circle.ek-p { fill:var(--rot); stroke:var(--rot); }
 .ek-punkt text { font-family:var(--mono); font-size:10px; fill:var(--tinte-2); pointer-events:none; }
-.ek-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
-.ek-rueck:empty { display:none; }
-.ek-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
-.ek-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
-.ek-rueck.fast { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
-.ek-rueck p { margin:0; }
-.ek-rueck p + p { margin-top:6px; }
-.ek-weg { margin-top:12px; padding:10px 14px; border:1px solid var(--gruen-rand); border-radius:9px; background:var(--gruen-hell);
-  display:flex; flex-wrap:wrap; gap:6px 20px; align-items:flex-start; }
-.ek-weg-text { flex:1 1 260px; min-width:0; }
-.ek-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
-.ek-weg .ek-zeile { font-family:var(--sans); font-size:.92rem; padding:3px 0; }
-.ek-weg svg.ek-skizze { width:220px; max-width:100%; height:auto; flex:0 0 auto; }
-.ek-schritt + .ek-schritt { margin-top:8px; }
-.ek-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); margin-bottom:1px; }
-.ek-btn.ek-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
-.ek-schritt-zahl { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.8; margin-left:6px; }
-.ek-kreis-knoepfe { display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
-.ek-schritt-platz { margin-top:8px; }
-.ek-schritt-platz:empty { display:none; }
-.ek-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
-.ek-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
-.ek-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
-.ek-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
-.ek-bilanz ul { margin:6px 0 0 18px; }
-[hidden] { display:none !important; }
 @media (max-width:560px) {
-  .ek-vorne { padding-left:14px; padding-right:14px; }
-  /* schmal: ±Paare übereinander (oben sin/cos-Werte, unten links 0, rechts die Tangenswerte), «nicht definiert» abgesetzt */
-  .ek-palette { grid-template-columns:repeat(4, minmax(0, 1fr)); }
-  .ek-palette [data-w="1/2"], .ek-palette [data-w="-1/2"] { grid-column:1; }
-  .ek-palette [data-w="1/2"] { grid-row:1; } .ek-palette [data-w="-1/2"] { grid-row:2; }
-  .ek-palette [data-w="w2/2"], .ek-palette [data-w="-w2/2"] { grid-column:2; }
-  .ek-palette [data-w="w2/2"] { grid-row:1; } .ek-palette [data-w="-w2/2"] { grid-row:2; }
-  .ek-palette [data-w="w3/2"], .ek-palette [data-w="-w3/2"] { grid-column:3; }
-  .ek-palette [data-w="w3/2"] { grid-row:1; } .ek-palette [data-w="-w3/2"] { grid-row:2; }
-  .ek-palette [data-w="1"], .ek-palette [data-w="-1"] { grid-column:4; }
-  .ek-palette [data-w="1"] { grid-row:1; } .ek-palette [data-w="-1"] { grid-row:2; }
-  .ek-palette [data-w="0"] { grid-row:3; grid-column:1; }
-  .ek-palette [data-w="w3/3"], .ek-palette [data-w="-w3/3"] { grid-column:3; }
-  .ek-palette [data-w="w3/3"] { grid-row:3; } .ek-palette [data-w="-w3/3"] { grid-row:4; }
-  .ek-palette [data-w="w3"], .ek-palette [data-w="-w3"] { grid-column:4; }
-  .ek-palette [data-w="w3"] { grid-row:3; } .ek-palette [data-w="-w3"] { grid-row:4; }
-  .ek-palette [data-w="nd"] { grid-row:5; grid-column:1 / -1; margin-top:6px; min-height:38px; }
-  .ek-btn.ek-weiter { min-width:0; flex:1 1 60%; }
-  .ek-taste { display:none; }
+  /* schmal: Leiste darf mehr Höhe nehmen (Palette und Rückmeldung zugleich sichtbar), Eingabe und Prüfen auf einer Zeile */
+  .ek-breit { display:none; }
+  /* schmal: fünf Spalten — oben 0 und die positiven sin/cos-Werte, darunter «nicht definiert» und die negativen,
+     unten die Tangenswerte (positives Paar, negatives Paar) */
+  .ek-palette { grid-template-columns:repeat(5, minmax(0, 1fr)); }
+  .ek-palette { gap:4px; }
+  .ek-palette .tr-btn { min-height:32px; padding:2px; font-size:.95rem; }
+  .ek-palette [data-w="0"] { grid-row:1; grid-column:1; } .ek-palette [data-w="nd"] { grid-row:2; grid-column:1; }
+  .ek-palette [data-w="1/2"] { grid-row:1; grid-column:2; } .ek-palette [data-w="-1/2"] { grid-row:2; grid-column:2; }
+  .ek-palette [data-w="w2/2"] { grid-row:1; grid-column:3; } .ek-palette [data-w="-w2/2"] { grid-row:2; grid-column:3; }
+  .ek-palette [data-w="w3/2"] { grid-row:1; grid-column:4; } .ek-palette [data-w="-w3/2"] { grid-row:2; grid-column:4; }
+  .ek-palette [data-w="1"] { grid-row:1; grid-column:5; } .ek-palette [data-w="-1"] { grid-row:2; grid-column:5; }
+  .ek-palette [data-w="w3/3"] { grid-row:3; grid-column:2; } .ek-palette [data-w="w3"] { grid-row:3; grid-column:3; }
+  .ek-palette [data-w="-w3/3"] { grid-row:3; grid-column:4; } .ek-palette [data-w="-w3"] { grid-row:3; grid-column:5; }
 }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
-<div class="page-wrap ek-wrap">
+<div class="page-wrap tr-wrap">
   <main class="content">
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Einheitskreistrainer</h1>
-      <p class="pt-untertitel">Grad und Bogenmass, die exakten Werte von Sinus, Cosinus und Tangens und der Weg zurück vom Wert zum Winkel — ohne Taschenrechner, mit Quadrant, Referenzwinkel und Vorzeichen statt Auswendiglernen.
-        Der Stoff dazu steht in <a href="../grundlagen/g5-1-grundlagen.html#definition">5.1 Grundlagen</a>
-        und <a href="../grundlagen/g5-4-einheitskreis.html#definition">5.4 Einheitskreis</a>.</p>
+      <p class="pt-untertitel">Grad und Bogenmass, exakte Werte und der Weg vom Wert zum Winkel, ohne Taschenrechner. Der Stoff dazu steht in <a href="../grundlagen/g5-1-grundlagen.html#definition">5.1 Grundlagen</a> und <a href="../grundlagen/g5-4-einheitskreis.html#definition">5.4 Einheitskreis</a>.</p>
     </div>
 
-<div class="ek-karte" id="ek-karte">
-  <div id="ek-aufgabe">
-    <div class="ek-vorne">
-      <div class="ek-kopf"><span class="ek-tag" id="ek-nr"></span><span class="ek-tag ek-thema" id="ek-thema"></span></div>
-      <p class="ek-auftrag" id="ek-auftrag"></p>
-      <div class="ek-ausdruck" id="ek-ausdruck"></div>
-      <div id="ek-antwort-eingabe" class="ek-eingabe">
-        <input type="text" id="ek-eingabe" autocomplete="off" spellcheck="false" aria-label="Deine Antwort">
-        <button type="button" class="ek-btn" id="ek-pruefen">Prüfen<span class="ek-taste">Enter</span></button>
-        <button type="button" class="ek-btn ek-schritt-btn" id="ek-schritt">Nächster Schritt<span class="ek-schritt-zahl" id="ek-schritt-zahl"></span></button>
+<div class="tr-karte" id="ek-karte">
+  <div class="tr-aufgabe" id="ek-aufgabe">
+    <div class="tr-kopf">
+      <div class="tr-tags"><span class="tr-tag" id="ek-nr"></span><span class="tr-tag tr-thema" id="ek-thema"></span></div>
+      <button type="button" class="tr-naechster" id="ek-schritt" title="Zeigt den nächsten Schritt der Lösung (Taste N)">Nächster Schritt<span class="tr-zaehler" id="ek-schritt-zahl"></span></button>
+    </div>
+    <div class="tr-flaeche" id="ek-flaeche">
+      <p class="tr-auftrag" id="ek-auftrag"></p>
+      <div class="tr-ausdruck" id="ek-ausdruck"></div>
+      <div class="ek-arbeit" id="ek-arbeit">
+        <div class="ek-kreiswahl" id="ek-kreis" hidden></div>
+        <div class="tr-weg" id="ek-weg" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="tr-leiste">
+      <div id="ek-antwort-eingabe" class="tr-reihe">
+        <input type="text" class="tr-lang" id="ek-eingabe" autocomplete="off" spellcheck="false" aria-label="Deine Antwort">
+        <button type="button" class="tr-btn" id="ek-pruefen">Prüfen<span class="tr-taste">Enter</span></button>
         <span class="ek-vorschau" id="ek-vorschau" aria-live="polite"></span>
       </div>
-      <div id="ek-antwort-palette" class="ek-palette" hidden></div>
-      <div class="ek-schritt-platz" id="ek-schritt-platz"></div>
-      <div id="ek-antwort-kreis" class="ek-kreiswahl" hidden>
-        <div id="ek-kreis"></div>
-        <div class="ek-kreis-knoepfe" id="ek-kreis-knoepfe">
-          <button type="button" class="ek-btn" id="ek-kreis-pruefen">Prüfen<span class="ek-taste">Enter</span></button>
-        </div>
+      <div id="ek-antwort-palette" class="ek-palette" role="group" aria-label="Wert wählen" hidden></div>
+      <div id="ek-antwort-kreis" class="tr-reihe" hidden>
+        <button type="button" class="tr-btn" id="ek-kreis-pruefen">Prüfen<span class="tr-taste">Enter</span></button>
+        <span class="tr-hinweis ek-kreis-hinweis">Antippen wählt einen Punkt an oder ab.<span class="ek-breit"> Mit der Tastatur: Tab springt zum nächsten Punkt, Leertaste wählt, Enter prüft.</span></span>
       </div>
-      <div class="ek-hinweis" id="ek-hinweis"></div>
-      <div class="ek-rueck" id="ek-rueck" aria-live="polite"></div>
-      <div class="ek-weg" id="ek-weg" hidden></div>
-    </div>
-    <div class="ek-knoepfe" id="ek-weiter-box" hidden>
-      <button type="button" class="ek-btn ek-weiter" id="ek-weiter">Nächste Aufgabe →<span class="ek-taste">Enter</span></button>
+      <div class="tr-hinweis" id="ek-hinweis"></div>
+      <div class="tr-rueck" id="ek-rueck" aria-live="polite"></div>
+      <div class="tr-weiter-box" id="ek-weiter-box" hidden>
+        <button type="button" class="tr-btn tr-weiter" id="ek-weiter">Nächste Aufgabe →<span class="tr-taste">Enter</span></button>
+      </div>
     </div>
   </div>
-  <div class="ek-bilanz" id="ek-bilanz" hidden></div>
+  <div class="tr-bilanz" id="ek-bilanz" hidden></div>
 </div>
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert der Trainer</div>
-  <p>Eine Runde hat zehn Zufallsaufgaben aus den Teilen, die du rechts wählst. Dort stellst du auch ein, ob die Winkel in Grad, im Bogenmass oder gemischt erscheinen.</p>
+  <p>Eine Runde hat zehn Zufallsaufgaben aus den Teilen, die du rechts wählst. Dort stellst du auch ein, ob die Winkel in Grad, im Bogenmass oder gemischt erscheinen. Geübt werden die exakten Werte von Sinus, Cosinus und Tangens ohne Taschenrechner, mit Quadrant, Referenzwinkel und Vorzeichen statt Auswendiglernen.</p>
   <ul>
     <li><strong>Grad und Bogenmass:</strong> Bogenmass als Vielfaches von \(\pi\), eingegeben als <code>5pi/6</code>, <code>-pi/4</code> oder <code>2pi</code>; Grad als <code>150</code> oder <code>150°</code>.</li>
     <li><strong>Exakte Werte:</strong> Wähle den Wert aus der Palette. Liegt der Fehler nur im Vorzeichen, bei vertauschten Werten von 30° und 60° oder beim Kehrwert des Tangens, sagt dir das Werkzeug genau das.</li>
-    <li><strong>Vom Wert zum Winkel:</strong> Klicke auf dem Einheitskreis alle Winkel an, welche die Gleichung erfüllen, und prüfe dann.</li>
-    <li><strong>Nächster Schritt:</strong> zeigt die Lösung Schritt für Schritt, jeden Schritt mit seiner Bezeichnung. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
+    <li><strong>Vom Wert zum Winkel:</strong> Klicke auf dem Einheitskreis alle Winkel an, welche die Gleichung erfüllen, und prüfe dann. Mit der Tastatur: Tab springt zum nächsten Punkt, Leertaste wählt, Enter prüft.</li>
+    <li><strong>Nächster Schritt</strong> (oben rechts, Taste N): zeigt die Lösung Schritt für Schritt unter der Aufgabe, jeden Schritt mit seiner Bezeichnung. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
   </ul>
-  <p>Nach jeder Aufgabe steht die Herleitung da — Quadrant, Referenzwinkel, Vorzeichen — mit einer Skizze am Einheitskreis. Gespeichert wird nichts.</p>
+  <p>Nach jeder Aufgabe steht unter der Aufgabe die ganze Herleitung — Quadrant, Referenzwinkel, Vorzeichen — mit einer Skizze am Einheitskreis. Gespeichert wird nichts.</p>
 </div>
 
 <details class="block block-merksatz" style="margin-top:10px">
@@ -294,26 +232,26 @@ MathJax = {
 </details>
 
   </main>
-  <aside class="ek-seite">
+  <aside class="tr-seite">
     <details id="ek-seite-det">
       <summary>Runde und Auswahl · <span id="ek-kurz"></span></summary>
-      <div class="ek-gruppen">
-        <div class="ek-gruppe">
-          <div class="ek-g-titel">Runde</div>
-          <div class="ek-zahl"><span>Aufgabe</span><b id="ek-z-nr"></b></div>
-          <div class="ek-zahl"><span>Auf Anhieb</span><b id="ek-z-ok">0</b></div>
-          <div class="ek-zahl"><span>Fehler</span><b id="ek-z-fehl">0</b></div>
-          <div class="ek-zahl"><span>Zeit</span><b id="ek-z-zeit">0:00</b></div>
-          <div class="ek-neu" style="margin-top:6px"><button type="button" id="ek-neu">Neue Runde</button></div>
+      <div class="tr-gruppen">
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Runde</div>
+          <div class="tr-zahl"><span>Aufgabe</span><b id="ek-z-nr"></b></div>
+          <div class="tr-zahl"><span>Auf Anhieb</span><b id="ek-z-ok">0</b></div>
+          <div class="tr-zahl"><span>Fehler</span><b id="ek-z-fehl">0</b></div>
+          <div class="tr-zahl"><span>Zeit</span><b id="ek-z-zeit">0:00</b></div>
+          <div class="tr-neu" style="margin-top:6px"><button type="button" id="ek-neu">Neue Runde</button></div>
         </div>
-        <div class="ek-gruppe" id="ek-themen">
-          <div class="ek-g-titel">Teile</div>
+        <div class="tr-gruppe" id="ek-themen">
+          <div class="tr-g-titel">Teile</div>
         </div>
-        <div class="ek-gruppe" id="ek-mass">
-          <div class="ek-g-titel">Winkel anzeigen in</div>
-          <button type="button" class="ek-opt ek-rund aktiv" data-m="grad" aria-pressed="true">Grad</button>
-          <button type="button" class="ek-opt ek-rund" data-m="rad" aria-pressed="false">Bogenmass</button>
-          <button type="button" class="ek-opt ek-rund" data-m="mix" aria-pressed="false">gemischt</button>
+        <div class="tr-gruppe" id="ek-mass">
+          <div class="tr-g-titel">Winkel anzeigen in</div>
+          <button type="button" class="tr-opt ek-rund aktiv" data-m="grad" aria-pressed="true">Grad</button>
+          <button type="button" class="tr-opt ek-rund" data-m="rad" aria-pressed="false">Bogenmass</button>
+          <button type="button" class="tr-opt ek-rund" data-m="mix" aria-pressed="false">gemischt</button>
         </div>
       </div>
     </details>
@@ -329,6 +267,7 @@ MathJax = {
 </footer>
 <!-- FUSS:ENDE -->
 <script src="../nav.js"></script>
+<script src="trainer.js"></script>
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
@@ -721,11 +660,10 @@ try {
 const themenBox = $('ek-themen');
 for (const [k, t] of Object.entries(THEMEN)) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'ek-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name; b.setAttribute('aria-pressed', themen.has(k));
+  b.type = 'button'; b.className = 'tr-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name; b.setAttribute('aria-pressed', themen.has(k));
   themenBox.appendChild(b);
 }
-document.querySelectorAll('#ek-mass .ek-opt').forEach(b => { b.classList.toggle('aktiv', b.dataset.m === mass); b.setAttribute('aria-pressed', b.dataset.m === mass); });
-
+document.querySelectorAll('#ek-mass .tr-opt').forEach(b => { b.classList.toggle('aktiv', b.dataset.m === mass); b.setAttribute('aria-pressed', b.dataset.m === mass); });
 // SVG des Einheitskreises. punkte: true = 16 anklickbare Punkte; phi: Winkel für die Herleitung, phis: mehrere (Lösungen)
 // Trefferfläche der Punkte r = 12: Nachbarn im Abstand 15° liegen 2 · 100 · sin 7.5° = 26.1 auseinander, die Flächen berühren sich nicht.
 const SVGNS = 'http://www.w3.org/2000/svg';
@@ -801,14 +739,36 @@ function zeigeZahlen() {
   $('ek-z-ok').textContent = stand.ok; $('ek-z-fehl').textContent = stand.fehl; $('ek-z-zeit').textContent = zeit();
   $('ek-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-// Lösungsweg: die ersten k Schritte; ohne k (Aufgabe abgeschlossen) alle und die Skizze. Die Skizze kommt erst am
-// Schluss, weil sie Punkt P bzw. die Lösungen zeigt und damit die Antwort vorwegnähme.
+// Kreis zum Anklicken so gross, dass Auftrag, Aufgabe und Kreis in die Arbeitsfläche passen (180 bis 300 px)
+function kreisGroesse() {
+  const k = $('ek-kreis'), fl = $('ek-flaeche');
+  if (k.hidden || !fl.clientHeight) return;
+  const cs = getComputedStyle(fl), innen = fl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  const frei = innen - $('ek-auftrag').offsetHeight - $('ek-ausdruck').offsetHeight - 10;
+  k.style.width = Math.max(180, Math.min(300, Math.floor(frei))) + 'px';
+}
+window.addEventListener('resize', kreisGroesse);
+document.addEventListener('toggle', () => requestAnimationFrame(kreisGroesse), true);
+// Ergebnis der Aufgabe, als letzte Zeile der ganzen Lösung
+function ergebnisTex(a) {
+  if (a.art === 'rad') return a.ausdruck.replace('\\;?', radTex(a.grad));
+  if (a.art === 'grad') return a.ausdruck.replace('\\;?', gradTex(a.grad));
+  if (a.art === 'palette') return a.ausdruck.replace('\\;?', wertTex(a.loesung));
+  return '\\varphi \\in \\{' + a.loesung.map(g => winkelTex(g, a.mass)).join(';\\, ') + '\\}';
+}
+// Lösungsweg unter der Aufgabe: die ersten k Schritte; ohne k (Aufgabe abgeschlossen) alle, das Ergebnis und die
+// Skizze. Die Skizze kommt erst am Schluss, weil sie Punkt P bzw. die Lösungen zeigt und damit die Antwort vorwegnähme.
 function wegHtml(a, k) {
   const st = schrittListe(a), alle = k === undefined || k >= st.length;
   const skizze = !alle ? '' : a.thema === 'werte' ? kreisSvg({ phi: a.grad, f: a.f }) : a.thema === 'umkehr' ? kreisSvg({ phis: a.loesung, f: a.f }) : '';
-  return '<div class="ek-weg-text"><div class="ek-weg-titel">' + (a.thema === 'umrechnen' ? 'Umrechnung' : 'Herleitung') + '</div>'
-    + st.slice(0, alle ? st.length : k).map((s, i) => '<div class="ek-schritt"><div class="ek-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>'
-      + s.zeilen.map(z => '<div class="ek-zeile">' + z + '</div>').join('') + '</div>').join('') + '</div>' + skizze;
+  return (skizze ? '<div class="tr-bild">' + skizze + '</div>' : '')
+    + st.slice(0, alle ? st.length : k).map((s, i) => '<div class="tr-schritt"><div class="tr-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>'
+      + s.zeilen.map(z => '<div class="tr-text">' + z + '</div>').join('') + '</div>').join('')
+    + (alle ? '<div class="tr-ergebnis">\\(' + ergebnisTex(a) + '\\)</div>' : '');
+}
+function zeigeWeg(k) {
+  setzen($('ek-weg'), wegHtml(A, k));
+  mjKette.then(() => trNachUnten($('ek-flaeche')));
 }
 function zeigeSchrittKnopf() {
   const n = schrittListe(A).length;
@@ -820,7 +780,7 @@ function naechsterSchritt() {
   const n = schrittListe(A).length;
   schritt = Math.min(schritt + 1, n); angesehen = true;
   if (schritt >= n) { meldung('fast', '<p>Lösung Schritt für Schritt angesehen.</p>'); return abschliessen(false); }
-  $('ek-weg').hidden = false; setzen($('ek-weg'), wegHtml(A, schritt));
+  zeigeWeg(schritt);
   zeigeSchrittKnopf();
 }
 function neueAufgabe() {
@@ -828,10 +788,6 @@ function neueAufgabe() {
   nr++;
   let a; do a = aufgabe([...themen], mass); while (a.ausdruck === letztes);
   A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0; gewaehlt = new Set(); schritt = 0; angesehen = false;
-  // «Nächster Schritt» steht neben «Prüfen»; bei der Palette (ohne Prüfen) darunter
-  if (a.art === 'kreis') $('ek-kreis-knoepfe').appendChild($('ek-schritt'));
-  else if (a.art === 'palette') $('ek-schritt-platz').appendChild($('ek-schritt'));
-  else $('ek-pruefen').after($('ek-schritt'));
   zeigeSchrittKnopf();
   $('ek-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('ek-thema').textContent = THEMEN[a.thema].name;
@@ -840,31 +796,43 @@ function neueAufgabe() {
   $('ek-antwort-eingabe').hidden = !(a.art === 'rad' || a.art === 'grad');
   $('ek-antwort-palette').hidden = a.art !== 'palette';
   $('ek-antwort-kreis').hidden = a.art !== 'kreis';
-  $('ek-hinweis').textContent = { rad: 'Zum Beispiel 5pi/6, -pi/4 oder 2pi (π geht auch).', grad: 'Zum Beispiel 150 oder 150°.', palette: '', kreis: 'Antippen wählt einen Punkt an oder ab. Mit der Tastatur: Tab springt zum nächsten Punkt, Leertaste wählt, Enter prüft.' }[a.art];
-  if (a.art === 'palette') setzen($('ek-antwort-palette'), PALETTE.map(k => '<button type="button" class="ek-btn' + (k === 'nd' ? ' ek-nd' : '') + '" data-w="' + k + '">' + (k === 'nd' ? 'nicht definiert' : '\\(' + wertTex(k) + '\\)') + '</button>').join(''));
+  $('ek-kreis').hidden = a.art !== 'kreis';
+  $('ek-arbeit').classList.toggle('ek-mitkreis', a.art === 'kreis'); $('ek-flaeche').classList.toggle('ek-kreismodus', a.art === 'kreis');
+  $('ek-hinweis').textContent = { rad: 'Zum Beispiel 5pi/6, -pi/4 oder 2pi (π geht auch).', grad: 'Zum Beispiel 150 oder 150°.', palette: '', kreis: '' }[a.art];
+  if (a.art === 'palette') setzen($('ek-antwort-palette'), PALETTE.map(k => '<button type="button" class="tr-btn' + (k === 'nd' ? ' ek-nd' : '') + '" data-w="' + k + '">' + (k === 'nd' ? 'nicht definiert' : '\\(' + wertTex(k) + '\\)') + '</button>').join(''));
   if (a.art === 'kreis') { $('ek-kreis').innerHTML = kreisSvg({ punkte: true, mass: a.mass }); $('ek-kreis-pruefen').disabled = false; }
   const inp = $('ek-eingabe'); inp.value = ''; inp.disabled = false; $('ek-pruefen').disabled = false;
   setzen($('ek-vorschau'), '');
-  setzen($('ek-rueck'), ''); $('ek-rueck').className = 'ek-rueck';
-  $('ek-weg').hidden = true; $('ek-weiter-box').hidden = true;
+  setzen($('ek-rueck'), ''); $('ek-rueck').className = 'tr-rueck';
+  setzen($('ek-weg'), ''); $('ek-weiter-box').hidden = true;
+  $('ek-flaeche').scrollTop = 0;
+  mjKette.then(kreisGroesse);
   zeigeZahlen();
-  if (a.art === 'rad' || a.art === 'grad') inp.focus();
+  if (a.art === 'rad' || a.art === 'grad') inp.focus({ preventScroll: true });
 }
-function meldung(cls, html) { $('ek-rueck').className = 'ek-rueck ' + cls; setzen($('ek-rueck'), html); }
+function meldung(cls, html) {
+  $('ek-rueck').className = 'tr-rueck ' + cls; setzen($('ek-rueck'), html);
+  if (A && A.art === 'kreis' && !fertig) mjKette.then(kreisZeigen);
+}
+// Die Rückmeldung macht die Leiste höher: Arbeitsfläche so weit scrollen, dass der Kreis ganz sichtbar bleibt
+function kreisZeigen() {
+  const fl = $('ek-flaeche'), d = $('ek-kreis').getBoundingClientRect().bottom - fl.getBoundingClientRect().bottom + 6;
+  if (d > 0) fl.scrollTop += d;
+}
 function abschliessen(gut) {
   fertig = true;
   $('ek-eingabe').disabled = true; $('ek-pruefen').disabled = true; $('ek-kreis-pruefen').disabled = true;
-  mjKette.then(() => $('ek-antwort-palette').querySelectorAll('button').forEach(b => { b.disabled = true; }));
   if (A.art === 'kreis') $('ek-kreis').querySelectorAll('.ek-punkt').forEach(p => {
     const g = +p.dataset.g, soll = A.loesung.includes(g), an = gewaehlt.has(g);
     p.classList.remove('an'); p.classList.toggle('ok', soll && an); p.classList.toggle('fehlt', soll && !an); p.classList.toggle('zuviel', !soll && an);
   });
-  $('ek-weg').hidden = false; setzen($('ek-weg'), wegHtml(A));
+  $('ek-antwort-palette').hidden = true; $('ek-antwort-kreis').hidden = true; $('ek-hinweis').textContent = '';
+  zeigeWeg();
   $('ek-weiter-box').hidden = false;
   zeigeSchrittKnopf();
   if (gut && !fehlerInAufgabe && !angesehen) stand.ok++;
   zeigeZahlen();
-  $('ek-weiter').focus();
+  mjKette.then(() => $('ek-weiter').focus({ preventScroll: true }));
 }
 function loesungTex(a) {
   if (a.art === 'rad') return '\\(' + radTex(a.grad) + '\\)';
@@ -900,8 +868,8 @@ function bilanz() {
     const f = FEHLER[c];
     return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + (f[2] ? ' — nachlesen in <a href="' + f[2][0] + '">' + f[2][1] + '</a>' : '') + '</li>';
   }).join('') + '</ul>';
-  else if (!stand.fehl) html += '<p>Keine Fehler — stark.</p>';
-  html += '<div class="ek-knoepfe" style="padding:12px 0 0"><button type="button" class="ek-btn ek-weiter" id="ek-nochmal">Neue Runde</button></div>';
+  else if (stand.ok === RUNDE) html += '<p>Alles auf Anhieb — stark.</p>';
+  html += '<div class="tr-weiter-box"><button type="button" class="tr-btn tr-weiter" id="ek-nochmal">Neue Runde</button></div>';
   $('ek-aufgabe').hidden = true; $('ek-bilanz').hidden = false;
   setzen($('ek-bilanz'), html);
   mjKette.then(() => $('ek-nochmal').focus());
@@ -934,7 +902,7 @@ $('ek-weiter').addEventListener('click', neueAufgabe);
 $('ek-neu').addEventListener('click', neueRunde);
 $('ek-bilanz').addEventListener('click', e => { if (e.target.closest('#ek-nochmal')) neueRunde(); });
 themenBox.addEventListener('click', e => {
-  const b = e.target.closest('.ek-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   const t = b.dataset.t;
   if (themen.has(t) && themen.size === 1) return;
   if (themen.has(t)) themen.delete(t); else themen.add(t);
@@ -942,13 +910,15 @@ themenBox.addEventListener('click', e => {
   neueRunde();
 });
 $('ek-mass').addEventListener('click', e => {
-  const b = e.target.closest('.ek-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   mass = b.dataset.m;
-  document.querySelectorAll('#ek-mass .ek-opt').forEach(x => { x.classList.toggle('aktiv', x === b); x.setAttribute('aria-pressed', x === b); });
+  document.querySelectorAll('#ek-mass .tr-opt').forEach(x => { x.classList.toggle('aktiv', x === b); x.setAttribute('aria-pressed', x === b); });
   neueRunde();
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && fertig && !$('ek-weiter-box').hidden && !e.target.closest('input, button, a, summary, .ek-punkt')) { e.preventDefault(); neueAufgabe(); }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === 'Enter' && fertig && !$('ek-weiter-box').hidden && !e.target.closest('input, button, a, summary, .ek-punkt')) { e.preventDefault(); neueAufgabe(); return; }
+  if ((e.key === 'n' || e.key === 'N') && !fertig && !$('ek-aufgabe').hidden && !e.target.closest('input, textarea')) { e.preventDefault(); naechsterSchritt(); }
 });
 const breit = matchMedia('(min-width: 901px)');
 function seiteOffen() { $('ek-seite-det').open = breit.matches; }

@@ -98,6 +98,7 @@
 <!-- SEO:ENDE -->
 <link rel="stylesheet" href="../schriften.css">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="trainer.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
@@ -107,131 +108,50 @@ MathJax = {
 </script>
 <script src="../vendor/mathjax/tex-svg.js"></script>
 <style>
-/* Systemtrainer — seiteneigene Klassen (Präfix sy-), Farben aus style.css.
-   Orange = Aufgabe, Grün = richtig und Lösungsweg, Rot = Fehler mit Diagnose, Grau = Format.
-   Aufbau wie im Termtrainer. Geraden: I blau, II orange (wie die Reglerfarben). */
-.sy-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
-.sy-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
-.sy-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
-  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
-.sy-seite summary::-webkit-details-marker { display:none; }
-.sy-seite summary::before { content:'▸ '; }
-.sy-seite details[open] summary::before { content:'▾ '; }
-.sy-gruppe { margin-bottom:16px; }
-.sy-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
-.sy-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
-  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
-.sy-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
-  border-radius:3px; background:var(--weiss); }
-.sy-opt.aktiv { color:var(--tinte); }
-.sy-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
-.sy-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
-.sy-opt:hover { color:var(--blau); }
-.sy-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
-.sy-zahl b { color:var(--tinte); font-weight:600; }
-.sy-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
-@media (min-width:901px) { .sy-seite summary { display:none; } }
-@media (max-width:900px) {
-  .sy-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
-  .sy-seite { order:-1; position:static; margin-bottom:-10px; }
-  .sy-seite details[open] > div { padding:12px 4px 0; }
-  .sy-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
-}
-.sy-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
-.sy-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
-.sy-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:12px; }
-.sy-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.sy-tag.sy-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
-.sy-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
-.sy-ausdruck { font-size:1.2rem; padding:8px 4px 12px; overflow-x:auto; }
-.sy-phasen { display:flex; flex-wrap:wrap; gap:4px 6px; margin:0 0 10px; }
+/* Systemtrainer — Rahmen aus trainer.css, hier nur Seiteneigenes (Präfix sy-).
+   Geraden der Skizze: I blau, II orange (wie die Reglerfarben). */
+.sy-phasen { display:flex; flex-wrap:wrap; gap:4px 6px; margin:0 0 8px; }
 .sy-phasen:empty { display:none; }
-.sy-phase { font-family:var(--mono); font-size:.68rem; padding:2px 9px; border-radius:20px; border:1px solid var(--linie); color:var(--tinte-2); background:var(--papier-2); }
+.sy-phase { font-family:var(--mono); font-size:.66rem; padding:1px 8px; border-radius:20px; border:1px solid var(--linie); color:var(--tinte-2); background:var(--papier-2); }
 .sy-phase.jetzt { background:var(--orange-hell); color:var(--orange); border-color:var(--orange-rand); font-weight:600; }
 .sy-phase.erledigt { background:var(--gruen-hell); color:var(--gruen); border-color:var(--gruen-rand); }
-.sy-frage { font-family:var(--sans); font-size:.95rem; font-weight:600; color:var(--tinte); margin:14px 0 6px; }
-.sy-wahl-titel { margin:10px 0 6px; }
-.sy-wahlen { display:flex; flex-direction:column; gap:6px; }
-.sy-wahl { display:flex; gap:10px; align-items:baseline; text-align:left; font-family:var(--sans); font-size:.92rem; line-height:1.35;
-  padding:8px 12px; border-radius:8px; cursor:pointer; border:1.5px solid var(--orange-rand); background:var(--weiss); color:var(--tinte); }
-.sy-wahl:hover:not(:disabled) { background:var(--orange-hell); }
-.sy-wahl:focus-visible { outline:2px solid var(--orange); outline-offset:1px; }
-.sy-wahl .sy-nr { font-family:var(--mono); font-size:.7rem; color:var(--orange); min-width:1em; }
-.sy-wahl:disabled { cursor:default; }
-.sy-wahl.sy-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
-.sy-hilfe { margin-top:10px; }
-.sy-btn.sy-naechster { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); font-weight:500; }
-.sy-weg .sy-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); padding:8px 0 2px; }
-.sy-weg .sy-schritt-kopf:first-of-type { padding-top:0; }
-.sy-wahl.sy-um { border-color:var(--linie); background:var(--papier-2); color:var(--tinte-2); }
-.sy-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
-  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
-.sy-btn:hover { filter:brightness(.97); }
-.sy-btn.sy-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
-.sy-btn:disabled { opacity:.45; cursor:default; }
-.sy-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
-.sy-rueck:empty { display:none; }
-.sy-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
-.sy-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
-.sy-rueck.fast { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
-.sy-rueck p { margin:0; }
-.sy-rueck p + p { margin-top:6px; }
-.sy-weg { margin-top:12px; padding:10px 14px; border:1px solid var(--gruen-rand); border-radius:9px; background:var(--gruen-hell);
-  display:flex; flex-wrap:wrap; gap:8px 24px; align-items:flex-start; }
-.sy-weg-text { flex:1 1 300px; min-width:0; }
-.sy-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
-.sy-weg .sy-zeile { padding:2px 0; overflow-x:auto; }
-.sy-weg .sy-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
-.sy-weg .sy-k { font-family:var(--sans); font-size:.8rem; color:var(--tinte-2); margin-left:10px; white-space:nowrap; }
-.sy-bild { flex:0 1 260px; max-width:100%; }
-.sy-bild svg { display:block; width:100%; height:auto; background:var(--weiss); border:1px solid var(--linie); border-radius:6px; }
-.sy-bild p { font-family:var(--sans); font-size:.8rem; color:var(--tinte-2); margin:4px 0 0; }
-.sy-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
-.sy-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
-.sy-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
-.sy-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
-.sy-bilanz ul { margin:6px 0 0 18px; }
-[hidden] { display:none !important; }
-@media (max-width:560px) {
-  .sy-vorne { padding-left:14px; padding-right:14px; }
-  .sy-ausdruck { font-size:1.05rem; }
-  .sy-btn.sy-weiter { min-width:0; flex:1 1 60%; }
-  .sy-taste { display:none; }
-}
+@media (max-width:560px) { .sy-phasen { display:none; } }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
-<div class="page-wrap sy-wrap">
+<div class="page-wrap tr-wrap">
   <main class="content">
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Systemtrainer</h1>
-      <p class="pt-untertitel">Lineare Gleichungssysteme mit zwei und drei Variablen: Hier übst du das Vorgehen, nicht das Rechnen. Du wählst das Verfahren, bereitest die Gleichungen vor, wendest das Verfahren an und deutest das Ergebnis. Das Werkzeug rechnet jeden Schritt aus. Bei 2×2-Systemen zeigt es am Schluss die beiden Geraden.
-        Der Stoff dazu steht in <a href="../grundlagen/g2-3-lineare-gleichungssysteme.html#verfahren">2.3 Lineare Gleichungssysteme</a>.</p>
+      <p class="pt-untertitel">Lineare Gleichungssysteme Schritt für Schritt: Du wählst das Vorgehen, das Werkzeug rechnet. Der Stoff dazu steht in <a href="../grundlagen/g2-3-lineare-gleichungssysteme.html#verfahren">2.3 Lineare Gleichungssysteme</a>.</p>
     </div>
 
-<div class="sy-karte" id="sy-karte">
-  <div id="sy-aufgabe">
-    <div class="sy-vorne">
-      <div class="sy-kopf"><span class="sy-tag" id="sy-nr"></span><span class="sy-tag sy-thema" id="sy-thema"></span></div>
-      <p class="sy-auftrag" id="sy-auftrag"></p>
-      <div class="sy-ausdruck" id="sy-ausdruck"></div>
-      <div class="sy-phasen" id="sy-phasen"></div>
-      <div class="sy-weg" id="sy-weg" hidden></div>
-      <div class="sy-schritt" id="sy-schritt">
-        <p class="sy-frage" id="sy-frage"></p>
-        <div id="sy-optionen" role="group" aria-label="Schritt wählen"></div>
-        <div class="sy-hilfe"><button type="button" class="sy-btn sy-naechster" id="sy-naechster">Nächster Schritt<span class="sy-taste">N</span></button></div>
-      </div>
-      <div class="sy-rueck" id="sy-rueck" aria-live="polite"></div>
+<div class="tr-karte" id="sy-karte">
+  <div class="tr-aufgabe" id="sy-aufgabe">
+    <div class="tr-kopf">
+      <div class="tr-tags"><span class="tr-tag" id="sy-nr"></span><span class="tr-tag tr-thema" id="sy-thema"></span></div>
+      <button type="button" class="tr-naechster" id="sy-naechster" title="Das Werkzeug führt den nächsten passenden Schritt aus (Taste N)">Nächster Schritt<span class="tr-zaehler tr-nur-taste">N</span></button>
     </div>
-    <div class="sy-knoepfe" id="sy-weiter-box" hidden>
-      <button type="button" class="sy-btn sy-weiter" id="sy-weiter">Nächste Aufgabe →<span class="sy-taste">Enter</span></button>
+    <div class="tr-flaeche" id="sy-flaeche">
+      <p class="tr-auftrag" id="sy-auftrag"></p>
+      <div class="tr-ausdruck" id="sy-ausdruck"></div>
+      <div class="tr-weg" id="sy-weg" aria-live="polite"></div>
+    </div>
+    <div class="tr-leiste">
+      <div id="sy-schritt">
+        <div class="sy-phasen" id="sy-phasen"></div>
+        <p class="tr-frage" id="sy-frage"></p>
+        <div id="sy-optionen" role="group" aria-label="Schritt wählen"></div>
+      </div>
+      <div class="tr-rueck" id="sy-rueck" aria-live="polite"></div>
+      <div class="tr-weiter-box" id="sy-weiter-box" hidden>
+        <button type="button" class="tr-btn tr-weiter" id="sy-weiter">Nächste Aufgabe →<span class="tr-taste">Enter</span></button>
+      </div>
     </div>
   </div>
-  <div class="sy-bilanz" id="sy-bilanz" hidden></div>
+  <div class="tr-bilanz" id="sy-bilanz" hidden></div>
 </div>
 
 <div class="block block-def">
@@ -265,20 +185,20 @@ MathJax = {
 </details>
 
   </main>
-  <aside class="sy-seite">
+  <aside class="tr-seite">
     <details id="sy-seite-det">
       <summary>Runde und Themen · <span id="sy-kurz"></span></summary>
-      <div class="sy-gruppen">
-        <div class="sy-gruppe">
-          <div class="sy-g-titel">Runde</div>
-          <div class="sy-zahl"><span>Aufgabe</span><b id="sy-z-nr"></b></div>
-          <div class="sy-zahl"><span>Auf Anhieb</span><b id="sy-z-ok">0</b></div>
-          <div class="sy-zahl"><span>Fehler</span><b id="sy-z-fehl">0</b></div>
-          <div class="sy-zahl"><span>Zeit</span><b id="sy-z-zeit">0:00</b></div>
-          <div class="sy-neu" style="margin-top:6px"><button type="button" id="sy-neu">Neue Runde</button></div>
+      <div class="tr-gruppen">
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Runde</div>
+          <div class="tr-zahl"><span>Aufgabe</span><b id="sy-z-nr"></b></div>
+          <div class="tr-zahl"><span>Auf Anhieb</span><b id="sy-z-ok">0</b></div>
+          <div class="tr-zahl"><span>Fehler</span><b id="sy-z-fehl">0</b></div>
+          <div class="tr-zahl"><span>Zeit</span><b id="sy-z-zeit">0:00</b></div>
+          <div class="tr-neu" style="margin-top:6px"><button type="button" id="sy-neu">Neue Runde</button></div>
         </div>
-        <div class="sy-gruppe" id="sy-themen">
-          <div class="sy-g-titel">Themen</div>
+        <div class="tr-gruppe" id="sy-themen">
+          <div class="tr-g-titel">Themen</div>
         </div>
       </div>
     </details>
@@ -294,6 +214,7 @@ MathJax = {
 </footer>
 <!-- FUSS:ENDE -->
 <script src="../nav.js"></script>
+<script src="trainer.js"></script>
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
@@ -1028,7 +949,7 @@ try {
 const themenBox = $('sy-themen');
 for (const [k, t] of Object.entries(THEMEN)) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'sy-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  b.type = 'button'; b.className = 'tr-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
   b.setAttribute('aria-pressed', String(themen.has(k)));
   themenBox.appendChild(b);
 }
@@ -1055,21 +976,20 @@ function zeigeZahlen() {
   $('sy-z-zeit').textContent = zeit();
   $('sy-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
+const AUF = '<' + 'div class="tr-schritt">', ZU = '</' + 'div>';   // Schritt öffnen/schliessen (getrennt notiert, sonst zählt die div-Bilanz des Pre-Flights falsch)
 function wegHtml() {
-  let html = '<div class="sy-weg-text"><div class="sy-weg-titel">' + (A.art === 'lage' ? 'Begründung' : 'Dein Weg') + '</div>';
+  let html = S.phase === 'ende' && A.n === 2 ? '<div class="tr-bild">' + skizze(A) + '</div>' : '', offen = false;
   for (const w of S.verlauf) {
-    if (w.kopf) html += '<div class="sy-schritt-kopf">' + w.kopf + '</div>';
-    else if (w.text) html += '<div class="sy-text">' + w.text + '</div>';
-    else if (w.L) html += '<div class="sy-zeile">\\(\\displaystyle ' + A.loesTex + '\\)</div>';
-    else html += '<div class="sy-zeile">\\(\\displaystyle ' + w.z + '\\)' + (w.k ? '<span class="sy-k">' + kommentar(w.k) + '</span>' : '') + '</div>';
+    if (w.kopf) { html += (offen ? ZU : '') + AUF + '<div class="tr-schritt-kopf">' + w.kopf + '</div>'; offen = true; }
+    else if (w.text) html += '<div class="tr-text">' + w.text + '</div>';
+    else if (w.L) html += (offen ? ZU : '') + '<div class="tr-ergebnis">\\(\\displaystyle ' + A.loesTex + '\\)</div>', offen = false;
+    else html += '<div class="tr-zeile">\\(\\displaystyle ' + w.z + '\\)' + (w.k ? '<span class="tr-k">' + kommentar(w.k) + '</span>' : '') + '</div>';
   }
-  html += '</div>';
-  if (S.phase === 'ende' && A.n === 2) html += '<div class="sy-bild">' + skizze(A) + '</div>';
-  return html;
+  return html + (offen ? ZU : '');
 }
 function zeigeSchritt() {
-  $('sy-weg').hidden = !S.verlauf.length;
-  if (S.verlauf.length) setzen($('sy-weg'), wegHtml());
+  setzen($('sy-weg'), wegHtml());
+  mjKette.then(() => trNachUnten($('sy-flaeche')));
   $('sy-phasen').innerHTML = phasenHtml();
   if (S.phase === 'ende') { $('sy-schritt').hidden = true; return; }
   $('sy-schritt').hidden = false;
@@ -1078,11 +998,11 @@ function zeigeSchritt() {
   const gruppen = [...new Set(OPT.map(o => o.gruppe))];
   let html = '';
   for (const g of gruppen) {
-    if (gruppen.length > 1) html += '<div class="sy-g-titel sy-wahl-titel">' + g + '</div>';
-    html += '<div class="sy-wahlen">' + OPT.map((o, i) => o.gruppe !== g ? '' : '<button type="button" class="sy-wahl" data-i="' + i + '">' + (i < 9 ? '<span class="sy-nr">' + (i + 1) + '</span>' : '') + '<span>' + o.label + '</span></button>').join('') + '</div>';
+    if (gruppen.length > 1) html += '<div class="tr-wahl-titel">' + g + '</div>';
+    html += '<div class="tr-wahlen">' + OPT.map((o, i) => o.gruppe !== g ? '' : '<button type="button" class="tr-wahl" data-i="' + i + '">' + (i < 9 ? '<span class="tr-nr">' + (i + 1) + '</span>' : '') + '<span>' + o.label + '</span></button>').join('') + '</div>';
   }
   setzen($('sy-optionen'), html);
-  mjKette.then(() => { const b = $('sy-optionen').querySelector('.sy-wahl'); if (b) b.focus({ preventScroll: true }); });
+  mjKette.then(() => { const b = $('sy-optionen').querySelector('.tr-wahl'); if (b) b.focus({ preventScroll: true }); });
 }
 function neueAufgabe() {
   if (nr >= RUNDE) return bilanz();
@@ -1093,16 +1013,16 @@ function neueAufgabe() {
   $('sy-thema').textContent = THEMEN[a.thema].name;
   $('sy-auftrag').textContent = a.auftrag;
   setzen($('sy-ausdruck'), '\\[' + a.ausdruck + '\\]');
-  setzen($('sy-rueck'), ''); $('sy-rueck').className = 'sy-rueck';
-  $('sy-weiter-box').hidden = true;
+  setzen($('sy-rueck'), ''); $('sy-rueck').className = 'tr-rueck';
+  $('sy-weiter-box').hidden = true; $('sy-naechster').disabled = false;
   zeigeSchritt();
   zeigeZahlen();
 }
-function meldung(cls, html) { $('sy-rueck').className = 'sy-rueck' + (cls ? ' ' + cls : ''); setzen($('sy-rueck'), html); }
+function meldung(cls, html) { $('sy-rueck').className = 'tr-rueck' + (cls ? ' ' + cls : ''); setzen($('sy-rueck'), html); }
 function abschliessen() {
   fertig = true;
   zeigeSchritt();
-  $('sy-weiter-box').hidden = false;
+  $('sy-weiter-box').hidden = false; $('sy-naechster').disabled = true;
   if (!fehlerInAufgabe && !hilfe) stand.ok++;
   zeigeZahlen();
   mjKette.then(() => $('sy-weiter').focus());
@@ -1124,8 +1044,8 @@ function waehle(i) {
   if (!o || fertig || !b || b.disabled) return;
   if (o.st === 'ok') return ausfuehren(o);
   b.disabled = true;
-  if (o.st === 'um') { b.classList.add('sy-um'); meldung('fast', '<p>≈ ' + o.grund + '</p>'); return; }
-  b.classList.add('sy-falsch');
+  if (o.st === 'um') { b.classList.add('tr-um'); meldung('fast', '<p>≈ ' + o.grund + '</p>'); return; }
+  b.classList.add('tr-falsch');
   fehlerSchritt++; fehlerInAufgabe++; stand.fehl++;
   stand.codes[o.code] = (stand.codes[o.code] || 0) + 1;
   let html = '<p>✗ ' + o.grund + '</p>';
@@ -1142,7 +1062,7 @@ function naechsterSchritt() {
   if (!o) return;
   hilfe = true;
   ausfuehren(o, '<p>Gezeigt: Schritt ' + (schritt + 1) + ' · ' + o.gruppe + ': ' + o.label + '</p>');
-  if (!fertig) $('sy-rueck').className = 'sy-rueck fast';
+  if (!fertig) $('sy-rueck').className = 'tr-rueck fast';
 }
 function bilanz() {
   clearInterval(tick);
@@ -1152,8 +1072,8 @@ function bilanz() {
     const f = FEHLER[c];
     return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + ' — nachlesen in <a href="' + f[1][0] + '">' + f[1][1] + '</a></li>';
   }).join('') + '</ul>';
-  else html += '<p>Keine Fehlgriffe — stark.</p>';
-  html += '<div class="sy-knoepfe" style="padding:12px 0 0"><button type="button" class="sy-btn sy-weiter" id="sy-nochmal">Neue Runde</button></div>';
+  else if (stand.ok === RUNDE) html += '<p>Alles selbst und ohne Fehlgriff — stark.</p>';
+  html += '<div class="tr-weiter-box"><button type="button" class="tr-btn tr-weiter" id="sy-nochmal">Neue Runde</button></div>';
   $('sy-aufgabe').hidden = true; $('sy-bilanz').hidden = false;
   setzen($('sy-bilanz'), html);
   mjKette.then(() => $('sy-nochmal').focus());
@@ -1165,13 +1085,13 @@ function neueRunde() {
   neueAufgabe();
 }
 
-$('sy-optionen').addEventListener('click', e => { const b = e.target.closest('.sy-wahl'); if (b) waehle(+b.dataset.i); });
+$('sy-optionen').addEventListener('click', e => { const b = e.target.closest('.tr-wahl'); if (b) waehle(+b.dataset.i); });
 $('sy-weiter').addEventListener('click', neueAufgabe);
 $('sy-naechster').addEventListener('click', naechsterSchritt);
 $('sy-neu').addEventListener('click', neueRunde);
 $('sy-bilanz').addEventListener('click', e => { if (e.target.closest('#sy-nochmal')) neueRunde(); });
 themenBox.addEventListener('click', e => {
-  const b = e.target.closest('.sy-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   const t = b.dataset.t;
   if (themen.has(t) && themen.size === 1) return;
   if (themen.has(t)) themen.delete(t); else themen.add(t);

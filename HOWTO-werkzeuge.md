@@ -59,6 +59,24 @@ Vorlage ist `werkzeuge/notationstrainer.html`.
 - **Rücklink** als letzter Satz im `.pt-untertitel`, auf den **Abschnitt** der Themenseite
   (Anker), bei mehreren Themenseiten auf jede:
   `Die Begriffe stehen in <a href="../grundlagen/g2-1-grundlagen.html#definition">2.1 Grundlagen</a>.`
+- **Trainer-Rahmen** (seit 11.10.2026, für jeden Trainer verbindlich): `werkzeuge/trainer.css` und `werkzeuge/trainer.js`
+  einbinden, Vorbild ist `werkzeuge/systemtrainer.html`. Alle Trainer sehen gleich aus und passen samt Bedienelementen
+  auf einen Bildschirm (1280×800 und 360×740):
+  - `.page-wrap.tr-wrap`; der `.pt-untertitel` ist **ein** Satz mit Rücklink, alles Weitere steht im Erklärblock
+    unter der Karte.
+  - `.tr-karte` reicht bis an den unteren Bildschirmrand (Höhe setzt `trainer.js`). Darin `.tr-aufgabe` mit drei
+    Teilen:
+    - `.tr-kopf`: links `.tr-tags` («Aufgabe n / 10», Thema), **rechts immer `.tr-naechster`** «Nächster Schritt»
+      mit Zähler `.tr-zaehler`;
+    - `.tr-flaeche`: `.tr-auftrag`, `.tr-ausdruck` und darunter `.tr-weg` — die Lösung **entwickelt sich unter der
+      Aufgabe**, Schritt für Schritt (`.tr-schritt` mit `.tr-schritt-kopf` «Schritt n · Bezeichnung», Zeilen
+      `.tr-zeile`/`.tr-text`, Ergebnis `.tr-ergebnis`, Skizze `.tr-bild`). Nur diese Fläche scrollt; nach jedem
+      Schritt `trNachUnten(fläche)`;
+    - `.tr-leiste`: Eingabe (`.tr-reihe`, `.tr-hinweis`), Auswahl (`.tr-wahlen` mit `.tr-wahl`), Knöpfe (`.tr-btn`),
+      Rückmeldung `.tr-rueck` (`richtig`/`falsch`/`fast`) und `.tr-weiter-box` mit «Nächste Aufgabe».
+  - Rundenende: `.tr-bilanz` statt `.tr-aufgabe`. Seitenspalte `aside.tr-seite` (`.tr-gruppen`, `.tr-gruppe`,
+    `.tr-g-titel`, `.tr-zahl`, `.tr-opt`, `.tr-neu`), schmal eingeklappt über der Karte.
+  - Seiteneigenes `<style>` (Präfix der Seite) nur für das, was der Rahmen nicht hat.
 - **Daten an einer Stelle.** Aufgaben, Faktoren, Lösungen stehen in **einer** Datenstruktur im
   Seitenskript (Notationstrainer: `KARTEN`), aus der Aufgabe, Rückmeldung und jede Tabelle
   zugleich entstehen. Nie einen Wert an zweiter Stelle notieren.

@@ -102,6 +102,7 @@
 <!-- SEO:ENDE -->
 <link rel="stylesheet" href="../schriften.css">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="trainer.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
@@ -111,132 +112,64 @@ MathJax = {
 </script>
 <script src="../vendor/mathjax/tex-svg.js"></script>
 <style>
-/* Rechentrainer — seiteneigene Klassen (Präfix rt-), Farben aus style.css.
-   Orange = Aufgabe, Grün = richtig und Lösungsweg, Rot = Fehler mit Diagnose, Grau = fast (Form).
-   Seitenspalte und Karte wie im Strategietrainer. */
-.rt-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
-.rt-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
-.rt-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
-  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
-.rt-seite summary::-webkit-details-marker { display:none; }
-.rt-seite summary::before { content:'▸ '; }
-.rt-seite details[open] summary::before { content:'▾ '; }
-.rt-gruppe { margin-bottom:16px; }
-.rt-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
-.rt-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
-  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
-.rt-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
-  border-radius:3px; background:var(--weiss); }
-.rt-opt.aktiv { color:var(--tinte); }
-.rt-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
-.rt-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
-.rt-opt:hover { color:var(--blau); }
-.rt-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
-.rt-zahl b { color:var(--tinte); font-weight:600; }
-.rt-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
-@media (min-width:901px) { .rt-seite summary { display:none; } }
-@media (max-width:900px) {
-  .rt-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
-  .rt-seite { order:-1; position:static; margin-bottom:-10px; }
-  .rt-seite details[open] > div { padding:12px 4px 0; }
-  .rt-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
-}
-.rt-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
-.rt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
-.rt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:12px; }
-.rt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.rt-tag.rt-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
-.rt-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
-.rt-ausdruck { font-size:1.25rem; padding:10px 4px 12px; overflow-x:auto; }
-.rt-eingabe { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-.rt-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:12em; max-width:100%;
-  border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
-.rt-eingabe input:focus { outline:none; border-color:var(--orange); }
+/* Rechentrainer — Rahmen aus trainer.css, hier nur Seiteneigenes (Präfix rt-).
+   Orange = Aufgabe, Grün = richtig und Lösungsweg, Rot = Fehler mit Diagnose, Grau = fast (Form). */
 .rt-vorschau { font-size:.95rem; color:var(--tinte-2); min-height:1.6em; }
-.rt-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
-  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
-.rt-btn:hover { filter:brightness(.97); }
-.rt-btn.rt-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
-.rt-btn:disabled { opacity:.45; cursor:default; }
-.rt-wahl { display:flex; flex-wrap:wrap; gap:8px; }
-.rt-wahl .rt-btn { min-width:72px; font-size:1.05rem; }
-.rt-wahl .rt-btn.rt-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
-.rt-hinweis { font-family:var(--sans); font-size:.78rem; color:var(--tinte-2); margin-top:6px; }
-.rt-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
-.rt-rueck:empty { display:none; }
-.rt-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
-.rt-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
-.rt-rueck.fast { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
-.rt-rueck p { margin:0; }
-.rt-rueck p + p { margin-top:6px; }
-.rt-weg { margin-top:12px; padding:10px 14px; border:1px solid var(--gruen-rand); border-radius:9px; background:var(--gruen-hell); }
-.rt-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
-.rt-weg .rt-zeile { padding:2px 0; overflow-x:auto; }
-.rt-weg .rt-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
-.rt-schritt { margin-top:8px; }
-.rt-schritt-kopf { font-family:var(--mono); font-size:.74rem; color:var(--gruen); margin-bottom:2px; }
-.rt-btn.rt-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
-.rt-wahl .rt-btn.rt-schritt-btn { font-size:.92rem; }
-.rt-schritt-zahl { font-family:var(--mono); font-size:.74rem; font-weight:400; margin-left:6px; }
-.rt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
-.rt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
-.rt-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
-.rt-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
-.rt-bilanz ul { margin:6px 0 0 18px; }
-[hidden] { display:none !important; }
+/* kurze Auswahl (abbrechend/periodisch, Zahlenmengen): Knöpfe nebeneinander, auch schmal */
+/* Eingabefeld und «Prüfen» bleiben auch schmal in einer Zeile */
+/* «Nächste Aufgabe» bleibt am unteren Rand der Leiste stehen, auch wenn eine lange Rückmeldung die Leiste scrollen lässt */
 @media (max-width:560px) {
-  .rt-vorne { padding-left:14px; padding-right:14px; }
-  .rt-ausdruck { font-size:1.1rem; }
-  .rt-btn.rt-weiter { min-width:0; flex:1 1 60%; }
-  .rt-taste { display:none; }
 }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
-<div class="page-wrap rt-wrap">
+<div class="page-wrap tr-wrap">
   <main class="content">
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Rechentrainer</h1>
-      <p class="pt-untertitel">Rechnen ohne Taschenrechner, wie es der Lehrplan verlangt: Hierarchie der Operationen, Vorzeichen, Brüche, Bruch–Dezimalzahl–Prozent und Zahlenmengen. Ist ein Ergebnis falsch, sucht das Werkzeug den Denkfehler dahinter.
-        Der Stoff dazu steht in <a href="../grundlagen/g1-1-grundlagen.html#hierarchie">1.1 Grundlagen</a>
-        und <a href="../grundlagen/g1-2-zahlen-grundoperationen.html#definition">1.2 Zahlen und Grundoperationen</a>.</p>
+      <p class="pt-untertitel">Rechnen ohne Taschenrechner: Ist ein Ergebnis falsch, sucht das Werkzeug den Denkfehler dahinter. Der Stoff dazu steht in <a href="../grundlagen/g1-1-grundlagen.html#hierarchie">1.1 Grundlagen</a> und <a href="../grundlagen/g1-2-zahlen-grundoperationen.html#definition">1.2 Zahlen und Grundoperationen</a>.</p>
     </div>
 
-<div class="rt-karte" id="rt-karte">
-  <div id="rt-aufgabe">
-    <div class="rt-vorne">
-      <div class="rt-kopf"><span class="rt-tag" id="rt-nr"></span><span class="rt-tag rt-thema" id="rt-thema"></span></div>
-      <p class="rt-auftrag" id="rt-auftrag"></p>
-      <div class="rt-ausdruck" id="rt-ausdruck"></div>
-      <div id="rt-antwort-eingabe" class="rt-eingabe">
-        <input type="text" id="rt-eingabe" autocomplete="off" inputmode="text" spellcheck="false" aria-label="Deine Antwort">
-        <button type="button" class="rt-btn" id="rt-pruefen">Prüfen<span class="rt-taste">Enter</span></button>
-        <button type="button" class="rt-btn rt-schritt-btn" id="rt-schritt">Nächster Schritt<span class="rt-schritt-zahl" id="rt-schritt-zahl"></span></button>
-        <span class="rt-vorschau" id="rt-vorschau" aria-live="polite"></span>
-      </div>
-      <div class="rt-hinweis" id="rt-hinweis"></div>
-      <div id="rt-antwort-wahl" class="rt-wahl" hidden></div>
-      <div class="rt-rueck" id="rt-rueck" aria-live="polite"></div>
-      <div class="rt-weg" id="rt-weg" hidden></div>
+<div class="tr-karte" id="rt-karte">
+  <div class="tr-aufgabe" id="rt-aufgabe">
+    <div class="tr-kopf">
+      <div class="tr-tags"><span class="tr-tag" id="rt-nr"></span><span class="tr-tag tr-thema" id="rt-thema"></span></div>
+      <button type="button" class="tr-naechster" id="rt-schritt" title="Zeigt den Lösungsweg Schritt für Schritt">Nächster Schritt<span class="tr-zaehler" id="rt-schritt-zahl"></span></button>
     </div>
-    <div class="rt-knoepfe" id="rt-weiter-box" hidden>
-      <button type="button" class="rt-btn rt-weiter" id="rt-weiter">Nächste Aufgabe →<span class="rt-taste">Enter</span></button>
+    <div class="tr-flaeche" id="rt-flaeche">
+      <p class="tr-auftrag" id="rt-auftrag"></p>
+      <div class="tr-ausdruck" id="rt-ausdruck"></div>
+      <div class="tr-weg" id="rt-weg" aria-live="polite"></div>
+    </div>
+    <div class="tr-leiste">
+      <div id="rt-antwort-eingabe">
+        <div class="tr-reihe">
+          <input type="text" class="tr-lang" id="rt-eingabe" autocomplete="off" inputmode="text" spellcheck="false" aria-label="Deine Antwort">
+          <button type="button" class="tr-btn" id="rt-pruefen">Prüfen<span class="tr-taste">Enter</span></button>
+          <span class="rt-vorschau" id="rt-vorschau" aria-live="polite"></span>
+        </div>
+        <div class="tr-hinweis" id="rt-hinweis"></div>
+      </div>
+      <div id="rt-antwort-wahl" class="tr-wahlen tr-kurz" role="group" aria-label="Antwort wählen" hidden></div>
+      <div class="tr-rueck" id="rt-rueck" aria-live="polite"></div>
+      <div class="tr-weiter-box" id="rt-weiter-box" hidden>
+        <button type="button" class="tr-btn tr-weiter" id="rt-weiter">Nächste Aufgabe →<span class="tr-taste">Enter</span></button>
+      </div>
     </div>
   </div>
-  <div class="rt-bilanz" id="rt-bilanz" hidden></div>
+  <div class="tr-bilanz" id="rt-bilanz" hidden></div>
 </div>
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert der Trainer</div>
-  <p>Eine Runde hat zehn Zufallsaufgaben aus den Themen, die du rechts wählst. Rechne auf Papier, nicht im Kopf allein — und ohne Taschenrechner.</p>
+  <p>Rechnen ohne Taschenrechner, wie es der Lehrplan verlangt. Eine Runde hat zehn Zufallsaufgaben aus den Themen, die du rechts wählst: Hierarchie der Operationen, Vorzeichen, Brüche, Bruch–Dezimalzahl–Prozent, Perioden und Zahlenmengen. Rechne auf Papier, nicht im Kopf allein — und ohne Taschenrechner.</p>
   <ul>
     <li><strong>Eingabe:</strong> ganze Zahlen wie <code>-7</code>, Brüche als <code>3/4</code> oder <code>-5/12</code>, Dezimalzahlen mit Punkt wie <code>0.375</code>, Prozent als <code>12.5</code> oder <code>12.5%</code>. Unter dem Feld siehst du, wie die Eingabe gelesen wird.</li>
     <li><strong>Falsch:</strong> Das Werkzeug rechnet die Aufgabe auch mit den häufigsten Denkfehlern durch. Trifft deine Antwort einen davon, sagt es dir, welcher es ist. Du hast einen zweiten Versuch; danach kommt der Lösungsweg.</li>
     <li><strong>Fast:</strong> Der Wert stimmt, aber die Form nicht — etwa ein Bruch, der sich noch kürzen lässt. Das zählt nicht als Fehler, du gibst es nochmals ein.</li>
-    <li><strong>Nächster Schritt:</strong> zeigt den Lösungsweg Schritt für Schritt, jeden Schritt mit seiner Regel. Antworten kannst du weiterhin, bis der letzte Schritt aufgedeckt ist. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
+    <li><strong>Nächster Schritt</strong> (oben rechts in der Karte): zeigt den Lösungsweg Schritt für Schritt unter der Aufgabe, jeden Schritt mit seiner Regel. Antworten kannst du weiterhin, bis der letzte Schritt aufgedeckt ist. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
   </ul>
   <p>Am Ende der Runde siehst du, welche Denkfehler am häufigsten waren, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
 </div>
@@ -259,20 +192,20 @@ MathJax = {
 </details>
 
   </main>
-  <aside class="rt-seite">
+  <aside class="tr-seite">
     <details id="rt-seite-det">
       <summary>Runde und Themen · <span id="rt-kurz"></span></summary>
-      <div class="rt-gruppen">
-        <div class="rt-gruppe">
-          <div class="rt-g-titel">Runde</div>
-          <div class="rt-zahl"><span>Aufgabe</span><b id="rt-z-nr"></b></div>
-          <div class="rt-zahl"><span>Auf Anhieb</span><b id="rt-z-ok">0</b></div>
-          <div class="rt-zahl"><span>Fehler</span><b id="rt-z-fehl">0</b></div>
-          <div class="rt-zahl"><span>Zeit</span><b id="rt-z-zeit">0:00</b></div>
-          <div class="rt-neu" style="margin-top:6px"><button type="button" id="rt-neu">Neue Runde</button></div>
+      <div class="tr-gruppen">
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Runde</div>
+          <div class="tr-zahl"><span>Aufgabe</span><b id="rt-z-nr"></b></div>
+          <div class="tr-zahl"><span>Auf Anhieb</span><b id="rt-z-ok">0</b></div>
+          <div class="tr-zahl"><span>Fehler</span><b id="rt-z-fehl">0</b></div>
+          <div class="tr-zahl"><span>Zeit</span><b id="rt-z-zeit">0:00</b></div>
+          <div class="tr-neu" style="margin-top:6px"><button type="button" id="rt-neu">Neue Runde</button></div>
         </div>
-        <div class="rt-gruppe" id="rt-themen">
-          <div class="rt-g-titel">Themen</div>
+        <div class="tr-gruppe" id="rt-themen">
+          <div class="tr-g-titel">Themen</div>
         </div>
       </div>
     </details>
@@ -288,6 +221,7 @@ MathJax = {
 </footer>
 <!-- FUSS:ENDE -->
 <script src="../nav.js"></script>
+<script src="trainer.js"></script>
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
@@ -927,7 +861,7 @@ try {
 const themenBox = $('rt-themen');
 for (const [k, t] of Object.entries(THEMEN)) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'rt-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  b.type = 'button'; b.className = 'tr-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
   b.setAttribute('aria-pressed', String(themen.has(k)));
   themenBox.appendChild(b);
 }
@@ -943,15 +877,21 @@ function zeigeZahlen() {
   $('rt-z-zeit').textContent = zeit();
   $('rt-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-// Ein Renderer für den Lösungsweg: die ersten k Schritte (ohne k: alle)
+// Ein Renderer für den Lösungsweg unter der Aufgabe: die ersten k Schritte (ohne k: alle, dazu das Ergebnis).
+// Die Ausgangszeile a.start ist die Aufgabe selbst und steht schon darüber.
 const zeileHtml = w => typeof w === 'string'
-  ? '<div class="rt-zeile">\\(\\displaystyle ' + w + '\\)</div>'
-  : '<div class="rt-text">' + w.text + '</div>';
+  ? '<div class="tr-zeile">\\(\\displaystyle ' + w + '\\)</div>'
+  : '<div class="tr-text">' + w.text + '</div>';
 function wegHtml(a, k) {
   const liste = schrittListe(a);
-  return '<div class="rt-weg-titel">Lösungsweg</div>' + (a.start ? zeileHtml(a.start) : '')
-    + liste.slice(0, k === undefined ? liste.length : k).map((s, i) =>
-      '<div class="rt-schritt"><div class="rt-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>' + s.zeilen.map(zeileHtml).join('') + '</div>').join('');
+  return liste.slice(0, k === undefined ? liste.length : k).map((s, i) =>
+      '<div class="tr-schritt"><div class="tr-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>' + s.zeilen.map(zeileHtml).join('') + '</div>').join('')
+    + (k === undefined ? '<div class="tr-ergebnis">' + (a.art === 'wahl' ? richtigText(a) : '\\(\\displaystyle ' + ergebnisTex(a) + '\\)') + '</div>' : '');
+}
+const richtigText = a => a.art === 'wahl' ? a.wahl.find(([k]) => k === a.loesung)[1] : '\\(' + ergebnisTex(a) + '\\)';
+function zeigeWeg(k) {
+  setzen($('rt-weg'), wegHtml(A, k));
+  mjKette.then(() => trNachUnten($('rt-flaeche')));
 }
 function schrittKnopf() {
   const n = schrittListe(A).length;
@@ -963,10 +903,10 @@ function naechsterSchritt() {
   const n = schrittListe(A).length;
   gezeigt = Math.min(gezeigt + 1, n);
   if (gezeigt >= n) {
-    meldung('fast', '<p>Lösung Schritt für Schritt angesehen. Richtig ist ' + (A.art === 'wahl' ? A.wahl.find(([k]) => k === A.loesung)[1] : '\\(' + ergebnisTex(A) + '\\)') + '.</p>');
+    meldung('fast', '<p>Lösung Schritt für Schritt angesehen. Richtig ist ' + richtigText(A) + '.</p>');
     return abschliessen(false);
   }
-  $('rt-weg').hidden = false; setzen($('rt-weg'), wegHtml(A, gezeigt));
+  zeigeWeg(gezeigt);
   schrittKnopf();
 }
 function neueAufgabe() {
@@ -974,7 +914,6 @@ function neueAufgabe() {
   nr++;
   let a; do a = aufgabe([...themen]); while (a.ausdruck === letztes);
   A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0; gezeigt = 0;
-  $('rt-pruefen').after($('rt-schritt'));     // für Wahl-Aufgaben steht der Knopf bei den Wahl-Knöpfen
   $('rt-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('rt-thema').textContent = THEMEN[a.thema].name;
   $('rt-auftrag').textContent = a.auftrag;
@@ -984,23 +923,23 @@ function neueAufgabe() {
   $('rt-antwort-wahl').hidden = !wahl;
   $('rt-hinweis').textContent = wahl ? '' : { zahl: 'Ganze Zahl, z.B. -7', bruch: 'Gekürzter Bruch, z.B. -5/12 (oder ganze Zahl)', dezimal: 'Dezimalzahl mit Punkt, z.B. 0.375', prozent: 'Prozentzahl, z.B. 12.5 oder 12.5%' }[a.art];
   if (wahl) {
-    setzen($('rt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="rt-btn" data-w="' + k + '">' + t + '</button>').join(''));
-    mjKette.then(() => { if (A === a) $('rt-antwort-wahl').appendChild($('rt-schritt')); });
+    setzen($('rt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="tr-wahl" data-w="' + k + '">' + t + '</button>').join(''));
   }
   const inp = $('rt-eingabe'); inp.value = ''; inp.disabled = false; $('rt-pruefen').disabled = false;
   setzen($('rt-vorschau'), '');
-  setzen($('rt-rueck'), ''); $('rt-rueck').className = 'rt-rueck';
-  $('rt-weg').hidden = true; $('rt-weiter-box').hidden = true;
+  setzen($('rt-rueck'), ''); $('rt-rueck').className = 'tr-rueck';
+  setzen($('rt-weg'), ''); $('rt-flaeche').scrollTop = 0; $('rt-weiter-box').hidden = true;
   schrittKnopf();
   zeigeZahlen();
   if (!wahl) inp.focus();
 }
-function meldung(cls, html) { $('rt-rueck').className = 'rt-rueck ' + cls; setzen($('rt-rueck'), html); }
+function meldung(cls, html) { $('rt-rueck').className = 'tr-rueck ' + cls; setzen($('rt-rueck'), html); }
 function abschliessen(gut) {
   fertig = true;
   $('rt-eingabe').disabled = true; $('rt-pruefen').disabled = true;
+  $('rt-antwort-eingabe').hidden = true; $('rt-antwort-wahl').hidden = true;   // Platz für Rückmeldung und «Nächste Aufgabe»
   mjKette.then(() => $('rt-antwort-wahl').querySelectorAll('button').forEach(b => { b.disabled = true; }));
-  $('rt-weg').hidden = false; setzen($('rt-weg'), wegHtml(A));
+  zeigeWeg();
   $('rt-weiter-box').hidden = false;
   schrittKnopf();
   if (gut && !fehlerInAufgabe && !gezeigt) stand.ok++;
@@ -1017,10 +956,10 @@ function antwort(eingabe) {
   const f = FEHLER[r.code];
   let html = '<p>✗ ' + (r.code === 'sonst' ? 'Noch nicht. ' : '<strong>' + f[0] + '.</strong> ') + f[1] + '</p>';
   if (A.art === 'wahl') {
-    const b = $('rt-antwort-wahl').querySelector('[data-w="' + eingabe + '"]'); if (b) b.classList.add('rt-falsch');
+    const b = $('rt-antwort-wahl').querySelector('[data-w="' + eingabe + '"]'); if (b) b.classList.add('tr-falsch');
   }
   if (versuch >= 2 || (A.art === 'wahl' && A.wahl.length === 2)) {
-    html += '<p>Richtig ist ' + (A.art === 'wahl' ? A.wahl.find(([k]) => k === A.loesung)[1] : '\\(' + ergebnisTex(A) + '\\)') + '.</p>';
+    html += '<p>Richtig ist ' + richtigText(A) + '.</p>';
     meldung('falsch', html);
     return abschliessen(false);
   }
@@ -1041,8 +980,8 @@ function bilanz() {
     const f = FEHLER[c];
     return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + (f[2] ? ' — nachlesen in <a href="' + f[2][0] + '">' + f[2][1] + '</a>' : '') + '</li>';
   }).join('') + '</ul>';
-  else if (!stand.fehl) html += '<p>Keine Fehler — stark.</p>';
-  html += '<div class="rt-knoepfe" style="padding:12px 0 0"><button type="button" class="rt-btn rt-weiter" id="rt-nochmal">Neue Runde</button></div>';
+  else if (stand.ok === RUNDE) html += '<p>Alles auf Anhieb — stark.</p>';
+  html += '<div class="tr-weiter-box"><button type="button" class="tr-btn tr-weiter" id="rt-nochmal">Neue Runde</button></div>';
   $('rt-aufgabe').hidden = true; $('rt-bilanz').hidden = false;
   setzen($('rt-bilanz'), html);
   mjKette.then(() => $('rt-nochmal').focus());
@@ -1057,13 +996,13 @@ function neueRunde() {
 $('rt-pruefen').addEventListener('click', () => antwort($('rt-eingabe').value));
 $('rt-eingabe').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); antwort($('rt-eingabe').value); } });
 $('rt-eingabe').addEventListener('input', () => setzen($('rt-vorschau'), vorschau($('rt-eingabe').value)));
-$('rt-antwort-wahl').addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (b && !b.disabled && !b.classList.contains('rt-falsch')) antwort(b.dataset.w); });
+$('rt-antwort-wahl').addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (b && !b.disabled && !b.classList.contains('tr-falsch')) antwort(b.dataset.w); });
 $('rt-weiter').addEventListener('click', neueAufgabe);
 $('rt-schritt').addEventListener('click', naechsterSchritt);
 $('rt-neu').addEventListener('click', neueRunde);
 $('rt-bilanz').addEventListener('click', e => { if (e.target.closest('#rt-nochmal')) neueRunde(); });
 themenBox.addEventListener('click', e => {
-  const b = e.target.closest('.rt-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   const t = b.dataset.t;
   if (themen.has(t) && themen.size === 1) return;
   if (themen.has(t)) themen.delete(t); else themen.add(t);

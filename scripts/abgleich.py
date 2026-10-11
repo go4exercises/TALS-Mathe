@@ -137,11 +137,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='HOWTO-simulationen/-werkzeuge: SEO- und FUSS-Marken woertlich (11.10.2026, Mathe 84f1a7f)',
-         wie='build-seo.py erkennt nur die vollen Marken mit «— generiert von scripts/build-seo.py, nicht von Hand '
-             'aendern». Ein nacktes <!-- SEO:ANFANG --> in einer neuen Seite liess es einen zweiten Kopf davor setzen, '
-             'nackte FUSS-Marken blieben leer. In Physik HOWTO-simulationen.md Z.37 und HOWTO-werkzeuge.md Z.39 '
-             '(«leere FUSS-Marken») einen Satz anfuegen: Marken woertlich aus der Vorlage kopieren. Danach streichen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

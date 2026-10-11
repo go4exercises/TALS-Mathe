@@ -106,6 +106,7 @@
 <!-- SEO:ENDE -->
 <link rel="stylesheet" href="../schriften.css">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="trainer.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
@@ -115,124 +116,85 @@ MathJax = {
 </script>
 <script src="../vendor/mathjax/tex-svg.js"></script>
 <style>
-/* Strategietrainer — seiteneigene Klassen (Präfix st-), Farben aus style.css.
-   Orange = Aufgabe und Wahl, Grün = richtig und Lösung, Rot = Fehlgriff, Grau = erlaubter Umweg.
-   Seitenspalte und Karte wie im Notationstrainer, der Verlauf wie im Umformer der Leitprogramme. */
-.st-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
-.st-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
-.st-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
-  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
-.st-seite summary::-webkit-details-marker { display:none; }
-.st-seite summary::before { content:'▸ '; }
-.st-seite details[open] summary::before { content:'▾ '; }
-.st-gruppe { margin-bottom:16px; }
-.st-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin:10px 0 6px; }
-.st-gruppe > .st-g-titel:first-child { margin-top:0; }
-.st-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
-  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
-.st-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
-  border-radius:3px; background:var(--weiss); }
-.st-opt.aktiv { color:var(--tinte); }
-.st-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
-.st-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
-.st-opt:hover { color:var(--blau); }
-.st-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
-.st-zahl b { color:var(--tinte); font-weight:600; }
-.st-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
-@media (min-width:901px) { .st-seite summary { display:none; } }
-@media (max-width:900px) {
-  .st-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
-  .st-seite { order:-1; position:static; margin-bottom:-10px; }
-  .st-seite details[open] > div { padding:12px 4px 0; }
-  .st-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
-}
-.st-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
-.st-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
-.st-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:10px; }
-.st-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.st-tag.st-auftrag { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
-.st-tag.st-d { background:var(--blau-hell); color:var(--blau); border-color:var(--blau-rand); margin-left:auto; }
-.st-verlauf { display:grid; grid-template-columns:minmax(0,auto) auto; justify-content:start; gap:4px 22px; padding:10px 14px;
-  border:1px solid var(--linie); border-radius:9px; background:var(--papier); min-height:2.6em; overflow-x:auto; font-size:1.05rem; }
+/* Strategietrainer — Rahmen aus trainer.css, hier nur Seiteneigenes (Präfix st-).
+   Verlauf wie im Heft: Gleichung links, Umformung rechts (orange), darüber je Schritt sein Kopf. */
+.st-seite .tr-g-titel { margin-top:10px; }
+.st-seite .tr-gruppe > .tr-g-titel:first-child { margin-top:0; }
+.tr-tag.st-d { background:var(--blau-hell); color:var(--blau); border-color:var(--blau-rand); }
+.tr-tag.st-d mjx-container { margin:0 !important; }
+.st-verlauf { display:grid; grid-template-columns:max-content 1fr; gap:3px 22px; overflow-x:auto; font-size:1.05rem; padding:2px 2px 4px; }
 .st-zeile { display:contents; }
-.st-gl { color:var(--blau); }
-.st-op { color:var(--orange); font-size:.86rem; align-self:center; font-family:var(--sans); }
-.st-schritt { display:block; font-family:var(--mono); font-size:.7rem; color:var(--gruen); }
-.st-hilfe { margin-top:10px; }
-.st-btn.st-naechster { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); font-weight:500; }
-.st-zeile.st-ende .st-gl { color:var(--gruen); font-weight:600; }
-.st-frage { font-family:var(--sans); font-size:.9rem; font-weight:600; color:var(--orange); margin:14px 2px 8px; }
-.st-wahl { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; }
-.st-knopf { font-family:var(--sans); font-size:.86rem; line-height:1.3; cursor:pointer; border-radius:8px; padding:7px 11px;
-  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--tinte); text-align:left; }
-.st-knopf:hover, .st-knopf:focus-visible { border-color:var(--orange); outline:none; }
-.st-knopf.st-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
-.st-knopf.st-umweg { border-color:var(--linie); background:var(--papier-2); color:var(--tinte-2); }
-.st-knopf.st-zeigen { border-color:var(--gruen); box-shadow:0 0 0 2px var(--gruen-hell); }
-.st-knopf:disabled { cursor:default; opacity:.45; }
-.st-rueck { font-family:var(--sans); font-size:.9rem; margin-top:12px; border-radius:7px; }
-.st-rueck:empty { display:none; }
-.st-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
-.st-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
-.st-rueck.hinweis { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
-.st-rueck p { margin:0; }
-.st-rueck p + p { margin-top:6px; }
-.st-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
-.st-btn { font-family:var(--sans); font-size:.95rem; font-weight:600; padding:9px 18px; border-radius:8px; cursor:pointer;
-  border:1.5px solid var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
-.st-btn:hover { filter:brightness(.97); }
-.st-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
-.st-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
-.st-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
-.st-bilanz ul { margin:6px 0 0 18px; }
+.st-gl { color:var(--tinte); }
+.st-zeile.st-start .st-gl { font-size:1.08em; padding-bottom:4px; }
+.st-op { color:var(--orange); font-size:.86rem; align-self:center; font-family:var(--sans); white-space:nowrap; }
+.st-sk { grid-column:1 / -1; border-top:1px dashed var(--gruen-rand); padding-top:5px; margin-top:3px; }
+.st-sk + .st-sk { border-top:none; padding-top:0; margin-top:0; }
+.st-wahlen { grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:4px 6px; }
+.st-wahlen .tr-wahl { font-size:.82rem; padding:5px 9px; }
+/* 15 Schritte: Die Leiste darf höher werden als im Rahmen, die Arbeitsfläche scrollt dafür */
+.st-karte .tr-leiste { max-height:66%; }
 .st-merk h3 { font-size:.95rem; margin:14px 0 4px; }
-[hidden] { display:none !important; }
 @media (max-width:560px) {
-  .st-vorne { padding-left:14px; padding-right:14px; }
-  .st-wahl { grid-template-columns:minmax(0, 1fr); }
-  .st-btn { min-width:0; flex:1 1 60%; }
-  .st-taste { display:none; }
-  .st-tag.st-d { margin-left:0; }
+  /* schmal: kein Raster, die Umformung rückt rechts neben oder unter ihre Zeile */
+  .st-verlauf { display:block; font-size:.98rem; }
+  .st-zeile { display:flex; flex-wrap:wrap; align-items:center; column-gap:12px; padding:1px 0; }
+  .st-zeile .st-gl { max-width:100%; overflow-x:auto; }
+  .st-op { margin-left:auto; }
+  .st-op:empty { display:none; }
+  .st-wahlen { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:4px; }
+  .st-wahlen .tr-wahl { font-size:.74rem; line-height:1.22; padding:4px 7px; }
+  .st-karte .tr-leiste { max-height:60%; }
+  .st-karte .tr-frage { display:none; }
+  /* Kopf schmal: «Aufgabe» weglassen, und solange 𝔻 dasteht, hat der Bereichsname keinen Platz */
+  .st-lang { display:none; }
+  .tr-tag.st-d { padding:2px 7px; }
+  .tr-tags:has(.st-d:not([hidden])) .tr-thema { display:none; }
 }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
-<div class="page-wrap st-wrap">
+<div class="page-wrap tr-wrap">
   <main class="content">
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Strategietrainer</h1>
-      <p class="pt-untertitel">Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus. Geübt wird das Entscheiden: Welcher Schritt passt hier, und warum passt ein anderer nicht?
-        Der Stoff dazu steht in <a href="../grundlagen/g1-3-algebraische-terme.html#faktorisieren">1.3 Algebraische Terme</a>,
-        <a href="../grundlagen/g2-2a-lineare-gleichungen.html#verfahren">2.2a Lineare Gleichungen</a>,
-        <a href="../grundlagen/g2-2b-quadratische-gleichungen.html#verfahren">2.2b Quadratische Gleichungen</a>
-        und <a href="../grundlagen/g2-3-lineare-gleichungssysteme.html">2.3 Lineare Gleichungssysteme</a>,
-        im Schwerpunktfach in <a href="../schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html#typen">2.2a Potenz-, Wurzel- und rationale Gleichungen</a>
-        und <a href="../schwerpunkt/s3-1-grundlagen.html#theorie">3.1 Grundlagen</a> (Schnittpunkte).</p>
+      <p class="pt-untertitel">Du wählst den nächsten Schritt, das Werkzeug rechnet ihn aus — der Stoff dazu steht in
+        <a href="../grundlagen/g1-3-algebraische-terme.html#faktorisieren" title="1.3 Algebraische Terme">1.3</a>,
+        <a href="../grundlagen/g2-2a-lineare-gleichungen.html#verfahren" title="2.2a Lineare Gleichungen">2.2a</a>,
+        <a href="../grundlagen/g2-2b-quadratische-gleichungen.html#verfahren" title="2.2b Quadratische Gleichungen">2.2b</a>
+        und <a href="../grundlagen/g2-3-lineare-gleichungssysteme.html" title="2.3 Lineare Gleichungssysteme">2.3</a>,
+        im Schwerpunktfach in <a href="../schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html#typen" title="2.2a Potenz-, Wurzel- und rationale Gleichungen">2.2a</a>
+        und <a href="../schwerpunkt/s3-1-grundlagen.html#theorie" title="3.1 Grundlagen (Schnittpunkte)">3.1</a>.</p>
     </div>
 
-<div class="st-karte" id="st-karte">
-  <div id="st-aufgabe">
-    <div class="st-vorne">
-      <div class="st-kopf"><span class="st-tag" id="st-nr"></span><span class="st-tag st-auftrag" id="st-auftrag"></span><span class="st-tag st-d" id="st-d" hidden></span></div>
-      <div class="st-verlauf" id="st-verlauf" aria-live="polite"></div>
-      <p class="st-frage" id="st-frage">Was ist der nächste Schritt?</p>
-      <div class="st-wahl" id="st-wahl"></div>
-      <div class="st-hilfe" id="st-hilfe"><button type="button" class="st-btn st-naechster" id="st-naechster">Nächster Schritt<span class="st-taste">N</span></button></div>
-      <div class="st-rueck" id="st-rueck" aria-live="polite"></div>
+<div class="tr-karte st-karte" id="st-karte">
+  <div class="tr-aufgabe" id="st-aufgabe">
+    <div class="tr-kopf">
+      <div class="tr-tags"><span class="tr-tag" id="st-nr"></span><span class="tr-tag tr-thema" id="st-thema"></span><span class="tr-tag st-d" id="st-d" hidden></span></div>
+      <button type="button" class="tr-naechster" id="st-naechster" title="Das Werkzeug führt den nächsten passenden Schritt aus (Taste N)">Nächster Schritt<span class="tr-zaehler tr-nur-taste">N</span></button>
     </div>
-    <div class="st-knoepfe" id="st-weiter-box" hidden>
-      <button type="button" class="st-btn" id="st-weiter">Nächste Aufgabe →<span class="st-taste">Enter</span></button>
+    <div class="tr-flaeche" id="st-flaeche">
+      <p class="tr-auftrag" id="st-auftrag"></p>
+      <div id="st-verlauf" aria-live="polite"></div>
+    </div>
+    <div class="tr-leiste" id="st-leiste">
+      <div id="st-schritt">
+        <p class="tr-frage" id="st-frage">Was ist der nächste Schritt?</p>
+        <div class="tr-wahlen st-wahlen" id="st-wahl" role="group" aria-label="Schritt wählen"></div>
+      </div>
+      <div class="tr-rueck" id="st-rueck" aria-live="polite"></div>
+      <div class="tr-weiter-box" id="st-weiter-box" hidden>
+        <button type="button" class="tr-btn tr-weiter" id="st-weiter">Nächste Aufgabe →<span class="tr-taste">Enter</span></button>
+      </div>
     </div>
   </div>
-  <div class="st-bilanz" id="st-bilanz" hidden></div>
+  <div class="tr-bilanz" id="st-bilanz" hidden></div>
 </div>
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert der Trainer</div>
-  <p>Eine Serie hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst. Bei jeder wählst du den nächsten Schritt. Passt er, rechnet das Werkzeug ihn aus und schreibt die Umformung rechts daneben — wie im Heft. Am Schluss gibst du die Lösungsmenge an oder erklärst den Term für fertig.</p>
+  <p>Eine Serie hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst. Bei jeder wählst du den nächsten Schritt. Geübt wird das Entscheiden: Welcher Schritt passt hier, und warum passt ein anderer nicht? Passt er, rechnet das Werkzeug ihn aus und schreibt die Umformung rechts daneben — wie im Heft. Am Schluss gibst du die Lösungsmenge an oder erklärst den Term für fertig.</p>
   <ul>
     <li><strong>✓ Passt:</strong> Der Schritt wird ausgeführt. Manchmal passen zwei Schritte, zum Beispiel bei \(x^2 + 6x = 7\) quadratisch ergänzen oder alles auf eine Seite bringen.</li>
     <li><strong>≈ Erlaubt, aber ein Umweg:</strong> Der Schritt wäre nicht falsch, führt aber nicht schneller ans Ziel. Er zählt nicht als Fehlgriff — wähle neu.</li>
@@ -296,29 +258,29 @@ MathJax = {
 </details>
 
   </main>
-  <aside class="st-seite">
+  <aside class="tr-seite st-seite">
     <details id="st-seite-det">
       <summary>Serie und Auswahl · <span id="st-kurz"></span></summary>
-      <div class="st-gruppen">
-        <div class="st-gruppe">
-          <div class="st-g-titel">Serie</div>
-          <div class="st-zahl"><span>Aufgabe</span><b id="st-z-nr"></b></div>
-          <div class="st-zahl"><span>Fehlgriffe</span><b id="st-z-fehl">0</b></div>
-          <div class="st-zahl"><span>Umwege</span><b id="st-z-um">0</b></div>
-          <div class="st-zahl"><span>Zeit</span><b id="st-z-zeit">0:00</b></div>
-          <div class="st-neu" style="margin-top:6px"><button type="button" id="st-neu">Neue Serie</button></div>
+      <div class="tr-gruppen">
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Serie</div>
+          <div class="tr-zahl"><span>Aufgabe</span><b id="st-z-nr"></b></div>
+          <div class="tr-zahl"><span>Fehlgriffe</span><b id="st-z-fehl">0</b></div>
+          <div class="tr-zahl"><span>Umwege</span><b id="st-z-um">0</b></div>
+          <div class="tr-zahl"><span>Zeit</span><b id="st-z-zeit">0:00</b></div>
+          <div class="tr-neu" style="margin-top:6px"><button type="button" id="st-neu">Neue Serie</button></div>
         </div>
-        <div class="st-gruppe" id="st-bereich">
-          <div class="st-g-titel">Gleichungen</div>
-          <button type="button" class="st-opt" data-b="lin" aria-pressed="false">Lineare Gleichungen</button>
-          <button type="button" class="st-opt" data-b="quad" aria-pressed="false">Quadratische Gleichungen</button>
-          <button type="button" class="st-opt" data-b="bruchgl" aria-pressed="false">Bruchgleichungen</button>
-          <div class="st-g-titel">Terme</div>
-          <button type="button" class="st-opt" data-b="fakt" aria-pressed="false">Faktorisieren</button>
-          <button type="button" class="st-opt" data-b="bruchterm" aria-pressed="false">Bruchterme vereinfachen</button>
-          <div class="st-g-titel">Gleichungssysteme</div>
-          <button type="button" class="st-opt" data-b="lgs" aria-pressed="false">Lineare Systeme</button>
-          <button type="button" class="st-opt" data-b="qgs" aria-pressed="false">Mit Parabel (Schwerpunktfach)</button>
+        <div class="tr-gruppe" id="st-bereich">
+          <div class="tr-g-titel">Gleichungen</div>
+          <button type="button" class="tr-opt" data-b="lin" aria-pressed="false">Lineare Gleichungen</button>
+          <button type="button" class="tr-opt" data-b="quad" aria-pressed="false">Quadratische Gleichungen</button>
+          <button type="button" class="tr-opt" data-b="bruchgl" aria-pressed="false">Bruchgleichungen</button>
+          <div class="tr-g-titel">Terme</div>
+          <button type="button" class="tr-opt" data-b="fakt" aria-pressed="false">Faktorisieren</button>
+          <button type="button" class="tr-opt" data-b="bruchterm" aria-pressed="false">Bruchterme vereinfachen</button>
+          <div class="tr-g-titel">Gleichungssysteme</div>
+          <button type="button" class="tr-opt" data-b="lgs" aria-pressed="false">Lineare Systeme</button>
+          <button type="button" class="tr-opt" data-b="qgs" aria-pressed="false">Mit Parabel (Schwerpunktfach)</button>
         </div>
       </div>
     </details>
@@ -334,6 +296,7 @@ MathJax = {
 </footer>
 <!-- FUSS:ENDE -->
 <script src="../nav.js"></script>
+<script src="trainer.js"></script>
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
@@ -1673,7 +1636,7 @@ try {                                              // Vorauswahl über #bereich=
   const m = /bereich=([a-z,]+)/.exec(location.hash);
   if (m) { const b = m[1].split(',').filter(x => VORLAGEN[x]); if (b.length) bereiche = new Set(b); }
 } catch (e) {}
-document.querySelectorAll('#st-bereich .st-opt').forEach(b => {
+document.querySelectorAll('#st-bereich .tr-opt').forEach(b => {
   b.classList.toggle('aktiv', bereiche.has(b.dataset.b));
   b.setAttribute('aria-pressed', String(bereiche.has(b.dataset.b)));
 });
@@ -1682,17 +1645,29 @@ let A = null, st = null, zeilen = [], fehl = 0, nr = 0, schritt = 0, hilfe = fal
 let zaehler = { fehl: 0, um: 0, sauber: 0, verwechslung: {} };
 let tick = null;
 const wahl = $('st-wahl');
+const THEMA_NAME = {};                             // Bereichsnamen aus der Seitenspalte, für den Kopf der Karte
+document.querySelectorAll('#st-bereich .tr-opt').forEach(b => { THEMA_NAME[b.dataset.b] = b.textContent; });
 
 function baueWahl(fam) {
   if (fam === wahlFam) return;
   wahlFam = fam;
-  setzen(wahl, LISTEN[fam].map(([id, text]) => '<button type="button" class="st-knopf" data-s="' + id + '">' + text + '</button>').join(''));
+  setzen(wahl, LISTEN[fam].map(([id, text]) => '<button type="button" class="tr-wahl" data-s="' + id + '"><span>' + text + '</span></button>').join(''));
 }
 function zeichneVerlauf() {
-  // je Zeile: Gleichung, Umformung und die Köpfe der Schritte, die von ihr ausgingen
-  setzen($('st-verlauf'), zeilen.map(([z, op, koepfe], i) =>
-    '<div class="st-zeile' + (fertig && i === zeilen.length - 1 ? ' st-ende' : '') + '"><span class="st-gl">\\(\\displaystyle ' + z + '\\)</span><span class="st-op">'
-    + (koepfe || []).map(k => '<span class="st-schritt">' + k + '</span>').join('') + (op || '') + '</span></div>').join(''));
+  // je Zeile: Gleichung | Umformung, darunter die Köpfe der Schritte, die von ihr ausgingen;
+  // die erste Zeile ist die Aufgabe, nach dem Abschluss steht die letzte als Ergebnis unter dem Verlauf
+  const kopf = k => '<div class="st-sk tr-schritt-kopf">' + k + '</div>';
+  const n = zeilen.length;
+  let html = '<div class="st-verlauf">';
+  zeilen.forEach(([z, op, koepfe], i) => {
+    if (fertig && i === n - 1) { html += (koepfe || []).map(kopf).join(''); return; }
+    html += '<div class="st-zeile' + (i === 0 ? ' st-start' : '') + '"><span class="st-gl">\\(\\displaystyle ' + z + '\\)</span><span class="st-op">' + (op || '') + '</span></div>'
+      + (koepfe || []).map(kopf).join('');
+  });
+  html += '</div>';
+  if (fertig) html += '<div class="tr-ergebnis">\\(\\displaystyle ' + zeilen[n - 1][0] + '\\)</div>';
+  setzen($('st-verlauf'), html);
+  mjKette.then(() => trNachUnten($('st-flaeche')));
 }
 function zeigeD() {
   const el = $('st-d');
@@ -1700,7 +1675,7 @@ function zeigeD() {
   else if (!fertig) el.hidden = true;
 }
 function knoepfeZuruecksetzen() {
-  mjKette.then(() => wahl.querySelectorAll('.st-knopf').forEach(b => { b.classList.remove('st-falsch', 'st-umweg', 'st-zeigen'); b.disabled = fertig; }));
+  mjKette.then(() => wahl.querySelectorAll('.tr-wahl').forEach(b => { b.classList.remove('tr-falsch', 'tr-um', 'tr-zeigen'); b.disabled = fertig; }));
 }
 function zeit() {
   const s = Math.floor((Date.now() - start) / 1000);
@@ -1721,19 +1696,27 @@ function neueAufgabe() {
   let a; do a = aufgabe([...bereiche]); while (a.vorlage === letzteVorlage && Math.random() < 0.8);
   letzteVorlage = a.vorlage;
   A = a; st = a.st; zeilen = [[st.z, '', []]]; fehl = 0; fehlerInAufgabe = 0; fertig = false; schritt = 0; hilfe = false;
-  $('st-nr').textContent = 'Aufgabe ' + nr + ' / ' + SERIE;
+  $('st-nr').innerHTML = '<span class="st-lang">Aufgabe </span>' + nr + ' / ' + SERIE;
+  $('st-thema').textContent = THEMA_NAME[a.bereich] || '';
   setzen($('st-auftrag'), a.auftrag);
-  $('st-frage').hidden = false; $('st-hilfe').hidden = false;
+  $('st-schritt').hidden = false; $('st-naechster').disabled = false;
   $('st-weiter-box').hidden = true;
   baueWahl(familie(st));
   setzen($('st-rueck'), '');
-  $('st-rueck').className = 'st-rueck';
+  $('st-rueck').className = 'tr-rueck';
   knoepfeZuruecksetzen();
   zeichneVerlauf();
   zeigeD();
   zeigeZahlen();
 }
-function meldung(cls, html) { $('st-rueck').className = 'st-rueck ' + cls; setzen($('st-rueck'), html); }
+// Rückmeldung: scrollt die Leiste so weit, dass sie ganz zu sehen ist (bei langer Schrittliste auf dem Handy)
+function meldung(cls, html) {
+  $('st-rueck').className = 'tr-rueck ' + cls; setzen($('st-rueck'), html);
+  mjKette.then(() => {
+    const l = $('st-leiste'), r = $('st-rueck'), lr = l.getBoundingClientRect(), rr = r.getBoundingClientRect();
+    if (rr.bottom > lr.bottom) l.scrollTop += Math.min(rr.bottom - lr.bottom + 10, rr.top - lr.top);
+  });
+}
 
 function waehle(id, gezeigt) {
   if (fertig || !st) return;
@@ -1754,30 +1737,30 @@ function waehle(id, gezeigt) {
     if (st.k === 'ende') {
       fertig = true;
       if (!fehlerInAufgabe && !hilfe) zaehler.sauber++;
-      $('st-frage').hidden = true; $('st-hilfe').hidden = true;
+      $('st-schritt').hidden = true; $('st-naechster').disabled = true;
       $('st-weiter-box').hidden = false;
-      meldung(hilfe ? 'hinweis' : 'richtig', (gezeigt ? '<p>Gezeigt: ' + kopf + '.</p>' : '') + '<p>' + (hilfe ? 'Gelöst, mit gezeigten Schritten.' : fehlerInAufgabe ? '✓ Gelöst.' : '✓ Gelöst — ohne Fehlgriff.') + '</p>');
+      meldung(hilfe ? 'fast' : 'richtig', (gezeigt ? '<p>Gezeigt: ' + kopf + '.</p>' : '') + '<p>' + (hilfe ? 'Gelöst, mit gezeigten Schritten.' : fehlerInAufgabe ? '✓ Gelöst.' : '✓ Gelöst — ohne Fehlgriff.') + '</p>');
       $('st-weiter').focus();
-    } else if (gezeigt) meldung('hinweis', '<p>Gezeigt: ' + kopf + '.' + (aus.info ? ' ' + aus.info : '') + '</p>');
+    } else if (gezeigt) meldung('fast', '<p>Gezeigt: ' + kopf + '.' + (aus.info ? ' ' + aus.info : '') + '</p>');
     else meldung('richtig', '<p>✓ ' + STRAT_NAME[id] + ' — passt.' + (aus.info ? ' ' + aus.info : '') + '</p>');
     knoepfeZuruecksetzen();
     zeichneVerlauf();
     zeigeD();
   } else if (r[0] === 'um') {
     zaehler.um++;
-    knopf.classList.add('st-umweg');
-    meldung('hinweis', '<p>≈ ' + r[1] + '</p>');
+    knopf.classList.add('tr-um');
+    meldung('fast', '<p>≈ ' + r[1] + '</p>');
   } else {
     fehl++; fehlerInAufgabe++; zaehler.fehl++;
     const richtig = passend(st);
     const schluessel = id + '→' + richtig[0];
     zaehler.verwechslung[schluessel] = (zaehler.verwechslung[schluessel] || 0) + 1;
-    knopf.classList.add('st-falsch');
+    knopf.classList.add('tr-falsch');
     let html = '<p>✗ ' + r[1] + '</p>';
     if (fehl >= 2) html += '<p><strong>Tipp:</strong> ' + tipp(st) + '</p>';
     if (fehl >= 3) {
       html += '<p><strong>Passend wäre:</strong> «' + STRAT_NAME[richtig[0]] + '»' + (richtig.length > 1 ? ' (oder «' + STRAT_NAME[richtig[1]] + '»)' : '') + '.</p>';
-      richtig.forEach(r2 => wahl.querySelector('[data-s="' + r2 + '"]').classList.add('st-zeigen'));
+      richtig.forEach(r2 => wahl.querySelector('[data-s="' + r2 + '"]').classList.add('tr-zeigen'));
     }
     meldung('falsch', html);
   }
@@ -1800,8 +1783,8 @@ function bilanz() {
       const [g, r] = k.split('→');
       return '<li>«' + STRAT_NAME[g] + '» gewählt, wo «' + STRAT_NAME[r] + '» passte' + (n > 1 ? ' (' + n + '×)' : '') + '</li>';
     }).join('') + '</ul>';
-  } else html += '<p>Keine Verwechslung — stark.</p>';
-  html += '<div class="st-knoepfe" style="padding:12px 0 0"><button type="button" class="st-btn" id="st-nochmal">Neue Serie</button></div>';
+  } else if (zaehler.sauber === SERIE) html += '<p>Alles selbst und ohne Verwechslung — stark.</p>';
+  html += '<div class="tr-weiter-box"><button type="button" class="tr-btn tr-weiter" id="st-nochmal">Neue Serie</button></div>';
   $('st-aufgabe').hidden = true;
   $('st-bilanz').hidden = false;
   setzen($('st-bilanz'), html);
@@ -1815,13 +1798,13 @@ function neueSerie() {
   neueAufgabe();
 }
 
-wahl.addEventListener('click', e => { const b = e.target.closest('.st-knopf'); if (b && !b.disabled) waehle(b.dataset.s); });
+wahl.addEventListener('click', e => { const b = e.target.closest('.tr-wahl'); if (b && !b.disabled) waehle(b.dataset.s); });
 $('st-weiter').addEventListener('click', neueAufgabe);
 $('st-naechster').addEventListener('click', naechsterSchritt);
 $('st-neu').addEventListener('click', neueSerie);
 $('st-bilanz').addEventListener('click', e => { if (e.target.closest('#st-nochmal')) neueSerie(); });
 $('st-bereich').addEventListener('click', e => {
-  const b = e.target.closest('.st-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   const v = b.dataset.b;
   if (bereiche.has(v) && bereiche.size === 1) return;      // ein Bereich bleibt immer gewählt
   if (bereiche.has(v)) bereiche.delete(v); else bereiche.add(v);

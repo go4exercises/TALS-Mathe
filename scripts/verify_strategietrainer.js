@@ -231,8 +231,8 @@ for (const bereich of Object.keys(K.VORLAGEN)) {
   const einl = html.slice(html.indexOf('pt-untertitel'), html.indexOf('</p>', html.indexOf('pt-untertitel')));
   for (const s of ['s2-2a-', 's3-1-']) if (!einl.includes(s)) melde('ST-C9: Einleitung ohne Verweis auf ' + s, '');
   // RT-C10: Bereichs-Schalter mit aria-pressed, beim Umschalten nachgeführt
-  const knoepfe = html.match(/<button[^>]*class="st-opt[^"]*"[^>]*>/g) || [];
-  if (!knoepfe.length || knoepfe.some(b => !/aria-pressed="(true|false)"/.test(b))) melde('RT-C10: st-opt ohne aria-pressed', knoepfe[0]);
+  const knoepfe = html.match(/<button[^>]*class="tr-opt[^"]*"[^>]*>/g) || [];
+  if (!knoepfe.length || knoepfe.some(b => !/aria-pressed="(true|false)"/.test(b))) melde('RT-C10: tr-opt ohne aria-pressed', knoepfe[0]);
   if (!/setAttribute\('aria-pressed'/.test(html)) melde('RT-C10: aria-pressed wird nicht nachgeführt', '');
 }
 

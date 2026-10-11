@@ -126,7 +126,7 @@ for (const c of ['negsq', 'negKlammer']) if (K.FEHLER[c][2][0] !== K.G14 + '#hie
 }
 { const l = K.lies('5.'); if (!l.q || l.q.n !== 5 || l.q.d !== 1) melde('GT-C6: «5.» nicht verstanden', JSON.stringify(l)); }
 if (/aria-label="' \+ f\.id/.test(html)) melde('GT-C7: aria-label überschreibt das sichtbare label', '');
-if (!/\.gt-opt[\s\S]{0,400}aria-pressed/.test(html) || (html.match(/aria-pressed/g) || []).length < 2) melde('RT-C10: .gt-opt ohne aria-pressed', '');
+if (!/\.tr-opt[\s\S]{0,400}aria-pressed/.test(html) || (html.match(/aria-pressed/g) || []).length < 2) melde('RT-C10: .tr-opt ohne aria-pressed', '');
 
 const py = [];
 let zahl = 0;

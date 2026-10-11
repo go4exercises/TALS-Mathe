@@ -102,6 +102,7 @@
 <!-- SEO:ENDE -->
 <link rel="stylesheet" href="../schriften.css">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="trainer.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
@@ -111,136 +112,69 @@ MathJax = {
 </script>
 <script src="../vendor/mathjax/tex-svg.js"></script>
 <style>
-/* Gesetzetrainer — seiteneigene Klassen (Präfix gt-), Farben aus style.css.
-   Orange = Aufgabe, Grün = richtig und Lösungsweg, Rot = Fehler mit Diagnose, Grau = fast (Form).
-   Aufbau wie im Rechentrainer; die Antwort steht in Feldern, die Vorschau setzt sie in die Zielform ein. */
-.gt-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
-.gt-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
-.gt-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
-  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
-.gt-seite summary::-webkit-details-marker { display:none; }
-.gt-seite summary::before { content:'▸ '; }
-.gt-seite details[open] summary::before { content:'▾ '; }
-.gt-gruppe { margin-bottom:16px; }
-.gt-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
-.gt-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
-  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
-.gt-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
-  border-radius:3px; background:var(--weiss); }
-.gt-opt.aktiv { color:var(--tinte); }
-.gt-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
-.gt-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
-.gt-opt:hover { color:var(--blau); }
-.gt-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
-.gt-zahl b { color:var(--tinte); font-weight:600; }
-.gt-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
-@media (min-width:901px) { .gt-seite summary { display:none; } }
-@media (max-width:900px) {
-  .gt-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
-  .gt-seite { order:-1; position:static; margin-bottom:-10px; }
-  .gt-seite details[open] > div { padding:12px 4px 0; }
-  .gt-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
-}
-.gt-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
-.gt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
-.gt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:12px; }
-.gt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.gt-tag.gt-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
-.gt-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
-.gt-ausdruck { font-size:1.25rem; padding:10px 4px 12px; overflow-x:auto; }
-.gt-eingabe { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-.gt-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:6.5em; max-width:100%;
-  border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
-.gt-eingabe input:focus { outline:none; border-color:var(--orange); }
-.gt-vorschau { font-size:1.05rem; color:var(--tinte); min-height:2em; margin:2px 0 8px; overflow-x:auto; }
+/* Gesetzetrainer — Rahmen aus trainer.css, hier nur Seiteneigenes (Präfix gt-).
+   Die Antwort steht in Feldern einer Zielform; die Vorschau darüber setzt die eingetippten Zahlen in die Form ein. */
+.gt-vorschau { font-size:1.05rem; color:var(--tinte); min-height:1.9em; margin:0 0 6px; overflow-x:auto; }
+.gt-vorschau:empty { display:none; }
+.gt-felder { display:contents; }          /* Felder und «Prüfen» brechen gemeinsam um (in .tr-reihe) */
 .gt-feld { display:inline-flex; align-items:center; gap:6px; }
 .gt-feld label { font-size:1rem; }
-.gt-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
-  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
-.gt-btn:hover { filter:brightness(.97); }
-.gt-btn.gt-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
-.gt-schritt-zahl { font-family:var(--mono); font-size:.72rem; font-weight:400; margin-left:6px; }
-.gt-btn.gt-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
-.gt-btn:disabled { opacity:.45; cursor:default; }
-.gt-wahl { display:flex; flex-wrap:wrap; gap:8px; }
-.gt-wahl .gt-btn { min-width:72px; font-size:1.05rem; }
-.gt-wahl .gt-btn.gt-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
-.gt-hinweis { font-family:var(--sans); font-size:.78rem; color:var(--tinte-2); margin-top:6px; }
-.gt-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
-.gt-rueck:empty { display:none; }
-.gt-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
-.gt-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
-.gt-rueck.fast { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
-.gt-rueck p { margin:0; }
-.gt-rueck p + p { margin-top:6px; }
-.gt-weg { margin-top:12px; padding:10px 14px; border:1px solid var(--gruen-rand); border-radius:9px; background:var(--gruen-hell); }
-.gt-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
-.gt-weg .gt-zeile { padding:2px 0; overflow-x:auto; }
-.gt-weg .gt-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
-.gt-schritt { margin-top:8px; }
-.gt-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); margin-bottom:1px; }
-.gt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
-.gt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
-.gt-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
-.gt-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
-.gt-bilanz ul { margin:6px 0 0 18px; }
-[hidden] { display:none !important; }
+.gt-feld input:disabled { opacity:.7; }
+/* Schmal: Felder und «Prüfen» in möglichst wenigen Reihen, Formathinweis weicht der Rückmeldung, die Leiste darf etwas höher werden als im Rahmen (48 %) */
 @media (max-width:560px) {
-  .gt-vorne { padding-left:14px; padding-right:14px; }
-  .gt-ausdruck { font-size:1.1rem; }
-  .gt-btn.gt-weiter { min-width:0; flex:1 1 60%; }
-  .gt-taste { display:none; }
+  .gt-feld input { width:4.5em; }
+  .gt-vorschau { min-height:0; margin-bottom:4px; }
 }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
-<div class="page-wrap gt-wrap">
+<div class="page-wrap tr-wrap">
   <main class="content">
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Gesetzetrainer</h1>
-      <p class="pt-untertitel">Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner anwenden: Terme auf eine Potenz bringen, Wurzeln teilweise ziehen und als Potenzen schreiben, Logarithmen berechnen, zerlegen und zusammenfassen. Rechts wählst du, was du üben willst. Bei einem Fehler nennt das Werkzeug die verwechselte Regel.
-        Der Stoff dazu steht in <a href="../grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html#potenzgesetze">1.4 Zehnerpotenzen und Quadratwurzeln</a>,
-        <a href="../schwerpunkt/s1-2-potenzen.html#potenzgesetze">SF 1.2 Potenzen</a>
-        und <a href="../schwerpunkt/s1-3-logarithmen.html#logarithmengesetze">SF 1.3 Logarithmen</a>.</p>
+      <p class="pt-untertitel">Potenz-, Wurzel- und Logarithmengesetze ohne Taschenrechner anwenden. Der Stoff dazu steht in <a href="../grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html#potenzgesetze">1.4 Zehnerpotenzen und Quadratwurzeln</a>, <a href="../schwerpunkt/s1-2-potenzen.html#potenzgesetze">SF 1.2 Potenzen</a> und <a href="../schwerpunkt/s1-3-logarithmen.html#logarithmengesetze">SF 1.3 Logarithmen</a>.</p>
     </div>
 
-<div class="gt-karte" id="gt-karte">
-  <div id="gt-aufgabe">
-    <div class="gt-vorne">
-      <div class="gt-kopf"><span class="gt-tag" id="gt-nr"></span><span class="gt-tag gt-thema" id="gt-thema"></span></div>
-      <p class="gt-auftrag" id="gt-auftrag"></p>
-      <div class="gt-ausdruck" id="gt-ausdruck"></div>
+<div class="tr-karte" id="gt-karte">
+  <div class="tr-aufgabe" id="gt-aufgabe">
+    <div class="tr-kopf">
+      <div class="tr-tags"><span class="tr-tag" id="gt-nr"></span><span class="tr-tag tr-thema" id="gt-thema"></span></div>
+      <button type="button" class="tr-naechster" id="gt-schritt" title="Zeigt die Lösung Schritt für Schritt, jeden Schritt mit seinem Gesetz">Nächster Schritt<span class="tr-zaehler" id="gt-schritt-zahl"></span></button>
+    </div>
+    <div class="tr-flaeche" id="gt-flaeche">
+      <p class="tr-auftrag" id="gt-auftrag"></p>
+      <div class="tr-ausdruck" id="gt-ausdruck"></div>
+      <div class="tr-weg" id="gt-weg" aria-live="polite"></div>
+    </div>
+    <div class="tr-leiste" id="gt-leiste">
       <div id="gt-antwort-eingabe">
         <div class="gt-vorschau" id="gt-vorschau" aria-live="polite"></div>
-        <div class="gt-eingabe">
-          <span id="gt-felder" class="gt-eingabe"></span>
-          <button type="button" class="gt-btn" id="gt-pruefen">Prüfen<span class="gt-taste">Enter</span></button>
-          <button type="button" class="gt-btn gt-schritt-btn" id="gt-schritt">Nächster Schritt<span class="gt-schritt-zahl" id="gt-schritt-zahl"></span></button>
+        <div class="tr-reihe">
+          <span id="gt-felder" class="gt-felder"></span>
+          <button type="button" class="tr-btn" id="gt-pruefen">Prüfen<span class="tr-taste">Enter</span></button>
         </div>
-        <div class="gt-hinweis" id="gt-hinweis">Ganze Zahl, Bruch wie 3/2 oder -1/2, Dezimalzahl mit Punkt wie 2.5</div>
+        <div class="tr-hinweis" id="gt-hinweis">Ganze Zahl, Bruch wie 3/2 oder -1/2, Dezimalzahl mit Punkt wie 2.5</div>
       </div>
-      <div id="gt-antwort-wahl" class="gt-wahl" hidden></div>
-      <div class="gt-rueck" id="gt-rueck" aria-live="polite"></div>
-      <div class="gt-weg" id="gt-weg" hidden></div>
-    </div>
-    <div class="gt-knoepfe" id="gt-weiter-box" hidden>
-      <button type="button" class="gt-btn gt-weiter" id="gt-weiter">Nächste Aufgabe →<span class="gt-taste">Enter</span></button>
+      <div id="gt-antwort-wahl" class="tr-wahlen" role="group" aria-label="Gilt die Regel?" hidden></div>
+      <div class="tr-rueck" id="gt-rueck" aria-live="polite"></div>
+      <div class="tr-weiter-box" id="gt-weiter-box" hidden>
+        <button type="button" class="tr-btn tr-weiter" id="gt-weiter">Nächste Aufgabe →<span class="tr-taste">Enter</span></button>
+      </div>
     </div>
   </div>
-  <div class="gt-bilanz" id="gt-bilanz" hidden></div>
+  <div class="tr-bilanz" id="gt-bilanz" hidden></div>
 </div>
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert der Trainer</div>
-  <p>Eine Runde hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst: Potenzen, Wurzeln, rationale Exponenten, Logarithmen — einzeln oder gemischt. Rationale Exponenten wie \(8^{\frac23}\) und die Logarithmen gehören zum Schwerpunktfach.</p>
+  <p>Eine Runde hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst: Potenzen, Wurzeln, rationale Exponenten, Logarithmen — einzeln oder gemischt. Du bringst Terme auf eine Potenz, ziehst Wurzeln teilweise und schreibst sie als Potenzen, berechnest Logarithmen, zerlegst sie und fasst sie zusammen. Rationale Exponenten wie \(8^{\frac23}\) und die Logarithmen gehören zum Schwerpunktfach.</p>
   <ul>
     <li><strong>Antwort in Feldern:</strong> Über den Feldern steht die Form, die verlangt ist, etwa \(x^{\,n}\) oder \(k\sqrt{r}\). Du tippst nur die Zahlen ein: ganze Zahlen, Brüche wie <code>3/2</code> oder <code>-1/2</code>, Dezimalzahlen mit Punkt. Die Vorschau setzt sie gleich in die Form ein.</li>
     <li><strong>Regel prüfen:</strong> Manche Aufgaben zeigen eine «Regel». Du entscheidest, ob sie für alle zulässigen Werte gilt. Danach siehst du ein Gegenbeispiel oder die Begründung.</li>
     <li><strong>Falsch:</strong> Das Werkzeug rechnet jede Aufgabe auch mit den typischen Verwechslungen, etwa Exponenten multipliziert statt addiert oder Basis und Zahl im Logarithmus vertauscht. Trifft deine Antwort eine davon, nennt es sie; sonst gibt es einen Tipp. Nach dem zweiten Versuch kommt der Lösungsweg mit dem Gesetz zu jedem Schritt.</li>
-    <li><strong>Nächster Schritt:</strong> zeigt die Lösung Schritt für Schritt, jeden Schritt mit seinem Gesetz. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
+    <li><strong>Nächster Schritt</strong> (oben rechts in der Karte): zeigt die Lösung Schritt für Schritt unter der Aufgabe, jeden Schritt mit seinem Gesetz. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
     <li><strong>Fast:</strong> Der Wert stimmt, aber die Form nicht, etwa ein ungekürzter Bruch oder eine Quadratzahl unter der Wurzel. Das zählt nicht als Fehler.</li>
   </ul>
   <p>Am Ende der Runde siehst du, welche Regeln du am häufigsten verwechselt hast, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
@@ -261,20 +195,20 @@ MathJax = {
 </details>
 
   </main>
-  <aside class="gt-seite">
+  <aside class="tr-seite">
     <details id="gt-seite-det">
       <summary>Runde und Bereiche · <span id="gt-kurz"></span></summary>
-      <div class="gt-gruppen">
-        <div class="gt-gruppe">
-          <div class="gt-g-titel">Runde</div>
-          <div class="gt-zahl"><span>Aufgabe</span><b id="gt-z-nr"></b></div>
-          <div class="gt-zahl"><span>Auf Anhieb</span><b id="gt-z-ok">0</b></div>
-          <div class="gt-zahl"><span>Fehler</span><b id="gt-z-fehl">0</b></div>
-          <div class="gt-zahl"><span>Zeit</span><b id="gt-z-zeit">0:00</b></div>
-          <div class="gt-neu" style="margin-top:6px"><button type="button" id="gt-neu">Neue Runde</button></div>
+      <div class="tr-gruppen">
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Runde</div>
+          <div class="tr-zahl"><span>Aufgabe</span><b id="gt-z-nr"></b></div>
+          <div class="tr-zahl"><span>Auf Anhieb</span><b id="gt-z-ok">0</b></div>
+          <div class="tr-zahl"><span>Fehler</span><b id="gt-z-fehl">0</b></div>
+          <div class="tr-zahl"><span>Zeit</span><b id="gt-z-zeit">0:00</b></div>
+          <div class="tr-neu" style="margin-top:6px"><button type="button" id="gt-neu">Neue Runde</button></div>
         </div>
-        <div class="gt-gruppe" id="gt-bereiche">
-          <div class="gt-g-titel">Bereiche</div>
+        <div class="tr-gruppe" id="gt-bereiche">
+          <div class="tr-g-titel">Bereiche</div>
         </div>
       </div>
     </details>
@@ -290,6 +224,7 @@ MathJax = {
 </footer>
 <!-- FUSS:ENDE -->
 <script src="../nav.js"></script>
+<script src="trainer.js"></script>
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
@@ -1085,7 +1020,7 @@ try {
 const bereichBox = $('gt-bereiche');
 for (const [k, t] of Object.entries(BEREICHE)) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'gt-opt' + (bereiche.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  b.type = 'button'; b.className = 'tr-opt' + (bereiche.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
   b.setAttribute('aria-pressed', bereiche.has(k) ? 'true' : 'false');
   bereichBox.appendChild(b);
 }
@@ -1102,18 +1037,23 @@ function zeigeZahlen() {
   $('gt-z-zeit').textContent = zeit();
   $('gt-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-// Lösungsweg mit den ersten k Schritten (ohne k: alle). «Regel prüfen» hat nur die Begründung, ohne Schritte.
+// Lösungsweg unter der Aufgabe in der Arbeitsfläche: die ersten k Schritte (ohne k: alle, dazu das Ergebnis).
+// Die Aufgabe steht schon darüber, darum beginnt der Weg mit Schritt 1. «Regel prüfen» hat nur die Begründung.
 function wegHtml(a, k = Infinity) {
-  const zeileHtml = w => (w.text ? '<div class="gt-text">' + w.text + '</div>'
-    : '<div class="gt-zeile">\\(\\displaystyle ' + (w.gl ? '\\Leftrightarrow\\; ' : '= ') + w.z + '\\)</div>');
-  let html = '<div class="gt-weg-titel">' + (a.art === 'wahl' ? 'Begründung' : 'Lösungsweg') + '</div>';
-  if (a.art === 'wahl') return html + a.weg.map(zeileHtml).join('');
-  html += '<div class="gt-zeile">\\(\\displaystyle ' + a.ausdruck + '\\)</div>';
+  const zeileHtml = w => (w.text ? '<div class="tr-text">' + w.text + '</div>'
+    : '<div class="tr-zeile">\\(\\displaystyle ' + (w.gl ? '\\Leftrightarrow\\; ' : '= ') + w.z + '\\)</div>');
+  const alles = k === Infinity;
+  if (a.art === 'wahl') return '<div class="tr-schritt"><div class="tr-schritt-kopf">Begründung</div>' + a.weg.map(zeileHtml).join('') + '</div>'
+    + '<div class="tr-ergebnis">Die Regel ' + loesungTex(a) + '.</div>';
+  let html = '';
   schrittListe(a).slice(0, k).forEach((s, i) => {
-    html += '<div class="gt-schritt"><div class="gt-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>' + s.zeilen.map(zeileHtml).join('') + '</div>';
+    html += '<div class="tr-schritt"><div class="tr-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>' + s.zeilen.map(zeileHtml).join('') + '</div>';
   });
+  // Ergebnis: Aufgabe = Lösung; bei einer Gleichung (Wegzeilen mit ⇔) nur die Lösung, etwa x = 2
+  if (alles) html += '<div class="tr-ergebnis">\\(\\displaystyle ' + (a.weg.some(w => w.gl) ? '' : a.ausdruck + ' = ') + loesungTex(a) + '\\)</div>';
   return html;
 }
+function zeigeWeg(k) { setzen($('gt-weg'), wegHtml(A, k)); mjKette.then(() => trNachUnten($('gt-flaeche'))); }
 const felder = () => [...$('gt-felder').querySelectorAll('input')];
 const werte = () => felder().map(i => i.value);
 function zeigeVorschau() { if (A && A.art !== 'wahl' && A.ziel === '{w}') setzen($('gt-vorschau'), ''); else if (A && A.art !== 'wahl') setzen($('gt-vorschau'), '\\(\\displaystyle ' + zielTex(A, werte()) + '\\)'); }
@@ -1122,43 +1062,45 @@ function neueAufgabe() {
   nr++;
   let a; do a = aufgabe([...bereiche]); while (a.ausdruck === letztes);
   A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0;
-  schritte = schrittListe(a); schritt = 0; geholfen = false; $('gt-schritt').disabled = false; zeigeSchrittZahl();
+  schritte = a.art === 'wahl' ? [] : schrittListe(a); schritt = 0; geholfen = false; $('gt-schritt').disabled = a.art === 'wahl'; zeigeSchrittZahl();
   $('gt-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
-  $('gt-thema').textContent = BEREICHE[a.bereich].name.replace(/ \(SF\)$/, '') + ' · ' + a.typ;
+  $('gt-thema').textContent = $('gt-thema').title = BEREICHE[a.bereich].name.replace(/ \(SF\)$/, '') + ' · ' + a.typ;   // title: schmal wird das Thema gekürzt
   setzen($('gt-auftrag'), a.auftrag);
   setzen($('gt-ausdruck'), '\\[' + a.ausdruck + (a.art === 'wahl' ? '' : a.felder.length === 1 && a.ziel === '{w}' ? ' = \\;?' : '') + '\\]');
   const wahl = a.art === 'wahl';
   $('gt-antwort-eingabe').hidden = wahl;
   $('gt-antwort-wahl').hidden = !wahl;
-  if (wahl) setzen($('gt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="gt-btn" data-w="' + k + '">' + t + '</button>').join(''));
+  if (wahl) setzen($('gt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="tr-wahl" data-w="' + k + '"><span>' + t + '</span></button>').join(''));
   else {
     setzen($('gt-felder'), a.felder.map(f => '<span class="gt-feld"><label for="gt-f-' + f.id + '">\\(' + f.tex + ' =\\)</label><input type="text" id="gt-f-' + f.id + '" autocomplete="off" inputmode="text" spellcheck="false"></span>').join(''));
     $('gt-pruefen').disabled = false;
-    mjKette.then(() => { const f = felder(); if (f[0]) f[0].focus(); });
+    mjKette.then(() => { const f = felder(); if (f[0]) f[0].focus({ preventScroll: true }); });
     zeigeVorschau();
   }
-  setzen($('gt-rueck'), ''); $('gt-rueck').className = 'gt-rueck';
-  $('gt-weg').hidden = true; $('gt-weiter-box').hidden = true;
+  setzen($('gt-rueck'), ''); $('gt-rueck').className = 'tr-rueck';
+  setzen($('gt-weg'), ''); $('gt-flaeche').scrollTop = 0; $('gt-hinweis').hidden = false; $('gt-weiter-box').hidden = true;
   zeigeZahlen();
 }
-function zeigeSchrittZahl() { $('gt-schritt-zahl').textContent = Math.min(schritt + 1, schritte.length) + '/' + schritte.length; }
+function zeigeSchrittZahl() { $('gt-schritt-zahl').textContent = schritte.length ? Math.min(schritt + 1, schritte.length) + '/' + schritte.length : '–'; }
 function naechsterSchritt() {
   if (fertig || !A || A.art === 'wahl') return;
   schritt++; geholfen = true;
   if (schritt >= schritte.length) { meldung('fast', '<p>Lösung Schritt für Schritt angesehen.</p>'); return abschliessen(false); }
-  $('gt-weg').hidden = false; setzen($('gt-weg'), wegHtml(A, schritt));
+  zeigeWeg(schritt);
   zeigeSchrittZahl();
 }
-function meldung(cls, html) { $('gt-rueck').className = 'gt-rueck ' + cls; setzen($('gt-rueck'), html); }
+// Rückmeldung; reicht die Leiste nicht (schmaler Bildschirm), wird sie ans Ende gerollt, damit Rückmeldung und «Nächste Aufgabe» sichtbar sind
+function meldung(cls, html) { $('gt-rueck').className = 'tr-rueck ' + cls; setzen($('gt-rueck'), html); mjKette.then(() => trNachUnten($('gt-leiste'))); }
 function abschliessen(gut) {
   fertig = true;
   felder().forEach(i => { i.disabled = true; }); $('gt-pruefen').disabled = true; $('gt-schritt').disabled = true;
   mjKette.then(() => $('gt-antwort-wahl').querySelectorAll('button').forEach(b => { b.disabled = true; }));
-  $('gt-weg').hidden = false; setzen($('gt-weg'), wegHtml(A));
-  $('gt-weiter-box').hidden = false;
+  zeigeWeg();
+  $('gt-hinweis').hidden = true; $('gt-weiter-box').hidden = false;
+  mjKette.then(() => trNachUnten($('gt-leiste')));
   if (gut && !fehlerInAufgabe && !geholfen) stand.ok++;
   zeigeZahlen();
-  $('gt-weiter').focus();
+  $('gt-weiter').focus({ preventScroll: true });
 }
 function antwort(eingabe) {
   if (fertig || !A) return;
@@ -1170,7 +1112,7 @@ function antwort(eingabe) {
   const f = FEHLER[r.code];
   let html = '<p>✗ ' + (r.code === 'sonst' ? 'Noch nicht. ' + (r.text || '') : '<strong>' + f[0] + '.</strong> ' + f[1]) + '</p>';
   if (A.art === 'wahl') {
-    const b = $('gt-antwort-wahl').querySelector('[data-w="' + eingabe + '"]'); if (b) b.classList.add('gt-falsch');
+    const b = $('gt-antwort-wahl').querySelector('[data-w="' + eingabe + '"]'); if (b) b.classList.add('tr-falsch');
   }
   if (versuch >= 2 || A.art === 'wahl') {
     html += '<p>Richtig ist ' + (A.art === 'wahl' ? '«' + loesungTex(A) + '»' : '\\(' + loesungTex(A) + '\\)') + '.</p>';
@@ -1189,11 +1131,11 @@ function bilanz() {
     const f = FEHLER[c];
     return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + (f[2] ? ' — nachlesen in <a href="' + f[2][0] + '">' + f[2][1] + '</a>' : '') + '</li>';
   }).join('') + '</ul>';
-  else if (!stand.fehl) html += '<p>Keine Fehler — stark.</p>';
-  html += '<div class="gt-knoepfe" style="padding:12px 0 0"><button type="button" class="gt-btn gt-weiter" id="gt-nochmal">Neue Runde</button></div>';
+  else if (stand.ok === RUNDE) html += '<p>Alles auf Anhieb — stark.</p>';
+  html += '<div class="tr-weiter-box"><button type="button" class="tr-btn tr-weiter" id="gt-nochmal">Neue Runde</button></div>';
   $('gt-aufgabe').hidden = true; $('gt-bilanz').hidden = false;
   setzen($('gt-bilanz'), html);
-  mjKette.then(() => $('gt-nochmal').focus());
+  mjKette.then(() => $('gt-nochmal').focus({ preventScroll: true }));
 }
 function neueRunde() {
   nr = 0; stand = { ok: 0, fehl: 0, codes: {} }; letztes = '';
@@ -1217,7 +1159,7 @@ $('gt-weiter').addEventListener('click', neueAufgabe);
 $('gt-neu').addEventListener('click', neueRunde);
 $('gt-bilanz').addEventListener('click', e => { if (e.target.closest('#gt-nochmal')) neueRunde(); });
 bereichBox.addEventListener('click', e => {
-  const b = e.target.closest('.gt-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   const t = b.dataset.t;
   if (bereiche.has(t) && bereiche.size === 1) return;
   if (bereiche.has(t)) bereiche.delete(t); else bereiche.add(t);

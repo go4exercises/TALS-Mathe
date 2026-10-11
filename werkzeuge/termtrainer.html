@@ -102,6 +102,7 @@
 <!-- SEO:ENDE -->
 <link rel="stylesheet" href="../schriften.css">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="trainer.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
@@ -111,133 +112,66 @@ MathJax = {
 </script>
 <script src="../vendor/mathjax/tex-svg.js"></script>
 <style>
-/* Termtrainer — seiteneigene Klassen (Präfix tt-), Farben aus style.css.
-   Orange = Aufgabe, Grün = richtig und Lösungsweg, Rot = Fehler mit Diagnose, Grau = fast (Form).
-   Aufbau wie im Rechentrainer. */
-.tt-wrap { grid-template-columns:minmax(0, 1fr) 200px; gap:44px; }
-.tt-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
-.tt-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
-  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
-.tt-seite summary::-webkit-details-marker { display:none; }
-.tt-seite summary::before { content:'▸ '; }
-.tt-seite details[open] summary::before { content:'▾ '; }
-.tt-gruppe { margin-bottom:16px; }
-.tt-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
-.tt-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
-  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
-.tt-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
-  border-radius:3px; background:var(--weiss); }
-.tt-opt.aktiv { color:var(--tinte); }
-.tt-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
-.tt-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
-.tt-opt:hover { color:var(--blau); }
-.tt-zahl { display:flex; justify-content:space-between; font-family:var(--mono); font-size:.74rem; margin:3px 0; }
-.tt-zahl b { color:var(--tinte); font-weight:600; }
-.tt-neu button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
-@media (min-width:901px) { .tt-seite summary { display:none; } }
-@media (max-width:900px) {
-  .tt-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
-  .tt-seite { order:-1; position:static; margin-bottom:-10px; }
-  .tt-seite details[open] > div { padding:12px 4px 0; }
-  .tt-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
-}
-.tt-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
-.tt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
-.tt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:12px; }
-.tt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.tt-tag.tt-thema { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); font-family:var(--sans); font-size:.78rem; }
-.tt-auftrag { font-family:var(--sans); font-size:.95rem; color:var(--tinte-2); margin:0 0 6px; }
-.tt-ausdruck { font-size:1.25rem; padding:10px 4px 12px; overflow-x:auto; }
-.tt-eingabe { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-.tt-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:18em; max-width:100%;
-  border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
-.tt-eingabe input:focus { outline:none; border-color:var(--orange); }
-.tt-tasten { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-.tt-tasten .tt-btn { font-family:var(--mono); font-weight:400; font-size:1rem; min-width:44px; min-height:38px; padding:4px 10px; }
-.tt-vorschau { font-size:.95rem; color:var(--tinte-2); min-height:1.8em; margin-top:6px; overflow-x:auto; }
-.tt-vorschau:not(:empty)::before { content:'gelesen: '; font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); }
-.tt-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
-  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
-.tt-btn:hover { filter:brightness(.97); }
-.tt-btn.tt-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
-.tt-btn.tt-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
-.tt-schritt-zahl { font-family:var(--mono); font-size:.72rem; font-weight:400; margin-left:6px; }
-.tt-btn:disabled { opacity:.45; cursor:default; }
-.tt-wahl { display:flex; flex-wrap:wrap; gap:8px; }
-.tt-wahl .tt-btn { min-width:72px; font-size:1.05rem; }
-.tt-wahl .tt-btn.tt-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
-.tt-hinweis { font-family:var(--sans); font-size:.78rem; color:var(--tinte-2); margin-top:6px; }
-.tt-rueck { font-family:var(--sans); font-size:.92rem; margin-top:12px; border-radius:7px; }
-.tt-rueck:empty { display:none; }
-.tt-rueck.richtig { background:var(--gruen-hell); border-left:4px solid var(--gruen-rand); padding:8px 12px; }
-.tt-rueck.falsch { background:var(--rot-hell); border-left:4px solid var(--rot-rand); padding:8px 12px; }
-.tt-rueck.fast { background:var(--papier-2); border-left:4px solid var(--linie); padding:8px 12px; }
-.tt-rueck p { margin:0; }
-.tt-rueck p + p { margin-top:6px; }
-.tt-weg { margin-top:12px; padding:10px 14px; border:1px solid var(--gruen-rand); border-radius:9px; background:var(--gruen-hell); }
-.tt-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
-.tt-weg .tt-zeile { padding:2px 0; overflow-x:auto; }
-.tt-weg .tt-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
-.tt-schritt { margin-top:8px; padding-top:6px; border-top:1px dashed var(--gruen-rand); }
-.tt-schritt-kopf { font-family:var(--mono); font-size:.74rem; color:var(--gruen); margin-bottom:2px; }
-.tt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
-.tt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
-.tt-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
-.tt-bilanz h2 { font-size:1.1rem; margin:0 0 8px; }
-.tt-bilanz ul { margin:6px 0 0 18px; }
-[hidden] { display:none !important; }
+/* Termtrainer — Rahmen aus trainer.css, hier nur Seiteneigenes (Präfix tt-):
+   Tastenleiste für ^ ² ( ) / + − und die Vorschau «so wird dein Term gelesen». */
+/* Eingabefeld füllt die Reihe neben «Prüfen», auch bei 360 px auf einer Zeile */
+.tt-tasten { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+.tt-tasten .tr-btn { font-family:var(--mono); font-weight:400; font-size:.95rem; min-width:40px; min-height:32px; padding:2px 8px; }
+.tt-vorschau { font-size:.88rem; color:var(--tinte-2); min-height:1.5em; margin-top:4px; overflow-x:auto; }
+.tt-vorschau:not(:empty)::before { content:'gelesen: '; font-family:var(--mono); font-size:.66rem; color:var(--tinte-2); }
 @media (max-width:560px) {
-  .tt-vorne { padding-left:14px; padding-right:14px; }
-  .tt-ausdruck { font-size:1.1rem; }
-  .tt-btn.tt-weiter { min-width:0; flex:1 1 60%; }
-  .tt-taste { display:none; }
-  .tt-tasten .tt-btn { flex:1 1 0; min-width:0; padding:4px 0; }
+  .tt-tasten .tr-btn { flex:1 1 0; min-width:0; min-height:30px; padding:2px 0; }
+  /* schmal: sobald die Vorschau steht, weicht der Formhinweis, damit die Rückmeldung Platz hat */
+  .tt-vorschau:not(:empty) + .tr-hinweis { display:none; }
 }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
-<div class="page-wrap tt-wrap">
+<div class="page-wrap tr-wrap">
   <main class="content">
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Termtrainer</h1>
-      <p class="pt-untertitel">Terme umformen ohne Taschenrechner: Klammern auflösen, binomische Formeln, ausklammern, faktorisieren und Bruchterme kürzen. Das Werkzeug prüft, ob deine Antwort gleichwertig ist und die verlangte Form hat, und erkennt typische Denkfehler.
-        Der Stoff dazu steht in <a href="../grundlagen/g1-3-algebraische-terme.html#klammern">1.3 Algebraische Terme</a>
-        und <a href="../schwerpunkt/s1-1-grundlagen.html#darstellungen">SF 1.1 Grundlagen</a>.</p>
+      <p class="pt-untertitel">Terme umformen, ausklammern, faktorisieren und kürzen ohne Taschenrechner; der Stoff dazu steht in <a href="../grundlagen/g1-3-algebraische-terme.html#klammern">1.3 Algebraische Terme</a> und <a href="../schwerpunkt/s1-1-grundlagen.html#darstellungen">SF 1.1 Grundlagen</a>.</p>
     </div>
 
-<div class="tt-karte" id="tt-karte">
-  <div id="tt-aufgabe">
-    <div class="tt-vorne">
-      <div class="tt-kopf"><span class="tt-tag" id="tt-nr"></span><span class="tt-tag tt-thema" id="tt-thema"></span></div>
-      <p class="tt-auftrag" id="tt-auftrag"></p>
-      <div class="tt-ausdruck" id="tt-ausdruck"></div>
-      <div class="tt-eingabe">
-        <input type="text" id="tt-eingabe" autocomplete="off" autocapitalize="off" inputmode="text" spellcheck="false" aria-label="Deine Antwort">
-        <button type="button" class="tt-btn" id="tt-pruefen">Prüfen<span class="tt-taste">Enter</span></button>
-        <button type="button" class="tt-btn tt-schritt-btn" id="tt-schritt">Nächster Schritt<span class="tt-schritt-zahl" id="tt-schritt-zahl"></span></button>
-      </div>
-      <div class="tt-tasten" id="tt-tasten" role="group" aria-label="Zeichen einfügen">
-        <button type="button" class="tt-btn" data-z="^" aria-label="Hochzahl">^</button>
-        <button type="button" class="tt-btn" data-z="^2" aria-label="hoch 2">²</button>
-        <button type="button" class="tt-btn" data-z="(" aria-label="Klammer auf">(</button>
-        <button type="button" class="tt-btn" data-z=")" aria-label="Klammer zu">)</button>
-        <button type="button" class="tt-btn" data-z="/" aria-label="Bruchstrich">/</button>
-        <button type="button" class="tt-btn" data-z="+" aria-label="plus">+</button>
-        <button type="button" class="tt-btn" data-z="-" aria-label="minus">−</button>
-      </div>
-      <div class="tt-vorschau" id="tt-vorschau" aria-live="polite"></div>
-      <div class="tt-hinweis" id="tt-hinweis"></div>
-      <div class="tt-rueck" id="tt-rueck" aria-live="polite"></div>
-      <div class="tt-weg" id="tt-weg" hidden></div>
+<div class="tr-karte" id="tt-karte">
+  <div class="tr-aufgabe" id="tt-aufgabe">
+    <div class="tr-kopf">
+      <div class="tr-tags"><span class="tr-tag" id="tt-nr"></span><span class="tr-tag tr-thema" id="tt-thema"></span></div>
+      <button type="button" class="tr-naechster" id="tt-schritt" title="Zeigt die Lösung Schritt für Schritt">Nächster Schritt<span class="tr-zaehler" id="tt-schritt-zahl"></span></button>
     </div>
-    <div class="tt-knoepfe" id="tt-weiter-box" hidden>
-      <button type="button" class="tt-btn tt-weiter" id="tt-weiter">Nächste Aufgabe →<span class="tt-taste">Enter</span></button>
+    <div class="tr-flaeche" id="tt-flaeche">
+      <p class="tr-auftrag" id="tt-auftrag"></p>
+      <div class="tr-ausdruck" id="tt-ausdruck"></div>
+      <div class="tr-weg" id="tt-weg" aria-live="polite"></div>
+    </div>
+    <div class="tr-leiste">
+      <div class="tr-reihe">
+        <input class="tr-lang" type="text" id="tt-eingabe" autocomplete="off" autocapitalize="off" inputmode="text" spellcheck="false" aria-label="Deine Antwort">
+        <button type="button" class="tr-btn" id="tt-pruefen">Prüfen<span class="tr-taste">Enter</span></button>
+      </div>
+      <div id="tt-hilfen">
+        <div class="tt-tasten" id="tt-tasten" role="group" aria-label="Zeichen einfügen">
+          <button type="button" class="tr-btn" data-z="^" aria-label="Hochzahl">^</button>
+          <button type="button" class="tr-btn" data-z="^2" aria-label="hoch 2">²</button>
+          <button type="button" class="tr-btn" data-z="(" aria-label="Klammer auf">(</button>
+          <button type="button" class="tr-btn" data-z=")" aria-label="Klammer zu">)</button>
+          <button type="button" class="tr-btn" data-z="/" aria-label="Bruchstrich">/</button>
+          <button type="button" class="tr-btn" data-z="+" aria-label="plus">+</button>
+          <button type="button" class="tr-btn" data-z="-" aria-label="minus">−</button>
+        </div>
+        <div class="tt-vorschau" id="tt-vorschau" aria-live="polite"></div>
+        <div class="tr-hinweis" id="tt-hinweis"></div>
+      </div>
+      <div class="tr-rueck" id="tt-rueck" aria-live="polite"></div>
+      <div class="tr-weiter-box" id="tt-weiter-box" hidden>
+        <button type="button" class="tr-btn tr-weiter" id="tt-weiter">Nächste Aufgabe →<span class="tr-taste">Enter</span></button>
+      </div>
     </div>
   </div>
-  <div class="tt-bilanz" id="tt-bilanz" hidden></div>
+  <div class="tr-bilanz" id="tt-bilanz" hidden></div>
 </div>
 
 <div class="block block-def">
@@ -248,7 +182,7 @@ MathJax = {
     <li><strong>Richtig</strong> heisst: gleichwertig zur Aufgabe <em>und</em> in der verlangten Form. Die Reihenfolge der Glieder und der Faktoren ist egal.</li>
     <li><strong>Fast:</strong> Dein Term ist gleichwertig, hat aber noch nicht die verlangte Form, etwa noch nicht vollständig faktorisiert oder noch nicht gekürzt. Das zählt nicht als Fehler, du gibst es nochmals ein.</li>
     <li><strong>Falsch:</strong> Das Werkzeug rechnet die Aufgabe auch mit den häufigsten Denkfehlern. Trifft deine Antwort einen davon, sagt es dir, welcher es ist; sonst zeigt eine Zahlenprobe, dass die Terme verschieden sind. Du hast einen zweiten Versuch, danach kommt der Lösungsweg.</li>
-    <li><strong>Nächster Schritt:</strong> zeigt die Lösung Schritt für Schritt, jeden Schritt mit seiner Regel. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
+    <li><strong>Nächster Schritt</strong> (oben rechts in der Karte): zeigt die Lösung direkt unter der Aufgabe Schritt für Schritt, jeden Schritt mit seiner Regel; der Zähler sagt, wie viele Schritte es sind. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
   </ul>
   <p>Am Ende der Runde siehst du, welche Denkfehler am häufigsten waren, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
 </div>
@@ -269,20 +203,20 @@ MathJax = {
 </details>
 
   </main>
-  <aside class="tt-seite">
+  <aside class="tr-seite">
     <details id="tt-seite-det">
       <summary>Runde und Themen · <span id="tt-kurz"></span></summary>
-      <div class="tt-gruppen">
-        <div class="tt-gruppe">
-          <div class="tt-g-titel">Runde</div>
-          <div class="tt-zahl"><span>Aufgabe</span><b id="tt-z-nr"></b></div>
-          <div class="tt-zahl"><span>Auf Anhieb</span><b id="tt-z-ok">0</b></div>
-          <div class="tt-zahl"><span>Fehler</span><b id="tt-z-fehl">0</b></div>
-          <div class="tt-zahl"><span>Zeit</span><b id="tt-z-zeit">0:00</b></div>
-          <div class="tt-neu" style="margin-top:6px"><button type="button" id="tt-neu">Neue Runde</button></div>
+      <div class="tr-gruppen">
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Runde</div>
+          <div class="tr-zahl"><span>Aufgabe</span><b id="tt-z-nr"></b></div>
+          <div class="tr-zahl"><span>Auf Anhieb</span><b id="tt-z-ok">0</b></div>
+          <div class="tr-zahl"><span>Fehler</span><b id="tt-z-fehl">0</b></div>
+          <div class="tr-zahl"><span>Zeit</span><b id="tt-z-zeit">0:00</b></div>
+          <div class="tr-neu" style="margin-top:6px"><button type="button" id="tt-neu">Neue Runde</button></div>
         </div>
-        <div class="tt-gruppe" id="tt-themen">
-          <div class="tt-g-titel">Themen</div>
+        <div class="tr-gruppe" id="tt-themen">
+          <div class="tr-g-titel">Themen</div>
         </div>
       </div>
     </details>
@@ -298,6 +232,7 @@ MathJax = {
 </footer>
 <!-- FUSS:ENDE -->
 <script src="../nav.js"></script>
+<script src="trainer.js"></script>
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── KERN:ANFANG ─────────────────────────────────────────────────
@@ -1065,7 +1000,7 @@ try {
 const themenBox = $('tt-themen');
 for (const [k, t] of Object.entries(THEMEN)) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'tt-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  b.type = 'button'; b.className = 'tr-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
   b.setAttribute('aria-pressed', String(themen.has(k)));
   themenBox.appendChild(b);
 }
@@ -1081,16 +1016,26 @@ function zeigeZahlen() {
   $('tt-z-zeit').textContent = zeit();
   $('tt-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-// Lösungsweg mit den ersten k Schritten (ohne k: alle)
+// Lösungsweg unter der Aufgabe mit den ersten k Schritten (ohne k: alle). Die Aufgabe steht direkt darüber,
+// darum beginnen die Formelzeilen mit «=».
 function wegHtml(a, k) {
-  const liste = schrittListe(a);
-  let html = '<div class="tt-weg-titel">Lösungsweg</div><div class="tt-zeile">\\(\\displaystyle ' + a.ausdruck + '\\)</div>';
-  liste.slice(0, k === undefined ? liste.length : k).forEach((s, j) => {
-    html += '<div class="tt-schritt"><div class="tt-schritt-kopf">Schritt ' + (j + 1) + ' · ' + s.titel + '</div>';
-    for (const z of s.zeilen) html += z.text ? '<div class="tt-text">' + z.text + '</div>' : '<div class="tt-zeile">\\(\\displaystyle = ' + z.tex + '\\)</div>';
+  const liste = schrittListe(a), bis = k === undefined ? liste.length : Math.min(k, liste.length);
+  let lj = -1, li = -1;                       // letzte Formelzeile des vollständigen Wegs = Ergebnis
+  if (bis === liste.length) liste.forEach((s, j) => s.zeilen.forEach((z, i) => { if (!z.text) { lj = j; li = i; } }));
+  let html = '';
+  liste.slice(0, bis).forEach((s, j) => {
+    html += '<div class="tr-schritt"><div class="tr-schritt-kopf">Schritt ' + (j + 1) + ' · ' + s.titel + '</div>';
+    s.zeilen.forEach((z, i) => {
+      const cls = j === lj && i === li ? 'tr-ergebnis' : 'tr-zeile';
+      html += z.text ? '<div class="tr-text">' + z.text + '</div>' : '<div class="' + cls + '">\\(\\displaystyle = ' + z.tex + '\\)</div>';
+    });
     html += '</div>';
   });
   return html;
+}
+function zeigeWeg(k) {
+  setzen($('tt-weg'), wegHtml(A, k));
+  mjKette.then(() => trNachUnten($('tt-flaeche')));
 }
 function schrittKnopf() {
   const n = schrittListe(A).length;
@@ -1105,7 +1050,7 @@ function naechsterSchritt() {
     meldung('fast', '<p>Lösung Schritt für Schritt angesehen.</p>');
     return abschliessen(false);
   }
-  $('tt-weg').hidden = false; setzen($('tt-weg'), wegHtml(A, schritt));
+  zeigeWeg(schritt);
   schrittKnopf();
 }
 function neueAufgabe() {
@@ -1116,27 +1061,28 @@ function neueAufgabe() {
   $('tt-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('tt-thema').textContent = THEMEN[a.thema].name;
   $('tt-auftrag').textContent = a.auftrag;
-  setzen($('tt-ausdruck'), '\\[' + a.ausdruck + '\\]');
+  setzen($('tt-ausdruck'), '\\(\\displaystyle ' + a.ausdruck + '\\)');
   $('tt-hinweis').textContent = HINWEIS[a.form];
-  const inp = $('tt-eingabe'); inp.value = ''; inp.disabled = false; $('tt-pruefen').disabled = false; tasten(true);
+  const inp = $('tt-eingabe'); inp.value = ''; inp.disabled = false; $('tt-pruefen').disabled = false; tasten(true); $('tt-hilfen').hidden = false;
   setzen($('tt-vorschau'), '');
-  setzen($('tt-rueck'), ''); $('tt-rueck').className = 'tt-rueck';
-  $('tt-weg').hidden = true; $('tt-weiter-box').hidden = true;
+  setzen($('tt-rueck'), ''); $('tt-rueck').className = 'tr-rueck';
+  setzen($('tt-weg'), ''); $('tt-weiter-box').hidden = true;
+  $('tt-flaeche').scrollTop = 0;
   schrittKnopf();
   zeigeZahlen();
-  inp.focus();
+  inp.focus({ preventScroll: true });
 }
 const tasten = an => $('tt-tasten').querySelectorAll('button').forEach(b => { b.disabled = !an; });
-function meldung(cls, html) { $('tt-rueck').className = 'tt-rueck ' + cls; setzen($('tt-rueck'), html); }
+function meldung(cls, html) { $('tt-rueck').className = 'tr-rueck ' + cls; setzen($('tt-rueck'), html); }
 function abschliessen(gut) {
   fertig = true;
-  $('tt-eingabe').disabled = true; $('tt-pruefen').disabled = true; tasten(false);
-  $('tt-weg').hidden = false; setzen($('tt-weg'), wegHtml(A));
+  $('tt-eingabe').disabled = true; $('tt-pruefen').disabled = true; tasten(false); $('tt-hilfen').hidden = true;
+  zeigeWeg();
   $('tt-weiter-box').hidden = false;
   schrittKnopf();
   if (gut && !fehlerInAufgabe && !hilfe) stand.ok++;
   zeigeZahlen();
-  $('tt-weiter').focus();
+  $('tt-weiter').focus({ preventScroll: true });
 }
 function antwort(eingabe) {
   if (fertig || !A) return;
@@ -1154,7 +1100,7 @@ function antwort(eingabe) {
   }
   html += '<p>Versuch es nochmals.</p>';
   meldung('falsch', html);
-  $('tt-eingabe').select();
+  $('tt-eingabe').focus({ preventScroll: true }); $('tt-eingabe').select();
 }
 function bilanz() {
   clearInterval(tick);
@@ -1164,11 +1110,11 @@ function bilanz() {
     const f = FEHLER[c];
     return '<li><strong>' + f[0] + '</strong>' + (n > 1 ? ' (' + n + '×)' : '') + (f[2] ? ' — nachlesen in <a href="' + f[2][0] + '">' + f[2][1] + '</a>' : '') + '</li>';
   }).join('') + '</ul>';
-  else if (!stand.fehl) html += '<p>Keine Fehler — stark.</p>';
-  html += '<div class="tt-knoepfe" style="padding:12px 0 0"><button type="button" class="tt-btn tt-weiter" id="tt-nochmal">Neue Runde</button></div>';
+  else if (stand.ok === RUNDE) html += '<p>Alles auf Anhieb — stark.</p>';
+  html += '<div class="tr-weiter-box"><button type="button" class="tr-btn tr-weiter" id="tt-nochmal">Neue Runde</button></div>';
   $('tt-aufgabe').hidden = true; $('tt-bilanz').hidden = false;
   setzen($('tt-bilanz'), html);
-  mjKette.then(() => $('tt-nochmal').focus());
+  mjKette.then(() => $('tt-nochmal').focus({ preventScroll: true }));
 }
 function neueRunde() {
   nr = 0; stand = { ok: 0, fehl: 0, codes: {} }; letztes = '';
@@ -1196,7 +1142,7 @@ $('tt-schritt').addEventListener('click', naechsterSchritt);
 $('tt-neu').addEventListener('click', neueRunde);
 $('tt-bilanz').addEventListener('click', e => { if (e.target.closest('#tt-nochmal')) neueRunde(); });
 themenBox.addEventListener('click', e => {
-  const b = e.target.closest('.tt-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   const t = b.dataset.t;
   if (themen.has(t) && themen.size === 1) return;
   if (themen.has(t)) themen.delete(t); else themen.add(t);

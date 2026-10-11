@@ -89,10 +89,11 @@ for (const thema of Object.keys(K.THEMEN)) for (let i = 0; i < N; i++) {
   }
 }
 if (K.STATISTIK.widerspruch) melde('Weg endet beim falschen Ergebnis oder in einer Sackgasse (Erzeuger)', K.STATISTIK.widerspruch + '× z.B. ' + K.STATISTIK.beispiel);
-// Jede Art von Schritt kommt als passend vor, jeder Fehlgriff wird angeboten
+// Jede Art von Schritt kommt als passend vor, jeder Fehlgriff wird angeboten. Nicht verlangt: 'Z:x' (zurück in eine
+// Gleichung ohne die gesuchte Variable) — seit Teilgleichungen mit nur einer Variablen aufgelöst dastehen, zu selten.
 for (const id of ['ME', 'MG', 'MA', 'U', 'O', 'V', 'D', 'E', 'G', 'A+', 'A-', 'L1', 'L2', 'L3', 'Z', 'W', 'P', 'R', 'Feine', 'Fkeine', 'Funendlich'])
   if (!(gewaehlt[id] > 0)) melde('Schritt kommt nie als passend vor', id);
-for (const id of ['U:um', 'ME:um', 'MG:um', 'MA:um', 'V:um', 'D:x', 'Ex:x', 'Gx:x', 'A+:x', 'A-:x', 'L1:x', 'L2:x', 'L3:x', 'Zx:x', 'Z:x', 'W:um', 'P:x', 'P:um', 'R:x'])
+for (const id of ['U:um', 'ME:um', 'MG:um', 'MA:um', 'V:um', 'D:x', 'Ex:x', 'Gx:x', 'A+:x', 'A-:x', 'L1:x', 'L2:x', 'L3:x', 'Zx:x', 'W:um', 'P:x', 'P:um', 'R:x'])
   if (!(angeboten[id] > 0)) melde('Umweg oder Fehlgriff kommt nie vor', id);
 for (const [k, v] of Object.entries(stat)) if (v < N * 0.04) melde('Thema/Fall zu selten', k + ' ' + v);
 

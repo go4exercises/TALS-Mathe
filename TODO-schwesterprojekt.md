@@ -22,6 +22,8 @@ Leitprogramme; gemeinsamer `build-clips.py`) — in Physik umgesetzt (Eintrag in
 nachgesehen: `TEXTBREITE_BEGRENZEN` in Physiks `build-clips.py`, Ähnlichkeit 99.8 %).
 **Abgeräumt am 10.10.2026:** der Eintrag vom 08.10.2026 (`clips_bibliothek.py`, Clipnamen mit Grossbuchstaben) —
 in Physik umgesetzt (Eintrag in `OFFEN`, Quelle Physik; Physiks `abgleich.py` hier übernommen).
+**Abgeräumt am 11.10.2026:** der Eintrag «Marken wörtlich kopieren» vom 11.10.2026 — in Physik umgesetzt
+(nachgesehen: HOWTO-werkzeuge Z.42, HOWTO-simulationen Z.39; Physiks `abgleich.py` hier übernommen).
 **Abgeräumt am 10.10.2026 (zweiter Durchgang):** der Eintrag vom 10.10.2026 (`build-clip-ton.py`, sieben
 Aussprache-Einträge) — in Physik umgesetzt (`1aca43e`; nachgesehen: `build-clip-ton.py` deckungsgleich, 12 Clips und
 2 Fragen neu vertont, «ppm, parts per million,» in drei Clips).
@@ -38,11 +40,18 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
-### 11.10.2026 · HOWTO-simulationen / HOWTO-werkzeuge: Marken wörtlich kopieren (auch in `OFFEN`)
+### 11.10.2026 · Trainer-Rahmen und «Nächster Schritt»
 
-**Was.** Ein Satz in §3: Die SEO- und FUSS-Marken wörtlich aus der Vorlage kopieren, samt «— generiert von
-scripts/build-seo.py, nicht von Hand ändern».
-**Wo.** Physik `HOWTO-simulationen.md` Z.37 und `HOWTO-werkzeuge.md` Z.39 (beide «leere FUSS-Marken»). Physiks
-`build-seo.py` sucht dieselben vollen Marken (`MARKE_AUF` Z.502, `FUSS_AUF` Z.504).
-**Warum.** Beim Bau von `simulationen/boxplot.html` (Mathe 84f1a7f) standen nackte Marken in der Seite:
-`build-seo.py` setzte einen zweiten SEO-Kopf davor und liess den Footer leer.
+**Wo.** `werkzeuge/trainer.css`, `werkzeuge/trainer.js`, HOWTO-werkzeuge §3 «Trainer-Rahmen».
+**Warum.** Die sieben Mathe-Trainer sahen verschieden aus, ihre Karten passten
+nicht auf einen Bildschirm (Oberkante 250–480 px, Höhe 470–785 px bei 800 px Fensterhöhe), und die neue Taste
+«Nächster Schritt» stand jedes Mal woanders. Jetzt gemeinsam: Karte bis zum unteren Bildschirmrand (Höhe per
+`trainer.js`), Kopf mit «Nächster Schritt» oben rechts, Arbeitsfläche, in der sich die Lösung unter der Aufgabe
+Schritt für Schritt entwickelt (nur sie scrollt), Bedienleiste unten. Vorbild `werkzeuge/systemtrainer.html`.
+**Was.** In Physik nachgezählt (nur gelesen): sechs Werkzeuge in `werkzeuge/` — `einheitentrainer.html` (2588 Zeilen),
+`formeln-umstellen.html` (1117), `bewegungsdiagramme.html` (1120), `fall-und-wurf.html` (1509),
+`freischneiden.html` (1992), `schaltungen-zusammenfassen.html` (2195); keins hat «Nächster Schritt» oder einen
+gemeinsamen Rahmen, Physiks HOWTO-werkzeuge kennt den Rahmen nicht. Übertrag: zuerst HOWTO-werkzeuge §3 angleichen
+(Datei ist in beiden Repos gleich gegliedert), dann entscheiden, welche der sechs Trainer sind (Einheitentrainer,
+Formeln umstellen sicher; die übrigen eher Rechner/Simulation-nahe) und nur diese umbauen. Leitfarbe Bernstein statt
+Blau beachten (`--blau` in `.tr-opt.aktiv`).

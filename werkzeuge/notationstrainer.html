@@ -98,6 +98,7 @@
 <!-- SEO:ENDE -->
 <link rel="stylesheet" href="../schriften.css">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="trainer.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
@@ -108,29 +109,11 @@ MathJax = {
 </script>
 <script src="../vendor/mathjax/tex-svg.js"></script>
 <style>
-/* Notationstrainer — seiteneigene Klassen (Präfix nt-), Farben aus style.css.
+/* Notationstrainer — Rahmen aus trainer.css, hier nur Seiteneigenes (Präfix nt-).
    Orange = Aufgabe (Vorderseite), Grün = Lösung (Rückseite), Rot = Stolperfalle. */
-.nt-wrap { grid-template-columns:minmax(0, 1fr) 190px; gap:44px; }
-/* Seitenspalte: Fächer und Filter, klein und klebend — die Karte behält die Höhe */
-.nt-seite { position:sticky; top:76px; font-size:.8rem; color:var(--tinte-2); }
-.nt-seite summary { list-style:none; cursor:pointer; font-family:var(--mono); font-size:.76rem; padding:7px 12px;
-  border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); }
-.nt-seite summary::-webkit-details-marker { display:none; }
-.nt-seite summary::before { content:'▸ '; }
-.nt-seite[open] summary::before, .nt-seite details[open] summary::before { content:'▾ '; }
-.nt-gruppe { margin-bottom:16px; }
-.nt-g-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--tinte-2);
-  border-bottom:1px solid var(--linie); padding-bottom:3px; margin-bottom:6px; }
-.nt-opt { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; font-family:var(--sans);
-  font-size:.8rem; line-height:1.35; color:var(--tinte-2); padding:3px 0 3px 19px; position:relative; }
-.nt-opt::before { content:''; position:absolute; left:0; top:5px; width:11px; height:11px; border:1px solid var(--linie);
-  border-radius:3px; background:var(--weiss); }
-.nt-opt.aktiv { color:var(--tinte); }
-.nt-opt.aktiv::before { background:var(--blau); border-color:var(--blau); }
-.nt-opt.aktiv::after { content:'✓'; position:absolute; left:2px; top:1px; font-size:.62rem; color:var(--weiss); }
-.nt-opt:hover { color:var(--blau); }
+/* Fächer als Balken in der Seitenspalte */
 .nt-opt-reihe { display:flex; gap:10px; }
-.nt-opt-reihe .nt-opt { width:auto; }
+.nt-opt-reihe .tr-opt { width:auto; }
 .nt-fach { display:grid; grid-template-columns:42px 1fr 26px; gap:6px; align-items:center; font-family:var(--mono); font-size:.72rem; margin:3px 0; }
 .nt-fach-balken { height:5px; background:var(--papier-2); border-radius:3px; overflow:hidden; }
 .nt-fach-balken span { display:block; height:100%; background:var(--blau-rand); }
@@ -138,93 +121,70 @@ MathJax = {
 .nt-fach-n { text-align:right; color:var(--tinte); }
 .nt-fach.nt-jetzt { color:var(--orange); font-weight:700; }
 .nt-meta { font-family:var(--mono); font-size:.68rem; margin-top:5px; }
-.nt-reset button { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; padding:0; }
-@media (min-width:901px) { .nt-seite summary { display:none; } }
-@media (max-width:900px) {
-  .nt-wrap { grid-template-columns:minmax(0, 1fr); gap:24px; }
-  .nt-seite { order:-1; position:static; margin-bottom:-10px; }
-  .nt-seite details[open] > div { padding:12px 4px 0; }
-  .nt-gruppen { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); column-gap:20px; }
-}
-.nt-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
-.nt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
-.nt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:10px; }
-.nt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
-.nt-tag.nt-fachtag { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); margin-left:auto; }
-.nt-lage { font-size:1.02rem; }
-.nt-ctx { font-size:.88rem; color:var(--tinte-2); margin-bottom:6px; }
-.nt-gegeben { font-size:1.05rem; }
-.nt-lage .nt-g { display:inline-block; margin-top:4px; font-family:var(--mono); font-size:.8rem; color:var(--tinte-2); }
-.nt-frage { margin-top:10px; font-weight:600; color:var(--orange); }
-.nt-hinten { border-top:1px dashed var(--linie); background:var(--gruen-hell); padding:14px 20px 16px; }
-.nt-hinten .nt-antwort { overflow-x:auto; }
-.nt-weg { font-size:.93rem; margin-top:4px; }
-.nt-falle { margin-top:10px; padding:8px 12px; background:var(--rot-hell); border-left:3px solid var(--rot); border-radius:4px; font-size:.9rem; }
+/* Vorderseite: Frage, Ausgangslage, Ergebnis, Grundmenge — Text statt einer Formel */
+.tr-auftrag.nt-frage { font-weight:600; color:var(--tinte); }
+.tr-ausdruck.nt-lage { font-size:1rem; padding-top:2px; }
+.nt-ctx { font-size:.88rem; color:var(--tinte-2); margin-bottom:4px; }
+.nt-g { display:inline-block; margin-top:4px; font-family:var(--mono); font-size:.8rem; color:var(--tinte-2); }
+.nt-leer { padding:24px 4px; text-align:center; color:var(--tinte-2); }
+/* Rückseite in der Arbeitsfläche */
+#nt-weg .tr-text { overflow-x:auto; }
+#nt-weg .tr-text p { margin:0 0 4px; }
+#nt-weg mjx-container[display="true"] { margin:.35em 0 !important; }
+.nt-falle { margin-top:8px; padding:6px 10px; background:var(--rot-hell); border-left:4px solid var(--rot); border-radius:4px; font-family:var(--sans); font-size:.88rem; }
 .nt-falle strong { color:var(--rot); }
-.nt-quer { margin-top:8px; font-size:.82rem; color:var(--tinte-2); }
-.nt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:12px 20px 16px; justify-content:center; }
-.nt-btn { font-family:var(--sans); font-size:.95rem; font-weight:600; padding:9px 18px; border-radius:8px; cursor:pointer;
-  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); min-width:150px; }
-.nt-btn:hover { filter:brightness(.97); }
-.nt-btn:disabled { opacity:.45; cursor:not-allowed; filter:none; }
-.nt-btn.nt-nein { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--rot); }
-.nt-btn.nt-ja { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); }
-.nt-btn.nt-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
-.nt-schritt-n { font-family:var(--mono); font-size:.72rem; font-weight:400; margin-left:6px; }
-.nt-schritte { margin-top:14px; padding:10px 14px; background:var(--gruen-hell); border:1px solid var(--gruen-rand); border-left:4px solid var(--gruen); border-radius:6px; overflow-x:auto; }
-.nt-schritt + .nt-schritt { margin-top:10px; padding-top:8px; border-top:1px dashed var(--gruen-rand); }
-.nt-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); margin-bottom:3px; }
-.nt-schritt-inhalt { font-size:.93rem; }
-.nt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
-.nt-leer { padding:24px 20px; text-align:center; color:var(--tinte-2); }
-[hidden] { display:none !important; }
-@media (max-width:560px) {
-  .nt-vorne, .nt-hinten { padding-left:14px; padding-right:14px; }
-  .nt-btn { min-width:0; flex:1 1 40%; }
-  .nt-taste { display:none; }
-}
+.nt-quer { margin-top:6px; font-family:var(--sans); font-size:.82rem; color:var(--tinte-2); }
+/* Bewerten: Rot = noch nicht, Grün = gewusst */
+.nt-knoepfe { justify-content:center; }
+.nt-knoepfe .tr-btn { min-width:150px; }
+@media (max-width:560px) { .nt-knoepfe .tr-btn { min-width:0; flex:1 1 40%; } }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
-<div class="page-wrap nt-wrap">
+<div class="page-wrap tr-wrap">
   <main class="content">
     <div class="page-titel">
       <div class="pt-bereich">WZ · Werkzeuge</div>
       <h1 class="pt-h1">Notationstrainer</h1>
-      <p class="pt-untertitel">Lernkartei für die Schreibweise von \(\mathbb{D}\), \(\mathbb{L}\) und Intervallen — gerechnet wird hier nicht.
-        Die Begriffe stehen in <a href="../grundlagen/g2-1-grundlagen.html#definition">2.1 Grundlagen</a>.</p>
+      <p class="pt-untertitel">Lernkartei für die Schreibweise von \(\mathbb{D}\), \(\mathbb{L}\) und Intervallen; der Stoff dazu steht in <a href="../grundlagen/g2-1-grundlagen.html#definition">2.1 Grundlagen</a>.</p>
     </div>
 
-<div class="nt-karte" id="nt-karte">
-  <div class="nt-vorne">
-    <div class="nt-kopf" id="nt-kopf"></div>
-    <div class="nt-lage" id="nt-lage"></div>
-    <div class="nt-frage" id="nt-frage"></div>
-    <div class="nt-schritte" id="nt-schritte" hidden></div>
+<div class="tr-karte" id="nt-karte">
+  <div class="tr-aufgabe" id="nt-aufgabe">
+    <div class="tr-kopf">
+      <div class="tr-tags"><span class="tr-tag" id="nt-fachtag"></span><span class="tr-tag tr-thema" id="nt-thema"></span></div>
+      <button type="button" class="tr-naechster" id="nt-schritt" title="Zeigt den nächsten Schritt vom Ergebnis zur Notation">Nächster Schritt<span class="tr-zaehler" id="nt-schritt-n"></span></button>
+    </div>
+    <div class="tr-flaeche" id="nt-flaeche">
+      <div id="nt-vorne">
+        <p class="tr-auftrag nt-frage" id="nt-frage"></p>
+        <div class="tr-ausdruck nt-lage" id="nt-lage"></div>
+      </div>
+      <div class="tr-weg" id="nt-weg" aria-live="polite"></div>
+      <div class="nt-leer" id="nt-leer" hidden>Mit dieser Auswahl gibt es keine Karten. Wähle mindestens eine Grundmenge und ein Thema.</div>
+    </div>
+    <div class="tr-leiste" id="nt-leiste">
+      <div class="tr-reihe nt-knoepfe" id="nt-knoepfe-vorne">
+        <button type="button" class="tr-btn" id="nt-umdrehen">Umdrehen<span class="tr-taste">Leertaste</span></button>
+      </div>
+      <div id="nt-knoepfe-hinten" hidden>
+        <p class="tr-frage">Stimmt deine Notation mit der Rückseite überein?</p>
+        <div class="tr-reihe nt-knoepfe">
+          <button type="button" class="tr-btn tr-nein" id="nt-nein">✗ Noch nicht<span class="tr-taste">1</span></button>
+          <button type="button" class="tr-btn tr-ja" id="nt-ja">✓ Gewusst<span class="tr-taste">2</span></button>
+        </div>
+      </div>
+      <div class="tr-rueck" id="nt-rueck" aria-live="polite"></div>
+    </div>
   </div>
-  <div class="nt-hinten" id="nt-hinten" hidden>
-    <div class="nt-antwort" id="nt-antwort"></div>
-    <div class="nt-weg" id="nt-weg"></div>
-    <div class="nt-falle" id="nt-falle" hidden></div>
-    <div class="nt-quer" id="nt-quer"></div>
-  </div>
-  <div class="nt-knoepfe" id="nt-knoepfe-vorne">
-    <button type="button" class="nt-btn nt-schritt-btn" id="nt-schritt">Nächster Schritt<span class="nt-schritt-n" id="nt-schritt-n"></span></button>
-    <button type="button" class="nt-btn" id="nt-umdrehen">Umdrehen<span class="nt-taste">Leertaste</span></button>
-  </div>
-  <div class="nt-knoepfe" id="nt-knoepfe-hinten" hidden>
-    <button type="button" class="nt-btn nt-nein" id="nt-nein">✗ Noch nicht<span class="nt-taste">1</span></button>
-    <button type="button" class="nt-btn nt-ja" id="nt-ja">✓ Gewusst<span class="nt-taste">2</span></button>
-  </div>
-  <div class="nt-leer" id="nt-leer" hidden>Mit dieser Auswahl gibt es keine Karten. Wähle mindestens ein Fach, eine Grundmenge und ein Thema.</div>
 </div>
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert die Kartei</div>
-  <p>Vorne steht, was die Rechnung ergeben hat, dazu die Grundmenge. Du schreibst die Definitionsmenge, die Lösungsmenge oder das Intervall in korrekter Notation auf — erst auf Papier, dann drehst du die Karte um.</p>
+  <p>Gerechnet wird hier nicht: Vorne steht, was die Rechnung ergeben hat, dazu die Grundmenge. Du schreibst die Definitionsmenge, die Lösungsmenge oder das Intervall in korrekter Notation auf — erst auf Papier, dann drehst du die Karte um.</p>
   <p>Jede Karte liegt in einem von drei Fächern. Neue Karten starten in Fach 1. Ist deine Notation <strong>richtig und gleichwertig</strong> zur Rückseite — mit der richtigen Klammer, dem richtigen Zeichen, der richtigen Menge —, wandert die Karte ein Fach weiter. Sonst fällt sie zurück in Fach 1. Eine andere korrekte Schreibweise derselben Menge zählt auch; die üblichen stehen auf der Rückseite unter «Ebenso richtig». Verlangt die Frage eine bestimmte Form, etwa «als Intervall» oder «aufzählend», zählt nur diese. Karten aus Fach 1 kommen viermal so oft dran wie aus Fach 3, die aus Fach 2 doppelt so oft.</p>
-  <p><strong>Nächster Schritt:</strong> zeigt Schritt für Schritt, wie man vom Ergebnis zur Notation kommt; nach dem letzten Schritt dreht sich die Karte um. Die Karte wandert dann nicht weiter, sondern zurück in Fach 1.</p>
+  <p><strong>Nächster Schritt</strong> (oben rechts auf der Karte): zeigt Schritt für Schritt unter der Aufgabe, wie man vom Ergebnis zur Notation kommt; nach dem letzten Schritt dreht sich die Karte um, und die Rückseite ergänzt nur noch, was fehlt. Die Karte wandert dann nicht weiter, sondern zurück in Fach 1.</p>
   <p>Tastatur: <strong>Leertaste</strong> dreht um, <strong>1</strong> heisst «noch nicht», <strong>2</strong> heisst «gewusst». Dein Stand wird nur in diesem Browser gespeichert.</p>
 </div>
 
@@ -249,28 +209,28 @@ MathJax = {
 </details>
 
   </main>
-  <aside class="nt-seite">
+  <aside class="tr-seite">
     <details id="nt-seite-det">
       <summary>Fächer und Filter · <span id="nt-kurz"></span></summary>
-      <div class="nt-gruppen">
-        <div class="nt-gruppe">
-          <div class="nt-g-titel">Fächer</div>
+      <div class="tr-gruppen">
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Fächer</div>
           <div id="nt-faecher"></div>
           <div class="nt-meta" id="nt-meta"></div>
         </div>
-        <div class="nt-gruppe">
-          <div class="nt-g-titel">Grundmenge</div>
+        <div class="tr-gruppe">
+          <div class="tr-g-titel">Grundmenge</div>
           <div class="nt-opt-reihe" id="nt-grund">
-            <button type="button" class="nt-opt" data-m="N" aria-pressed="false">\(\mathbb{N}\)</button>
-            <button type="button" class="nt-opt" data-m="Z" aria-pressed="false">\(\mathbb{Z}\)</button>
-            <button type="button" class="nt-opt" data-m="Q" aria-pressed="false">\(\mathbb{Q}\)</button>
-            <button type="button" class="nt-opt aktiv" data-m="R" aria-pressed="true">\(\mathbb{R}\)</button>
+            <button type="button" class="tr-opt" data-m="N" aria-pressed="false">\(\mathbb{N}\)</button>
+            <button type="button" class="tr-opt" data-m="Z" aria-pressed="false">\(\mathbb{Z}\)</button>
+            <button type="button" class="tr-opt" data-m="Q" aria-pressed="false">\(\mathbb{Q}\)</button>
+            <button type="button" class="tr-opt aktiv" data-m="R" aria-pressed="true">\(\mathbb{R}\)</button>
           </div>
         </div>
-        <div class="nt-gruppe" id="nt-kat">
-          <div class="nt-g-titel">Thema</div>
+        <div class="tr-gruppe" id="nt-kat">
+          <div class="tr-g-titel">Thema</div>
         </div>
-        <div class="nt-gruppe nt-reset"><button type="button" id="nt-reset">Kartei zurücksetzen</button></div>
+        <div class="tr-gruppe tr-neu"><button type="button" id="nt-reset">Kartei zurücksetzen</button></div>
       </div>
     </details>
   </aside>
@@ -285,6 +245,7 @@ MathJax = {
 </footer>
 <!-- FUSS:ENDE -->
 <script src="../nav.js"></script>
+<script src="trainer.js"></script>
 <script>buildNav({ id: 'werkzeuge' });</script>
 <script>
 // ── Kartensatz ───────────────────────────────────────────────
@@ -783,6 +744,7 @@ const fachVon = id => Math.min(FAECHER, fach[id] || 1);   // ältere Stände hat
 
 let aktuell = null, letzte = null;
 let schritte = [], schrittNr = 0;              // aufgedeckte Lösungsschritte der aktuellen Karte
+let hinten = false;                            // Rückseite aufgedeckt
 
 function imStapel() { return KARTEN.filter(c => auswahl.m.has(grundVon(c)) && auswahl.k.has(c.k)); }
 
@@ -803,7 +765,16 @@ function setzen(el, html) {
   el.innerHTML = html;
 }
 function setzeFormeln(els) {
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise(els).catch(() => {});
+  if (window.MathJax && MathJax.typesetPromise) return MathJax.typesetPromise(els).catch(() => {});
+  return Promise.resolve();
+}
+// Neues in der Arbeitsfläche: erst setzen lassen, dann ans Ende scrollen
+function anhaengen(html) {
+  const el = document.createElement('div');
+  el.innerHTML = html;
+  const neu = [...el.children];
+  neu.forEach(n => $('nt-weg').appendChild(n));
+  setzeFormeln(neu).then(() => trNachUnten($('nt-flaeche')));
 }
 
 function zeigeFaecher() {
@@ -816,22 +787,29 @@ function zeigeFaecher() {
     `<span class="nt-fach-n">${z}</span></div>`).join('');
   $('nt-meta').textContent = `${st.length} Karten in der Auswahl`;
   $('nt-kurz').textContent = `${st.length} Karten · ${n.join(' | ')}`;
+  if (window.trHoehe) trHoehe();                  // die Zusammenfassung über der Karte kann umbrechen
 }
 
 function zeigeKarte() {
   aktuell = ziehen();
   const leer = !aktuell;
   $('nt-leer').hidden = !leer;
-  document.querySelector('.nt-vorne').hidden = leer;
+  $('nt-vorne').hidden = leer;
   $('nt-knoepfe-vorne').hidden = leer;
-  $('nt-hinten').hidden = true;
   $('nt-knoepfe-hinten').hidden = true;
+  hinten = false;
+  setzen($('nt-weg'), '');
+  setzen($('nt-rueck'), ''); $('nt-rueck').className = 'tr-rueck';
+  $('nt-flaeche').scrollTop = 0;
   zeigeFaecher();
-  if (leer) return;
+  if (leer) {
+    $('nt-fachtag').textContent = ''; $('nt-thema').textContent = '';
+    schritte = []; schrittNr = 0; zeigeSchrittZaehler();
+    return;
+  }
   const c = aktuell;
-  setzen($('nt-kopf'),
-    `<span class="nt-tag">${THEMEN[c.k]}</span>` +
-    `<span class="nt-tag nt-fachtag">Fach ${fachVon(c.id)}</span>`);
+  $('nt-fachtag').textContent = `Fach ${fachVon(c.id)}`;
+  $('nt-thema').textContent = THEMEN[c.k];
   const art = !c.ctx ? '' : /cases/.test(c.ctx) ? 'Gleichungssystem' : /\\[lg][te]\b/.test(c.ctx) ? 'Ungleichung' : 'Gleichung';
   setzen($('nt-lage'),
     (c.ctx ? `<div class="nt-ctx">${art}: \\(\\displaystyle ${c.ctx}\\)</div>` : '') +
@@ -840,56 +818,69 @@ function zeigeKarte() {
   setzen($('nt-frage'), c.frage);
   setzeFormeln([$('nt-lage'), $('nt-frage')]);
   schritte = schrittListe(c); schrittNr = 0;
-  setzen($('nt-schritte'), '');
-  $('nt-schritte').hidden = true;
   $('nt-ja').disabled = false; $('nt-ja').title = '';
   zeigeSchrittZaehler();
 }
 
+// Zähler im Knopf oben rechts; gesperrt, sobald die Rückseite offen ist
 function zeigeSchrittZaehler() {
-  $('nt-schritt-n').textContent = `${Math.min(schrittNr + 1, schritte.length)}/${schritte.length}`;
+  $('nt-schritt-n').textContent = schritte.length ? `${Math.min(schrittNr + 1, schritte.length)}/${schritte.length}` : '';
+  $('nt-schritt').disabled = !aktuell || hinten || schrittNr >= schritte.length;
 }
 
-// Deckt den nächsten Lösungsschritt auf; nach dem letzten dreht sich die Karte um.
+function schrittHtml(nr, s) {
+  return `<div class="tr-schritt"><div class="tr-schritt-kopf">Schritt ${nr} · ${s.titel}</div><div class="tr-text">${s.inhalt}</div></div>`;
+}
+
+// Deckt den nächsten Lösungsschritt unter der Aufgabe auf; nach dem letzten dreht sich die Karte um.
 function naechsterSchritt() {
-  if (!aktuell || schrittNr >= schritte.length) return;
+  if (!aktuell || hinten || schrittNr >= schritte.length) return;
   const s = schritte[schrittNr++];
-  const el = document.createElement('div');
-  el.className = 'nt-schritt';
-  el.innerHTML = `<div class="nt-schritt-kopf">Schritt ${schrittNr} · ${s.titel}</div><div class="nt-schritt-inhalt">${s.inhalt}</div>`;
-  const box = $('nt-schritte');
-  box.appendChild(el); box.hidden = false;
-  setzeFormeln([el]);
+  anhaengen(schrittHtml(schrittNr, s));
   zeigeSchrittZaehler();
   if (schrittNr >= schritte.length) umdrehen();
 }
 
+// Rückseite in der Arbeitsfläche unter Aufgabe und Schritten. Ohne Schritte: die ganze Rückseite.
+// Mit Schritten: nur, was noch fehlt — die übrigen Schritte, die Stolperfalle und der Link.
+// (Die Schritte decken Antwort und Begründung samt «Ebenso richtig» vollständig ab.)
 function umdrehen() {
-  if (!aktuell || !$('nt-hinten').hidden) return;
+  if (!aktuell || hinten) return;
   const c = aktuell;
-  $('nt-schritte').hidden = true;                  // die Rückseite zeigt dasselbe vollständig
-  // Karten mit D und L: beide Mengen untereinander, Begründung je Menge
-  setzen($('nt-antwort'), c.l
-    ? `\\[ \\begin{aligned} ${c.a.replace(' = ', ' &= ')} \\\\ \\mathbb{L} &= ${c.l} \\end{aligned} \\]`
-    : `\\[ ${c.a} \\]`);
-  setzen($('nt-weg'), c.l
-    ? `<p><strong>\\(\\mathbb{D}\\):</strong> ${c.weg}</p><p><strong>\\(\\mathbb{L}\\):</strong> ${c.lweg}</p>`
-    : c.weg);
-  $('nt-falle').hidden = !c.falle;
-  setzen($('nt-falle'), c.falle ? `<strong>Stolperfalle:</strong> ${c.falle}` : '');
-  setzen($('nt-quer'), `→ <a href="${c.s[0]}">${c.s[1]}</a>`);
-  $('nt-hinten').hidden = false;
+  hinten = true;
+  let html = '', inhalt = '';
+  const mitSchritten = schrittNr > 0;
+  if (mitSchritten) {
+    while (schrittNr < schritte.length) { const s = schritte[schrittNr++]; html += schrittHtml(schrittNr, s); }
+  } else {
+    // Karten mit D und L: beide Mengen untereinander, Begründung je Menge
+    inhalt = '<div class="tr-ergebnis">' + (c.l
+        ? `\\[ \\begin{aligned} ${c.a.replace(' = ', ' &= ')} \\\\ \\mathbb{L} &= ${c.l} \\end{aligned} \\]`
+        : `\\[ ${c.a} \\]`) + '</div>' +
+      '<div class="tr-text">' + (c.l
+        ? `<p><strong>\\(\\mathbb{D}\\):</strong> ${c.weg}</p><p><strong>\\(\\mathbb{L}\\):</strong> ${c.lweg}</p>`
+        : c.weg) + '</div>';
+  }
+  inhalt += (c.falle ? `<div class="nt-falle"><strong>Stolperfalle:</strong> ${c.falle}</div>` : '') +
+    `<div class="nt-quer">→ <a href="${c.s[0]}">${c.s[1]}</a></div>`;
+  html += '<div class="tr-schritt nt-hinten"><div class="tr-schritt-kopf">Rückseite · ' +
+    (mitSchritten ? 'Zum Vergleich' : 'Lösung') + '</div>' + inhalt + '</div>';
+  anhaengen(html);
   $('nt-knoepfe-vorne').hidden = true;
   $('nt-knoepfe-hinten').hidden = false;
   // Mit Schritten gelöst: zählt nicht als gewusst
-  if (schrittNr > 0) { $('nt-ja').disabled = true; $('nt-ja').title = 'Mit «Nächster Schritt» gelöst — die Karte geht zurück in Fach 1.'; }
-  setzeFormeln([$('nt-antwort'), $('nt-weg'), $('nt-falle')]);
+  if (mitSchritten) {
+    $('nt-ja').disabled = true; $('nt-ja').title = 'Mit «Nächster Schritt» gelöst — die Karte geht zurück in Fach 1.';
+    $('nt-rueck').className = 'tr-rueck fast';
+    setzen($('nt-rueck'), '<p>Mit «Nächster Schritt» gelöst — die Karte geht zurück in Fach 1.</p>');
+  }
+  zeigeSchrittZaehler();
   // Fokus weg vom Knopf, sonst löst die nächste Leertaste «gewusst» aus
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
 }
 
 function bewerten(gewusst) {
-  if (!aktuell || $('nt-hinten').hidden) return;
+  if (!aktuell || !hinten) return;
   if (schrittNr > 0) gewusst = false;          // Schritte benutzt: wie «noch nicht», zurück in Fach 1
   fach[aktuell.id] = gewusst ? Math.min(FAECHER, fachVon(aktuell.id) + 1) : 1;
   speichern();
@@ -901,12 +892,12 @@ function bewerten(gewusst) {
 const katLeiste = $('nt-kat');
 Object.entries(THEMEN).forEach(([k, t]) => {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'nt-opt' + (auswahl.k.has(k) ? ' aktiv' : ''); b.dataset.k = k; b.textContent = t;
+  b.type = 'button'; b.className = 'tr-opt' + (auswahl.k.has(k) ? ' aktiv' : ''); b.dataset.k = k; b.textContent = t;
   b.setAttribute('aria-pressed', String(auswahl.k.has(k)));
   katLeiste.appendChild(b);
 });
 function filterKlick(e, menge, schluessel) {
-  const b = e.target.closest('.nt-opt'); if (!b) return;
+  const b = e.target.closest('.tr-opt'); if (!b) return;
   const v = b.dataset[schluessel];
   if (menge.has(v)) menge.delete(v); else menge.add(v);
   b.classList.toggle('aktiv', menge.has(v));
@@ -926,8 +917,8 @@ $('nt-reset').addEventListener('click', () => {
   fach = {}; speichern(); letzte = null; zeigeKarte();
 });
 document.addEventListener('keydown', e => {
-  if (e.target.closest('input, textarea, select, .nt-opt, #nt-reset, summary, a') || e.ctrlKey || e.metaKey || e.altKey) return;
-  if (e.key === ' ' && $('nt-hinten').hidden && aktuell) { e.preventDefault(); umdrehen(); }
+  if (e.target.closest('input, textarea, select, .tr-opt, #nt-reset, summary, a') || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === ' ' && !hinten && aktuell) { e.preventDefault(); umdrehen(); }
   else if (e.key === '1') bewerten(false);
   else if (e.key === '2') bewerten(true);
 });
