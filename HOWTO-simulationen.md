@@ -74,7 +74,9 @@ Selbsttest `scripts/verify_<name>.js` (im Pre-Flight eingetragen).
   «Skelett & Klassen»). Seiteneigenes CSS im `<style>` der Seite mit eigenem Präfix
   (Muster: `nt-` im Notationstrainer).
 - Den SEO-Kopf und den Footer **nicht** von Hand schreiben: Beide entstehen aus `scripts/build-seo.py` (§4);
-  für den Footer nur die leeren FUSS-Marken nach `.page-wrap` setzen (STYLEGUIDE §7).
+  für den Footer nur die leeren FUSS-Marken nach `.page-wrap` setzen (STYLEGUIDE §7). Die Marken wörtlich aus
+  der Vorbildseite kopieren, samt «— generiert von scripts/build-seo.py, nicht von Hand ändern»: Ein nacktes
+  `<!-- SEO:ANFANG -->` erkennt das Skript nicht und setzt einen zweiten Kopf davor.
 
 ## 4 · Eintragen
 

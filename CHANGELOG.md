@@ -24,6 +24,12 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **Simulation Boxplot** (11.10.2026, `simulationen/boxplot.html`): 4–15 Werte im Punktdiagramm ziehen oder
+  eintippen und in sechs Schritten verfolgen: sortierte Liste mit den Plätzen von Median und Quartilen (Median der
+  Hälften wie g4.3), Boxplot Teil für Teil aus dem Punktdiagramm, vier Teile mit gleich vielen Werten und die Form
+  (symmetrisch, rechts-/linksschief, Mittelwert gegen Median), Ausreisser mit der Faustregel \(1.5 \cdot \text{QD}\)
+  aus g4.3, zwei Gruppen im Vergleich. Kachel in `simulationen.html`, Bausteine in g4.2 und g4.3 (`#darstellungen`),
+  Selbsttest `scripts/verify_boxplot.js` im Pre-Flight. HOWTO-simulationen: Marken für SEO-Kopf und Footer wörtlich kopieren.
 - **Übersichten Werkzeuge und Simulationen kompakter** (11.10.2026): je Kachel ein kurzer Satz, darunter nur noch
   die Pillen der verweisenden Themenseiten, eine je Seite, ohne Text davor. `HOWTO-werkzeuge.md` und
   `HOWTO-simulationen.md` nachgeführt; Übertrag an Physik in `TODO-schwesterprojekt.md` und `OFFEN`.

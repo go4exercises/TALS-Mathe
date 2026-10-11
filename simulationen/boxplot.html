@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boxplot — Mathe begreifbar</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Werte verschieben und sehen, wie ein Boxplot entsteht: sortieren, Quartile ablesen, Box und Whisker — dazu Form der Verteilung, Ausreisser und Gruppenvergleich.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/simulationen/boxplot.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Boxplot — Simulation: vom Punktdiagramm zu den fünf Zahlen">
+<meta property="og:description" content="Werte verschieben und sehen, wie ein Boxplot entsteht: sortieren, Quartile ablesen, Box und Whisker — dazu Form der Verteilung, Ausreisser und Gruppenvergleich.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/simulationen/boxplot.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/simulationen/boxplot.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/simulationen/boxplot.html",
+   "name": "Boxplot — Simulation: vom Punktdiagramm zu den fünf Zahlen",
+   "description": "Werte verschieben und sehen, wie ein Boxplot entsteht: sortieren, Quartile ablesen, Box und Whisker — dazu Form der Verteilung, Ausreisser und Gruppenvergleich.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Boxplot"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Quartile"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Median"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Quartilsdifferenz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Ausreisser"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Simulation"
+    }
+   ],
+   "keywords": "Mathematik, Boxplot, Quartile, Median, Quartilsdifferenz, Ausreisser, Simulation",
+   "learningResourceType": "Simulation",
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<link rel="stylesheet" href="../style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
+  svg: { fontCache:'global', scale:1.05 },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+<style>
+/* Boxplot — seiteneigene Klassen (Präfix bp-), Farben aus style.css und wie in der Simulation
+   Standardabweichung: Q0/Q4 und Whisker orange (Spannweite), Q1/Q3 und Box blau (Quartilsdifferenz),
+   Mittelwert lila, Median dunkel. Eine Datenreihe für alle Schritte, Gruppe B nur in Schritt 6. */
+.bp-wrap { grid-template-columns:minmax(0, 1fr); grid-template-areas:"content"; max-width:980px; }
+.bp-steuer { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+.bp-steuer .bp-luecke { flex:1 1 12px; }
+.bp-hinweis { font-family:var(--sans); font-size:.8rem; color:var(--tinte-2); }
+.bp-btn { font-family:var(--sans); font-size:.85rem; padding:6px 12px; border-radius:8px; cursor:pointer;
+  border:1px solid var(--linie); background:var(--weiss); color:var(--tinte); }
+.bp-btn:hover { border-color:var(--blau-rand); }
+.bp-btn:disabled { opacity:.4; cursor:default; }
+.bp-btn[aria-pressed="true"] { background:var(--blau); border-color:var(--blau); color:var(--weiss); }
+.bp-svg { display:block; width:100%; height:auto; }
+.bp-zieh { touch-action:none; }
+.bp-zieh .bp-pt { cursor:grab; }
+.bp-zieh .bp-pt:focus { outline:none; stroke-width:4.5; }
+.bp-eingabe { display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; margin:8px 0 4px; font-family:var(--sans); font-size:.86rem; }
+.bp-eingabe input { flex:1 1 220px; min-width:0; border:1px solid var(--linie); border-radius:8px; padding:6px 10px; background:var(--papier);
+  font-family:var(--mono); font-size:.95rem; color:var(--tinte); }
+.bp-eingabe input:focus { outline:1.5px solid var(--blau-rand); }
+.bp-eingabe input[aria-invalid="true"] { border-color:var(--rot); }
+.bp-fehler { font-family:var(--sans); font-size:.8rem; color:var(--rot); min-height:1.1em; }
+.bp-cap { font-family:var(--sans); font-size:.82rem; color:var(--tinte-2); margin-top:8px; }
+.bp-dyn { font-family:var(--sans); font-size:.9rem; margin-top:8px; }
+.bp-dyn p { margin:4px 0; }
+.tx-rand { color:#b85c00; font-weight:600; }
+.tx-box { color:#1a4f8a; font-weight:600; }
+.tx-mitte { color:var(--lila); font-weight:600; }
+.bp-kacheln { display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:10px; }
+.bp-kachel { border:1px solid var(--linie); border-left:4px solid var(--linie); border-radius:8px; padding:8px 12px; background:var(--papier); font-family:var(--sans); }
+.bp-kachel b { display:block; font-family:var(--mono); font-size:1.3rem; font-weight:600; color:var(--tinte); }
+.bp-kachel span { font-size:.78rem; color:var(--tinte-2); }
+.bp-schalter { display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:8px; font-family:var(--sans); font-size:.86rem; }
+.bp-schalter label { display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+@media (max-width:560px) {
+  .bp-steuer .bp-luecke { display:none; }
+  .bp-btn { font-size:.8rem; padding:6px 9px; }
+}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap bp-wrap">
+  <main class="content">
+    <div class="page-titel">
+      <div class="pt-bereich">SIM · Simulationen</div>
+      <h1 class="pt-h1">Boxplot</h1>
+      <p class="pt-untertitel">Verschiebe die Werte und beobachte, wie aus einem Punktdiagramm Schritt für Schritt ein Boxplot wird: sortieren, halbieren, die fünf Zahlen ablesen, Box und Whisker zeichnen. Danach liest du aus dem Boxplot die Form der Verteilung und Ausreisser ab und vergleichst zwei Gruppen.
+        Der Stoff dazu steht in <a href="../grundlagen/g4-2-diagramme.html#darstellungen">4.2 Diagramme</a> und <a href="../grundlagen/g4-3-masszahlen.html#darstellungen">4.3 Masszahlen</a>.</p>
+    </div>
+
+<p>Alle Schritte rechnen mit derselben Stichprobe. Ändere sie, indem du die Punkte ziehst oder die Werte eintippst. Alles weiter unten rechnet sofort mit.</p>
+
+<!-- ════════ Schritt 1 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-daten">Schritt 1 · Die Daten im Punktdiagramm</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle nacheinander «symmetrisch», «rechtsschief» und «linksschief». Wo liegen die Punkte dicht beieinander, wo stehen sie vereinzelt? Merke dir die drei Bilder: In Schritt 4 erkennst du sie im Boxplot wieder.</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Das Punktdiagramm zeigt jeden einzelnen Wert; gleiche Werte stapeln sich. Bei vielen Werten wird es unübersichtlich. Der Boxplot fasst die Werte in fünf Zahlen zusammen und zeigt trotzdem, wo sie dicht und wo sie weit verteilt liegen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="bp-steuer">
+      <button type="button" class="bp-btn" id="bp-plus">+ Wert</button>
+      <button type="button" class="bp-btn" id="bp-minus">− Wert</button>
+      <span class="bp-luecke"></span>
+      <span class="bp-hinweis">Beispiele:</span>
+      <button type="button" class="bp-btn bp-bsp" data-werte="4,6,7,8,9,10,10,11,12,13,14,16">symmetrisch</button>
+      <button type="button" class="bp-btn bp-bsp" data-werte="2,3,3,4,4,5,5,6,7,9,12,17">rechtsschief</button>
+      <button type="button" class="bp-btn bp-bsp" data-werte="3,8,11,13,14,15,15,16,16,17,17,18">linksschief</button>
+      <button type="button" class="bp-btn bp-bsp" data-werte="6,7,8,8,9,9,10,10,11,12,19">mit Ausreisser</button>
+      <button type="button" class="bp-btn bp-bsp" data-werte="2,3,3,4,5,15,16,16,17,18">zwei Gruppen</button>
+    </div>
+    <svg class="bp-svg bp-zieh" id="bp-s1" role="img" aria-label="Punktdiagramm mit verschiebbaren Werten"></svg>
+    <div class="bp-eingabe">
+      <label for="bp-werte">Werte</label>
+      <input type="text" id="bp-werte" inputmode="numeric" autocomplete="off" spellcheck="false" aria-describedby="bp-fehler">
+    </div>
+    <div class="bp-fehler" id="bp-fehler" aria-live="polite"></div>
+    <p class="bp-cap">Jeder Punkt ist ein Wert von 0 bis 20 (ziehen oder mit Tab anwählen und mit den Pfeiltasten schieben). Im Feld die Werte mit Komma oder Leerzeichen trennen, ganze Zahlen, vier bis fünfzehn Werte. Die Punkte lassen sich auch in den Schritten 3 bis 5 ziehen.</p>
+  </div>
+</div>
+
+<!-- ════════ Schritt 2 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-sortieren">Schritt 2 · Sortieren, halbieren, die Mitte suchen</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Drücke oben abwechselnd «+ Wert» und «− Wert», damit \(n\) zwischen gerade und ungerade wechselt. Wann sitzt eine Markierung <em>auf</em> einem Wert, wann <em>zwischen</em> zwei Werten? Was geschieht bei ungeradem \(n\) mit dem mittleren Wert?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Alle fünf Zahlen stammen aus der sortierten Liste. Der Median \(Q_2\) teilt sie in eine untere und eine obere Hälfte, \(Q_1\) und \(Q_3\) sind die Mediane dieser Hälften. Hat ein Teil eine gerade Anzahl Werte, liegt seine Mitte zwischen zwei Werten, und man mittelt sie. Bei ungeradem \(n\) gehört der Median zu keiner der beiden Hälften.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <svg class="bp-svg" id="bp-s2" role="img" aria-label="Sortierte Liste mit den Plätzen von Minimum, Quartilen, Median und Maximum"></svg>
+    <div class="bp-dyn" id="bp-f2"></div>
+    <p class="bp-cap">Kleine graue Zahlen: Plätze in der sortierten Liste. Quartile nach dem Verfahren aus 4.3 (Median der Hälften).</p>
+  </div>
+</div>
+
+<!-- ════════ Schritt 3 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-bauen">Schritt 3 · Vom Punktdiagramm zum Boxplot</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Drücke «↺ Von vorn» und baue den Boxplot Teil für Teil mit «▶ Nächster Teil». Welche Punkte werden bei jedem Teil hervorgehoben, und wohin führt die gestrichelte Linie?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Boxplot ersetzt die einzelnen Punkte durch fünf Zahlen: Die Whisker enden bei \(Q_0 = x_{\min}\) und \(Q_4 = x_{\max}\), die Box reicht von \(Q_1\) bis \(Q_3\), der Strich in der Box ist der Median. Die Box umfasst die mittlere Hälfte der Werte, ihre Breite ist die Quartilsdifferenz \(\text{QD}\), die ganze Länge die Spannweite \(R\).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="bp-steuer">
+      <button type="button" class="bp-btn" id="bp-weiter">▶ Nächster Teil</button>
+      <button type="button" class="bp-btn" id="bp-vorn">↺ Von vorn</button>
+      <span class="bp-hinweis" id="bp-phase-nr"></span>
+    </div>
+    <svg class="bp-svg bp-zieh" id="bp-s3" role="img" aria-label="Punktdiagramm und darunter der Boxplot derselben Werte, Teil für Teil aufgebaut"></svg>
+    <div class="bp-dyn" id="bp-f3" aria-live="polite"></div>
+  </div>
+</div>
+
+<!-- ════════ Schritt 4 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-viertel">Schritt 4 · Vier Teile mit gleich vielen Werten</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle oben «rechtsschief». Zähle die Punkte in jedem der vier Teile und vergleiche, wie lang die Teile sind. Wo liegt der Mittelwert \(\bar{x}\) im Vergleich zum Median? Wähle dann «linksschief» und «symmetrisch».</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Linker Whisker, linke Boxhälfte, rechte Boxhälfte und rechter Whisker enthalten gleich viele Werte, je rund ein Viertel. Ein <em>kurzer</em> Teil heisst darum: Die Werte liegen dort dicht. Ein <em>langer</em>: Sie sind weit verteilt, nicht etwa zahlreich. Ist die rechte Seite deutlich länger, ist die Verteilung rechtsschief, und der Mittelwert liegt meist rechts vom Median (wie in 4.2).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <svg class="bp-svg bp-zieh" id="bp-s4" role="img" aria-label="Boxplot in vier farbigen Teilen mit der Anzahl Werte und der Länge jedes Teils"></svg>
+    <div class="bp-dyn" id="bp-f4"></div>
+    <p class="bp-cap">Punkte in den Whiskern <span class="tx-rand">orange</span>, in der Box <span class="tx-box">blau</span>. Grau umrandete Punkte liegen genau auf \(Q_1\), dem Median oder \(Q_3\) und zählen zu keinem Teil.</p>
+  </div>
+</div>
+
+<!-- ════════ Schritt 5 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-ausreisser">Schritt 5 · Ein Ausreisser</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle oben «mit Ausreisser» und ziehe hier den grössten Wert hin und her. Was bewegt sich im Boxplot, was bleibt stehen? Beobachte auch \(\bar{x}\). Schalte dann die Faustregel ein.</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Ein Ausreisser verlängert nur seinen Whisker. Box und Median bleiben stehen, weil sie nur auf die Plätze in der Mitte der sortierten Liste schauen; der Mittelwert dagegen wandert mit. Nach der Faustregel aus 4.3 gilt ein Wert als Ausreisser, wenn er mehr als \(1.5 \cdot \text{QD}\) über \(Q_3\) oder unter \(Q_1\) liegt. Viele Programme zeichnen ihn dann als einzelnen Punkt, und der Whisker endet beim letzten Wert davor.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="bp-schalter">
+      <label><input type="checkbox" id="bp-zaun"> <span>Faustregel: Ausreisser (mehr als \(1.5 \cdot \text{QD}\) ausserhalb der Box) einzeln zeichnen</span></label>
+    </div>
+    <svg class="bp-svg bp-zieh" id="bp-s5" role="img" aria-label="Punktdiagramm und Boxplot mit Mittelwert, wahlweise mit den Grenzen der Faustregel für Ausreisser"></svg>
+    <div class="bp-kacheln" id="bp-kacheln"></div>
+    <div class="bp-dyn" id="bp-f5"></div>
+  </div>
+</div>
+
+<!-- ════════ Schritt 6 ════════ -->
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3 id="anim-vergleich">Schritt 6 · Zwei Gruppen vergleichen</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle nacheinander die Gruppen B. Vergleiche zuerst die Lage (Median), dann die Streuung (Box und ganze Länge). Wo liegt der Median der einen Gruppe im Vergleich zur Box der anderen?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Boxplots untereinander auf derselben Achse zeigen Lage und Streuung mehrerer Gruppen auf einen Blick, dafür ist der Boxplot gemacht. Liegt der Median der einen Gruppe ausserhalb der Box der anderen, ist der Unterschied deutlich: Mindestens die Hälfte ihrer Werte liegt dann über \(Q_3\) bzw. unter \(Q_1\) der anderen Gruppe.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="bp-steuer">
+      <span class="bp-hinweis">Gruppe B:</span>
+      <button type="button" class="bp-btn bp-bspB" data-werte="8,10,11,12,12,13,14,14,15,16,18" aria-pressed="true">höher</button>
+      <button type="button" class="bp-btn bp-bspB" data-werte="1,3,5,7,8,9,10,12,14,17,19" aria-pressed="false">breiter gestreut</button>
+      <button type="button" class="bp-btn bp-bspB" data-werte="8,9,9,10,10,10,11,11,12" aria-pressed="false">eng beisammen</button>
+      <button type="button" class="bp-btn bp-bspB" data-werte="2,3,3,4,4,5,5,6,7,9,12,17" aria-pressed="false">rechtsschief</button>
+    </div>
+    <svg class="bp-svg" id="bp-s6" role="img" aria-label="Boxplots der Gruppen A und B untereinander auf derselben Achse"></svg>
+    <div class="bp-eingabe">
+      <label for="bp-wertB">Werte B</label>
+      <input type="text" id="bp-wertB" inputmode="numeric" autocomplete="off" spellcheck="false" aria-describedby="bp-fehlerB">
+    </div>
+    <div class="bp-fehler" id="bp-fehlerB" aria-live="polite"></div>
+    <div class="bp-dyn" id="bp-f6"></div>
+    <p class="bp-cap">Gruppe A sind deine Daten aus Schritt 1.</p>
+  </div>
+</div>
+
+<!-- ════════ Zusammenfassung ════════ -->
+<h2 id="lesen">Was der Boxplot zeigt — und was nicht</h2>
+
+<ul>
+  <li><strong>Lage:</strong> der Median, der Strich in der Box.</li>
+  <li><strong>Streuung:</strong> die Breite der Box ist die Quartilsdifferenz \(\text{QD} = Q_3 - Q_1\), die ganze Länge die Spannweite \(R = Q_4 - Q_0\).</li>
+  <li><strong>Form:</strong> Sind die beiden Seiten gleich lang, ist die Verteilung ungefähr symmetrisch; ist eine Seite deutlich länger, ist sie schief, und zwar zu dieser Seite hin.</li>
+  <li><strong>Ausreisser:</strong> ein auffällig langer Whisker, bei der Faustregel ein einzelner Punkt.</li>
+</ul>
+
+<p>Nicht sichtbar sind die einzelnen Werte, ihre Anzahl \(n\) und der Mittelwert. Auch Gipfel zeigt der Boxplot nicht: Wähle in Schritt 1 «zwei Gruppen». Der Boxplot sieht unauffällig aus, und der Median liegt mitten in der Lücke, wo es gar keine Werte gibt. Wer das wissen will, braucht das Punktdiagramm oder ein Histogramm.</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Jeder der vier Teile eines Boxplots enthält rund ein Viertel der Werte. Ein langer Teil bedeutet weit verteilte Werte, nicht viele Werte.</p>
+</div>
+
+  </main>
+</div>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Simulationen · Boxplot</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script src="../mathlib.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script src="../nav.js"></script>
+<script>buildNav({ id: 'simulationen' });</script>
+<script>
+// ── KERN:ANFANG ─────────────────────────────────────────────────
+// Boxplot ohne DOM; scripts/verify_boxplot.js lädt diesen Block in node:vm und rechnet in python3 nach.
+const X_MIN = 0, X_MAX = 20, N_MIN = 4, N_MAX = 15;
+const mittel = a => a.reduce((s, x) => s + x, 0) / a.length;
+const sortiert = a => a.slice().sort((u, v) => u - v);
+// Plätze (ab 1) der fünf Zahlen in der sortierten Liste: ganz = auf einem Wert, .5 = zwischen zwei Werten.
+// Quartile nach 4.3: Mitte der unteren bzw. oberen Hälfte (je h = ⌊n/2⌋ Werte, bei ungeradem n ohne den Median).
+function plaetze(n) {
+  const h = Math.floor(n / 2), mitte = k => (k + 1) / 2;
+  return [1, mitte(h), mitte(n), n - h + mitte(h), n];
+}
+const wertAn = (s, p) => (s[Math.floor(p) - 1] + s[Math.ceil(p) - 1]) / 2;
+// Rang (ab 1) jedes Werts; gleiche Werte nach ihrer Reihenfolge in der Liste
+function raenge(a) {
+  const r = [];
+  a.map((_, i) => i).sort((i, j) => a[i] - a[j] || i - j).forEach((i, k) => { r[i] = k + 1; });
+  return r;
+}
+function kennzahlen(a) {
+  const s = sortiert(a), n = s.length, p = plaetze(n), q = p.map(x => wertAn(s, x));
+  return { n, s, p, m: mittel(a), q0: q[0], q1: q[1], q2: q[2], q3: q[3], q4: q[4], R: q[4] - q[0], QD: q[3] - q[1] };
+}
+// Die vier Teile nach Plätzen: Plätze genau auf Q1, Median oder Q3 zählen zu keinem Teil
+function viertel(n) {
+  const g = plaetze(n).slice(1, 4), teile = [[], [], [], []], grenze = [];
+  for (let r = 1; r <= n; r++) {
+    if (g.includes(r)) grenze.push(r);
+    else teile[g.filter(x => x < r).length].push(r);
+  }
+  return { teile, grenze };
+}
+// Form aus dem Boxplot: eine Seite (bzw. Boxhälfte) gilt als deutlich länger ab dem 1.5-Fachen und mindestens 1 mehr
+const deutlich = (u, v) => u >= 1.5 * v && u - v >= 1;
+function form(k) {
+  if (k.R === 0) return 'keine';
+  const links = k.q2 - k.q0, rechts = k.q4 - k.q2, bl = k.q2 - k.q1, br = k.q3 - k.q2;
+  if (deutlich(rechts, links) && br >= bl) return 'rechtsschief';
+  if (deutlich(links, rechts) && bl >= br) return 'linksschief';
+  if (!deutlich(rechts, links) && !deutlich(links, rechts) && !deutlich(br, bl) && !deutlich(bl, br)) return 'symmetrisch';
+  return 'unklar';
+}
+// Faustregel aus 4.3: Ausreisser liegen mehr als 1.5 · QD unter Q1 oder über Q3; Whisker bis zum letzten Wert davor
+function zaeune(a) {
+  const k = kennzahlen(a), u = k.q1 - 1.5 * k.QD, o = k.q3 + 1.5 * k.QD, drin = a.filter(x => x >= u && x <= o);
+  return { u, o, aus: sortiert(a.filter(x => x < u || x > o)), wu: Math.min(...drin), wo: Math.max(...drin) };
+}
+// Eingabe: ganze Zahlen von X_MIN bis X_MAX, getrennt durch Komma, Strichpunkt oder Leerzeichen
+function liesWerte(t) {
+  const teile = String(t).trim().split(/[\s,;]+/).filter(Boolean), w = [];
+  for (const x of teile) {
+    if (!/^\d+$/.test(x) || +x < X_MIN || +x > X_MAX) return { fehler: '«' + x + '» ist keine ganze Zahl von ' + X_MIN + ' bis ' + X_MAX + '.' };
+    w.push(+x);
+  }
+  if (w.length < N_MIN) return { fehler: 'Mindestens ' + N_MIN + ' Werte.' };
+  if (w.length > N_MAX) return { fehler: 'Höchstens ' + N_MAX + ' Werte.' };
+  return { werte: w };
+}
+// Zahlen: höchstens d Nachkommastellen, Dezimalpunkt; gerundet() sagt, ob «≈» nötig ist
+function zahl(x, d = 2) { const r = Math.round(x * 10 ** d) / 10 ** d; return String(Object.is(r, -0) ? 0 : r); }
+const gerundet = (x, d = 2) => Math.abs(Math.round(x * 10 ** d) / 10 ** d - x) > 1e-9;
+// ── KERN:ENDE ───────────────────────────────────────────────────
+
+// ── Oberfläche ──
+const $ = id => document.getElementById(id);
+const FARBE = { rand: '#b85c00', box: '#1a4f8a', mitte: '#5b2d8e', median: '#1c1a17', punkt: '#4a463f', grau: '#8a8278',
+  gitter: '#e6e1d6', achse: '#8a8278', text: '#4a463f', hellRand: '#fdefd8', hellBox: '#ddeaf8', B: '#1f6b3a', hellB: '#d8f0e2' };
+const Q_NAME = ['Q₀', 'Q₁', 'Q₂', 'Q₃', 'Q₄'], Q_FARBE = [FARBE.rand, FARBE.box, FARBE.median, FARBE.box, FARBE.rand];
+let daten = [3, 5, 6, 7, 8, 8, 9, 11, 12, 15], datenB = [8, 10, 11, 12, 12, 13, 14, 14, 15, 16, 18], phase = 5, mitZaun = false;
+const minus = t => String(t).replace(/^-/, '−');
+const NS = 'http://www.w3.org/2000/svg';
+function el(name, attr, text) {
+  const e = document.createElementNS(NS, name);
+  // Beschriftungen mit weissem Rand, damit sie über Linien lesbar bleiben
+  if (name === 'text') { e.setAttribute('stroke', '#fff'); e.setAttribute('stroke-width', '4'); e.setAttribute('stroke-linejoin', 'round'); e.setAttribute('paint-order', 'stroke'); }
+  for (const k in attr) e.setAttribute(k, attr[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+const leer = svg => { while (svg.firstChild) svg.removeChild(svg.firstChild); };
+// Gezeichnet wird in der echten Breite (1 Einheit = 1 px), damit Schrift und Punkte auch am Handy lesbar bleiben
+const breite = svg => Math.max(300, Math.round(svg.getBoundingClientRect().width) || 680);
+const RAND = 24;
+const skala = W => v => RAND + (v - X_MIN) / (X_MAX - X_MIN) * (W - 2 * RAND);
+const radius = W => Math.max(6, Math.min(10, (W - 2 * RAND) / (X_MAX - X_MIN) * 0.42));
+const stapel = a => Math.max(...Object.values(a.reduce((m, v) => { m[v] = (m[v] || 0) + 1; return m; }, {})));
+
+// MathJax: Formeln nach dem Ziehen gesammelt neu setzen (höchstens alle 150 ms)
+let mjKette = Promise.resolve(), mjUhr = null;
+const mjWarte = new Map();
+function setzeTex(id, html) {
+  mjWarte.set(id, html);
+  if (mjUhr) return;
+  mjUhr = setTimeout(() => {
+    mjUhr = null;
+    const jetzt = [...mjWarte]; mjWarte.clear();
+    mjKette = mjKette.then(() => {
+      const els = jetzt.map(([i, h]) => { const e = $(i); if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([e]); e.innerHTML = h; return e; });
+      if (window.MathJax && MathJax.typesetPromise) return MathJax.typesetPromise(els);
+    }).catch(() => {});
+  }, 150);
+}
+
+// ── Bausteine der Zeichnungen ──
+// Zahlenachse mit Strichen; Beschriftung unter der Linie
+function achse(svg, x, y, W) {
+  for (let t = X_MIN; t <= X_MAX; t += 1) {
+    svg.appendChild(el('line', { x1: x(t), y1: y, x2: x(t), y2: y + (t % 2 ? 3 : 6), stroke: FARBE.achse }));
+    if (t % 2 || (W < 460 && t % 4)) continue;
+    svg.appendChild(el('text', { x: x(t), y: y + 19, 'font-size': 12, 'text-anchor': 'middle', fill: FARBE.text }, t));
+  }
+  svg.appendChild(el('line', { x1: x(X_MIN), y1: y, x2: x(X_MAX), y2: y, stroke: FARBE.achse, 'stroke-width': 1.5 }));
+}
+// Punktdiagramm: gleiche Werte gestapelt, unten der kleinste Rang; stil(rang) → { fill, stroke }
+function punkte(svg, a, x, yB, r, stil, zieh) {
+  const rg = raenge(a), erst = {};
+  a.forEach((v, i) => { erst[v] = Math.min(erst[v] === undefined ? Infinity : erst[v], rg[i]); });
+  a.forEach((v, i) => {
+    const s = stil(rg[i]), cy = yB - r - 3 - (rg[i] - erst[v]) * (2 * r + 2);
+    const attr = { cx: x(v), cy, r, fill: s.fill, stroke: s.stroke, 'stroke-width': s.breit || 2.5 };
+    if (zieh) Object.assign(attr, { class: 'bp-pt', 'data-i': i, tabindex: 0, role: 'slider', 'aria-label': 'Wert ' + (i + 1), 'aria-valuemin': X_MIN, 'aria-valuemax': X_MAX, 'aria-valuenow': v });
+    svg.appendChild(el('circle', attr));
+  });
+}
+// Beschriftungen in Reihen verteilen, damit sie sich nicht überdecken; gibt die Anzahl Reihen zurück
+function reihen(items, W) {
+  const ende = [];
+  items.slice().sort((u, v) => u.x - v.x).forEach(it => {
+    const w = it.text.length * 7 + 8;
+    it.x = Math.min(W - w / 2, Math.max(w / 2, it.x));
+    let r = 0;
+    while (r < ende.length && ende[r] > it.x - w / 2) r++;
+    ende[r] = it.x + w / 2; it.reihe = r;
+  });
+  return Math.max(1, ende.length);
+}
+// Boxplot um die Mittellinie y; o.phase 0–5 baut ihn auf, o.wu/o.wo Whiskerenden, o.teile färbt die vier Teile
+function boxplot(svg, k, x, y, h, o = {}) {
+  const ph = o.phase === undefined ? 5 : o.phase, wu = o.wu === undefined ? k.q0 : o.wu, wo = o.wo === undefined ? k.q4 : o.wo;
+  const fBox = o.farbe || FARBE.box, fRand = o.farbe || FARBE.rand, hell = o.hell || FARBE.hellBox;
+  if (ph >= 5) {
+    const st = o.teile ? { stroke: FARBE.rand, 'stroke-width': 5, opacity: 0.85 } : { stroke: fRand, 'stroke-width': 2, 'stroke-dasharray': '5 4' };
+    svg.appendChild(el('line', Object.assign({ x1: x(wu), y1: y, x2: x(k.q1), y2: y }, st)));
+    svg.appendChild(el('line', Object.assign({ x1: x(k.q3), y1: y, x2: x(wo), y2: y }, st)));
+  }
+  if (ph >= 4) svg.appendChild(el('rect', { x: x(k.q1), y: y - h / 2, width: Math.max(x(k.q3) - x(k.q1), 1), height: h, fill: hell, stroke: fBox, 'stroke-width': 2.5 }));
+  if (ph >= 1) for (const v of [wu, wo]) svg.appendChild(el('line', { x1: x(v), y1: y - h / 4, x2: x(v), y2: y + h / 4, stroke: fRand, 'stroke-width': 2.5 }));
+  if (ph >= 3 && ph < 4) for (const v of [k.q1, k.q3]) svg.appendChild(el('line', { x1: x(v), y1: y - h / 2, x2: x(v), y2: y + h / 2, stroke: fBox, 'stroke-width': 2.5 }));
+  if (ph >= 2) svg.appendChild(el('line', { x1: x(k.q2), y1: y - h / 2, x2: x(k.q2), y2: y + h / 2, stroke: o.farbe || FARBE.median, 'stroke-width': 3.5 }));
+}
+// Die fünf Zahlen unter dem Boxplot beschriften; welche = Indizes 0–4
+function fuenfZahlen(svg, k, x, y, W, welche) {
+  const q = [k.q0, k.q1, k.q2, k.q3, k.q4];
+  const items = welche.map(i => ({ x: x(q[i]), text: Q_NAME[i] + ' = ' + zahl(q[i]), farbe: Q_FARBE[i] }));
+  const n = reihen(items, W);
+  items.forEach(it => svg.appendChild(el('text', { x: it.x, y: y + 14 + it.reihe * 17, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: it.farbe }, it.text)));
+  return n * 17 + 4;
+}
+
+// ── Schritt 1: Punktdiagramm ──
+function zeichne1() {
+  const svg = $('bp-s1'), W = breite(svg), x = skala(W), r = radius(W), yB = 10 + Math.max(4, stapel(daten)) * (2 * r + 2) + 4;
+  svg.dataset.w = W;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (yB + 28)); leer(svg);
+  for (let t = X_MIN; t <= X_MAX; t += 2) svg.appendChild(el('line', { x1: x(t), y1: 6, x2: x(t), y2: yB, stroke: FARBE.gitter }));
+  achse(svg, x, yB, W);
+  punkte(svg, daten, x, yB, r, () => ({ fill: '#fff', stroke: FARBE.punkt }), true);
+}
+
+// ── Schritt 2: sortierte Liste mit den Plätzen ──
+const PLATZ_TEXT = p => Number.isInteger(p) ? 'der ' + p + '. Wert' : 'zwischen dem ' + Math.floor(p) + '. und dem ' + Math.ceil(p) + '. Wert';
+function platzRechnung(s, p) {
+  if (Number.isInteger(p)) return zahl(s[p - 1]);
+  const a = s[Math.floor(p) - 1], b = s[Math.ceil(p) - 1];
+  return '\\frac{' + a + ' + ' + b + '}{2} = ' + zahl((a + b) / 2);
+}
+function zeichne2() {
+  const svg = $('bp-s2'), W = breite(svg), k = kennzahlen(daten), n = k.n, h = Math.floor(n / 2);
+  const cw = Math.min(46, (W - 16) / n), x0 = (W - n * cw) / 2, ch = 30, yZ = 22;
+  const xp = p => x0 + (p - 0.5) * cw;
+  const items = k.p.map((p, i) => ({ x: xp(p), text: Q_NAME[i], farbe: Q_FARBE[i], p }));
+  const nReihen = reihen(items, W), yM = yZ + ch + 10, yH = yM + nReihen * 17 + 22, H = yH + 26;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); leer(svg);
+  // Zellen; ein Platz genau auf Q1, Median oder Q3 wird gefärbt
+  k.s.forEach((v, i) => {
+    const p = i + 1, j = [1, 2, 3].find(t => k.p[t] === p);
+    svg.appendChild(el('rect', { x: x0 + i * cw, y: yZ, width: cw, height: ch, fill: j === undefined ? '#fff' : j === 2 ? '#eeeae2' : FARBE.hellBox, stroke: FARBE.achse }));
+    svg.appendChild(el('text', { x: x0 + (i + 0.5) * cw, y: yZ + 20, 'font-size': 14, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.text }, v));
+    svg.appendChild(el('text', { x: x0 + (i + 0.5) * cw, y: yZ - 6, 'font-size': 10, 'text-anchor': 'middle', fill: FARBE.grau }, p));
+  });
+  // Marken: Strich zwischen zwei Zellen oder Dreieck unter einer Zelle, Name darunter
+  items.forEach(it => {
+    const xm = xp(it.p);
+    if (Number.isInteger(it.p)) svg.appendChild(el('path', { d: 'M' + xm + ' ' + (yZ + ch + 2) + ' l-5 7 h10 z', fill: it.farbe }));
+    else svg.appendChild(el('line', { x1: xm, y1: yZ - 4, x2: xm, y2: yZ + ch + 8, stroke: it.farbe, 'stroke-width': 3 }));
+    svg.appendChild(el('text', { x: it.x, y: yM + 12 + it.reihe * 17, 'font-size': 12, 'font-weight': 700, 'text-anchor': 'middle', fill: it.farbe }, it.text));
+  });
+  // Klammern der Hälften
+  const klammer = (von, bis, text) => {
+    const a = x0 + (von - 1) * cw + 3, b = x0 + bis * cw - 3;
+    svg.appendChild(el('path', { d: 'M' + a + ' ' + (yH - 6) + ' v6 H' + b + ' v-6', fill: 'none', stroke: FARBE.grau, 'stroke-width': 1.5 }));
+    svg.appendChild(el('text', { x: (a + b) / 2, y: yH + 16, 'font-size': 12, 'text-anchor': 'middle', fill: FARBE.text }, b - a < 120 ? text[0] : text[1]));
+  };
+  klammer(1, h, [h + ' Werte', 'untere Hälfte · ' + h + ' Werte']);
+  klammer(n - h + 1, n, [h + ' Werte', 'obere Hälfte · ' + h + ' Werte']);
+  const s = k.s, gerade = n % 2 === 0;
+  setzeTex('bp-f2',
+    '<p>\\(n = ' + n + '\\) ist ' + (gerade ? 'gerade' : 'ungerade') + '. <strong>Median:</strong> ' + PLATZ_TEXT(k.p[2]) + ', \\(\\tilde{x} = Q_2 = ' + platzRechnung(s, k.p[2]) + '\\).' +
+      (gerade ? ' Er teilt die Liste in zwei Hälften mit je ' + h + ' Werten.' : ' Er gehört zu keiner Hälfte; jede Hälfte hat ' + h + ' Werte.') + '</p>' +
+    '<p><span class="tx-box">\\(Q_1\\)</span>: Mitte der unteren Hälfte, ' + PLATZ_TEXT(k.p[1]) + ', \\(Q_1 = ' + platzRechnung(s, k.p[1]) + '\\).</p>' +
+    '<p><span class="tx-box">\\(Q_3\\)</span>: Mitte der oberen Hälfte, ' + PLATZ_TEXT(k.p[3]) + ', \\(Q_3 = ' + platzRechnung(s, k.p[3]) + '\\).</p>' +
+    '<p><span class="tx-rand">\\(Q_0\\) und \\(Q_4\\)</span>: der erste und der letzte Wert, \\(Q_0 = x_{\\min} = ' + k.q0 + '\\), \\(Q_4 = x_{\\max} = ' + k.q4 + '\\).</p>');
+}
+
+// ── Schritt 3: Punktdiagramm und Boxplot, Teil für Teil ──
+const PHASEN = [
+  'Nur die Punkte. Darunter entsteht der Boxplot auf derselben Achse.',
+  'Die Enden: der kleinste Wert \\(Q_0 = x_{\\min}\\) und der grösste \\(Q_4 = x_{\\max}\\). Ihr Abstand ist die Spannweite \\(R = Q_4 - Q_0\\).',
+  'Der Median \\(Q_2\\): Mitte der sortierten Liste. Links und rechts davon liegen gleich viele Werte.',
+  'Die Quartile \\(Q_1\\) und \\(Q_3\\): Mitten der unteren und der oberen Hälfte.',
+  'Die Box von \\(Q_1\\) bis \\(Q_3\\) umfasst die mittlere Hälfte der Werte. Ihre Breite ist die Quartilsdifferenz \\(\\text{QD} = Q_3 - Q_1\\).',
+  'Die Whisker verbinden die Box mit den Enden. Fertig: Aus allen Punkten sind fünf Zahlen geworden.'
+];
+// Welche Plätze bei welcher Phase hervorgehoben werden
+function rolle(k, rang, ph) {
+  const auf = p => rang === Math.floor(p) || rang === Math.ceil(p);
+  if (ph === 1 && (rang === 1 || rang === k.n)) return 0;
+  if (ph === 2 && auf(k.p[2])) return 2;
+  if (ph === 3 && (auf(k.p[1]) || auf(k.p[3]))) return 1;
+  return -1;
+}
+function zeichne3() {
+  const svg = $('bp-s3'), W = breite(svg), x = skala(W), r = radius(W), k = kennzahlen(daten);
+  const yB = 10 + Math.max(4, stapel(daten)) * (2 * r + 2) + 4, yBox = yB + 62, hBox = 36;
+  const welche = [[], [0, 4], [0, 2, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]][phase];
+  const q = [k.q0, k.q1, k.q2, k.q3, k.q4];
+  svg.dataset.w = W; leer(svg);
+  // Führungslinien von den Punkten zum Boxplot
+  welche.forEach(i => svg.appendChild(el('line', { x1: x(q[i]), y1: 6, x2: x(q[i]), y2: yBox + hBox / 2, stroke: Q_FARBE[i], 'stroke-width': 1.5, 'stroke-dasharray': '4 4', opacity: 0.7 })));
+  achse(svg, x, yB, W);
+  punkte(svg, daten, x, yB, r, rang => {
+    const ro = rolle(k, rang, phase);
+    return ro < 0 ? { fill: '#fff', stroke: phase ? FARBE.grau : FARBE.punkt } : { fill: Q_FARBE[ro], stroke: Q_FARBE[ro] };
+  }, true);
+  boxplot(svg, k, x, yBox, hBox, { phase });
+  const hT = welche.length ? fuenfZahlen(svg, k, x, yBox + hBox / 2 + 2, W, welche) : 0;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (yBox + hBox / 2 + hT + 8));
+  $('bp-weiter').disabled = phase >= 5;
+  $('bp-phase-nr').textContent = 'Teil ' + phase + ' von 5';
+  let t = '<p>' + PHASEN[phase] + '</p>';
+  if (phase === 5) t += '<p>\\(R = ' + k.q4 + ' - ' + k.q0 + ' = ' + zahl(k.R) + '\\), \\(\\text{QD} = ' + zahl(k.q3) + ' - ' + zahl(k.q1) + ' = ' + zahl(k.QD) + '\\).</p>';
+  setzeTex('bp-f3', t);
+}
+
+// ── Schritt 4: die vier Teile ──
+const FORM_TEXT = {
+  symmetrisch: 'Beide Seiten und beide Boxhälften sind ungefähr gleich lang: Die Verteilung ist <strong>ungefähr symmetrisch</strong>.',
+  rechtsschief: 'Die rechte Seite ist deutlich länger: Die Werte laufen nach rechts aus, die Verteilung ist <strong>rechtsschief</strong>.',
+  linksschief: 'Die linke Seite ist deutlich länger: Die Werte laufen nach links aus, die Verteilung ist <strong>linksschief</strong>.',
+  unklar: 'Die Teile sind ungleich lang, aber nicht eindeutig zu einer Seite hin: Die Form ist <strong>nicht eindeutig</strong>.',
+  keine: 'Alle Werte sind gleich: Der Boxplot ist ein einziger Strich.'
+};
+function zeichne4() {
+  const svg = $('bp-s4'), W = breite(svg), x = skala(W), r = radius(W), k = kennzahlen(daten), v = viertel(k.n);
+  const teilVon = rang => v.grenze.includes(rang) ? -1 : v.teile.findIndex(t => t.includes(rang));
+  const yB = 10 + Math.max(4, stapel(daten)) * (2 * r + 2) + 4, yBox = yB + 80, hBox = 32;
+  svg.dataset.w = W; leer(svg);
+  achse(svg, x, yB, W);
+  punkte(svg, daten, x, yB, r, rang => {
+    const t = teilVon(rang);
+    return t < 0 ? { fill: '#fff', stroke: FARBE.grau, breit: 2 } : t === 0 || t === 3 ? { fill: FARBE.hellRand, stroke: FARBE.rand } : { fill: FARBE.hellBox, stroke: FARBE.box };
+  }, true);
+  boxplot(svg, k, x, yBox, hBox, { teile: true });
+  // Mittelwert als Raute
+  const xm = x(k.m);
+  svg.appendChild(el('path', { d: 'M' + xm + ' ' + (yBox - hBox / 2 - 14) + ' l6 7 l-6 7 l-6 -7 z', fill: FARBE.mitte }));
+  svg.appendChild(el('text', { x: Math.min(W - 40, Math.max(40, xm)), y: yBox - hBox / 2 - 19, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.mitte }, 'x̄ ' + (gerundet(k.m) ? '≈ ' : '= ') + zahl(k.m)));
+  // Je Teil: Anzahl Werte und Länge
+  const q = [k.q0, k.q1, k.q2, k.q3, k.q4];
+  const items = [0, 1, 2, 3].map(i => ({ x: (x(q[i]) + x(q[i + 1])) / 2, text: v.teile[i].length + ' W. · ' + zahl(q[i + 1] - q[i]), farbe: i === 0 || i === 3 ? FARBE.rand : FARBE.box }));
+  const nR = reihen(items, W);
+  items.forEach(it => svg.appendChild(el('text', { x: it.x, y: yBox + hBox / 2 + 16 + it.reihe * 17, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: it.farbe }, it.text)));
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (yBox + hBox / 2 + nR * 17 + 12));
+  const je = v.teile[0].length, f = form(k);
+  let t = '<p>Unter jedem Teil: Anzahl Werte (W.) und Länge. Jeder Teil enthält <strong>' + je + ' ' + (je === 1 ? 'Wert' : 'Werte') + '</strong>' +
+    (v.grenze.length ? ', dazu ' + (v.grenze.length === 1 ? 'liegt 1 Wert' : 'liegen ' + v.grenze.length + ' Werte') + ' genau auf einer Grenze' : '') + '.</p>';
+  t += '<p>' + FORM_TEXT[f];
+  if (f !== 'keine') {
+    const d = k.m - k.q2;
+    t += ' Mittelwert \\(\\bar{x}' + (gerundet(k.m) ? ' \\approx ' : ' = ') + zahl(k.m) + '\\), Median \\(\\tilde{x} = ' + zahl(k.q2) + '\\): ' +
+      (Math.abs(d) < 0.25 ? 'fast gleich.' : 'der Mittelwert liegt ' + (d > 0 ? 'rechts' : 'links') + ' vom Median.');
+  }
+  setzeTex('bp-f4', t + '</p>');
+}
+
+// ── Schritt 5: Ausreisser und Faustregel ──
+function zeichne5() {
+  const svg = $('bp-s5'), W = breite(svg), x = skala(W), r = radius(W), k = kennzahlen(daten), z = zaeune(daten);
+  const yB = 22 + Math.max(4, stapel(daten)) * (2 * r + 2) + 4, yBox = yB + 50, hBox = 32;
+  svg.dataset.w = W; leer(svg);
+  // Grenzen der Faustregel, soweit sie auf der Achse liegen
+  if (mitZaun) [[z.u, 'Q₁ − 1.5·QD'], [z.o, 'Q₃ + 1.5·QD']].forEach(([g, name], i) => {
+    if (g < X_MIN || g > X_MAX) return;
+    svg.appendChild(el('line', { x1: x(g), y1: 6, x2: x(g), y2: yBox + hBox / 2, stroke: FARBE.grau, 'stroke-width': 1.5, 'stroke-dasharray': '2 4' }));
+    svg.appendChild(el('text', { x: x(g) + (i ? -4 : 4), y: 14, 'font-size': 11, 'text-anchor': i ? 'end' : 'start', fill: FARBE.grau }, (W < 560 ? '' : name + ' = ') + minus(zahl(g))));
+  });
+  achse(svg, x, yB, W);
+  const ausRang = new Set(); const rg = raenge(daten);
+  if (mitZaun) daten.forEach((v, i) => { if (v < z.u || v > z.o) ausRang.add(rg[i]); });
+  punkte(svg, daten, x, yB, r, rang => ausRang.has(rang) ? { fill: '#fde2e2', stroke: '#b3261e' } : { fill: '#fff', stroke: FARBE.punkt }, true);
+  boxplot(svg, k, x, yBox, hBox, mitZaun ? { wu: z.wu, wo: z.wo } : {});
+  if (mitZaun) z.aus.forEach(v => svg.appendChild(el('circle', { cx: x(v), cy: yBox, r: 5, fill: '#fff', stroke: '#b3261e', 'stroke-width': 2.5 })));
+  const xm = x(k.m);
+  svg.appendChild(el('path', { d: 'M' + xm + ' ' + (yBox + hBox / 2 + 4) + ' l6 7 l-6 7 l-6 -7 z', fill: FARBE.mitte }));
+  svg.appendChild(el('text', { x: Math.min(W - 40, Math.max(40, xm)), y: yBox + hBox / 2 + 34, 'font-size': 12, 'font-weight': 600, 'text-anchor': 'middle', fill: FARBE.mitte }, 'x̄ ' + (gerundet(k.m) ? '≈ ' : '= ') + zahl(k.m)));
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (yBox + hBox / 2 + 42));
+  setzeTex('bp-kacheln',
+    '<div class="bp-kachel" style="border-left-color:' + FARBE.median + '"><span>Median</span><b>' + zahl(k.q2) + '</b><span>\\(\\tilde{x} = Q_2\\)</span></div>' +
+    '<div class="bp-kachel" style="border-left-color:' + FARBE.mitte + '"><span>Mittelwert</span><b>' + (gerundet(k.m) ? '≈ ' : '') + zahl(k.m) + '</b><span>\\(\\bar{x}\\), nicht im Boxplot</span></div>' +
+    '<div class="bp-kachel" style="border-left-color:' + FARBE.box + '"><span>Quartilsdifferenz</span><b>' + zahl(k.QD) + '</b><span>\\(\\text{QD} = Q_3 - Q_1\\), Box</span></div>' +
+    '<div class="bp-kachel" style="border-left-color:' + FARBE.rand + '"><span>Spannweite</span><b>' + zahl(k.R) + '</b><span>\\(R = Q_4 - Q_0\\)</span></div>');
+  let t = '<p>Faustregel: Ausreisser liegen unter \\(Q_1 - 1.5 \\cdot \\text{QD} = ' + zahl(k.q1) + ' - 1.5 \\cdot ' + zahl(k.QD) + ' = ' + minus(zahl(z.u)) +
+    '\\) oder über \\(Q_3 + 1.5 \\cdot \\text{QD} = ' + zahl(k.q3) + ' + 1.5 \\cdot ' + zahl(k.QD) + ' = ' + zahl(z.o) + '\\). ';
+  t += z.aus.length ? (z.aus.length === 1 ? 'Ausreisser ist der Wert ' : 'Ausreisser sind die Werte ') + z.aus.join(', ') + '.' : 'Bei deinen Daten gibt es keinen Ausreisser.';
+  if (z.aus.length && !mitZaun) t += ' Schalte die Faustregel oben ein, um ' + (z.aus.length === 1 ? 'ihn' : 'sie') + ' einzeln zu sehen.';
+  if (mitZaun && z.aus.length) t += ' Die Whisker reichen nur noch bis ' + z.wu + ' und ' + z.wo + ', die letzten Werte innerhalb der Grenzen.';
+  setzeTex('bp-f5', t + '</p>');
+}
+
+// ── Schritt 6: zwei Gruppen ──
+function zeichne6() {
+  const svg = $('bp-s6'), W = breite(svg), x = skala(W), a = kennzahlen(daten), b = kennzahlen(datenB), hBox = 30;
+  const yA = 30, yBb = yA + hBox + 34, yAx = yBb + hBox / 2 + 14;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (yAx + 28)); leer(svg);
+  for (let t = X_MIN; t <= X_MAX; t += 2) svg.appendChild(el('line', { x1: x(t), y1: 8, x2: x(t), y2: yAx, stroke: FARBE.gitter }));
+  achse(svg, x, yAx, W);
+  boxplot(svg, a, x, yA, hBox, {});
+  boxplot(svg, b, x, yBb, hBox, { farbe: FARBE.B, hell: FARBE.hellB });
+  const marke = (k, y, name, f) => {
+    const links = x(k.q0) > 40;
+    svg.appendChild(el('text', { x: links ? x(k.q0) - 8 : x(k.q4) + 8, y: y + 5, 'font-size': 14, 'font-weight': 700, 'text-anchor': links ? 'end' : 'start', fill: f }, name));
+  };
+  marke(a, yA, 'A', FARBE.box); marke(b, yBb, 'B', FARBE.B);
+  const d = b.q2 - a.q2;
+  let t = '<p><strong>Lage:</strong> Median A \\(= ' + zahl(a.q2) + '\\), Median B \\(= ' + zahl(b.q2) + '\\). ' +
+    (Math.abs(d) < 1e-9 ? 'Die Mediane sind gleich.' : 'Der Median von B liegt um ' + zahl(Math.abs(d)) + ' ' + (d > 0 ? 'höher' : 'tiefer') + '.');
+  if (b.q2 > a.q3) t += ' Er liegt sogar über \\(Q_3\\) von A: Mindestens die Hälfte der Werte von B ist grösser als drei Viertel der Werte von A, ein <strong>deutlicher</strong> Unterschied.';
+  else if (b.q2 < a.q1) t += ' Er liegt sogar unter \\(Q_1\\) von A: Mindestens die Hälfte der Werte von B ist kleiner als drei Viertel der Werte von A, ein <strong>deutlicher</strong> Unterschied.';
+  else if (a.q2 > b.q3 || a.q2 < b.q1) t += ' Der Median von A liegt ausserhalb der Box von B: ein <strong>deutlicher</strong> Unterschied.';
+  else t += ' Jeder Median liegt in der Box der anderen Gruppe: Die mittleren Hälften überlappen stark, der Unterschied in der Lage ist gering.';
+  t += '</p><p><strong>Streuung:</strong> \\(\\text{QD}\\) A \\(= ' + zahl(a.QD) + '\\), B \\(= ' + zahl(b.QD) + '\\); \\(R\\) A \\(= ' + zahl(a.R) + '\\), B \\(= ' + zahl(b.R) + '\\). ';
+  const s = b.QD - a.QD;
+  t += Math.abs(s) < 1e-9 ? 'Die mittleren Hälften sind gleich breit.' : 'Die mittlere Hälfte von ' + (s > 0 ? 'B' : 'A') + ' ist breiter gestreut.';
+  if ((b.R - a.R) * s < 0) t += ' Bei der Spannweite ist es umgekehrt: Dort entscheiden nur die beiden äussersten Werte.';
+  setzeTex('bp-f6', t + '</p>');
+}
+
+// ── Eingabe und Ziehen ──
+function alles(mitFeld = true) {
+  if (mitFeld) { $('bp-werte').value = daten.join(', '); $('bp-werte').removeAttribute('aria-invalid'); $('bp-fehler').textContent = ''; }
+  zeichne1(); zeichne2(); zeichne3(); zeichne4(); zeichne5(); zeichne6();
+  $('bp-plus').disabled = daten.length >= N_MAX; $('bp-minus').disabled = daten.length <= N_MIN;
+}
+const ZIEH = ['bp-s1', 'bp-s3', 'bp-s4', 'bp-s5'];
+let zug = null;
+function setze(i, v, svgId) {
+  v = Math.max(X_MIN, Math.min(X_MAX, v));
+  if (v === daten[i]) return;
+  daten[i] = v; alles();
+  const c = $(svgId).querySelector('[data-i="' + i + '"]'); if (c) c.focus({ preventScroll: true });
+}
+ZIEH.forEach(id => {
+  const svg = $(id);
+  svg.addEventListener('pointerdown', e => {
+    const c = e.target.closest('.bp-pt'); if (!c) return;
+    e.preventDefault(); zug = { i: +c.dataset.i, id }; c.focus({ preventScroll: true });
+  });
+  svg.addEventListener('keydown', e => {
+    const c = e.target.closest('.bp-pt'); if (!c) return;
+    const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
+    if (!d) return;
+    e.preventDefault(); setze(+c.dataset.i, daten[+c.dataset.i] + d, id);
+  });
+});
+window.addEventListener('pointermove', e => {
+  if (!zug) return;
+  const svg = $(zug.id), rc = svg.getBoundingClientRect(), W = +svg.dataset.w;
+  const p = (e.clientX - rc.left) / rc.width * W;
+  setze(zug.i, Math.round(X_MIN + (p - RAND) / (W - 2 * RAND) * (X_MAX - X_MIN)), zug.id);
+});
+window.addEventListener('pointerup', () => { zug = null; });
+$('bp-werte').addEventListener('input', e => {
+  const r = liesWerte(e.target.value);
+  if (r.fehler) { e.target.setAttribute('aria-invalid', 'true'); $('bp-fehler').textContent = r.fehler; return; }
+  e.target.removeAttribute('aria-invalid'); $('bp-fehler').textContent = '';
+  daten = r.werte; alles(false);
+});
+$('bp-werte').addEventListener('change', () => alles());
+$('bp-wertB').addEventListener('input', e => {
+  const r = liesWerte(e.target.value);
+  if (r.fehler) { e.target.setAttribute('aria-invalid', 'true'); $('bp-fehlerB').textContent = r.fehler; return; }
+  e.target.removeAttribute('aria-invalid'); $('bp-fehlerB').textContent = '';
+  datenB = r.werte;
+  document.querySelectorAll('.bp-bspB').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.werte === datenB.join(','))));
+  zeichne6();
+});
+$('bp-wertB').addEventListener('change', e => { e.target.value = datenB.join(', '); e.target.removeAttribute('aria-invalid'); $('bp-fehlerB').textContent = ''; });
+$('bp-plus').addEventListener('click', () => { if (daten.length < N_MAX) { daten.push(Math.round(kennzahlen(daten).q2)); alles(); } });
+$('bp-minus').addEventListener('click', () => { if (daten.length > N_MIN) { daten.pop(); alles(); } });
+document.querySelectorAll('.bp-bsp').forEach(b => b.addEventListener('click', () => { daten = b.dataset.werte.split(',').map(Number); alles(); }));
+document.querySelectorAll('.bp-bspB').forEach(b => b.addEventListener('click', () => {
+  datenB = b.dataset.werte.split(',').map(Number); $('bp-wertB').value = datenB.join(', ');
+  document.querySelectorAll('.bp-bspB').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  zeichne6();
+}));
+$('bp-weiter').addEventListener('click', () => { phase = Math.min(5, phase + 1); zeichne3(); });
+$('bp-vorn').addEventListener('click', () => { phase = 0; zeichne3(); });
+$('bp-zaun').addEventListener('change', e => { mitZaun = e.target.checked; zeichne5(); });
+let groesseUhr = null;
+window.addEventListener('resize', () => { clearTimeout(groesseUhr); groesseUhr = setTimeout(() => alles(false), 150); });
+$('bp-wertB').value = datenB.join(', ');
+alles();
+</script>
+</body>
+</html>
