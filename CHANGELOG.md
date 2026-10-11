@@ -24,6 +24,10 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **CLAUDE.md schlanker** (11.10.2026, /doctor): die Beschreibungen der einzelnen Werkzeuge und Simulationen stehen
+  jetzt in `werkzeuge/CLAUDE.md` und `simulationen/CLAUDE.md` (laden nur bei Arbeit in diesen Ordnern), in der Haupt-
+  `CLAUDE.md` bleiben die Regeln für alle; Bestandslisten der Leitprogramme und Clip-Zählungen entfernt (stehen in
+  den Dateien). `preflight`-Skill: Beschreibung in Anführungszeichen, vorher ungültiges YAML. HOWTOs nachgeführt.
 - **g4.2 Boxplot: Ausreisser umschaltbar** (11.10.2026): im Tab «Boxplot» ein zweites Beispiel mit Rohdaten
   (11 Lernzeiten, Ausreisser 12 nach der Faustregel \(1.5 \cdot \text{QD}\) aus g4.3), Knöpfe «bis Min und Max» /
   «Ausreisser einzeln» (`gm-btn`), dazu der Hinweis, dass die zweite Form mehr als die fünf Kennzahlen braucht.

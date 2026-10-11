@@ -46,95 +46,28 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `.block-tipp`) — **nicht** am Seitenanfang und **nicht** auf den Kacheln von
   `index.html`. Anleitung: `HOWTO-simulationen.md`, `HOWTO-werkzeuge.md`; der Pre-Flight
   prüft mit `check_sim_wz`. Alte Adressen leitet `404.html` weiter (Tabelle `WEITERLEITUNGEN`).
-- `simulationen/standardabweichung.html` (seit 11.10.2026, erste Simulationsseite): eine Stichprobe (2–8 Werte, 0–20)
-  ziehen oder eintippen, in sechs Schritten von den Abweichungen über ihre Quadrate (flächengetreu) zu Varianz und
-  \(s\) (Standard \(n - 1\) wie g4.3, umschaltbar auf \(\sigma\)), dann \(R\), \(\text{QD}\) (Median der Hälften) und
-  \(\bar{x} \pm s\) im Vergleich und «ohne den äussersten Wert». Variationskoeffizient nur als Zusatz (nicht im RLP).
-  Aus einer externen Vorlage übernommen und angepasst. Selbsttest `scripts/verify_standardabweichung.js` (python3
-  `statistics`). Verlinkt aus g4.3 (`#darstellungen`).
-- `simulationen/boxplot.html` (seit 11.10.2026): 4–15 ganze Werte (0–20) im Punktdiagramm, gemeinsam für sechs Schritte —
-  sortierte Liste mit Plätzen von \(Q_0\)…\(Q_4\) (Median der Hälften), Boxplot Teil für Teil, vier Teile mit gleich vielen
-  Werten (nach Rang; Plätze genau auf einer Grenze zählen zu keinem Teil, Whisker dort immer bis Min/Max) und Form (`form()`),
-  Ausreisser nach der Faustregel \(1.5 \cdot \text{QD}\) aus g4.3 — standardmässig einzeln gezeichnet, Whisker bis zum letzten Wert
-  davor; Schalter «Whisker» in Schritt 3, 5, 6 auf «bis Min und Max» wie in g4.2, Vergleich mit einer Gruppe B. Selbsttest `scripts/verify_boxplot.js` (python3
-  `statistics`, prüft auch die Aussagen «drei Viertel ≤ \(Q_3\)» und «Hälfte ≥ Median»). Verlinkt aus g4.2 und g4.3 (`#darstellungen`).
-- `werkzeuge/notationstrainer.html` — Lernkartei (3 Fächer, Stand in `localStorage` unter
-  `tals-mathe-notationstrainer-v1`, in `rechtliches.html` genannt) zur Notation von
-  𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`
-  im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
-  nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Verlinkt aus
-  g2.1 (`#definition`); seit 10.10.2026 nur Grundlagenfach (116 Karten, die 25 des
-  Schwerpunktfachs und der Fach-Filter sind entfernt). Bis 10.10.2026 lag er als `notationstrainer.html` im Root.
-- `werkzeuge/strategietrainer.html` (seit 10.10.2026): Zufallsaufgaben aus sieben Bereichen —
-  lineare, quadratische und Bruchgleichungen, Faktorisieren, Bruchterme, lineare Systeme und Systeme
-  mit Parabel (SF). Man wählt den nächsten Schritt aus einer festen Liste je Familie (Gleichungen 15,
-  Terme 10, Systeme 7); das Werkzeug führt ihn aus (✓), weist einen erlaubten Umweg grau ab (≈) oder
-  begründet den Fehlgriff (✗; Tipp beim zweiten, Lösung beim dritten). Aufgaben werden von hinten
-  gebaut, gerechnet wird exakt (Brüche, Wurzeln, ganzzahlige Paare). Der Kern steht zwischen
-  `KERN:ANFANG`/`KERN:ENDE` und wird von `scripts/verify_strategietrainer.js` (im Pre-Flight) mit
-  Zufallsaufgaben durchgespielt: alle Wege, Lösungen gegen die gestellte Aufgabe, Terme an
-  Zufallsstellen, 𝔻 gegen den Nenner. Neue Vorlage oder Regel → dort zuerst grün. Vorwahl über
-  `#bereich=fakt,bruchterm` (kein `?`: `check_sim_wz` liest die Adresse bis `#` als Dateinamen).
-  Verlinkt aus g1.3, g2.2a, g2.2b, g2.3, s2.2a, s3.1. Weitere Trainer-Ideen: `../TODO-trainer-mathe.md`.
-- `werkzeuge/rechentrainer.html` (seit 11.10.2026): Rechnen ohne Taschenrechner (GF 1.1/1.2) in sechs
-  Themen — Hierarchie der Operationen, Vorzeichen, Brüche, Bruch–Dezimal–Prozent, Perioden, Zahlenmengen. Kern ist die
-  **Fehlerdiagnose**: Jede Aufgabe wird zusätzlich mit typischen Denkfehlern gerechnet (Parser mit
-  umschaltbaren Regeln: Strich vor Punkt, −3² als 9, a − (−b) als a − b …); trifft die Antwort einen
-  davon, nennt die Rückmeldung den Fehler mit Link (`FEHLER`). Lösungsweg Stufe für Stufe nach g1.1.
-  Vorwahl `#thema=reihenfolge,vorzeichen`. Selbsttest `scripts/verify_rechentrainer.js` rechnet jede
-  Aufgabe in `python3` mit `Fraction` nach.
-- `werkzeuge/einheitskreistrainer.html` (seit 11.10.2026): Grad ↔ Bogenmass, exakte Werte von sin/cos/tan
-  (Palette, Diagnose: Vorzeichen, sin/cos bzw. 30°/60° vertauscht, Kehrwert, «nicht definiert»), vom Wert
-  zum Winkel (Punkte am Kreis anklicken). Werte aus Quadrant und Referenzwinkel, Herleitung mit Skizze.
-  Anzeige Grad/Bogenmass/gemischt; Vorwahl `#teil=werte&mass=rad`. Selbsttest
-  `scripts/verify_einheitskreistrainer.js` mit Gegenrechnung in `python3`.
-- `werkzeuge/termtrainer.html` (seit 11.10.2026): Terme umformen (GF 1.3, SF 1.1) in sieben Themen — Zusammenfassen,
-  Klammern, Klammer mal Klammer, binomische Formeln, Ausklammern, Faktorisieren, Bruchterme kürzen. Die Eingabe
-  (`3x^2-2x+1`, `2x(x+3)(x-3)`, `(x-3)/(x+3)`) wird exakt als Quotient zweier Polynome verglichen; die Form
-  (ausmultipliziert, vollständig faktorisiert, gekürzt) am Syntaxbaum. Aufgaben stehen als Eingabetext,
-  Lösungsweg und Denkfehler ebenso (`diag`, `FEHLER`). Vorwahl `#thema=binome,faktorisieren`. Selbsttest
-  `scripts/verify_termtrainer.js` wertet alles in `python3` mit `Fraction` aus und prüft Unzerlegbarkeit.
-- `werkzeuge/gesetzetrainer.html` (seit 11.10.2026): Potenz-, Wurzel- und Logarithmengesetze (GF 1.4, SF 1.2, 1.3),
-  Bereiche wählbar (`#bereich=potenzen,wurzeln,rational,logarithmen`; `wurzeln` nur GF-1.4-Stoff mit
-  ⁿ√x = x^{1/n}, m/n-Exponenten im Bereich `rational` (SF)). Antwort in Feldern einer Zielform (`ziel`, z.B.
-  `x^{{n}}`, `{k}\sqrt{{r}}`); Potenzterme als Exponentenbäume, Denkfehler durch umgeschaltete Regeln
-  (`expo(x, 'p1mal')` …), dazu «Regel prüfen» (`FALLEN`). Selbsttest `scripts/verify_gesetzetrainer.js` rechnet
-  in `python3` unabhängig nach (Wurzeln als `(x**m)**(1/n)`, `math.log`).
-- `werkzeuge/systemtrainer.html` (seit 11.10.2026): lineare Gleichungssysteme (GF 2.3) in vier Themen — 2×2 lösen,
-  Sonderfälle 2×2, 3×3 lösen, Lösungsfall erkennen (`#thema=zwei,sonder,drei,lage`). Man wählt den Lösungsfall und gibt
-  𝕃 ein: Zahlen bzw. bei unendlich vielen Lösungen \(y\) (und \(z\)) als Ausdruck in \(x\), Schreibweise
-  \(\{(x \mid \ldots) : x \in \mathbb{R}\}\) wie in g2.3 und im Notationstrainer. Die Prüfung macht die Probe und
-  erkennt vertauschte Werte, Vorzeichen, falschen Lösungsfall, Fehler beim Auflösen nach y. Lösungsweg nach Form
-  (Einsetzen, Gleichsetzen, Addieren mit kleinerem kgV; 3×3: eliminieren, 2×2, zurück), bei 2×2 Skizze der Geraden (SVG).
-  Selbsttest `scripts/verify_systemtrainer.js`: python3 löst jedes System selbst und prüft, dass jede Wegzeile aus dem
-  System folgt (Zeilenraum der erweiterten Matrix); `STATISTIK.widerspruch` muss 0 bleiben, sonst verwirft der
-  Erzeuger kaputte Wege still.
+- **Einzelne Simulationen und Werkzeuge** (Zweck, Themen, Vorwahl, Besonderheiten) stehen in
+  `simulationen/CLAUDE.md` und `werkzeuge/CLAUDE.md` (laden, sobald dort gearbeitet wird). Für alle gilt: Rechnung
+  zwischen `KERN:ANFANG`/`KERN:ENDE`, Selbsttest `scripts/verify_<name>.js` im Pre-Flight mit Gegenrechnung in
+  `python3`; neue Vorlage oder Regel → dort zuerst grün. Vorwahl nur mit `#` (`#thema=…`), nie mit `?`:
+  `check_sim_wz` liest die Adresse bis `#` als Dateinamen. Ein Erzeuger, der kaputte Wege still verwirft, braucht
+  einen Zähler, der 0 bleiben muss (Muster `STATISTIK.widerspruch` im Systemtrainer), sonst sieht der Selbsttest den
+  Fehler nie. Notationstrainer: Karten nennen das Ergebnis, jede Lösung vor dem Eintrag mit `python3` nachrechnen;
+  sein `localStorage`-Schlüssel ist in `rechtliches.html` genannt.
 - `leitprogramme/` — 22 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt. **Seit dem 06.10.2026 sind dort nur die
-  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — sechzehn
-  (`quadratische-funktionen`, `lineare-funktionen`, `potenz-wurzelfunktionen`,
-  `polynomfunktionen`, `exp-log-funktionen`, `trigonometrische-funktionen`,
-  `betragsfunktionen`, `lineare-quadratische-gleichungen`, `dreiecke`, `vierecke`, `kreis-kreisteile`, `aehnlichkeit`,
-  `trigonometrische-berechnungen`, `einheitskreis`, `trigonometrische-gleichungen`, `modellieren`). Die sechs älteren (`potenzen`, `quadratische-gleichungen`,
+  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** (Liste in `leitprogramme.html`). Die sechs älteren (`potenzen`, `quadratische-gleichungen`,
   `gleichungssysteme`, `uebungspruefung-1`, `trigo2` und seit 08.10.2026 `planimetrie`, abgelöst durch je ein
   Leitprogramm zu 5.2a–d) bleiben als Dateien bestehen, ihre
   Kärtchen stehen vorübergehend unter «Alte Leitprogramme (werden demnächst ersetzt)»
   am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
   im Suchindex. Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine
   kleine Pille «LP» (`.karte-lp`/`.lp-link` in `index.html`). Die zwei Arten:
-  - *nach Thema* (20: `potenzen.html`, `quadratische-gleichungen.html`,
-    `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
-    `exp-log-funktionen.html`, `trigonometrische-funktionen.html`, `betragsfunktionen.html`,
-    `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`, `lineare-quadratische-gleichungen.html`
-    (Umformer statt Regler), `planimetrie.html` (Geometrie-Arbeitsbereich), `trigonometrische-berechnungen.html`,
-    `einheitskreis.html`, `trigonometrische-gleichungen.html` (GF 5.3–5.5, freigeschaltet 08.10.2026),
-    `modellieren.html` (GF 2.M Textaufgaben, je Aufgabenart ein Kapitel, freigeschaltet 08.10.2026),
-    `dreiecke.html`, `vierecke.html`, `kreis-kreisteile.html`, `aehnlichkeit.html` (GF 5.2a–d, je Themenseite ein
-    Leitprogramm, freigeschaltet 08.10.2026))
+  - *nach Thema* (20, Liste in `leitprogramme.html`)
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
@@ -160,12 +93,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 586 Drehbücher, alle vertont: **391 in `clips.json`** (363:01 min,
-  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **195** Clips mit
-  `"probe": true` (35 Prüfungsclips und 160 Clips der Leitprogramme nach Thema:
-  je 10 «Parabel sehen», «Kurve sehen», «Polynom sehen», «Exponentialkurve sehen»,
-  «Sinuskurve sehen», «Knick sehen», «Figuren sehen», «Gleichungen lösen», «Dreiecke berechnen»,
-  «Einheitskreis sehen», 12 «Ansatz finden», je 8 «Gerade sehen», «Winkel finden», «Dreiecke sehen», «Vierecke sehen», «Kreisteile sehen», «Ähnlichkeit sehen»), die im zugehörigen Leitprogramm stehen und
+- `clips/` — Drehbücher, alle vertont: die einen in `clips.json`, die anderen mit `"probe": true`
+  (Prüfungsclips und Clips der Leitprogramme nach Thema), die im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. Die Clips der *sichtbaren* Leitprogramme zeigt
   `clips.html` seit 06.10.2026 trotzdem: je Themenseite eine Tabelle Animationen · Leitprogramm · Weitere Clips
   (`scripts/clips_bibliothek.py`, HOWTO-clips «Bibliotheksseite»). **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
@@ -175,10 +104,9 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   eine Korrektur daran gehört darum auch nach `TODO-schwesterprojekt.md`. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,
   nicht als HTML-Entität. Vollständig in `HOWTO-clips.md`, das Verbindliche in
   STYLEGUIDE §6.4.
-  **Animationsclips** (`animation`, Reihe «Animationen erklärt»): 223 Clips auf 46 Seiten
-  (Stand 28.09.2026), je Animation einer, «▶ Clip» in ihrer Titelzeile. Wie in
+  **Animationsclips** (`animation`, Reihe «Animationen erklärt»): je Animation einer, «▶ Clip» in ihrer Titelzeile. Wie in
   `HOWTO-clips.md`, «Bild einer Animation».
-  **Rechner-Clips** (`werkzeug: true`, 22 Stück auf 14 Seiten) sind ein eigener Strang:
+  **Rechner-Clips** (`werkzeug: true`) sind ein eigener Strang:
   keine eigene Reihe, sondern letzter Clip der Reihe, deren Stoff sie bedienen. **Jede
   Angabe zum TI-30X Pro MathPrint gehört nachgeschlagen**: zuerst in der TI-Online-Hilfe
   (Bildschirmfotos, Kapitel zu Lösern, Matrizen, Vektoren), dann im PDF-Handbuch — Links

@@ -101,6 +101,10 @@ nicht auffindbar.
 
 `nav.js` und `index.html` bleiben unberührt: Die Rubrik steht dort schon, einzelne Seiten nicht.
 
+Dazu ein Absatz in **`werkzeuge/CLAUDE.md`**: wozu die Seite dient, Themen und Vorwahl, Selbsttest und was nicht aus
+dem Code hervorgeht. Claude Code lädt diese Datei nur, wenn es in `werkzeuge/` arbeitet; die Haupt-`CLAUDE.md` nennt
+seit 11.10.2026 nur noch die Regeln für alle Seiten.
+
 ## 5 · Verlinken in der Themenseite
 
 **Im Abschnitt, zu dem das Werkzeug inhaltlich gehört** — nicht am Seitenanfang (dort steht nur

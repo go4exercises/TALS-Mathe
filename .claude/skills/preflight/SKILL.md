@@ -1,6 +1,6 @@
 ---
 name: preflight
-description: Pflicht-Qualitätscheck für TALS-Mathe-Themenseiten. IMMER ausführen, bevor Änderungen an einer Datei in grundlagen/*.html oder schwerpunkt/*.html committet werden. Zweistufig: schnelle Eigen-Checks (Tag-Bilanz, ß, Dezimalkomma in Math, doppelte IDs, Skelett, Phantom-Klassen, mathlib-Einbindung, Ressourcen-Marker) plus Aufruf der autoritativen Repo-Skripte verify_mathjax.js (echte Render-Prüfung), verify_js_runtime.js (JS-Laufzeit in jsdom) und check_identifier_collisions.py. Fehlen die npm-Module mathjax-full/jsdom, werden die Tiefen-Checks sauber übersprungen.
+description: "Pflicht-Qualitätscheck für TALS-Mathe-Themenseiten. IMMER ausführen, bevor Änderungen an einer Datei in grundlagen/*.html oder schwerpunkt/*.html committet werden. Zweistufig: schnelle Eigen-Checks (Tag-Bilanz, ß, Dezimalkomma in Math, doppelte IDs, Skelett, Phantom-Klassen, mathlib-Einbindung, Ressourcen-Marker) plus Aufruf der autoritativen Repo-Skripte verify_mathjax.js (echte Render-Prüfung), verify_js_runtime.js (JS-Laufzeit in jsdom) und check_identifier_collisions.py. Fehlen die npm-Module mathjax-full/jsdom, werden die Tiefen-Checks sauber übersprungen."
 ---
 
 # Pre-Flight für TALS-Mathe-Themenseiten
