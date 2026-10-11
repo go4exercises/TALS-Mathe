@@ -327,7 +327,7 @@ trennt ein **Strichpunkt**, wie bei den Intervallen (§2.7) und den Live-Anzeige
 `\(\mathbb{L} = \{3;\,4\}\)`, in JS-Text `𝕃 = { 3; 4 }` — nicht `\{3,\,4\}`. Das Komma
 bleibt der Aufzählung in Prosa vorbehalten. Koordinaten schreiben weiter `(3 | 4)`.
 Umgestellt am 29.09.2026 im Lerngebiet G2 (Themenseiten, Clips, Leitprogramme
-Quadratische Gleichungen und Gleichungssysteme); **die übrigen Seiten sind noch nicht
+Quadratische Gleichungen und Gleichungssysteme), am 11.10.2026 im Notationstrainer; **die übrigen Seiten sind noch nicht
 umgestellt** — wer eine anfasst, zieht sie mit (`grep -n '\\{[^}]*,' <seite>`).
 
 ## 2.12 Eine Rechnung, eine Zeile (verbindlich seit 27.09.2026)

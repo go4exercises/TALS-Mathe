@@ -34,6 +34,25 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
+### 11.10.2026 · Werkzeuge: Selbsttest prüft auch Rückmeldung und gleichwertige Eingaben
+
+**Was.** In Mathe hat eine Prüfung aller sechs Trainer (`TODO-trainer-korrekturen.md`, Commits `7ed2ed8`,
+`042a671`) keinen Fachfehler gefunden, aber 21 Fehlbewertungen, die die Selbsttests nicht sahen:
+- Denkfehler-Texte, die zur Aufgabe nicht passen.
+- Ein Denkfehler-Wert, der zufällig der Lösung oder ihrer Gegenzahl entspricht.
+- Richtige Eingaben, die abgelehnt werden: gemischte Zahl, `*` an jeder Stelle.
+- Halbfertige Formen, die als richtig gelten: Doppelbruch, unvereinfachte Klammer.
+
+Mathe `HOWTO-werkzeuge.md` §6 nennt diese vier Prüfungen jetzt.
+
+**Wo.** Physik `HOWTO-werkzeuge.md` (Abschnitt «Selbsttest», um Z. 71). Gezählt am 11.10.2026: Physik hat 6
+Werkzeuge unter `werkzeuge/` (bewegungsdiagramme, einheitentrainer, fall-und-wurf, formeln-umstellen,
+freischneiden, schaltungen-zusammenfassen), aber nur einen Selbsttest, `scripts/verify_einheitentrainer.js`.
+Rückmeldungen mit Denkfehler-Texten haben vor allem `bewegungsdiagramme.html` und `einheitentrainer.html`.
+
+**Warum.** Dieselbe Lücke ist in Physik zu erwarten. Vorschlag: denselben Prüfdurchgang machen, ein
+Agent je Werkzeug, nur lesen, Befunde in ein TODO.
+
 ### 10.10.2026 · `build-seo.py`: Footer aus einer Quelle, Version 2.0 (auch in `OFFEN`)
 
 **Was.** `build-seo.py` erzeugt den Footer zwischen `<!-- FUSS:ANFANG … -->` und `<!-- FUSS:ENDE -->`

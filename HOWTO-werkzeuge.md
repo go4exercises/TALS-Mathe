@@ -134,6 +134,15 @@ Link, nicht mit dem Baustein.
   Mathe: `scripts/verify_strategietrainer.js` — es lädt nur den Block zwischen `KERN:ANFANG` und
   `KERN:ENDE` in `node:vm` (ohne DOM) und spielt Tausende Zufallsaufgaben durch. Neue Selbsttests
   in die Liste der Werkzeug-Selbsttests in `preflight.py` aufnehmen.
+  Dass die Musterlösung angenommen und jeder Denkfehler-Wert erkannt wird, genügt nicht (Prüfung
+  aller Trainer am 11.10.2026, `TODO-trainer-korrekturen.md`). Der Selbsttest prüft auch:
+  - ob ein Denkfehler-Wert zufällig der Lösung oder der Gegenzahl der Lösung entspricht. Solche
+    Aufgaben verwerfen, oder dem Wert einen eigenen Code geben.
+  - ob die Erklärung zum Denkfehler zur gestellten Aufgabe passt. Etwa «addiert» bei einem Minus
+    oder «Klammer übersehen» bei \((-a)^3\): Hier ändert die Klammer nichts.
+  - ob gleichwertige Eingaben angenommen werden, etwa eine gemischte Zahl oder `*` an jeder Stelle.
+  - ob halbfertige Formen nicht als richtig gelten, etwa ein Doppelbruch oder eine unvereinfachte
+    Klammer.
 - **Render-Check** bei 1280 px und 360 px: `node .claude/tools/render-check.mjs
   werkzeuge/<name>.html`. Eingabefelder und Knöpfe bei 360 px bedienbar, kein seitliches
   Scrollen.
