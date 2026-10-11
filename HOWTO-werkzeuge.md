@@ -83,8 +83,8 @@ nicht auffindbar.
 
 1. **Übersicht** `werkzeuge.html`, zwischen `<!-- WERKZEUGE:ANFANG -->` und
    `<!-- WERKZEUGE:ENDE -->`: eine Kachel unter Fach und Themenbereich — `a.karte` über der
-   ganzen Kachel, `.lp-kopf` Titel, `.lp-satz` ein Satz, je verweisende Themenseite eine
-   `.lp-zeile` mit Pille auf den Abschnitt. Bedient es mehrere Fächer, steht die Kachel in
+   ganzen Kachel, `.lp-kopf` Titel, `.lp-satz` ein kurzer Satz (eine Zeile), darunter
+   in `.lp-pillen` je verweisende Themenseite eine Pille ohne Text davor, die auf den Abschnitt zeigt. Bedient es mehrere Fächer, steht die Kachel in
    jedem Fach einmal. Ohne Themenbereich unter
    `<h2 id="ausserhalb">Ausserhalb der Lerngebiete</h2>`.
 2. **`scripts/build-seo.py`**, Tabelle `SEITEN`: Schlüssel `'werkzeuge/<name>.html'`,
