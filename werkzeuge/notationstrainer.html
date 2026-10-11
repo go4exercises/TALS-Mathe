@@ -166,8 +166,15 @@ MathJax = {
 .nt-btn { font-family:var(--sans); font-size:.95rem; font-weight:600; padding:9px 18px; border-radius:8px; cursor:pointer;
   border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); min-width:150px; }
 .nt-btn:hover { filter:brightness(.97); }
+.nt-btn:disabled { opacity:.45; cursor:not-allowed; filter:none; }
 .nt-btn.nt-nein { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--rot); }
 .nt-btn.nt-ja { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); }
+.nt-btn.nt-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
+.nt-schritt-n { font-family:var(--mono); font-size:.72rem; font-weight:400; margin-left:6px; }
+.nt-schritte { margin-top:14px; padding:10px 14px; background:var(--gruen-hell); border:1px solid var(--gruen-rand); border-left:4px solid var(--gruen); border-radius:6px; overflow-x:auto; }
+.nt-schritt + .nt-schritt { margin-top:10px; padding-top:8px; border-top:1px dashed var(--gruen-rand); }
+.nt-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); margin-bottom:3px; }
+.nt-schritt-inhalt { font-size:.93rem; }
 .nt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
 .nt-leer { padding:24px 20px; text-align:center; color:var(--tinte-2); }
 [hidden] { display:none !important; }
@@ -194,6 +201,7 @@ MathJax = {
     <div class="nt-kopf" id="nt-kopf"></div>
     <div class="nt-lage" id="nt-lage"></div>
     <div class="nt-frage" id="nt-frage"></div>
+    <div class="nt-schritte" id="nt-schritte" hidden></div>
   </div>
   <div class="nt-hinten" id="nt-hinten" hidden>
     <div class="nt-antwort" id="nt-antwort"></div>
@@ -202,6 +210,7 @@ MathJax = {
     <div class="nt-quer" id="nt-quer"></div>
   </div>
   <div class="nt-knoepfe" id="nt-knoepfe-vorne">
+    <button type="button" class="nt-btn nt-schritt-btn" id="nt-schritt">Nächster Schritt<span class="nt-schritt-n" id="nt-schritt-n"></span></button>
     <button type="button" class="nt-btn" id="nt-umdrehen">Umdrehen<span class="nt-taste">Leertaste</span></button>
   </div>
   <div class="nt-knoepfe" id="nt-knoepfe-hinten" hidden>
@@ -215,6 +224,7 @@ MathJax = {
   <div class="block-titel">📘 So funktioniert die Kartei</div>
   <p>Vorne steht, was die Rechnung ergeben hat, dazu die Grundmenge. Du schreibst die Definitionsmenge, die Lösungsmenge oder das Intervall in korrekter Notation auf — erst auf Papier, dann drehst du die Karte um.</p>
   <p>Jede Karte liegt in einem von drei Fächern. Neue Karten starten in Fach 1. Ist deine Notation <strong>richtig und gleichwertig</strong> zur Rückseite — mit der richtigen Klammer, dem richtigen Zeichen, der richtigen Menge —, wandert die Karte ein Fach weiter. Sonst fällt sie zurück in Fach 1. Eine andere korrekte Schreibweise derselben Menge zählt auch; die üblichen stehen auf der Rückseite unter «Ebenso richtig». Verlangt die Frage eine bestimmte Form, etwa «als Intervall» oder «aufzählend», zählt nur diese. Karten aus Fach 1 kommen viermal so oft dran wie aus Fach 3, die aus Fach 2 doppelt so oft.</p>
+  <p><strong>Nächster Schritt:</strong> zeigt Schritt für Schritt, wie man vom Ergebnis zur Notation kommt; nach dem letzten Schritt dreht sich die Karte um. Die Karte wandert dann nicht weiter, sondern zurück in Fach 1.</p>
   <p>Tastatur: <strong>Leertaste</strong> dreht um, <strong>1</strong> heisst «noch nicht», <strong>2</strong> heisst «gewusst». Dein Stand wird nur in diesem Browser gespeichert.</p>
 </div>
 
@@ -722,6 +732,39 @@ const KARTEN = [
     falle:R`Nicht \(x \in \mathbb{R}\): Dann wäre auch \(\left(\sqrt{2} \mid \sqrt{2} - 1\right)\) dabei, und das liegt nicht in \(\mathbb{Q} \times \mathbb{Q}\).`, s:S_G23 },
 ];
 
+// ── Lösungsschritte (reine Funktion, ohne DOM) ───────────────
+// Baut aus den Kartenfeldern die Schritte vom Ergebnis zur Notation. Was die Vorderseite schon zeigt
+// (Gleichung, Ergebnis, Grundmenge, Frage), wird nicht wiederholt. Ein «Ebenso richtig: …» in der
+// Begründung verrät die Notation und rückt darum in den Notationsschritt. Die Stolperfalle bleibt
+// der Rückseite vorbehalten: Sie warnt vor falschen Schreibweisen und gehört zum Vergleich danach.
+function teileWeg(text) {
+  const i = text.search(/\s*(Ebenso richtig:|Ebenso:|Gleichwertig:)/);
+  return i < 0 ? [text, ''] : [text.slice(0, i).trim(), text.slice(i).trim()];
+}
+const BEGRUENDUNG = {
+  lin:    R`Lösung mit \(\mathbb{G}\) abgleichen, Schreibweise wählen`,
+  quad:   R`Lösungen mit \(\mathbb{G}\) abgleichen, Schreibweise wählen`,
+  sonder: R`Sonderfall deuten, Schreibweise wählen`,
+  ungl:   R`Grenzen und Grundmenge prüfen, Schreibweise wählen`,
+  schreib:R`Grenzen und Zahlenmenge lesen, Schreibweise wählen`,
+  lgs:    R`Lösungspaar mit \(\mathbb{G}\) abgleichen, Schreibweise wählen`
+};
+function schrittListe(c) {
+  const liste = [];
+  const zwei = (titel, weg, titelN, notation) => {
+    const [grund, ebenso] = teileWeg(weg);
+    if (grund) liste.push({ titel, inhalt: grund });
+    liste.push({ titel: titelN, inhalt: `\\[ ${notation} \\]` + (ebenso ? `<p>${ebenso}</p>` : '') });
+  };
+  if (c.k === 'D') {
+    zwei(R`\(\mathbb{D}\) · Was aus \(\mathbb{G}\) wegfällt`, c.weg, R`\(\mathbb{D}\) · Notation`, c.a);
+    if (c.l) zwei(R`\(\mathbb{L}\) · Was davon in \(\mathbb{D}\) liegt`, c.lweg, R`\(\mathbb{L}\) · Notation`, R`\mathbb{L} = ` + c.l);
+  } else {
+    zwei(BEGRUENDUNG[c.k] || 'Schreibweise wählen', c.weg, 'Notation', c.a);
+  }
+  return liste;
+}
+
 // ── Zustand (nur in diesem Browser) ──────────────────────────
 const SPEICHER = 'tals-mathe-notationstrainer-v1';
 let fach = {};                                 // id → 1…5
@@ -739,6 +782,7 @@ const FAECHER = 3;
 const fachVon = id => Math.min(FAECHER, fach[id] || 1);   // ältere Stände hatten 5 Fächer
 
 let aktuell = null, letzte = null;
+let schritte = [], schrittNr = 0;              // aufgedeckte Lösungsschritte der aktuellen Karte
 
 function imStapel() { return KARTEN.filter(c => auswahl.m.has(grundVon(c)) && auswahl.k.has(c.k)); }
 
@@ -795,11 +839,35 @@ function zeigeKarte() {
     (c.g ? `<span class="nt-g">Grundmenge \\(\\mathbb{G} = ${c.g}\\)</span>` : ''));
   setzen($('nt-frage'), c.frage);
   setzeFormeln([$('nt-lage'), $('nt-frage')]);
+  schritte = schrittListe(c); schrittNr = 0;
+  setzen($('nt-schritte'), '');
+  $('nt-schritte').hidden = true;
+  $('nt-ja').disabled = false; $('nt-ja').title = '';
+  zeigeSchrittZaehler();
+}
+
+function zeigeSchrittZaehler() {
+  $('nt-schritt-n').textContent = `${Math.min(schrittNr + 1, schritte.length)}/${schritte.length}`;
+}
+
+// Deckt den nächsten Lösungsschritt auf; nach dem letzten dreht sich die Karte um.
+function naechsterSchritt() {
+  if (!aktuell || schrittNr >= schritte.length) return;
+  const s = schritte[schrittNr++];
+  const el = document.createElement('div');
+  el.className = 'nt-schritt';
+  el.innerHTML = `<div class="nt-schritt-kopf">Schritt ${schrittNr} · ${s.titel}</div><div class="nt-schritt-inhalt">${s.inhalt}</div>`;
+  const box = $('nt-schritte');
+  box.appendChild(el); box.hidden = false;
+  setzeFormeln([el]);
+  zeigeSchrittZaehler();
+  if (schrittNr >= schritte.length) umdrehen();
 }
 
 function umdrehen() {
   if (!aktuell || !$('nt-hinten').hidden) return;
   const c = aktuell;
+  $('nt-schritte').hidden = true;                  // die Rückseite zeigt dasselbe vollständig
   // Karten mit D und L: beide Mengen untereinander, Begründung je Menge
   setzen($('nt-antwort'), c.l
     ? `\\[ \\begin{aligned} ${c.a.replace(' = ', ' &= ')} \\\\ \\mathbb{L} &= ${c.l} \\end{aligned} \\]`
@@ -813,6 +881,8 @@ function umdrehen() {
   $('nt-hinten').hidden = false;
   $('nt-knoepfe-vorne').hidden = true;
   $('nt-knoepfe-hinten').hidden = false;
+  // Mit Schritten gelöst: zählt nicht als gewusst
+  if (schrittNr > 0) { $('nt-ja').disabled = true; $('nt-ja').title = 'Mit «Nächster Schritt» gelöst — die Karte geht zurück in Fach 1.'; }
   setzeFormeln([$('nt-antwort'), $('nt-weg'), $('nt-falle')]);
   // Fokus weg vom Knopf, sonst löst die nächste Leertaste «gewusst» aus
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
@@ -820,6 +890,7 @@ function umdrehen() {
 
 function bewerten(gewusst) {
   if (!aktuell || $('nt-hinten').hidden) return;
+  if (schrittNr > 0) gewusst = false;          // Schritte benutzt: wie «noch nicht», zurück in Fach 1
   fach[aktuell.id] = gewusst ? Math.min(FAECHER, fachVon(aktuell.id) + 1) : 1;
   speichern();
   letzte = aktuell.id;
@@ -847,6 +918,7 @@ katLeiste.addEventListener('click', e => filterKlick(e, auswahl.k, 'k'));
 $('nt-grund').addEventListener('click', e => filterKlick(e, auswahl.m, 'm'));
 
 $('nt-umdrehen').addEventListener('click', umdrehen);
+$('nt-schritt').addEventListener('click', naechsterSchritt);
 $('nt-ja').addEventListener('click', () => bewerten(true));
 $('nt-nein').addEventListener('click', () => bewerten(false));
 $('nt-reset').addEventListener('click', () => {

@@ -8,6 +8,9 @@
 //   – jeder hinterlegte Denkfehler-Wert wird als genau dieser Fehler erkannt und nie als richtig
 //   – ein ungekürzter Bruch gilt als «fast», nicht als falsch
 //   – der Lösungsweg endet beim Ergebnis; LaTeX ohne unausgeglichene Klammern, ohne «undefined»
+//   – Schrittliste («Nächster Schritt»): nicht leer, jeder Titel konkret (nicht «Schritt 2», «Rechnen»),
+//     LaTeX in Titeln und Zeilen ausgeglichen, jedes Stück des Lösungswegs kommt in einem Schritt vor;
+//     bei Hierarchie und Vorzeichen nennt jeder Titel eine Teilrechnung «Regel: \(… = …\)»
 //   – Gegenrechnung in python3 mit fractions.Fraction: jede Lösung unabhängig nachgerechnet
 //     (Terme mit Pythons eigener Rangfolge, in der −3**2 = −9 gilt; Perioden über die
 //     ausgeschriebene Dezimalzahl; abbrechend/periodisch über die Langdivision)
@@ -21,7 +24,7 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'rechentrai
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, pruefe, dezimal, qTex, Q, ggT, termAufgabe, F_REIHE, F_VZ, lies, parse, rechne };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, pruefe, dezimal, qTex, Q, ggT, termAufgabe, F_REIHE, F_VZ, lies, parse, rechne, schrittListe };', ctx);
 const K = ctx.K;
 const N = +process.argv[2] || 400;
 const befunde = new Map();
@@ -35,6 +38,32 @@ function latexOk(z, wo) {
   if (/undefined|NaN|Infinity|null|\[object/.test(z)) melde('Text: undefined/NaN', wo + ': ' + z);
   if (/[+-] -|\+ \+|- \+/.test(z)) melde('LaTeX: doppeltes Vorzeichen', wo + ': ' + z);
 }
+// Schrittliste: Stücke der weg-Zeilen (getrennt an «=») müssen in start oder den Schrittzeilen stehen,
+// {text}-Zeilen in einem Titel oder als Schrittzeile.
+const norm = z => z.replace(/\\quad\s*\\Rightarrow\s*\\quad/g, '=').replace(/\\displaystyle|\s+/g, '');
+const GENERISCH = /^(schritt\s*\d*|rechnen|ausrechnen|lösung|weiter|vereinfachen)[.:]?$/i;
+function schrittePruefen(a, thema, wo) {
+  const liste = K.schrittListe(a);
+  if (!Array.isArray(liste) || !liste.length) { melde('Schrittliste leer', wo); return; }
+  const stuecke = new Set(), texte = [];
+  const zerlege = z => norm(z).split('=').filter(Boolean).forEach(t => stuecke.add(t));
+  if (a.start) { latexOk(a.start, wo + ' Start'); zerlege(a.start); }
+  for (const s of liste) {
+    if (typeof s.titel !== 'string' || s.titel.trim().length < 10 || GENERISCH.test(s.titel.trim())) melde('Schritttitel leer oder generisch', wo + ': ' + s.titel);
+    else latexOk(s.titel, wo + ' Titel');
+    texte.push(norm(s.titel || ''));
+    if (!s.zeilen || !s.zeilen.length) melde('Schritt ohne Zeile', wo + ': ' + s.titel);
+    for (const z of s.zeilen || []) {
+      if (typeof z === 'string') { latexOk(z, wo + ' Schritt'); zerlege(z); }
+      else { latexOk(z.text, wo + ' Schritt'); texte.push(norm(z.text)); }
+    }
+    if ((thema === 'reihenfolge' || thema === 'vorzeichen') && !/^[^\\]{6,}: \\\(.+ = .+\\\)/.test(s.titel)) melde('Schritttitel ohne Regel und Teilrechnung', wo + ': ' + s.titel);
+  }
+  for (const w of a.weg) {
+    if (typeof w === 'string') { for (const t of norm(w).split('=').filter(Boolean)) if (!stuecke.has(t)) melde('Lösungsweg-Stück fehlt in den Schritten', wo + ': ' + t); }
+    else { const t = norm(w.text).replace(/[.:]$/, ''); if (!texte.some(x => x.includes(t))) melde('Lösungsweg-Text fehlt in den Schritten', wo + ': ' + w.text); }
+  }
+}
 const alsEingabe = (q, art) => art === 'dezimal' ? K.dezimal(q) : art === 'prozent' ? K.dezimal(q) + '%' : q.d === 1 ? String(q.n) : q.n + '/' + q.d;
 
 const py = [];
@@ -47,6 +76,7 @@ for (const thema of Object.keys(K.THEMEN)) {
     const wo = thema + ' «' + a.ausdruck + '»';
     latexOk(a.ausdruck, wo);
     for (const w of a.weg) latexOk(typeof w === 'string' ? w : w.text, wo + ' Weg');
+    schrittePruefen(a, thema, wo);
     if (a.art === 'wahl') {
       if (K.pruefe(a, a.loesung).status !== 'ok') melde('Musterlösung nicht angenommen', wo);
       for (const [k] of a.wahl) if (k !== a.loesung && K.pruefe(a, k).status !== 'falsch') melde('Falsche Wahl nicht als falsch erkannt', wo + ' ' + k);

@@ -174,6 +174,11 @@ MathJax = {
 .rt-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
 .rt-weg .rt-zeile { padding:2px 0; overflow-x:auto; }
 .rt-weg .rt-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
+.rt-schritt { margin-top:8px; }
+.rt-schritt-kopf { font-family:var(--mono); font-size:.74rem; color:var(--gruen); margin-bottom:2px; }
+.rt-btn.rt-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
+.rt-wahl .rt-btn.rt-schritt-btn { font-size:.92rem; }
+.rt-schritt-zahl { font-family:var(--mono); font-size:.74rem; font-weight:400; margin-left:6px; }
 .rt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
 .rt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
 .rt-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
@@ -209,6 +214,7 @@ MathJax = {
       <div id="rt-antwort-eingabe" class="rt-eingabe">
         <input type="text" id="rt-eingabe" autocomplete="off" inputmode="text" spellcheck="false" aria-label="Deine Antwort">
         <button type="button" class="rt-btn" id="rt-pruefen">Prüfen<span class="rt-taste">Enter</span></button>
+        <button type="button" class="rt-btn rt-schritt-btn" id="rt-schritt">Nächster Schritt<span class="rt-schritt-zahl" id="rt-schritt-zahl"></span></button>
         <span class="rt-vorschau" id="rt-vorschau" aria-live="polite"></span>
       </div>
       <div class="rt-hinweis" id="rt-hinweis"></div>
@@ -230,6 +236,7 @@ MathJax = {
     <li><strong>Eingabe:</strong> ganze Zahlen wie <code>-7</code>, Brüche als <code>3/4</code> oder <code>-5/12</code>, Dezimalzahlen mit Punkt wie <code>0.375</code>, Prozent als <code>12.5</code> oder <code>12.5%</code>. Unter dem Feld siehst du, wie die Eingabe gelesen wird.</li>
     <li><strong>Falsch:</strong> Das Werkzeug rechnet die Aufgabe auch mit den häufigsten Denkfehlern durch. Trifft deine Antwort einen davon, sagt es dir, welcher es ist. Du hast einen zweiten Versuch; danach kommt der Lösungsweg.</li>
     <li><strong>Fast:</strong> Der Wert stimmt, aber die Form nicht — etwa ein Bruch, der sich noch kürzen lässt. Das zählt nicht als Fehler, du gibst es nochmals ein.</li>
+    <li><strong>Nächster Schritt:</strong> zeigt den Lösungsweg Schritt für Schritt, jeden Schritt mit seiner Regel. Antworten kannst du weiterhin, bis der letzte Schritt aufgedeckt ist. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
   </ul>
   <p>Am Ende der Runde siehst du, welche Denkfehler am häufigsten waren, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
 </div>
@@ -416,8 +423,44 @@ function texInnen(x, anfang) {
   const pr = x.r.t === 'bin' && !x.r.paren && (PREC0[x.r.op] < PREC0[x.op] || (PREC0[x.r.op] === PREC0[x.op] && (x.op === '-' || x.op === ':')));
   return (pl ? '(' + tex(x.l, true) + ')' : tex(x.l, anfang)) + OPTEX[x.op] + (pr ? '(' + tex(x.r, true) + ')' : tex(x.r, false));
 }
-// Lösungsweg: je Schritt eine Operation — Klammer vor Potenz vor Punkt vor Strich, sonst von links
-function schritte(ast) {
+// Lösungsweg: je Schritt eine Operation — Klammer vor Potenz vor Punkt vor Strich, sonst von links.
+// stufen(ast) → [{ zeile, titel }]: die erste Zeile ist der Ausgangsterm (titel null), jede weitere nennt
+// ihre Regel und die Teilrechnung, z.B. «Punkt vor Strich: \(4 \cdot 3 = 12\)».
+const RANG = { '^': 3, '*': 2, ':': 2, '+': 1, '-': 1 };
+const OPNAME = { '^': 'Potenz ausrechnen', '*': 'Multiplizieren', ':': 'Dividieren', '+': 'Addieren', '-': 'Subtrahieren' };
+function regel(best, n, v) {
+  const x = best.x, d = best.key[0];
+  if (x.t === 'neg') return (qWert(x.a.v) < 0 ? 'Vorzeichenregel (Minus vor einer negativen Zahl macht plus)' : 'Minus vor der Zahl')
+    + ': \\(' + tex(Object.assign({}, x, { paren: false })) + ' = ' + qTex(v) + '\\)';
+  const andere = [];                          // andere Rechnungen auf derselben Klammertiefe
+  (function sammle(y, t) {
+    if (y.t === 'num') return;
+    const dd = t + (y.paren ? 1 : 0);
+    if (y !== x && y.t === 'bin' && dd === d) andere.push(RANG[y.op]);
+    if (y.t === 'neg') sammle(y.a, dd); else { sammle(y.l, dd); sammle(y.r, dd); }
+  })(n, 0);
+  const hatP = andere.includes(2), hatS = andere.includes(1), L = rechne(x.l), R = rechne(x.r);
+  let r;
+  if (d > 0) r = 'Klammer zuerst';
+  else if (x.op === '^') r = best.eltern && best.eltern.t === 'neg' ? 'Potenz vor dem Minus davor'
+    : hatP && hatS ? 'Potenz vor Punkt und Strich' : hatP ? 'Potenz vor Punkt' : hatS ? 'Potenz vor Strich' : OPNAME['^'];
+  else if (RANG[x.op] === 2) r = hatS ? 'Punkt vor Strich' + (hatP ? ', von links nach rechts' : '') : hatP ? 'Gleiche Stufe von links nach rechts' : OPNAME[x.op];
+  else r = hatS ? 'Gleiche Stufe von links nach rechts' : OPNAME[x.op];
+  const ln = qWert(L) < 0, rn = qWert(R) < 0;
+  let teil = tex(Object.assign({}, x, { paren: false }));
+  if (x.op === '*' || x.op === ':') {
+    const w = x.op === '*' ? ' mal ' : ' durch ';
+    if (ln || rn) r += ' (' + (ln ? 'minus' : 'plus') + w + (rn ? 'minus' : 'plus') + ' gibt ' + (ln && rn ? 'plus' : 'minus') + ')';
+  } else if (x.op === '-' && rn) { r += ' (Minus vor einer negativen Zahl macht plus)'; teil += ' = ' + qTex(L) + ' + ' + qTex(qNeg(R)); }
+  else if (x.op === '+' && rn) { r += ' (Plus vor einer negativen Zahl ändert nichts)'; teil += ' = ' + qTex(L) + ' - ' + qTex(qNeg(R)); }
+  else if (x.op === '-' && ln) r += ' (von einer negativen Zahl aus weiter nach links)';
+  else if (x.op === '^' && ln) r += R.n % 2 ? ' (ungerade Hochzahl: negativ)' : ' (gerade Hochzahl: positiv)';
+  let s = r + ': \\(' + teil + ' = ' + qTex(v) + '\\)';
+  if (best.eltern && best.eltern.t === 'neg' && x.op === '^') s += ', also \\(-' + tex(x, false) + ' = ' + qTex(qNeg(v)) + '\\)';
+  return s;
+}
+function schritte(ast) { return stufen(ast).map(z => z.zeile); }
+function stufen(ast) {
   // Ein Minus vor einer Zahl ist ihr Vorzeichen, kein Rechenschritt: vor der ersten Zeile zur Zahl falten.
   // −(−5) bleibt: Dort rechnet das äussere Minus.
   const falte = x => {
@@ -427,7 +470,7 @@ function schritte(ast) {
     return x;
   };
   let n = falte(JSON.parse(JSON.stringify(ast)));
-  const out = [tex(n)];
+  const out = [tex(n)], titel = [null];
   for (let k = 0; k < 40 && n.t !== 'num'; k++) {
     let best = null, pos = 0;
     (function walk(x, tiefe, eltern, seite) {
@@ -444,12 +487,13 @@ function schritte(ast) {
     })(n, 0, null, null);
     if (!best) break;
     const v = rechne(best.x);
+    const t = regel(best, n, v);
     const neu = { t: 'num', v };
     if (best.eltern) best.eltern[best.seite] = neu; else n = neu;
     const s = tex(n);
-    if (s !== out[out.length - 1]) out.push(s);
+    if (s !== out[out.length - 1]) { out.push(s); titel.push(t); }
   }
-  return out.map((s, i) => (i ? '= ' : '') + s);
+  return out.map((s, i) => ({ zeile: (i ? '= ' : '') + s, titel: titel[i] }));
 }
 const asciiPy = s => s.replace(/:/g, '/').replace(/\^/g, '**').replace(/\d+/g, m => 'Fraction(' + m + ')');
 
@@ -502,8 +546,10 @@ function termAufgabe(thema, ascii, flags) {
     if (w && !qGleich(w, v) && !diag.some(([, u]) => qGleich(u, w))) diag.push([f, w]);
   }
   if (v.n !== 0 && !diag.some(([, u]) => qGleich(u, qNeg(v)))) diag.push(['vz', qNeg(v)]);
+  const st = stufen(ast);
   return { thema, auftrag: 'Berechne ohne Taschenrechner.', ausdruck: tex(ast), rechnen: true, art: 'zahl', loesung: v, diag,
-           weg: schritte(ast), pyth: asciiPy(ascii) };
+           weg: st.map(z => z.zeile), start: st[0].zeile, liste: st.slice(1).map(z => ({ titel: z.titel, zeilen: [z.zeile] })),
+           pyth: asciiPy(ascii) };
 }
 const F_REIHE = ['lr', 'rassoc', 'negsq', 'klammerPot', 'potmal', 'minusKlammer', 'klammerVorrang'];
 const F_VZ = ['minusminus', 'prodsign', 'negsub', 'negsq', 'klammerPot'];
@@ -544,6 +590,19 @@ const VZ = [
   () => `(-${rnd(2, 5)}) ^ 2 - (-${r2()})`,
 ];
 
+// Schrittliste: Jede Aufgabe trägt neben weg (alle Zeilen) start (Ausgangszeile, kein Schritt, oder null)
+// und liste = [{ titel, zeilen: [LaTeX | {text}] }]. Die Zeilen eines Schritts sind Stücke der weg-Zeilen,
+// getrennt an « = » — der Selbsttest prüft, dass jedes Stück von weg in einem Schritt vorkommt.
+const teile = z => z.split(' = ');
+const stellen = k => ['keine Stelle', 'eine Stelle', 'zwei Stellen', 'drei Stellen'][k] || k + ' Stellen';
+function kuerzTitel(z, n) {
+  const g = ggT(z, n);
+  if (z === 0) return 'Zähler \\(0\\): der Bruch ist \\(0\\)';
+  if (g === 1) return 'Kürzen: nicht möglich, der Bruch ist schon gekürzt';
+  return 'Kürzen durch \\(' + g + '\\)' + (n === g ? ': eine ganze Zahl' : '');
+}
+function schrittListe(a) { return a.liste; }
+
 // Brüche: zwei Brüche (oder ganze Zahl und Bruch) mit + − · :
 function zufallsBruch(maxN = 12) { for (;;) { const d = rnd(2, maxN), n = rnd(1, 2 * d); if (ggT(n, d) === 1) return Q(n, d); } }
 function bruchAufgabe() {
@@ -583,8 +642,22 @@ function bruchAufgabe() {
     weg.push('= ' + A + ' \\cdot ' + qTex(Q(b.d, b.n)) + ' = ' + (n === 1 ? z : '\\frac{' + z + '}{' + n + '}') + (z === v.n && n === v.d ? '' : ' = ' + qTex(v)));
   }
   if (v.n !== 0) push('vz', qNeg(v));
+  const seg = ['', ...teile(weg[weg.length - 1].replace(/^= /, ''))], liste = [];
+  if (op === '+' || op === '-') {
+    const s = op === '+' ? 1 : -1, za = a.n * (N / a.d), zb = b.n * (N / b.d), zs = za + s * zb;
+    liste.push({ titel: weg[1].text.replace(/[.:]$/, ''), zeilen: ['= ' + seg[1]] });
+    liste.push({ titel: 'Zähler ' + (s > 0 ? 'addieren' : 'subtrahieren') + ': \\(' + za + opT + zb + ' = ' + zs + '\\)', zeilen: ['= ' + seg[2]] });
+    if (seg[3]) liste.push({ titel: kuerzTitel(zs, N), zeilen: ['= ' + seg[3]] });
+  } else if (op === '*') {
+    liste.push({ titel: 'Zähler mal Zähler, Nenner mal Nenner', zeilen: ['= ' + seg[1], '= ' + seg[2]] });
+    if (seg[3]) liste.push({ titel: kuerzTitel(a.n * b.n, a.d * b.d), zeilen: ['= ' + seg[3]] });
+  } else {
+    liste.push({ titel: 'Durch \\(' + B + '\\) teilen heisst mit dem Kehrwert \\(' + qTex(Q(b.d, b.n)) + '\\) multiplizieren', zeilen: ['= ' + seg[1]] });
+    liste.push({ titel: 'Zähler mal Zähler, Nenner mal Nenner', zeilen: ['= ' + seg[2]] });
+    if (seg[3]) liste.push({ titel: kuerzTitel(a.n * b.d, a.d * b.n), zeilen: ['= ' + seg[3]] });
+  }
   return { thema: 'brueche', auftrag: 'Berechne und gib das Ergebnis als gekürzten Bruch an.', ausdruck: weg[0], rechnen: true, art: 'bruch', loesung: v, diag,
-           weg, pyth: qPy(a) + ' ' + ({ '*': '*', ':': '/' }[op] || op) + ' ' + qPy(b) };
+           weg, start: weg[0], liste, pyth: qPy(a) + ' ' + ({ '*': '*', ':': '/' }[op] || op) + ' ' + qPy(b) };
 }
 
 // Bruch, Dezimalzahl, Prozent
@@ -600,6 +673,42 @@ const zehnerBruch = q => { let k = 0; while ((10 ** k) % q.d !== 0) k++; return 
 function umwandelnAufgabe() {
   const typ = pick(['b2d', 'b2d', 'd2b', 'zuProzent', 'zuProzent', 'p2b', 'p2d']);
   const q = abbrechenderBruch();
+  const a = umwandelnRoh(typ, q);
+  if (!a) return null;
+  const seg = teile(a.weg[0]), zeilen = i => ['= ' + seg[i]];
+  let k = 0; while ((10 ** k) % q.d !== 0) k++;
+  const zehner = q.n * (10 ** k) / q.d, L = [];
+  if (typ === 'b2d') {
+    if (seg.length === 2) L.push({ titel: 'Der Nenner ist schon \\(' + q.d + '\\): als Dezimalzahl schreiben, ' + stellen(k) + ' nach dem Punkt', zeilen: zeilen(1) });
+    else {
+      L.push({ titel: 'Auf den Nenner \\(' + 10 ** k + '\\) erweitern: Zähler und Nenner mal \\(' + (10 ** k) / q.d + '\\)', zeilen: [...zeilen(1), ...zeilen(2)] });
+      L.push({ titel: 'Zehnerbruch als Dezimalzahl: ' + stellen(k) + ' nach dem Punkt', zeilen: zeilen(3) });
+    }
+  } else if (typ === 'd2b') {
+    L.push({ titel: 'Als Zehnerbruch schreiben: ' + stellen(k) + ' nach dem Punkt, also Nenner \\(' + 10 ** k + '\\)', zeilen: zeilen(1) });
+    L.push({ titel: kuerzTitel(zehner, 10 ** k), zeilen: zeilen(2) });
+  } else if (typ === 'zuProzent') {
+    const j = seg.length - 2;
+    if (j === 2) L.push({ titel: 'Zuerst den Bruch als Dezimalzahl schreiben', zeilen: zeilen(1) });
+    L.push({ titel: 'Mit \\(100\\%\\) malnehmen, denn \\(1 = 100\\%\\)', zeilen: zeilen(j) });
+    L.push({ titel: 'Dezimalpunkt um zwei Stellen nach rechts', zeilen: zeilen(j + 1) });
+  } else if (typ === 'p2b') {
+    if (seg.length === 3) {
+      L.push({ titel: 'Prozent heisst «von Hundert»: Bruch mit Nenner \\(100\\)', zeilen: zeilen(1) });
+      L.push({ titel: kuerzTitel(a.loesung.n * 100 / a.loesung.d, 100), zeilen: zeilen(2) });
+    } else {
+      L.push({ titel: 'Durch \\(100\\) teilen: Dezimalpunkt um zwei Stellen nach links', zeilen: zeilen(1) });
+      L.push({ titel: 'Als Zehnerbruch schreiben: ' + stellen(k) + ' nach dem Punkt, also Nenner \\(' + 10 ** k + '\\)', zeilen: zeilen(2) });
+      L.push({ titel: kuerzTitel(zehner, 10 ** k), zeilen: zeilen(3) });
+    }
+  } else {
+    L.push({ titel: 'Prozent heisst «von Hundert»: durch \\(100\\) teilen', zeilen: zeilen(1) });
+    L.push({ titel: 'Dezimalpunkt um zwei Stellen nach links', zeilen: zeilen(2) });
+  }
+  a.start = seg[0]; a.liste = L;
+  return a;
+}
+function umwandelnRoh(typ, q) {
   if (typ === 'b2d') {
     const L = String(q.d).length, komma = Q(q.n * 10 ** L + q.d, 10 ** L);   // «3/8» als 3.8 gelesen
     const a = { thema: 'umwandeln', auftrag: 'Schreibe als Dezimalzahl.', ausdruck: qTex(q), art: 'dezimal', loesung: q, diag: [], weg: [erweiterWeg(q)], pyth: qPy(q) };
@@ -647,7 +756,10 @@ function periodeAufgabe() {
     if (roh[1] !== q.d) weg.push('\\frac{' + roh[0] + '}{' + roh[1] + '} = ' + qTex(q));
     weg.push({ text: 'Gekürzter Nenner \\(' + q.d + '\\)' + (abbr ? ' hat keinen Primfaktor ausser 2 und 5' : ' hat einen Primfaktor ausser 2 und 5') + ' — die Dezimalzahl ' + (abbr ? 'bricht ab' : 'ist periodisch') + '.' });
     weg.push(qTex(q) + ' = ' + (abbr ? dezimal(q) : periodeTex(pp)));
-    return { thema: 'periodisch', auftrag: 'Bricht die Dezimalzahl ab, oder ist sie periodisch?', ausdruck: '\\frac{' + roh[0] + '}{' + roh[1] + '}',
+    const liste = [];
+    if (roh[1] !== q.d) liste.push({ titel: 'Zuerst kürzen durch \\(' + roh[1] / q.d + '\\)', zeilen: [weg[0]] });
+    liste.push({ titel: weg[weg.length - 2].text.replace(/[.:]$/, ''), zeilen: [weg[weg.length - 1]] });
+    return { start: null, liste, thema: 'periodisch', auftrag: 'Bricht die Dezimalzahl ab, oder ist sie periodisch?', ausdruck: '\\frac{' + roh[0] + '}{' + roh[1] + '}',
              art: 'wahl', wahl: [['abbrechend', 'abbrechend'], ['periodisch', 'periodisch']], loesung: abbr ? 'abbrechend' : 'periodisch',
              diag: [[abbr ? 'periodisch' : 'abbrechend', 'nenner']], weg, pyth: '"' + (abbr ? 'abbrechend' : 'periodisch') + '"', pruefPy: [roh[0], roh[1]] };
   }
@@ -672,8 +784,16 @@ function periodeAufgabe() {
   if (V) weg.push(klein + 'z = ' + (ganz * klein + +vor) + '.\\overline{' + per + '}');
   const diff = gross - klein, zDiff = (ganz * gross + +(vor + per)) - (V ? ganz * klein + +vor : ganz);
   weg.push({ text: 'Untereinander stehen dieselben Perioden — subtrahieren:' });
+  const liste = [
+    { titel: 'Der Zahl einen Namen geben: \\(z\\)', zeilen: [weg[0]] },
+    { titel: 'Mit \\(' + gross + '\\) malnehmen: ' + (V ? 'die Ziffer vor der Periode und eine ganze Periode' : 'eine ganze Periode (' + (L === 1 ? 'eine Ziffer' : 'zwei Ziffern') + ')') + ' vor den Punkt', zeilen: [weg[1]] },
+  ];
+  if (V) liste.push({ titel: 'Mit \\(' + klein + '\\) malnehmen: nur die Ziffer vor der Periode vor den Punkt', zeilen: [weg[2]] });
+  liste.push({ titel: 'Untereinander stehen dieselben Perioden — subtrahieren: \\(' + gross + 'z - ' + (V ? klein : '') + 'z\\)', zeilen: [diff + 'z = ' + zDiff] });
+  liste.push({ titel: 'Nach \\(z\\) auflösen: durch \\(' + diff + '\\) teilen', zeilen: ['z = \\frac{' + zDiff + '}{' + diff + '}'] });
+  if (!(q.n === zDiff && q.d === diff)) liste.push({ titel: kuerzTitel(zDiff, diff), zeilen: ['z = ' + qTex(q)] });
   weg.push(diff + 'z = ' + zDiff + ' \\quad\\Rightarrow\\quad z = \\frac{' + zDiff + '}{' + diff + '}' + (q.n === zDiff && q.d === diff ? '' : ' = ' + qTex(q)));
-  return { thema: 'periodisch', auftrag: 'Schreibe als gekürzten Bruch.', ausdruck: t, art: 'bruch', loesung: q, diag, weg,
+  return { thema: 'periodisch', auftrag: 'Schreibe als gekürzten Bruch.', ausdruck: t, art: 'bruch', loesung: q, diag, weg, start: null, liste,
            pyth: 'Fraction(' + zDiff + ', ' + diff + ')', pruefPer: pz };
 }
 
@@ -706,7 +826,8 @@ function mengenAufgabe() {
   let e; do e = pick(pool)(); while (!e);
   const [t, menge, erkl, wert] = e;
   return { thema: 'mengen', auftrag: 'Zu welcher kleinsten Standard-Zahlenmenge gehört die Zahl?', ausdruck: t, art: 'wahl', wahl: MENGEN, loesung: menge,
-           diag: [], weg: [{ text: erkl }], pyth: '"' + menge + '"', mengeWert: wert };
+           diag: [], weg: [{ text: erkl }], start: null,
+           liste: [{ titel: 'Erst ausrechnen, dann die kleinste Menge wählen: ' + MENGEN.find(([k]) => k === menge)[1], zeilen: [{ text: erkl }] }], pyth: '"' + menge + '"', mengeWert: wert };
 }
 
 const THEMEN = {
@@ -811,7 +932,7 @@ for (const [k, t] of Object.entries(THEMEN)) {
   themenBox.appendChild(b);
 }
 
-let A = null, nr = 0, versuch = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, letztes = '';
+let A = null, nr = 0, versuch = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, letztes = '', gezeigt = 0;
 let stand = { ok: 0, fehl: 0, codes: {} };
 
 function zeit() { const s = Math.floor((Date.now() - start) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
@@ -822,16 +943,38 @@ function zeigeZahlen() {
   $('rt-z-zeit').textContent = zeit();
   $('rt-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-function wegHtml(a) {
-  return '<div class="rt-weg-titel">Lösungsweg</div>' + a.weg.map(w => typeof w === 'string'
-    ? '<div class="rt-zeile">\\(\\displaystyle ' + w + '\\)</div>'
-    : '<div class="rt-text">' + w.text + '</div>').join('');
+// Ein Renderer für den Lösungsweg: die ersten k Schritte (ohne k: alle)
+const zeileHtml = w => typeof w === 'string'
+  ? '<div class="rt-zeile">\\(\\displaystyle ' + w + '\\)</div>'
+  : '<div class="rt-text">' + w.text + '</div>';
+function wegHtml(a, k) {
+  const liste = schrittListe(a);
+  return '<div class="rt-weg-titel">Lösungsweg</div>' + (a.start ? zeileHtml(a.start) : '')
+    + liste.slice(0, k === undefined ? liste.length : k).map((s, i) =>
+      '<div class="rt-schritt"><div class="rt-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>' + s.zeilen.map(zeileHtml).join('') + '</div>').join('');
+}
+function schrittKnopf() {
+  const n = schrittListe(A).length;
+  $('rt-schritt-zahl').textContent = Math.min(gezeigt + 1, n) + '/' + n;
+  $('rt-schritt').disabled = fertig;
+}
+function naechsterSchritt() {
+  if (fertig || !A) return;
+  const n = schrittListe(A).length;
+  gezeigt = Math.min(gezeigt + 1, n);
+  if (gezeigt >= n) {
+    meldung('fast', '<p>Lösung Schritt für Schritt angesehen. Richtig ist ' + (A.art === 'wahl' ? A.wahl.find(([k]) => k === A.loesung)[1] : '\\(' + ergebnisTex(A) + '\\)') + '.</p>');
+    return abschliessen(false);
+  }
+  $('rt-weg').hidden = false; setzen($('rt-weg'), wegHtml(A, gezeigt));
+  schrittKnopf();
 }
 function neueAufgabe() {
   if (nr >= RUNDE) return bilanz();
   nr++;
   let a; do a = aufgabe([...themen]); while (a.ausdruck === letztes);
-  A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0;
+  A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0; gezeigt = 0;
+  $('rt-pruefen').after($('rt-schritt'));     // für Wahl-Aufgaben steht der Knopf bei den Wahl-Knöpfen
   $('rt-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('rt-thema').textContent = THEMEN[a.thema].name;
   $('rt-auftrag').textContent = a.auftrag;
@@ -840,11 +983,15 @@ function neueAufgabe() {
   $('rt-antwort-eingabe').hidden = wahl;
   $('rt-antwort-wahl').hidden = !wahl;
   $('rt-hinweis').textContent = wahl ? '' : { zahl: 'Ganze Zahl, z.B. -7', bruch: 'Gekürzter Bruch, z.B. -5/12 (oder ganze Zahl)', dezimal: 'Dezimalzahl mit Punkt, z.B. 0.375', prozent: 'Prozentzahl, z.B. 12.5 oder 12.5%' }[a.art];
-  if (wahl) setzen($('rt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="rt-btn" data-w="' + k + '">' + t + '</button>').join(''));
+  if (wahl) {
+    setzen($('rt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="rt-btn" data-w="' + k + '">' + t + '</button>').join(''));
+    mjKette.then(() => { if (A === a) $('rt-antwort-wahl').appendChild($('rt-schritt')); });
+  }
   const inp = $('rt-eingabe'); inp.value = ''; inp.disabled = false; $('rt-pruefen').disabled = false;
   setzen($('rt-vorschau'), '');
   setzen($('rt-rueck'), ''); $('rt-rueck').className = 'rt-rueck';
   $('rt-weg').hidden = true; $('rt-weiter-box').hidden = true;
+  schrittKnopf();
   zeigeZahlen();
   if (!wahl) inp.focus();
 }
@@ -855,7 +1002,8 @@ function abschliessen(gut) {
   mjKette.then(() => $('rt-antwort-wahl').querySelectorAll('button').forEach(b => { b.disabled = true; }));
   $('rt-weg').hidden = false; setzen($('rt-weg'), wegHtml(A));
   $('rt-weiter-box').hidden = false;
-  if (gut && !fehlerInAufgabe) stand.ok++;
+  schrittKnopf();
+  if (gut && !fehlerInAufgabe && !gezeigt) stand.ok++;
   zeigeZahlen();
   $('rt-weiter').focus();
 }
@@ -863,7 +1011,7 @@ function antwort(eingabe) {
   if (fertig || !A) return;
   const r = pruefe(A, eingabe);
   if (r.status === 'format' || r.status === 'fast') { meldung('fast', '<p>' + (r.status === 'fast' ? '≈ ' : '') + r.text + '</p>'); return; }
-  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
+  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe || gezeigt ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
   versuch++; fehlerInAufgabe++; stand.fehl++;
   stand.codes[r.code] = (stand.codes[r.code] || 0) + 1;
   const f = FEHLER[r.code];
@@ -911,6 +1059,7 @@ $('rt-eingabe').addEventListener('keydown', e => { if (e.key === 'Enter') { e.pr
 $('rt-eingabe').addEventListener('input', () => setzen($('rt-vorschau'), vorschau($('rt-eingabe').value)));
 $('rt-antwort-wahl').addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (b && !b.disabled && !b.classList.contains('rt-falsch')) antwort(b.dataset.w); });
 $('rt-weiter').addEventListener('click', neueAufgabe);
+$('rt-schritt').addEventListener('click', naechsterSchritt);
 $('rt-neu').addEventListener('click', neueRunde);
 $('rt-bilanz').addEventListener('click', e => { if (e.target.closest('#rt-nochmal')) neueRunde(); });
 themenBox.addEventListener('click', e => {

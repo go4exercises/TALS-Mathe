@@ -156,10 +156,11 @@ MathJax = {
 .gt-vorschau { font-size:1.05rem; color:var(--tinte); min-height:2em; margin:2px 0 8px; overflow-x:auto; }
 .gt-feld { display:inline-flex; align-items:center; gap:6px; }
 .gt-feld label { font-size:1rem; }
-.gt-weg .gt-k { font-family:var(--sans); font-size:.8rem; color:var(--tinte-2); margin-left:10px; }
 .gt-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
   border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
 .gt-btn:hover { filter:brightness(.97); }
+.gt-btn.gt-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
+.gt-schritt-zahl { font-family:var(--mono); font-size:.72rem; font-weight:400; margin-left:6px; }
 .gt-btn.gt-weiter { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); min-width:180px; }
 .gt-btn:disabled { opacity:.45; cursor:default; }
 .gt-wahl { display:flex; flex-wrap:wrap; gap:8px; }
@@ -177,6 +178,8 @@ MathJax = {
 .gt-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
 .gt-weg .gt-zeile { padding:2px 0; overflow-x:auto; }
 .gt-weg .gt-text { font-family:var(--sans); font-size:.9rem; padding:2px 0; }
+.gt-schritt { margin-top:8px; }
+.gt-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); margin-bottom:1px; }
 .gt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
 .gt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
 .gt-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
@@ -215,6 +218,7 @@ MathJax = {
         <div class="gt-eingabe">
           <span id="gt-felder" class="gt-eingabe"></span>
           <button type="button" class="gt-btn" id="gt-pruefen">Prüfen<span class="gt-taste">Enter</span></button>
+          <button type="button" class="gt-btn gt-schritt-btn" id="gt-schritt">Nächster Schritt<span class="gt-schritt-zahl" id="gt-schritt-zahl"></span></button>
         </div>
         <div class="gt-hinweis" id="gt-hinweis">Ganze Zahl, Bruch wie 3/2 oder -1/2, Dezimalzahl mit Punkt wie 2.5</div>
       </div>
@@ -236,6 +240,7 @@ MathJax = {
     <li><strong>Antwort in Feldern:</strong> Über den Feldern steht die Form, die verlangt ist, etwa \(x^{\,n}\) oder \(k\sqrt{r}\). Du tippst nur die Zahlen ein: ganze Zahlen, Brüche wie <code>3/2</code> oder <code>-1/2</code>, Dezimalzahlen mit Punkt. Die Vorschau setzt sie gleich in die Form ein.</li>
     <li><strong>Regel prüfen:</strong> Manche Aufgaben zeigen eine «Regel». Du entscheidest, ob sie für alle zulässigen Werte gilt. Danach siehst du ein Gegenbeispiel oder die Begründung.</li>
     <li><strong>Falsch:</strong> Das Werkzeug rechnet jede Aufgabe auch mit den typischen Verwechslungen, etwa Exponenten multipliziert statt addiert oder Basis und Zahl im Logarithmus vertauscht. Trifft deine Antwort eine davon, nennt es sie; sonst gibt es einen Tipp. Nach dem zweiten Versuch kommt der Lösungsweg mit dem Gesetz zu jedem Schritt.</li>
+    <li><strong>Nächster Schritt:</strong> zeigt die Lösung Schritt für Schritt, jeden Schritt mit seinem Gesetz. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
     <li><strong>Fast:</strong> Der Wert stimmt, aber die Form nicht, etwa ein ungekürzter Bruch oder eine Quadratzahl unter der Wurzel. Das zählt nicht als Fehler.</li>
   </ul>
   <p>Am Ende der Runde siehst du, welche Regeln du am häufigsten verwechselt hast, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
@@ -543,7 +548,7 @@ function potenzWert() {
     const w = Q(form === 'a' ? 1 : form === 'neg' ? -1 : 1 + a);
     return { ...A, ausdruck: aus, loesung: [w], py: { links: form === 'a' ? a + '**0' : form === 'neg' ? '-' + a + '**0' : a + '**0 + ' + a + '**1', rechts: qPy(w) },
       diag: [['nullExp', [Q(form === 'a' ? 0 : form === 'neg' ? 0 : a)]], ['negsq', [Q(1)]]].filter(([c]) => c !== 'negsq' || form === 'neg'),
-      weg: [zeile(form === 'summe' ? '1 + ' + a : form === 'neg' ? '-1' : '1', '\\(a^0 = 1\\)' + (form === 'neg' ? '; das Minus steht vor der Potenz' : '')), zeile(qTex(w))], tipp: '\\(a^0 = 1\\) für \\(a \\neq 0\\).' };
+      weg: [zeile(form === 'summe' ? '1 + ' + a : form === 'neg' ? '-1' : '1', 'Nullexponent: \\(a^0 = 1\\)' + (form === 'neg' ? '; das Minus steht vor der Potenz' : '')), zeile(qTex(w))], tipp: '\\(a^0 = 1\\) für \\(a \\neq 0\\).' };
   }
   if (art === 'vorzeichen') {                              // −aⁿ und (−a)ⁿ
     const a = rnd(2, 5), n = a > 3 ? 2 : pick([2, 4]), mitKl = Math.random() < 0.5;   // nur gerade n: bei ungeradem ist (−a)ⁿ = −aⁿ
@@ -767,11 +772,11 @@ function logWert() {
   if (c !== 'e' && q.d === 1) { const b = qPow(Q(c), q.n); const quot = qDiv(b, Q(basis)); if (!qGleich(quot, w)) diag.push(['logQuot', [quot]]); }
   const bt = c === 'e' ? 'e' : String(basis);
   const weg = c === 'e'
-    ? [zeile('\\ln\\left(e^{' + qTex(q) + '}\\right)', 'als Potenz von \\(e\\) schreiben'), zeile(qTex(w), '\\(\\ln(e^k) = k\\)')]
+    ? [zeile('\\ln\\left(e^{' + qTex(q) + '}\\right)', 'als Potenz von \\(e\\) schreiben'), zeile(qTex(w), 'Definition: \\(\\ln(e^k) = k\\)')]
     : p === 1
-      ? [{ text: 'Gesucht ist der Exponent: \\(' + bt + '^{\\,?} = ' + arg.tex + '\\).' }, zeile(logTex(basis, c + '^{' + qTex(q) + '}'), 'als Potenz von \\(' + c + '\\) schreiben'), zeile(qTex(w))]
-      : [{ text: 'Gesucht ist \\(x\\) mit \\(' + bt + '^{x} = ' + arg.tex + '\\). Beide Zahlen sind Potenzen von \\(' + c + '\\): \\((' + c + '^{' + p + '})^{x} = ' + c + '^{' + qTex(q) + '}\\).' },
-        { text: 'Exponenten vergleichen: \\(' + p + 'x = ' + qTex(q) + '\\), also \\(x = ' + qTex(w) + '\\).' }, zeile(qTex(w))];
+      ? [{ text: 'Gesucht ist der Exponent: \\(' + bt + '^{\\,?} = ' + arg.tex + '\\).', k: 'Definition: \\(\\log_a(b)\\) ist der Exponent zur Basis \\(a\\)' }, zeile(logTex(basis, c + '^{' + qTex(q) + '}'), 'als Potenz von \\(' + c + '\\) schreiben'), zeile(qTex(w))]
+      : [{ text: 'Gesucht ist \\(x\\) mit \\(' + bt + '^{x} = ' + arg.tex + '\\). Beide Zahlen sind Potenzen von \\(' + c + '\\): \\((' + c + '^{' + p + '})^{x} = ' + c + '^{' + qTex(q) + '}\\).', k: 'Definition: Basis und Zahl als Potenzen von \\(' + c + '\\)' },
+        { text: '\\(' + p + 'x = ' + qTex(q) + '\\), also \\(x = ' + qTex(w) + '\\).', k: 'P3 und Exponenten vergleichen' }, zeile(qTex(w))];
   return { bereich: 'logarithmen', typ: 'Wert eines Logarithmus', auftrag: 'Berechne ohne Taschenrechner. Gib das Ergebnis exakt an (ganze Zahl oder Bruch).', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
     ausdruck: logTex(basis, arg.tex), loesung: [w], diag, weg,
     tipp: '\\(\\log_a(b)\\) ist der Exponent, mit dem man \\(a\\) potenzieren muss, um \\(b\\) zu erhalten. Schreibe beide Zahlen als Potenz derselben Basis.',
@@ -790,7 +795,7 @@ function expGleichung() {
   return { bereich: 'logarithmen', typ: 'Exponentialgleichung', auftrag: 'Löse exakt, ohne Taschenrechner.', felder: [F('x')], ziel: 'x = {x}',
     ausdruck: a + '^{' + expo_ + '} = ' + bt, loesung: [x], diag: diag.filter(([, [v]]) => !qGleich(v, x)),
     weg: [aequi((p === 1 ? c : '\\left(' + c + '^{' + p + '}\\right)') + '^{' + expo_ + '} = ' + c + '^{' + q + '}', 'beide Seiten als Potenz von \\(' + c + '\\)'),
-      aequi((p === 1 ? '' : p) + (d && p > 1 ? '(' + expo_ + ')' : expo_) + ' = ' + q, 'gleiche Basis: Exponenten gleichsetzen'), aequi('x = ' + qTex(x))],
+      aequi((p === 1 ? '' : p) + (d && p > 1 ? '(' + expo_ + ')' : expo_) + ' = ' + q, 'gleiche Basis: Exponenten gleichsetzen'), aequi('x = ' + qTex(x), 'nach \\(x\\) auflösen')],
     tipp: 'Schreibe beide Seiten als Potenz derselben Basis und setze die Exponenten gleich. Das ist \\(x = \\log_a(b)\\).',
     py: { links: 'math.log(' + qPy(b) + ', ' + a + ')' + (d ? ' - ' + d : ''), rechts: qPy(x) } };
 }
@@ -800,26 +805,26 @@ function logGesetze() {
   if (art === 'summe') {
     const [u, v, k] = pick([[2, 5, 1], [4, 25, 2], [20, 5, 2], [50, 2, 2], [8, 125, 3], [25, 40, 3], [4, 250, 3], [200, 5, 3], [16, 625, 4]]);
     return { ...A, ausdruck: '\\lg(' + u + ') + \\lg(' + v + ')', loesung: [Q(k)], diag: [],
-      weg: [zeile('\\lg(' + u + ' \\cdot ' + v + ')', 'Gesetz 1: Summe → Produkt'), zeile('\\lg(' + u * v + ')'), zeile(String(k), '\\(10^{' + k + '} = ' + u * v + '\\)')],
+      weg: [zeile('\\lg(' + u + ' \\cdot ' + v + ')', 'Gesetz 1: Summe → Produkt'), zeile('\\lg(' + u * v + ')'), zeile(String(k), 'Logarithmus ausrechnen: \\(10^{' + k + '} = ' + u * v + '\\)')],
       tipp: 'Gesetz 1 rückwärts: \\(\\lg(u) + \\lg(v) = \\lg(u \\cdot v)\\).', py: { links: 'math.log10(' + u + ')+math.log10(' + v + ')', rechts: String(k) } };
   }
   if (art === 'differenz') {
     const a = pick([2, 3, 5]), k = rnd(1, a === 2 ? 5 : 2), v = pick([3, 5, 6, 7].filter(x => x % a)), u = v * a ** k;
     return { ...A, ausdruck: '\\log_{' + a + '}(' + u + ') - \\log_{' + a + '}(' + v + ')', loesung: [Q(k)], diag: [],
-      weg: [zeile('\\log_{' + a + '}\\left(\\frac{' + u + '}{' + v + '}\\right)', 'Gesetz 2: Differenz → Quotient'), zeile('\\log_{' + a + '}(' + u / v + ')'), zeile(String(k), '\\(' + a + '^{' + k + '} = ' + u / v + '\\)')],
+      weg: [zeile('\\log_{' + a + '}\\left(\\frac{' + u + '}{' + v + '}\\right)', 'Gesetz 2: Differenz → Quotient'), zeile('\\log_{' + a + '}(' + u / v + ')'), zeile(String(k), 'Logarithmus ausrechnen: \\(' + a + '^{' + k + '} = ' + u / v + '\\)')],
       tipp: 'Gesetz 2 rückwärts: \\(\\log_a(u) - \\log_a(v) = \\log_a\\left(\\frac{u}{v}\\right)\\).', py: { links: 'math.log(' + u + ', ' + a + ')-math.log(' + v + ', ' + a + ')', rechts: String(k) } };
   }
   if (art === 'faktor') {
     const [f, u, v, k] = pick([[2, 5, 4, 2], [2, 2, 25, 2], [3, 2, 125, 3], [2, 50, 4, 4], [3, 5, 8, 3], [2, 20, 25, 4]]);
     return { ...A, ausdruck: f + '\\lg(' + u + ') + \\lg(' + v + ')', loesung: [Q(k)], diag: [],
-      weg: [zeile('\\lg\\left(' + u + '^{' + f + '}\\right) + \\lg(' + v + ')', 'Gesetz 3: Faktor → Exponent'), zeile('\\lg(' + u ** f + ' \\cdot ' + v + ')', 'Gesetz 1'), zeile('\\lg(' + u ** f * v + ')'), zeile(String(k))],
+      weg: [zeile('\\lg\\left(' + u + '^{' + f + '}\\right) + \\lg(' + v + ')', 'Gesetz 3: Faktor → Exponent'), zeile('\\lg(' + u ** f + ' \\cdot ' + v + ')', 'Gesetz 1: Summe → Produkt'), zeile('\\lg(' + u ** f * v + ')'), zeile(String(k))],
       tipp: 'Zuerst mit Gesetz 3 den Faktor als Exponent ins Argument holen, dann Gesetz 1.', py: { links: f + '*math.log10(' + u + ')+math.log10(' + v + ')', rechts: String(k) } };
   }
   if (art === 'quotient') {                                // lg(cᵏ)/lg(c) bzw. log_b(cᵏ)/log_b(c)
     const c = pick([2, 3, 5]), k = rnd(2, c === 2 ? 6 : 3), b = pick([10, 10, 'e', 7]);
     const lt = z => (b === 10 ? '\\lg(' + z + ')' : b === 'e' ? '\\ln(' + z + ')' : '\\log_{' + b + '}(' + z + ')');
     return { ...A, ausdruck: '\\frac{' + lt(c ** k) + '}{' + lt(c) + '}', loesung: [Q(k)], diag: [['logGekuerzt', [Q(c ** (k - 1))]]],
-      weg: [zeile('\\frac{' + lt(c + '^{' + k + '}') + '}{' + lt(c) + '}', c ** k + ' als Potenz von ' + c), zeile('\\frac{' + k + ' \\cdot ' + lt(c) + '}{' + lt(c) + '}', 'Gesetz 3'), zeile(String(k), 'kürzen: Jetzt ist \\(' + lt(c) + '\\) ein Faktor')],
+      weg: [zeile('\\frac{' + lt(c + '^{' + k + '}') + '}{' + lt(c) + '}', c ** k + ' als Potenz von ' + c), zeile('\\frac{' + k + ' \\cdot ' + lt(c) + '}{' + lt(c) + '}', 'Gesetz 3: Exponent → Faktor'), zeile(String(k), 'kürzen: Jetzt ist \\(' + lt(c) + '\\) ein Faktor')],
       tipp: 'Schreibe die Zahl im Zähler als Potenz der Zahl im Nenner und wende Gesetz 3 an.', py: { links: logPy(b, c ** k) + '/' + logPy(b, c), rechts: String(k) } };
   }
   const a = pick([2, 3, 5, 10]), m = rnd(1, 5), n = pick([2, 3].filter(x => ggT(x, m) === 1));
@@ -933,7 +938,7 @@ const FALLEN = {
 };
 function falle(bereich) {
   const [regel, gilt, bsp, li, re, warum, py] = pick(FALLEN[bereich]);
-  const weg = gilt ? [{ text: '✓ Die Regel gilt. ' + warum }] : [{ text: '✗ Die Regel gilt nicht. Gegenbeispiel mit \\(' + bsp + '\\): links \\(' + li + '\\), rechts \\(' + re + '\\). ' + warum }];
+  const weg = gilt ? [{ text: '✓ Die Regel gilt. ' + warum, k: 'Begründung: Die Regel gilt' }] : [{ text: '✗ Die Regel gilt nicht. Gegenbeispiel mit \\(' + bsp + '\\): links \\(' + li + '\\), rechts \\(' + re + '\\). ' + warum, k: 'Gegenbeispiel: Die Regel gilt nicht' }];
   return { bereich, typ: 'Regel prüfen', auftrag: 'Gilt diese Regel für alle zulässigen Werte?', ausdruck: regel, art: 'wahl', loesung: gilt ? 'gilt' : 'nicht',
     wahl: [['gilt', 'gilt immer'], ['nicht', 'gilt nicht immer']], diag: [[gilt ? 'falleVerworfen' : 'falleGeglaubt', gilt ? 'nicht' : 'gilt']], weg,
     py: { falle: true, gilt, links: py[0], rechts: py[1] } };
@@ -1035,6 +1040,29 @@ function loesungTex(a) {
   if (a.loesTex) return a.loesTex;
   return einsetzenZiel(a, a.loesung.map(q => ({ tex: qTex(q), neg: q.n < 0, abs: qTex(qAbs(q)) })));
 }
+// Lösungsweg in Schritten für «Nächster Schritt»: [{ titel, zeilen: [Wegzeile …] }].
+// Wie die Anzeige: Zeilen, die die vorige wiederholen, fallen weg. Eine Zeile mit Kommentar k beginnt einen
+// Schritt (k wird der Titel), eine ohne gehört zum vorigen. Ausnahme: Ist die letzte Zeile eine reine Zahl
+// ohne Kommentar, wird sie ein eigener Schritt «Ausrechnen: \(… = Zahl\)».
+const ZAHL = /^-?(\d+|\\frac\{\d+\}\{\d+\})$/;
+function schrittListe(a) {
+  const sicht = [];
+  let vorher = a.art === 'wahl' ? null : a.ausdruck, davor = vorher;
+  for (const w of a.weg) {
+    if (w.text) { sicht.push({ w, davor: null }); davor = null; continue; }
+    if (w.z === vorher) continue;
+    sicht.push({ w, davor }); vorher = w.z; davor = w.z;
+  }
+  const liste = [];
+  const gross = t => t.charAt(0).toUpperCase() + t.slice(1);
+  sicht.forEach(({ w, davor: d }, i) => {
+    if (w.k) liste.push({ titel: gross(w.k), zeilen: [w] });
+    else if (i === sicht.length - 1 && w.z && ZAHL.test(w.z) && d) liste.push({ titel: 'Ausrechnen: \\(' + d + ' = ' + w.z + '\\)', zeilen: [w] });
+    else if (liste.length) liste[liste.length - 1].zeilen.push(w);
+    else liste.push({ titel: '', zeilen: [w] });
+  });
+  return liste;
+}
 // ── KERN:ENDE ───────────────────────────────────────────────────
 
 
@@ -1063,6 +1091,7 @@ for (const [k, t] of Object.entries(BEREICHE)) {
 }
 
 let A = null, nr = 0, versuch = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, letztes = '';
+let schritte = [], schritt = 0, geholfen = false;      // «Nächster Schritt»: Schrittliste, gezeigte Schritte, benutzt?
 let stand = { ok: 0, fehl: 0, codes: {} };
 
 function zeit() { const s = Math.floor((Date.now() - start) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
@@ -1073,16 +1102,16 @@ function zeigeZahlen() {
   $('gt-z-zeit').textContent = zeit();
   $('gt-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-function wegHtml(a) {
+// Lösungsweg mit den ersten k Schritten (ohne k: alle). «Regel prüfen» hat nur die Begründung, ohne Schritte.
+function wegHtml(a, k = Infinity) {
+  const zeileHtml = w => (w.text ? '<div class="gt-text">' + w.text + '</div>'
+    : '<div class="gt-zeile">\\(\\displaystyle ' + (w.gl ? '\\Leftrightarrow\\; ' : '= ') + w.z + '\\)</div>');
   let html = '<div class="gt-weg-titel">' + (a.art === 'wahl' ? 'Begründung' : 'Lösungsweg') + '</div>';
-  if (a.art !== 'wahl') html += '<div class="gt-zeile">\\(\\displaystyle ' + a.ausdruck + '\\)</div>';
-  let vorher = a.ausdruck;
-  for (const w of a.weg) {
-    if (w.text) { html += '<div class="gt-text">' + w.text + '</div>'; continue; }
-    if (w.z === vorher) continue;
-    vorher = w.z;
-    html += '<div class="gt-zeile">\\(\\displaystyle ' + (w.gl ? '\\Leftrightarrow\\; ' : '= ') + w.z + '\\)' + (w.k ? '<span class="gt-k">' + w.k + '</span>' : '') + '</div>';
-  }
+  if (a.art === 'wahl') return html + a.weg.map(zeileHtml).join('');
+  html += '<div class="gt-zeile">\\(\\displaystyle ' + a.ausdruck + '\\)</div>';
+  schrittListe(a).slice(0, k).forEach((s, i) => {
+    html += '<div class="gt-schritt"><div class="gt-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>' + s.zeilen.map(zeileHtml).join('') + '</div>';
+  });
   return html;
 }
 const felder = () => [...$('gt-felder').querySelectorAll('input')];
@@ -1093,6 +1122,7 @@ function neueAufgabe() {
   nr++;
   let a; do a = aufgabe([...bereiche]); while (a.ausdruck === letztes);
   A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0;
+  schritte = schrittListe(a); schritt = 0; geholfen = false; $('gt-schritt').disabled = false; zeigeSchrittZahl();
   $('gt-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('gt-thema').textContent = BEREICHE[a.bereich].name.replace(/ \(SF\)$/, '') + ' · ' + a.typ;
   setzen($('gt-auftrag'), a.auftrag);
@@ -1111,14 +1141,22 @@ function neueAufgabe() {
   $('gt-weg').hidden = true; $('gt-weiter-box').hidden = true;
   zeigeZahlen();
 }
+function zeigeSchrittZahl() { $('gt-schritt-zahl').textContent = Math.min(schritt + 1, schritte.length) + '/' + schritte.length; }
+function naechsterSchritt() {
+  if (fertig || !A || A.art === 'wahl') return;
+  schritt++; geholfen = true;
+  if (schritt >= schritte.length) { meldung('fast', '<p>Lösung Schritt für Schritt angesehen.</p>'); return abschliessen(false); }
+  $('gt-weg').hidden = false; setzen($('gt-weg'), wegHtml(A, schritt));
+  zeigeSchrittZahl();
+}
 function meldung(cls, html) { $('gt-rueck').className = 'gt-rueck ' + cls; setzen($('gt-rueck'), html); }
 function abschliessen(gut) {
   fertig = true;
-  felder().forEach(i => { i.disabled = true; }); $('gt-pruefen').disabled = true;
+  felder().forEach(i => { i.disabled = true; }); $('gt-pruefen').disabled = true; $('gt-schritt').disabled = true;
   mjKette.then(() => $('gt-antwort-wahl').querySelectorAll('button').forEach(b => { b.disabled = true; }));
   $('gt-weg').hidden = false; setzen($('gt-weg'), wegHtml(A));
   $('gt-weiter-box').hidden = false;
-  if (gut && !fehlerInAufgabe) stand.ok++;
+  if (gut && !fehlerInAufgabe && !geholfen) stand.ok++;
   zeigeZahlen();
   $('gt-weiter').focus();
 }
@@ -1126,7 +1164,7 @@ function antwort(eingabe) {
   if (fertig || !A) return;
   const r = pruefe(A, eingabe);
   if (r.status === 'format' || r.status === 'fast') { meldung('fast', '<p>' + (r.status === 'fast' ? '≈ ' : '') + r.text + '</p>'); return; }
-  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
+  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe || geholfen ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
   versuch++; fehlerInAufgabe++; stand.fehl++;
   stand.codes[r.code] = (stand.codes[r.code] || 0) + 1;
   const f = FEHLER[r.code];
@@ -1165,6 +1203,7 @@ function neueRunde() {
 }
 
 $('gt-pruefen').addEventListener('click', () => antwort(werte()));
+$('gt-schritt').addEventListener('click', naechsterSchritt);
 $('gt-felder').addEventListener('keydown', e => {
   if (e.key !== 'Enter' || !e.target.matches('input')) return;
   e.preventDefault();

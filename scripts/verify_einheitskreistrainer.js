@@ -11,6 +11,8 @@
 //   – Vom Wert zum Winkel: Die Lösungsmenge stimmt mit der in python3 berechneten überein
 //     (asin/acos/atan, auf [0°; 360°[ gebracht); fehlende Lösung → «nur eine Lösung»
 //   – LaTeX ohne unausgeglichene Klammern, ohne «undefined»
+//   – Taste «Nächster Schritt»: Schrittliste nicht leer, jeder Titel nicht leer und nicht generisch («Schritt 2»),
+//     LaTeX ausgeglichen, und die Schritte zusammengefügt ergeben genau den bisherigen Weg (a.weg bzw. herleitung)
 //   – gezielte Fälle aus der Prüfung vom 11.10.2026 (EK-B1 … EK-C11): «*» als Produkt, Diagnosen für
 //     Grad statt Bogenmass, π vergessen, Faktor bzw. Bruch umgedreht, zwei Fehler auf einmal, sin/cos
 //     vertauscht und falsche Symmetrie beim Rückweg, Tangens-Herleitung über sin/cos, Intervall [0°; 360°[
@@ -24,7 +26,7 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'einheitskr
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, KREIS, AUSSEN, PALETTE, wert, wertZahl, wertTex, herleitung, pruefe, radTex, mod360 };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, KREIS, AUSSEN, PALETTE, wert, wertZahl, wertTex, herleitung, herleitungSchritte, schrittListe, pruefe, radTex, mod360 };', ctx);
 const K = ctx.K;
 const N = +process.argv[2] || 300;
 const befunde = new Map();
@@ -37,6 +39,21 @@ function latexOk(z, wo) {
   if (/[+-] -|\+ \+/.test(z)) melde('LaTeX: doppeltes Vorzeichen', wo + ': ' + z);
 }
 
+// Schritte zusammengefügt = bisheriger Weg. Eine Fortsetzung «\(= …» hängt sich an die Formel davor an.
+const zusammen = zeilen => zeilen.join(' ').replace(/\\\) \\\(= /g, ' = ').replace(/\s+/g, ' ').trim();
+function schritteOk(schritte, weg, wo) {
+  if (!Array.isArray(schritte) || !schritte.length) { melde('Schritte: Liste leer', wo); return; }
+  for (const st of schritte) {
+    if (!st.titel || !String(st.titel).trim()) melde('Schritte: Titel leer', wo);
+    else if (/^\s*(schritt|step)?\s*\d*\s*[.:]?\s*$/i.test(st.titel) || st.titel.replace(/\\\(|\\\)/g, '').trim().length < 6) melde('Schritte: Titel generisch', wo + ': ' + st.titel);
+    latexOk(st.titel, wo + ' Schritttitel');
+    if (!Array.isArray(st.zeilen) || !st.zeilen.length) melde('Schritte: Schritt ohne Inhalt', wo + ': ' + st.titel);
+    else st.zeilen.forEach(z => latexOk(z, wo + ' Schritt'));
+  }
+  const ist = zusammen(schritte.flatMap(st => st.zeilen || [])), soll = zusammen(weg);
+  if (ist !== soll) melde('Schritte: ergeben nicht den bisherigen Weg', wo + '\n    Schritte: ' + ist + '\n    Weg:      ' + soll);
+}
+
 const py = [];
 // 1. Werte aller Aufgabenwinkel
 for (const g of K.KREIS.concat(K.AUSSEN)) for (const f of ['sin', 'cos', 'tan']) {
@@ -47,6 +64,7 @@ for (const g of K.KREIS.concat(K.AUSSEN)) for (const f of ['sin', 'cos', 'tan'])
   for (const mass of ['grad', 'rad']) {
     const h = K.herleitung(f, g, mass);
     h.forEach(x => latexOk(x, f + ' ' + g));
+    schritteOk(K.herleitungSchritte(f, g, mass), h, 'Schritte ' + f + ' ' + g + ' ' + mass);
     if (!h[h.length - 1].includes(k === 'nd' ? 'nicht definiert' : K.wertTex(k))) melde('Herleitung endet nicht beim Wert', f + ' ' + g + ' ' + mass + ': ' + h[h.length - 1]);
   }
 }
@@ -65,6 +83,7 @@ for (const thema of Object.keys(K.THEMEN)) for (const mass of ['grad', 'rad', 'm
   zahl++;
   const wo = thema + ' «' + a.ausdruck + '»';
   latexOk(a.ausdruck, wo); latexOk(a.auftrag, wo); a.weg.forEach(z => latexOk(z, wo + ' Weg'));
+  schritteOk(K.schrittListe(a), a.weg, wo + ' Schritte');
   if (a.art === 'rad') {
     for (const e of radEingaben(a.grad)) { const r = K.pruefe(a, e); if (r.status !== 'ok') melde('Bogenmass-Eingabe nicht angenommen', wo + ' ' + e + ' ' + JSON.stringify(r)); }
     const zN = a.grad / 180;

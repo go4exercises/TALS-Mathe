@@ -158,6 +158,9 @@ MathJax = {
 .st-zeile { display:contents; }
 .st-gl { color:var(--blau); }
 .st-op { color:var(--orange); font-size:.86rem; align-self:center; font-family:var(--sans); }
+.st-schritt { display:block; font-family:var(--mono); font-size:.7rem; color:var(--gruen); }
+.st-hilfe { margin-top:10px; }
+.st-btn.st-naechster { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); font-weight:500; }
 .st-zeile.st-ende .st-gl { color:var(--gruen); font-weight:600; }
 .st-frage { font-family:var(--sans); font-size:.9rem; font-weight:600; color:var(--orange); margin:14px 2px 8px; }
 .st-wahl { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; }
@@ -217,6 +220,7 @@ MathJax = {
       <div class="st-verlauf" id="st-verlauf" aria-live="polite"></div>
       <p class="st-frage" id="st-frage">Was ist der nächste Schritt?</p>
       <div class="st-wahl" id="st-wahl"></div>
+      <div class="st-hilfe" id="st-hilfe"><button type="button" class="st-btn st-naechster" id="st-naechster">Nächster Schritt<span class="st-taste">N</span></button></div>
       <div class="st-rueck" id="st-rueck" aria-live="polite"></div>
     </div>
     <div class="st-knoepfe" id="st-weiter-box" hidden>
@@ -233,6 +237,7 @@ MathJax = {
     <li><strong>✓ Passt:</strong> Der Schritt wird ausgeführt. Manchmal passen zwei Schritte, zum Beispiel bei \(x^2 + 6x = 7\) quadratisch ergänzen oder alles auf eine Seite bringen.</li>
     <li><strong>≈ Erlaubt, aber ein Umweg:</strong> Der Schritt wäre nicht falsch, führt aber nicht schneller ans Ziel. Er zählt nicht als Fehlgriff — wähle neu.</li>
     <li><strong>✗ Passt nicht:</strong> Du erfährst, warum. Beim zweiten Fehlgriff im selben Schritt kommt ein Tipp, beim dritten wird der passende Schritt markiert.</li>
+    <li><strong>Nächster Schritt</strong> (Taste N): Das Werkzeug führt den nächsten passenden Schritt selbst aus. Im Verlauf steht bei jedem Schritt, welcher es war. So kannst du dich durch die ganze Lösung führen lassen. Die Aufgabe zählt dann nicht mehr als «ohne Fehlgriff», aber auch nicht als Fehler.</li>
   </ul>
   <p>Gleichungen, Terme und Gleichungssysteme haben je eine eigene Liste von Schritten. Sie bleibt immer gleich — auch Schritte, die zu einer ganz anderen Art Aufgabe gehören. Genau das ist die Übung: erkennen, was hier passt. Gespeichert wird nichts.</p>
 </div>
@@ -1673,7 +1678,7 @@ document.querySelectorAll('#st-bereich .st-opt').forEach(b => {
   b.setAttribute('aria-pressed', String(bereiche.has(b.dataset.b)));
 });
 
-let A = null, st = null, zeilen = [], fehl = 0, nr = 0, start = 0, fertig = false, letzteVorlage = '', wahlFam = '';
+let A = null, st = null, zeilen = [], fehl = 0, nr = 0, schritt = 0, hilfe = false, start = 0, fertig = false, letzteVorlage = '', wahlFam = '';
 let zaehler = { fehl: 0, um: 0, sauber: 0, verwechslung: {} };
 let tick = null;
 const wahl = $('st-wahl');
@@ -1684,8 +1689,10 @@ function baueWahl(fam) {
   setzen(wahl, LISTEN[fam].map(([id, text]) => '<button type="button" class="st-knopf" data-s="' + id + '">' + text + '</button>').join(''));
 }
 function zeichneVerlauf() {
-  setzen($('st-verlauf'), zeilen.map(([z, op], i) =>
-    '<div class="st-zeile' + (fertig && i === zeilen.length - 1 ? ' st-ende' : '') + '"><span class="st-gl">\\(\\displaystyle ' + z + '\\)</span><span class="st-op">' + (op || '') + '</span></div>').join(''));
+  // je Zeile: Gleichung, Umformung und die Köpfe der Schritte, die von ihr ausgingen
+  setzen($('st-verlauf'), zeilen.map(([z, op, koepfe], i) =>
+    '<div class="st-zeile' + (fertig && i === zeilen.length - 1 ? ' st-ende' : '') + '"><span class="st-gl">\\(\\displaystyle ' + z + '\\)</span><span class="st-op">'
+    + (koepfe || []).map(k => '<span class="st-schritt">' + k + '</span>').join('') + (op || '') + '</span></div>').join(''));
 }
 function zeigeD() {
   const el = $('st-d');
@@ -1713,10 +1720,10 @@ function neueAufgabe() {
   nr++;
   let a; do a = aufgabe([...bereiche]); while (a.vorlage === letzteVorlage && Math.random() < 0.8);
   letzteVorlage = a.vorlage;
-  A = a; st = a.st; zeilen = [[st.z, '']]; fehl = 0; fehlerInAufgabe = 0; fertig = false;
+  A = a; st = a.st; zeilen = [[st.z, '', []]]; fehl = 0; fehlerInAufgabe = 0; fertig = false; schritt = 0; hilfe = false;
   $('st-nr').textContent = 'Aufgabe ' + nr + ' / ' + SERIE;
   setzen($('st-auftrag'), a.auftrag);
-  $('st-frage').hidden = false;
+  $('st-frage').hidden = false; $('st-hilfe').hidden = false;
   $('st-weiter-box').hidden = true;
   baueWahl(familie(st));
   setzen($('st-rueck'), '');
@@ -1728,28 +1735,31 @@ function neueAufgabe() {
 }
 function meldung(cls, html) { $('st-rueck').className = 'st-rueck ' + cls; setzen($('st-rueck'), html); }
 
-function waehle(id) {
+function waehle(id, gezeigt) {
   if (fertig || !st) return;
   const r = regel(st, id);
   const knopf = wahl.querySelector('[data-s="' + id + '"]');
   if (r[0] === 'ok') {
     const aus = ausfuehren(st, id);
+    const kopf = 'Schritt ' + ++schritt + ' · ' + STRAT_NAME[id];
+    zeilen[zeilen.length - 1][2].push(kopf);
     if (aus.ersetzen) zeilen[zeilen.length - 1][0] = aus.ersetzen;
     else if (!aus.bleibt) {
-      zeilen[zeilen.length - 1][1] = aus.op;
-      for (const z of aus.zeilen) zeilen.push(z.slice());
-      zeilen.push([aus.next.z, '']);
+      zeilen[zeilen.length - 1][1] = aus.op.toLowerCase() === STRAT_NAME[id].toLowerCase() ? '' : aus.op;   // nicht doppelt zum Kopf
+      for (const z of aus.zeilen) zeilen.push([z[0], z[1], []]);
+      zeilen.push([aus.next.z, '', []]);
     }
     st = aus.next;
     fehl = 0;
     if (st.k === 'ende') {
       fertig = true;
-      if (!fehlerInAufgabe) zaehler.sauber++;
-      $('st-frage').hidden = true;
+      if (!fehlerInAufgabe && !hilfe) zaehler.sauber++;
+      $('st-frage').hidden = true; $('st-hilfe').hidden = true;
       $('st-weiter-box').hidden = false;
-      meldung('richtig', '<p>✓ ' + (fehlerInAufgabe ? 'Gelöst.' : 'Gelöst — ohne Fehlgriff.') + '</p>');
+      meldung(hilfe ? 'hinweis' : 'richtig', (gezeigt ? '<p>Gezeigt: ' + kopf + '.</p>' : '') + '<p>' + (hilfe ? 'Gelöst, mit gezeigten Schritten.' : fehlerInAufgabe ? '✓ Gelöst.' : '✓ Gelöst — ohne Fehlgriff.') + '</p>');
       $('st-weiter').focus();
-    } else meldung('richtig', '<p>✓ ' + STRAT_NAME[id] + ' — passt.' + (aus.info ? ' ' + aus.info : '') + '</p>');
+    } else if (gezeigt) meldung('hinweis', '<p>Gezeigt: ' + kopf + '.' + (aus.info ? ' ' + aus.info : '') + '</p>');
+    else meldung('richtig', '<p>✓ ' + STRAT_NAME[id] + ' — passt.' + (aus.info ? ' ' + aus.info : '') + '</p>');
     knoepfeZuruecksetzen();
     zeichneVerlauf();
     zeigeD();
@@ -1774,10 +1784,16 @@ function waehle(id) {
   zeigeZahlen();
 }
 
+// «Nächster Schritt»: das Werkzeug führt den ersten passenden Schritt aus und nennt ihn
+function naechsterSchritt() {
+  if (fertig || !st) return;
+  hilfe = true;
+  waehle(passend(st)[0], true);
+}
 function bilanz() {
   clearInterval(tick);
   const top = Object.entries(zaehler.verwechslung).sort((u, v) => v[1] - u[1]).slice(0, 3);
-  let html = '<h2>Serie fertig</h2><p>' + zaehler.sauber + ' von ' + SERIE + ' Aufgaben ohne Fehlgriff · '
+  let html = '<h2>Serie fertig</h2><p>' + zaehler.sauber + ' von ' + SERIE + ' Aufgaben selbst und ohne Fehlgriff · '
     + zaehler.fehl + ' Fehlgriffe · ' + zaehler.um + ' Umwege · Zeit ' + zeit() + '</p>';
   if (top.length) {
     html += '<p>Am häufigsten verwechselt:</p><ul>' + top.map(([k, n]) => {
@@ -1801,6 +1817,7 @@ function neueSerie() {
 
 wahl.addEventListener('click', e => { const b = e.target.closest('.st-knopf'); if (b && !b.disabled) waehle(b.dataset.s); });
 $('st-weiter').addEventListener('click', neueAufgabe);
+$('st-naechster').addEventListener('click', naechsterSchritt);
 $('st-neu').addEventListener('click', neueSerie);
 $('st-bilanz').addEventListener('click', e => { if (e.target.closest('#st-nochmal')) neueSerie(); });
 $('st-bereich').addEventListener('click', e => {
@@ -1814,6 +1831,7 @@ $('st-bereich').addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && fertig && !$('st-weiter-box').hidden && !e.target.closest('button, a, summary')) { e.preventDefault(); neueAufgabe(); }
+  if ((e.key === 'n' || e.key === 'N') && !fertig && !e.ctrlKey && !e.metaKey && !e.altKey && !e.target.closest('input, textarea')) { e.preventDefault(); naechsterSchritt(); }
 });
 
 // Seitenspalte: breit immer offen, schmal eingeklappt über der Karte

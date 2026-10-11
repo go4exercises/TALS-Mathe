@@ -11,6 +11,8 @@
 //   – Gegenrechnung in python3, unabhängig von der Rechnung des Werkzeugs: Aufgabe (links) und Lösung
 //     (rechts) werden aus eigenen Python-Ausdrücken ausgewertet — Potenzen mit math und Fraction,
 //     Wurzeln als (x**m)**(1/n), Logarithmen mit math.log; mit Variablen an Zufallsstellen
+//   – «Nächster Schritt» (schrittListe): nie leer, jeder Titel konkret (nicht leer, nicht nur «Schritt n»),
+//     LaTeX ausgeglichen, jede Wegzeile steht in einem Schritt (ausser sie wiederholt die vorige)
 //   – «Regel prüfen»: Eine gültige Regel stimmt in Python an Zufallswerten, eine ungültige scheitert
 //     am angegebenen Gegenbeispiel
 // Exit 1 bei einem Befund.
@@ -23,7 +25,7 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'gesetzetra
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { BEREICHE, FEHLER, FALLEN, aufgabe, pruefe, loesungTex, zielTex, qTex, dezimal, Q, lies, G14 };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { BEREICHE, FEHLER, FALLEN, aufgabe, pruefe, schrittListe, loesungTex, zielTex, qTex, dezimal, Q, lies, G14 };', ctx);
 const K = ctx.K;
 const N = +process.argv[2] || 1500;
 const befunde = new Map();
@@ -35,6 +37,25 @@ function latexOk(z, wo) {
   if ((z.match(/\\\(/g) || []).length !== (z.match(/\\\)/g) || []).length) melde('LaTeX: \\( \\) unausgeglichen', wo + ': ' + z);
   if (/undefined|NaN|Infinity|null|\[object/.test(z)) melde('Text: undefined/NaN', wo + ': ' + z);
   if (/[+-] -|\+ \+|- \+|\+ -/.test(z)) melde('LaTeX: doppeltes Vorzeichen', wo + ': ' + z);
+}
+function schritteOk(a, wo) {
+  const liste = K.schrittListe(a);
+  if (!liste.length) { melde('Schritte: Liste leer', wo); return; }
+  const generisch = /^(Schritt|Rechnen|Umformen|Weiter|Lösung|Gesetz)\s*\d*\s*:?\s*$/i;
+  for (const s of liste) {
+    if (!s.titel || !s.titel.trim()) melde('Schritte: Titel leer', wo + ' ' + JSON.stringify(s.zeilen));
+    else if (generisch.test(s.titel.trim()) || s.titel.trim().length < 6) melde('Schritte: Titel generisch', wo + ' «' + s.titel + '»');
+    else if (/^\\\(/.test(s.titel.trim())) melde('Schritte: Titel nur Formel, ohne Gesetz/Operation', wo + ' «' + s.titel + '»');
+    latexOk(s.titel || '', wo + ' Schritttitel');
+    if (!s.zeilen.length) melde('Schritte: Schritt ohne Zeile', wo + ' «' + s.titel + '»');
+  }
+  const drin = new Set(liste.flatMap(s => s.zeilen));
+  let vorher = a.art === 'wahl' ? null : a.ausdruck;
+  for (const w of a.weg) {
+    if (w.text) { if (!drin.has(w)) melde('Schritte: Textzeile fehlt', wo + ' ' + w.text); continue; }
+    if (!drin.has(w) && w.z !== vorher) melde('Schritte: Wegzeile fehlt', wo + ' ' + w.z);
+    vorher = w.z;
+  }
 }
 const alsEingabe = (q, dez) => (dez && q.d !== 1 ? K.dezimal(q) : q.d === 1 ? String(q.n) : q.n + '/' + q.d);
 
@@ -117,6 +138,7 @@ for (const bereich of Object.keys(K.BEREICHE)) for (let i = 0; i < N; i++) {
   const wo = bereich + ' «' + a.ausdruck + '»';
   latexOk(a.ausdruck, wo); latexOk(a.auftrag, wo);
   a.weg.forEach(w => latexOk(w.text || w.z, wo + ' Weg'));
+  schritteOk(a, wo);
   if (a.art === 'wahl') {
     if (K.pruefe(a, a.loesung).status !== 'ok') melde('Wahl: Lösung nicht angenommen', wo);
     const falsch = a.wahl.find(([k]) => k !== a.loesung)[0];

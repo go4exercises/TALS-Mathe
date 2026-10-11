@@ -3,6 +3,15 @@
 Lädt nur, wenn Claude an Dateien in `werkzeuge/` arbeitet. Die Regeln für alle Simulationen und Werkzeuge stehen
 in der Haupt-`CLAUDE.md` (Projektstruktur), Aufbau und Eintragen in `HOWTO-werkzeuge.md`. Hier: die einzelnen Seiten.
 
+**Alle sieben Trainer haben die Taste «Nächster Schritt»** (seit 11.10.2026): Sie deckt die Lösung Schritt für Schritt
+auf, jeder Schritt mit Kopf «Schritt n · Bezeichnung» (Regel bzw. Operation, nie nur «Schritt 2»). Zählt nicht als
+Fehler, aber nicht mehr als «auf Anhieb»; nach dem letzten Schritt ist die Aufgabe abgeschlossen (Notationstrainer:
+Karte dreht sich um und geht zurück in Fach 1). Eingabe-Trainer bilden die Schritte im Kern mit `schrittListe(a)`
+→ `[{ titel, zeilen }]`, gezeigt von `wegHtml(a, k)`; ihre Selbsttests prüfen Titel und dass keine Wegzeile verloren
+geht. Strategie- und Systemtrainer führen den nächsten passenden Schritt aus (Taste N) und schreiben jeden Schritt mit
+Kopf in den Verlauf. Einheitskreistrainer: Schritte stehen neben `herleitung()` ein zweites Mal, der Selbsttest
+meldet, wenn sie auseinanderlaufen.
+
 - `werkzeuge/notationstrainer.html` — Lernkartei (3 Fächer, Stand in `localStorage` unter
   `tals-mathe-notationstrainer-v1`, in `rechtliches.html` genannt) zur Notation von
   𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`

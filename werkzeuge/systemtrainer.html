@@ -160,6 +160,10 @@ MathJax = {
 .sy-wahl .sy-nr { font-family:var(--mono); font-size:.7rem; color:var(--orange); min-width:1em; }
 .sy-wahl:disabled { cursor:default; }
 .sy-wahl.sy-falsch { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--tinte-2); }
+.sy-hilfe { margin-top:10px; }
+.sy-btn.sy-naechster { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); font-weight:500; }
+.sy-weg .sy-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); padding:8px 0 2px; }
+.sy-weg .sy-schritt-kopf:first-of-type { padding-top:0; }
 .sy-wahl.sy-um { border-color:var(--linie); background:var(--papier-2); color:var(--tinte-2); }
 .sy-btn { font-family:var(--sans); font-size:.92rem; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
   border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); }
@@ -218,7 +222,8 @@ MathJax = {
       <div class="sy-weg" id="sy-weg" hidden></div>
       <div class="sy-schritt" id="sy-schritt">
         <p class="sy-frage" id="sy-frage"></p>
-        <div id="sy-optionen" role="group" aria-label="Nächster Schritt"></div>
+        <div id="sy-optionen" role="group" aria-label="Schritt wählen"></div>
+        <div class="sy-hilfe"><button type="button" class="sy-btn sy-naechster" id="sy-naechster">Nächster Schritt<span class="sy-taste">N</span></button></div>
       </div>
       <div class="sy-rueck" id="sy-rueck" aria-live="polite"></div>
     </div>
@@ -238,9 +243,10 @@ MathJax = {
     <li><strong>Lösen:</strong> Es bleibt eine Gleichung. Steht noch eine Variable da, löst du nach ihr auf. Ist sie weggefallen, entscheidest du: Widerspruch wie \(0 = 5\) oder immer wahr wie \(0 = 0\)?</li>
     <li><strong>Zurück einsetzen:</strong> Wähle eine Gleichung, aus der sich die zweite Variable berechnen lässt. Bei 3×3-Systemen eliminierst du vorher eine Variable und wählst die Gleichung, mit der du sie aus den beiden anderen entfernst.</li>
     <li><strong>Rückmeldung:</strong> ✓ Der Schritt passt und wird ausgeführt. ≈ Erlaubt, aber ein Umweg: Das Werkzeug sagt, was kürzer ist, und du wählst neu. Das zählt nicht als Fehler. ✗ Der Schritt passt nicht, mit Begründung. Beim zweiten Fehlgriff im selben Schritt kommt ein Tipp, beim dritten zeigt das Werkzeug den Schritt.</li>
+    <li><strong>Nächster Schritt:</strong> Das Werkzeug führt den nächsten passenden Schritt selbst aus und nennt ihn. So kannst du dich durch die ganze Lösung führen lassen. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehlgriff.</li>
     <li><strong>Lösungsfall erkennen:</strong> Hier entscheidest du nur, wie viele Lösungen es gibt. Am schnellsten geht das, wenn du beide Gleichungen nach \(y\) auflöst und Steigung und Achsenabschnitt vergleichst.</li>
   </ul>
-  <p>Die Schritte wählst du mit der Maus oder mit den Zifferntasten. Am Ende der Runde siehst du, wo es am häufigsten geklemmt hat, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
+  <p>Die Schritte wählst du mit der Maus oder mit den Zifferntasten, «Nächster Schritt» mit N. Am Ende der Runde siehst du, wo es am häufigsten geklemmt hat, mit Link zur passenden Stelle im Lehrmittel. Gespeichert wird nichts.</p>
 </div>
 
 <details class="block block-merksatz" style="margin-top:10px">
@@ -475,7 +481,7 @@ function optVervielfachen(S, v) {
   const nm = S.nm, p = faktoren(S, v);
   const was = [malText(p[0], S.eq[0].name), malText(p[1], S.eq[1].name)].filter(Boolean).join(', ');
   const tun = S => {
-    if (!S.methode) { S.methode = 'A'; text(S, 'Additionsverfahren:'); }
+    if (!S.methode) S.methode = 'A';
     S.fak = p;
     S.eq.forEach((e, i) => { if (p[i] !== 1) zeile(S, termTex(e.k.map(c => c * p[i]), nm) + ' = ' + e.r * p[i], e.name + ' \\cdot ' + p[i]); });
     S.phase = 'anw';
@@ -489,7 +495,7 @@ function optVervielfachen(S, v) {
 function optMethode(S, m) {
   const [e0, e1] = S.eq, nm = S.nm, l = S.eq.map(geloest);
   const r = (st, grund) => ({ id: 'M' + m, gruppe: 'Verfahren', label: VERF[m], st, grund, code: 'methode',
-    tun: S => { S.methode = m; text(S, VERF[m] + ':'); weiterNachVorb(S); } });
+    tun: S => { S.methode = m; weiterNachVorb(S); } });
   if (S.eq.some(q => q.form === 'roh')) return r('um', 'Ordne zuerst ' + S.eq.find(q => q.form === 'roh').name + ': die Variablen links, die Zahl rechts. Dann sieht man, welches Verfahren passt.');
   if (l[0] >= 0 && l[1] >= 0) {
     if (l[0] === l[1]) {
@@ -511,6 +517,7 @@ function optMethode(S, m) {
     if ([0, 1].some(v => glatt(e0, v) && glatt(e1, v))) return r('ok');
     return r('um', 'Dafür müssten beide Gleichungen nach derselben Variablen aufgelöst werden, und dabei entstehen Brüche.' + (einer ? ' Einsetzen ist kürzer.' : ' Das Additionsverfahren ist geschickter.'));
   }
+  if (![0, 1].some(v => e0.k[v] !== 0 && e1.k[v] !== 0)) return r('um', 'Jede Gleichung enthält nur noch eine Variable. Löse eine davon auf und setze ein.');
   return r('ok');
 }
 function optStart(S) {
@@ -671,7 +678,7 @@ function optVar(S) {
     id: 'W' + v, gruppe: 'Eliminieren', label: T(VAR[v]) + ' eliminieren', code: 'drei',
     st: kostenV(gl, v) <= 1.5 * best ? 'ok' : 'um',
     grund: 'Geht, aber die Zahlen werden gross. Am einfachsten ist eine Variable, vor der in einer Gleichung 1 steht oder die in einer Gleichung fehlt.',
-    tun: S => { S.v = v; text(S, T(VAR[v]) + ' eliminieren:'); S.phase = 'pivot'; } }));
+    tun: S => { S.v = v; S.phase = 'pivot'; } }));
 }
 function optPivot(S) {
   const gl = S.a.gl, v = S.v;
@@ -700,12 +707,14 @@ function eliminieren(S, p) {
     }
     let f = ggT(ggT(kk[0], kk[1]), r) || 1;                          // gemeinsamen Faktor wegteilen, vorne kein Minus
     if ((kk[0] || kk[1]) < 0) f = -f;
-    if (Math.abs(f) > 1 && (kk[0] || kk[1])) { kk = kk.map(c => c / f); r /= f; zeile(S, termTex(kk, nm) + ' = ' + r, name + ' : ' + wertTex(f)); }
+    if (f !== 1 && (kk[0] || kk[1])) { kk = kk.map(c => c / f); r /= f; zeile(S, termTex(kk, nm) + ' = ' + r, name + ' : ' + wertTex(f)); }
     // nur noch eine Variable mit 1 davor: steht schon aufgelöst da
     const form = kk[0] === 0 && kk[1] === 1 ? 's1' : kk[1] === 0 && kk[0] === 1 ? 's0' : 'std';
     neu.push({ k: kk, r, form, name });
   });
-  const leer = neu.findIndex(g => g.k[0] === 0 && g.k[1] === 0);
+  // ganz weggefallene Gleichung; ein Widerspruch geht vor 0 = 0
+  const ohne = [0, 1].filter(i => neu[i].k[0] === 0 && neu[i].k[1] === 0);
+  const leer = ohne.find(i => neu[i].r !== 0) ?? (ohne.length ? ohne[0] : -1);
   setze2(S, neu, nm, rest);
   if (leer >= 0) nachEins(S, null, Q(0), Q(neu[leer].r));
 }
@@ -1024,7 +1033,7 @@ for (const [k, t] of Object.entries(THEMEN)) {
   themenBox.appendChild(b);
 }
 
-let A = null, S = null, OPT = [], nr = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, fehlerSchritt = 0, letztes = '';
+let A = null, S = null, OPT = [], nr = 0, schritt = 0, hilfe = false, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, fehlerSchritt = 0, letztes = '';
 let stand = { ok: 0, fehl: 0, codes: {} };
 const kommentar = k => k.replace(/ \\cdot /g, ' · ').replace(/-/g, '−');
 // Phasen als Leiste: 3×3 beginnt mit dem Eliminieren
@@ -1049,7 +1058,8 @@ function zeigeZahlen() {
 function wegHtml() {
   let html = '<div class="sy-weg-text"><div class="sy-weg-titel">' + (A.art === 'lage' ? 'Begründung' : 'Dein Weg') + '</div>';
   for (const w of S.verlauf) {
-    if (w.text) html += '<div class="sy-text">' + w.text + '</div>';
+    if (w.kopf) html += '<div class="sy-schritt-kopf">' + w.kopf + '</div>';
+    else if (w.text) html += '<div class="sy-text">' + w.text + '</div>';
     else if (w.L) html += '<div class="sy-zeile">\\(\\displaystyle ' + A.loesTex + '\\)</div>';
     else html += '<div class="sy-zeile">\\(\\displaystyle ' + w.z + '\\)' + (w.k ? '<span class="sy-k">' + kommentar(w.k) + '</span>' : '') + '</div>';
   }
@@ -1078,7 +1088,7 @@ function neueAufgabe() {
   if (nr >= RUNDE) return bilanz();
   nr++;
   let a; do a = aufgabe([...themen]); while (a.ausdruck === letztes);
-  A = a; S = zustand(a); letztes = a.ausdruck; fertig = false; fehlerInAufgabe = 0; fehlerSchritt = 0;
+  A = a; S = zustand(a); letztes = a.ausdruck; fertig = false; fehlerInAufgabe = 0; fehlerSchritt = 0; schritt = 0; hilfe = false;
   $('sy-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('sy-thema').textContent = THEMEN[a.thema].name;
   $('sy-auftrag').textContent = a.auftrag;
@@ -1093,14 +1103,17 @@ function abschliessen() {
   fertig = true;
   zeigeSchritt();
   $('sy-weiter-box').hidden = false;
-  if (!fehlerInAufgabe) stand.ok++;
+  if (!fehlerInAufgabe && !hilfe) stand.ok++;
   zeigeZahlen();
   mjKette.then(() => $('sy-weiter').focus());
 }
+// Jeder ausgeführte Schritt bekommt im Verlauf einen Kopf «Schritt n · Phase: Schritt»
 function ausfuehren(o, vorher) {
+  if (A.art !== 'lage') S.verlauf.push({ kopf: 'Schritt ' + ++schritt + ' · ' + o.gruppe + ': ' + o.label });
   o.tun(S); fehlerSchritt = 0;
   if (S.phase === 'ende') {
-    meldung(fehlerInAufgabe ? 'fast' : 'richtig', (vorher || '') + '<p>' + (fehlerInAufgabe ? 'Fertig, mit ' + fehlerInAufgabe + ' Fehlgriff' + (fehlerInAufgabe > 1 ? 'en' : '') + '.' : '✓ Fertig — jeder Schritt auf Anhieb.') + '</p>');
+    const wie = fehlerInAufgabe ? 'Fertig, mit ' + fehlerInAufgabe + ' Fehlgriff' + (fehlerInAufgabe > 1 ? 'en' : '') + (hilfe ? ' und gezeigten Schritten.' : '.') : hilfe ? 'Fertig, mit gezeigten Schritten.' : '✓ Fertig — jeder Schritt auf Anhieb.';
+    meldung(fehlerInAufgabe || hilfe ? 'fast' : 'richtig', (vorher || '') + '<p>' + wie + '</p>');
     return abschliessen();
   }
   if (vorher) meldung('falsch', vorher); else meldung('', '');
@@ -1121,6 +1134,15 @@ function waehle(i) {
   if (fehlerSchritt >= 3) return ausfuehren(richtig, html + '<p>So geht es weiter: ' + richtig.label + '.</p>');
   if (fehlerSchritt === 2) html += '<p>Tipp: ' + tipp(S) + '</p>';
   meldung('falsch', html);
+}
+// «Nächster Schritt»: das Werkzeug führt den nächsten passenden Schritt aus und nennt ihn
+function naechsterSchritt() {
+  if (fertig || !S || S.phase === 'ende') return;
+  const o = OPT.find(x => x.st === 'ok');
+  if (!o) return;
+  hilfe = true;
+  ausfuehren(o, '<p>Gezeigt: Schritt ' + (schritt + 1) + ' · ' + o.gruppe + ': ' + o.label + '</p>');
+  if (!fertig) $('sy-rueck').className = 'sy-rueck fast';
 }
 function bilanz() {
   clearInterval(tick);
@@ -1145,6 +1167,7 @@ function neueRunde() {
 
 $('sy-optionen').addEventListener('click', e => { const b = e.target.closest('.sy-wahl'); if (b) waehle(+b.dataset.i); });
 $('sy-weiter').addEventListener('click', neueAufgabe);
+$('sy-naechster').addEventListener('click', naechsterSchritt);
 $('sy-neu').addEventListener('click', neueRunde);
 $('sy-bilanz').addEventListener('click', e => { if (e.target.closest('#sy-nochmal')) neueRunde(); });
 themenBox.addEventListener('click', e => {
@@ -1160,6 +1183,7 @@ document.addEventListener('keydown', e => {
   if (e.target.closest('input, textarea') || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.key === 'Enter' && fertig && !$('sy-weiter-box').hidden && !e.target.closest('button, a, summary')) { e.preventDefault(); neueAufgabe(); return; }
   if (!fertig && /^[1-9]$/.test(e.key) && $('sy-aufgabe').hidden === false) { e.preventDefault(); waehle(+e.key - 1); }
+  if (!fertig && (e.key === 'n' || e.key === 'N') && $('sy-aufgabe').hidden === false) { e.preventDefault(); naechsterSchritt(); }
 });
 const breit = matchMedia('(min-width: 901px)');
 function seiteOffen() { $('sy-seite-det').open = breit.matches; }

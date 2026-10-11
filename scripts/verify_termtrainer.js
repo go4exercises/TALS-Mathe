@@ -9,6 +9,8 @@
 //   – jede Zeile des Lösungswegs ist gleichwertig; die letzte wird angenommen, keine gilt als falsch
 //   – jeder Denkfehler-Wert ist nicht gleichwertig und wird als genau dieser Fehler erkannt
 //   – Formprüfung: ausmultiplizierte Lösung bei «Produkt» und erweiterter Bruch gelten als «fast»
+//   – Schrittliste (Taste «Nächster Schritt»): nicht leer, jeder Titel konkret (nicht leer, nicht generisch),
+//     LaTeX ausgeglichen, jede Wegzeile kommt in einem Schritt vor, kein Kommentar geht verloren
 //   – LaTeX ohne unausgeglichene Klammern, ohne «undefined», ohne doppeltes Vorzeichen
 //   – Gegenrechnung in python3 mit fractions.Fraction, unabhängig vom Leser des Werkzeugs: Aufgabe,
 //     Lösung, Weg und Denkfehler werden aus dem Eingabetext an Zufallsstellen ausgewertet;
@@ -24,9 +26,10 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'termtraine
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, FORM, aufgabe, pruefe, parse, wert, rGleich, T, tex, variablen, faktorListe, pMul, pKonst };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, FORM, aufgabe, pruefe, schrittListe, parse, wert, rGleich, T, tex, variablen, faktorListe, pMul, pKonst };', ctx);
 const K = ctx.K;
 const N = +process.argv[2] || 400;
+const GENERISCH = /^(umformen|zusammenfassen|kürzen|ausrechnen|ausklammern|ausmultiplizieren|vereinfachen|schritt\s*\d*|lösung|weiter)$/i;
 const befunde = new Map();
 const melde = (art, info) => { if (!befunde.has(art)) befunde.set(art, { n: 0, info }); befunde.get(art).n++; };
 function latexOk(z, wo) {
@@ -62,6 +65,25 @@ for (const thema of Object.keys(K.THEMEN)) for (let i = 0; i < N; i++) {
   });
   a.weg.filter(w => w.text).forEach(w => latexOk(w.text, wo + ' Text'));
   if (!zeilen.length || K.T(zeilen[zeilen.length - 1].a) !== a.loesTex) melde('Weg endet nicht bei der Lösung', wo);
+  // Schrittliste
+  const sl = K.schrittListe(a);
+  if (!sl.length) melde('Schrittliste leer', wo);
+  const inSchritten = new Set(sl.flatMap(s => s.zeilen.map(z => z.tex || z.text)));
+  sl.forEach(s => {
+    const t = (s.titel || '').trim();
+    if (!t) melde('Schritt ohne Titel', wo);
+    if (t.length < 10 || GENERISCH.test(t.replace(/\\\(.*?\\\)/g, '').trim())) melde('Schrittitel generisch', wo + ' «' + t + '»');
+    if (/^[a-zäöü]/.test(t) && !/^ggT/.test(t)) melde('Schrittitel klein', wo + ' «' + t + '»');
+    latexOk(t, wo + ' Schrittitel');
+    if ((t.match(/\\\(/g) || []).length !== (t.match(/\\\)/g) || []).length) melde('Schrittitel: \\( \\) unausgeglichen', wo + ' «' + t + '»');
+    if (!s.zeilen.length) melde('Schritt ohne Zeile', wo + ' «' + t + '»');
+    s.zeilen.forEach(z => latexOk(z.tex || z.text, wo + ' Schritt'));
+  });
+  for (const w of a.weg) {
+    const z = w.text || K.T(w.a);
+    if (!inSchritten.has(z) && z !== a.ausdruck) melde('Wegzeile fehlt in den Schritten', wo + ' → ' + z);
+  }
+  if (sl.length !== a.weg.filter(w => w.k).length) melde('Kommentar ging in der Schrittliste verloren', wo);
   a.diag.forEach(([c1, w1], j) => a.diag.slice(j + 1).forEach(([c2, w2]) => { if (c1 !== c2 && gleich(w1, w2)) melde('TT-C6: zwei Denkfehler mit gleichem Wert', wo + ' ' + c1 + '/' + c2 + ' ' + w1); }));
   if (a.thema === 'ausmultiplizieren' && a.diag.some(([c]) => c === 'vzProdukt') && !a.aufg.includes('-')) melde('TT-C7: vzProdukt ohne negativen Faktor', wo);
   for (const [code, w] of a.diag) {

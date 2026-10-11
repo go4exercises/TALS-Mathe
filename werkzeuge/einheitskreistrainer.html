@@ -188,6 +188,13 @@ MathJax = {
 .ek-weg-titel { font-family:var(--mono); font-size:.66rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--gruen); margin-bottom:4px; }
 .ek-weg .ek-zeile { font-family:var(--sans); font-size:.92rem; padding:3px 0; }
 .ek-weg svg.ek-skizze { width:220px; max-width:100%; height:auto; flex:0 0 auto; }
+.ek-schritt + .ek-schritt { margin-top:8px; }
+.ek-schritt-kopf { font-family:var(--mono); font-size:.72rem; color:var(--gruen); margin-bottom:1px; }
+.ek-btn.ek-schritt-btn { border-color:var(--gruen-rand); background:var(--weiss); color:var(--gruen); }
+.ek-schritt-zahl { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.8; margin-left:6px; }
+.ek-kreis-knoepfe { display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+.ek-schritt-platz { margin-top:8px; }
+.ek-schritt-platz:empty { display:none; }
 .ek-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 16px; justify-content:center; }
 .ek-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
 .ek-bilanz { padding:16px 20px 18px; border-top:5px solid var(--gruen); }
@@ -238,12 +245,16 @@ MathJax = {
       <div id="ek-antwort-eingabe" class="ek-eingabe">
         <input type="text" id="ek-eingabe" autocomplete="off" spellcheck="false" aria-label="Deine Antwort">
         <button type="button" class="ek-btn" id="ek-pruefen">Prüfen<span class="ek-taste">Enter</span></button>
+        <button type="button" class="ek-btn ek-schritt-btn" id="ek-schritt">Nächster Schritt<span class="ek-schritt-zahl" id="ek-schritt-zahl"></span></button>
         <span class="ek-vorschau" id="ek-vorschau" aria-live="polite"></span>
       </div>
       <div id="ek-antwort-palette" class="ek-palette" hidden></div>
+      <div class="ek-schritt-platz" id="ek-schritt-platz"></div>
       <div id="ek-antwort-kreis" class="ek-kreiswahl" hidden>
         <div id="ek-kreis"></div>
-        <button type="button" class="ek-btn" id="ek-kreis-pruefen">Prüfen<span class="ek-taste">Enter</span></button>
+        <div class="ek-kreis-knoepfe" id="ek-kreis-knoepfe">
+          <button type="button" class="ek-btn" id="ek-kreis-pruefen">Prüfen<span class="ek-taste">Enter</span></button>
+        </div>
       </div>
       <div class="ek-hinweis" id="ek-hinweis"></div>
       <div class="ek-rueck" id="ek-rueck" aria-live="polite"></div>
@@ -263,6 +274,7 @@ MathJax = {
     <li><strong>Grad und Bogenmass:</strong> Bogenmass als Vielfaches von \(\pi\), eingegeben als <code>5pi/6</code>, <code>-pi/4</code> oder <code>2pi</code>; Grad als <code>150</code> oder <code>150°</code>.</li>
     <li><strong>Exakte Werte:</strong> Wähle den Wert aus der Palette. Liegt der Fehler nur im Vorzeichen, bei vertauschten Werten von 30° und 60° oder beim Kehrwert des Tangens, sagt dir das Werkzeug genau das.</li>
     <li><strong>Vom Wert zum Winkel:</strong> Klicke auf dem Einheitskreis alle Winkel an, welche die Gleichung erfüllen, und prüfe dann.</li>
+    <li><strong>Nächster Schritt:</strong> zeigt die Lösung Schritt für Schritt, jeden Schritt mit seiner Bezeichnung. Die Aufgabe zählt dann nicht mehr als «auf Anhieb», aber auch nicht als Fehler.</li>
   </ul>
   <p>Nach jeder Aufgabe steht die Herleitung da — Quadrant, Referenzwinkel, Vorzeichen — mit einer Skizze am Einheitskreis. Gespeichert wird nichts.</p>
 </div>
@@ -405,6 +417,79 @@ function herleitung(f, grad, mass) {
   return z;
 }
 
+// ── Lösungsweg in benannten Schritten (Taste «Nächster Schritt») ──
+// Dieselben Zeilen wie herleitung() bzw. a.weg, nur in Schritte mit Bezeichnung zerlegt. Eine Zeile von a.weg darf
+// über mehrere Schritte laufen: Fortsetzungen beginnen mit «\(= …» bzw. setzen den Satz fort. Der Selbsttest prüft,
+// dass die Schritte zusammengefügt wieder genau a.weg ergeben.
+function herleitungSchritte(f, grad, mass) {
+  const s = [], n = mod360(grad), w = wert(f, grad);
+  if (mass === 'rad') s.push({ titel: 'Bogenmass in Grad umrechnen', zeilen: ['\\(' + radTex(grad) + ' = ' + gradTex(grad) + '\\).'] });
+  if (n !== grad) {
+    const d = grad < 0 ? Math.ceil(-grad / 360) * 360 : grad - n;
+    s.push({ titel: 'Auf \\([0°;\\,360°[\\) zurückführen: \\(' + d + '°\\) ' + (grad < 0 ? 'addieren' : 'abziehen'),
+             zeilen: ['\\(' + gradTex(grad) + (grad < 0 ? ' + ' + d + '° = ' : ' - ' + d + '° = ') + gradTex(n) + '\\): derselbe Punkt auf dem Kreis.'] });
+  }
+  if (n % 90 === 0) {
+    const P = { 0: '(1 \\mid 0)', 90: '(0 \\mid 1)', 180: '(-1 \\mid 0)', 270: '(0 \\mid -1)' }[n];
+    s.push({ titel: 'Punkt auf der Achse bestimmen', zeilen: ['Der Punkt liegt auf einer Achse: \\(P' + P + '\\).'] });
+    if (f === 'tan') s.push(w === 'nd'
+      ? { titel: 'Tangens als \\(\\frac{\\sin}{\\cos}\\): Nenner prüfen', zeilen: ['\\(\\cos ' + gradTex(n) + ' = 0\\): Durch \\(0\\) teilen geht nicht, \\(\\tan ' + gradTex(n) + '\\) ist also nicht definiert.'] }
+      : { titel: 'Tangens als Quotient \\(\\frac{\\sin}{\\cos}\\)', zeilen: ['\\(\\tan ' + gradTex(n) + ' = \\frac{\\sin ' + gradTex(n) + '}{\\cos ' + gradTex(n) + '} = ' + wertTex(w) + '\\).'] });
+    else s.push({ titel: (f === 'cos' ? 'x' : 'y') + '-Koordinate von \\(P\\) ablesen', zeilen: ['\\(\\' + f + ' ' + gradTex(n) + ' = ' + wertTex(w) + '\\) ist die ' + (f === 'cos' ? 'x' : 'y') + '-Koordinate von \\(P\\).'] });
+    return s;
+  }
+  const q = quadrant(n), r = referenz(n);
+  const rWeg = q === 2 ? '180° - ' + gradTex(n) + ' = ' : q === 3 ? gradTex(n) + ' - 180° = ' : '360° - ' + gradTex(n) + ' = ';
+  if (q === 1) s.push({ titel: 'Quadrant bestimmen', zeilen: ['\\(' + gradTex(n) + '\\) liegt im Quadranten I; dort sind alle Werte positiv.'] });
+  else {
+    s.push({ titel: 'Quadrant bestimmen', zeilen: ['\\(' + gradTex(n) + '\\) liegt im Quadranten ' + R[q] + '.'] });
+    s.push({ titel: 'Referenzwinkel: Abstand zur x-Achse', zeilen: ['Referenzwinkel: \\(' + rWeg + gradTex(r) + '\\).'] });
+  }
+  if (f === 'tan') {
+    const ws = wert('sin', n), wc = wert('cos', n), pm = k => k[0] === '-' ? 'negativ' : 'positiv';
+    const sl = k => (k[0] === '-' ? '-' : '') + { '1/2': '1/2', 'w2/2': '\\sqrt{2}/2', 'w3/2': '\\sqrt{3}/2' }[betrag(k)];
+    if (q !== 1) s.push({ titel: 'Vorzeichen im Quadranten', zeilen: ['Im Quadranten ' + R[q] + ' ist \\(\\sin\\) ' + pm(ws) + ' und \\(\\cos\\) ' + pm(wc) + ', der Tangens also ' + pm(w)
+      + ': \\(\\tan ' + gradTex(n) + ' = ' + (w[0] === '-' ? '-' : '') + '\\tan ' + gradTex(r) + '\\).'] });
+    s.push({ titel: 'Tangens als Quotient \\(\\frac{\\sin}{\\cos}\\)', zeilen: ['\\(\\tan ' + gradTex(n) + ' = \\frac{\\sin ' + gradTex(n) + '}{\\cos ' + gradTex(n) + '}\\)'] });
+    s.push({ titel: 'Werte von \\(\\sin\\) und \\(\\cos\\) einsetzen und vereinfachen', zeilen: ['\\(= \\frac{' + sl(ws) + '}{' + sl(wc) + '} = ' + wertTex(w) + '\\).'] });
+    return s;
+  }
+  if (q !== 1) {
+    const plus = w[0] !== '-';
+    s.push({ titel: 'Vorzeichen im Quadranten', zeilen: ['Im Quadranten ' + R[q] + ' ist der ' + FNAME[f] + ' ' + (plus ? 'positiv' : 'negativ') + ':',
+      '\\(\\' + f + ' ' + gradTex(n) + ' = ' + (plus ? '' : '-') + '\\' + f + ' ' + gradTex(r) + '\\)'] });
+    s.push({ titel: 'Wert des Referenzwinkels einsetzen', zeilen: ['\\(= ' + wertTex(w) + '\\).'] });
+  } else s.push({ titel: 'Wert im 1. Quadranten ablesen', zeilen: ['\\(\\' + f + ' ' + gradTex(n) + ' = ' + wertTex(w) + '\\).'] });
+  return s;
+}
+function umrechnenSchritte(grad, zuRad) {
+  const g = ggT(grad, 180), z = grad / g, n = 180 / g;
+  const merk = { titel: 'Kontrolle mit der Merkhilfe \\(\\pi = 180°\\)', zeilen: ['Merkhilfe: \\(\\pi = 180°\\), also \\(\\frac{\\pi}{6} = 30°\\), \\(\\frac{\\pi}{4} = 45°\\), \\(\\frac{\\pi}{3} = 60°\\), \\(\\frac{\\pi}{2} = 90°\\).'] };
+  if (zuRad) return [
+    { titel: 'In Bogenmass umrechnen: mit \\(\\frac{\\pi}{180°}\\) malnehmen', zeilen: ['\\(' + gradTex(grad) + ' = ' + gradTex(grad) + ' \\cdot \\frac{\\pi}{180°}\\)'] },
+    { titel: 'Gradzeichen kürzen, als einen Bruch schreiben', zeilen: ['\\(= ' + (grad < 0 ? '-' : '') + '\\frac{' + Math.abs(grad) + '\\pi}{180}\\)'] },
+    { titel: 'Bruch kürzen: Zähler und Nenner durch \\(' + g + '\\) teilen', zeilen: ['\\(= ' + radTex(grad) + '\\)'] },
+    merk];
+  return [
+    { titel: 'In Grad umrechnen: mit \\(\\frac{180°}{\\pi}\\) malnehmen', zeilen: ['\\(' + radTex(grad) + ' = ' + radTex(grad) + ' \\cdot \\frac{180°}{\\pi}\\)'] },
+    { titel: '\\(\\pi\\) kürzen', zeilen: ['\\(= ' + (n === 1 ? z + ' \\cdot 180°' : (Math.abs(z) === 1 ? (z < 0 ? '-' : '') : z + ' \\cdot ') + '\\frac{180°}{' + n + '}') + '\\)'] },
+    { titel: n === 1 ? 'Ausmultiplizieren' : '\\(180°\\) durch \\(' + n + '\\) teilen' + (Math.abs(z) === 1 ? '' : ', mal \\(' + z + '\\)'), zeilen: ['\\(= ' + gradTex(grad) + '\\)'] },
+    merk];
+}
+function umkehrSchritte(f, w, loes, m) {
+  const s = [];
+  const r = KREIS.find(g => g <= 90 && wert(f, g) === betrag(w));
+  if (w === '0' || betrag(w) === '1' && f !== 'tan') s.push({ titel: 'Punkte auf den Achsen suchen', zeilen: ['\\(\\' + f + '\\varphi = ' + wertTex(w) + '\\) gilt nur auf den Achsen.'] });
+  else {
+    const qs = [1, 2, 3, 4].filter(q => loes.some(g => quadrant(g) === q));
+    s.push({ titel: 'Referenzwinkel aus dem Betrag', zeilen: ['Betrag \\(' + wertTex(betrag(w)) + '\\): Referenzwinkel \\(' + gradTex(r) + '\\).'] });
+    s.push({ titel: 'Quadranten aus dem Vorzeichen', zeilen: [FNAME[f] + ' ' + (w[0] === '-' ? 'negativ' : 'positiv') + ': Quadranten ' + qs.map(q => R[q]).join(' und ') + '.'] });
+  }
+  s.push({ titel: 'Lösungsmenge angeben', zeilen: ['Also \\(\\varphi \\in \\{' + loes.map(g => winkelTex(g, m)).join(';\\, ') + '\\}\\)' + (m === 'rad' ? ', in Grad: \\(' + loes.map(gradTex).join(';\\, ') + '\\).' : '.')] });
+  return s;
+}
+const schrittListe = a => a.schritte;
+
 // ── Fehler, die das Werkzeug erkennt ──
 const S51 = ['../grundlagen/g5-1-grundlagen.html#definition', '5.1 Grad und Bogenmass'];
 const S54Q = ['../grundlagen/g5-4-einheitskreis.html#quadranten', '5.4 Vorzeichen in den vier Quadranten'];
@@ -453,14 +538,14 @@ function umrechnenAufgabe(mass) {
   weg.push('Merkhilfe: \\(\\pi = 180°\\), also \\(\\frac{\\pi}{6} = 30°\\), \\(\\frac{\\pi}{4} = 45°\\), \\(\\frac{\\pi}{3} = 60°\\), \\(\\frac{\\pi}{2} = 90°\\).');
   return { thema: 'umrechnen', art: zuRad ? 'rad' : 'grad', grad,
            auftrag: zuRad ? 'Rechne ins Bogenmass um (exakt, als Vielfaches von π).' : 'Rechne ins Gradmass um.',
-           ausdruck: zuRad ? gradTex(grad) + ' = \\;?' : radTex(grad) + ' = \\;?', weg };
+           ausdruck: zuRad ? gradTex(grad) + ' = \\;?' : radTex(grad) + ' = \\;?', weg, schritte: umrechnenSchritte(grad, zuRad) };
 }
 function werteAufgabe(mass) {
   const f = pick(['sin', 'sin', 'cos', 'cos', 'tan']);
   const grad = Math.random() < 0.78 ? pick(KREIS) : pick(AUSSEN);
   const m = wahlMass(mass);
   return { thema: 'werte', art: 'palette', f, grad, mass: m, loesung: wert(f, grad),
-           auftrag: 'Gib den exakten Wert an.', ausdruck: '\\' + f + '\\left(' + winkelTex(grad, m) + '\\right) = \\;?', weg: herleitung(f, grad, m) };
+           auftrag: 'Gib den exakten Wert an.', ausdruck: '\\' + f + '\\left(' + winkelTex(grad, m) + '\\right) = \\;?', weg: herleitung(f, grad, m), schritte: herleitungSchritte(f, grad, m) };
 }
 const UMKEHR_WERTE = { sin: ['0', '1/2', 'w2/2', 'w3/2', '1'], cos: ['0', '1/2', 'w2/2', 'w3/2', '1'], tan: ['0', 'w3/3', '1', 'w3'] };
 function umkehrAufgabe(mass) {
@@ -480,7 +565,7 @@ function umkehrAufgabe(mass) {
   z.push('Also \\(\\varphi \\in \\{' + loes.map(g => winkelTex(g, m)).join(';\\, ') + '\\}\\)' + (m === 'rad' ? ', in Grad: \\(' + loes.map(gradTex).join(';\\, ') + '\\).' : '.'));
   return { thema: 'umkehr', art: 'kreis', f, w, mass: m, loesung: loes,
            auftrag: 'Für welche Winkel \\(\\varphi \\in ' + (m === 'rad' ? '[0;\\,2\\pi[' : '[0°;\\,360°[') + '\\) gilt die Gleichung? Klicke alle an.',
-           ausdruck: '\\' + f + '\\varphi = ' + wertTex(w), weg: z };
+           ausdruck: '\\' + f + '\\varphi = ' + wertTex(w), weg: z, schritte: umkehrSchritte(f, w, loes, m) };
 }
 const THEMEN = {
   umrechnen: { name: 'Grad und Bogenmass', neu: umrechnenAufgabe },
@@ -708,6 +793,7 @@ function kreisSvg({ punkte = false, phi = null, phis = null, f = null, mass: ms 
 }
 
 let A = null, nr = 0, versuch = 0, fertig = false, start = 0, tick = null, fehlerInAufgabe = 0, letztes = '';
+let schritt = 0, angesehen = false;   // Taste «Nächster Schritt»: so viele Schritte sind aufgedeckt
 let stand = { ok: 0, fehl: 0, codes: {} }, gewaehlt = new Set();
 function zeit() { const s = Math.floor((Date.now() - start) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
 function zeigeZahlen() {
@@ -715,16 +801,38 @@ function zeigeZahlen() {
   $('ek-z-ok').textContent = stand.ok; $('ek-z-fehl').textContent = stand.fehl; $('ek-z-zeit').textContent = zeit();
   $('ek-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
-function wegHtml(a) {
-  const skizze = a.thema === 'werte' ? kreisSvg({ phi: a.grad, f: a.f }) : a.thema === 'umkehr' ? kreisSvg({ phis: a.loesung, f: a.f }) : '';
+// Lösungsweg: die ersten k Schritte; ohne k (Aufgabe abgeschlossen) alle und die Skizze. Die Skizze kommt erst am
+// Schluss, weil sie Punkt P bzw. die Lösungen zeigt und damit die Antwort vorwegnähme.
+function wegHtml(a, k) {
+  const st = schrittListe(a), alle = k === undefined || k >= st.length;
+  const skizze = !alle ? '' : a.thema === 'werte' ? kreisSvg({ phi: a.grad, f: a.f }) : a.thema === 'umkehr' ? kreisSvg({ phis: a.loesung, f: a.f }) : '';
   return '<div class="ek-weg-text"><div class="ek-weg-titel">' + (a.thema === 'umrechnen' ? 'Umrechnung' : 'Herleitung') + '</div>'
-    + a.weg.map(z => '<div class="ek-zeile">' + z + '</div>').join('') + '</div>' + skizze;
+    + st.slice(0, alle ? st.length : k).map((s, i) => '<div class="ek-schritt"><div class="ek-schritt-kopf">Schritt ' + (i + 1) + ' · ' + s.titel + '</div>'
+      + s.zeilen.map(z => '<div class="ek-zeile">' + z + '</div>').join('') + '</div>').join('') + '</div>' + skizze;
+}
+function zeigeSchrittKnopf() {
+  const n = schrittListe(A).length;
+  setzen($('ek-schritt-zahl'), Math.min(schritt + 1, n) + '/' + n);
+  $('ek-schritt').disabled = fertig;
+}
+function naechsterSchritt() {
+  if (fertig || !A) return;
+  const n = schrittListe(A).length;
+  schritt = Math.min(schritt + 1, n); angesehen = true;
+  if (schritt >= n) { meldung('fast', '<p>Lösung Schritt für Schritt angesehen.</p>'); return abschliessen(false); }
+  $('ek-weg').hidden = false; setzen($('ek-weg'), wegHtml(A, schritt));
+  zeigeSchrittKnopf();
 }
 function neueAufgabe() {
   if (nr >= RUNDE) return bilanz();
   nr++;
   let a; do a = aufgabe([...themen], mass); while (a.ausdruck === letztes);
-  A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0; gewaehlt = new Set();
+  A = a; letztes = a.ausdruck; versuch = 0; fertig = false; fehlerInAufgabe = 0; gewaehlt = new Set(); schritt = 0; angesehen = false;
+  // «Nächster Schritt» steht neben «Prüfen»; bei der Palette (ohne Prüfen) darunter
+  if (a.art === 'kreis') $('ek-kreis-knoepfe').appendChild($('ek-schritt'));
+  else if (a.art === 'palette') $('ek-schritt-platz').appendChild($('ek-schritt'));
+  else $('ek-pruefen').after($('ek-schritt'));
+  zeigeSchrittKnopf();
   $('ek-nr').textContent = 'Aufgabe ' + nr + ' / ' + RUNDE;
   $('ek-thema').textContent = THEMEN[a.thema].name;
   setzen($('ek-auftrag'), a.auftrag);
@@ -753,7 +861,8 @@ function abschliessen(gut) {
   });
   $('ek-weg').hidden = false; setzen($('ek-weg'), wegHtml(A));
   $('ek-weiter-box').hidden = false;
-  if (gut && !fehlerInAufgabe) stand.ok++;
+  zeigeSchrittKnopf();
+  if (gut && !fehlerInAufgabe && !angesehen) stand.ok++;
   zeigeZahlen();
   $('ek-weiter').focus();
 }
@@ -767,7 +876,7 @@ function antwort(e) {
   if (fertig || !A) return;
   const r = pruefe(A, e);
   if (r.status === 'format' || r.status === 'fast') { meldung('fast', '<p>' + (r.status === 'fast' ? '≈ ' : '') + r.text + '</p>'); return; }
-  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
+  if (r.status === 'ok') { meldung('richtig', '<p>✓ Richtig' + (fehlerInAufgabe || angesehen ? '.' : ' — auf Anhieb.') + '</p>'); return abschliessen(true); }
   versuch++; fehlerInAufgabe++; stand.fehl++;
   stand.codes[r.code] = (stand.codes[r.code] || 0) + 1;
   const f = FEHLER[r.code];
@@ -820,6 +929,7 @@ $('ek-kreis').addEventListener('keydown', e => {
   if (p && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); if (e.key === ' ') punktUmschalten(p); else antwort([...gewaehlt]); }
 });
 $('ek-kreis-pruefen').addEventListener('click', () => antwort([...gewaehlt]));
+$('ek-schritt').addEventListener('click', naechsterSchritt);
 $('ek-weiter').addEventListener('click', neueAufgabe);
 $('ek-neu').addEventListener('click', neueRunde);
 $('ek-bilanz').addEventListener('click', e => { if (e.target.closest('#ek-nochmal')) neueRunde(); });
