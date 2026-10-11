@@ -24,7 +24,7 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'termtraine
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, aufgabe, pruefe, parse, wert, rGleich, T, faktorListe, pMul, pKonst };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, FORM, aufgabe, pruefe, parse, wert, rGleich, T, tex, variablen, faktorListe, pMul, pKonst };', ctx);
 const K = ctx.K;
 const N = +process.argv[2] || 400;
 const befunde = new Map();
@@ -62,6 +62,8 @@ for (const thema of Object.keys(K.THEMEN)) for (let i = 0; i < N; i++) {
   });
   a.weg.filter(w => w.text).forEach(w => latexOk(w.text, wo + ' Text'));
   if (!zeilen.length || K.T(zeilen[zeilen.length - 1].a) !== a.loesTex) melde('Weg endet nicht bei der Lösung', wo);
+  a.diag.forEach(([c1, w1], j) => a.diag.slice(j + 1).forEach(([c2, w2]) => { if (c1 !== c2 && gleich(w1, w2)) melde('TT-C6: zwei Denkfehler mit gleichem Wert', wo + ' ' + c1 + '/' + c2 + ' ' + w1); }));
+  if (a.thema === 'ausmultiplizieren' && a.diag.some(([c]) => c === 'vzProdukt') && !a.aufg.includes('-')) melde('TT-C7: vzProdukt ohne negativen Faktor', wo);
   for (const [code, w] of a.diag) {
     if (!K.FEHLER[code]) melde('Fehlercode ohne Text', code);
     if (gleich(a.aufg, w)) { melde('Denkfehler-Wert ist gleichwertig', wo + ' ' + code + ' ' + w); continue; }
@@ -90,6 +92,65 @@ for (const thema of Object.keys(K.THEMEN)) for (let i = 0; i < N; i++) {
 const a0 = K.aufgabe(['binome']);
 for (const e of ['x^', '(x+1', 'x+1)', '3x2', '2,5x', 'x^-1', '', '3*-2', '?', '()']) if (K.pruefe(a0, e).status !== 'format') melde('Fehleingabe nicht abgefangen', e);
 for (const [u, v] of [['−3x²', '-3x^2'], ['2·x', '2x'], ['[x+1]', '(x+1)'], ['x:2', 'x/2'], ['X^3', 'x^3']]) if (!gleich(u, v)) melde('Schreibweise nicht gelesen', u);
+
+// Gezielte Fälle aus der Prüfung vom 11.10.2026 (TODO-trainer-korrekturen.md, TT-B1 … TT-C10)
+function fall(thema, form, aufg, loes) {
+  const t = { thema, form, aufg, loes, diag: [], weg: [] };
+  t.baum = K.parse(aufg); t.loesBaum = K.parse(loes); t.vars = K.variablen(t.baum);
+  t.ausdruck = K.tex(t.baum); t.loesTex = K.tex(t.loesBaum);
+  return t;
+}
+function erwarte(wo, a, eingabe, status, textTeil) {
+  const r = K.pruefe(a, eingabe);
+  if (r.status !== status || (textTeil && !(r.text || '').includes(textTeil))) melde('Gezielter Fall ' + wo, '«' + a.aufg + '» ← ' + eingabe + ' → ' + JSON.stringify(r));
+}
+function suche(thema, aufg) {
+  for (let k = 0; k < 400000; k++) { const a = K.aufgabe([thema]); if (a.aufg === aufg) return a; }
+  melde('Gezielter Fall: Aufgabe nicht gefunden', thema + ' ' + aufg); return null;
+}
+function diagnostiziert(wo, a, eingabe) {
+  if (!a) return;
+  const r = K.pruefe(a, eingabe);
+  if (r.status !== 'falsch' || r.code === 'sonst') melde('Gezielter Fall ' + wo + ': Denkfehler nicht erkannt', '«' + a.aufg + '» ← ' + eingabe + ' → ' + JSON.stringify(r));
+}
+// TT-B1: Faktoren mit Brüchen
+{ const a = fall('faktorisieren', 'produkt', '4x^2-1', '(2x+1)(2x-1)');
+  erwarte('TT-B1', a, '4(x+1/2)(x-1/2)', 'fast', 'ganzen Zahlen');
+  const b = fall('faktorisieren', 'produkt', 'x^2+3x+2', '(x+1)(x+2)');
+  erwarte('TT-B1', b, '(x/2+1)(2x+2)', 'fast', 'ganzen Zahlen'); }
+// TT-B2: Doppelbruch
+{ const a = fall('bruchterme', 'bruch', '(3x-9)/(x^2-9)', '3/(x+3)');
+  erwarte('TT-B2', a, '3/((x+3)/1)', 'fast'); erwarte('TT-B2', a, '3/(x+3)', 'ok');
+  const b = fall('bruchterme', 'bruch', '(4x^2+24x+36)/(x^2-9)', '4(x+3)/(x-3)');
+  erwarte('TT-B2', b, '(x+3)/((x-3)/4)', 'fast'); erwarte('TT-B2', b, '4(x+3)/(x-3)', 'ok'); }
+// TT-B3: unvereinfachte Summen in Faktoren und im gekürzten Bruch
+erwarte('TT-B3', fall('faktorisieren', 'produkt', 'x^2-9', '(x+3)(x-3)'), '(x+5-2)(x-3)', 'fast');
+erwarte('TT-B3', fall('ausklammern', 'produkt', '6x^2-9x', '3x(2x-3)'), '3x(x+x-3)', 'fast');
+erwarte('TT-B3', fall('bruchterme', 'bruch', '(x^2-3x)/x', 'x-3'), 'x+x-3-x', 'fast');
+erwarte('TT-B3', fall('bruchterme', 'bruch', '(x^2-3x)/(x^2-9)', 'x/(x+3)'), 'x/(x+5-2)', 'fast');
+// TT-B4: häufige Fehler mit Diagnose
+{ const a = suche('binome', '(x - 3)^2'); diagnostiziert('TT-B4', a, 'x^2+6x+9'); diagnostiziert('TT-B4', a, 'x^2-9');
+  diagnostiziert('TT-B4', suche('bruchterme', '(x^2 - 9)/(x + 3)'), 'x+3');
+  diagnostiziert('TT-B4', suche('bruchterme', '(x^2 - 6x + 9)/(9 - x^2)'), '(x-3)/(x+3)');
+  diagnostiziert('TT-B4', suche('faktorisieren', '2x^2 - 18'), '(x+3)(x-3)'); }
+// TT-C1: Zahl hinter der Klammer
+erwarte('TT-C1', fall('faktorisieren', 'produkt', '2x^2-18', '2(x+3)(x-3)'), '(x+3)(x-3)2', 'format', 'vorne');
+// TT-C2: Bruchstrich in der Summe
+erwarte('TT-C2', fall('ausmultiplizieren', 'summe', '(x+2)(x+3)', 'x^2+5x+6'), 'x^2+5x+6/1', 'fast', 'Bruchstrich');
+// TT-C3: Kosmetisches
+{ const a = fall('ausmultiplizieren', 'summe', '(x+2)(x+3)', 'x^2+5x+6');
+  for (const e of ['1x^2+5x+6', 'x^2+5x^1+6', 'x^2+5x+6x^0']) erwarte('TT-C3', a, e, 'fast', 'Glied');
+  erwarte('TT-C3', fall('ausklammern', 'produkt', '4x^3+4x^2', '4x^2(x+1)'), '4xx(x+1)', 'fast'); }
+// TT-C4, TT-C5: Wortlaut
+if (K.FORM.einBruch.includes('(x-3)/(x+3)')) melde('TT-C4: festes Beispiel in FORM.einBruch', K.FORM.einBruch);
+if (!/px/.test(K.FEHLER.vietaVz[1])) melde('TT-C5: p und q nicht eingeführt', K.FEHLER.vietaVz[1]);
+// TT-C8: Leser
+if (K.pruefe(a0, '2 3x').status !== 'format') melde('TT-C8: «2 3x» nicht abgefangen', JSON.stringify(K.pruefe(a0, '2 3x')));
+for (const [u, v] of [['x⁴', 'x^4'], ['x÷2', 'x/2'], ['x¹²', 'x^12']]) { try { if (!gleich(u, v)) melde('TT-C8: Schreibweise nicht gelesen', u); } catch (e) { melde('TT-C8: Schreibweise nicht gelesen', u); } }
+// TT-C9, TT-C10, RT-C10: Oberfläche und Links
+if (!/id="tt-tasten"/.test(html)) melde('TT-C9: Tastenleiste fehlt', '');
+for (const [, n] of kern.matchAll(/const (L_[A-Z]+) =/g)) if ((kern.match(new RegExp('\\b' + n + '\\b', 'g')) || []).length < 2) melde('TT-C10: Link-Konstante nie benutzt', n);
+if (!/aria-pressed/.test(html)) melde('RT-C10: Themen-Schalter ohne aria-pressed', '');
 
 const skript = `
 import sys, json, re, random

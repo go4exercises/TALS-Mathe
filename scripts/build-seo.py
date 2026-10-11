@@ -136,7 +136,7 @@ SEITEN = {
    ort='Werkzeuge · Rechentrainer',
    typ='article', lrt=['Werkzeug', 'Übung'],
    titel='Rechentrainer — Rechnen ohne Taschenrechner mit Fehlerdiagnose',
-   beschreibung='Rechnen ohne Taschenrechner: Reihenfolge, Vorzeichen, Brüche, Dezimal und Prozent, Perioden, Zahlenmengen. Bei Fehlern nennt der Trainer den Denkfehler.',
+   beschreibung='Ohne Taschenrechner: Hierarchie der Operationen, Vorzeichen, Brüche, Dezimal und Prozent, Perioden, Zahlenmengen. Bei Fehlern nennt der Trainer den Denkfehler.',
    themen=['Mathematik', 'Hierarchie der Operationen', 'Vorzeichenregeln', 'Bruchrechnen', 'Prozent', 'Zahlenmengen', 'Übung']),
  'werkzeuge/einheitskreistrainer.html': dict(
    ort='Werkzeuge · Einheitskreistrainer',

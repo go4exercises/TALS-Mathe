@@ -196,7 +196,22 @@ MathJax = {
 [hidden] { display:none !important; }
 @media (max-width:560px) {
   .ek-vorne { padding-left:14px; padding-right:14px; }
+  /* schmal: ±Paare übereinander (oben sin/cos-Werte, unten links 0, rechts die Tangenswerte), «nicht definiert» abgesetzt */
   .ek-palette { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  .ek-palette [data-w="1/2"], .ek-palette [data-w="-1/2"] { grid-column:1; }
+  .ek-palette [data-w="1/2"] { grid-row:1; } .ek-palette [data-w="-1/2"] { grid-row:2; }
+  .ek-palette [data-w="w2/2"], .ek-palette [data-w="-w2/2"] { grid-column:2; }
+  .ek-palette [data-w="w2/2"] { grid-row:1; } .ek-palette [data-w="-w2/2"] { grid-row:2; }
+  .ek-palette [data-w="w3/2"], .ek-palette [data-w="-w3/2"] { grid-column:3; }
+  .ek-palette [data-w="w3/2"] { grid-row:1; } .ek-palette [data-w="-w3/2"] { grid-row:2; }
+  .ek-palette [data-w="1"], .ek-palette [data-w="-1"] { grid-column:4; }
+  .ek-palette [data-w="1"] { grid-row:1; } .ek-palette [data-w="-1"] { grid-row:2; }
+  .ek-palette [data-w="0"] { grid-row:3; grid-column:1; }
+  .ek-palette [data-w="w3/3"], .ek-palette [data-w="-w3/3"] { grid-column:3; }
+  .ek-palette [data-w="w3/3"] { grid-row:3; } .ek-palette [data-w="-w3/3"] { grid-row:4; }
+  .ek-palette [data-w="w3"], .ek-palette [data-w="-w3"] { grid-column:4; }
+  .ek-palette [data-w="w3"] { grid-row:3; } .ek-palette [data-w="-w3"] { grid-row:4; }
+  .ek-palette [data-w="nd"] { grid-row:5; grid-column:1 / -1; margin-top:6px; min-height:38px; }
   .ek-btn.ek-weiter { min-width:0; flex:1 1 60%; }
   .ek-taste { display:none; }
 }
@@ -284,9 +299,9 @@ MathJax = {
         </div>
         <div class="ek-gruppe" id="ek-mass">
           <div class="ek-g-titel">Winkel anzeigen in</div>
-          <button type="button" class="ek-opt ek-rund aktiv" data-m="grad">Grad</button>
-          <button type="button" class="ek-opt ek-rund" data-m="rad">Bogenmass</button>
-          <button type="button" class="ek-opt ek-rund" data-m="mix">gemischt</button>
+          <button type="button" class="ek-opt ek-rund aktiv" data-m="grad" aria-pressed="true">Grad</button>
+          <button type="button" class="ek-opt ek-rund" data-m="rad" aria-pressed="false">Bogenmass</button>
+          <button type="button" class="ek-opt ek-rund" data-m="mix" aria-pressed="false">gemischt</button>
         </div>
       </div>
     </details>
@@ -367,7 +382,7 @@ function herleitung(f, grad, mass) {
   if (n % 90 === 0) {
     const P = { 0: '(1 \\mid 0)', 90: '(0 \\mid 1)', 180: '(-1 \\mid 0)', 270: '(0 \\mid -1)' }[n];
     z.push('Der Punkt liegt auf einer Achse: \\(P' + P + '\\).');
-    if (f === 'tan') z.push(w === 'nd' ? '\\(\\cos ' + gradTex(n) + ' = 0\\): Durch \\(0\\) teilen geht nicht — \\(\\tan ' + gradTex(n) + '\\) ist nicht definiert.'
+    if (f === 'tan') z.push(w === 'nd' ? '\\(\\cos ' + gradTex(n) + ' = 0\\): Durch \\(0\\) teilen geht nicht, \\(\\tan ' + gradTex(n) + '\\) ist also nicht definiert.'
                                        : '\\(\\tan ' + gradTex(n) + ' = \\frac{\\sin ' + gradTex(n) + '}{\\cos ' + gradTex(n) + '} = ' + wertTex(w) + '\\).');
     else z.push('\\(\\' + f + ' ' + gradTex(n) + ' = ' + wertTex(w) + '\\) ist die ' + (f === 'cos' ? 'x' : 'y') + '-Koordinate von \\(P\\).');
     return z;
@@ -375,6 +390,14 @@ function herleitung(f, grad, mass) {
   const q = quadrant(n), r = referenz(n);
   const rWeg = q === 1 ? '' : q === 2 ? '180° - ' + gradTex(n) + ' = ' : q === 3 ? gradTex(n) + ' - 180° = ' : '360° - ' + gradTex(n) + ' = ';
   z.push('\\(' + gradTex(n) + '\\) liegt im Quadranten ' + R[q] + (q === 1 ? '; dort sind alle Werte positiv.' : '. Referenzwinkel: \\(' + rWeg + gradTex(r) + '\\).'));
+  if (f === 'tan') {                       // Tangens als Quotient: Vorzeichen von sin und cos, dann sin/cos
+    const ws = wert('sin', n), wc = wert('cos', n), pm = k => k[0] === '-' ? 'negativ' : 'positiv';
+    const sl = k => (k[0] === '-' ? '-' : '') + { '1/2': '1/2', 'w2/2': '\\sqrt{2}/2', 'w3/2': '\\sqrt{3}/2' }[betrag(k)];
+    if (q !== 1) z.push('Im Quadranten ' + R[q] + ' ist \\(\\sin\\) ' + pm(ws) + ' und \\(\\cos\\) ' + pm(wc) + ', der Tangens also ' + pm(w)
+      + ': \\(\\tan ' + gradTex(n) + ' = ' + (w[0] === '-' ? '-' : '') + '\\tan ' + gradTex(r) + '\\).');
+    z.push('\\(\\tan ' + gradTex(n) + ' = \\frac{\\sin ' + gradTex(n) + '}{\\cos ' + gradTex(n) + '} = \\frac{' + sl(ws) + '}{' + sl(wc) + '} = ' + wertTex(w) + '\\).');
+    return z;
+  }
   if (q !== 1) {
     const plus = w[0] !== '-';
     z.push('Im Quadranten ' + R[q] + ' ist der ' + FNAME[f] + ' ' + (plus ? 'positiv' : 'negativ') + ': \\(\\' + f + ' ' + gradTex(n) + ' = ' + (plus ? '' : '-') + '\\' + f + ' ' + gradTex(r) + ' = ' + wertTex(w) + '\\).');
@@ -389,19 +412,29 @@ const S54D = ['../grundlagen/g5-4-einheitskreis.html#definition', '5.4 Definitio
 const S54T = ['../grundlagen/g5-4-einheitskreis.html#tangens', '5.4 Tangens am Einheitskreis'];
 const S54S = ['../grundlagen/g5-4-einheitskreis.html#symmetrie', '5.4 Symmetrieeigenschaften'];
 const S54U = ['../grundlagen/g5-4-einheitskreis.html#umkehr', '5.4 Umkehroperationen'];
+const VERTAUSCHT = '\\(\\cos\\varphi\\) ist die x-Koordinate, \\(\\sin\\varphi\\) die y-Koordinate von \\(P\\). Und: \\(\\sin 30° = \\cos 60° = \\frac{1}{2}\\), \\(\\sin 60° = \\cos 30° = \\frac{\\sqrt{3}}{2}\\).';
+const TANKEHR = '\\(\\tan\\varphi = \\frac{\\sin\\varphi}{\\cos\\varphi}\\), nicht umgekehrt: \\(\\tan 30° = \\frac{1/2}{\\sqrt{3}/2} = \\frac{1}{\\sqrt{3}} = \\frac{\\sqrt{3}}{3}\\), \\(\\tan 60° = \\sqrt{3}\\).';
 const FEHLER = {
   halb: ['Volle Drehung mit π verwechselt', 'Die volle Drehung ist \\(360° = 2\\pi\\), also gilt \\(180° = \\pi\\). Umrechnen mit dem Faktor \\(\\frac{\\pi}{180°}\\) bzw. \\(\\frac{180°}{\\pi}\\).', S51],
-  kehr: ['Umrechnungsfaktor umgedreht', 'Von Grad ins Bogenmass mit \\(\\frac{\\pi}{180°}\\) malnehmen, zurück mit \\(\\frac{180°}{\\pi}\\) — nicht umgekehrt.', S51],
-  ohnePi: ['π vergessen', 'Das Bogenmass ist ein Vielfaches von \\(\\pi\\): \\(150° = \\frac{5}{6}\\pi = \\frac{5\\pi}{6}\\), nicht \\(\\frac{5}{6}\\).', S51],
+  kehr: ['Umrechnungsfaktor umgedreht', 'Von Grad ins Bogenmass mit \\(\\frac{\\pi}{180°}\\) malnehmen, zurück mit \\(\\frac{180°}{\\pi}\\), nicht umgekehrt.', S51],
+  bruchKehr: ['Bruch umgedreht', 'Die Gradzahl kommt in den Zähler, \\(180°\\) in den Nenner: \\(30° = \\frac{30°}{180°} \\cdot \\pi = \\frac{\\pi}{6}\\), nicht \\(\\frac{180°}{30°} \\cdot \\pi = 6\\pi\\).', S51],
+  gradStattRad: ['Grad statt Bogenmass', 'Gefragt ist das Bogenmass, ein Vielfaches von \\(\\pi\\). Umrechnen mit dem Faktor \\(\\frac{\\pi}{180°}\\): \\(150° = 150° \\cdot \\frac{\\pi}{180°} = \\frac{5\\pi}{6}\\).', S51],
+  ohnePi: ['π vergessen', 'Das Bogenmass ist ein Vielfaches von \\(\\pi\\): \\(150° = \\frac{5}{6}\\pi = \\frac{5\\pi}{6}\\), nicht \\(\\frac{5}{6}\\) oder \\(0.833\\).', S51],
   radStattGrad: ['Bogenmass statt Grad', 'Gefragt ist das Gradmass. \\(\\pi\\) entspricht \\(180°\\), nicht \\(3.14°\\).', S51],
   vorzeichen: ['Vorzeichen', 'Der Betrag stimmt, das Vorzeichen nicht.', S54Q],
-  vertauscht: ['sin und cos bzw. 30° und 60° vertauscht', '\\(\\cos\\varphi\\) ist die x-Koordinate, \\(\\sin\\varphi\\) die y-Koordinate von \\(P\\). Und: \\(\\sin 30° = \\cos 60° = \\frac{1}{2}\\), \\(\\sin 60° = \\cos 30° = \\frac{\\sqrt{3}}{2}\\).', S54D],
-  tanKehr: ['Kehrwert beim Tangens', '\\(\\tan\\varphi = \\frac{\\sin\\varphi}{\\cos\\varphi}\\), nicht umgekehrt: \\(\\tan 30° = \\frac{1/2}{\\sqrt{3}/2} = \\frac{1}{\\sqrt{3}} = \\frac{\\sqrt{3}}{3}\\), \\(\\tan 60° = \\sqrt{3}\\).', S54T],
-  nd: ['Tangens nicht definiert', 'Bei \\(90°\\) und \\(270°\\) ist \\(\\cos\\varphi = 0\\) — \\(\\tan\\varphi = \\frac{\\sin\\varphi}{\\cos\\varphi}\\) ist dort nicht definiert.', S54T],
+  vertauscht: ['sin und cos bzw. 30° und 60° vertauscht', VERTAUSCHT, S54D],
+  vertauschtVz: ['sin und cos bzw. 30° und 60° vertauscht — und das Vorzeichen', VERTAUSCHT + ' Dazu stimmt das Vorzeichen nicht.', S54D],
+  tanKehr: ['Kehrwert beim Tangens', TANKEHR, S54T],
+  tanKehrVz: ['Kehrwert beim Tangens — und das Vorzeichen', TANKEHR + ' Dazu stimmt das Vorzeichen nicht.', S54T],
+  nd: ['Tangens nicht definiert', 'Bei \\(90°\\) und \\(270°\\) ist \\(\\cos\\varphi = 0\\): Dort ist \\(\\tan\\varphi = \\frac{\\sin\\varphi}{\\cos\\varphi}\\) nicht definiert.', S54T],
   ndFalsch: ['«nicht definiert» zu Unrecht', 'Nicht definiert ist nur der Tangens bei \\(90°\\) und \\(270°\\), wo \\(\\cos\\varphi = 0\\). Sinus und Cosinus haben für jeden Winkel einen Wert.', S54T],
-  umkehrEine: ['Nur eine Lösung', 'Jeder Wert zwischen \\(-1\\) und \\(1\\) kommt auf dem Kreis zweimal vor: beim Sinus symmetrisch zur y-Achse, beim Cosinus zur x-Achse, beim Tangens gegenüber (\\(+180°\\)).', S54S],
+  umkehrEine: ['Nur eine Lösung', 'Jeder Wert zwischen \\(-1\\) und \\(1\\) kommt auf dem Kreis zweimal vor: beim Sinus symmetrisch zur y-Achse, beim Cosinus symmetrisch zur x-Achse.', S54S],
+  umkehrEineTan: ['Nur eine Lösung', 'Jeder Wert des Tangens kommt auf dem Kreis zweimal vor, im Abstand \\(180°\\): \\(\\tan(\\varphi + 180°) = \\tan\\varphi\\). Die zweite Lösung liegt gegenüber.', S54S],
+  umkehrVertauscht: ['sin und cos vertauscht', 'Das sind die Lösungen der anderen Funktion. \\(\\cos\\varphi\\) ist die x-Koordinate, \\(\\sin\\varphi\\) die y-Koordinate von \\(P\\).', S54D],
+  umkehrSymTan: ['Falsche Symmetrie beim Tangens', 'Beim Tangens liegt die zweite Lösung gegenüber, um \\(180°\\) weiter: \\(\\tan(\\varphi + 180°) = \\tan\\varphi\\). Gespiegelt an einer Achse wechselt der Tangens das Vorzeichen.', S54S],
   umkehrVz: ['Vorzeichen beim Rückweg', 'Die Referenzwinkel stimmen, aber nicht die Quadranten: Das Vorzeichen des Werts entscheidet, in welchen Quadranten die Lösungen liegen.', S54Q],
   sonst: ['ohne erkannten Denkfehler', 'Geh den Weg über Quadrant, Referenzwinkel und Vorzeichen.', null],
+  sonstUm: ['ohne erkannten Denkfehler', 'Umrechnen mit dem Faktor \\(\\frac{\\pi}{180°}\\) (Grad → Bogenmass) bzw. \\(\\frac{180°}{\\pi}\\) (Bogenmass → Grad).', null],
 };
 
 // ── Aufgaben ──
@@ -415,7 +448,7 @@ function umrechnenAufgabe(mass) {
   if (grad === 0) return null;
   const g = ggT(grad, 180), z = grad / g, n = 180 / g;
   const weg = zuRad
-    ? ['\\(' + gradTex(grad) + ' = ' + grad + ' \\cdot \\frac{\\pi}{180°} = \\frac{' + grad + '\\pi}{180} = ' + radTex(grad) + '\\)']
+    ? ['\\(' + gradTex(grad) + ' = ' + gradTex(grad) + ' \\cdot \\frac{\\pi}{180°} = ' + (grad < 0 ? '-' : '') + '\\frac{' + Math.abs(grad) + '\\pi}{180} = ' + radTex(grad) + '\\)']
     : ['\\(' + radTex(grad) + ' = ' + radTex(grad) + ' \\cdot \\frac{180°}{\\pi} = ' + (n === 1 ? z + ' \\cdot 180°' : (Math.abs(z) === 1 ? (z < 0 ? '-' : '') : z + ' \\cdot ') + '\\frac{180°}{' + n + '}') + ' = ' + gradTex(grad) + '\\)'];
   weg.push('Merkhilfe: \\(\\pi = 180°\\), also \\(\\frac{\\pi}{6} = 30°\\), \\(\\frac{\\pi}{4} = 45°\\), \\(\\frac{\\pi}{3} = 60°\\), \\(\\frac{\\pi}{2} = 90°\\).');
   return { thema: 'umrechnen', art: zuRad ? 'rad' : 'grad', grad,
@@ -444,9 +477,9 @@ function umkehrAufgabe(mass) {
     z.push('Betrag \\(' + wertTex(betrag(w)) + '\\): Referenzwinkel \\(' + gradTex(r) + '\\).');
     z.push(FNAME[f] + ' ' + (w[0] === '-' ? 'negativ' : 'positiv') + ': Quadranten ' + qs.map(q => R[q]).join(' und ') + '.');
   }
-  z.push('Also \\(\\varphi \\in \\{' + loes.map(g => winkelTex(g, m)).join(';\\, ') + '\\}\\)' + (m === 'rad' ? ' — in Grad: \\(' + loes.map(gradTex).join(';\\, ') + '\\).' : '.'));
+  z.push('Also \\(\\varphi \\in \\{' + loes.map(g => winkelTex(g, m)).join(';\\, ') + '\\}\\)' + (m === 'rad' ? ', in Grad: \\(' + loes.map(gradTex).join(';\\, ') + '\\).' : '.'));
   return { thema: 'umkehr', art: 'kreis', f, w, mass: m, loesung: loes,
-           auftrag: 'Für welche Winkel \\(\\varphi\\) zwischen \\(0\\) und \\(' + (m === 'rad' ? '2\\pi' : '360°') + '\\) gilt die Gleichung? Klicke alle an.',
+           auftrag: 'Für welche Winkel \\(\\varphi \\in ' + (m === 'rad' ? '[0;\\,2\\pi[' : '[0°;\\,360°[') + '\\) gilt die Gleichung? Klicke alle an.',
            ausdruck: '\\' + f + '\\varphi = ' + wertTex(w), weg: z };
 }
 const THEMEN = {
@@ -457,19 +490,48 @@ const THEMEN = {
 function aufgabe(themen, mass) { for (;;) { const a = THEMEN[pick(themen)].neu(mass); if (a) return a; } }
 
 // ── Eingaben lesen ──
-// Bogenmass: «5pi/6», «5π/6», «5/6pi», «-pi/4», «2pi», «0» → Vielfaches von π als [Zähler, Nenner]
+// Bogenmass: «5pi/6», «5π/6», «5/6pi», «pi/6*5», «5*pi/6», «(5pi)/6», «-pi/4», «2pi», «0» → Vielfaches von π als
+// [Zähler, Nenner], ungekürzt. Produkte (mit «*» oder ohne) und Quotienten werden von links nach rechts gelesen.
+// Ohne π: «5/6» → ohnePi, «0.8333» oder «150» → dezimal; «150°» → grad; «5400/pi» → durchPi.
 function liesRad(s) {
-  s = String(s).trim().toLowerCase().replace(/[−–]/g, '-').replace(/\s+/g, '').replace(/π/g, 'pi').replace(/\\pi/g, 'pi').replace(/\*/g, '');
+  s = String(s).trim().toLowerCase().replace(/[−–]/g, '-').replace(/\s+/g, '').replace(/π/g, 'pi').replace(/\\pi/g, 'pi').replace(/·/g, '*');
   if (!s) return { leer: true };
   if (/,/.test(s)) return { fehler: 'Schreibe den Dezimalpunkt, nicht das Komma.' };
-  let m;
-  if (s === '0') return { z: 0, n: 1 };
-  if ((m = /^([+-]?)(\d*)pi(?:\/(\d+))?$/.exec(s))) return { z: (m[1] === '-' ? -1 : 1) * (m[2] ? +m[2] : 1), n: m[3] ? +m[3] : 1 };
-  if ((m = /^([+-]?)(\d+)\/(\d+)pi$/.exec(s))) return { z: (m[1] === '-' ? -1 : 1) * +m[2], n: +m[3] };
-  if ((m = /^([+-]?)\((\d*)pi\)\/(\d+)$/.exec(s))) return { z: (m[1] === '-' ? -1 : 1) * (m[2] ? +m[2] : 1), n: +m[3] };
-  if ((m = /^([+-]?)(\d+)\/(\d+)$/.exec(s))) return { ohnePi: true, z: (m[1] === '-' ? -1 : 1) * +m[2], n: +m[3] };
-  if ((m = /^([+-]?\d*\.?\d+)$/.exec(s))) return { dezimal: +m[1] };
-  return { fehler: 'Diese Eingabe verstehe ich nicht. Beispiele: <code>5pi/6</code>, <code>-pi/4</code>, <code>2pi</code>.' };
+  const unklar = { fehler: 'Diese Eingabe verstehe ich nicht. Beispiele: <code>5pi/6</code>, <code>-pi/4</code>, <code>2pi</code>.' };
+  if (/^[+-]?\d*\.?\d+°$/.test(s)) return { grad: +s.slice(0, -1) };
+  const tok = s.match(/\d*\.\d+|\d+|pi|[*/()+-]|./g);
+  let i = 0, dez = false;
+  // Wert = z/n · π^p
+  function faktor() {
+    const t = tok[i];
+    if (t === '(') { i++; const v = ausdruck(); if (tok[i] !== ')') throw 0; i++; return v; }
+    if (t === 'pi') { i++; return { z: 1, n: 1, p: 1 }; }
+    if (t !== undefined && /^\d*\.?\d+$/.test(t)) { i++; if (t.includes('.')) dez = true; return { z: +t, n: 1, p: 0 }; }
+    throw 0;
+  }
+  function produkt() {
+    let v = faktor();
+    for (;;) {
+      const t = tok[i];
+      if (t === '*') { i++; const w = faktor(); v = { z: v.z * w.z, n: v.n * w.n, p: v.p + w.p }; }
+      else if (t === '/') { i++; const w = faktor(); v = { z: v.z * w.n, n: v.n * w.z, p: v.p - w.p }; }
+      else if (t === '(' || t === 'pi' || (t !== undefined && /^\d/.test(t) && tok[i - 1] === ')')) { const w = faktor(); v = { z: v.z * w.z, n: v.n * w.n, p: v.p + w.p }; }
+      else return v;
+    }
+  }
+  function ausdruck() {
+    let vz = 1;
+    if (tok[i] === '-' || tok[i] === '+') { if (tok[i] === '-') vz = -1; i++; }
+    const v = produkt(); v.z *= vz; return v;
+  }
+  let v;
+  try { v = ausdruck(); if (i !== tok.length) throw 0; } catch (e) { return unklar; }
+  if (v.n < 0) { v.z = -v.z; v.n = -v.n; }
+  if (v.p === 0) return dez || v.n === 1 ? { dezimal: v.n ? v.z / v.n : NaN } : { ohnePi: true, z: v.z, n: v.n };
+  if (v.p === -1) return { durchPi: v.n ? v.z / v.n : NaN };
+  if (v.p !== 1) return unklar;
+  if (dez) return { fehler: 'Schreibe das Vielfache von \\(\\pi\\) als Bruch, z.B. <code>5pi/6</code>.' };
+  return { z: v.z, n: v.n };
 }
 function liesGrad(s) {
   s = String(s).trim().replace(/[−–]/g, '-').replace(/\s+/g, '').replace(/°$/, '').replace(/grad$/i, '');
@@ -491,18 +553,25 @@ function pruefe(a, e) {
     const l = liesRad(e);
     if (l.leer) return { status: 'format', text: 'Gib zuerst eine Antwort ein.' };
     if (l.fehler) return { status: 'format', text: l.fehler };
-    const soll = a.grad / 180;
-    if (l.dezimal !== undefined) return Math.abs(l.dezimal - soll * Math.PI) < 0.01
-      ? { status: 'fast', text: 'Der Wert stimmt ungefähr — gefragt ist aber das exakte Vielfache von \\(\\pi\\), z.B. <code>5pi/6</code>.' }
-      : { status: 'falsch', code: 'sonst' };
+    const soll = a.grad / 180, kehrt = a.grad * 180 / Math.PI;   // kehrt: Gradzahl mal 180°/π statt π/180°
+    if (l.grad !== undefined) return { status: 'falsch', code: Math.abs(l.grad - a.grad) < 1e-9 ? 'gradStattRad' : 'sonstUm' };
+    if (l.durchPi !== undefined) return { status: 'falsch', code: Math.abs(l.durchPi - a.grad * 180) < 1e-9 ? 'kehr' : 'sonstUm' };
+    if (l.dezimal !== undefined) {
+      const d = l.dezimal;
+      if (Math.abs(d - soll * Math.PI) < 0.01) return { status: 'fast', text: 'Der Wert stimmt ungefähr — gefragt ist aber das exakte Vielfache von \\(\\pi\\), z.B. <code>5pi/6</code>.' };
+      if (Math.abs(d - a.grad) < 1e-9) return { status: 'falsch', code: 'gradStattRad' };
+      if (Math.abs(d - soll) < 0.001) return { status: 'falsch', code: 'ohnePi' };
+      if (Math.abs(d - kehrt) < Math.max(0.01, Math.abs(kehrt) * 1e-4)) return { status: 'falsch', code: 'kehr' };
+      return { status: 'falsch', code: 'sonstUm' };
+    }
     if (!l.n) return { status: 'format', text: 'Der Nenner darf nicht \\(0\\) sein.' };
     const ist = l.z / l.n;
-    if (l.ohnePi) return Math.abs(ist - soll) < 1e-12 ? { status: 'falsch', code: 'ohnePi' } : { status: 'falsch', code: 'sonst' };
+    if (l.ohnePi) return Math.abs(ist - soll) < 1e-12 ? { status: 'falsch', code: 'ohnePi' } : { status: 'falsch', code: 'sonstUm' };
     if (Math.abs(ist - soll) < 1e-12) return ggT(l.z, l.n) !== 1 && l.z !== 0
       ? { status: 'fast', text: 'Der Wert stimmt, aber der Bruch ist noch nicht gekürzt.' } : { status: 'ok' };
     if (Math.abs(ist - 2 * soll) < 1e-12 || Math.abs(ist - soll / 2) < 1e-12) return { status: 'falsch', code: 'halb' };
-    if (Math.abs(ist - 1 / soll) < 1e-12) return { status: 'falsch', code: 'kehr' };
-    return { status: 'falsch', code: 'sonst' };
+    if (Math.abs(ist - 1 / soll) < 1e-12) return { status: 'falsch', code: 'bruchKehr' };
+    return { status: 'falsch', code: 'sonstUm' };
   }
   if (a.art === 'grad') {
     const l = liesGrad(e);
@@ -511,7 +580,7 @@ function pruefe(a, e) {
     if (Math.abs(l.g - a.grad) < 1e-9) return { status: 'ok' };
     if (Math.abs(l.g - 2 * a.grad) < 1e-9 || Math.abs(l.g - a.grad / 2) < 1e-9) return { status: 'falsch', code: 'halb' };
     if (Math.abs(l.g - a.grad / 180 * Math.PI) < 0.01) return { status: 'falsch', code: 'radStattGrad' };
-    return { status: 'falsch', code: 'sonst' };
+    return { status: 'falsch', code: 'sonstUm' };
   }
   if (a.art === 'palette') {
     const s = a.loesung;
@@ -520,18 +589,25 @@ function pruefe(a, e) {
     if (e === 'nd') return { status: 'falsch', code: 'ndFalsch' };
     if (betrag(e) === betrag(s)) return { status: 'falsch', code: 'vorzeichen' };
     const n = mod360(a.grad);
+    const vzFalsch = s !== '0' && e !== '0' && (s[0] === '-') !== (e[0] === '-');   // zweiter Fehler: Vorzeichen
     if (a.f !== 'tan') {
       const andere = wert(a.f === 'sin' ? 'cos' : 'sin', n);
-      if (betrag(e) === betrag(andere)) return { status: 'falsch', code: 'vertauscht' };
-    } else if (s !== '0' && ((betrag(s) === 'w3' && betrag(e) === 'w3/3') || (betrag(s) === 'w3/3' && betrag(e) === 'w3'))) return { status: 'falsch', code: 'tanKehr' };
+      if (betrag(e) === betrag(andere)) return { status: 'falsch', code: vzFalsch ? 'vertauschtVz' : 'vertauscht' };
+    } else if (s !== '0' && ((betrag(s) === 'w3' && betrag(e) === 'w3/3') || (betrag(s) === 'w3/3' && betrag(e) === 'w3'))) return { status: 'falsch', code: vzFalsch ? 'tanKehrVz' : 'tanKehr' };
     return { status: 'falsch', code: 'sonst' };
   }
   // Kreis: e = Liste der gewählten Winkel
   const fehlt = a.loesung.filter(g => !e.includes(g)), zuviel = e.filter(g => !a.loesung.includes(g));
   if (!e.length) return { status: 'format', text: 'Klicke zuerst mindestens einen Punkt an.' };
   if (!fehlt.length && !zuviel.length) return { status: 'ok' };
+  const gleich = (u, v) => u.length === v.length && u.every(g => v.includes(g));
   let code = 'sonst';
-  if (!zuviel.length && fehlt.length) code = 'umkehrEine';
+  if (!zuviel.length && fehlt.length) code = a.f === 'tan' ? 'umkehrEineTan' : 'umkehrEine';
+  else if (a.f !== 'tan' && gleich(e, KREIS.filter(g => wert(a.f === 'sin' ? 'cos' : 'sin', g) === a.w))) code = 'umkehrVertauscht';
+  else if (a.f === 'tan' && (() => {                 // wie Sinus (180° − φ) oder Cosinus (360° − φ) gespiegelt
+    const g0 = a.loesung.find(g => g < 180);
+    return gleich(e, [g0, mod360(180 - g0)]) || gleich(e, [g0, mod360(360 - g0)]);
+  })()) code = 'umkehrSymTan';
   else if (zuviel.length && zuviel.every(g => wert(a.f, g) === neg(a.w))) code = 'umkehrVz';
   return { status: 'falsch', code, fehlt, zuviel };
 }
@@ -560,14 +636,15 @@ try {
 const themenBox = $('ek-themen');
 for (const [k, t] of Object.entries(THEMEN)) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'ek-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  b.type = 'button'; b.className = 'ek-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name; b.setAttribute('aria-pressed', themen.has(k));
   themenBox.appendChild(b);
 }
-document.querySelectorAll('#ek-mass .ek-opt').forEach(b => b.classList.toggle('aktiv', b.dataset.m === mass));
+document.querySelectorAll('#ek-mass .ek-opt').forEach(b => { b.classList.toggle('aktiv', b.dataset.m === mass); b.setAttribute('aria-pressed', b.dataset.m === mass); });
 
-// SVG des Einheitskreises. punkte: true = 16 anklickbare Punkte; markiert: Winkel für die Herleitung
+// SVG des Einheitskreises. punkte: true = 16 anklickbare Punkte; phi: Winkel für die Herleitung, phis: mehrere (Lösungen)
+// Trefferfläche der Punkte r = 12: Nachbarn im Abstand 15° liegen 2 · 100 · sin 7.5° = 26.1 auseinander, die Flächen berühren sich nicht.
 const SVGNS = 'http://www.w3.org/2000/svg';
-function kreisSvg({ punkte = false, phi = null, f = null, mass: ms = 'grad', groesse = 300 } = {}) {
+function kreisSvg({ punkte = false, phi = null, phis = null, f = null, mass: ms = 'grad', groesse = 300 } = {}) {
   const c = 150, r = 100;
   const px = g => c + r * Math.cos(g * Math.PI / 180), py = g => c - r * Math.sin(g * Math.PI / 180);
   let s = '<svg class="ek-skizze" viewBox="0 0 300 300" xmlns="' + SVGNS + '" role="img" aria-label="Einheitskreis">';
@@ -579,31 +656,51 @@ function kreisSvg({ punkte = false, phi = null, f = null, mass: ms = 'grad', gro
   }
   s += '<circle cx="150" cy="150" r="100" fill="none" stroke="var(--blau-rand)" stroke-width="1.5"/>';
   if (!punkte) s += [[195, 105, 'I'], [105, 105, 'II'], [105, 200, 'III'], [195, 200, 'IV']].map(([x, y, t]) => '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-family="var(--mono)" font-size="12" fill="var(--linie)">' + t + '</text>').join('');
-  if (phi !== null) {
+  // Zeiger zu einem Winkel: Referenzwinkel, cos (blau) und sin (orange) als Strecken, Punkt P.
+  // Eine Strecke der Länge 0 (Punkt auf einer Achse) wird weder gezeichnet noch beschriftet.
+  // Mehrere Zeiger: Eine Beschriftung, die eine frühere überdecken würde, entfällt (gleicher Referenzwinkel, gemeinsame Strecke).
+  const belegt = [];
+  const frei = (x, y, anker, text, pruefen) => {
+    const w = text.length * 6.5, cx = anker === 'start' ? x + w / 2 : anker === 'end' ? x - w / 2 : x, cy = y - 4;
+    if (pruefen && belegt.some(b => Math.abs(b[0] - cx) < (b[2] + w) / 2 && Math.abs(b[1] - cy) < 11)) return false;
+    belegt.push([cx, cy, w]); return true;
+  };
+  const zeiger = (phi, name, pruefen) => {
     const n = mod360(phi), X = px(n), Y = py(n);
+    let z = '';
     // Referenzwinkel-Bogen zur nächsten x-Achse
     const ref = referenz(n);
     if (n % 90 !== 0) {
       const von = n <= 90 ? 0 : n <= 270 ? 180 : 360, rr = 34;
       const a1 = Math.min(von, n), a2 = Math.max(von, n);
       const x1 = c + rr * Math.cos(a1 * Math.PI / 180), y1 = c - rr * Math.sin(a1 * Math.PI / 180), x2 = c + rr * Math.cos(a2 * Math.PI / 180), y2 = c - rr * Math.sin(a2 * Math.PI / 180);
-      s += '<path d="M' + x1.toFixed(1) + ',' + y1.toFixed(1) + ' A' + rr + ',' + rr + ' 0 0 0 ' + x2.toFixed(1) + ',' + y2.toFixed(1) + '" fill="none" stroke="var(--lila)" stroke-width="2"/>';
+      z += '<path d="M' + x1.toFixed(1) + ',' + y1.toFixed(1) + ' A' + rr + ',' + rr + ' 0 0 0 ' + x2.toFixed(1) + ',' + y2.toFixed(1) + '" fill="none" stroke="var(--lila)" stroke-width="2"/>';
       const am = (a1 + a2) / 2, lx = c + 50 * Math.cos(am * Math.PI / 180), ly = c - 50 * Math.sin(am * Math.PI / 180);
-      s += '<text x="' + lx.toFixed(1) + '" y="' + (ly + 4).toFixed(1) + '" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--lila)">' + ref + '°</text>';
+      if (frei(lx, ly + 4, 'middle', ref + '°', pruefen)) z += '<text x="' + lx.toFixed(1) + '" y="' + (ly + 4).toFixed(1) + '" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--lila)">' + ref + '°</text>';
     }
-    s += '<line x1="' + X.toFixed(1) + '" y1="' + Y.toFixed(1) + '" x2="' + X.toFixed(1) + '" y2="150" stroke="var(--orange)" stroke-width="2.5"/>';
-    s += '<line x1="150" y1="150" x2="' + X.toFixed(1) + '" y2="150" stroke="var(--blau)" stroke-width="2.5"/>';
-    s += '<line x1="150" y1="150" x2="' + X.toFixed(1) + '" y2="' + Y.toFixed(1) + '" stroke="var(--tinte)" stroke-width="1.5"/>';
-    s += '<circle cx="' + X.toFixed(1) + '" cy="' + Y.toFixed(1) + '" r="5" fill="var(--gruen)"/>';
+    const mitSin = Math.abs(Y - 150) > 0.5, mitCos = Math.abs(X - 150) > 0.5;
+    if (mitSin) z += '<line x1="' + X.toFixed(1) + '" y1="' + Y.toFixed(1) + '" x2="' + X.toFixed(1) + '" y2="150" stroke="var(--orange)" stroke-width="2.5"/>';
+    if (mitCos) z += '<line x1="150" y1="150" x2="' + X.toFixed(1) + '" y2="150" stroke="var(--blau)" stroke-width="2.5"/>';
+    z += '<line x1="150" y1="150" x2="' + X.toFixed(1) + '" y2="' + Y.toFixed(1) + '" stroke="var(--tinte)" stroke-width="1.5"/>';
+    z += '<circle cx="' + X.toFixed(1) + '" cy="' + Y.toFixed(1) + '" r="5" fill="var(--gruen)"/>';
     const lab = (X >= 150 ? 1 : -1);
-    s += '<text x="' + (X + lab * 9).toFixed(1) + '" y="' + (Y + (Y <= 150 ? -7 : 15)).toFixed(1) + '" text-anchor="' + (lab > 0 ? 'start' : 'end') + '" font-family="var(--mono)" font-size="12" fill="var(--gruen)">P</text>';
-    s += '<text x="' + ((150 + X) / 2).toFixed(1) + '" y="' + (Y <= 150 ? 166 : 142) + '" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--blau)">cos</text>';
-    s += '<text x="' + (X + (X >= 150 ? 6 : -6)).toFixed(1) + '" y="' + ((150 + Y) / 2 + 4).toFixed(1) + '" text-anchor="' + (X >= 150 ? 'start' : 'end') + '" font-family="var(--mono)" font-size="10" fill="var(--orange)">sin</text>';
+    frei(X + lab * 9, Y + (Y <= 150 ? -7 : 15), lab > 0 ? 'start' : 'end', name, false);
+    z += '<text x="' + (X + lab * 9).toFixed(1) + '" y="' + (Y + (Y <= 150 ? -7 : 15)).toFixed(1) + '" text-anchor="' + (lab > 0 ? 'start' : 'end') + '" font-family="var(--mono)" font-size="12" fill="var(--gruen)">' + name + '</text>';
+    if (mitCos && frei((150 + X) / 2, Y <= 150 ? 166 : 142, 'middle', 'cos', pruefen)) z += '<text x="' + ((150 + X) / 2).toFixed(1) + '" y="' + (Y <= 150 ? 166 : 142) + '" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--blau)">cos</text>';
+    if (mitSin && frei(X + (X >= 150 ? 6 : -6), (150 + Y) / 2 + 4, X >= 150 ? 'start' : 'end', 'sin', pruefen)) z += '<text x="' + (X + (X >= 150 ? 6 : -6)).toFixed(1) + '" y="' + ((150 + Y) / 2 + 4).toFixed(1) + '" text-anchor="' + (X >= 150 ? 'start' : 'end') + '" font-family="var(--mono)" font-size="10" fill="var(--orange)">sin</text>';
+    return z;
+  };
+  const winkel = phis || (phi !== null ? [phi] : []);
+  if (winkel.length === 2) {                // Vom Wert zum Winkel: die beiden Lösungen gestrichelt verbunden
+    const [u, v] = winkel;
+    s += '<line x1="' + px(u).toFixed(1) + '" y1="' + py(u).toFixed(1) + '" x2="' + px(v).toFixed(1) + '" y2="' + py(v).toFixed(1) + '" stroke="'
+      + (f === 'sin' ? 'var(--orange)' : f === 'cos' ? 'var(--blau)' : 'var(--tinte-2)') + '" stroke-width="1.2" stroke-dasharray="4 3"/>';
   }
+  winkel.forEach((w, i) => { s += zeiger(w, winkel.length > 1 ? 'P' + '₁₂'[i] : 'P', winkel.length > 1); });
   if (punkte) for (const g of KREIS) {
     const X = px(g), Y = py(g), lx = c + (r + 24) * Math.cos(g * Math.PI / 180), ly = c - (r + 24) * Math.sin(g * Math.PI / 180);
     s += '<g class="ek-punkt" data-g="' + g + '" tabindex="0" role="checkbox" aria-checked="false" aria-label="' + (ms === 'rad' ? radText(g) : g + ' Grad') + '">'
-      + '<circle cx="' + X.toFixed(1) + '" cy="' + Y.toFixed(1) + '" r="13" fill="transparent"/>'
+      + '<circle cx="' + X.toFixed(1) + '" cy="' + Y.toFixed(1) + '" r="12" fill="transparent"/>'
       + '<circle class="ek-p" cx="' + X.toFixed(1) + '" cy="' + Y.toFixed(1) + '" r="6.5"/>'
       + '<text x="' + lx.toFixed(1) + '" y="' + (ly + 3.5).toFixed(1) + '" text-anchor="middle">' + (ms === 'rad' ? radText(g) : g + '°') + '</text></g>';
   }
@@ -619,7 +716,7 @@ function zeigeZahlen() {
   $('ek-kurz').textContent = Math.min(nr, RUNDE) + '/' + RUNDE + ' · ' + stand.ok + ' auf Anhieb';
 }
 function wegHtml(a) {
-  const skizze = a.thema === 'werte' ? kreisSvg({ phi: a.grad, f: a.f }) : '';
+  const skizze = a.thema === 'werte' ? kreisSvg({ phi: a.grad, f: a.f }) : a.thema === 'umkehr' ? kreisSvg({ phis: a.loesung, f: a.f }) : '';
   return '<div class="ek-weg-text"><div class="ek-weg-titel">' + (a.thema === 'umrechnen' ? 'Umrechnung' : 'Herleitung') + '</div>'
     + a.weg.map(z => '<div class="ek-zeile">' + z + '</div>').join('') + '</div>' + skizze;
 }
@@ -635,7 +732,7 @@ function neueAufgabe() {
   $('ek-antwort-eingabe').hidden = !(a.art === 'rad' || a.art === 'grad');
   $('ek-antwort-palette').hidden = a.art !== 'palette';
   $('ek-antwort-kreis').hidden = a.art !== 'kreis';
-  $('ek-hinweis').textContent = { rad: 'Zum Beispiel 5pi/6, -pi/4 oder 2pi (π geht auch).', grad: 'Zum Beispiel 150 oder 150°.', palette: '', kreis: 'Antippen wählt einen Punkt an oder ab.' }[a.art];
+  $('ek-hinweis').textContent = { rad: 'Zum Beispiel 5pi/6, -pi/4 oder 2pi (π geht auch).', grad: 'Zum Beispiel 150 oder 150°.', palette: '', kreis: 'Antippen wählt einen Punkt an oder ab. Mit der Tastatur: Tab springt zum nächsten Punkt, Leertaste wählt, Enter prüft.' }[a.art];
   if (a.art === 'palette') setzen($('ek-antwort-palette'), PALETTE.map(k => '<button type="button" class="ek-btn' + (k === 'nd' ? ' ek-nd' : '') + '" data-w="' + k + '">' + (k === 'nd' ? 'nicht definiert' : '\\(' + wertTex(k) + '\\)') + '</button>').join(''));
   if (a.art === 'kreis') { $('ek-kreis').innerHTML = kreisSvg({ punkte: true, mass: a.mass }); $('ek-kreis-pruefen').disabled = false; }
   const inp = $('ek-eingabe'); inp.value = ''; inp.disabled = false; $('ek-pruefen').disabled = false;
@@ -674,8 +771,8 @@ function antwort(e) {
   versuch++; fehlerInAufgabe++; stand.fehl++;
   stand.codes[r.code] = (stand.codes[r.code] || 0) + 1;
   const f = FEHLER[r.code];
-  let html = '<p>✗ ' + (r.code === 'sonst' ? 'Noch nicht. ' : '<strong>' + f[0] + '.</strong> ') + f[1] + '</p>';
-  if (r.code === 'vorzeichen' && A.thema === 'werte' && mod360(A.grad) % 90) {
+  let html = '<p>✗ ' + (r.code.startsWith('sonst') ? 'Noch nicht. ' : '<strong>' + f[0] + '.</strong> ') + f[1] + '</p>';
+  if (['vorzeichen', 'vertauschtVz', 'tanKehrVz'].includes(r.code) && A.thema === 'werte' && mod360(A.grad) % 90) {
     const q = quadrant(mod360(A.grad));
     html += '<p>\\(' + winkelTex(A.grad, A.mass) + '\\) liegt im Quadranten ' + R[q] + ': ' + ['', 'alle positiv', 'nur der Sinus positiv', 'nur der Tangens positiv', 'nur der Cosinus positiv'][q] + '.</p>';
   }
@@ -688,7 +785,7 @@ function antwort(e) {
 }
 function bilanz() {
   clearInterval(tick);
-  const top = Object.entries(stand.codes).filter(([c]) => c !== 'sonst').sort((u, v) => v[1] - u[1]).slice(0, 3);
+  const top = Object.entries(stand.codes).filter(([c]) => !c.startsWith('sonst')).sort((u, v) => v[1] - u[1]).slice(0, 3);
   let html = '<h2>Runde fertig</h2><p>' + stand.ok + ' von ' + RUNDE + ' auf Anhieb richtig · ' + stand.fehl + ' Fehler · Zeit ' + zeit() + '</p>';
   if (top.length) html += '<p>Erkannte Denkfehler:</p><ul>' + top.map(([c, n]) => {
     const f = FEHLER[c];
@@ -731,13 +828,13 @@ themenBox.addEventListener('click', e => {
   const t = b.dataset.t;
   if (themen.has(t) && themen.size === 1) return;
   if (themen.has(t)) themen.delete(t); else themen.add(t);
-  b.classList.toggle('aktiv', themen.has(t));
+  b.classList.toggle('aktiv', themen.has(t)); b.setAttribute('aria-pressed', themen.has(t));
   neueRunde();
 });
 $('ek-mass').addEventListener('click', e => {
   const b = e.target.closest('.ek-opt'); if (!b) return;
   mass = b.dataset.m;
-  document.querySelectorAll('#ek-mass .ek-opt').forEach(x => x.classList.toggle('aktiv', x === b));
+  document.querySelectorAll('#ek-mass .ek-opt').forEach(x => { x.classList.toggle('aktiv', x === b); x.setAttribute('aria-pressed', x === b); });
   neueRunde();
 });
 document.addEventListener('keydown', e => {

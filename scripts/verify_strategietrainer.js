@@ -13,6 +13,7 @@
 //     vollständig zerlegt bzw. gekürzt, und 𝔻 stimmt mit den Nullstellen des Nenners überein
 //   – Systeme: Jedes Lösungspaar erfüllt beide Gleichungen, die Anzahl stimmt
 //   – LaTeX: Klammern ausgeglichen, keine «+ -», «1x», «x^1», «+ 0»
+//   – Einzelfälle aus TODO-trainer-korrekturen.md (ST-B1 … ST-C9, RT-C10), siehe pruefeFaelle
 // Exit 1 bei einem Befund.
 const fs = require('fs');
 const path = require('path');
@@ -111,6 +112,67 @@ function pruefeSys(ende, a, wo) {
   }
 }
 
+// ── Einzelfälle aus der Prüfung vom 11.10.2026 (TODO-trainer-korrekturen.md) ──
+const ggT = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
+const kgV = (a, b) => Math.abs(a * b) / ggT(a, b);
+const quadratZahl = n => n >= 0 && Math.round(Math.sqrt(n)) ** 2 === n;
+const NULL_FORM = ['q_fakt', 'q_binom', 'q_teilbar', 'q_allg', 'q_rein', 'q_ohne_c', 'q_prod'];
+function pruefeFaelle(st, a, wo, tiefe) {
+  const fam = K.familie(st), R = id => K.regel(st, id);
+  if (fam === 'gl') {
+    // ST-C3: Mitternachtsformel einheitlich — ✓ nur bei ax² + bx + c = 0 ohne Spezialform,
+    // ≈ bei einer Spezialform (b = 0, c = 0, Binom, Zweiklammersatz, schon faktorisiert), ✗ wenn rechts nicht 0 steht
+    let soll = 'x';
+    if (NULL_FORM.includes(st.k)) {
+      soll = 'um';
+      if (st.k === 'q_allg') soll = 'ok';
+      if (st.k === 'q_teilbar') { const B = st.b / st.a, C = st.c / st.a; if (!quadratZahl(B * B - 4 * C)) soll = 'ok'; }
+    }
+    if (R('mf')[0] !== soll) melde('ST-C3: Mitternachtsformel uneinheitlich bewertet', st.k + ' «' + st.z + '»: ' + R('mf')[0] + ' statt ' + soll);
+    // ST-B3: x² = negative Zahl — Faktorisieren ist ✗
+    if (st.k === 'q_x2' && st.n < 0 && R('binom')[0] !== 'x') melde('ST-B3: Faktorisieren bei x² = negativ nicht ✗', st.z);
+    // ST-C1: x² = Bruch — eigener Text
+    if (st.k === 'q_x2' && st.d > 1 && R('brueche')[1] === 'Hier stehen keine Brüche.') melde('ST-C1: «keine Brüche» bei x² = Bruch', st.z);
+    // ST-C2: Bruchgleichung — keine Klammern, keine Zahl vor x
+    if (st.k === 'bruch_gl') for (const id of ['klammern', 'teilen']) if (R(id)[0] !== 'x') melde('ST-C2: ' + id + ' bei Bruchgleichung nicht ✗', st.z);
+    // ST-C5: «nicht in Faktoren zerlegen» stimmt nicht, wenn ein Zahlfaktor ausgeklammert werden kann
+    for (const [id] of K.LISTEN.gl) { const r = R(id); if (r[1] && /nicht in Faktoren zerlegen/.test(r[1])) melde('ST-C5: «nicht in Faktoren zerlegen»', st.z + ' / ' + id); }
+    // ST-C8: «x = 0 geht verloren» nur, wo 0 eine Lösung ist
+    const f0 = a.f(0), nullLsg = Number.isFinite(f0) && Math.abs(f0) < 1e-9 && !(a.dW || []).includes(0);
+    const dx = R('durchx');
+    if (!nullLsg && dx[1] && /x = 0/.test(dx[1]) && /verl/.test(dx[1])) melde('ST-C8: «x = 0 geht verloren», obwohl 0 keine Lösung ist', st.k + ' «' + st.z + '»');
+    // ST-C6 und ST-C9 (Gleichungen): ausführen und Ergebnis ansehen
+    for (const id of K.passend(st)) {
+      const aus = K.ausfuehren(st, id);
+      const ops = [aus.op, ...aus.zeilen.map(z => z[1])];
+      if (ops.some(o => o === 'Binom' || o === 'faktorisieren')) melde('ST-C9: Schritt heisst nur «Binom»/«faktorisieren»', st.k + ' «' + st.z + '» → ' + ops.join(' | '));
+      if (st.k === 'q_ohne_c' && id === 'ausklammern') {
+        const m = /\((-?\d*)x ([+-]) (\d+)\) = 0$/.exec(aus.next.z);
+        if (m) { const k = m[1] === '' ? 1 : m[1] === '-' ? -1 : +m[1];
+          if (ggT(k, +m[3]) > 1 || k < 0) melde('ST-C6: Zahlfaktor in der Klammer stehen gelassen', st.z + ' → ' + aus.next.z); }
+      }
+    }
+  }
+  if (fam === 'term' && tiefe === 0) {
+    // ST-C7: im ersten Schritt gibt es nichts auszumultiplizieren
+    const r = R('ausmult');
+    if (r[0] !== 'x' || /wieder am Anfang/.test(r[1])) melde('ST-C7: Ausmultiplizieren im ersten Schritt', st.z + ': ' + r[0] + ' ' + r[1]);
+  }
+  if (st.k === 's_sys' && !st.g.some(e => e.roh) && st.g.every(e => e.t === 'lin' && e.form === 'norm')) {
+    const [e1, e2] = st.g;
+    // ST-B1: «es entstehen Brüche» nur, wenn sich keine Gleichung ohne Brüche nach einer Variablen auflösen lässt
+    const glatt = e => (e.b && e.a % e.b === 0 && e.c % e.b === 0) || (e.a && e.b % e.a === 0 && e.c % e.a === 0);
+    const ein = R('einsetzen');
+    if (ein[0] !== 'ok' && /Brüche/.test(ein[1]) && st.g.some(glatt)) melde('ST-B1: «es entstehen Brüche», obwohl eine Gleichung glatt auflösbar ist', st.z);
+    // ST-B2: Additionsverfahren eliminiert die Variable mit dem kleineren kgV
+    if (R('addition')[0] === 'ok' && e1.a && e2.a && e1.b && e2.b) {
+      const aus = K.ausfuehren(st, 'addition'), kx = kgV(e1.a, e2.a), ky = kgV(e1.b, e2.b);
+      const bleibt = kx < ky ? 'y' : 'x';
+      if (aus.next.v && aus.next.v !== bleibt) melde('ST-B2: Additionsverfahren eliminiert nicht die Variable mit dem kleineren kgV', st.z + ' (kgV x ' + kx + ', y ' + ky + ') → ' + aus.op);
+    }
+  }
+}
+
 let zustaende = 0, wege = 0;
 function gehe(st, a, wo, tiefe) {
   zustaende++;
@@ -128,6 +190,7 @@ function gehe(st, a, wo, tiefe) {
       else { latexOk(r[1], st.k + '/' + id); if (r[1] === 'Dieser Schritt passt hier nicht.') melde('Regel ohne eigene Begründung', st.k + '/' + id); }
     }
   }
+  pruefeFaelle(st, a, wo, tiefe);
   for (const id of ok) {
     const aus = K.ausfuehren(st, id);
     for (const [z] of aus.zeilen) latexOk(z, wo + ' ' + id);
@@ -156,6 +219,21 @@ for (const bereich of Object.keys(K.VORLAGEN)) {
       gehe(a.st, a, fn.name + ' «' + a.st.z + '»', 0);
     }
   }
+}
+
+// ── Seite (ausserhalb des Kerns) ──
+{
+  const merk = html.slice(html.indexOf('⭐ Welcher Schritt wann?'), html.indexOf('</details>', html.indexOf('⭐ Welcher Schritt wann?')));
+  const teilen = /Durch die Zahl vor[^]*?<\/tr>/.exec(merk);
+  // ST-C4: «teilen bei gemeinsamem Faktor» nur bei quadratischen Gleichungen
+  if (!teilen || (/gemeinsamen Faktor/.test(teilen[0]) && !/quadratisch/.test(teilen[0]))) melde('ST-C4: Merkkasten «teilen bei gemeinsamem Faktor» gilt auch für lineare Gleichungen', teilen && teilen[0]);
+  // ST-C9: Einleitung verweist auf s2.2a und s3.1
+  const einl = html.slice(html.indexOf('pt-untertitel'), html.indexOf('</p>', html.indexOf('pt-untertitel')));
+  for (const s of ['s2-2a-', 's3-1-']) if (!einl.includes(s)) melde('ST-C9: Einleitung ohne Verweis auf ' + s, '');
+  // RT-C10: Bereichs-Schalter mit aria-pressed, beim Umschalten nachgeführt
+  const knoepfe = html.match(/<button[^>]*class="st-opt[^"]*"[^>]*>/g) || [];
+  if (!knoepfe.length || knoepfe.some(b => !/aria-pressed="(true|false)"/.test(b))) melde('RT-C10: st-opt ohne aria-pressed', knoepfe[0]);
+  if (!/setAttribute\('aria-pressed'/.test(html)) melde('RT-C10: aria-pressed wird nicht nachgeführt', '');
 }
 
 console.log(`${Object.keys(zaehl).length} Vorlagen · ${Object.values(zaehl).reduce((s, v) => s + v, 0)} Aufgaben · ${zustaende} Zustände · ${wege} Wege bis zum Ende`);

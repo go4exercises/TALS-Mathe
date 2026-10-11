@@ -21,7 +21,7 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'rechentrai
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, pruefe, dezimal, qTex, Q, ggT };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { THEMEN, FEHLER, pruefe, dezimal, qTex, Q, ggT, termAufgabe, F_REIHE, F_VZ, lies, parse, rechne };', ctx);
 const K = ctx.K;
 const N = +process.argv[2] || 400;
 const befunde = new Map();
@@ -77,6 +77,87 @@ for (const thema of Object.keys(K.THEMEN)) {
     py.push({ art: 'wert', ausdruck: a.pyth, n: a.loesung.n, d: a.loesung.d, wo });
     if (a.pruefPer) py.push({ art: 'periode', per: a.pruefPer, n: a.loesung.n, d: a.loesung.d, wo });
   }
+}
+
+// Gezielte Fälle aus TODO-trainer-korrekturen.md (RT-B1 … RT-C10)
+function fall(id, ok, info) { if (!ok) melde(id, info); }
+{
+  // RT-B1: gemischte Zahl richtig lesen, bei verlangtem Bruch «fast»
+  const l = K.lies('1 1/2');
+  fall('RT-B1 gemischte Zahl falsch gelesen', l.q && l.q.n === 3 && l.q.d === 2, JSON.stringify(l));
+  const l2 = K.lies('-2 3/4');
+  fall('RT-B1 negative gemischte Zahl falsch gelesen', l2.q && l2.q.n === -11 && l2.q.d === 4, JSON.stringify(l2));
+  const ab = { thema: 'brueche', art: 'bruch', loesung: K.Q(3, 2), diag: [] };
+  const r = K.pruefe(ab, '1 1/2');
+  fall('RT-B1 gemischte Zahl nicht «fast»', r.status === 'fast' && /als Bruch/.test(r.text || ''), JSON.stringify(r));
+  fall('RT-B1 falsche gemischte Zahl nicht «falsch»', K.pruefe(ab, '1 1/3').status === 'falsch', JSON.stringify(K.pruefe(ab, '1 1/3')));
+}
+const codeVon = (thema, ascii, flags, eingabe) => { const a = K.termAufgabe(thema, ascii, flags); return a ? K.pruefe(a, eingabe).code : 'keine Aufgabe'; };
+const erwarte = (id, thema, ascii, flags, eingabe, code) => { const c = codeVon(thema, ascii, flags, eingabe); fall(id, c === code, ascii + ' → ' + eingabe + ': ' + c + ' statt ' + code); };
+// RT-B2: Klammer übersehen getrennt nach Minus vor der Klammer und Vorrang der Klammer
+erwarte('RT-B2 Klammer-Diagnose', 'reihenfolge', '4 * (7 - 5) ^ 2', K.F_REIHE, '3', 'klammerVorrang');
+// 6·(5 − 6)² = 6; ohne Klammer −6 = −Lösung, darum nach RT-C4 «Vorzeichen» (auch (5 − 6)² = −1 ergibt −6)
+erwarte('RT-B2 Klammer-Diagnose', 'reihenfolge', '6 * (5 - 6) ^ 2', K.F_REIHE, '-6', 'vz');
+erwarte('RT-B2 Klammer-Diagnose', 'reihenfolge', '(3 + 5) ^ 2 - 11', K.F_REIHE, '17', 'klammerVorrang');
+erwarte('RT-B2 Klammer-Diagnose', 'reihenfolge', '10 - (5 - 2)', K.F_REIHE, '3', 'minusKlammer');
+erwarte('RT-B2 Klammer-Diagnose', 'vorzeichen', '(-3) ^ 2 - (-6)', K.F_VZ, '-3', 'klammerPot');
+fall('RT-B2 ohneKlammer noch vorhanden', !K.FEHLER.ohneKlammer, '');
+// RT-B3: minusminus für jeden negativen Operanden, −(−b) und +(−b)
+erwarte('RT-B3 Vorzeichen ohne Diagnose', 'vorzeichen', '2 * (-4) - 8 * (-3)', K.F_VZ, '-32', 'minusminus');
+erwarte('RT-B3 Vorzeichen ohne Diagnose', 'vorzeichen', '-9 - 8 * (-2)', K.F_VZ, '-25', 'minusminus');
+erwarte('RT-B3 Vorzeichen ohne Diagnose', 'vorzeichen', '-(-5) + 7', K.F_VZ, '2', 'minusminus');
+erwarte('RT-B3 Vorzeichen ohne Diagnose', 'vorzeichen', '(-12) : 3 + (-5)', K.F_VZ, '1', 'minusminus');
+// RT-B4: Text von «vz» passt auch bei Summen
+fall('RT-B4 vz-Text nennt Produkte', !/Produkten/.test(K.FEHLER.vz[1]), K.FEHLER.vz[1]);
+// RT-C1: Prozent als Bruch → fast
+{ const a = { thema: 'umwandeln', art: 'prozent', loesung: K.Q(75), diag: [] };
+  fall('RT-C1 Bruch bei Prozent angenommen', K.pruefe(a, '150/2').status === 'fast', JSON.stringify(K.pruefe(a, '150/2'))); }
+// RT-C2: Kürzungsmeldung mit Vorzeichen
+{ const r = K.pruefe({ thema: 'brueche', art: 'bruch', loesung: K.Q(-1, 2), diag: [] }, '-2/4');
+  fall('RT-C2 Vorzeichen fehlt in der Kürzungsmeldung', r.status === 'fast' && r.text.includes('-\\frac{2}{4} = -\\frac{1}{2}'), JSON.stringify(r)); }
+// RT-C4: Wert = −Lösung heisst «Vorzeichen», nicht «Strich vor Punkt»
+erwarte('RT-C4 Mehrdeutige Diagnose', 'reihenfolge', '12 - 7 * 6', K.F_REIHE, '30', 'vz');
+// RT-C8, RT-C9: Wortlaut
+fall('RT-C8 «nur die Primfaktoren 2 und 5»', !/nur die Primfaktoren/.test(html), '');
+fall('RT-C9 Thema heisst nicht «Hierarchie der Operationen»', /Hierarchie/.test(K.THEMEN.reihenfolge.name), K.THEMEN.reihenfolge.name);
+// RT-C10: Themen-Schalter mit aria-pressed
+fall('RT-C10 aria-pressed fehlt', /aria-pressed/.test(html.slice(html.indexOf('// ── KERN:ENDE'))), '');
+// Zufallsaufgaben gezielt
+const ohneKl = s => s.replace(/^= /, '').replace(/[()]/g, '');
+const asciiVon = py => py.replace(/Fraction\((\d+)\)/g, '$1').replace(/\*\*/g, '^').replace(/\//g, ':');
+for (let i = 0; i < N; i++) {
+  for (const thema of ['reihenfolge', 'vorzeichen']) {
+    const a = K.THEMEN[thema].neu(); if (!a) continue;
+    const zeilen = a.weg.filter(w => typeof w === 'string');
+    for (let k = 1; k < zeilen.length; k++)   // RT-B6: kein Schritt, der nur Klammern weglässt
+      if (ohneKl(zeilen[k]) === ohneKl(zeilen[k - 1])) melde('RT-B6 leerer Schritt im Lösungsweg', zeilen[k - 1] + ' | ' + zeilen[k]);
+    if (thema === 'vorzeichen' && !a.diag.some(([c]) => c !== 'vz')) melde('RT-B3 Vorzeichen-Aufgabe ohne Diagnose', a.ausdruck);
+    if (a.pyth.includes('**')) {             // RT-C3: Hochzahl als Faktor muss sich vom richtigen Wert unterscheiden
+      const asc = asciiVon(a.pyth), w = K.rechne(K.parse(asc, { potmal: true }), { potmal: true });
+      if (w && w.n === a.loesung.n && w.d === a.loesung.d) melde('RT-C3 potmal ergibt die Lösung', a.ausdruck);
+    }
+  }
+  { const a = K.THEMEN.brueche.neu();
+    if (a) {
+      const m = /^Fraction\((-?\d+), (\d+)\) (.) Fraction\((-?\d+), (\d+)\)$/.exec(a.pyth);
+      const ad = +m[2], bd = +m[5], op = m[3], N2 = ad * bd / K.ggT(ad, bd);
+      if (ad > 10 || bd > 10) melde('RT-B5 Nenner über 10', a.ausdruck);
+      if ((op === '+' || op === '-') && N2 > 60) melde('RT-B5 Hauptnenner über 60', a.ausdruck);
+      const txt = a.weg.map(w => typeof w === 'string' ? w : w.text).join(' ');
+      if (/beide Brüche erweitern/.test(txt) && (ad === N2 || bd === N2)) melde('RT-C5 «beide Brüche erweitern» ohne Grund', a.ausdruck);
+      if (/^1 /.test(a.ausdruck) || /\}\{1 \\cdot|\}\{\d+ \\cdot 1\}/.test(txt)) melde('RT-C6 trivialer Faktor 1', a.ausdruck + ' | ' + txt);
+    } }
+  { const a = K.THEMEN.umwandeln.neu();
+    if (a) {
+      const txt = a.weg.map(w => typeof w === 'string' ? w : w.text).join(' ');
+      for (const [, f] of txt.matchAll(/\\cdot (\d+)\}/g)) if (+f > 250) melde('RT-C7 Erweiterungsfaktor über 250', txt);
+      if (/\\frac\{-?\d+\.\d/.test(txt)) melde('RT-C9 Dezimalzahl im Bruch', txt);
+    } }
+  { const a = K.THEMEN.periodisch.neu();
+    if (a) {
+      const txt = a.weg.map(w => typeof w === 'string' ? w : w.text).join(' ');
+      if (/(^|[^a-z\\])x\b/.test(txt)) melde('RT-C9 Variable x statt z', txt);
+    } }
 }
 
 // Gegenrechnung in python3

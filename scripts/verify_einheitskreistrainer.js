@@ -11,6 +11,9 @@
 //   – Vom Wert zum Winkel: Die Lösungsmenge stimmt mit der in python3 berechneten überein
 //     (asin/acos/atan, auf [0°; 360°[ gebracht); fehlende Lösung → «nur eine Lösung»
 //   – LaTeX ohne unausgeglichene Klammern, ohne «undefined»
+//   – gezielte Fälle aus der Prüfung vom 11.10.2026 (EK-B1 … EK-C11): «*» als Produkt, Diagnosen für
+//     Grad statt Bogenmass, π vergessen, Faktor bzw. Bruch umgedreht, zwei Fehler auf einmal, sin/cos
+//     vertauscht und falsche Symmetrie beim Rückweg, Tangens-Herleitung über sin/cos, Intervall [0°; 360°[
 // Exit 1 bei einem Befund.
 const fs = require('fs');
 const path = require('path');
@@ -84,11 +87,66 @@ for (const thema of Object.keys(K.THEMEN)) for (const mass of ['grad', 'rad', 'm
     if (!K.PALETTE.includes(a.loesung)) melde('Lösung fehlt in der Palette', wo + ' ' + a.loesung);
   } else {
     if (K.pruefe(a, a.loesung.slice()).status !== 'ok') melde('Umkehr: Lösung nicht angenommen', wo);
-    if (a.loesung.length > 1 && K.pruefe(a, a.loesung.slice(0, 1)).code !== 'umkehrEine') melde('Umkehr: fehlende Lösung nicht erkannt', wo);
+    if (a.loesung.length > 1 && K.pruefe(a, a.loesung.slice(0, 1)).code !== (a.f === 'tan' ? 'umkehrEineTan' : 'umkehrEine')) melde('Umkehr: fehlende Lösung nicht erkannt', wo);
     py.push({ art: 'umkehr', f: a.f, z: K.wertZahl(a.w), loes: a.loesung, wo });
   }
 }
 function ggt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; }
+
+// 3. Gezielte Fälle (Prüfung vom 11.10.2026, TODO-trainer-korrekturen.md)
+const fall = (art, bed, info) => { if (!bed) melde(art, info); };
+const istCode = (r, code) => r && r.code === code;
+{
+  const rad = g => ({ thema: 'umrechnen', art: 'rad', grad: g }), grad = g => ({ thema: 'umrechnen', art: 'grad', grad: g });
+  // EK-B1: ohne Diagnose beim Umrechnen keine Rede von Quadrant und Referenzwinkel
+  for (const [a, e] of [[rad(150), '7pi/3'], [grad(150), '17']]) {
+    const r = K.pruefe(a, e), f = K.FEHLER[r.code];
+    fall('EK-B1: Rückmeldung beim Umrechnen spricht vom Quadranten', f && !/Quadrant|Referenzwinkel/.test(f[1]) && /180/.test(f[1]), a.art + ' ' + e + ' → ' + r.code);
+  }
+  // EK-B2: «*» als Produkt
+  for (const e of ['pi/6*5', 'pi*5/6', '5*pi/6', '5/6*pi', '(5*pi)/6', '5 * pi / 6', '5π/6', '5/6pi', '(5pi)/6'])
+    fall('EK-B2: Produkt mit * nicht gelesen', K.pruefe(rad(150), e).status === 'ok', e + ' → ' + JSON.stringify(K.pruefe(rad(150), e)));
+  fall('EK-B2: Produkt mit * nicht gelesen', K.pruefe(rad(-45), '-pi/4*1').status === 'ok' && K.pruefe(rad(-45), '-1*pi/4').status === 'ok', '-pi/4');
+  fall('EK-B2: ungekürzt mit * nicht «fast»', K.pruefe(rad(150), 'pi/12*10').status === 'fast', 'pi/12*10');
+  // EK-C11: Grad statt Bogenmass, π vergessen als Dezimalzahl, Faktor umgedreht
+  fall('EK-C11: Grad statt Bogenmass nicht erkannt', istCode(K.pruefe(rad(150), '150'), 'gradStattRad') && istCode(K.pruefe(rad(150), '150°'), 'gradStattRad'), JSON.stringify(K.pruefe(rad(150), '150')));
+  fall('EK-C11: π vergessen (Dezimalzahl) nicht erkannt', istCode(K.pruefe(rad(150), '0.8333'), 'ohnePi') && istCode(K.pruefe(rad(-30), '-0.1667'), 'ohnePi'), JSON.stringify(K.pruefe(rad(150), '0.8333')));
+  fall('EK-C11: 6π bei 30° als «Faktor umgedreht»', !istCode(K.pruefe(rad(30), '6pi'), 'kehr') && K.FEHLER[K.pruefe(rad(30), '6pi').code], JSON.stringify(K.pruefe(rad(30), '6pi')));
+  fall('EK-C11: Faktor umgedreht nicht erkannt', istCode(K.pruefe(rad(30), '1718.87'), 'kehr') && istCode(K.pruefe(rad(30), '5400/pi'), 'kehr'), JSON.stringify(K.pruefe(rad(30), '5400/pi')));
+  // EK-C9: Umrechnungsweg mit Gradzeichen, Vorzeichen vor dem Bruch
+  for (let i = 0; i < 400; i++) {
+    const a = K.THEMEN.umrechnen.neu('grad'); if (!a) continue;
+    fall('EK-C9: Umrechnungsweg ohne Gradzeichen', a.weg[0].includes(a.grad + '° \\cdot \\frac{\\pi}{180°}'), a.weg[0]);
+    fall('EK-C9: Minus im Zähler', !/\\frac\{-/.test(a.weg.join(' ')), a.weg[0]);
+  }
+  // EK-C5: zwei Fehler auf einmal
+  const pal = (f, g) => ({ thema: 'werte', art: 'palette', f, grad: g, mass: 'grad', loesung: K.wert(f, g) });
+  fall('EK-C5: vertauscht + Vorzeichen', istCode(K.pruefe(pal('sin', 30), '-w3/2'), 'vertauschtVz'), JSON.stringify(K.pruefe(pal('sin', 30), '-w3/2')));
+  fall('EK-C5: vertauscht ohne Vorzeichen', istCode(K.pruefe(pal('sin', 30), 'w3/2'), 'vertauscht'), JSON.stringify(K.pruefe(pal('sin', 30), 'w3/2')));
+  fall('EK-C5: Kehrwert + Vorzeichen', istCode(K.pruefe(pal('tan', 30), '-w3'), 'tanKehrVz'), JSON.stringify(K.pruefe(pal('tan', 30), '-w3')));
+  // EK-C6: Tangens-Herleitung mit sin/cos
+  for (const g of [30, 45, 150, 240, 315, -60, 510]) fall('EK-C6: Tangens-Herleitung ohne sin/cos', K.herleitung('tan', g, 'grad').some(z => z.includes('\\frac{\\sin')), String(g));
+  // EK-C10: kein Gedankenstrich neben Formeln bei «nicht definiert»
+  fall('EK-C10: Gedankenstrich in FEHLER.nd', !/—/.test(K.FEHLER.nd[1]), K.FEHLER.nd[1]);
+  // Vom Wert zum Winkel
+  const um = (f, w) => ({ thema: 'umkehr', art: 'kreis', f, w, mass: 'grad', loesung: K.KREIS.filter(g => K.wert(f, g) === w) });
+  for (let i = 0; i < 300; i++) {
+    const a = K.THEMEN.umkehr.neu(i % 2 ? 'rad' : 'grad');
+    fall('EK-C1: Intervall nicht als [0°; 360°[', a.auftrag.includes('[0°;\\,360°[') || a.auftrag.includes('[0;\\,2\\pi['), a.auftrag);
+    // EK-C3: Lösungsmenge der anderen Funktion
+    if (a.f !== 'tan') {
+      const andere = K.KREIS.filter(g => K.wert(a.f === 'sin' ? 'cos' : 'sin', g) === a.w);
+      if (andere.join() !== a.loesung.join()) fall('EK-C3: sin/cos vertauscht nicht erkannt', istCode(K.pruefe(a, andere), 'umkehrVertauscht'), a.ausdruck + ' ' + andere);
+    }
+  }
+  // EK-C2: Text beim Tangens
+  const t1 = K.pruefe(um('tan', '-w3'), [120]), ft = K.FEHLER[t1.code];
+  fall('EK-C2: «nur eine Lösung» beim Tangens', ft && !/zwischen/.test(ft[1]) && /180°/.test(ft[1]), JSON.stringify(t1));
+  fall('EK-C2: «nur eine Lösung» bei sin', istCode(K.pruefe(um('sin', '1/2'), [30]), 'umkehrEine'), JSON.stringify(K.pruefe(um('sin', '1/2'), [30])));
+  // EK-C4: Tangens wie Sinus oder Cosinus gespiegelt
+  for (const e of [[45, 135], [45, 315]]) fall('EK-C4: falsche Symmetrie beim Tangens', istCode(K.pruefe(um('tan', '1'), e), 'umkehrSymTan'), e + ' → ' + JSON.stringify(K.pruefe(um('tan', '1'), e)));
+  fall('EK-C4: Vorzeichen beim Rückweg (sin)', istCode(K.pruefe(um('sin', '1/2'), [210, 330]), 'umkehrVz'), JSON.stringify(K.pruefe(um('sin', '1/2'), [210, 330])));
+}
 
 const skript = `
 import sys, json, math

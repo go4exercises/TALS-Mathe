@@ -153,6 +153,8 @@ MathJax = {
 .tt-eingabe input { font-family:var(--mono); font-size:1.05rem; padding:7px 10px; width:18em; max-width:100%;
   border:1.5px solid var(--orange-rand); border-radius:8px; background:var(--papier); color:var(--tinte); }
 .tt-eingabe input:focus { outline:none; border-color:var(--orange); }
+.tt-tasten { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.tt-tasten .tt-btn { font-family:var(--mono); font-weight:400; font-size:1rem; min-width:44px; min-height:38px; padding:4px 10px; }
 .tt-vorschau { font-size:.95rem; color:var(--tinte-2); min-height:1.8em; margin-top:6px; overflow-x:auto; }
 .tt-vorschau:not(:empty)::before { content:'gelesen: '; font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); }
 .tt-weg .tt-k { font-family:var(--sans); font-size:.8rem; color:var(--tinte-2); margin-left:10px; }
@@ -187,6 +189,7 @@ MathJax = {
   .tt-ausdruck { font-size:1.1rem; }
   .tt-btn.tt-weiter { min-width:0; flex:1 1 60%; }
   .tt-taste { display:none; }
+  .tt-tasten .tt-btn { flex:1 1 0; min-width:0; padding:4px 0; }
 }
 </style>
 </head>
@@ -211,6 +214,15 @@ MathJax = {
       <div class="tt-eingabe">
         <input type="text" id="tt-eingabe" autocomplete="off" autocapitalize="off" inputmode="text" spellcheck="false" aria-label="Deine Antwort">
         <button type="button" class="tt-btn" id="tt-pruefen">Prüfen<span class="tt-taste">Enter</span></button>
+      </div>
+      <div class="tt-tasten" id="tt-tasten" role="group" aria-label="Zeichen einfügen">
+        <button type="button" class="tt-btn" data-z="^" aria-label="Hochzahl">^</button>
+        <button type="button" class="tt-btn" data-z="^2" aria-label="hoch 2">²</button>
+        <button type="button" class="tt-btn" data-z="(" aria-label="Klammer auf">(</button>
+        <button type="button" class="tt-btn" data-z=")" aria-label="Klammer zu">)</button>
+        <button type="button" class="tt-btn" data-z="/" aria-label="Bruchstrich">/</button>
+        <button type="button" class="tt-btn" data-z="+" aria-label="plus">+</button>
+        <button type="button" class="tt-btn" data-z="-" aria-label="minus">−</button>
       </div>
       <div class="tt-vorschau" id="tt-vorschau" aria-live="polite"></div>
       <div class="tt-hinweis" id="tt-hinweis"></div>
@@ -352,13 +364,16 @@ const rGleich = (a, b) => pGleich(pMul(a.z, b.n), pMul(b.z, a.n));
 
 // ── Eingabe lesen ──
 function TermFehler(text) { const e = new Error(text); e.termFehler = true; return e; }
+const HOCH = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 function normiere(s) {
-  return String(s).toLowerCase().replace(/[−–—]/g, '-').replace(/[·⋅×]/g, '*').replace(/²/g, '^2').replace(/³/g, '^3')
-    .replace(/:/g, '/').replace(/[[{]/g, '(').replace(/[\]}]/g, ')').replace(/\s+/g, '');
+  return String(s).toLowerCase().replace(/[−–—]/g, '-').replace(/[·⋅×]/g, '*')
+    .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, h => '^' + [...h].map(c => HOCH.indexOf(c)).join(''))
+    .replace(/[:÷]/g, '/').replace(/[[{]/g, '(').replace(/[\]}]/g, ')').replace(/\s+/g, '');
 }
 // Syntaxbaum: num, var, par (Klammer), pow (Basis b, natürliche Hochzahl k), mul (Faktoren f, stern[j] =
 // ausdrücklich mit * geschrieben), div (a / b), add (terme: [{ vz, t }])
 function parse(eingabe) {
+  if (/\d\s+\d/.test(String(eingabe))) throw TermFehler('Zwischen zwei Zahlen fehlt ein Rechenzeichen. Schreib <code>*</code> dazwischen oder rechne das Produkt aus.');
   const s = normiere(eingabe);
   if (!s) throw TermFehler('Gib zuerst einen Term ein.');
   let i = 0;
@@ -384,7 +399,7 @@ function parse(eingabe) {
       if (c === '*') { i++; acc = malDazu(acc, potenz(), true); }
       else if (c === '/') { i++; acc = { t: 'div', a: acc, b: potenz() }; }
       else if (ist(c, /[a-z(]/)) acc = malDazu(acc, potenz(), false);
-      else if (ist(c, /[0-9]/)) throw TermFehler('Eine Zahl direkt hinter einer Variablen oder Klammer verstehe ich nicht. Hochzahlen schreibst du mit <code>^</code>, z.B. <code>x^2</code>.');
+      else if (ist(c, /[0-9]/)) throw TermFehler('Eine Zahl direkt hinter einer Variablen oder Klammer verstehe ich nicht. Schreib die Zahl vorne, z.B. <code>2(x+3)</code>, oder mit <code>*</code>. Hochzahlen schreibst du mit <code>^</code>, z.B. <code>x^2</code>.');
       else return acc;
     }
   }
@@ -470,26 +485,28 @@ function glied(x) {                // einfaches Glied: [Zahl] Variable[^k] …, 
   let c = 1; const o = {};
   for (let j = 0; j < f.length; j++) {
     const g = f[j];
-    if (g.t === 'num' && j === 0) c = g.v;
+    if (g.t === 'num' && j === 0 && !(g.v === 1 && f.length > 1)) c = g.v;      // 1x: die 1 schreibt man nicht
     else if (g.t === 'var' && !o[g.v]) o[g.v] = 1;
-    else if (g.t === 'pow' && g.b.t === 'var' && !o[g.b.v]) o[g.b.v] = g.k;
+    else if (g.t === 'pow' && g.b.t === 'var' && !o[g.b.v] && g.k > 1) o[g.b.v] = g.k;   // x^1, x^0: nicht vereinfacht
     else return null;
   }
   return { c, m: monom(o) };
 }
-function summenform(x) {           // 'ok' | 'klammer' | 'glied' | 'gleichartig'
+function summenform(x) {           // 'ok' | 'bruch' | 'klammer' | 'glied' | 'gleichartig'
   const terme = x.t === 'add' ? x.terme : [{ vz: 1, t: x }];
   const da = new Set();
   for (const { t } of terme) {
     const g = glied(t);
-    if (!g) return enthaelt(t, ['par', 'div']) ? 'klammer' : 'glied';
+    if (!g) return enthaelt(t, ['div']) ? 'bruch' : enthaelt(t, ['par']) ? 'klammer' : 'glied';
     if (da.has(g.m) || g.c === 0) return 'gleichartig';
     da.add(g.m);
   }
   return 'ok';
 }
-// Faktoren eines Produkts als Polynome (Zahlfaktoren fallen weg, Monome zerfallen in Variablen); null = kein Produkt
-function faktorListe(x) {
+// Faktoren eines Produkts als Polynome (Zahlfaktoren fallen weg, Monome zerfallen in Variablen); null = kein Produkt.
+// info.grund (falls info übergeben): 'ganzeZahlen' = eine Klammer hat Bruch-Koeffizienten, 'klammerInnen' = in einer
+// Klammer ist die Summe noch nicht vereinfacht
+function faktorListe(x, info) {
   if (x.t === 'add') { if (x.terme.length !== 1) return null; x = x.terme[0].t; }
   const liste = [];
   function sammle(y) {
@@ -502,7 +519,9 @@ function faktorListe(x) {
       if (a.t === 'add' && a.terme.length === 1) a = a.terme[0].t;
       if (a.t !== 'add') return sammle(a);
       const r = wert(a);
-      if (pGrad(r.n) !== 0 || Math.abs(r.n.get('')) !== 1 || pNull(r.z)) return false;
+      if (pGrad(r.n) !== 0 || pNull(r.z)) return false;
+      if (Math.abs(r.n.get('')) !== 1) { if (info) info.grund = 'ganzeZahlen'; return false; }
+      if (summenform(a) !== 'ok') { if (info) info.grund = 'klammerInnen'; return false; }
       const p = r.n.get('') < 0 ? pAdd(new Map(), r.z, -1) : r.z;
       if (p.size === 1) { const [m] = p.keys(); for (const [v, e] of Object.entries(zerlege(m))) for (let k = 0; k < e; k++) liste.push(pVar(v)); }
       else liste.push(p);
@@ -517,6 +536,16 @@ function schluessel(p) {          // Faktor bis auf einen Zahlfaktor: durch den 
   return ms.map(m => { const c = p.get(m), g = ggT(c, lead) || 1; let z = c / g, n = lead / g; if (n < 0) { z = -z; n = -n; } return m + ':' + z + '/' + n; }).join('|');
 }
 const schluessel_liste = fl => fl.map(schluessel).sort().join('‖');
+// Form eines Produkts: null = sauber faktorisiert, sonst ein Schlüssel von FORM. Zahl und Variablen vor den
+// Klammern müssen ein vereinfachtes Glied sein (nicht 4xx(x + 1), nicht 2 · 3(x + 1)).
+function produktForm(x) {
+  const info = {};
+  if (!faktorListe(x, info)) return info.grund || 'keinProdukt';
+  const y = x.t === 'add' ? x.terme[0].t : x;
+  const f = (y.t === 'mul' ? y.f : [y]).filter(g => g.t !== 'par' && !(g.t === 'pow' && g.b.t === 'par'));
+  if (f.length && !glied(f.length === 1 ? f[0] : { t: 'mul', f })) return 'glied';
+  return null;
+}
 
 // ── Rückmeldungen ──
 const G13 = '../grundlagen/g1-3-algebraische-terme.html';
@@ -525,7 +554,6 @@ const L_K = [G13 + '#klammern', '1.3 Klammern auflösen'];
 const L_B = [G13 + '#binomi', '1.3 Binomische Formeln'];
 const L_F = [G13 + '#faktorisieren', '1.3 Faktorisieren'];
 const L_C = [G13 + '#bruchterme', '1.3 Bruchterme'];
-const L_S = ['../schwerpunkt/s1-1-grundlagen.html#typen', 'SF 1.1 Struktur-Regeln'];
 const FEHLER = {
   vzGlied:       ['Vorzeichen vom Glied getrennt', 'Das Rechenzeichen vor einem Glied gehört zu diesem Glied: In \\(4x^2 - x^2\\) wird \\(x^2\\) abgezogen, also \\(3x^2\\).', L_Z],
   gradGemischt:  ['Ungleichartige Glieder zusammengefasst', 'Gleichartig sind nur Glieder mit demselben Variablenteil. \\(x\\) und \\(x^2\\) bleiben getrennt stehen.', L_Z],
@@ -542,21 +570,31 @@ const FEHLER = {
   binom2statt3:  ['Quadrat statt 3. binomischer Formel', 'Eine Differenz zweier Quadrate ohne mittleres Glied ist \\(a^2 - b^2 = (a + b)(a - b)\\), kein Quadrat \\((a \\pm b)^2\\). Probe durch Ausmultiplizieren.', L_F],
   binom3statt12: ['3. statt 1. oder 2. binomischer Formel', 'Hat der Term ein mittleres Glied \\(\\pm 2ab\\), ist er ein Quadrat: \\(a^2 \\pm 2ab + b^2 = (a \\pm b)^2\\).', L_F],
   binomVz:       ['Vorzeichen in der Klammer', 'Das Vorzeichen des mittleren Glieds bestimmt das Vorzeichen in der Klammer: \\(x^2 - 6x + 9 = (x - 3)^2\\).', L_F],
-  vietaVz:       ['Vorzeichen im Zweiklammersatz', 'Gesucht sind \\(r\\) und \\(s\\) mit \\(r + s = p\\) und \\(r \\cdot s = q\\) — mit Vorzeichen. Probe: Die Klammern ausmultipliziert müssen den Term ergeben.', L_F],
+  vietaVz:       ['Vorzeichen im Zweiklammersatz', 'Für \\(x^2 + px + q = (x + r)(x + s)\\) sucht man \\(r\\) und \\(s\\) mit \\(r + s = p\\) und \\(r \\cdot s = q\\) — mit Vorzeichen. Probe: Die Klammern ausmultipliziert müssen den Term ergeben.', L_F],
   einsVergessen: ['Die 1 beim Ausklammern vergessen', 'Klammerst du ein ganzes Glied aus, bleibt \\(1\\) stehen: \\(3x^2 + 3x = 3x(x + 1)\\), nicht \\(3x \\cdot x\\).', L_F],
   ausklVz:       ['Vorzeichen beim Ausklammern', 'In der Klammer steht, was nach dem Teilen durch den ausgeklammerten Faktor übrig bleibt — mit Vorzeichen. Probe durch Ausmultiplizieren.', L_F],
+  mitteVz:       ['Vorzeichen des mittleren Glieds', 'Das mittlere Glied hat das Vorzeichen aus der Klammer: \\((a + b)^2 = a^2 + 2ab + b^2\\) und \\((a - b)^2 = a^2 - 2ab + b^2\\).', L_B],
+  b3statt12:     ['Mit der 3. binomischen Formel verwechselt', 'Ein Quadrat ist eine Klammer mal <em>dieselbe</em> Klammer: \\((x - 3)^2 = (x - 3)(x - 3) = x^2 - 6x + 9\\). Nur \\((a + b)(a - b)\\) ergibt \\(a^2 - b^2\\).', L_B],
+  faktorVergessen:['Ausgeklammerten Faktor vergessen', 'Der ausgeklammerte Faktor gehört zum Ergebnis: \\(2x^2 - 18 = 2(x^2 - 9) = 2(x + 3)(x - 3)\\). Probe durch Ausmultiplizieren.', L_F],
+  kuerzVz:       ['Vorzeichen beim Kürzen', 'Gestrichen wird nur der gemeinsame Faktor, der andere bleibt mit seinem Vorzeichen stehen: \\(\\frac{(x + 3)(x - 3)}{x + 3} = x - 3\\). Darum zuerst Zähler und Nenner faktorisieren.', L_C],
+  minusVergessen:['Minus beim Umdrehen vergessen', '\\(3 - x\\) und \\(x - 3\\) sind Gegenzahlen: \\(3 - x = -(x - 3)\\). Wer einen Faktor so umdreht, um zu kürzen, muss das Minus mitnehmen.', L_C],
   summeGekuerzt: ['Aus einer Summe gekürzt', 'Gekürzt werden dürfen nur Faktoren, niemals Summanden. Erst Zähler und Nenner faktorisieren, dann gemeinsame Faktoren streichen.', L_C],
   sonst:         ['Noch nicht', '', null],
 };
 // Rückmeldung «fast»: gleichwertig, aber noch nicht in der verlangten Form (zählt nicht als Fehler)
 const FORM = {
   klammer:       'Der Term ist gleichwertig, aber noch nicht ausmultipliziert: Es stehen noch Klammern.',
-  glied:         'Der Term ist gleichwertig, aber ein Glied ist noch nicht vereinfacht (etwa \\(x \\cdot x\\) oder \\(2 \\cdot 3x\\)).',
+  bruch:         'Der Term ist gleichwertig, aber es steht noch ein Bruchstrich: Rechne ihn aus.',
+  glied:         'Der Term ist gleichwertig, aber ein Glied ist noch nicht vereinfacht (etwa \\(x \\cdot x\\), \\(2 \\cdot 3x\\), \\(1x\\) oder \\(x^1\\)).',
   gleichartig:   'Der Term ist gleichwertig, aber gleichartige Glieder sind noch nicht zusammengefasst.',
   keinProdukt:   'Der Term ist gleichwertig, aber noch kein Produkt: Gefragt ist eine Darstellung in Faktoren.',
+  ganzeZahlen:   'Der Term ist gleichwertig, aber schreib die Faktoren mit ganzen Zahlen: \\(4\\left(x + \\frac{1}{2}\\right) = 2(2x + 1)\\).',
+  klammerInnen:  'Der Term ist gleichwertig, aber in einer Klammer ist die Summe noch nicht vereinfacht: Fasse zuerst zusammen.',
   unvollstaendig:'Der Term ist gleichwertig, aber noch nicht vollständig faktorisiert: Ein Faktor lässt sich weiter zerlegen.',
   nichtGgT:      'Der Term ist gleichwertig, aber das ist noch nicht der grösste gemeinsame Faktor: In der Klammer haben noch alle Glieder etwas gemeinsam.',
-  einBruch:      'Der Term ist gleichwertig — schreib ihn als einen einzigen Bruch, Zähler und Nenner je in Klammern: <code>(x-3)/(x+3)</code>.',
+  einBruch:      'Der Term ist gleichwertig — schreib ihn als einen einzigen Bruch, Zähler und Nenner je in Klammern: <code>(Zähler)/(Nenner)</code>.',
+  doppelbruch:   'Der Term ist gleichwertig, aber im Zähler oder Nenner steht noch ein Bruch: Schreib ihn als einfachen Bruch.',
+  bruchTeil:     'Der Term ist gleichwertig, aber Zähler oder Nenner ist noch nicht vereinfacht: Fasse gleichartige Glieder zusammen.',
   nichtGekuerzt: 'Der Term ist gleichwertig, aber noch nicht vollständig gekürzt: Zähler und Nenner haben noch einen gemeinsamen Faktor.',
 };
 
@@ -589,7 +627,7 @@ function klammern() {
   const art = pick(['zwei', 'minus', 'verschachtelt', 'quadratisch']);
   if (art === 'zwei') {                                     // a(bx + c) − d(ex + f)
     const a = rnd(2, 6), b = rnd(1, 5), c = nz(-9, 9), dd = rnd(2, 6), e = rnd(1, 5), f = nz(-9, 9);
-    if (a * b === dd * e) return null;
+    if (a * b === dd * e || a * c + dd * f === c - f) return null;   // Minusklammer und «nur erstes» gleich: nicht unterscheidbar
     const loes = glieder([[a * b - dd * e, 'x1'], [a * c - dd * f, '']]);
     return { thema: 'klammern', auftrag: 'Löse die Klammern auf und fasse zusammen.', form: 'summe',
       aufg: a + kl(lin(b, c)) + ' - ' + dd + kl(lin(e, f)), loes,
@@ -632,7 +670,7 @@ function ausmultiplizieren() {
     if (r === s || r === -s) return null;
     return { ...A, aufg: kl(lin(1, r)) + kl(lin(1, s)), loes: glieder([[1, 'x2'], [r + s, 'x1'], [r * s, '']]),
       weg: [d(glieder([[1, 'x2'], [s, 'x1'], [r, 'x1'], [r * s, '']]), 'jeder mit jedem'), d(glieder([[1, 'x2'], [r + s, 'x1'], [r * s, '']]), 'zusammenfassen')],
-      diag: [['nurAussen', glieder([[1, 'x2'], [r * s, '']])], ['vzProdukt', glieder([[1, 'x2'], [r + s, 'x1'], [-r * s, '']])]] };
+      diag: [['nurAussen', glieder([[1, 'x2'], [r * s, '']])], ...(r < 0 || s < 0 ? [['vzProdukt', glieder([[1, 'x2'], [r + s, 'x1'], [-r * s, '']])]] : [])] };
   }
   if (art === 'axbx') {                                     // (ax + b)(cx + e)
     const a = rnd(2, 5), b = nz(-7, 7), c = rnd(1, 5), e = nz(-7, 7);
@@ -640,7 +678,7 @@ function ausmultiplizieren() {
     const loes = glieder([[a * c, 'x2'], [a * e + b * c, 'x1'], [b * e, '']]);
     return { ...A, aufg: kl(lin(a, b)) + kl(lin(c, e)), loes,
       weg: [d(glieder([[a * c, 'x2'], [a * e, 'x1'], [b * c, 'x1'], [b * e, '']]), 'jeder mit jedem'), d(loes, 'zusammenfassen')],
-      diag: [['nurAussen', glieder([[a * c, 'x2'], [b * e, '']])], ['vzProdukt', glieder([[a * c, 'x2'], [a * e + b * c, 'x1'], [-b * e, '']])]] };
+      diag: [['nurAussen', glieder([[a * c, 'x2'], [b * e, '']])], ...(b < 0 || e < 0 ? [['vzProdukt', glieder([[a * c, 'x2'], [a * e + b * c, 'x1'], [-b * e, '']])]] : [])] };
   }
   if (art === 'ab') {                                       // (pa + qb)(ra + sb)
     const p = rnd(1, 4), q = nz(-5, 5), r = rnd(1, 4), s = nz(-5, 5);
@@ -648,7 +686,7 @@ function ausmultiplizieren() {
     const loes = glieder([[p * r, 'a2'], [p * s + q * r, 'a1b1'], [q * s, 'b2']]);
     return { ...A, aufg: kl(glieder([[p, 'a1'], [q, 'b1']])) + kl(glieder([[r, 'a1'], [s, 'b1']])), loes,
       weg: [d(glieder([[p * r, 'a2'], [p * s, 'a1b1'], [q * r, 'a1b1'], [q * s, 'b2']]), 'jeder mit jedem'), d(loes, 'zusammenfassen')],
-      diag: [['nurAussen', glieder([[p * r, 'a2'], [q * s, 'b2']])], ['vzProdukt', glieder([[p * r, 'a2'], [p * s + q * r, 'a1b1'], [-q * s, 'b2']])]] };
+      diag: [['nurAussen', glieder([[p * r, 'a2'], [q * s, 'b2']])], ...(q < 0 || s < 0 ? [['vzProdukt', glieder([[p * r, 'a2'], [p * s + q * r, 'a1b1'], [-q * s, 'b2']])]] : [])] };
   }
   if (art === 'k') {                                        // k(x + r)(x + s)
     const k = rnd(2, 5) * vz(), r = nz(-6, 6), s = nz(-6, 6);
@@ -679,6 +717,7 @@ function binome() {
     const diag = [['mitteVergessen', glieder([[a * a, 'x2'], [b * b, '']])], ['mitteEinfach', glieder([[a * a, 'x2'], [a * b, 'x1'], [b * b, '']])]];
     if (b < 0) diag.push(['quadratMinus', glieder([[a * a, 'x2'], [2 * a * b, 'x1'], [-b * b, '']])]);
     if (a > 1) diag.push(['koefQuadrat', glieder([[a, 'x2'], [2 * a * b, 'x1'], [b * b, '']])]);
+    diag.push(['mitteVz', glieder([[a * a, 'x2'], [-2 * a * b, 'x1'], [b * b, '']])], ['b3statt12', glieder([[a * a, 'x2'], [-b * b, '']])]);
     return { ...A, aufg: kl(lin(a, b)) + '^2', loes, diag,
       weg: [d(sq(a, 'x') + (b < 0 ? ' - ' : ' + ') + '2*' + pv(a, 'x') + '*' + B + ' + ' + B + '^2', nr + ' binomische Formel: \\((a ' + (b < 0 ? '-' : '+') + ' b)^2 = a^2 ' + (b < 0 ? '-' : '+') + ' 2ab + b^2\\)'), d(loes, 'ausrechnen')] };
   }
@@ -700,6 +739,7 @@ function binome() {
     const diag = [['mitteVergessen', glieder([[p * p, 'a2'], [q * q, 'b2']])], ['mitteEinfach', glieder([[p * p, 'a2'], [p * q, 'a1b1'], [q * q, 'b2']])]];
     if (q < 0) diag.push(['quadratMinus', glieder([[p * p, 'a2'], [2 * p * q, 'a1b1'], [-q * q, 'b2']])]);
     if (p > 1 || Q > 1) diag.push(['koefQuadrat', glieder([[p, 'a2'], [2 * p * q, 'a1b1'], [Q, 'b2']])]);
+    diag.push(['mitteVz', glieder([[p * p, 'a2'], [-2 * p * q, 'a1b1'], [q * q, 'b2']])], ['b3statt12', glieder([[p * p, 'a2'], [-q * q, 'b2']])]);
     return { ...A, aufg: kl(glieder([[p, 'a1'], [q, 'b1']])) + '^2', loes, diag,
       weg: [d(sq(p, 'a') + (q < 0 ? ' - ' : ' + ') + '2*' + pv(p, 'a') + '*' + pv(Q, 'b') + ' + ' + sq(Q, 'b'), (q < 0 ? '2.' : '1.') + ' binomische Formel'), d(loes, 'ausrechnen')] };
   }
@@ -805,6 +845,7 @@ function faktorisieren() {
       innen = [[1, 'x2'], [r + s, 'x1'], [r * s, '']]; loes = F + kl(lin(1, r)) + kl(lin(1, s)); wort = 'Zweiklammersatz';
       diag = [['vietaVz', F + kl(lin(1, -r)) + kl(lin(1, -s))]];
     }
+    diag.push(['faktorVergessen', loes.slice(F.length)]);                                // nur die Klammern, ohne F
     return { ...A, aufg: glieder(hoch(innen)), loes, diag,
       weg: [d(F + kl(glieder(innen)), 'zuerst den gemeinsamen Faktor ausklammern'), d(loes, 'dann die Klammer: ' + wort)] };
   }
@@ -830,12 +871,12 @@ function bruchterme() {
   const xp = c => lin(1, c);
   if (art === 'b3') {                                       // (x² − b²)/(x + σb) = x − σb
     return { ...A, aufg: kl(glieder([[1, 'x2'], [-b * b, '']])) + '/' + kl(xp(B)), loes: xp(-B),
-      weg: [d(kl(kl(xp(b)) + kl(xp(-b))) + '/' + kl(xp(B)), 'Zähler faktorisieren: 3. binomische Formel'), d(xp(-B), 'gemeinsamen Faktor \\((' + T(xp(B)) + ')\\) kürzen'), D(-B)], diag: [] };
+      weg: [d(kl(kl(xp(b)) + kl(xp(-b))) + '/' + kl(xp(B)), 'Zähler faktorisieren: 3. binomische Formel'), d(xp(-B), 'gemeinsamen Faktor \\((' + T(xp(B)) + ')\\) kürzen'), D(-B)], diag: [['kuerzVz', xp(B)]] };
   }
   if (art === 'b3n') {                                      // (kx + kb)/(x² − b²) = k/(x − b)
     const k = rnd(2, 6);
     return { ...A, aufg: kl(glieder([[k, 'x1'], [k * B, '']])) + '/' + kl(glieder([[1, 'x2'], [-b * b, '']])), loes: k + '/' + kl(xp(-B)),
-      weg: [d(kl(k + kl(xp(B))) + '/' + kl(kl(xp(b)) + kl(xp(-b))), 'Zähler ausklammern, Nenner: 3. binomische Formel'), d(k + '/' + kl(xp(-B)), 'kürzen'), D(b, -b)], diag: [] };
+      weg: [d(kl(k + kl(xp(B))) + '/' + kl(kl(xp(b)) + kl(xp(-b))), 'Zähler ausklammern, Nenner: 3. binomische Formel'), d(k + '/' + kl(xp(-B)), 'kürzen'), D(b, -b)], diag: [['kuerzVz', k + '/' + kl(xp(B))], ['faktorVergessen', '1/' + kl(xp(-B))]] };
   }
   if (art === 'b3b12') {                                    // (x² − b²)/(x + σb)² = (x − σb)/(x + σb)
     return { ...A, aufg: kl(glieder([[1, 'x2'], [-b * b, '']])) + '/' + kl(glieder([[1, 'x2'], [2 * B, 'x1'], [b * b, '']])), loes: kl(xp(-B)) + '/' + kl(xp(B)),
@@ -845,7 +886,7 @@ function bruchterme() {
     const r = nz(-6, 6), t = nz(-8, 8);
     if (t === r || t === -r) return null;
     return { ...A, aufg: kl(glieder([[1, 'x2'], [r + t, 'x1'], [r * t, '']])) + '/' + kl(glieder([[1, 'x2'], [-r * r, '']])), loes: kl(xp(t)) + '/' + kl(xp(-r)),
-      weg: [d(kl(kl(xp(r)) + kl(xp(t))) + '/' + kl(kl(xp(r)) + kl(xp(-r))), 'Zähler: Zweiklammersatz; Nenner: 3. binomische Formel'), d(kl(xp(t)) + '/' + kl(xp(-r)), 'kürzen'), D(r, -r)], diag: [] };
+      weg: [d(kl(kl(xp(r)) + kl(xp(t))) + '/' + kl(kl(xp(r)) + kl(xp(-r))), 'Zähler: Zweiklammersatz; Nenner: 3. binomische Formel'), d(kl(xp(t)) + '/' + kl(xp(-r)), 'kürzen'), D(r, -r)], diag: [['kuerzVz', kl(xp(t)) + '/' + kl(xp(r))]] };
   }
   if (art === 'xsumme') {                                   // (x² + mx)/x = x + m
     const m = nz(-9, 9);
@@ -856,12 +897,12 @@ function bruchterme() {
   if (art === 'xsumme2') {                                  // (x² + mx)/(x² − m²) = x/(x − m)
     const m = nz(-8, 8);
     return { ...A, aufg: kl(glieder([[1, 'x2'], [m, 'x1']])) + '/' + kl(glieder([[1, 'x2'], [-m * m, '']])), loes: 'x/' + kl(xp(-m)),
-      weg: [d(kl('x' + kl(xp(m))) + '/' + kl(kl(xp(m)) + kl(xp(-m))), 'Zähler: \\(x\\) ausklammern; Nenner: 3. binomische Formel'), d('x/' + kl(xp(-m)), 'kürzen'), D(m, -m)], diag: [] };
+      weg: [d(kl('x' + kl(xp(m))) + '/' + kl(kl(xp(m)) + kl(xp(-m))), 'Zähler: \\(x\\) ausklammern; Nenner: 3. binomische Formel'), d('x/' + kl(xp(-m)), 'kürzen'), D(m, -m)], diag: [['kuerzVz', 'x/' + kl(xp(m))]] };
   }
   if (art === 'kb3') {                                      // (kx² − kb²)/(x + σb)² = k(x − σb)/(x + σb)
     const k = rnd(2, 5);
     return { ...A, aufg: kl(glieder([[k, 'x2'], [-k * b * b, '']])) + '/' + kl(glieder([[1, 'x2'], [2 * B, 'x1'], [b * b, '']])), loes: k + kl(xp(-B)) + '/' + kl(xp(B)),
-      weg: [d(kl(k + kl(xp(b)) + kl(xp(-b))) + '/' + kl(kl(xp(B)) + '^2'), 'Zähler: \\(' + k + '\\) ausklammern, dann 3. binomische Formel'), d(k + kl(xp(-B)) + '/' + kl(xp(B)), 'kürzen'), D(-B)], diag: [] };
+      weg: [d(kl(k + kl(xp(b)) + kl(xp(-b))) + '/' + kl(kl(xp(B)) + '^2'), 'Zähler: \\(' + k + '\\) ausklammern, dann 3. binomische Formel'), d(k + kl(xp(-B)) + '/' + kl(xp(B)), 'kürzen'), D(-B)], diag: [['faktorVergessen', kl(xp(-B)) + '/' + kl(xp(B))]] };
   }
   if (art === 'zahl') {                                     // (kx + km)/k = x + m
     const k = rnd(2, 9), m = nz(-9, 9);
@@ -875,7 +916,7 @@ function bruchterme() {
     weg: [d(kl(kl(xp(-b)) + '^2') + '/' + kl(kl(b + ' - x') + kl(b + ' + x')), 'faktorisieren: 2. und 3. binomische Formel'),
       d(kl(kl(xp(-b)) + '^2') + '/' + kl('-' + kl(xp(-b)) + kl(xp(b))), '\\(' + b + ' - x = -(x - ' + b + ')\\)'),
       d('-' + kl(xp(-b)) + '/' + kl(xp(b)), 'kürzen'),
-      d(kl(b + ' - x') + '/' + kl(xp(b)), 'das Minus in den Zähler: \\(-(x - ' + b + ') = ' + b + ' - x\\)'), D(b, -b)], diag: [] };
+      d(kl(b + ' - x') + '/' + kl(xp(b)), 'das Minus in den Zähler: \\(-(x - ' + b + ') = ' + b + ' - x\\)'), D(b, -b)], diag: [['minusVergessen', kl(xp(-b)) + '/' + kl(xp(b))]] };
 }
 
 const THEMEN = {
@@ -924,14 +965,20 @@ function probe(a, rIn, vars) {
 function formPruefen(a, b) {
   if (a.form === 'summe') { const f = summenform(b); return f === 'ok' ? null : FORM[f]; }
   if (a.form === 'produkt') {
+    const pf = produktForm(b);
+    if (pf && pf !== 'glied') return FORM[pf];
     const fe = faktorListe(b), fl = faktorListe(a.loesBaum);
-    if (!fe) return FORM.keinProdukt;
     if (schluessel_liste(fe) !== schluessel_liste(fl)) return a.thema === 'ausklammern' ? FORM.nichtGgT : FORM.unvollstaendig;
     for (const p of fe) if (p.size > 1) { const g = inhalt(p); if (g > 1) return 'Der Term ist gleichwertig, aber in einer Klammer steckt noch der gemeinsame Faktor \\(' + g + '\\): Klammere ihn auch aus.'; }
-    return null;
+    return pf ? FORM.glied : null;
   }
   // Bruch: ein einziger Bruch, Nenner nicht grösser als nötig, keine gemeinsame Zahl in Zähler und Nenner
   if (b.t === 'add' && b.terme.length > 1 && enthaelt(b, ['div'])) return FORM.einBruch;
+  const y = b.t === 'add' && b.terme.length === 1 ? b.terme[0].t : b;
+  if (y.t === 'div') {
+    if (enthaelt(y.a, ['div']) || enthaelt(y.b, ['div'])) return FORM.doppelbruch;
+    if (![y.a, y.b].every(t => summenform(ohnePar(t)) === 'ok' || !produktForm(t))) return FORM.bruchTeil;
+  } else if (!(summenform(ohnePar(y)) === 'ok' || !produktForm(y))) { const f = summenform(ohnePar(y)); return FORM[f === 'klammer' ? 'bruchTeil' : f]; }
   const r = wert(b);
   if (pGrad(r.n) > pGrad(wert(a.loesBaum).n)) return FORM.nichtGekuerzt;
   const g = ggT(inhalt(r.z), inhalt(r.n));
@@ -998,6 +1045,7 @@ const themenBox = $('tt-themen');
 for (const [k, t] of Object.entries(THEMEN)) {
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'tt-opt' + (themen.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  b.setAttribute('aria-pressed', String(themen.has(k)));
   themenBox.appendChild(b);
 }
 
@@ -1034,17 +1082,18 @@ function neueAufgabe() {
   $('tt-auftrag').textContent = a.auftrag;
   setzen($('tt-ausdruck'), '\\[' + a.ausdruck + '\\]');
   $('tt-hinweis').textContent = HINWEIS[a.form];
-  const inp = $('tt-eingabe'); inp.value = ''; inp.disabled = false; $('tt-pruefen').disabled = false;
+  const inp = $('tt-eingabe'); inp.value = ''; inp.disabled = false; $('tt-pruefen').disabled = false; tasten(true);
   setzen($('tt-vorschau'), '');
   setzen($('tt-rueck'), ''); $('tt-rueck').className = 'tt-rueck';
   $('tt-weg').hidden = true; $('tt-weiter-box').hidden = true;
   zeigeZahlen();
   inp.focus();
 }
+const tasten = an => $('tt-tasten').querySelectorAll('button').forEach(b => { b.disabled = !an; });
 function meldung(cls, html) { $('tt-rueck').className = 'tt-rueck ' + cls; setzen($('tt-rueck'), html); }
 function abschliessen(gut) {
   fertig = true;
-  $('tt-eingabe').disabled = true; $('tt-pruefen').disabled = true;
+  $('tt-eingabe').disabled = true; $('tt-pruefen').disabled = true; tasten(false);
   $('tt-weg').hidden = false; setzen($('tt-weg'), wegHtml(A));
   $('tt-weiter-box').hidden = false;
   if (gut && !fehlerInAufgabe) stand.ok++;
@@ -1094,6 +1143,16 @@ $('tt-pruefen').addEventListener('click', () => antwort($('tt-eingabe').value));
 $('tt-eingabe').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); antwort($('tt-eingabe').value); } });
 let vorschauUhr = null;
 $('tt-eingabe').addEventListener('input', () => { clearTimeout(vorschauUhr); vorschauUhr = setTimeout(() => setzen($('tt-vorschau'), vorschau($('tt-eingabe').value)), 250); });
+// Tastenleiste: fügt an der Cursorposition ein; mousedown verhindern, damit das Feld (und die Handytastatur) offen bleibt
+$('tt-tasten').addEventListener('mousedown', e => { if (e.target.closest('[data-z]')) e.preventDefault(); });
+$('tt-tasten').addEventListener('click', e => {
+  const b = e.target.closest('[data-z]'), inp = $('tt-eingabe');
+  if (!b || inp.disabled) return;
+  const von = inp.selectionStart ?? inp.value.length, bis = inp.selectionEnd ?? von;
+  inp.setRangeText(b.dataset.z, von, bis, 'end');
+  inp.focus();
+  inp.dispatchEvent(new Event('input'));
+});
 $('tt-weiter').addEventListener('click', neueAufgabe);
 $('tt-neu').addEventListener('click', neueRunde);
 $('tt-bilanz').addEventListener('click', e => { if (e.target.closest('#tt-nochmal')) neueRunde(); });
@@ -1103,6 +1162,7 @@ themenBox.addEventListener('click', e => {
   if (themen.has(t) && themen.size === 1) return;
   if (themen.has(t)) themen.delete(t); else themen.add(t);
   b.classList.toggle('aktiv', themen.has(t));
+  b.setAttribute('aria-pressed', String(themen.has(t)));
   neueRunde();
 });
 document.addEventListener('keydown', e => {

@@ -23,7 +23,7 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'werkzeuge', 'gesetzetra
 const kern = html.slice(html.indexOf('// ── KERN:ANFANG'), html.indexOf('// ── KERN:ENDE'));
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(kern + '\n;globalThis.K = { BEREICHE, FEHLER, FALLEN, aufgabe, pruefe, loesungTex, zielTex, qTex, dezimal, Q };', ctx);
+vm.runInContext(kern + '\n;globalThis.K = { BEREICHE, FEHLER, FALLEN, aufgabe, pruefe, loesungTex, zielTex, qTex, dezimal, Q, lies, G14 };', ctx);
 const K = ctx.K;
 const N = +process.argv[2] || 1500;
 const befunde = new Map();
@@ -37,6 +37,75 @@ function latexOk(z, wo) {
   if (/[+-] -|\+ \+|- \+|\+ -/.test(z)) melde('LaTeX: doppeltes Vorzeichen', wo + ': ' + z);
 }
 const alsEingabe = (q, dez) => (dez && q.d !== 1 ? K.dezimal(q) : q.d === 1 ? String(q.n) : q.n + '/' + q.d);
+
+// Gezielte Prüfungen zu TODO-trainer-korrekturen.md (GT-B1 … GT-C8)
+const codes = a => a.diag.map(([c]) => c);
+const abbr = q => { let d = q.d; while (d % 2 === 0) d /= 2; while (d % 5 === 0) d /= 5; return d === 1; };
+function gezielt(a, bereich, wo) {
+  // GT-B1: Vorzeichen-Aufgaben nur mit geradem Exponenten; negKlammer/negsq = Wert mit übersehener Klammer
+  let m;
+  if ((m = /^(\(?)-(\d+)\)?\^\{(\d+)\}$/.exec(a.ausdruck))) {
+    const b = +m[2], n = +m[3], mitKl = m[1] === '(';
+    if (n % 2) melde('GT-B1: Vorzeichen-Aufgabe mit ungeradem Exponenten', wo);
+    const falsch = mitKl ? -(b ** n) : (-b) ** n;
+    for (const [c, [v]] of a.diag) if ((c === 'negKlammer' || c === 'negsq') && v.n / v.d !== falsch) melde('GT-B1: Klammer-Diagnose mit falschem Wert', wo + ' ' + c);
+  }
+  // GT-B2: «verschiedene Basen» nur bei verschiedenen Basen
+  if ((m = /^(\d+)\^\{-?\d+\} \\cdot (\d+)\^/.exec(a.ausdruck)) && m[1] === m[2] && codes(a).includes('basenVerschieden')) melde('GT-B2: basenVerschieden bei gleicher Basis', wo);
+  // GT-B3: Quotient bzw. Differenz von Wurzeln nicht als «addiert» etikettieren
+  if (/^\\frac\{\\sqrt/.test(a.ausdruck) && codes(a).includes('wurzelMal')) melde('GT-B3: Quotient als «addiert» etikettiert', wo);
+  if (/ - \\sqrt/.test(a.ausdruck) && codes(a).includes('radikandAddiert')) melde('GT-B3: Differenz als «addiert» etikettiert', wo);
+  // GT-B4: Nenner-Diagnose nur, wenn es einen Nenner gibt
+  if (a.typ === 'Zu einem Logarithmus zusammenfassen' && a.loesung[1].n > 0 && codes(a).includes('logZerlVz')) melde('GT-B4: Nenner-Diagnose ohne Nenner', wo);
+  // GT-B5: Bereich Wurzeln nur GF 1.4: Wurzeln ⁿ√x (m = 1), Ergebnis-Exponent ganz oder 1/n, keine Werte mit Bruchexponent
+  if (bereich === 'wurzeln') {
+    if (/\\sqrt(\[\d+\])?\{x\^/.test(a.ausdruck)) melde('GT-B5: Bereich Wurzeln mit m ≠ 1', wo);
+    if (a.ziel === 'x^{{n}}' && Math.abs(a.loesung[0].n) !== 1) melde('GT-B5: Bereich Wurzeln mit Exponent m/n', wo);
+    if (a.typ === 'Rationaler Exponent') melde('GT-B5: Bereich Wurzeln mit rationalem Exponenten', wo);
+    for (const [c] of a.diag) if (K.FEHLER[c][2] && !K.FEHLER[c][2][0].startsWith(K.G14)) melde('GT-B5: Fehler-Link im Bereich Wurzeln nicht auf g1.4', wo + ' ' + c);
+  }
+  if (bereich === 'rational' && a.ziel === 'x^{{n}}' && !/\\sqrt(\[\d+\])?\{x\^/.test(a.ausdruck) && Math.abs(a.loesung[0].n) === 1) melde('GT-B5: Bereich Rational ohne m/n', wo);
+  // GT-C1: keine GF-Nummern, die in SF 1.2 anders heissen
+  for (const w of a.weg) if (/P[4-7] rückwärts|P7/.test((w.k || '') + (w.text || ''))) melde('GT-C1: Nummer «P4 rückwärts»/«P7» im Lösungsweg', wo);
+  if (/P[4-7]/.test(a.tipp || '')) melde('GT-C1: Nummer P4–P7 im Tipp', wo);
+  // GT-C2: ln(√e) u.ä.: Wurzel-Diagnose vor dem Kehrwert
+  if (a.typ === 'Wert eines Logarithmus' && /sqrt/.test(a.ausdruck)) {
+    const wz = a.diag.find(([c]) => c === 'logWurzel') || [];
+    const kehr = a.diag.find(([c]) => c === 'logKehr');
+    if (kehr && wz[1] && kehr[1][0].n === wz[1][0].n && kehr[1][0].d === wz[1][0].d) melde('GT-C2: logKehr mit gleichem Wert wie logWurzel', wo);
+    if (wz[1] && K.pruefe(a, [wz[1][0].n + '/' + wz[1][0].d]).code !== 'logWurzel') melde('GT-C2: Wurzel-Fehler nicht als logWurzel erkannt', wo);
+  }
+  // GT-C5: x ≠ 0 im Auftrag der Potenzterme
+  if ((a.typ === 'Eine Potenz' || a.typ === 'Zwei Basen') && !/neq 0/.test(a.auftrag)) melde('GT-C5: Auftrag ohne x ≠ 0', wo);
+  // GT-C6: gerundete Dezimalzahl statt Bruch → Hinweis «exakt»
+  if (a.art !== 'wahl' && !a.ziel.includes('10^')) {
+    const j = a.loesung.findIndex(q => q.d !== 1 && !abbr(q));
+    if (j >= 0) {
+      const e = a.loesung.map(q => (q.d === 1 ? String(q.n) : q.n + '/' + q.d));
+      e[j] = (a.loesung[j].n / a.loesung[j].d).toFixed(3);
+      const r = K.pruefe(a, e);
+      if (r.status !== 'fast' || !/exakt/.test(r.text)) melde('GT-C6: gerundeter Bruch nicht als «exakt angeben»', wo + ' ' + e + ' → ' + JSON.stringify(r));
+    }
+  }
+  // GT-C8: Lösung ohne überflüssige Klammern
+  if (a.art !== 'wahl' && /^\{/.test(K.loesungTex(a))) melde('GT-C8: Lösung mit { }', wo + ' ' + K.loesungTex(a));
+}
+// Einzelfälle ohne Zufall
+if (!K.BEREICHE.rational || !/\(SF\)/.test(K.BEREICHE.rational.name)) melde('GT-B5: Bereich «Rationale Exponenten (SF)» fehlt', '');
+for (const [regel, gilt] of K.FALLEN.wurzeln || []) if (/\\frac\{m\}\{n\}|\\sqrt\[3\]/.test(regel)) melde('GT-B5: SF-Regel im Bereich Wurzeln', regel);
+for (const liste of Object.values(K.FALLEN)) for (const [regel, gilt] of liste) if (gilt && /\\frac\{m\}\{n\}/.test(regel) && !/a > 0/.test(regel)) melde('GT-B6: Regel mit m/n ohne «a > 0» in der Aussage', regel);
+if (/Summen/.test(K.FEHLER.falleGeglaubt[1])) melde('GT-C3: falleGeglaubt spricht von Summen', '');
+for (const c of ['negBasis', 'basisMal', 'nullExp', 'kehrVergessen']) if (K.FEHLER[c][2][0] !== K.G14 + '#potenzgesetze') melde('GT-C4: Link nicht auf g1.4 #potenzgesetze', c);
+for (const c of ['negsq', 'negKlammer']) if (K.FEHLER[c][2][0] !== K.G14 + '#hierarchie') melde('GT-C4: Link nicht auf g1.4 #hierarchie', c);
+{
+  const merk = html.slice(html.indexOf('Die Gesetze auf einen Blick'), html.indexOf('</details>', html.indexOf('Die Gesetze auf einen Blick')));
+  if (!/a, b \\ge 0/.test(merk)) melde('GT-C5: Merktabelle ohne a, b ≥ 0 bei Wurzeln', '');
+  if (!/m\}\{n\}\}[^<]*a > 0/.test(merk)) melde('GT-C5: Merktabelle ohne a > 0 bei rationalen Exponenten', '');
+  if (!/a > 0,\\ a \\neq 1/.test(merk)) melde('GT-C5: Merktabelle ohne a > 0, a ≠ 1 beim Logarithmus', '');
+}
+{ const l = K.lies('5.'); if (!l.q || l.q.n !== 5 || l.q.d !== 1) melde('GT-C6: «5.» nicht verstanden', JSON.stringify(l)); }
+if (/aria-label="' \+ f\.id/.test(html)) melde('GT-C7: aria-label überschreibt das sichtbare label', '');
+if (!/\.gt-opt[\s\S]{0,400}aria-pressed/.test(html) || (html.match(/aria-pressed/g) || []).length < 2) melde('RT-C10: .gt-opt ohne aria-pressed', '');
 
 const py = [];
 let zahl = 0;
@@ -75,6 +144,7 @@ for (const bereich of Object.keys(K.BEREICHE)) for (let i = 0; i < N; i++) {
     const f = K.pruefe(a, [K.dezimal(K.Q(a.loesung[0].n * 10, a.loesung[0].d)), String(a.loesung[1].n - 1)]);
     if (f.status !== 'fast') melde('Mantisse ≥ 10 nicht als «fast»', wo + ' ' + JSON.stringify(f));
   }
+  gezielt(a, bereich, wo);
   for (const [code, w] of a.diag) {
     if (!K.FEHLER[code]) melde('Fehlercode ohne Text', code);
     if (w.some(q => q && (!Number.isFinite(q.n) || !Number.isFinite(q.d)))) { melde('Denkfehler-Wert nicht endlich', wo + ' ' + code); continue; }

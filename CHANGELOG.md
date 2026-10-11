@@ -24,6 +24,20 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   «· RLP-BM 2030». Leitprogramme tragen keine eigene Version mehr im Footer. Neu mit Footer:
   `leitprogramme.html`, `simulationen.html`, `werkzeuge.html`, Notationstrainer. Die Bauskripte
   `scripts/lp/*/seite.py` geben nur leere Marken aus — nach jedem Bau `build-seo.py`.
+- **Mathe-Trainer geprüft und korrigiert** (11.10.2026): alle sechs Trainer auf fachliche Richtigkeit
+  und Didaktik durchgesehen (Befunde in `TODO-trainer-korrekturen.md`, alle erledigt). Kein fachlicher
+  Fehler; korrigiert wurden Bewertung und Rückmeldung. Richtige Eingaben, die als falsch galten (gemischte
+  Zahl `1 1/2`, `pi/6*5`), werden gelesen; Doppelbrüche und unvereinfachte Klammern gelten nicht mehr als
+  fertig; unpassende Denkfehler-Etiketten ersetzt (u.a. Vorzeichen-Aufgaben nur noch mit geradem
+  Exponenten, Subtraktion statt Division bei Wurzeln, Klammer-Vorrang statt Minusklammer); neue
+  Diagnosen (Binome, Bruchterme, Vorzeichen vor negativer Zahl, Grad statt Bogenmass, sin/cos beim
+  Rückweg vertauscht). Gesetzetrainer: neuer Bereich «Rationale Exponenten (SF)», der Bereich Wurzeln
+  enthält nur noch GF-1.4-Stoff, Voraussetzungen in Aufträgen und Merktabelle. Strategietrainer:
+  Additionsverfahren eliminiert die günstigere Variable, Einsetzen erkennt kürzbare Gleichungen,
+  Mitternachtsformel einheitlich nach g2.2b bewertet. Termtrainer mit Tastenleiste, Einheitskreistrainer
+  mit Skizze beim Rückweg und Palette für schmale Bildschirme. Notationstrainer: «richtig und
+  gleichwertig» statt «genau so», 6 neue ℚ-Karten (116), aufzählende Mengen mit Strichpunkt
+  (STYLEGUIDE §2.11). g2.1 und Clip `g2-1-anim-ungleichung`: «+∞». Alle Schalter mit `aria-pressed`.
 - **Neue Werkzeuge: Termtrainer und Gesetzetrainer** (11.10.2026). Termtrainer: Zufallsterme zum
   Zusammenfassen, Auflösen von Klammern, Ausmultiplizieren, zu binomischen Formeln, zum Ausklammern,
   Faktorisieren und Kürzen von Bruchtermen; die Eingabe wird exakt auf Gleichwertigkeit und auf die

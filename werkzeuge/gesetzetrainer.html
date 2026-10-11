@@ -231,7 +231,7 @@ MathJax = {
 
 <div class="block block-def">
   <div class="block-titel">📘 So funktioniert der Trainer</div>
-  <p>Eine Runde hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst: Potenzen, Wurzeln, Logarithmen — einzeln oder gemischt. Die Logarithmen gehören zum Schwerpunktfach.</p>
+  <p>Eine Runde hat zehn Zufallsaufgaben aus den Bereichen, die du rechts wählst: Potenzen, Wurzeln, rationale Exponenten, Logarithmen — einzeln oder gemischt. Rationale Exponenten wie \(8^{\frac23}\) und die Logarithmen gehören zum Schwerpunktfach.</p>
   <ul>
     <li><strong>Antwort in Feldern:</strong> Über den Feldern steht die Form, die verlangt ist, etwa \(x^{\,n}\) oder \(k\sqrt{r}\). Du tippst nur die Zahlen ein: ganze Zahlen, Brüche wie <code>3/2</code> oder <code>-1/2</code>, Dezimalzahlen mit Punkt. Die Vorschau setzt sie gleich in die Form ein.</li>
     <li><strong>Regel prüfen:</strong> Manche Aufgaben zeigen eine «Regel». Du entscheidest, ob sie für alle zulässigen Werte gilt. Danach siehst du ein Gegenbeispiel oder die Begründung.</li>
@@ -246,9 +246,10 @@ MathJax = {
   <table class="ftb-tabelle" style="margin-top:8px">
     <tbody>
       <tr><td style="text-align:left;font-family:var(--sans)">Potenzen (P1–P7)</td><td style="text-align:left;font-family:var(--sans)">\(a^m \cdot a^n = a^{m+n}\), \(\frac{a^m}{a^n} = a^{m-n}\), \((a^m)^n = a^{m \cdot n}\), \((ab)^n = a^n b^n\), \(\left(\frac{a}{b}\right)^n = \frac{a^n}{b^n}\), \(a^0 = 1\), \(a^{-n} = \frac{1}{a^n}\)</td></tr>
-      <tr><td style="text-align:left;font-family:var(--sans)">Wurzeln</td><td style="text-align:left;font-family:var(--sans)">\(\sqrt[n]{a^m} = a^{\frac{m}{n}}\), \(\sqrt{a} \cdot \sqrt{b} = \sqrt{ab}\), \(\frac{\sqrt{a}}{\sqrt{b}} = \sqrt{\frac{a}{b}}\), \(\sqrt{a^2} = |a|\); keine Regel für \(\sqrt{a + b}\)</td></tr>
-      <tr><td style="text-align:left;font-family:var(--sans)">Logarithmus</td><td style="text-align:left;font-family:var(--sans)">\(a^x = b \Leftrightarrow x = \log_a(b)\); \(\log_a(1) = 0\), \(\log_a(a) = 1\), \(\log_a\left(a^k\right) = k\)</td></tr>
-      <tr><td style="text-align:left;font-family:var(--sans)">Logarithmengesetze</td><td style="text-align:left;font-family:var(--sans)">\(\log(uv) = \log(u) + \log(v)\), \(\log\left(\frac{u}{v}\right) = \log(u) - \log(v)\), \(\log\left(u^k\right) = k \cdot \log(u)\); keine Regel für \(\log(u + v)\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Wurzeln</td><td style="text-align:left;font-family:var(--sans)">\(\sqrt[n]{a} = a^{\frac{1}{n}}\), \(\sqrt{a} \cdot \sqrt{b} = \sqrt{ab}\), \(\frac{\sqrt{a}}{\sqrt{b}} = \sqrt{\frac{a}{b}}\) für \(a, b \ge 0\) (im Nenner \(b > 0\)); \(\sqrt{a^2} = |a|\); keine Regel für \(\sqrt{a + b}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Rationale Exponenten</td><td style="text-align:left;font-family:var(--sans)">\(a^{\frac{m}{n}} = \sqrt[n]{a^m} = \left(\sqrt[n]{a}\right)^m\) für \(a > 0\); die Potenzgesetze gelten dann auch für Bruchexponenten</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Logarithmus</td><td style="text-align:left;font-family:var(--sans)">Für \(a > 0,\ a \neq 1\) und \(b > 0\): \(a^x = b \Leftrightarrow x = \log_a(b)\); \(\log_a(1) = 0\), \(\log_a(a) = 1\), \(\log_a\left(a^k\right) = k\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Logarithmengesetze</td><td style="text-align:left;font-family:var(--sans)">Für \(u, v > 0\): \(\log(uv) = \log(u) + \log(v)\), \(\log\left(\frac{u}{v}\right) = \log(u) - \log(v)\), \(\log\left(u^k\right) = k \cdot \log(u)\); keine Regel für \(\log(u + v)\)</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Basiswechsel</td><td style="text-align:left;font-family:var(--sans)">\(\log_a(b) = \frac{\lg(b)}{\lg(a)} = \frac{\ln(b)}{\ln(a)}\)</td></tr>
     </tbody>
   </table>
@@ -328,11 +329,10 @@ const zahlTex = q => (q.d !== 1 && abbrechend(q) && q.d <= 1000 && q.d % 10 === 
 // ── Rückmeldungen ──
 const G14 = '../grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html', S12 = '../schwerpunkt/s1-2-potenzen.html', S13 = '../schwerpunkt/s1-3-logarithmen.html';
 const L_PG = [G14 + '#potenzgesetze', '1.4 Potenzgesetze'];
+const L_GH = [G14 + '#hierarchie', '1.4 Hierarchie'];
 const L_WN = [G14 + '#wissenschaftlich', '1.4 Wissenschaftliche Notation'];
 const L_WG = [G14 + '#wurzelgesetze', '1.4 Wurzelgesetze'];
-const L_SD = [S12 + '#definition', 'SF 1.2 Ganzzahlige Exponenten'];
 const L_SR = [S12 + '#rationale-exponenten', 'SF 1.2 Rationale Exponenten'];
-const L_SH = [S12 + '#hierarchie', 'SF 1.2 Hierarchie'];
 const L_LD = [S13 + '#definition', 'SF 1.3 Definition des Logarithmus'];
 const L_LG = [S13 + '#logarithmengesetze', 'SF 1.3 Logarithmengesetze'];
 const L_LB = [S13 + '#basiswechsel', 'SF 1.3 Basiswechsel'];
@@ -345,20 +345,24 @@ const FEHLER = {
   p2vz:         ['Subtraktion in der falschen Reihenfolge', 'Bei \\(\\frac{a^m}{a^n} = a^{m-n}\\) rechnet man Exponent des Zählers minus Exponent des Nenners.', L_PG],
   minusminus:   ['Minus eines negativen Exponenten', 'Ein negativer Exponent im Nenner wird abgezogen: \\(\\frac{a^3}{a^{-2}} = a^{3-(-2)} = a^{5}\\). Minus mal Minus gibt Plus.', L_PG],
   p4erste:      ['Potenz nur auf den ersten Faktor', 'Ein Produkt wird potenziert, indem man jeden Faktor potenziert: \\((a \\cdot b)^n = a^n \\cdot b^n\\) (P4).', L_PG],
-  negBasis:     ['Negativer Exponent als negative Zahl', 'Ein negativer Exponent bildet den Kehrwert, er macht die Zahl nicht negativ: \\(2^{-3} = \\frac{1}{2^3} = \\frac{1}{8}\\).', L_SD],
-  basisMal:     ['Basis mal Exponent', '\\(a^n\\) ist ein Produkt aus \\(n\\) gleichen Faktoren: \\(2^3 = 2 \\cdot 2 \\cdot 2 = 8\\), nicht \\(2 \\cdot 3\\).', L_SD],
-  nullExp:      ['\\(a^0\\) als \\(0\\)', 'Für \\(a \\neq 0\\) gilt \\(a^0 = 1\\): Auf der Treppe \\(2^2 = 4\\), \\(2^1 = 2\\), \\(2^0 = 1\\) teilt jeder Schritt durch die Basis.', L_SD],
-  negsq:        ['Vorzeichen vor der Potenz', 'Die Potenz bindet stärker als das Vorzeichen: \\(-2^4 = -(2^4) = -16\\). Nur \\((-2)^4 = 16\\).', L_SH],
-  negKlammer:   ['Klammer um die negative Basis übersehen', '\\((-2)^3 = (-2) \\cdot (-2) \\cdot (-2) = -8\\), aber \\((-2)^4 = 16\\): Bei einem geraden Exponenten wird das Ergebnis positiv.', L_SH],
-  kehrVergessen:['Kehrwert vergessen', 'Ein negativer Exponent bildet den Kehrwert: \\(\\left(\\frac{2}{3}\\right)^{-2} = \\left(\\frac{3}{2}\\right)^{2} = \\frac{9}{4}\\).', L_SD],
+  negBasis:     ['Negativer Exponent als negative Zahl', 'Ein negativer Exponent bildet den Kehrwert, er macht die Zahl nicht negativ: \\(2^{-3} = \\frac{1}{2^3} = \\frac{1}{8}\\).', L_PG],
+  basisMal:     ['Basis mal Exponent', '\\(a^n\\) ist ein Produkt aus \\(n\\) gleichen Faktoren: \\(2^3 = 2 \\cdot 2 \\cdot 2 = 8\\), nicht \\(2 \\cdot 3\\).', L_PG],
+  nullExp:      ['\\(a^0\\) als \\(0\\)', 'Für \\(a \\neq 0\\) gilt \\(a^0 = 1\\): Auf der Treppe \\(2^2 = 4\\), \\(2^1 = 2\\), \\(2^0 = 1\\) teilt jeder Schritt durch die Basis.', L_PG],
+  negsq:        ['Vorzeichen vor der Potenz', 'Die Potenz bindet stärker als das Vorzeichen: \\(-2^4 = -(2^4) = -16\\). Nur \\((-2)^4 = 16\\).', L_GH],
+  negKlammer:   ['Klammer um die negative Basis übersehen', '\\((-2)^3 = (-2) \\cdot (-2) \\cdot (-2) = -8\\), aber \\((-2)^4 = 16\\): Bei einem geraden Exponenten wird das Ergebnis positiv.', L_GH],
+  kehrVergessen:['Kehrwert vergessen', 'Ein negativer Exponent bildet den Kehrwert: \\(\\left(\\frac{2}{3}\\right)^{-2} = \\left(\\frac{3}{2}\\right)^{2} = \\frac{9}{4}\\).', L_PG],
   basenVerschieden: ['Verschiedene Basen wie gleiche behandelt', 'Exponenten addiert werden nur bei gleicher Basis. Bei gleichem Exponenten gilt dagegen \\(a^n \\cdot b^n = (ab)^n\\) (P4): \\(5^3 \\cdot 2^3 = 10^3\\).', L_PG],
+  basenMal:     ['Basen multipliziert', 'Bei gleicher Basis bleibt die Basis stehen, nur die Exponenten werden addiert: \\(a^m \\cdot a^n = a^{m+n}\\), nicht \\((a \\cdot a)^{m+n}\\). \\(3^2 \\cdot 3^1 = 3^3 = 27\\), nicht \\(9^3\\).', L_PG],
   zehnerMal:    ['Zehnerexponenten multipliziert', 'Beim Multiplizieren werden die Exponenten der Zehnerpotenzen addiert: \\(10^4 \\cdot 10^3 = 10^7\\) (P1).', L_WN],
   zehnerVz:     ['Zehnerexponenten falsch subtrahiert', 'Beim Dividieren rechnet man Exponent des Zählers minus Exponent des Nenners: \\(\\frac{10^{3}}{10^{-2}} = 10^{3-(-2)} = 10^{5}\\).', L_WN],
   wurzelNichtGezogen: ['Wurzel aus dem Quadrat nicht gezogen', 'Beim teilweisen Wurzelziehen wird aus dem Quadrat die Wurzel gezogen: \\(\\sqrt{72} = \\sqrt{36 \\cdot 2} = \\sqrt{36} \\cdot \\sqrt{2} = 6\\sqrt{2}\\).', L_WG],
   radikandAddiert: ['Radikanden addiert', 'Unter einer Wurzel wird nicht addiert: \\(\\sqrt{a} + \\sqrt{b} \\neq \\sqrt{a + b}\\). Zusammenfassen lassen sich nur gleichartige Wurzeln, also gleiche Radikanden: \\(3\\sqrt{2} + 5\\sqrt{2} = 8\\sqrt{2}\\).', L_WG],
+  radikandSubtrahiert: ['Radikanden subtrahiert', 'Unter einer Wurzel wird nicht subtrahiert: \\(\\sqrt{a} - \\sqrt{b} \\neq \\sqrt{a - b}\\). Zusammenfassen lassen sich nur gleichartige Wurzeln, also gleiche Radikanden: \\(5\\sqrt{3} - 2\\sqrt{3} = 3\\sqrt{3}\\).', L_WG],
   summeWurzel:  ['Wurzel einer Summe aufgeteilt', '\\(\\sqrt{a + b} \\neq \\sqrt{a} + \\sqrt{b}\\): Die Wurzel wirkt wie eine Klammer, zuerst wird addiert. \\(\\sqrt{9 + 16} = \\sqrt{25} = 5\\), nicht \\(3 + 4\\).', L_WG],
   wurzelMal:    ['Radikanden addiert statt multipliziert', '\\(\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{a \\cdot b}\\) (W1): Die Radikanden werden multipliziert.', L_WG],
+  wurzelDiv:    ['Radikanden subtrahiert statt dividiert', '\\(\\frac{\\sqrt{a}}{\\sqrt{b}} = \\sqrt{\\frac{a}{b}}\\) (W2): Die Radikanden werden dividiert.', L_WG],
   nennerVergessen: ['Nur den Zähler erweitert', 'Erweitern heisst Zähler <em>und</em> Nenner mit \\(\\sqrt{a}\\) multiplizieren. Im Nenner steht dann \\(\\sqrt{a} \\cdot \\sqrt{a} = a\\).', L_WG],
+  wurzelExp:    ['Wurzelexponent als Exponent', 'Die \\(n\\)-te Wurzel ist die Potenz mit Exponent \\(\\frac{1}{n}\\) (W0): \\(\\sqrt[3]{x} = x^{\\frac13}\\), nicht \\(x^3\\).', L_WG],
   wurzelVertauscht: ['Wurzel- und Potenzexponent vertauscht', '\\(\\sqrt[n]{a^m} = a^{\\frac{m}{n}}\\): Der Wurzelexponent kommt in den Nenner, der Exponent unter der Wurzel in den Zähler.', L_SR],
   bruchAddiert: ['Bruchexponenten falsch addiert', 'Brüche addiert man über den Hauptnenner: \\(\\frac12 + \\frac13 = \\frac36 + \\frac26 = \\frac56\\), nicht Zähler plus Zähler und Nenner plus Nenner.', L_SR],
   ratMal:       ['Bruchexponent als Faktor', '\\(a^{\\frac{m}{n}}\\) heisst \\(\\left(\\sqrt[n]{a}\\right)^m\\), nicht \\(a \\cdot \\frac{m}{n}\\): \\(8^{\\frac23} = \\left(\\sqrt[3]{8}\\right)^2 = 4\\).', L_SR],
@@ -369,12 +373,13 @@ const FEHLER = {
   logWurzel:    ['Wurzel nicht als Exponent \\(\\frac12\\)', 'Eine Quadratwurzel ist die Potenz mit Exponent \\(\\frac12\\): \\(\\sqrt{5} = 5^{\\frac12}\\), also \\(\\log_5\\left(\\sqrt{5}\\right) = \\frac12\\).', L_LD],
   logGekuerzt:  ['Den Logarithmus gekürzt', '\\(\\frac{\\lg(8)}{\\lg(2)}\\) ist nicht \\(\\frac{8}{2}\\): \\(\\lg\\) ist kein Faktor, den man kürzen kann. Mit Gesetz 3: \\(\\frac{\\lg(2^3)}{\\lg(2)} = \\frac{3\\lg(2)}{\\lg(2)} = 3\\).', L_LG],
   logZerlVz:    ['Nenner mit falschem Vorzeichen', 'Quotient → Differenz (Gesetz 2): Was im Nenner steht, wird abgezogen: \\(\\lg\\left(\\frac{u}{v}\\right) = \\lg(u) - \\lg(v)\\).', L_LG],
+  logSummeVz:   ['Summe wie Differenz behandelt', 'Summe → Produkt (Gesetz 1): \\(\\lg(u) + \\lg(v) = \\lg(u \\cdot v)\\). Der Exponent bleibt positiv; negativ wird er nur, wenn der Faktor im Nenner steht, also bei einer Differenz.', L_LG],
   logKonst:     ['Konstante nicht logarithmiert', 'Auch die Zahl im Argument wird logarithmiert: \\(\\lg(100 \\cdot x) = \\lg(100) + \\lg(x) = 2 + \\lg(x)\\).', L_LG],
   logExpFaktor: ['Exponent nicht als Faktor', 'Potenz → Faktor (Gesetz 3): Der Exponent «fällt herunter», \\(\\lg(x^3) = 3\\lg(x)\\). Bei einer Wurzel ist der Exponent ein Bruch: \\(\\lg(\\sqrt{y}) = \\frac12\\lg(y)\\).', L_LG],
   logFaktorExp: ['Faktor nicht zum Exponenten gemacht', 'Rückwärts gelesen macht Gesetz 3 aus dem Faktor einen Exponenten: \\(2\\lg(x) = \\lg(x^2)\\). Ein Minus davor heisst: in den Nenner, also Exponent negativ.', L_LG],
   basisOben:    ['Basis im Zähler', 'Basiswechsel: \\(\\log_a(b) = \\frac{\\lg(b)}{\\lg(a)}\\). Die Basis \\(a\\) steht im Nenner.', L_LB],
   expVersch:    ['Verschiebung im Exponenten vergessen', 'Zuerst den ganzen Exponenten bestimmen, dann nach \\(x\\) auflösen: \\(2^{x + 1} = 16 = 2^4\\) heisst \\(x + 1 = 4\\), also \\(x = 3\\).', L_LE],
-  falleGeglaubt:['Falsche Regel für richtig gehalten', 'Eine Regel muss für <em>alle</em> zulässigen Werte gelten; ein einziges Gegenbeispiel widerlegt sie. Richtig sind die Regeln für Produkte, Quotienten und Potenzen, nicht für Summen.', L_ST],
+  falleGeglaubt:['Falsche Regel für richtig gehalten', 'Eine Regel muss für <em>alle</em> zulässigen Werte gelten; ein einziges Gegenbeispiel widerlegt sie.', L_ST],
   falleVerworfen:['Richtige Regel für falsch gehalten', 'Diese Regel gilt für alle zulässigen Werte. Prüfe sie mit zwei, drei Zahlen nach: Sie stimmt jedes Mal.', L_ST],
   sonst:        ['Noch nicht', '', null],
 };
@@ -479,7 +484,7 @@ function eineBasis() {
     divpow: () => ({ t: 'div', a: e(), b: { t: 'pow', a: e(), k: rnd(2, 3) } }),
     powdiv: () => ({ t: 'pow', a: { t: 'div', a: e(), b: e() }, k: rnd(2, 3) }),
   }[form]();
-  return baumAufgabe(x, 'potenzen', 'Eine Potenz', 'Schreibe als eine einzige Potenz von \\(x\\).', [F('n')], 'x^{{n}}');
+  return baumAufgabe(x, 'potenzen', 'Eine Potenz', 'Schreibe als eine einzige Potenz von \\(x\\) (für \\(x \\neq 0\\)).', [F('n')], 'x^{{n}}');
 }
 // Potenzen: zwei Basen, je ein Exponent
 function zweiBasen() {
@@ -488,7 +493,7 @@ function zweiBasen() {
   const x = form === 'div' ? { t: 'div', a: e(), b: e() }
     : form === 'pow' ? { t: 'pow', a: e(), k: pick([2, 3, -1, -2]) }
     : { t: 'div', a: { t: 'pow', a: e(), k: pick([2, 3]) }, b: e() };
-  const A = baumAufgabe(x, 'potenzen', 'Zwei Basen', 'Vereinfache so weit wie möglich. Ein Exponent darf negativ sein.', [F('m'), F('n')], 'a^{{m}} \\cdot b^{{n}}');
+  const A = baumAufgabe(x, 'potenzen', 'Zwei Basen', 'Vereinfache so weit wie möglich (für \\(a, b \\neq 0\\)). Ein Exponent darf negativ sein.', [F('m'), F('n')], 'a^{{m}} \\cdot b^{{n}}');
   if (A && form !== 'div') {                // Potenz nur auf den ersten Faktor
     const p = x.t === 'pow' ? x : x.a;
     const halb = blatt({ a: qMul(p.a.e.a, Q(p.k)), b: p.a.e.b });
@@ -541,7 +546,7 @@ function potenzWert() {
       weg: [zeile(form === 'summe' ? '1 + ' + a : form === 'neg' ? '-1' : '1', '\\(a^0 = 1\\)' + (form === 'neg' ? '; das Minus steht vor der Potenz' : '')), zeile(qTex(w))], tipp: '\\(a^0 = 1\\) für \\(a \\neq 0\\).' };
   }
   if (art === 'vorzeichen') {                              // −aⁿ und (−a)ⁿ
-    const a = rnd(2, 5), n = rnd(2, a > 3 ? 3 : 4), mitKl = Math.random() < 0.5;
+    const a = rnd(2, 5), n = a > 3 ? 2 : pick([2, 4]), mitKl = Math.random() < 0.5;   // nur gerade n: bei ungeradem ist (−a)ⁿ = −aⁿ
     const w = Q(mitKl ? (-a) ** n : -(a ** n));
     return { ...A, ausdruck: mitKl ? '(-' + a + ')^{' + n + '}' : '-' + a + '^{' + n + '}', loesung: [w], py: { links: mitKl ? '(-' + a + ')**' + n : '-' + a + '**' + n, rechts: qPy(w) },
       diag: [[mitKl ? 'negKlammer' : 'negsq', [qNeg(w)]], ['basisMal', [Q(-a * n)]]],
@@ -556,7 +561,7 @@ function potenzWert() {
     const aus = div ? '\\frac{' + a + '^{' + m + '}}{' + a + '^{' + n + '}}' : a + '^{' + m + '} \\cdot ' + a + '^{' + n + '}';
     const d = [];
     if (!div && m * n !== s && Math.abs(m * n) <= 8) d.push(['p1mal', [qPow(Q(a), m * n)]]);
-    if (!div && Math.abs(s) <= 4) d.push(['basenVerschieden', [qPow(Q(a * a), s)]]);
+    if (!div && Math.abs(s) <= 4) d.push(['basenMal', [qPow(Q(a * a), s)]]);
     if (div && n - m !== s) d.push(['p2vz', [qPow(Q(a), n - m)]]);
     if (div && n < 0) d.push(['minusminus', [qPow(Q(a), m + n)]]);
     return { ...A, ausdruck: aus, loesung: [w], py: { links: div ? a + '**(' + m + ')/' + a + '**(' + n + ')' : a + '**(' + m + ')*' + a + '**(' + n + ')', rechts: qPy(w) }, diag: d,
@@ -569,8 +574,8 @@ function potenzWert() {
   return { ...A, ausdruck: div ? '\\frac{' + a + '^{' + n + '}}{' + b + '^{' + n + '}}' : a + '^{' + n + '} \\cdot ' + b + '^{' + n + '}', loesung: [w],
     py: { links: div ? 'Fraction(' + a + ')**' + n + '/Fraction(' + b + ')**' + n : a + '**' + n + '*' + b + '**' + n, rechts: qPy(w) },
     diag: div ? [['p2div', [basis]], ['basenVerschieden', [Q(1)]]] : [['basenVerschieden', [qPow(basis, 2 * n)]]],
-    weg: [zeile(div ? '\\left(\\frac{' + a + '}{' + b + '}\\right)^{' + n + '}' : '(' + a + ' \\cdot ' + b + ')^{' + n + '}', div ? 'P5 rückwärts: gleicher Exponent, Basen dividieren' : 'P4 rückwärts: gleicher Exponent, Basen multiplizieren'), zeile(qTex(basis) + '^{' + n + '}'), zeile(qTex(w))],
-    tipp: 'Gleicher Exponent: zuerst die Basen zusammenfassen (P4, P5).' };
+    weg: [zeile(div ? '\\left(\\frac{' + a + '}{' + b + '}\\right)^{' + n + '}' : '(' + a + ' \\cdot ' + b + ')^{' + n + '}', div ? 'gleicher Exponent, Basen dividieren: \\(\\frac{a^n}{b^n} = \\left(\\frac{a}{b}\\right)^n\\)' : 'gleicher Exponent, Basen multiplizieren: \\(a^n \\cdot b^n = (a \\cdot b)^n\\)'), zeile(qTex(basis) + '^{' + n + '}'), zeile(qTex(w))],
+    tipp: 'Gleicher Exponent: zuerst die Basen zusammenfassen, \\(a^n \\cdot b^n = (a \\cdot b)^n\\) und \\(\\frac{a^n}{b^n} = \\left(\\frac{a}{b}\\right)^n\\).' };
 }
 
 // Potenzen: wissenschaftliche Notation
@@ -630,7 +635,7 @@ function wurzelAufgabe(art) {
     const aus = div ? '\\frac{\\sqrt{' + a + '}}{\\sqrt{' + b + '}}' : '\\sqrt{' + a + '} \\cdot \\sqrt{' + b + '}';
     const summe = div ? a - b : a + b, [sk, sr] = teilweise(summe);
     return { ...A, typ: div ? 'Quotient von Wurzeln' : 'Produkt von Wurzeln', auftrag: 'Berechne ohne Taschenrechner.', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
-      ausdruck: aus, loesung: [erg], diag: summe > 0 && sr === 1 ? [['wurzelMal', [Q(sk)]]] : [],
+      ausdruck: aus, loesung: [erg], diag: summe > 0 && sr === 1 ? [[div ? 'wurzelDiv' : 'wurzelMal', [Q(sk)]]] : [],
       weg: [zeile(div ? '\\sqrt{\\frac{' + a + '}{' + b + '}}' : '\\sqrt{' + a + ' \\cdot ' + b + '}', div ? 'W2: Quotientenwurzel' : 'W1: Produktwurzel'), zeile('\\sqrt{' + (div ? a / b : a * b) + '}'), zeile(qTex(erg))],
       tipp: div ? '\\(\\frac{\\sqrt{a}}{\\sqrt{b}} = \\sqrt{\\frac{a}{b}}\\) (W2).' : '\\(\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{a \\cdot b}\\) (W1).',
       py: { links: div ? 'math.sqrt(' + a + ')/math.sqrt(' + b + ')' : 'math.sqrt(' + a + ')*math.sqrt(' + b + ')', rechts: qPy(erg) } };
@@ -641,7 +646,7 @@ function wurzelAufgabe(art) {
     const a = s * s * r, b = t * t * r, k = Q(minus ? s - t : s + t);
     const diag = [];
     const [sk, sr] = teilweise(minus ? a - b : a + b);
-    diag.push(['radikandAddiert', [Q(sk), Q(sr)]]);
+    diag.push([minus ? 'radikandSubtrahiert' : 'radikandAddiert', [Q(sk), Q(sr)]]);
     return { ...A, typ: 'Wurzeln addieren', auftrag: 'Fasse zusammen. Ziehe dazu zuerst die Wurzeln teilweise.',
       ausdruck: '\\sqrt{' + a + '} ' + (minus ? '-' : '+') + ' \\sqrt{' + b + '}', loesung: [k, Q(r)], loesTex: wzTex(k, r), vergleich: vergleich(k, r), diag,
       weg: [zeile(wzTex(Q(s), r) + (minus ? ' - ' : ' + ') + wzTex(Q(t), r), 'teilweise Wurzel ziehen — jetzt sind die Wurzeln gleichartig'), zeile('(' + s + (minus ? ' - ' : ' + ') + t + ')\\sqrt{' + r + '}', 'ausklammern wie bei \\(' + s + 'x ' + (minus ? '-' : '+') + ' ' + t + 'x\\)'), zeile(wzTex(k, r))],
@@ -665,15 +670,18 @@ function wurzelAufgabe(art) {
     tipp: 'Erweitere den Bruch mit der Wurzel aus dem Nenner.',
     py: { links: c + '/math.sqrt(' + r + ')', rechts: qPy(k) + '*math.sqrt(' + r + ')' } };
 }
-// Wurzeln als Potenzen mit rationalem Exponenten
-function wurzelPotenz() {
+// Wurzeln als Potenzen. modus 'gf' (GF 1.4): nur ⁿ√x = x^(1/n), Ergebnis ganz oder 1/n;
+// modus 'rational' (SF 1.2): verlangt einen Exponenten m/n (Wurzel mit m ≠ 1 oder Ergebnis m/n)
+function wurzelPotenz(modus) {
+  const gf = modus === 'gf', bereich = gf ? 'wurzeln' : 'rational';
   const wz = (m, n) => ({ t: 'b', e: { x: Q(m, n) }, wz: [m, n] });
   const pot = e => blatt({ x: e });
-  const form = pick(['eine', 'kehr', 'mal', 'zwei', 'quot', 'wzwz']);
-  let x, extra = [];
-  const n = rnd(2, 5), m = pick([1, 1, 2, 3, 4, 5].filter(v => v !== n && ggT(v, n) === 1));
+  const form = pick(gf ? ['eine', 'kehr', 'wzwz'] : ['eine', 'kehr', 'mal', 'zwei', 'quot']);
+  let x;
+  const n = rnd(2, 5), m = gf ? 1 : pick([2, 3, 4, 5].filter(v => v !== n && ggT(v, n) === 1));
+  if (m === undefined) return null;
   if (form === 'eine') x = wz(m, n);
-  else if (form === 'kehr') x = { t: 'div', a: pot(Q(1)), b: wz(m, n) };
+  else if (form === 'kehr') x = { t: 'div', a: pot(Q(gf ? 0 : 1)), b: wz(m, n) };     // GF: 1/ⁿ√x (W7), SF: x/ⁿ√(xᵐ)
   else if (form === 'mal') x = { t: 'mul', a: pot(Q(rnd(1, 3))), b: wz(m, n) };
   else if (form === 'zwei') { const n2 = pick([2, 3, 4].filter(v => v !== n)); x = { t: 'mul', a: wz(1, n), b: wz(pick([1, 2].filter(v => ggT(v, n2) === 1)), n2) }; }
   else if (form === 'quot') { const n2 = pick([2, 3].filter(v => v !== n)); x = { t: 'div', a: wz(m, n), b: wz(1, n2) }; }
@@ -681,23 +689,31 @@ function wurzelPotenz() {
     const a = pick([2, 3]), b = pick([2, 3, 4]);
     const loes = Q(1, a * b);
     const aus = (b === 2 ? '\\sqrt{' : '\\sqrt[' + b + ']{') + (a === 2 ? '\\sqrt{x}' : '\\sqrt[' + a + ']{x}') + '}';
-    return { bereich: 'wurzeln', typ: 'Wurzel als Potenz', auftrag: 'Schreibe als eine Potenz von \\(x\\) (für \\(x > 0\\)).', ausdruck: aus, felder: [F('n')], ziel: 'x^{{n}}', loesung: [loes],
-      diag: [['p3plus', [qAdd(Q(1, a), Q(1, b))]], ['wurzelVertauscht', [Q(a * b)]]],
-      weg: [zeile('\\left(x^{\\frac{1}{' + a + '}}\\right)^{\\frac{1}{' + b + '}}', 'Wurzeln als Potenzen'), zeile('x^{\\frac{1}{' + a + '} \\cdot \\frac{1}{' + b + '}}', 'P3: Exponenten multiplizieren'), zeile('x^{' + qTex(loes) + '}')],
+    return { bereich, typ: 'Wurzel als Potenz', auftrag: 'Schreibe als eine Potenz von \\(x\\) (für \\(x > 0\\)).', ausdruck: aus, felder: [F('n')], ziel: 'x^{{n}}', loesung: [loes],
+      diag: [['p3plus', [qAdd(Q(1, a), Q(1, b))]], ['wurzelExp', [Q(a * b)]]],
+      weg: [zeile('\\left(x^{\\frac{1}{' + a + '}}\\right)^{\\frac{1}{' + b + '}}', 'Wurzeln als Potenzen: \\(\\sqrt[n]{x} = x^{\\frac{1}{n}}\\)'), zeile('x^{\\frac{1}{' + a + '} \\cdot \\frac{1}{' + b + '}}', 'P3: Exponenten multiplizieren'), zeile('x^{' + qTex(loes) + '}')],
       tipp: 'Die \\(n\\)-te Wurzel ist die Potenz mit Exponent \\(\\frac{1}{n}\\); dann P3.',
       py: { links: (b === 2 ? 'math.sqrt' : '(lambda t: t**(1/' + b + '))') + '(' + (a === 2 ? 'math.sqrt(x)' : 'x**(1/' + a + ')') + ')', rechts: 'x**' + qPy(loes), vars: ['x'] } };
   }
-  const A = baumAufgabe(x, 'wurzeln', 'Wurzel als Potenz', 'Schreibe als eine Potenz von \\(x\\) (für \\(x > 0\\)).', [F('n')], 'x^{{n}}');
+  const A = baumAufgabe(x, bereich, 'Wurzel als Potenz', 'Schreibe als eine Potenz von \\(x\\) (für \\(x > 0\\)).', [F('n')], 'x^{{n}}');
   if (!A) return null;
+  if (!gf && m === 1 && Math.abs(A.loesung[0].n) === 1) return null;       // ohne m/n: Stoff von GF 1.4
+  if (gf && form === 'kehr') {                              // 1/ⁿ√x: direkt mit dem negativen Exponenten (W7)
+    A.diag = [['kehrVergessen', [Q(1, n)]], ['wurzelExp', [Q(-n)]]];
+    A.weg = [zeile('\\frac{1}{x^{\\frac{1}{' + n + '}}}', 'Wurzel als Potenz: \\(\\sqrt[n]{x} = x^{\\frac{1}{n}}\\)'), zeile('x^{-\\frac{1}{' + n + '}}', 'im Nenner heisst negativer Exponent: \\(\\frac{1}{a^n} = a^{-n}\\)')];
+    A.tipp = 'Schreibe die Wurzel als Potenz, \\(\\sqrt[n]{x} = x^{\\frac{1}{n}}\\). Ein Faktor im Nenner bekommt einen negativen Exponenten.';
+    return A;
+  }
   // Wurzel- und Potenzexponent vertauscht, Brüche falsch addiert
   const tausch = y => (y.t === 'b' ? (y.wz ? { ...y, e: { x: Q(y.wz[1], y.wz[0]) } } : y) : y.t === 'pow' ? { ...y, a: tausch(y.a) } : { ...y, a: tausch(y.a), b: tausch(y.b) });
   const wv = expo(tausch(x)).x;
-  if (!qGleich(wv, A.loesung[0])) A.diag.push(['wurzelVertauscht', [wv]]);
+  if (!qGleich(wv, A.loesung[0])) A.diag.push([gf ? 'wurzelExp' : 'wurzelVertauscht', [wv]]);
   if (form === 'zwei' || form === 'mal') {
     const e1 = expo(x.a).x, e2 = expo(x.b).x, falsch = Q(e1.n + e2.n, e1.d + e2.d);
     if (e1.d > 1 || e2.d > 1) if (!qGleich(falsch, A.loesung[0])) A.diag.push(['bruchAddiert', [falsch]]);
   }
-  A.tipp = 'Schreibe jede Wurzel als Potenz, \\(\\sqrt[n]{x^m} = x^{\\frac{m}{n}}\\), und verrechne dann die Exponenten mit den Potenzgesetzen.';
+  A.tipp = gf ? 'Schreibe jede Wurzel als Potenz, \\(\\sqrt[n]{x} = x^{\\frac{1}{n}}\\), und verrechne dann die Exponenten mit den Potenzgesetzen.'
+    : 'Schreibe jede Wurzel als Potenz, \\(\\sqrt[n]{x^m} = x^{\\frac{m}{n}}\\), und verrechne dann die Exponenten mit den Potenzgesetzen.';
   return A;
 }
 // Rationale Exponenten: Wert
@@ -712,7 +728,7 @@ function ratWert() {
   const wz = (n === 2 ? '\\sqrt{' : '\\sqrt[' + n + ']{') + bt + '}';
   const diag = [['ratMal', [qMul(basis, e)]]];
   if (m < 0) diag.push(['negBasis', [qNeg(w)]], ['kehrVergessen', [qPow(Q(c, q), -m)]]);
-  return { bereich: 'wurzeln', typ: 'Rationaler Exponent', auftrag: 'Berechne ohne Taschenrechner.', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
+  return { bereich: 'rational', typ: 'Rationaler Exponent', auftrag: 'Berechne ohne Taschenrechner.', felder: [F('w', '\\text{Wert}')], ziel: '{w}',
     ausdruck: btK + '^{' + qTex(e) + '}', loesung: [w], diag,
     weg: [zeile((m < 0 ? '\\frac{1}{' : '') + (Math.abs(m) === 1 ? wz : '\\left(' + wz + '\\right)^{' + Math.abs(m) + '}') + (m < 0 ? '}' : ''), Math.abs(m) === 1 ? 'Exponent \\(\\frac{1}{' + n + '}\\) heisst ' + n + '-te Wurzel' + (m < 0 ? '; negativer Exponent: Kehrwert' : '') : 'erst die Wurzel ziehen, dann potenzieren' + (m < 0 ? '; negativer Exponent: Kehrwert' : '')),
       zeile((m < 0 ? '\\frac{1}{' : '') + (bruch ? '\\left(\\frac{' + c + '}{' + q + '}\\right)' : c) + (Math.abs(m) === 1 ? '' : '^{' + Math.abs(m) + '}') + (m < 0 ? '}' : '')), zeile(qTex(w))],
@@ -746,8 +762,8 @@ function logWert() {
   if (w.n) diag.push(['logVz', [qNeg(w)]]);
   if (q.n === 0) diag.push(['log1', [Q(1)]]);
   if (qGleich(q, Q(p))) diag.push(['log1', [Q(0)]]);
+  if (q.d === 2) diag.push(['logWurzel', [qMul(Q(q.n), Q(2, p))]]);      // vor logKehr: bei ln(√e) geben beide 2
   if (w.n && !qGleich(qDiv(Q(1), w), w)) diag.push(['logKehr', [qDiv(Q(1), w)]]);
-  if (q.d === 2) diag.push(['logWurzel', [qMul(Q(q.n), Q(2, p))]]);
   if (c !== 'e' && q.d === 1) { const b = qPow(Q(c), q.n); const quot = qDiv(b, Q(basis)); if (!qGleich(quot, w)) diag.push(['logQuot', [quot]]); }
   const bt = c === 'e' ? 'e' : String(basis);
   const weg = c === 'e'
@@ -846,12 +862,12 @@ function logZusammenfassen() {
     return (f.n < 0 ? (erst ? '-' : ' - ') : erst ? '' : ' + ') + fak + lt(v);
   };
   const aus = glied(m, 'x', true) + glied(n, 'y', false);
-  const diag = [['logFaktorExp', [Q(1), Q(n.n < 0 ? -1 : 1)]], ['logZerlVz', [m, qAbs(n)]], ['logZerlVz', [m, qNeg(n)]]];
+  const diag = [['logFaktorExp', [Q(1), Q(n.n < 0 ? -1 : 1)]], [n.n < 0 ? 'logZerlVz' : 'logSummeVz', [m, qNeg(n)]]];
   return { bereich: 'logarithmen', typ: 'Zu einem Logarithmus zusammenfassen', auftrag: 'Schreibe als einen einzigen Logarithmus (für \\(x, y > 0\\)). Ein Faktor im Nenner hat einen negativen Exponenten.',
     ausdruck: aus, felder: [F('m'), F('n')], ziel: lt('x^{{m}} \\cdot y^{{n}}'), loesung: [m, n], diag: diag.filter(([, w]) => !(qGleich(w[0], m) && qGleich(w[1], n))),
     weg: [zeile(lt('x^{' + qTex(m) + '}') + (n.n < 0 ? ' - ' : ' + ') + lt('y^{' + qTex(qAbs(n)) + '}'), 'Gesetz 3 rückwärts: Faktor → Exponent'),
       zeile(n.n < 0 ? lt('\\frac{x^{' + qTex(m) + '}}{y^{' + qTex(qAbs(n)) + '}}') : lt('x^{' + qTex(m) + '} \\cdot y^{' + qTex(n) + '}'), n.n < 0 ? 'Gesetz 2: Differenz → Quotient' : 'Gesetz 1: Summe → Produkt'),
-      zeile(lt('x^{' + qTex(m) + '} \\cdot y^{' + qTex(n) + '}'), n.n < 0 ? 'P7: im Nenner heisst negativer Exponent' : '')],
+      zeile(lt('x^{' + qTex(m) + '} \\cdot y^{' + qTex(n) + '}'), n.n < 0 ? 'im Nenner heisst negativer Exponent: \\(\\frac{1}{a^n} = a^{-n}\\)' : '')],
     tipp: 'Zuerst jeden Faktor als Exponenten ins Argument holen (Gesetz 3), dann Summe → Produkt, Differenz → Quotient.',
     py: { links: (m.n < 0 ? '' : '') + qPy(m) + '*' + logPy(basis, 'x') + '+' + qPy(n) + '*' + logPy(basis, 'y'), rechts: logPy(basis, 'x**' + qPy(m) + '*y**' + qPy(n)), vars: ['x', 'y'] } };
 }
@@ -890,10 +906,17 @@ const FALLEN = {
     ['\\sqrt{a^2} = a', false, 'a = -3', '\\sqrt{(-3)^2} = \\sqrt{9} = 3', '-3', 'Richtig ist \\(\\sqrt{a^2} = |a|\\) (W9): Die Wurzel ist nie negativ.', ['math.sqrt((-3)**2)', '-3']],
     ['\\left(\\sqrt{a}\\right)^2 = a', true, '', '', '', 'W8: Für \\(a \\ge 0\\) macht das Quadrat die Wurzel rückgängig.', ['math.sqrt(a)**2', 'a']],
     ['\\sqrt{a} + \\sqrt{a} = 2\\sqrt{a}', true, '', '', '', 'Gleichartige Wurzeln fasst man zusammen wie \\(x + x = 2x\\).', ['math.sqrt(a)+math.sqrt(a)', '2*math.sqrt(a)']],
-    ['\\sqrt{a} \\cdot \\sqrt[3]{a} = \\sqrt[6]{a}', false, 'a = 64', '\\sqrt{64} \\cdot \\sqrt[3]{64} = 8 \\cdot 4 = 32', '\\sqrt[6]{64} = 2', 'Als Potenzen: \\(a^{\\frac12} \\cdot a^{\\frac13} = a^{\\frac56}\\) — die Exponenten werden addiert, nicht multipliziert.', ['math.sqrt(64)*64**(1/3)', '64**(1/6)']],
-    ['\\sqrt[n]{a^m} = a^{\\frac{m}{n}}', true, '', '', '', 'So sind Potenzen mit rationalem Exponenten definiert (für \\(a > 0\\)).', ['(a**m)**(1/n)', 'a**(m/n)']],
     ['\\frac{1}{\\sqrt{a}} = \\frac{\\sqrt{a}}{a}', true, '', '', '', 'Erweitern mit \\(\\sqrt{a}\\): \\(\\frac{1 \\cdot \\sqrt{a}}{\\sqrt{a} \\cdot \\sqrt{a}} = \\frac{\\sqrt{a}}{a}\\) (für \\(a > 0\\)).', ['1/math.sqrt(a)', 'math.sqrt(a)/a']],
     ['\\sqrt{a^2 + b^2} = a + b', false, 'a = 3,\\ b = 4', '\\sqrt{9 + 16} = 5', '3 + 4 = 7', 'Die Wurzel einer Summe lässt sich nicht aufteilen.', ['math.sqrt(3**2+4**2)', '3+4']],
+  ],
+  rational: [
+    ['\\sqrt{a} \\cdot \\sqrt[3]{a} = \\sqrt[6]{a}', false, 'a = 64', '\\sqrt{64} \\cdot \\sqrt[3]{64} = 8 \\cdot 4 = 32', '\\sqrt[6]{64} = 2', 'Als Potenzen: \\(a^{\\frac12} \\cdot a^{\\frac13} = a^{\\frac56}\\) — die Exponenten werden addiert, nicht multipliziert.', ['math.sqrt(64)*64**(1/3)', '64**(1/6)']],
+    ['\\sqrt[n]{a^m} = a^{\\frac{m}{n}} \\quad \\text{für } a > 0', true, '', '', '', 'So sind Potenzen mit rationalem Exponenten definiert. Ohne die Voraussetzung \\(a > 0\\) stimmt es nicht: \\(\\sqrt{(-3)^2} = 3\\), nicht \\(-3\\).', ['(a**m)**(1/n)', 'a**(m/n)']],
+    ['a^{\\frac{m}{n}} = \\left(\\sqrt[n]{a}\\right)^m \\quad \\text{für } a > 0', true, '', '', '', 'Zuerst die Wurzel, dann die Potenz: \\(a^{\\frac{m}{n}} = \\left(a^{\\frac{1}{n}}\\right)^m\\) nach P3. So rechnet man ohne Taschenrechner: \\(8^{\\frac23} = 2^2 = 4\\).', ['a**(m/n)', '(a**(1/n))**m']],
+    ['\\sqrt[n]{a^m} = a^{\\frac{n}{m}}', false, 'a = 8,\\ m = 2,\\ n = 3', '\\sqrt[3]{8^2} = \\sqrt[3]{64} = 4', '8^{\\frac32} = 8\\sqrt{8} \\approx 22.6', 'Der Wurzelexponent kommt in den Nenner: \\(\\sqrt[n]{a^m} = a^{\\frac{m}{n}}\\).', ['(8**2)**(1/3)', '8**(3/2)']],
+    ['a^{\\frac{m}{n}} = \\frac{m}{n} \\cdot a', false, 'a = 8,\\ m = 2,\\ n = 3', '8^{\\frac23} = \\left(\\sqrt[3]{8}\\right)^2 = 4', '\\frac23 \\cdot 8 = \\frac{16}{3}', 'Ein Bruchexponent ist kein Faktor: \\(a^{\\frac{m}{n}} = \\left(\\sqrt[n]{a}\\right)^m\\).', ['8**(2/3)', '2/3*8']],
+    ['a^{-\\frac{1}{2}} = -\\sqrt{a}', false, 'a = 4', '4^{-\\frac12} = \\frac{1}{\\sqrt{4}} = \\frac12', '-\\sqrt{4} = -2', 'Ein negativer Exponent bildet den Kehrwert: \\(a^{-\\frac12} = \\frac{1}{\\sqrt{a}}\\).', ['4**(-1/2)', '-math.sqrt(4)']],
+    ['\\left(a^{\\frac{1}{2}}\\right)^{\\frac{2}{3}} = a^{\\frac{1}{3}} \\quad \\text{für } a > 0', true, '', '', '', 'P3 gilt auch für Bruchexponenten: \\(\\frac12 \\cdot \\frac23 = \\frac13\\).', ['(a**(1/2))**(2/3)', 'a**(1/3)']],
   ],
   logarithmen: [
     ['\\log(u + v) = \\log(u) + \\log(v)', false, 'u = v = 10', '\\lg(10 + 10) = \\lg(20) \\approx 1.30', '\\lg(10) + \\lg(10) = 2', 'Für Summen gibt es kein Logarithmengesetz.', ['math.log10(20)', 'math.log10(10)+math.log10(10)']],
@@ -918,7 +941,8 @@ function falle(bereich) {
 
 const BEREICHE = {
   potenzen:    { name: 'Potenzen', vorlagen: [[eineBasis, 3], [zweiBasen, 2], [potenzWert, 3], [wissenschaftlich, 1], [() => falle('potenzen'), 1]] },
-  wurzeln:     { name: 'Wurzeln', vorlagen: [[() => wurzelAufgabe('teilweise'), 2], [() => wurzelAufgabe('produkt'), 1], [() => wurzelAufgabe('summe'), 1], [() => wurzelAufgabe('summeTrap'), 1], [() => wurzelAufgabe('nenner'), 1], [wurzelPotenz, 3], [ratWert, 2], [() => falle('wurzeln'), 1]] },
+  wurzeln:     { name: 'Wurzeln', vorlagen: [[() => wurzelAufgabe('teilweise'), 2], [() => wurzelAufgabe('produkt'), 1], [() => wurzelAufgabe('summe'), 1], [() => wurzelAufgabe('summeTrap'), 1], [() => wurzelAufgabe('nenner'), 1], [() => wurzelPotenz('gf'), 2], [() => falle('wurzeln'), 1]] },
+  rational:    { name: 'Rationale Exponenten (SF)', vorlagen: [[() => wurzelPotenz('rational'), 3], [ratWert, 3], [() => falle('rational'), 1]] },
   logarithmen: { name: 'Logarithmen (SF)', vorlagen: [[logWert, 3], [expGleichung, 2], [logGesetze, 2], [logZerlegen, 2], [logZusammenfassen, 1], [basiswechsel, 1], [() => falle('logarithmen'), 1]] },
 };
 function aufgabe(bereiche) {
@@ -948,7 +972,7 @@ function lies(s) {
     if (!n) return { fehler: 'Der Nenner darf nicht \\(0\\) sein.' };
     return { q: Q(z, n), roh: [z, n], art: 'bruch' };
   }
-  if ((m = /^([+-]?)(\d*)\.(\d+)$/.exec(s)) && (m[2] || m[3])) return { q: Q((m[1] === '-' ? -1 : 1) * +(m[2] + m[3]), 10 ** m[3].length), art: 'dezimal' };
+  if ((m = /^([+-]?)(\d*)\.(\d*)$/.exec(s)) && (m[2] || m[3])) return { q: Q((m[1] === '-' ? -1 : 1) * +(m[2] + m[3]), 10 ** m[3].length), art: 'dezimal' };
   if ((m = /^([+-]?)(\d+)$/.exec(s))) return { q: Q((m[1] === '-' ? -1 : 1) * +m[2]), art: 'ganz' };
   return { fehler: 'Diese Eingabe verstehe ich nicht. Beispiele: <code>-3</code>, <code>3/2</code>, <code>0.25</code>.' };
 }
@@ -957,7 +981,7 @@ function einsetzenZiel(a, zahlen) {          // Platzhalter {id} durch Zahlen er
   a.felder.forEach((f, j) => {
     const z = zahlen[j];
     if (z.neg && t.includes('+ {' + f.id + '}')) t = t.split('+ {' + f.id + '}').join('- {' + z.abs + '}');
-    else t = t.split('{' + f.id + '}').join('{' + z.tex + '}');
+    else t = t.split('{' + f.id + '}').join(z.tex);
   });
   return t;
 }
@@ -992,6 +1016,17 @@ function pruefe(a, eingabe) {
   }
   const dg = a.diag.find(([, v]) => (a.vergleich && a.felder.length === 2 && a.ziel.includes('sqrt') ? wzKey(w) === wzKey(v) : passt(w, v)));
   if (dg) return { status: 'falsch', code: dg[0] };
+  // gerundete Dezimalzahl statt eines nicht abbrechenden Bruchs: Hinweis statt Fehler
+  const stellen = j => (String(eingabe[j]).trim().split('.')[1] || '').length;
+  const gerundet = j => {                     // korrekt gerundet oder abgeschnitten
+    if (ls[j].art !== 'dezimal' || !stellen(j) || abbrechend(a.loesung[j])) return false;
+    const u = qWert(w[j]), v = qWert(a.loesung[j]), e = 10 ** -stellen(j);
+    return Math.abs(u - v) <= e / 2 + 1e-12 || (Math.abs(u - v) < e && Math.abs(u) < Math.abs(v) && u * v > 0);
+  };
+  if (!a.vergleich || a.felder.length === 1) {
+    const g = a.loesung.map((q, j) => (gerundet(j) ? 1 : qGleich(w[j], q) ? 0 : -1));
+    if (g.includes(1) && !g.includes(-1)) return { status: 'fast', text: 'Das ist gerundet. Gib das Ergebnis exakt an: als Bruch mit <code>/</code>, nicht als Dezimalzahl.' };
+  } else if (a.loesung.some((q, j) => gerundet(j)) && a.loesung.every((q, j) => gerundet(j) || qGleich(w[j], q))) return { status: 'fast', text: 'Das ist gerundet. Gib das Ergebnis exakt an: als Bruch mit <code>/</code>, nicht als Dezimalzahl.' };
   const richtig = a.felder.length > 1 && !a.vergleich ? a.felder.filter((f, j) => qGleich(w[j], a.loesung[j])).map(f => '\\(' + f.tex + '\\)') : [];
   return { status: 'falsch', code: 'sonst', text: (richtig.length ? richtig.join(' und ') + (richtig.length > 1 ? ' stimmen' : ' stimmt') + ' schon. ' : '') + 'Tipp: ' + a.tipp };
 }
@@ -1023,6 +1058,7 @@ const bereichBox = $('gt-bereiche');
 for (const [k, t] of Object.entries(BEREICHE)) {
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'gt-opt' + (bereiche.has(k) ? ' aktiv' : ''); b.dataset.t = k; b.textContent = t.name;
+  b.setAttribute('aria-pressed', bereiche.has(k) ? 'true' : 'false');
   bereichBox.appendChild(b);
 }
 
@@ -1066,7 +1102,7 @@ function neueAufgabe() {
   $('gt-antwort-wahl').hidden = !wahl;
   if (wahl) setzen($('gt-antwort-wahl'), a.wahl.map(([k, t]) => '<button type="button" class="gt-btn" data-w="' + k + '">' + t + '</button>').join(''));
   else {
-    setzen($('gt-felder'), a.felder.map(f => '<span class="gt-feld"><label for="gt-f-' + f.id + '">\\(' + f.tex + ' =\\)</label><input type="text" id="gt-f-' + f.id + '" autocomplete="off" inputmode="text" spellcheck="false" aria-label="' + f.id + '"></span>').join(''));
+    setzen($('gt-felder'), a.felder.map(f => '<span class="gt-feld"><label for="gt-f-' + f.id + '">\\(' + f.tex + ' =\\)</label><input type="text" id="gt-f-' + f.id + '" autocomplete="off" inputmode="text" spellcheck="false"></span>').join(''));
     $('gt-pruefen').disabled = false;
     mjKette.then(() => { const f = felder(); if (f[0]) f[0].focus(); });
     zeigeVorschau();
@@ -1147,6 +1183,7 @@ bereichBox.addEventListener('click', e => {
   if (bereiche.has(t) && bereiche.size === 1) return;
   if (bereiche.has(t)) bereiche.delete(t); else bereiche.add(t);
   b.classList.toggle('aktiv', bereiche.has(t));
+  b.setAttribute('aria-pressed', bereiche.has(t) ? 'true' : 'false');
   neueRunde();
 });
 document.addEventListener('keydown', e => {

@@ -51,7 +51,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Verlinkt aus
-  g2.1 (`#definition`); seit 10.10.2026 nur Grundlagenfach (110 Karten, die 25 des
+  g2.1 (`#definition`); seit 10.10.2026 nur Grundlagenfach (116 Karten, die 25 des
   Schwerpunktfachs und der Fach-Filter sind entfernt). Bis 10.10.2026 lag er als `notationstrainer.html` im Root.
 - `werkzeuge/strategietrainer.html` (seit 10.10.2026): Zufallsaufgaben aus sieben Bereichen —
   lineare, quadratische und Bruchgleichungen, Faktorisieren, Bruchterme, lineare Systeme und Systeme
@@ -65,7 +65,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `#bereich=fakt,bruchterm` (kein `?`: `check_sim_wz` liest die Adresse bis `#` als Dateinamen).
   Verlinkt aus g1.3, g2.2a, g2.2b, g2.3, s2.2a, s3.1. Weitere Trainer-Ideen: `../TODO-trainer-mathe.md`.
 - `werkzeuge/rechentrainer.html` (seit 11.10.2026): Rechnen ohne Taschenrechner (GF 1.1/1.2) in sechs
-  Themen — Reihenfolge, Vorzeichen, Brüche, Bruch–Dezimal–Prozent, Perioden, Zahlenmengen. Kern ist die
+  Themen — Hierarchie der Operationen, Vorzeichen, Brüche, Bruch–Dezimal–Prozent, Perioden, Zahlenmengen. Kern ist die
   **Fehlerdiagnose**: Jede Aufgabe wird zusätzlich mit typischen Denkfehlern gerechnet (Parser mit
   umschaltbaren Regeln: Strich vor Punkt, −3² als 9, a − (−b) als a − b …); trifft die Antwort einen
   davon, nennt die Rückmeldung den Fehler mit Link (`FEHLER`). Lösungsweg Stufe für Stufe nach g1.1.
@@ -83,7 +83,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   Lösungsweg und Denkfehler ebenso (`diag`, `FEHLER`). Vorwahl `#thema=binome,faktorisieren`. Selbsttest
   `scripts/verify_termtrainer.js` wertet alles in `python3` mit `Fraction` aus und prüft Unzerlegbarkeit.
 - `werkzeuge/gesetzetrainer.html` (seit 11.10.2026): Potenz-, Wurzel- und Logarithmengesetze (GF 1.4, SF 1.2, 1.3),
-  Bereiche wählbar (`#bereich=potenzen,wurzeln,logarithmen`). Antwort in Feldern einer Zielform (`ziel`, z.B.
+  Bereiche wählbar (`#bereich=potenzen,wurzeln,rational,logarithmen`; `wurzeln` nur GF-1.4-Stoff mit
+  ⁿ√x = x^{1/n}, m/n-Exponenten im Bereich `rational` (SF)). Antwort in Feldern einer Zielform (`ziel`, z.B.
   `x^{{n}}`, `{k}\sqrt{{r}}`); Potenzterme als Exponentenbäume, Denkfehler durch umgeschaltete Regeln
   (`expo(x, 'p1mal')` …), dazu «Regel prüfen» (`FALLEN`). Selbsttest `scripts/verify_gesetzetrainer.js` rechnet
   in `python3` unabhängig nach (Wurzeln als `(x**m)**(1/n)`, `math.log`).
