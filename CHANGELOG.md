@@ -92,6 +92,36 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
 
 ---
 
+## [2.0] — 11./12. Oktober 2026 · Leitprogramme Gleichungen und Gleichungssysteme, Trainer-Rahmen
+
+### Hinzugefügt
+
+- **Drei Leitprogramme statt «Lineare und quadratische Gleichungen»:** `lineare-gleichungen.html` (GF 2.2a, neu),
+  `quadratische-gleichungen.html` (2.2b) und `gleichungssysteme.html` (2.3), die beiden letzten unter der alten
+  Adresse neu gebaut. Je Vorwissen mit Vortest, fünf Kapitel mit Umformer (2.3: eigener LGS-Umformer mit Prüfer
+  `scripts/lp/gleichungssysteme/pruef-lgs-umformer.mjs`), zehn vertonte Clips mit Kontrollfragen (Präfixe
+  `g2-2a-lp-`, `g2-2b-lp-`, `g2-3-lp-`), Übungen mit Rückmeldung, Gesamttest und Bewertungspaket als PDF.
+  Geprüft nach HOWTO-leitprogramme §15 (je drei Prüfer, Befunde in `TODO.md`), behoben und an allen fünf Stellen
+  freigeschaltet. `lineare-quadratische-gleichungen.html` steht unter «Alte Leitprogramme» (`noindex`).
+
+### Geändert
+
+- **Themenseiten:** g2.2a Kipprichtung des Ungleichheitszeichens «auch umgekehrt»; g2.3 «0 = 0» heisst im 3×3-System
+  nur ohne weiteren Widerspruch unendlich viele Lösungen.
+- **`lp-druck.sty`:** Teilgebiet in der Kopfzeile nicht mehr in Grossbuchstaben («2.2b» statt «2.2B»), alle
+  Leitprogramm-PDFs neu gebaut.
+- **HOWTO-leitprogramme §15:** neue Fehlerklassen (Anker auf einem früheren gleichen Wort, Allaussagen über
+  Lösungsfälle, Auswahl beim Wechsel der Aufgabe, Bildfenster über den ganzen Reglerbereich, Läuferkoordinaten).
+- **Trainer-Rahmen** (11.10.2026): `werkzeuge/trainer.css` und `trainer.js` für alle sieben Trainer — Karte bis zum
+  unteren Bildschirmrand, «Nächster Schritt» oben rechts, die Lösung entwickelt sich unter der Aufgabe in derselben
+  Arbeitsfläche, Bedienleiste unten (HOWTO-werkzeuge §3). Übertrag an Physik in `TODO-schwesterprojekt.md`.
+- **«Nächster Schritt» in allen Trainern** (11.10.2026): deckt die Lösung Schritt für Schritt auf, jeder Schritt
+  bezeichnet.
+- **Systemtrainer: Vorgehen statt Rechnen** (11.10.2026): statt 𝕃 einzugeben wählt man Lösungsschritte aus — zuerst
+  die Methode, dann die vorbereitenden Umformungen (oder umgekehrt), dann die Anwendung der Methode.
+
+---
+
 ## [2.0] — 10. Oktober 2026 · Aussprache nach Hörprobe
 
 ### Geändert

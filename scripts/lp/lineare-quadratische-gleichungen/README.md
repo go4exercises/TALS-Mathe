@@ -1,5 +1,9 @@
 # Bauskripte: Leitprogramm Lineare und quadratische Gleichungen
 
+**Abgelöst am 12.10.2026** durch je ein Leitprogramm zu 2.2a (`scripts/lp/lineare-gleichungen/`) und 2.2b
+(`scripts/lp/quadratische-gleichungen/`); die Seite steht unter «Alte Leitprogramme» (`noindex`). Der Umformer und
+seine Beschreibung unten bleiben die Grundlage (HOWTO-leitprogramme §8d).
+
 Leitprogramm zum Teilgebiet GF 2.2 (Themenseiten `g2-2a-lineare-gleichungen.html` und
 `g2-2b-quadratische-gleichungen.html`), gebaut am 06.10.2026 nach dem Leitfaden des
 Auftraggebers (`HOWTO-GleichungLP.md`) im Kapitelmuster der Funktionen-Leitprogramme. Die eine
