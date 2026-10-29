@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Geraden- und Parabeltrainer</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Geraden und Parabeln zeichnen aus Scheitel-, Produkt- oder allgemeiner Form und umgekehrt die Gleichung aus dem Graphen ablesen, Schritt für Schritt mit Rückmeldung.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/werkzeuge/parabeltrainer.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Geraden- und Parabeltrainer — vom Graphen zur Gleichung und zurück">
+<meta property="og:description" content="Geraden und Parabeln zeichnen aus Scheitel-, Produkt- oder allgemeiner Form und umgekehrt die Gleichung aus dem Graphen ablesen, Schritt für Schritt mit Rückmeldung.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/werkzeuge/parabeltrainer.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/werkzeuge/parabeltrainer.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/werkzeuge/parabeltrainer.html",
+   "name": "Geraden- und Parabeltrainer — vom Graphen zur Gleichung und zurück",
+   "description": "Geraden und Parabeln zeichnen aus Scheitel-, Produkt- oder allgemeiner Form und umgekehrt die Gleichung aus dem Graphen ablesen, Schritt für Schritt mit Rückmeldung.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Lineare Funktionen"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Quadratische Funktionen"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Parabel"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Scheitelform"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Steigung"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Übung"
+    }
+   ],
+   "keywords": "Mathematik, Lineare Funktionen, Quadratische Funktionen, Parabel, Scheitelform, Steigung, Übung",
+   "learningResourceType": [
+    "Werkzeug",
+    "Übung"
+   ],
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<style>
+/* Layout: Karopapier-Plot links (gleiche Einheiten in x und y), Steuerung rechts: Modus, Form, Aufgabe, Schritte; darunter alle Formen */
+:root{
+  --paper:#EEF1F5; --sheet:#FFFFFF; --ink:#152029; --ink2:#55626E; --line:#D5DCE4;
+  --grid:#E4EAF1; --gridH:#F0F3F7; --gridM:#C4D0DC; --axis:#152029;
+  --cur:#1D4ED8; --curSoft:#E7EDFC; --tri:#C2410C; --sym:#0E7C86; --pt:#7C3AED;
+  --ok:#15803D; --bad:#B42318; --warnBg:#FFF4E0; --warnInk:#7A4A00;
+  --f-disp:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0E1318; --sheet:#151C23; --ink:#E4EAF0; --ink2:#9AA7B4; --line:#28323C;
+  --grid:#1C252E; --gridH:#182028; --gridM:#2F3C48; --axis:#DDE4EB;
+  --cur:#8EABFF; --curSoft:#1B2542; --tri:#FF9A5C; --sym:#4FD1DB; --pt:#B794FF;
+  --ok:#5DD38C; --bad:#FF8A80; --warnBg:#2E2410; --warnInk:#F2C879; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1318; --sheet:#151C23; --ink:#E4EAF0; --ink2:#9AA7B4; --line:#28323C;
+  --grid:#1C252E; --gridH:#182028; --gridM:#2F3C48; --axis:#DDE4EB;
+  --cur:#8EABFF; --curSoft:#1B2542; --tri:#FF9A5C; --sym:#4FD1DB; --pt:#B794FF;
+  --ok:#5DD38C; --bad:#FF8A80; --warnBg:#2E2410; --warnInk:#F2C879; color-scheme:dark; }
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+.wrap{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1,h2,h3{font-family:var(--f-disp);margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.01em}
+h2{font-size:.95rem}
+.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px}
+.top p{margin:0;color:var(--ink2)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--cur);outline-offset:2px}
+.panel{background:var(--sheet);border:1px solid var(--line);border-radius:10px}
+.btn{background:var(--sheet);border:1px solid var(--line);border-radius:7px;padding:5px 11px;font-size:.9rem;font-weight:600;white-space:nowrap}
+.btn:hover{border-color:var(--cur);color:var(--cur)}
+.btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.btn.sm{padding:3px 9px;font-size:.85rem}
+.btn.primary{background:var(--cur);border-color:var(--cur);color:var(--sheet)}
+.btn.primary:hover{opacity:.9;color:var(--sheet)}
+.grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:14px;align-items:start}
+@media (max-width:920px){.grid{grid-template-columns:minmax(0,1fr)}}
+.plotcard{overflow:hidden;display:flex;flex-direction:column}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.9rem}
+.toolbar .sp{flex:1 1 auto}
+.task{font-weight:600;color:var(--ink2);min-width:0}
+.plot{position:relative;aspect-ratio:5/4;max-width:100%;touch-action:none;user-select:none;-webkit-user-select:none}
+@media (max-width:520px){.plot{aspect-ratio:1/1}}
+canvas{display:block;width:100%;height:100%;cursor:grab}
+canvas.pick{cursor:crosshair}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:7px 12px;border-top:1px solid var(--line);font-size:.84rem;color:var(--ink2)}
+.side{display:flex;flex-direction:column;gap:10px;min-width:0}
+.side section{padding:10px 12px}
+.phead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 10px;margin-bottom:6px}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--sheet)}
+.seg label{position:relative;cursor:pointer;flex:1 1 0;min-width:0}
+.seg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.seg span{display:block;padding:7px 8px;font-size:.86rem;font-weight:700;color:var(--ink2);text-align:center}
+.seg input:checked+span{background:var(--ink);color:var(--sheet)}
+.seg input:focus-visible+span{outline:2px solid var(--cur);outline-offset:-3px}
+.seg.small span{padding:4px 6px;font-size:.8rem}
+.seg.small input:checked+span{background:var(--cur)}
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.chip{border:1px solid var(--line);background:var(--sheet);border-radius:8px;padding:4px 4px 5px;font-size:.84rem;font-weight:700;color:var(--ink2);line-height:1.15;min-width:0}
+.chip small{display:block;font-weight:400;font-size:.72rem;font-family:var(--f-mono)}
+.chip[aria-pressed="true"]{background:var(--curSoft);border-color:var(--cur);color:var(--cur);box-shadow:inset 0 0 0 1px var(--cur)}
+.lbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);font-weight:600}
+.eqform{font-family:"Times New Roman",Georgia,serif;font-size:1.25rem;display:flex;flex-wrap:wrap;align-items:center;gap:4px;line-height:1.9}
+.eqform i{font-style:italic}
+.eqin{width:4.2em;border:1.5px solid var(--cur);border-radius:6px;padding:2px 5px;background:var(--curSoft);font-family:var(--f-mono);font-size:.95rem;text-align:center;color:var(--ink)}
+.eqin.ok{border-color:var(--ok);background:var(--sheet);color:var(--ok);font-weight:600}
+.eqin.bad{border-color:var(--bad);background:var(--warnBg)}
+.eqres{margin-top:6px;font-size:1.1rem}
+.prev{border-radius:7px;background:var(--gridH);padding:4px 8px;margin-bottom:8px;font-size:.9rem}
+.prev .t{color:var(--ok)}
+.eqmain{font-size:1.2rem;overflow-x:auto;overflow-y:hidden;min-height:2.4rem;max-width:100%;padding:2px 0}
+.row{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.own{margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+.own .fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:6px}
+.own .fields.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fld{display:flex;flex-direction:column;gap:2px;min-width:0}
+.fld input,.rin input{border:1px solid var(--line);border-radius:6px;padding:4px 7px;background:var(--sheet);font-family:var(--f-mono);font-size:.9rem;min-width:0;width:100%}
+.err{color:var(--bad);font-size:.85rem;margin:2px 0 0}
+.stepper{display:grid;gap:5px}
+.sbtn{border:1px solid var(--line);border-top:4px solid var(--sc,var(--line));background:var(--sheet);border-radius:7px;padding:4px 2px 5px;font-size:.8rem;font-weight:700;line-height:1.15;text-align:center;min-width:0;overflow:hidden}
+.sbtn small{display:block;font-weight:400;color:var(--ink2);font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbtn[aria-pressed="true"]{background:var(--curSoft);border-color:var(--cur);border-top-color:var(--sc,var(--cur))}
+.sbtn.ok{border-top-color:var(--ok)}
+.sbtn.ok small::after{content:" ✓";color:var(--ok)}
+.sdetail{margin-top:8px;border-left:4px solid var(--sc,var(--line));padding:4px 0 4px 10px;min-height:9rem}
+.sdetail .t{font-weight:700}
+.sdetail p{margin:4px 0}
+.sdetail .r{font-size:.88rem;color:var(--ink2)}
+.mx{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.sol{background:var(--curSoft);border-radius:7px;padding:4px 10px;margin-top:6px;overflow-x:auto;max-width:100%}
+.fb{border-radius:7px;padding:5px 9px;margin-top:6px;font-size:.9rem}
+.fb.bad{background:var(--warnBg);color:var(--warnInk)}
+.fb.good{color:var(--ok);font-weight:700;padding-left:0}
+.rin{display:grid;grid-template-columns:auto minmax(0,1fr) 1.3rem;gap:6px 8px;align-items:center;margin:8px 0}
+.rin .ok{color:var(--ok);font-weight:700}.rin .no{color:var(--bad);font-weight:700}
+.forms{padding:14px 16px}
+.forms .cols{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.forms .cols{grid-template-columns:minmax(0,1fr)}}
+.forms ul{margin:6px 0 0;padding-left:1.05rem}
+.forms li{margin-bottom:5px}
+.forms li mjx-container>svg{max-width:100%}   /* lange Umrechnungsformel: auf 360 px kleiner statt seitlich scrollen */
+.ftab{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;align-items:baseline;margin-top:6px}
+.ftab .k{font-weight:700;font-size:.9rem}
+.ftab .v{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.ftab .v.given{background:var(--curSoft);border-radius:6px;padding:0 6px}
+.covered{filter:blur(6px);user-select:none;pointer-events:none}
+.note{color:var(--ink2);font-size:.88rem}
+mjx-container{color:inherit}
+mjx-container[display="true"]{margin:.25em 0!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* Fusszeile der Site (build-seo.py); die Seite bindet style.css nicht ein */
+.site-footer{max-width:1320px;margin:28px auto 0;padding-top:12px;border-top:1px solid var(--line);color:var(--ink2);font-size:.8rem;text-align:center}
+.site-footer p{margin:2px 0}.site-footer a{color:inherit}
+</style>
+
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{enableMenu:false},startup:{typeset:false}};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Geraden- und Parabeltrainer</h1>
+    <p>Von der Gleichung zum Graphen und vom Graphen zur Gleichung – Schritt für Schritt.</p>
+  </header>
+
+  <div class="grid">
+    <section class="panel plotcard" aria-label="Koordinatensystem">
+      <div class="toolbar">
+        <span class="task" id="task"></span>
+        <span class="sp"></span>
+        <button class="btn sm" type="button" id="sketchbtn" aria-pressed="false" title="Mit Stift oder Maus den Graphen skizzieren">✎ Skizze</button>
+        <button class="btn sm" type="button" id="zin" aria-label="Hineinzoomen">＋</button>
+        <button class="btn sm" type="button" id="zout" aria-label="Herauszoomen">−</button>
+        <button class="btn sm" type="button" id="vfit">Ansicht</button>
+      </div>
+      <div class="plot" id="plot"><canvas id="cv" role="img" aria-label="Koordinatensystem mit Graph"></canvas></div>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <aside class="side">
+      <div class="seg" role="radiogroup" aria-label="Modus">
+        <label><input type="radio" name="mode" id="m-draw" value="draw" checked><span>Zeichnen: Gleichung → Graph</span></label>
+        <label><input type="radio" name="mode" id="m-read" value="read"><span>Ablesen: Graph → Gleichung</span></label>
+      </div>
+
+      <section class="panel">
+        <div class="phead"><h2 id="formhead">Gegebene Form</h2></div>
+        <div class="chips" id="forms-chips" role="group" aria-label="Form der Funktionsgleichung">
+          <button type="button" class="chip" data-f="lin">Gerade<small>mx + q</small></button>
+          <button type="button" class="chip" data-f="sf">Scheitelform<small>a(x−u)²+v</small></button>
+          <button type="button" class="chip" data-f="pf">Produktform<small>a(x−x₁)(x−x₂)</small></button>
+          <button type="button" class="chip" data-f="af">Allgemein<small>ax²+bx+c</small></button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="phead"><h2 id="taskhead">Aufgabe</h2>
+          <div class="row"><button class="btn sm primary" type="button" id="newtask">Neue Zufallsaufgabe</button><button class="btn sm" type="button" id="owntoggle" aria-expanded="false">Selbst eingeben</button></div>
+        </div>
+        <div class="eqmain" id="eq"></div>
+        <div class="seg small" id="howseg" role="radiogroup" aria-label="Arbeitsweise">
+          <label><input type="radio" name="how" id="h-self" value="self" checked><span>Punkte selbst setzen</span></label>
+          <label><input type="radio" name="how" id="h-demo" value="demo"><span>Vorführen</span></label>
+        </div>
+        <div class="own" id="own" hidden></div>
+      </section>
+
+      <section class="panel">
+        <div class="phead"><h2>Schritte</h2><div class="row"><button class="btn sm" type="button" id="prev" aria-label="Vorheriger Schritt">‹</button><button class="btn sm" type="button" id="play">▶ Abspielen</button><button class="btn sm" type="button" id="next" aria-label="Nächster Schritt">›</button></div></div>
+        <div class="stepper" id="steps" role="group" aria-label="Schritt wählen"></div>
+        <div class="sdetail" id="detail" aria-live="polite"></div>
+      </section>
+    </aside>
+  </div>
+
+  <section class="panel forms">
+    <div class="phead"><h2>Alle Formen und Eigenschaften</h2><button class="btn sm" type="button" id="formsbtn">Aufdecken</button></div>
+    <div id="formsbody"></div>
+  </section>
+</div>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Werkzeuge · Geraden- und Parabeltrainer</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+// ── KERN:ANFANG — Brüche, Funktionen, Zufallsaufgaben, Schritte; geprüft von scripts/verify_parabeltrainer.js
+/* ================= Brüche ================= */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
+class Q{
+  constructor(n,d=1){if(d===0)throw new Error('Division durch 0');if(d<0){n=-n;d=-d;}const g=gcd(n,d)||1;this.n=n/g;this.d=d/g;}
+  static of(x){if(x instanceof Q)return x;if(Number.isInteger(x))return new Q(x,1);
+    for(let d=1;d<=1000;d++){const n=Math.round(x*d);if(Math.abs(n/d-x)<1e-9)return new Q(n,d);}return new Q(Math.round(x*1e6),1e6);}
+  add(o){o=Q.of(o);return new Q(this.n*o.d+o.n*this.d,this.d*o.d);}
+  sub(o){o=Q.of(o);return new Q(this.n*o.d-o.n*this.d,this.d*o.d);}
+  mul(o){o=Q.of(o);return new Q(this.n*o.n,this.d*o.d);}
+  div(o){o=Q.of(o);return new Q(this.n*o.d,this.d*o.n);}
+  neg(){return new Q(-this.n,this.d);}
+  abs(){return new Q(Math.abs(this.n),this.d);}
+  get v(){return this.n/this.d;}
+  isZero(){return this.n===0;} isNeg(){return this.n<0;} isInt(){return this.d===1;}
+  isOne(){return this.n===1&&this.d===1;} isMinusOne(){return this.n===-1&&this.d===1;}
+  eq(o){o=Q.of(o);return this.n===o.n&&this.d===o.d;}
+  tex(){if(this.d===1)return String(this.n);if(this.d>1000)return fmt(this.v);return (this.n<0?'-':'')+`\\frac{${Math.abs(this.n)}}{${this.d}}`;}
+  texP(){return this.n<0?`\\left(${this.tex()}\\right)`:this.tex();}
+  str(){const s=this.n<0?'−':'';if(this.d===1)return s+Math.abs(this.n);if([2,4,5,8,10,20,25].includes(this.d))return s+fmt(Math.abs(this.v));return `${s}${Math.abs(this.n)}/${this.d}`;}
+}
+const Q0=new Q(0),Q1=new Q(1);
+function fmt(x,dec=3){if(!isFinite(x))return '?';let s=(Math.round(x*10**dec)/10**dec).toFixed(dec);if(s.includes('.'))s=s.replace(/0+$/,'').replace(/\.$/,'');return s==='-0'?'0':s;}
+function parseQ(s){s=String(s).trim().replace(/,/g,'.').replace(/−/g,'-').replace(/\s+/g,'');if(s==='')return null;
+  let m=s.match(/^([+-]?\d*\.?\d+)\/(\d*\.?\d+)$/);if(m){const d=parseFloat(m[2]);if(d===0)return null;return Q.of(parseFloat(m[1])).div(Q.of(d));}
+  m=s.match(/^[+-]?\d*\.?\d+$/);if(m)return Q.of(parseFloat(s));return null;}
+function isqrt(n){if(n<0)return null;const r=Math.round(Math.sqrt(n));return r*r===n?r:null;}
+function rootQ(q){if(q.isNeg())return null;const a=isqrt(q.n),b=isqrt(q.d);return a!==null&&b!==null?new Q(a,b):null;}
+const T=t=>`\\(${t}\\)`;
+const D=t=>`<div class="mx">\\[${t}\\]</div>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ================= Terme ================= */
+function coefX(c,body){if(c.isOne())return body;if(c.isMinusOne())return '-'+body;return c.tex()+body;}
+function plusTerm(c,body){if(c.isZero())return '';const a=c.abs(),s=c.isNeg()?' - ':' + ';if(body==='')return s+a.tex();return s+(a.isOne()?'':a.tex())+body;}
+function fac(x){return x.isZero()?'x':`\\left(x ${x.isNeg()?'+':'-'} ${x.abs().tex()}\\right)`;}
+function linTeX(m,q){if(m.isZero())return 'y = '+q.tex();return 'y = '+coefX(m,'x')+plusTerm(q,'');}
+function afTeX(a,b,c){return 'y = '+coefX(a,'x^2')+plusTerm(b,'x')+plusTerm(c,'');}
+function sfTeX(a,u,v){return 'y = '+coefX(a,u.isZero()?'x^2':fac(u)+'^2')+plusTerm(v,'');}
+function pfTeX(a,x1,x2){let body;if(x1.eq(x2))body=x1.isZero()?'x^2':fac(x1)+'^2';else{let f=[x1,x2];if(f[1].isZero())f=[f[1],f[0]];body=fac(f[0])+fac(f[1]);}return 'y = '+coefX(a,body);}
+const PT=(x,y)=>`(${x.tex()} \\mid ${y.tex()})`;
+const PS=(x,y)=>`(${x.str()} | ${y.str()})`;
+
+/* ================= Funktionen ================= */
+function mkLin(m,q){m=Q.of(m);q=Q.of(q);return{type:'lin',m,q,f:x=>m.v*x+q.v};}
+function mkPar(a,u,v){a=Q.of(a);u=Q.of(u);v=Q.of(v);
+  const b=a.mul(u).mul(-2),c=a.mul(u).mul(u).add(v),r=v.neg().div(a);
+  let roots;if(r.isNeg())roots={kind:'none'};else if(r.isZero())roots={kind:'double',x1:u,x2:u};
+  else{const s=rootQ(r);roots=s?{kind:'two',x1:u.sub(s),x2:u.add(s)}:{kind:'irr',r,x1v:u.v-Math.sqrt(r.v),x2v:u.v+Math.sqrt(r.v)};}
+  return{type:'par',a,u,v,b,c,roots,f:x=>a.v*(x-u.v)**2+v.v,fQ:x=>a.mul(Q.of(x).sub(u).mul(Q.of(x).sub(u))).add(v)};}
+function mkParRoots(a,x1,x2){a=Q.of(a);x1=Q.of(x1);x2=Q.of(x2);const u=x1.add(x2).div(2),v=a.mul(u.sub(x1)).mul(u.sub(x2));const F=mkPar(a,u,v);
+  F.roots=x1.eq(x2)?{kind:'double',x1,x2}:{kind:'two',x1:x1.v<=x2.v?x1:x2,x2:x1.v<=x2.v?x2:x1};return F;}
+function mkParABC(a,b,c){a=Q.of(a);b=Q.of(b);c=Q.of(c);const u=b.neg().div(a.mul(2)),v=c.sub(b.mul(b).div(a.mul(4)));return mkPar(a,u,v);}
+function fnTeX(F,f){if(F.type==='lin')return linTeX(F.m,F.q);if(f==='sf')return sfTeX(F.a,F.u,F.v);if(f==='af')return afTeX(F.a,F.b,F.c);
+  if(F.roots.kind==='two'||F.roots.kind==='double')return pfTeX(F.a,F.roots.x1,F.roots.x2);return null;}
+
+/* ================= Zufall ================= */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+function rnd(form,forRead){
+  if(form==='lin'){const ms=[[1,1],[-1,1],[2,1],[-2,1],[3,1],[-3,1],[1,2],[-1,2],[1,3],[-1,3],[2,3],[-2,3],[3,2],[-3,2],[1,4],[0,1]];
+    let p;do{p=pick(ms);}while(p[0]===0&&Math.random()<.7);return mkLin(new Q(p[0],p[1]),rint(-4,4));}
+  const A=forRead?[[1,2],[-1,2],[1,1],[-1,1],[2,1],[-2,1],[3,1],[-3,1]]:[[1,2],[-1,2],[1,1],[-1,1],[2,1],[-2,1],[1,4],[-1,4],[3,1],[-3,1]];
+  for(let k=0;k<200;k++){
+    if(form==='sf'){const a=new Q(...pick(A)),u=rint(-4,4),v=a.isNeg()?rint(-1,5):rint(-5,1);return mkPar(a,u,v);}
+    if(form==='pf'){const a=new Q(...pick([[1,2],[-1,2],[1,1],[-1,1],[2,1],[-2,1]]));const x1=rint(-5,4);let x2=Math.random()<.12?x1:rint(-5,5);if(x2===x1&&Math.random()<.5)continue;
+      const dd=Math.abs(x2-x1);if(dd%2===1&&a.d===2)continue;if(forRead&&dd%2===1&&Math.abs(a.n)===1&&a.d===1&&Math.random()<.6)continue;
+      const F=mkParRoots(a,x1,x2);if(Math.abs(F.v.v)>8||Math.abs(F.c.v)>12)continue;return F;}
+    if(form==='af'){const a=new Q(...pick([[1,1],[-1,1],[2,1],[-2,1],[1,2],[-1,2]]));const u=rint(-3,3);if(a.d===2&&forRead&&u%2!==0)continue;const v=rint(-4,4);
+      const F=mkPar(a,u,v);if(Math.abs(F.c.v)>9||(forRead&&!F.c.isInt()))continue;if(F.b.isZero()&&Math.random()<.6)continue;return F;}
+  }
+  return mkPar(1,1,-2);
+}
+
+/* ================= Zustand ================= */
+let mode='draw',form='sf',how='self';
+let F=rnd('sf',false);
+let steps=[],si=0,done=[],scene=[],wrong=[],fb=null,inp={},rfb={},formsShown=false,playing=null;
+let box={x0:-6,x1:6,y0:-6,y1:6};
+let snap=0.5;
+const COL={pt:'--pt',tri:'--tri',sym:'--sym',cur:'--cur',ok:'--ok'};
+
+/* ================= Schritte: Zeichnen ================= */
+const P2=(x,y)=>[Q.of(x),Q.of(y)];
+function el(k,o){return{k,...o};}
+function drawSteps(){
+  const S=[];
+  if(F.type==='lin'){
+    const m=F.m,q=F.q,n=m.d,p=m.n;
+    S.push({lab:'q',sub:'y-Achse',t:'y-Achsenabschnitt',kind:'point',target:P2(0,q),c:'--pt',
+      how:`In ${T('y = m\\,x + q')} ist ${T('q')} der y-Achsenabschnitt: Für ${T('x = 0')} ist ${T('y = q')}. Setze den Punkt auf der y-Achse.`,
+      sol:()=>D(`x = 0:\\quad y = ${m.isZero()?'':m.texP()+'\\cdot 0 + '}${q.tex()} = ${q.tex()} \\quad\\Rightarrow\\quad ${PT(Q0,q)}`),
+      hintX:'Der y-Achsenabschnitt liegt immer auf der y-Achse, also bei x = 0.',
+      els:()=>[el('pt',{x:0,y:q.v,lab:PS(Q0,q),c:'--pt'})]});
+    S.push({lab:'m',sub:'Dreieck',t:'Steigungsdreieck',kind:'point',target:P2(n,q.add(p)),c:'--tri',
+      how:m.isZero()?`Die Steigung ist 0: Die Gerade verläuft waagrecht. Geh von ${T(PT(Q0,q))} 1 nach rechts, ohne nach oben oder unten zu gehen.`
+        :`${T('m = '+m.tex())} bedeutet: ${n} nach rechts, dann ${Math.abs(p)} nach ${p>0?'oben':'unten'}${n>1?' (Nenner nach rechts, Zähler nach oben)':''}. Starte bei ${T(PT(Q0,q))} und setze den Endpunkt.`,
+      sol:()=>D(`m = ${m.tex()} = \\frac{\\Delta y}{\\Delta x} = \\frac{${p}}{${n}} \\quad\\Rightarrow\\quad (0 + ${n} \\mid ${q.tex()} ${p<0?'-':'+'} ${Math.abs(p)}) = ${PT(new Q(n),q.add(p))}`),
+      yHint:p>0?'Positive Steigung: nach oben gehen.':'Negative Steigung: nach unten gehen.',
+      swapHint:'Δx und Δy vertauscht? Zuerst den Nenner nach rechts, dann den Zähler nach oben bzw. unten.',
+      els:()=>[el('tri',{x:0,y:q.v,dx:n,dy:p,c:'--tri'}),el('pt',{x:n,y:q.v+p,lab:PS(new Q(n),q.add(p)),c:'--tri'})]});
+    S.push({lab:'✎',sub:'zeichnen',t:'Gerade zeichnen',kind:'show',c:'--cur',
+      how:'Lege das Lineal an beide Punkte und zeichne die Gerade über die ganze Breite.',
+      sol:()=>m.isZero()?`<p class="r">Waagrechte Gerade, keine Nullstelle${q.isZero()?' (sie liegt auf der x-Achse)':''}.</p>`:`<p class="r">Kontrolle: Die Gerade schneidet die x-Achse bei ${T('x_0 = -\\frac{q}{m} = '+q.neg().div(m).tex())}.</p>`,
+      els:()=>[el('curve',{})]});
+    return S;
+  }
+  const a=F.a,u=F.u,v=F.v;
+  const schab=(start,txt)=>({lab:'1 → a',sub:'Schablone',t:'Form der Parabel: 1 nach rechts, a nach oben',kind:'point',target:P2(u.add(1),v.add(a)),c:'--pt',
+    how:`${txt}Ab dem Scheitel 1 nach rechts, dann ${T('a\\cdot 1^2 = '+a.tex())} nach ${a.isNeg()?'unten':'oben'}. Bei der Normalparabel (${T('a = 1')}) wäre es genau 1 nach oben.`,
+    sol:()=>D(`f(${u.add(1).tex()}) = ${a.texP()}\\cdot 1^2 ${v.isZero()?'':(v.isNeg()?'- ':'+ ')+v.abs().tex()} = ${v.add(a).tex()} \\quad\\Rightarrow\\quad ${PT(u.add(1),v.add(a))}`),
+    yHint:a.isNeg()?'a ist negativ: Die Parabel ist nach unten geöffnet, also nach unten gehen.':'a ist positiv: nach oben gehen.',
+    els:()=>[el('tri',{x:u.v,y:v.v,dx:1,dy:a.v,c:'--tri',lx:'1',ly:'a'}),el('pt',{x:u.v+1,y:v.v+a.v,lab:'',c:'--pt'})]});
+  const mirror1={lab:'Spiegeln',sub:'Symmetrie',t:'An der Symmetrieachse spiegeln',kind:'point',target:P2(u.sub(1),v.add(a)),c:'--sym',
+    how:`Die Parabel ist symmetrisch zur Achse ${T('x = '+u.tex())}. Spiegle den letzten Punkt an dieser Achse.`,
+    sol:()=>D(`(${u.tex()} - 1 \\mid ${v.add(a).tex()}) = ${PT(u.sub(1),v.add(a))}`),
+    els:()=>[el('vline',{x:u.v,lab:'x = '+u.str(),c:'--sym'}),el('pt',{x:u.v-1,y:v.v+a.v,lab:'',c:'--sym'})]};
+  const big=Math.abs(4*a.v)>9;
+  const schab2={lab:big?'½ → a/4':'2 → 4a',sub:'Schablone',t:big?'Weiterer Punkt: ½ nach rechts, a/4 nach oben':'Weiterer Punkt: 2 nach rechts, 4a nach oben',kind:'point',
+    target:big?P2(u.add(new Q(1,2)),v.add(a.div(4))):P2(u.add(2),v.add(a.mul(4))),c:'--pt',
+    how:big?`Weil ${T('a')} gross ist, nimm einen Zwischenpunkt: ${T('\\tfrac{1}{2}')} nach rechts, dann ${T('a\\cdot\\left(\\tfrac{1}{2}\\right)^2 = \\tfrac{a}{4} = '+a.div(4).tex())}. Der Spiegelpunkt wird automatisch ergänzt.`
+      :`Ab dem Scheitel 2 nach rechts, dann ${T('a\\cdot 2^2 = 4a = '+a.mul(4).tex())} nach ${a.isNeg()?'unten':'oben'}. Der Spiegelpunkt wird automatisch ergänzt.`,
+    sol:()=>big?D(`f\\left(${u.add(new Q(1,2)).tex()}\\right) = ${a.texP()}\\cdot\\left(\\tfrac{1}{2}\\right)^2 ${v.isZero()?'':(v.isNeg()?'- ':'+ ')+v.abs().tex()} = ${v.add(a.div(4)).tex()}`)
+      :D(`f(${u.add(2).tex()}) = ${a.texP()}\\cdot 2^2 ${v.isZero()?'':(v.isNeg()?'- ':'+ ')+v.abs().tex()} = ${v.add(a.mul(4)).tex()}`),
+    yHint:a.isNeg()?'Nach unten gehen: a ist negativ.':'Nach oben gehen.',
+    els:()=>{const dx=big?.5:2,dy=big?a.v/4:4*a.v;return[el('pt',{x:u.v+dx,y:v.v+dy,lab:'',c:'--pt'}),el('pt',{x:u.v-dx,y:v.v+dy,lab:'',c:'--sym'})];}};
+  const curve={lab:'✎',sub:'zeichnen',t:'Parabel zeichnen',kind:'show',c:'--cur',
+    how:'Verbinde die Punkte mit einer glatten, symmetrischen Kurve. Im Scheitel ist die Parabel rund, nicht spitz.',
+    sol:()=>`<p class="r">Kontrolle: ${F.roots.kind==='none'?'Die Parabel schneidet die x-Achse nicht.':F.roots.kind==='double'?`Der Scheitel liegt auf der x-Achse (doppelte Nullstelle ${T('x = '+u.tex())}).`:F.roots.kind==='two'?`Nullstellen bei ${T('x_1 = '+F.roots.x1.tex())} und ${T('x_2 = '+F.roots.x2.tex())}.`:`Nullstellen bei ${T('x \\approx '+fmt(F.roots.x1v,2))} und ${T('x \\approx '+fmt(F.roots.x2v,2))}.`} y-Achsenabschnitt ${T(PT(Q0,F.c))}.</p>`,
+    els:()=>[el('curve',{})]};
+  const Spt=(c,lab)=>el('pt',{x:u.v,y:v.v,lab:lab||('S'+PS(u,v)),c:c||'--pt'});
+  if(form==='sf'){
+    S.push({lab:'S',sub:'Scheitel',t:'Scheitel ablesen und setzen',kind:'point',target:P2(u,v),c:'--pt',
+      how:`Die Scheitelform ${T('y = a\\,(x - x_S)^2 + y_S')} zeigt den Scheitel direkt. Achtung Vorzeichen: ${T('(x - 2)')} gehört zu ${T('x_S = 2')}, ${T('(x + 2)')} zu ${T('x_S = -2')}.`,
+      sol:()=>D(`${sfTeX(a,u,v)} \\quad\\Rightarrow\\quad S${PT(u,v)}`),
+      hintSign:'In der Klammer steht x_S mit umgekehrtem Vorzeichen: (x + 3) heisst x_S = −3.',
+      els:()=>[Spt()]});
+    S.push(schab('',''));S.push(mirror1);S.push(schab2);S.push(curve);return S;
+  }
+  if(form==='pf'){
+    const R=F.roots;
+    if(R.kind==='double'){
+      S.push({lab:'S',sub:'Nullstelle',t:'Doppelte Nullstelle = Scheitel',kind:'point',target:P2(R.x1,0),c:'--pt',
+        how:`Beide Faktoren sind gleich: ${T(fac(R.x1)+'^2')}. Die Parabel berührt die x-Achse nur bei ${T('x - x_1 = 0')}. Dieser Punkt ist zugleich der Scheitel.`,
+        sol:()=>D(`${fac(R.x1)} = 0 \\;\\Rightarrow\\; x = ${R.x1.tex()} \\quad\\Rightarrow\\quad S${PT(R.x1,Q0)}`),hintSign:'Vorzeichen: (x − 2) = 0 heisst x = 2, (x + 2) = 0 heisst x = −2.',els:()=>[Spt()]});
+      S.push(schab('',''));S.push(mirror1);S.push(curve);return S;
+    }
+    S.push({lab:'x₁',sub:'Nullstelle',t:'Erste Nullstelle',kind:'point',target:P2(R.x1,0),c:'--pt',
+      how:`Ein Produkt ist 0, wenn ein Faktor 0 ist. Aus ${T(fac(R.x1)+' = 0')} folgt die Nullstelle. Setze den Punkt auf der x-Achse.`,
+      sol:()=>D(`${fac(R.x1)} = 0 \\;\\Rightarrow\\; x_1 = ${R.x1.tex()} \\quad\\Rightarrow\\quad N_1${PT(R.x1,Q0)}`),
+      hintSign:'Vorzeichen: (x − 2) = 0 heisst x = 2, (x + 2) = 0 heisst x = −2.',alt:P2(R.x2,0),
+      els:()=>[el('pt',{x:R.x1.v,y:0,lab:'N₁',c:'--pt'})]});
+    S.push({lab:'x₂',sub:'Nullstelle',t:'Zweite Nullstelle',kind:'point',target:P2(R.x2,0),c:'--pt',
+      how:`Genauso aus dem zweiten Faktor: ${T(fac(R.x2)+' = 0')}.`,
+      sol:()=>D(`${fac(R.x2)} = 0 \\;\\Rightarrow\\; x_2 = ${R.x2.tex()} \\quad\\Rightarrow\\quad N_2${PT(R.x2,Q0)}`),
+      hintSign:'Vorzeichen in der Klammer umkehren.',
+      els:()=>[el('pt',{x:R.x2.v,y:0,lab:'N₂',c:'--pt'})]});
+    S.push({lab:'S',sub:'Scheitel',t:'Scheitel in der Mitte',kind:'point',target:P2(u,v),c:'--sym',
+      how:`Der Scheitel liegt genau in der Mitte zwischen den Nullstellen: ${T('x_S = \\frac{x_1 + x_2}{2}')}. Den y-Wert erhältst du durch Einsetzen.`,
+      sol:()=>D(`\\begin{aligned} x_S &= \\frac{${R.x1.tex()} + ${R.x2.texP()}}{2} = ${u.tex()} \\\\ y_S &= ${a.texP()}\\cdot\\left(${u.tex()} - ${R.x1.texP()}\\right)\\left(${u.tex()} - ${R.x2.texP()}\\right) = ${v.tex()} \\end{aligned}`),
+      els:()=>[el('vline',{x:u.v,lab:'x = '+u.str(),c:'--sym'}),Spt('--sym')]});
+    if(!u.isZero())S.push({lab:'c',sub:'y-Achse',t:'y-Achsenabschnitt',kind:'point',target:P2(0,F.c),c:'--pt',
+      how:`Setze ${T('x = 0')} ein: ${T('y = a\\cdot(0 - x_1)(0 - x_2) = a\\cdot x_1\\cdot x_2')}. Der Spiegelpunkt wird automatisch ergänzt.`,
+      sol:()=>D(`f(0) = ${a.texP()}\\cdot ${R.x1.neg().texP()}\\cdot ${R.x2.neg().texP()} = ${F.c.tex()}`),
+      hintX:'Der y-Achsenabschnitt liegt auf der y-Achse (x = 0).',
+      els:()=>[el('pt',{x:0,y:F.c.v,lab:PS(Q0,F.c),c:'--pt'}),el('pt',{x:2*u.v,y:F.c.v,lab:'',c:'--sym'})]});
+    else S.push(schab('',''));
+    S.push(curve);return S;
+  }
+  // allgemeine Form
+  S.push({lab:'c',sub:'y-Achse',t:'y-Achsenabschnitt',kind:'point',target:P2(0,F.c),c:'--pt',
+    how:`In ${T('y = a\\,x^2 + b\\,x + c')} ist ${T('c')} der y-Achsenabschnitt: Für ${T('x = 0')} fallen die anderen Summanden weg.`,
+    sol:()=>D(`f(0) = ${F.c.tex()} \\quad\\Rightarrow\\quad ${PT(Q0,F.c)}`),hintX:'Der y-Achsenabschnitt liegt auf der y-Achse (x = 0).',
+    els:()=>[el('pt',{x:0,y:F.c.v,lab:PS(Q0,F.c),c:'--pt'})]});
+  S.push({lab:'S',sub:'Scheitel',t:'Scheitel berechnen',kind:'point',target:P2(u,v),c:'--pt',
+    how:`Die x-Koordinate des Scheitels ist ${T('x_S = -\\frac{b}{2a}')}. Den y-Wert erhältst du durch Einsetzen: ${T('y_S = f(x_S)')}.`,
+    sol:()=>D(`\\begin{aligned} x_S &= -\\frac{${F.b.tex()}}{2\\cdot ${a.texP()}} = ${u.tex()} \\\\ y_S &= ${a.texP()}\\cdot ${u.texP()}^2 ${F.b.isZero()?'':'+ '+F.b.texP()+'\\cdot '+u.texP()} ${F.c.isZero()?'':'+ '+F.c.texP()} = ${v.tex()} \\end{aligned}`),
+    hintSign:'Vorzeichen: x_S = −b/(2a). Ist b positiv und a positiv, liegt der Scheitel links der y-Achse.',
+    els:()=>[el('vline',{x:u.v,lab:'x = '+u.str(),c:'--sym'}),Spt()]});
+  if(!u.isZero())S.push({lab:'Spiegeln',sub:'Symmetrie',t:'y-Achsenabschnitt spiegeln',kind:'point',target:P2(u.mul(2),F.c),c:'--sym',
+    how:`Spiegle ${T(PT(Q0,F.c))} an der Symmetrieachse ${T('x = '+u.tex())}. Der Abstand zur Achse bleibt gleich.`,
+    sol:()=>D(`x = 2\\cdot x_S = 2\\cdot ${u.texP()} = ${u.mul(2).tex()} \\quad\\Rightarrow\\quad ${PT(u.mul(2),F.c)}`),
+    els:()=>[el('pt',{x:2*u.v,y:F.c.v,lab:'',c:'--sym'})]});
+  const sc=schab('','');sc.how+=' Der Spiegelpunkt wird automatisch ergänzt.';
+  const e0=sc.els;sc.els=()=>[...e0(),el('pt',{x:u.v-1,y:v.v+a.v,lab:'',c:'--sym'})];
+  S.push(sc);S.push(curve);return S;
+}
+
+/* ================= Schritte: Ablesen ================= */
+function readSteps(){
+  const S=[];
+  if(F.type==='lin'){
+    const m=F.m,q=F.q,n=m.d,p=m.n;
+    S.push({lab:'q',sub:'y-Achse',t:'y-Achsenabschnitt q',kind:'input',keys:['q'],c:'--pt',
+      how:'Lies ab, wo die Gerade die y-Achse schneidet.',sol:()=>D(`q = ${q.tex()}`),
+      pre:C=>glowAxis('y',C.sym),els:()=>[el('pt',{x:0,y:q.v,lab:PS(Q0,q),c:'--pt'})]});
+    S.push({lab:'m',sub:'Dreieck',t:'Steigung m',kind:'input',keys:['m'],c:'--tri',
+      how:`Geh von ${T('(0 \\mid q)')} nach rechts, bis die Gerade wieder genau durch einen Gitterpunkt geht. Zeichne das Steigungsdreieck: ${T('m = \\frac{\\Delta y}{\\Delta x}')}.`,
+      sol:()=>D(`m = \\frac{\\Delta y}{\\Delta x} = \\frac{${p}}{${n}} = ${m.tex()}`),
+      hint:(k,x)=>near(x,-m.v)&&!m.isZero()?'Vorzeichen: Steigt die Gerade nach rechts, ist m positiv, fällt sie, ist m negativ.':(!m.isZero()&&near(x,1/m.v))?'Umgekehrt: Δy durch Δx, also «hoch durch rechts».':null,
+      pre:C=>hlPoint(0,q.v,C.tri,''),els:()=>[el('tri',{x:0,y:q.v,dx:n,dy:p,c:'--tri'}),el('pt',{x:n,y:q.v+p,lab:'',c:'--tri'})]});
+    return S;
+  }
+  const a=F.a,u=F.u,v=F.v,R=F.roots;
+  const stepS=(c)=>({lab:'S',sub:'Scheitel',t:'Scheitel S ablesen',kind:'input',keys:['xS','yS'],c:c||'--pt',
+    how:`Der Scheitel ist der ${a.isNeg()?'höchste':'tiefste'} Punkt der Parabel. Lies seine Koordinaten ab.`,
+    sol:()=>D(`S${PT(u,v)} \\quad\\Rightarrow\\quad x_S = ${u.tex()},\\ y_S = ${v.tex()}`),
+    hint:(k,x)=>k==='xS'&&near(x,-u.v)&&!u.isZero()?'Vorzeichen von x_S prüfen: links der y-Achse ist x negativ.':null,
+    els:()=>[el('vline',{x:u.v,lab:'x = '+u.str(),c:'--sym'}),el('pt',{x:u.v,y:v.v,lab:'S'+PS(u,v),c:'--pt'})]});
+  const stepA=()=>({lab:'a',sub:'Öffnung',t:'Streckfaktor a',kind:'input',keys:['a'],c:'--tri',
+    how:`Geh vom Scheitel 1 nach rechts. Um so viel liegt die Parabel dort höher (dann ${T('a > 0')}) oder tiefer (${T('a < 0')}) als der Scheitel. Kontrolle: 2 nach rechts ergibt ${T('4a')}.`,
+    sol:()=>D(`a = f(x_S + 1) - y_S = ${v.add(a).tex()} - ${v.texP()} = ${a.tex()}`),
+    hint:(k,x)=>near(x,-a.v)?'Vorzeichen: Ist die Parabel nach unten geöffnet, ist a negativ.':near(x,1/a.v)&&!near(a.v,1)?'Nicht der Kehrwert: Δy bei Δx = 1 ist direkt a.':null,
+    pre:C=>{hlBracketH(v.v,u.v,u.v+1,C.tri,'1');},
+    els:()=>[el('tri',{x:u.v,y:v.v,dx:1,dy:a.v,c:'--tri',lx:'1',ly:'a = '+a.str()}),el('pt',{x:u.v+1,y:v.v+a.v,lab:'',c:'--tri'})]});
+  if(form==='sf'){S.push(stepS());S.push(stepA());return S;}
+  if(form==='pf'){
+    if(R.kind==='none'){S.push({lab:'!',sub:'Hinweis',t:'Keine Nullstellen',kind:'info',c:'--bad',how:'Die Parabel schneidet die x-Achse nicht. Ohne Nullstellen gibt es keine Produktform mit reellen Zahlen. Wähle Scheitelform oder allgemeine Form.'});return S;}
+    const irr=R.kind==='irr';
+    S.push({lab:'x₁, x₂',sub:'Nullstellen',t:R.kind==='double'?'Doppelte Nullstelle':'Nullstellen ablesen',kind:'input',keys:R.kind==='double'?['x1']:['x1','x2'],unordered:true,tol:irr?0.12:null,c:'--pt',
+      how:R.kind==='double'?'Die Parabel berührt die x-Achse nur im Scheitel. Diese Stelle ist eine doppelte Nullstelle.':`Lies ab, wo die Parabel die x-Achse schneidet.${irr?' Hier liegen die Nullstellen nicht auf Gitterpunkten, ablesen geht nur ungefähr.':''}`,
+      sol:()=>R.kind==='double'?D(`x_1 = x_2 = ${u.tex()}`):irr?D(`x_{1,2} = ${u.tex()} \\pm \\sqrt{${R.r.tex()}} \\approx ${fmt(R.x1v,2)};\\ ${fmt(R.x2v,2)}`):D(`x_1 = ${R.x1.tex()},\\quad x_2 = ${R.x2.tex()}`),
+      pre:C=>glowAxis('x',C.sym),
+      els:()=>R.kind==='irr'?[el('pt',{x:R.x1v,y:0,lab:'N₁',c:'--pt'}),el('pt',{x:R.x2v,y:0,lab:'N₂',c:'--pt'})]:[el('pt',{x:R.x1.v,y:0,lab:'N₁',c:'--pt'}),el('pt',{x:R.x2.v,y:0,lab:R.kind==='double'?'':'N₂',c:'--pt'})]});
+    const xs=R.kind==='irr'?null:[R.x1,R.x2];
+    S.push({lab:'a',sub:'Faktor',t:'Faktor a mit einem weiteren Punkt',kind:'input',keys:['a'],c:'--tri',
+      how:`Die Nullstellen legen ${T('a')} noch nicht fest: Alle Parabeln ${T('y = a\\,(x - x_1)(x - x_2)')} gehen durch sie. Setze einen weiteren Punkt ein, am einfachsten den Scheitel S${T(PT(u,v))} oder den y-Achsenabschnitt.`,
+      sol:()=>xs?D(`${v.tex()} = a\\cdot\\left(${u.tex()} - ${xs[0].texP()}\\right)\\left(${u.tex()} - ${xs[1].texP()}\\right) = a\\cdot ${u.sub(xs[0]).mul(u.sub(xs[1])).texP()} \\quad\\Rightarrow\\quad a = ${a.tex()}`):D(`a = ${a.tex()}`),
+      hint:(k,x)=>near(x,-a.v)?'Vorzeichen: Nach unten geöffnet heisst a negativ.':null,
+      pre:C=>hlPoint(u.v,v.v,C.tri,'S'),els:()=>[el('pt',{x:u.v,y:v.v,lab:'S'+PS(u,v),c:'--tri'})]});
+    return S;
+  }
+  // allgemeine Form
+  S.push({lab:'c',sub:'y-Achse',t:'y-Achsenabschnitt c',kind:'input',keys:['c'],c:'--pt',how:'In der allgemeinen Form ist c der y-Achsenabschnitt. Lies ab, wo die Parabel die y-Achse schneidet.',
+    sol:()=>D(`c = f(0) = ${F.c.tex()}`),pre:C=>glowAxis('y',C.sym),els:()=>[el('pt',{x:0,y:F.c.v,lab:PS(Q0,F.c),c:'--pt'})]});
+  S.push(stepS());S.push(stepA());
+  S.push({lab:'b',sub:'rechnen',t:'Koeffizient b berechnen',kind:'input',keys:['b'],c:'--sym',
+    how:`b lässt sich nicht direkt ablesen. Aus ${T('x_S = -\\frac{b}{2a}')} folgt ${T('b = -2a\\cdot x_S')}.`,
+    sol:()=>D(`b = -2\\cdot ${a.texP()}\\cdot ${u.texP()} = ${F.b.tex()}`)+`<p class="r">Kontrolle durch Ausmultiplizieren der Scheitelform: ${T(`${coefX(a,u.isZero()?'x^2':fac(u)+'^2')}${plusTerm(v,'')} = ${afTeX(a,F.b,F.c).slice(4)}`)}, der y-Achsenabschnitt stimmt mit c überein.</p>`,
+    hint:(k,x)=>near(x,-F.b.v)&&!F.b.isZero()?'Vorzeichen: b = −2a·x_S.':null,els:()=>[]});
+  return S;
+}
+// ── KERN:ENDE
+const KEYTEX={q:'q',m:'m',xS:'x_S',yS:'y_S',a:'a',b:'b',c:'c',x1:'x_1',x2:'x_2'};
+function keyVal(k){if(F.type==='lin')return{q:F.q,m:F.m}[k];const R=F.roots;
+  if(k==='x1')return R.kind==='irr'?R.x1v:R.x1;if(k==='x2')return R.kind==='irr'?R.x2v:R.x2;return{xS:F.u,yS:F.v,a:F.a,b:F.b,c:F.c}[k];}
+const nv=x=>x instanceof Q?x.v:x;
+const near=(x,y,t)=>Math.abs(x-y)<=(t??(0.02+0.01*Math.abs(y)));
+
+/* ================= Aufbau ================= */
+function build(){
+  stopPlay();
+  steps=mode==='draw'?drawSteps():readSteps();
+  si=0;lastOk=null;fbOk=null;strokes=[];sketchFb=null;sketchBad=null;setSketch(false);done=steps.map(()=>false);scene=[];wrong=[];fb=null;inp={};rfb={};formsShown=false;
+  if(mode==='read')steps.forEach((s,i)=>{if(s.kind==='info')done[i]=true;});
+  // Raster für das Setzen
+  const ts=steps.filter(s=>s.target).flatMap(s=>s.target.map(q=>q.v));
+  snap=ts.every(v=>Math.abs(v*2-Math.round(v*2))<1e-9)?0.5:ts.every(v=>Math.abs(v*4-Math.round(v*4))<1e-9)?0.25:0.25;
+  fitBox();renderAll();
+}
+function keyPoints(){
+  const pts=[[0,0]];
+  if(F.type==='lin'){const n=F.m.d;pts.push([0,F.q.v],[n,F.q.v+F.m.n],[-4,F.f(-4)],[4,F.f(4)]);if(!F.m.isZero()){const x0=-F.q.v/F.m.v;if(Math.abs(x0)<9)pts.push([x0,0]);}return pts;}
+  const u=F.u.v,v=F.v.v,a=F.a.v;pts.push([u,v]);const dx=Math.abs(4*a)>9?1:2;pts.push([u-dx,F.f(u-dx)],[u+dx,F.f(u+dx)],[u-2.5,v],[u+2.5,v]);
+  if(Math.abs(u)<=6)pts.push([0,F.c.v]);
+  if(Math.abs(u)<=6&&!F.u.isZero())pts.push([2*u,F.c.v]);
+  const R=F.roots;if(R.kind==='two'||R.kind==='double'){pts.push([R.x1.v,0],[R.x2.v,0]);}else if(R.kind==='irr'){pts.push([R.x1v,0],[R.x2v,0]);}
+  return pts;
+}
+function fitBox(){
+  const pts=keyPoints();let x0=Math.min(...pts.map(p=>p[0])),x1=Math.max(...pts.map(p=>p[0])),y0=Math.min(...pts.map(p=>p[1])),y1=Math.max(...pts.map(p=>p[1]));
+  x0-=1.5;x1+=1.5;y0-=1.5;y1+=1.5;
+  if(x1-x0<10){const c=(x0+x1)/2;x0=c-5;x1=c+5;}if(y1-y0<10){const c=(y0+y1)/2;y0=c-5;y1=c+5;}
+  box={x0,x1,y0,y1};
+}
+
+/* ================= Darstellung (HTML) ================= */
+let tsP=null;
+function typeset(ids){const MJ=window.MathJax;if(!MJ||!MJ.typesetPromise||!MJ.startup)return;const els=ids.map($).filter(Boolean);MJ.startup.promise=MJ.startup.promise.then(()=>MJ.typesetPromise(els)).catch(e=>console.warn(e));}
+function renderAll(){renderChips();renderEq();renderOwn();renderSteps();renderForms();kick();}
+function renderChips(){
+  document.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===form));
+  $('formhead').textContent=mode==='draw'?'Gegebene Form':'Gesuchte Form';
+  $('howseg').hidden=mode!=='draw';$('sketchbtn').hidden=mode!=='draw';
+  $('taskhead').textContent=mode==='draw'?'Gegeben':'Gesucht';
+  $('task').textContent=mode==='draw'?'Zeichne den Graphen zur Gleichung':'Bestimme die Gleichung zum Graphen';
+}
+function partialTeX(){
+  const K=k=>{const i=steps.findIndex(s=>s.keys&&s.keys.includes(k));const kn=i>=0&&done[i];if(!kn)return '\\boxed{\\phantom{0}}';const v=keyVal(k);return v instanceof Q?v.texP():fmtP(v);};
+  const fmtP=x=>{const s=fmt(x,2);return s.startsWith('-')?`\\left(${s}\\right)`:s;};
+  if(F.type==='lin')return `y = ${K('m')}\\,x + ${K('q')}`;
+  if(form==='sf')return `y = ${K('a')}\\,\\left(x - ${K('xS')}\\right)^2 + ${K('yS')}`;
+  if(form==='pf'){if(F.roots.kind==='none')return '\\text{keine Produktform}';if(F.roots.kind==='double')return `y = ${K('a')}\\,\\left(x - ${K('x1')}\\right)^2`;return `y = ${K('a')}\\,\\left(x - ${K('x1')}\\right)\\left(x - ${K('x2')}\\right)`;}
+  return `y = ${K('a')}\\,x^2 + ${K('b')}\\,x + ${K('c')}`;
+}
+const PH={q:'q',m:'m',xS:'xₛ',yS:'yₛ',a:'a',b:'b',c:'c',x1:'x₁',x2:'x₂'};
+function eqKeys(){if(mode!=='read')return[];if(F.type==='lin')return['m','q'];if(form==='sf')return['a','xS','yS'];if(form==='af')return['a','b','c'];
+  if(form==='pf'){if(F.roots.kind==='none')return[];if(F.roots.kind==='double')return['a','x1'];return['a','x1','x2'];}return[];}
+function keyDone(k){const i=steps.findIndex(s=>s.keys&&s.keys.includes(k));return i>=0&&done[i];}
+function fld(k){const st=keyDone(k)?'ok':(rfb[k]||'');return `<input type="text" class="eqin ${st}" id="eq-${k}" data-k="${k}" value="${esc(inp[k]??'')}" placeholder="${PH[k]}" aria-label="Wert für ${PH[k]}" autocomplete="off" inputmode="text"${keyDone(k)?' readonly':''}>`;}
+function renderEq(){
+  if(mode==='draw'){$('eq').innerHTML=T(fnTeX(F,form));typeset(['eq']);return;}
+  const all=done.every(Boolean);let h='';
+  if(F.type==='lin')h=`<i>y</i> = ${fld('m')} <i>x</i> + ${fld('q')}`;
+  else if(form==='sf')h=`<i>y</i> = ${fld('a')} · (<i>x</i> − ${fld('xS')})² + ${fld('yS')}`;
+  else if(form==='af')h=`<i>y</i> = ${fld('a')} <i>x</i>² + ${fld('b')} <i>x</i> + ${fld('c')}`;
+  else if(F.roots.kind==='none')h='<span class="note">Keine Nullstellen, also keine Produktform.</span>';
+  else if(F.roots.kind==='double')h=`<i>y</i> = ${fld('a')} · (<i>x</i> − ${fld('x1')})²`;
+  else h=`<i>y</i> = ${fld('a')} · (<i>x</i> − ${fld('x1')}) · (<i>x</i> − ${fld('x2')})`;
+  const res=all&&fnTeX(F,form)?`<div class="eqres">${T(fnTeX(F,form))}</div>`:'';
+  $('eq').innerHTML=`<div class="eqform">${h}</div>${eqKeys().length&&!all?`<div class="row" style="margin-top:6px"><button class="btn sm primary" type="button" id="eqcheck">Prüfen</button><span class="note">Abgelesene Werte direkt in die Gleichung eintragen. Negative Werte mit Minus, z. B. −2 in (x − □) für x + 2.</span></div>`:''}${res}`;
+  typeset(['eq']);
+}
+const OWNF={lin:[['m','m','Steigung'],['q','q','y-Achsenabschnitt']],sf:[['a','a',''],['u','x_S',''],['v','y_S','']],pf:[['a','a',''],['x1','x_1',''],['x2','x_2','']],af:[['a','a',''],['b','b',''],['c','c','']]};
+let ownOpen=false,ownErr='';
+function ownDefaults(){const o={};
+  if(form==='lin'&&F.type==='lin'){o.m=F.m.str();o.q=F.q.str();}
+  else if(F.type==='par'){if(form==='sf'){o.a=F.a.str();o.u=F.u.str();o.v=F.v.str();}
+    if(form==='af'){o.a=F.a.str();o.b=F.b.str();o.c=F.c.str();}
+    if(form==='pf'&&(F.roots.kind==='two'||F.roots.kind==='double')){o.a=F.a.str();o.x1=F.roots.x1.str();o.x2=F.roots.x2.str();}}
+  return o;}
+function renderOwn(){
+  $('own').hidden=!ownOpen;$('owntoggle').setAttribute('aria-expanded',ownOpen);
+  if(!ownOpen)return;const fs=OWNF[form],d=ownDefaults();
+  $('own').innerHTML=`<p class="note" style="margin:0 0 6px">${mode==='draw'?'Parameter der gegebenen Gleichung':'Parameter des Graphen, der abgelesen werden soll'} (auch Brüche wie 1/2 oder -3/4):</p><div class="fields${fs.length===2?' two':''}">${fs.map(([k,t,h])=>`<div class="fld"><label class="lbl" for="own-${k}">${T(t)}</label><input type="text" id="own-${k}" inputmode="text" autocomplete="off" value="${esc(d[k]??'')}"${h?` aria-label="${h}"`:''}></div>`).join('')}</div><div class="row"><button class="btn sm primary" type="button" id="ownapply">Übernehmen</button></div>${ownErr?`<p class="err">${ownErr}</p>`:''}`;
+  typeset(['own']);
+}
+function applyOwn(){
+  const fs=OWNF[form],v={};for(const[k]of fs){const q=parseQ($('own-'+k).value);if(!q){ownErr=`Bitte für alle Felder eine Zahl eingeben (z. B. 2, -1.5 oder 3/4).`;renderOwn();return;}v[k]=q;}
+  if(form!=='lin'&&v.a.isZero()){ownErr='a darf nicht 0 sein, sonst ist es keine Parabel.';renderOwn();return;}
+  ownErr='';
+  if(form==='lin')F=mkLin(v.m,v.q);else if(form==='sf')F=mkPar(v.a,v.u,v.v);else if(form==='pf')F=mkParRoots(v.a,v.x1,v.x2);else F=mkParABC(v.a,v.b,v.c);
+  build();
+}
+
+function stepColor(s){return s?`var(${s.c||'--line'})`:'var(--cur)';}
+function renderSteps(){
+  const n=steps.length;$('steps').style.gridTemplateColumns=`repeat(${n+1},minmax(0,1fr))`;
+  $('steps').innerHTML=steps.map((s,i)=>`<button type="button" class="sbtn${done[i]&&s.kind!=='info'?' ok':''}" data-s="${i}" aria-pressed="${si===i}" style="--sc:${stepColor(s)}">${esc(s.lab)}<small>${esc(s.sub)}</small></button>`).join('')+`<button type="button" class="sbtn" data-s="${n}" aria-pressed="${si===n}" style="--sc:var(--ok)">✓<small>Ergebnis</small></button>`;
+  renderDetail();
+}
+function renderDetail(){
+  const el=$('detail'),n=steps.length;
+  if(si===n){el.style.setProperty('--sc','var(--ok)');const all=done.every(Boolean);
+    const eq=fnTeX(F,form)||fnTeX(F,'sf');
+    el.innerHTML=`<div class="t">Ergebnis</div>`+(all?`${D(eq)}<p class="r">${mode==='draw'?'Der Graph ist fertig gezeichnet.':'Alle Parameter sind bestimmt.'} Unten stehen alle Formen und Eigenschaften dieser Funktion.</p>`
+      :`<p>Es fehlen noch Schritte: ${steps.map((s,i)=>done[i]?null:i+1).filter(x=>x).join(', ')}.</p>`)+`<div class="row" style="margin-top:6px"><button class="btn sm primary" type="button" data-act="new">Neue Zufallsaufgabe</button></div>`;
+    if(all&&!formsShown){formsShown=true;renderForms();}
+    typeset(['detail']);return;}
+  const s=steps[si];el.style.setProperty('--sc',stepColor(s));
+  let h=lastOk!==null&&lastOk!==si&&steps[lastOk]?`<div class="prev"><div class="t">✓ Richtig: ${steps[lastOk].t}</div>${steps[lastOk].sol?(steps[lastOk].kind==='show'?steps[lastOk].sol():`<div class="mx">${steps[lastOk].sol()}</div>`):''}</div>`:'';
+  h+=`<div class="t">Schritt ${si+1}: ${s.t}</div><p>${s.how}</p>`;
+  if(s.kind==='point'){
+    if(done[si])h+=`<div class="sol">${s.sol()}</div>`;
+    else if(how==='self'){h+=`<p class="r">Setze die Punkte in beliebiger Reihenfolge (Raster ${String(snap)}). Jeder Punkt auf dem Graphen zählt.</p>`;if(fbOk)h+=`<div class="fb good">${fbOk}</div>`;if(fb)h+=`<div class="fb bad">${fb}</div>`;h+=`<div class="row" style="margin-top:6px">${wrong.length?'<button class="btn sm" type="button" data-act="clear">Punkt löschen</button>':''}<button class="btn sm" type="button" data-act="show">Lösung zeigen</button></div>`;}
+    else h+=`<div class="row" style="margin-top:6px"><button class="btn sm primary" type="button" data-act="show">Vorführen</button></div>`;
+  }else if(s.kind==='show'){
+    if(done[si])h+=(sketchFb?`<div class="fb good">${sketchFb}</div>`:'')+s.sol();
+    else if(mode==='draw'&&how==='self'){
+      h+=`<p class="r">${sketch?'Skizziere den Graphen mit Stift, Finger oder Maus. Mehrere Striche sind erlaubt.':'Skizziere den Graphen selbst oder lass ihn zeichnen.'}</p>`;
+      if(sketchFb)h+=`<div class="fb bad">${sketchFb}</div>`;
+      h+=`<div class="row" style="margin-top:6px">${sketch?`<button class="btn sm primary" type="button" data-act="skcheck"${strokes.length?'':' disabled'}>Skizze prüfen</button><button class="btn sm" type="button" data-act="skclear">Skizze löschen</button>`:`<button class="btn sm primary" type="button" data-act="sketch">✎ Selbst skizzieren</button>`}<button class="btn sm" type="button" data-act="show">Zeichnen lassen</button></div>`;}
+    else h+=`<div class="row" style="margin-top:6px"><button class="btn sm primary" type="button" data-act="show">${mode==='draw'?'Zeichnen':'Zeigen'}</button></div>`;
+  }else if(s.kind==='input'){
+    const ek=eqKeys(),dk=s.keys.filter(k=>!ek.includes(k));
+    if(!dk.length&&!done[si])h+=`<p class="r">Trage ${s.keys.map(k=>T(KEYTEX[k])).join(' und ')} oben in die Gleichung ein.</p>`;
+    if(dk.length)h+=`<div class="rin">${dk.map(k=>{const f=rfb[k];return `<label for="in-${k}">${T(KEYTEX[k])} =</label><input type="text" id="in-${k}" data-k="${k}" autocomplete="off" inputmode="text" value="${esc(inp[k]??'')}" placeholder="z. B. 2, -1/2, 1.5"${done[si]?' readonly':''}><span class="${f==='good'?'ok':f==='bad'?'no':''}">${f==='good'?'✓':f==='bad'?'✗':''}</span>`;}).join('')}</div>`;
+    if(done[si])h+=`<div class="sol">${s.sol()}</div>`;
+    else{if(fb)h+=`<div class="fb bad">${fb}</div>`;h+=`<div class="row"><button class="btn sm primary" type="button" data-act="check">Prüfen</button><button class="btn sm" type="button" data-act="show">Lösung zeigen</button></div>`;}
+  }
+  if(done[si])h+=`<div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-act="next">Weiter ›</button></div>`;
+  el.innerHTML=h;typeset(['detail']);
+}
+function renderForms(){
+  const body=$('formsbody');const show=formsShown;
+  $('formsbtn').textContent=show?'Verdecken':'Aufdecken';
+  body.classList.toggle('covered',!show);
+  if(F.type==='lin'){const m=F.m,q=F.q;
+    const props=[`Steigung ${T('m = '+m.tex())}: ${m.isZero()?'waagrecht':m.isNeg()?'fallend':'steigend'}`,`y-Achsenabschnitt ${T(PT(Q0,q))}`,
+      m.isZero()?(q.isZero()?'Die Gerade ist die x-Achse.':'Keine Nullstelle'):`Nullstelle ${T('x_0 = -\\frac{q}{m} = '+q.neg().div(m).tex())}`,
+      m.isZero()?'':`Pro Einheit nach rechts ändert sich y um ${T(m.tex())}.`].filter(Boolean);
+    body.innerHTML=`<div class="cols"><div><div class="ftab"><span class="k">Gleichung</span><span class="v given">${T(linTeX(m,q))}</span></div></div><div><h3 class="lbl">Eigenschaften</h3><ul>${props.map(p=>`<li>${p}</li>`).join('')}</ul></div></div>`;
+    typeset(['formsbody']);return;}
+  const a=F.a,u=F.u,v=F.v,R=F.roots;
+  let pf;if(R.kind==='two'||R.kind==='double')pf=T(pfTeX(a,R.x1,R.x2));else if(R.kind==='irr')pf=`${T(`y \\approx ${coefX(a,`\\left(x ${R.x1v<0?'+':'-'} ${fmt(Math.abs(R.x1v),2)}\\right)\\left(x ${R.x2v<0?'+':'-'} ${fmt(Math.abs(R.x2v),2)}\\right)`)}`)} <span class="note">(Nullstellen irrational)</span>`;else pf='<span class="note">keine – die Parabel hat keine Nullstellen</span>';
+  const giv=f=>mode==='draw'&&form===f?' given':'';
+  const zeros=R.kind==='none'?'keine':R.kind==='double'?T('x_1 = x_2 = '+u.tex()):R.kind==='two'?T(`x_1 = ${R.x1.tex()},\\ x_2 = ${R.x2.tex()}`):T(`x_{1,2} = ${u.tex()} \\pm \\sqrt{${R.r.tex()}} \\approx ${fmt(R.x1v,2)};\\ ${fmt(R.x2v,2)}`);
+  const aa=Math.abs(a.v);
+  const props=[`Scheitel ${T('S'+PT(u,v))}, Symmetrieachse ${T('x = '+u.tex())}`,
+    `Nach ${a.isNeg()?'unten':'oben'} geöffnet, ${aa>1?'gestreckt':aa<1?'gestaucht':'gleiche Form wie die Normalparabel'} (${T('|a| = '+a.abs().tex())})`,
+    `y-Achsenabschnitt ${T(PT(Q0,F.c))}`,`Nullstellen: ${zeros}`,
+    `Wertebereich ${T(a.isNeg()?`\\mathbb{W} = \\{y \\mid y \\leq ${v.tex()}\\}`:`\\mathbb{W} = \\{y \\mid y \\geq ${v.tex()}\\}`)}`];
+  const conv=[`Scheitelform → allgemein: ausmultiplizieren, ${T('b = -2a\\,x_S')}, ${T('c = a\\,x_S^2 + y_S')}`,
+    `Allgemein → Scheitel: ${T('x_S = -\\frac{b}{2a} = '+u.tex())}, ${T('y_S = f(x_S) = '+v.tex())}`,
+    `Nullstellen → Scheitel: ${T('x_S = \\frac{x_1 + x_2}{2}')}`,
+    `Scheitel → Nullstellen: ${T('a\\,(x - x_S)^2 + y_S = 0 \\;\\Rightarrow\\; x_{1,2} = x_S \\pm \\sqrt{-\\tfrac{y_S}{a}}')}`];
+  body.innerHTML=`<div class="cols"><div><div class="ftab"><span class="k">Scheitelform</span><span class="v${giv('sf')}">${T(sfTeX(a,u,v))}</span><span class="k">Produktform</span><span class="v${giv('pf')}">${pf}</span><span class="k">Allgemeine Form</span><span class="v${giv('af')}">${T(afTeX(a,F.b,F.c))}</span></div><h3 class="lbl" style="margin-top:12px">Umrechnen</h3><ul>${conv.map(p=>`<li>${p}</li>`).join('')}</ul></div><div><h3 class="lbl">Eigenschaften</h3><ul>${props.map(p=>`<li>${p}</li>`).join('')}</ul></div></div>`;
+  typeset(['formsbody']);
+}
+
+/* ================= Ablauf ================= */
+let lastOk=null,fbOk=null,sketch=false,strokes=[],cur=null,sketchFb=null,sketchBad=null;
+function complete(i,quiet){
+  if(done[i])return;done[i]=true;wrong=[];if(i===si)fb=null;
+  const s=steps[i];if(s.kind==='input')s.keys.forEach(k=>{if(rfb[k]!=='good'){const v=keyVal(k);inp[k]=v instanceof Q?v.str().replace('−','-'):fmt(v,2);rfb[k]='good';}});
+  const now=performance.now();(s.els?s.els():[]).forEach((e,j)=>scene.push({...e,t0:now+j*260}));
+  lastOk=i;
+  if(done.every(Boolean)&&!formsShown){formsShown=true;renderForms();}
+  if(!quiet)advance();
+}
+function advance(){
+  if(!playing&&(si>=steps.length||done[si])){const nx=done.findIndex((d,j)=>!d&&j>si);const any=done.findIndex(d=>!d);si=nx>=0?nx:(any>=0?any:steps.length);}
+  renderSteps();renderEq();kick();focusField();
+}
+function focusField(){if(mode!=='read')return;const s=steps[si];if(!s||!s.keys||done[si])return;
+  setTimeout(()=>{const e=document.querySelector(`#eq-${s.keys[0]}`)||document.querySelector(`#in-${s.keys[0]}`);if(e&&!e.readOnly)e.focus({preventScroll:true});},60);}
+function goStep(i){si=Math.max(0,Math.min(steps.length,i));fb=null;wrong=[];lastOk=null;renderSteps();kick();focusField();
+  if(how==='demo'&&mode==='draw'&&si<steps.length&&!done[si]&&!playing)setTimeout(()=>{if(!done[si])complete(si);},380);}
+function readFields(){document.querySelectorAll('#eq .eqin, #detail .rin input').forEach(e=>{if(!e.readOnly)inp[e.dataset.k]=e.value;});}
+function evalStep(j){ // true = richtig, false = falsch, null = unvollständig
+  const s=steps[j];if(!s||s.kind!=='input'||done[j])return null;
+  if(s.keys.some(k=>!parseQ(inp[k]??'')))return null;
+  let all=true,hint=null;const used=new Set();
+  s.keys.forEach(k=>{const q=parseQ(inp[k]);let ok=false;
+    if(s.unordered&&s.keys.length>1){const cand=s.keys.map(keyVal).map(nv);for(let i=0;i<cand.length;i++){if(!used.has(i)&&near(q.v,cand[i],s.tol)){used.add(i);ok=true;break;}}}
+    else ok=near(q.v,nv(keyVal(k)),s.tol);
+    rfb[k]=ok?'good':'bad';if(!ok){all=false;if(!hint&&s.hint)hint=s.hint(k,q.v);}});
+  return all?true:(hint||false);
+}
+function checkInputs(){
+  readFields();let msg=null,any=false;const order=[si,...steps.map((_,j)=>j).filter(j=>j!==si)];
+  const toComplete=[];
+  for(const j of order){const r=evalStep(j);if(r===null)continue;any=true;if(r===true)toComplete.push(j);else if(j===si||!msg)msg=typeof r==='string'?r:'Noch nicht. Schau die markierte Stelle im Graphen genau an.';}
+  if(!any){fb='Trage zuerst einen Wert ein.';renderEq();renderDetail();return;}
+  fb=toComplete.includes(si)?null:msg;
+  if(toComplete.length){toComplete.forEach(j=>complete(j,true));advance();}
+  else{renderEq();renderDetail();kick();}
+}
+function pointTry(x,y){
+  if(mode!=='draw')return;
+  const tolOf=(tx,ty)=>0.01+Math.max(Math.abs(tx-snapV(tx)),Math.abs(ty-snapV(ty)));
+  const open=steps.map((st,j)=>j).filter(j=>steps[j].kind==='point'&&!done[j]);
+  for(const j of open){const[tx,ty]=steps[j].target.map(q=>q.v);const t=tolOf(tx,ty);
+    if(Math.abs(x-tx)<=t&&Math.abs(y-ty)<=t){wrong=[];fb=null;fbOk=null;complete(j);return;}}
+  // weitere Punkte auf dem Graphen sind ebenfalls richtig
+  const fy=F.f(x);
+  if(isFinite(fy)&&Math.abs(fy-y)<=0.01+Math.abs(fy-snapV(fy))){
+    wrong=[];fb=null;const P=PS(Q.of(x),Q.of(fy));
+    if(!scene.some(e=>e.k==='pt'&&Math.abs(e.x-x)<1e-9&&Math.abs(e.y-fy)<1e-9))scene.push({k:'pt',x,y:fy,lab:'',c:'--ok',t0:performance.now()});
+    fbOk=`✓ ${P} liegt auf dem Graphen.`;renderDetail();kick();return;}
+  wrong=[[x,y]];fbOk=null;
+  // Hinweis bezogen auf den naheliegendsten offenen Punkt
+  const ref=open.includes(si)?si:open.sort((i,k)=>dist(steps[i],x,y)-dist(steps[k],x,y))[0];
+  let h=null;
+  if(ref!==undefined){const st=steps[ref];const[tx,ty]=st.target.map(q=>q.v);const tol=tolOf(tx,ty);const nr=(p,q)=>Math.abs(p-q)<=tol;
+    if(nr(x,ty)&&nr(y,tx)&&!nr(tx,ty))h=st.swapHint||'x und y vertauscht? Zuerst nach rechts oder links (x), dann nach oben oder unten (y).';
+    else if(st.hintSign&&nr(x,-tx)&&nr(y,ty)&&!nr(tx,0))h=st.hintSign;
+    else if(st.yHint&&nr(x,tx))h=st.yHint;
+    else if(st.hintX&&nr(y,ty)&&!nr(x,tx))h=st.hintX;}
+  fb=`${esc(PS(Q.of(x),Q.of(y)))} liegt nicht auf dem Graphen.${h?' '+h:''}<br><span class="r">Rotes × ziehen zum Verschieben, antippen zum Löschen.</span>`;
+  renderDetail();kick();
+}
+function setSketch(on){sketch=on;const b=$('sketchbtn');if(b){b.setAttribute('aria-pressed',on);b.hidden=mode!=='draw';}kick();}
+function checkSketch(){
+  const pts=strokes.flat();if(pts.length<5){sketchFb='Die Skizze ist noch zu kurz.';renderDetail();return;}
+  // Abstand jedes Skizzenpunkts zur Kurve (in Einheiten)
+  const cs=[];const N=800;for(let i=0;i<=N;i++){const x=V.x0+(V.x1-V.x0)*i/N,y=F.f(x);if(isFinite(y)&&y>V.y0-5&&y<V.y1+5)cs.push([x,y]);}
+  const ds=pts.map(([x,y])=>{let m=1e9;for(const[cx,cy]of cs){const d=(cx-x)**2+(cy-y)**2;if(d<m)m=d;}return Math.sqrt(m);});
+  const mean=ds.reduce((a,b)=>a+b,0)/ds.length;const sorted=[...ds].sort((a,b)=>a-b);const p90=sorted[Math.floor(sorted.length*.9)];
+  const iw=ds.indexOf(Math.max(...ds));const worst=pts[iw];
+  const xs=pts.map(p=>p[0]),xmin=Math.min(...xs),xmax=Math.max(...xs);
+  let cover=true,msg='';
+  if(F.type==='par'){const u=F.u.v,w=Math.min(1.5,(V.x1-V.x0)/4);if(xmin>u-w||xmax<u+w){cover=false;msg='Die Skizze muss über den Scheitel hinweg auf beide Seiten reichen.';}}
+  else if(xmax-xmin<Math.min(6,(V.x1-V.x0)*.5)){cover=false;msg='Zeichne die Gerade über einen grösseren Bereich.';}
+  const ok=cover&&mean<=0.25&&p90<=0.5;
+  if(ok){sketchFb=`✓ Gute Skizze: mittlere Abweichung ${fmt(mean,2)} Einheiten. Zum Vergleich wird der exakte Graph eingeblendet.`;sketchBad=null;setSketch(false);complete(steps.findIndex(st=>st.kind==='show'));return;}
+  sketchBad=cover?worst:null;
+  sketchFb=msg||(`Noch zu ungenau: mittlere Abweichung ${fmt(mean,2)} Einheiten, grösste bei x ≈ ${fmt(worst[0],1)}. `+(F.type==='par'?'Tipp: Die Parabel geht durch alle gesetzten Punkte und ist im Scheitel rund.':'Tipp: Lineal an die beiden Punkte anlegen.'))+' Skizze löschen und neu versuchen oder mehr Punkte setzen.';
+  renderDetail();kick();
+}
+function dist(st,x,y){const[tx,ty]=st.target.map(q=>q.v);return Math.hypot(tx-x,ty-y);}
+function stopPlay(){if(playing){clearTimeout(playing);playing=null;}$('play').textContent='▶ Abspielen';}
+function play(){
+  if(playing){stopPlay();return;}
+  $('play').textContent='❚❚ Stopp';
+  const stepOn=()=>{let i=done.findIndex(d=>!d);if(i<0){si=steps.length;renderSteps();stopPlay();return;}
+    si=i;complete(i,true);renderSteps();renderEq();kick();playing=setTimeout(stepOn,steps[i].kind==='show'?2000:1500);};
+  stepOn();
+}
+
+/* ================= Zeichnen (Canvas) ================= */
+const cv=$('cv'),ctx=cv.getContext('2d');let W=0,H=0,DPR=1,V={x0:-6,x1:6,y0:-6,y1:6,u:30};
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function resize(){const r=cv.getBoundingClientRect();DPR=window.devicePixelRatio||1;W=r.width;H=r.height;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);draw();}
+function calcView(){const bw=box.x1-box.x0,bh=box.y1-box.y0,u=Math.min(W/bw,H/bh),cx=(box.x0+box.x1)/2,cy=(box.y0+box.y1)/2;V={x0:cx-W/u/2,x1:cx+W/u/2,y0:cy-H/u/2,y1:cy+H/u/2,u};}
+const sx=x=>(x-V.x0)*V.u, sy=y=>H-(y-V.y0)*V.u, wx=px=>V.x0+px/V.u, wy=py=>V.y0+(H-py)/V.u;
+const snapV=v=>Math.round(v/snap)*snap;
+let rafOn=false;
+function kick(){if(!rafOn){rafOn=true;requestAnimationFrame(loop);}}
+function loop(){const busy=draw();if(busy)requestAnimationFrame(loop);else rafOn=false;}
+const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DUR={pt:420,tri:900,vline:600,curve:1500,bracket:500};
+function prog(e,now){if(reduced())return 1;const d=DUR[e.k]||500;return Math.max(0,Math.min(1,(now-e.t0)/d));}
+const easeOut=t=>1-Math.pow(1-t,3);
+const easeBack=t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
+let hover=null;
+function draw(){
+  if(!W)return false;ctx.setTransform(DPR,0,0,DPR,0,0);calcView();
+  const C={sheet:css('--sheet'),grid:css('--grid'),gridH:css('--gridH'),gridM:css('--gridM'),axis:css('--axis'),ink:css('--ink'),ink2:css('--ink2'),cur:css('--cur'),tri:css('--tri'),sym:css('--sym'),pt:css('--pt'),bad:css('--bad'),ok:css('--ok')};
+  ctx.fillStyle=C.sheet;ctx.fillRect(0,0,W,H);
+  // Karogitter
+  if(V.u>=40&&snap<1){ctx.strokeStyle=C.gridH;ctx.lineWidth=1;ctx.beginPath();for(let x=Math.ceil(V.x0*2)/2;x<=V.x1;x+=.5){const p=Math.round(sx(x))+.5;ctx.moveTo(p,0);ctx.lineTo(p,H);}for(let y=Math.ceil(V.y0*2)/2;y<=V.y1;y+=.5){const p=Math.round(sy(y))+.5;ctx.moveTo(0,p);ctx.lineTo(W,p);}ctx.stroke();}
+  const gstep=V.u>=12?1:V.u>=5?5:10;
+  ctx.strokeStyle=C.grid;ctx.lineWidth=1;ctx.beginPath();
+  for(let x=Math.ceil(V.x0/gstep)*gstep;x<=V.x1;x+=gstep){const p=Math.round(sx(x))+.5;ctx.moveTo(p,0);ctx.lineTo(p,H);}
+  for(let y=Math.ceil(V.y0/gstep)*gstep;y<=V.y1;y+=gstep){const p=Math.round(sy(y))+.5;ctx.moveTo(0,p);ctx.lineTo(W,p);}ctx.stroke();
+  const ax=Math.min(Math.max(sy(0),0),H),ay=Math.min(Math.max(sx(0),0),W);
+  ctx.strokeStyle=C.axis;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(0,ax);ctx.lineTo(W,ax);ctx.moveTo(ay,H);ctx.lineTo(ay,0);ctx.stroke();
+  ctx.fillStyle=C.axis;ctx.beginPath();ctx.moveTo(W,ax);ctx.lineTo(W-9,ax-4);ctx.lineTo(W-9,ax+4);ctx.fill();ctx.beginPath();ctx.moveTo(ay,0);ctx.lineTo(ay-4,9);ctx.lineTo(ay+4,9);ctx.fill();
+  const L=V.u>=26?1:V.u>=13?2:5;
+  ctx.font='12px "JetBrains Mono",ui-monospace,monospace';ctx.fillStyle=C.ink2;ctx.textAlign='center';ctx.textBaseline='top';
+  for(let x=Math.ceil(V.x0/L)*L;x<=V.x1;x+=L){if(x===0)continue;const p=sx(x);if(p<10||p>W-16)continue;ctx.fillRect(p-.5,ax-3,1,6);ctx.fillText(String(x),p,ax+5>H-16?ax-18:ax+5);}
+  ctx.textBaseline='middle';
+  for(let y=Math.ceil(V.y0/L)*L;y<=V.y1;y+=L){if(y===0)continue;const p=sy(y);if(p<12||p>H-10)continue;ctx.fillRect(ay-3,p-.5,6,1);const left=ay-6<24;ctx.textAlign=left?'left':'right';ctx.fillText(String(y),left?ay+8:ay-6,p);}
+  ctx.textAlign='right';ctx.textBaseline='top';if(sx(0)>8&&sy(0)<H-14)ctx.fillText('0',ay-5,ax+5);
+  ctx.fillStyle=C.ink;ctx.font='italic 600 14px "Source Sans 3",system-ui,sans-serif';ctx.textAlign='right';ctx.textBaseline='top';ctx.fillText('x',W-6,ax+8>H-20?ax-22:ax+8);ctx.textAlign='left';ctx.fillText('y',ay+10,4);
+
+  const now=performance.now();let busy=false;
+  if(mode==='read')drawCurve(1,C.cur,2.8);
+  // Vorab-Markierung im Ablesemodus
+  const s=steps[si];
+  if(mode==='read'&&s&&!done[si]&&s.pre)s.pre(C);
+  for(const e of scene){const p=prog(e,now);if(p<1)busy=true;if(now<e.t0)continue;drawEl(e,p,C);}
+  // Skizze
+  if(strokes.length){ctx.save();ctx.strokeStyle=C.ink;ctx.globalAlpha=.75;ctx.lineWidth=2.6;ctx.lineCap='round';ctx.lineJoin='round';for(const st of strokes){ctx.beginPath();st.forEach(([x,y],i)=>i?ctx.lineTo(sx(x),sy(y)):ctx.moveTo(sx(x),sy(y)));ctx.stroke();}ctx.restore();}
+  if(sketchBad){ctx.save();ctx.strokeStyle=C.bad;ctx.lineWidth=2;ctx.setLineDash([4,3]);ctx.beginPath();ctx.arc(sx(sketchBad[0]),sy(sketchBad[1]),16,0,7);ctx.stroke();ctx.restore();}
+  // Fehlversuche
+  for(const[x,y]of wrong){const X=sx(x),Y=sy(y);ctx.save();ctx.strokeStyle=C.bad;ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(X-6,Y-6);ctx.lineTo(X+6,Y+6);ctx.moveTo(X+6,Y-6);ctx.lineTo(X-6,Y+6);ctx.stroke();ctx.restore();}
+  // Zielhilfe beim Setzen
+  const picking=mode==='draw'&&how==='self'&&!sketch&&steps.some((st,j)=>st.kind==='point'&&!done[j]);
+  cv.classList.toggle('pick',!!picking||(mode==='draw'&&sketch));
+  if(picking&&hover){const X=sx(hover[0]),Y=sy(hover[1]);ctx.save();ctx.strokeStyle=C.cur;ctx.globalAlpha=.5;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(X,ax);ctx.lineTo(X,Y);ctx.moveTo(ay,Y);ctx.lineTo(X,Y);ctx.stroke();ctx.restore();
+    ctx.save();ctx.strokeStyle=C.cur;ctx.lineWidth=2;ctx.beginPath();ctx.arc(X,Y,7,0,7);ctx.stroke();ctx.restore();
+    ctx.font='600 12px "JetBrains Mono",monospace';ctx.textAlign='left';ctx.textBaseline='bottom';halo(PS(Q.of(hover[0]),Q.of(hover[1])),X+10,Y-8,C.cur,C);}
+  // Legende
+  $('legend').innerHTML=(mode==='draw'&&sketch)?'Skizzenmodus: mit Stift, Finger oder Maus zeichnen · ✎ Skizze erneut tippen zum Beenden':mode==='read'?'Graph gegeben · Markierungen zeigen, wo im aktuellen Schritt abgelesen wird':(picking?(wrong.length?'Rotes × ziehen = verschieben · antippen oder Entf = löschen · neuer Klick = neuer Versuch':'Tippe oder klicke den Punkt · Ziehen verschiebt die Ansicht'):'Schritt wählen oder ▶ Abspielen · Ziehen verschiebt die Ansicht');
+  return busy;
+}
+function halo(t,x,y,col,C){ctx.save();ctx.lineWidth=4;ctx.strokeStyle=C.sheet;ctx.lineJoin='round';ctx.strokeText(t,x,y);ctx.fillStyle=col;ctx.fillText(t,x,y);ctx.restore();}
+function drawCurve(p,col,lw){
+  ctx.save();ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();
+  if(F.type==='lin'){const x0=V.x0,x1=V.x0+(V.x1-V.x0)*p;ctx.moveTo(sx(x0),sy(F.f(x0)));ctx.lineTo(sx(x1),sy(F.f(x1)));}
+  else{const u=F.u.v,Rr=Math.max(u-V.x0,V.x1-u)*p,N=240;
+    for(const sgn of[-1,1]){let pen=false;for(let i=0;i<=N;i++){const x=u+sgn*Rr*i/N,y=F.f(x),Y=sy(y);if(Y<-H*3||Y>H*4){pen=false;continue;}if(!pen){ctx.moveTo(sx(x),Y);pen=true;}else ctx.lineTo(sx(x),Y);}}}
+  ctx.stroke();ctx.restore();
+}
+function drawEl(e,p,C){
+  const col=e.c?css(e.c):C.cur;
+  if(e.k==='curve'){drawCurve(easeOut(p),C.cur,3);return;}
+  if(e.k==='pt'){const X=sx(e.x),Y=sy(e.y),r=6*Math.max(0,easeBack(p));ctx.save();ctx.fillStyle=col;ctx.strokeStyle=C.sheet;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(X,Y,Math.max(0,r),0,7);ctx.fill();ctx.stroke();ctx.restore();
+    if(e.lab&&p>.5){ctx.save();ctx.globalAlpha=Math.min(1,(p-.5)*2);ctx.font='600 12.5px "JetBrains Mono",monospace';const w=ctx.measureText(e.lab).width;let tx=X+10,ta='left';if(tx+w>W-4){tx=X-10;ta='right';}ctx.textAlign=ta;ctx.textBaseline='bottom';halo(e.lab,tx,Y-7,col,C);ctx.restore();}return;}
+  if(e.k==='tri'){const X0=sx(e.x),Y0=sy(e.y),X1=sx(e.x+e.dx),Y1=sy(e.y+e.dy);const p1=Math.min(1,p*2),p2=Math.max(0,p*2-1);
+    ctx.save();ctx.strokeStyle=col;ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(X0,Y0);ctx.lineTo(X0+(X1-X0)*easeOut(p1),Y0);if(p2>0){ctx.moveTo(X1,Y0);ctx.lineTo(X1,Y0+(Y1-Y0)*easeOut(p2));}ctx.stroke();
+    ctx.font='600 12px "JetBrains Mono",monospace';
+    if(p1>=1){ctx.textAlign='center';ctx.textBaseline=e.dy>=0?'top':'bottom';halo(e.lx||String(e.dx),(X0+X1)/2,Y0+(e.dy>=0?5:-5),col,C);}
+    if(p2>=1&&e.dy!==0){ctx.textAlign='left';ctx.textBaseline='middle';halo(e.ly||((e.dy>0?'+':'−')+fmt(Math.abs(e.dy))),X1+6,(Y0+Y1)/2,col,C);}
+    ctx.restore();return;}
+  if(e.k==='vline'){const X=sx(e.x);ctx.save();ctx.strokeStyle=col;ctx.globalAlpha=.75;ctx.lineWidth=1.4;ctx.setLineDash([6,5]);ctx.beginPath();ctx.moveTo(X,H);ctx.lineTo(X,H-H*easeOut(p));ctx.stroke();ctx.restore();
+    if(p>=1&&e.lab){ctx.font='600 12px "JetBrains Mono",monospace';ctx.textAlign='left';ctx.textBaseline='top';halo(e.lab,X+5,8,col,C);}return;}
+}
+function glowAxis(t,col){ctx.save();ctx.strokeStyle=col;ctx.globalAlpha=.22;ctx.lineWidth=12;ctx.lineCap='round';ctx.beginPath();if(t==='y'){const X=sx(0);ctx.moveTo(X,0);ctx.lineTo(X,H);}else{const Y=sy(0);ctx.moveTo(0,Y);ctx.lineTo(W,Y);}ctx.stroke();ctx.restore();}
+function hlPoint(x,y,col,lab){const X=sx(x),Y=sy(y);ctx.save();ctx.strokeStyle=col;ctx.lineWidth=2.2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.arc(X,Y,13,0,7);ctx.stroke();ctx.restore();
+  if(lab){ctx.font='600 12px "JetBrains Mono",monospace';ctx.textAlign='left';ctx.textBaseline='bottom';halo(lab,X+15,Y-8,col,{sheet:css('--sheet')});}}
+function hlBracketH(y,x1,x2,col,lab){const Y=sy(y),A=sx(x1),B=sx(x2);ctx.save();ctx.strokeStyle=col;ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(A,Y);ctx.lineTo(B,Y);ctx.moveTo(A,Y-5);ctx.lineTo(A,Y+5);ctx.moveTo(B,Y-5);ctx.lineTo(B,Y+5);ctx.stroke();ctx.restore();
+  if(lab){ctx.font='600 12px "JetBrains Mono",monospace';ctx.textAlign='center';ctx.textBaseline='bottom';halo(lab,(A+B)/2,Y-6,col,{sheet:css('--sheet')});}}
+
+/* ================= Interaktion ================= */
+let down=null;
+function evPos(e){const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+function hitWrong(px,py,pt){const r=pt==='mouse'?12:22;return wrong.findIndex(([x,y])=>Math.hypot(sx(x)-px,sy(y)-py)<=r);}
+cv.addEventListener('pointerdown',e=>{const[px,py]=evPos(e);
+  if(mode==='draw'&&sketch){cur=[[wx(px),wy(py)]];strokes.push(cur);cv.setPointerCapture(e.pointerId);sketchFb=null;sketchBad=null;kick();return;}const w=mode==='draw'?hitWrong(px,py,e.pointerType):-1;
+  down={px,py,box:{...box},moved:false,id:e.pointerId,w};cv.setPointerCapture(e.pointerId);});
+cv.addEventListener('pointermove',e=>{const[px,py]=evPos(e);
+  if(cur){const l=cur[cur.length-1];const X=wx(px),Y=wy(py);if(Math.hypot(sx(X)-sx(l[0]),sy(Y)-sy(l[1]))>=2){cur.push([X,Y]);kick();}return;}
+  if(mode==='draw'&&sketch){hover=null;return;}
+  if(down){const dx=px-down.px,dy=py-down.py;if(!down.moved&&Math.hypot(dx,dy)>7)down.moved=true;
+    if(down.moved&&down.w>=0){wrong[down.w]=[snapV(wx(px)),snapV(wy(py))];hover=null;kick();return;}
+    if(down.moved){const kx=dx/V.u,ky=dy/V.u;box={x0:down.box.x0-kx,x1:down.box.x1-kx,y0:down.box.y0+ky,y1:down.box.y1+ky};hover=null;kick();return;}}
+  hover=[snapV(wx(px)),snapV(wy(py))];cv.style.cursor=mode==='draw'&&hitWrong(px,py,e.pointerType)>=0?'move':'';kick();});
+cv.addEventListener('pointerup',e=>{if(cur){cur=null;if(si<steps.length&&steps[si].kind==='show')renderDetail();return;}if(!down)return;const d=down;down=null;
+  if(d.w>=0){const[x,y]=wrong[d.w];wrong.splice(d.w,1);if(d.moved)pointTry(x,y);else{fb=null;renderDetail();kick();}return;}
+  if(d.moved)return;const[px,py]=evPos(e);
+  if(mode==='draw'&&how==='self')pointTry(snapV(wx(px)),snapV(wy(py)));});
+cv.addEventListener('pointercancel',()=>{down=null;cur=null;});
+cv.addEventListener('pointerleave',()=>{hover=null;kick();});
+cv.addEventListener('wheel',e=>{e.preventDefault();const[px,py]=evPos(e);const f=e.deltaY>0?1.12:1/1.12,X=wx(px),Y=wy(py);
+  box={x0:X-(X-box.x0)*f,x1:X+(box.x1-X)*f,y0:Y-(Y-box.y0)*f,y1:Y+(box.y1-Y)*f};kick();},{passive:false});
+function zoom(f){const cx=(box.x0+box.x1)/2,cy=(box.y0+box.y1)/2,hx=(box.x1-box.x0)/2*f,hy=(box.y1-box.y0)/2*f;box={x0:cx-hx,x1:cx+hx,y0:cy-hy,y1:cy+hy};kick();}
+$('zin').onclick=()=>zoom(.8);$('zout').onclick=()=>zoom(1.25);$('vfit').onclick=()=>{fitBox();kick();};
+
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{mode=r.value;
+  if(mode==='read'){if(form==='pf'&&F.type==='par'&&F.roots.kind==='none')F=rnd('pf',true);else F=rnd(form,true);}else F=rnd(form,false);
+  ownErr='';build();}));
+document.querySelectorAll('input[name=how]').forEach(r=>r.addEventListener('change',()=>{how=r.value;fb=null;wrong=[];renderDetail();kick();
+  if(how==='demo'&&si<steps.length&&!done[si])setTimeout(()=>{if(!done[si])complete(si);},300);}));
+$('forms-chips').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;const nf=b.dataset.f;if(nf===form)return;
+  const wasPar=F.type==='par';form=nf;ownErr='';
+  if(mode==='read'&&wasPar&&nf!=='lin'){build();return;}   // gleicher Graph, andere gesuchte Form
+  F=rnd(form,mode==='read');build();});
+$('eq').addEventListener('input',e=>{if(e.target.classList.contains('eqin')){inp[e.target.dataset.k]=e.target.value;e.target.classList.remove('bad');}});
+$('eq').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('eqin')){e.preventDefault();checkInputs();}});
+$('eq').addEventListener('click',e=>{if(e.target.id==='eqcheck')checkInputs();});
+$('detail').addEventListener('input',e=>{if(e.target.dataset&&e.target.dataset.k)inp[e.target.dataset.k]=e.target.value;});
+$('sketchbtn').onclick=()=>{setSketch(!sketch);if(sketch){const k=steps.findIndex(st=>st.kind==='show');if(k>=0&&!done[k]){si=k;renderSteps();}}else renderDetail();};
+$('newtask').onclick=()=>{F=rnd(form,mode==='read');ownErr='';build();};
+$('owntoggle').onclick=()=>{ownOpen=!ownOpen;renderOwn();};
+$('own').addEventListener('click',e=>{if(e.target.id==='ownapply')applyOwn();});
+$('own').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();applyOwn();}});
+$('steps').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(b){stopPlay();goStep(+b.dataset.s);}});
+$('detail').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  if(a==='show')complete(si);else if(a==='check')checkInputs();else if(a==='clear'){wrong=[];fb=null;renderDetail();kick();}else if(a==='sketch'){setSketch(true);renderDetail();}else if(a==='skclear'){strokes=[];sketchFb=null;sketchBad=null;renderDetail();kick();}else if(a==='skcheck')checkSketch();else if(a==='next')goStep(si+1);else if(a==='new'){F=rnd(form,mode==='read');build();}});
+$('detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();checkInputs();}});
+$('prev').onclick=()=>{stopPlay();goStep(si-1);};$('next').onclick=()=>{stopPlay();goStep(si+1);};$('play').onclick=play;
+$('formsbtn').onclick=()=>{formsShown=!formsShown;renderForms();};
+
+document.addEventListener('keydown',e=>{if((e.key==='Delete'||e.key==='Backspace')&&wrong.length&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();wrong=[];fb=null;renderDetail();kick();}});
+new ResizeObserver(resize).observe($('plot'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',kick);
+new MutationObserver(kick).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(kick);
+build();
+</script>
+</body>
+</html>

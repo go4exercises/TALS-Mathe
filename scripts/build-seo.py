@@ -162,6 +162,12 @@ SEITEN = {
    titel='Systemtrainer — das Vorgehen bei linearen Gleichungssystemen üben',
    beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen Schritt für Schritt: Verfahren wählen, Gleichungen vorbereiten, anwenden, Lösungsfall deuten — das Werkzeug rechnet.',
    themen=['Mathematik', 'Lineare Gleichungssysteme', 'Einsetzverfahren', 'Additionsverfahren', 'Lösungsmenge', 'Übung']),
+ 'werkzeuge/parabeltrainer.html': dict(
+   ort='Werkzeuge · Geraden- und Parabeltrainer',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Geraden- und Parabeltrainer — vom Graphen zur Gleichung und zurück',
+   beschreibung='Geraden und Parabeln zeichnen aus Scheitel-, Produkt- oder allgemeiner Form und umgekehrt die Gleichung aus dem Graphen ablesen, Schritt für Schritt mit Rückmeldung.',
+   themen=['Mathematik', 'Lineare Funktionen', 'Quadratische Funktionen', 'Parabel', 'Scheitelform', 'Steigung', 'Übung']),
  'simulationen/boxplot.html': dict(
    ort='Simulationen · Boxplot',
    typ='article', lrt='Simulation',

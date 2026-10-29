@@ -169,7 +169,8 @@ def check_resources_section(text, fname, rep):
 FREMDHOSTS = ("fonts.googleapis.com", "fonts.gstatic.com", "cdn.jsdelivr.net")
 
 # Seiten mit eigenem Aufbau — kein .page-wrap, kein <main class="content">.
-EIGENES_SKELETT = {"index.html", "feedback.html"}
+EIGENES_SKELETT = {"index.html", "feedback.html",
+                   "parabeltrainer.html"}   # Werkzeug mit eigenem Aussehen, öffnet in neuem Fenster (werkzeuge/CLAUDE.md)
 
 
 def check_keine_fremdhosts(text, fname, rep):
@@ -334,7 +335,7 @@ def run_deep(file_args, rep):
                 rep.warn("verify_js_runtime.js", "Summenzeile nicht erkannt")
 
     # Selbsttests der Werkzeuge (werkzeuge/*.html), je ein scripts/verify_<name>.js
-    for name in ("strategietrainer", "rechentrainer", "einheitskreistrainer", "termtrainer", "gesetzetrainer", "systemtrainer", "standardabweichung", "boxplot"):
+    for name in ("strategietrainer", "rechentrainer", "einheitskreistrainer", "termtrainer", "gesetzetrainer", "systemtrainer", "parabeltrainer", "standardabweichung", "boxplot"):
         et = scripts / f"verify_{name}.js"
         if not et.is_file():
             continue

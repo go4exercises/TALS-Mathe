@@ -73,3 +73,18 @@ meldet, wenn sie auseinanderlaufen.
   je Aufgabe vier Zufallswege über passende Schritte, nie eine Sackgasse, Ende beim Gauss-Ergebnis, jede Art von
   Schritt und Fehlgriff kommt vor; python3 prüft jede Zeile jedes Wegs gegen den Zeilenraum.
   `STATISTIK.widerspruch` muss 0 bleiben, sonst verwirft der Erzeuger kaputte Wege still.
+- `werkzeuge/parabeltrainer.html` (seit 29.10.2026): Geraden- und Parabeltrainer (GF 3.2, 3.3), **bewusste Ausnahme vom
+  Trainer-Rahmen**: extern gebaut und auf Wunsch des Auftraggebers fast unverändert übernommen, mit eigenem `<style>`,
+  ohne `nav.js`, `style.css` und Taste «Nächster Schritt». Er **öffnet in einem neuen Fenster**: Baustein auf g3.2
+  (`#gleichung-aufstellen`) und g3.3 (`#darstellungen`) und Kachel in `werkzeuge.html` mit `target="_blank"`. Darum steht
+  die Datei in `EIGENES_SKELETT` des Pre-Flights (kein `page-wrap`, keine nav). Angepasst wurde nur der Rahmen:
+  HTML-Gerüst, `../schriften.css` statt Google Fonts (Titelschrift Source Sans 3 statt Bricolage Grotesque),
+  `../vendor/mathjax/tex-svg.js` statt CDN, SEO- und FUSS-Marken samt `.site-footer`-Regel im `<style>`, KERN-Marken.
+  Zwei Modi (Zeichnen: Gleichung → Graph, Ablesen: Graph → Gleichung), vier Formen (Gerade `mx + q`, Scheitelform,
+  Produktform, allgemeine Form), Zufallsaufgaben oder eigene Parameter, Punkte setzen oder vorführen, Skizze mit
+  Abweichungsprüfung. Kein `localStorage`. Gerechnet wird exakt mit der Bruchklasse `Q`. **Notation weicht von den
+  Themenseiten ab** (`q` statt `b`, «Produktform» statt «Linearfaktorform», \(x_S, y_S\) statt \(u, v\)) — vom
+  Auftraggeber so übernommen. Selbsttest `scripts/verify_parabeltrainer.js`: je Form und Modus 2000 Zufallsaufgaben,
+  jeder Zielpunkt eines Zeichenschritts exakt auf dem Graphen, Formen, Nullstellen und Rückwege (`mkParABC`,
+  `mkParRoots`) in `python3` mit `Fraction` nachgerechnet, Schritttexte ohne `undefined`/`NaN`/Dezimalkomma.
+  Die Zustandsvariablen `F` und `form` stehen als `let` im Kern; der Test setzt sie über `setze()`.

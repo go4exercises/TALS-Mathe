@@ -345,6 +345,7 @@ ZUSATZSEITEN = [
     ('werkzeuge/termtrainer.html', 'WZ', 'Termtrainer', 'thema'),
     ('werkzeuge/gesetzetrainer.html', 'WZ', 'Gesetzetrainer', 'thema'),
     ('werkzeuge/systemtrainer.html', 'WZ', 'Systemtrainer', 'thema'),
+    ('werkzeuge/parabeltrainer.html', 'WZ', 'Geraden- und Parabeltrainer', 'thema'),
     ('simulationen/boxplot.html', 'SIM', 'Boxplot', 'thema'),
     ('simulationen/standardabweichung.html', 'SIM', 'Standardabweichung', 'thema'),
     ('leitprogramme/quadratische-funktionen.html', '▤',
