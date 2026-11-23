@@ -50,6 +50,8 @@ Angepasst werden nur die Punkte hier.
   .site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
   html:fullscreen .site-footer{display:none}
   ```
+- **Fusszeile jeder Folie:** links nach dem Namen `· <a href="https://mathe.begreifbar.ch/">mathe.begreifbar.ch</a>`,
+  absolut, damit der Link auch in einer heruntergeladenen Datei zur Site führt.
 - **Rücklink** auf der Titelfolie, als Satz unter dem Tastenhinweis, mit Anker auf den Abschnitt:
   `Der Stoff dazu steht in <a href="../grundlagen/…html#abschnitt">5.3 …</a>.` Dazu
   `.stage a{color:inherit}`. In der Tastensteuerung `e.target.matches('button,a')`, damit Enter

@@ -7,7 +7,9 @@ Alle sind extern gebaut und mit wenig Eingriff übernommen. Sie haben ihr eigene
 Bühne 1600 × 900, eigene Navigationsleiste) und öffnen sich in einem neuen Fenster. Alle Formeln stehen
 in MathJax; Texte aus dem Skript laufen über `mjHTML`. Beschriftungen in den SVG-Figuren sind Text.
 Das Karoraster des Originals ist entfernt (Wunsch vom 23.11.2026, gilt für jede neue Präsentation).
-Die Fusszeile jeder Folie («Raphael Arnold Kohler · 23.11.2026») ist vom Original übernommen und fest.
+Die Fusszeile jeder Folie («Raphael Arnold Kohler · 23.11.2026») ist vom Original übernommen und fest; seit
+24.11.2026 steht darin links ein Rücklink auf https://mathe.begreifbar.ch/ (absolut, damit er auch in einer
+heruntergeladenen Datei funktioniert).
 
 - `praesentationen/einheitskreis.html` (seit 23.11.2026), **anders gebaut als die beiden anderen**: keine Folienfolge,
   sondern acht Themen über eine Auswahlliste oben (`#thema`), je mit Schritten («Schritt weiter», «Alle Schritte»,

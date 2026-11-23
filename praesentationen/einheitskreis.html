@@ -690,7 +690,7 @@ SL.forEach((s,i)=>{
   const sec=document.createElement('section');sec.className='slide';sec.hidden=i!==0;sec.setAttribute('aria-label',s.title);
   sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand">Mathe begreifbar</span><span>${s.sec} · ${i+1} von ${SL.length}</span></header>
   <h1>${s.title}</h1><div class="body">${s.html}</div>
-  <footer><span>Raphael Arnold Kohler</span><span>23.11.2026</span></footer></div></div>`;
+  <footer><span>Raphael Arnold Kohler · <a href="https://mathe.begreifbar.ch/">mathe.begreifbar.ch</a></span><span>23.11.2026</span></footer></div></div>`;
   deck.append(sec);s.el=sec;s.step=0;s.ctl=s.init(sec)||{};
   {let x0=sec.querySelector('#x0');if(x0)x0.className='auf';else{sec.querySelector('.fig').insertAdjacentHTML('beforeend','<div class="auftrag"></div>');x0=sec.querySelector('.auftrag')}
    let offen=false;const zeig=z=>{offen=z&&!!LOE[i];mjHTML(x0,'<span>'+(offen?'<b>Lösung:</b> '+LOE[i]:'<b>Auftrag:</b> '+AUF[i])+'</span>'+(LOE[i]?`<button type="button" aria-pressed="${offen}">${offen?'Auftrag':'Lösung'}</button>`:''))};
