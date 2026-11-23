@@ -225,6 +225,7 @@ svg text{font-family:var(--sans)}
 /* Formelsatz (MathJax) und Footer der Site — HOWTO-praesentationen.md §3 */
 body:not(.mj) #deck{visibility:hidden}
 .stage a{color:inherit}
+.brand{display:inline-flex;align-items:center;gap:10px}.hub{display:block;line-height:0}.hub svg{display:block;width:30px;height:30px}   /* Symbol von begreifbar.ch, Rücklink */
 .site-footer{flex:none;color:#9aa3b8;font-size:11px;line-height:1.5;text-align:center;padding:0 16px 6px}
 .site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
 html:fullscreen .site-footer{display:none}
@@ -499,7 +500,7 @@ function aufgaben(sec,title,T){const W=T.length>2?480:700;
   folie(sec,title,`<div class="karten ${T.length>2?'k3':''}">${T.map((t,i)=>`<div class="karte"><h3>${t.name||'Aufgabe '+(i+1)}<small>${t.tag||''}</small></h3>
   <svg viewBox="0 0 ${W} 280" role="img" aria-label="Skizze"></svg><p>${t.text}</p>
   <div class="loes st" data-step="${i+1}">${t.sol}</div></div>`).join('')}</div>`,T.length,r=>{
-    r.querySelectorAll('svg').forEach((sk,i)=>{SKW=W;T[i].fig(sk)});SKW=700;return {}});
+    r.querySelectorAll('.karte>svg').forEach((sk,i)=>{SKW=W;T[i].fig(sk)});SKW=700;return {}});
 }
 aufgaben('Satzgruppe des Pythagoras','Pythagoras anwenden',[
  {text:'Ein rechtwinkliges Dreieck hat die Katheten \\(a = 6\\text{ cm}\\) und \\(b = 8\\text{ cm}\\). Wie lang ist die Hypotenuse \\(c\\)?',
@@ -719,7 +720,7 @@ folie('Rechtwinkliges Dreieck','Überblick',`<div class="ueb">
 const deck=document.getElementById('deck'),dots=document.getElementById('dots'),pos=document.getElementById('pos');
 SL.forEach((s,i)=>{
   const sec=document.createElement('section');sec.className='slide';sec.setAttribute('aria-label','Folie '+(i+1)+': '+(s.title||'Titel'));
-  sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand">Mathe begreifbar</span><span>${s.sec}</span></header>
+  sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand"><a class="hub" href="https://begreifbar.ch/" aria-label="begreifbar.ch" title="begreifbar.ch"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1a17"/><rect x="14" y="16" width="14" height="32" rx="4" fill="#5b8fc9"/><rect x="36" y="16" width="14" height="32" rx="4" fill="#c98028"/></svg></a>Mathe begreifbar</span><span>${s.sec}</span></header>
   <h1>${s.title}</h1><div class="body">${s.html}</div>
   <footer><span>Raphael Arnold Kohler · <a href="https://mathe.begreifbar.ch/">mathe.begreifbar.ch</a></span><span>23.11.2026 · ${i+1} / ${SL.length}</span></footer></div></div>`;
   deck.append(sec);s.el=sec;s.step=0;s.ctl=s.init(sec)||{};

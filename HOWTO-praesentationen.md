@@ -50,6 +50,11 @@ Angepasst werden nur die Punkte hier.
   .site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
   html:fullscreen .site-footer{display:none}
   ```
+- **Kopfzeile jeder Folie:** vor «Mathe begreifbar» das Symbol von begreifbar.ch als Rücklink, nur das Symbol ist
+  Link. Inline-SVG (kein Bild von fremdem Host, funktioniert offline), Markup und CSS aus einer der vorhandenen
+  Präsentationen kopieren (`a.hub`, `.brand{display:inline-flex…}`). **Danach prüfen, ob das Skript Elemente ohne
+  Einschränkung sucht** (`querySelectorAll('svg')`): Das Symbol ist das erste SVG der Folie und verschiebt die
+  Zuordnung. Einschränken, etwa auf `.karte>svg`; der Selbsttest meldet so etwas als Laufzeitfehler.
 - **Fusszeile jeder Folie:** links nach dem Namen `· <a href="https://mathe.begreifbar.ch/">mathe.begreifbar.ch</a>`,
   absolut, damit der Link auch in einer heruntergeladenen Datei zur Site führt.
 - **Rücklink** auf der Titelfolie, als Satz unter dem Tastenhinweis, mit Anker auf den Abschnitt:
