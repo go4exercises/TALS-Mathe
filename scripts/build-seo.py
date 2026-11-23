@@ -192,6 +192,12 @@ SEITEN = {
    titel='Geraden- und Parabeltrainer — vom Graphen zur Gleichung und zurück',
    beschreibung='Geraden und Parabeln zeichnen aus Scheitel-, Produkt- oder allgemeiner Form und umgekehrt die Gleichung aus dem Graphen ablesen, Schritt für Schritt mit Rückmeldung.',
    themen=['Mathematik', 'Lineare Funktionen', 'Quadratische Funktionen', 'Parabel', 'Scheitelform', 'Steigung', 'Übung']),
+ 'werkzeuge/schraegbild-werkstatt.html': dict(
+   ort='Werkzeuge · Schrägbild-Werkstatt',
+   typ='article', lrt=['Werkzeug', 'Übung'],
+   titel='Schrägbild-Werkstatt — Körper zeichnen, prüfen, drehen und abwickeln',
+   beschreibung='Körper als Schrägbild oder in der Dreitafelprojektion selbst zeichnen und prüfen lassen, mit drehbarem 3D-Modell, Netz, Oberfläche, Volumen und Bastelbogen.',
+   themen=['Mathematik', 'Schrägbild', 'Dreitafelprojektion', 'Körpernetz', 'Oberfläche', 'Volumen', 'Raumgeometrie', 'Übung']),
  'simulationen/boxplot.html': dict(
    ort='Simulationen · Boxplot',
    typ='article', lrt='Simulation',

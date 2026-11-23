@@ -107,6 +107,10 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
   `scripts/verify_einheitskreis.js` (Umkehrung und exakte Werte gegen python3).
 - `HOWTO-werkzeuge.md` §9: extern gebaute Datei übernehmen (gilt auch für Simulationen).
 
+- **Werkzeug Schrägbild-Werkstatt** (SF 4.1): Körper als Schrägbild oder in der Dreitafel zeichnen und prüfen
+  lassen; extern gebaut, eigenes Aussehen, öffnet in neuem Fenster; Selbsttest `scripts/verify_schraegbild.js`.
+- Symbol von begreifbar.ch in der Kopfzeile der Site als Rücklink.
+
 ### Geändert
 
 - Pre-Flight: Platzhalter `${…}` aus JS-Vorlagen zählen nicht mehr als doppelte IDs; `check_sim_wz` kennt

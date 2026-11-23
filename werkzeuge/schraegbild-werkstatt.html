@@ -1,0 +1,2912 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Schrägbild-Werkstatt</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Körper als Schrägbild oder in der Dreitafelprojektion selbst zeichnen und prüfen lassen, mit drehbarem 3D-Modell, Netz, Oberfläche, Volumen und Bastelbogen.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/werkzeuge/schraegbild-werkstatt.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Schrägbild-Werkstatt — Körper zeichnen, prüfen, drehen und abwickeln">
+<meta property="og:description" content="Körper als Schrägbild oder in der Dreitafelprojektion selbst zeichnen und prüfen lassen, mit drehbarem 3D-Modell, Netz, Oberfläche, Volumen und Bastelbogen.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/werkzeuge/schraegbild-werkstatt.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/werkzeuge/schraegbild-werkstatt.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/werkzeuge/schraegbild-werkstatt.html",
+   "name": "Schrägbild-Werkstatt — Körper zeichnen, prüfen, drehen und abwickeln",
+   "description": "Körper als Schrägbild oder in der Dreitafelprojektion selbst zeichnen und prüfen lassen, mit drehbarem 3D-Modell, Netz, Oberfläche, Volumen und Bastelbogen.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Schrägbild"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Dreitafelprojektion"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Körpernetz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Oberfläche"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Volumen"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Raumgeometrie"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Übung"
+    }
+   ],
+   "keywords": "Mathematik, Schrägbild, Dreitafelprojektion, Körpernetz, Oberfläche, Volumen, Raumgeometrie, Übung",
+   "learningResourceType": [
+    "Werkzeug",
+    "Übung"
+   ],
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<style>
+/* Layout: zwei Werkzeugzeilen, Aufgabenzeile, darunter Zeichenblatt links und 3D-/Netz-Ansicht rechts */
+:root{
+  --bg:#e8ebef; --chrome:#ffffff; --fg:#1e2b45; --muted:#5b6679; --line:#d2d8e0;
+  --accent:#2f4f8f; --paper:#fcfcfa; --ok:#1b7a3d; --bad:#b3261e;
+  --mark:#c62828;
+  --ui:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --head:Georgia, "Times New Roman", serif;
+  --mono:ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141922; --chrome:#1e2530; --fg:#e4e9f0; --muted:#9aa5b4; --line:#323c4a; --accent:#8db0f0; --ok:#5fcf8a; --bad:#ff8a80; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141922; --chrome:#1e2530; --fg:#e4e9f0; --muted:#9aa5b4; --line:#323c4a; --accent:#8db0f0; --ok:#5fcf8a; --bad:#ff8a80; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--ui);font-size:15px;display:flex;flex-direction:column;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding-block:8px 0}
+.brand{display:flex;flex-direction:column;line-height:1.1;margin-right:6px}
+.brand small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.brand b{font-family:var(--head);font-size:19px;font-weight:600}
+.grp{display:flex;flex-wrap:wrap;max-width:100%;min-width:0;align-items:center;gap:3px;background:var(--chrome);border:1px solid var(--line);border-radius:10px;padding:3px}
+.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:0 5px}
+button,select{font:inherit;color:var(--fg);background:transparent;border:0;border-radius:7px;height:34px;padding:0 10px;cursor:pointer;white-space:nowrap}
+select{background:var(--chrome);border:1px solid var(--line);padding:0 6px;max-width:100%;min-width:0}
+@media (max-width:520px){#task{max-width:62vw}}
+button:hover{background:color-mix(in srgb,var(--accent) 11%,transparent)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 18%,transparent);box-shadow:inset 0 0 0 1.5px var(--accent)}
+button.primary{background:var(--accent);color:var(--chrome);font-weight:600}
+button:disabled{opacity:.4;cursor:default}
+.pen{display:inline-flex;align-items:center;gap:7px}
+.pen i{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--fg)}
+.pen i.dash{border-top-style:dashed}
+.pen i.red{border-color:var(--mark)}
+.pen i.dot{border-top-style:dotted;border-color:#d9822b}
+.pen b.eraser{display:inline-block;width:16px;height:9px;border:2px solid var(--fg);border-radius:2px;transform:rotate(-30deg);background:linear-gradient(90deg,var(--fg) 0 35%,transparent 35%)}
+.dir i{display:inline-block;width:18px;height:0;border-top:2.5px solid;transform:rotate(-40deg);margin-right:2px}
+.dir .dz{border-color:#d9822b} .dir .df{border-color:#0f8b8d}
+#draw.erasing{cursor:cell}
+.taskline{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding-block:8px;min-height:38px;font-size:14.5px;line-height:1.4}
+.taskline .t{max-width:72ch}
+.taskline .t b{font-weight:600}
+.taskline .ziel{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+#result{font-weight:600}
+#result.ok{color:var(--ok)} #result.bad{color:var(--bad)}
+#result ul{margin:2px 0 0;padding-left:18px;font-weight:400;color:var(--fg)}
+main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:12px}
+@media (max-width:860px){main{grid-template-columns:1fr;grid-template-rows:minmax(340px,1fr) minmax(380px,1fr)} body{overflow:auto} html,body{height:auto;min-height:100%}}
+.panel{position:relative;min-height:280px;border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 24px rgba(20,30,45,.10)}
+.paper{background:var(--paper)}
+.view{background:radial-gradient(circle at 50% 38%,#2b3546,#131922);display:flex;flex-direction:column}
+.stage{position:relative;flex:1;min-height:0}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.cap{position:absolute;left:10px;top:8px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;pointer-events:none}
+.paper .cap{color:#5b6679}
+.view .cap{color:#a9b5c4}
+.seg{position:absolute;right:8px;top:6px;display:flex;background:rgba(15,20,28,.7);border:1px solid #3d4a5c;border-radius:8px;padding:2px}
+.seg button{height:28px;color:#dbe3ec;font-size:13.5px}
+.seg button[aria-pressed="true"]{background:#3a4a62;box-shadow:none}
+.ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 10px;background:rgba(10,14,20,.55);border-top:1px solid #2c3746;color:#dbe3ec}
+.ctrl button{color:#dbe3ec;border:1px solid #3d4a5c;height:30px;font-size:13.5px}
+.ctrl button[aria-pressed="true"]{background:#3a4a62;box-shadow:none}
+.rissbtns{display:inline-flex;gap:4px}
+.rissbtns button[aria-pressed="true"]{background:#8db0f0;color:#131922;border-color:#8db0f0}
+.ctrl label{display:flex;align-items:center;gap:8px;font-size:13.5px}
+.ctrl input[type=range]{width:min(180px,40vw);accent-color:#8db0f0}
+.info{font-size:12.5px;color:#c9d3df;padding:0 10px 8px;background:rgba(10,14,20,.55);display:flex;flex-wrap:wrap;gap:2px 14px;font-variant-numeric:tabular-nums}
+.info .mono{font-family:var(--mono);font-size:12px}
+.info .warn{color:#ffb4a8}
+.legend{position:absolute;left:10px;bottom:8px;max-width:calc(100% - 150px);font-size:12px;color:#5b6679;display:flex;flex-wrap:wrap;gap:2px 10px;pointer-events:none;background:rgba(252,252,250,.88);padding:2px 6px;border-radius:5px}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.legend i{display:inline-block;width:14px;height:0;border-top:3px solid}
+.zoom{position:absolute;right:8px;bottom:8px;display:flex;gap:2px;background:rgba(255,255,255,.92);border:1px solid #d2d8e0;border-radius:9px;padding:2px}
+.zoom button{height:30px;min-width:34px;padding:0 8px;color:#1e2b45;font-variant-numeric:tabular-nums}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 16px;border-radius:8px;font-size:14px;z-index:20;max-width:90vw;text-align:center}
+dialog{border:0;border-radius:12px;padding:0;max-width:min(860px,calc(100vw - 32px));width:100%;max-height:calc(100vh - 40px);background:var(--chrome);color:var(--fg);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(15,20,28,.45)}
+#printDlg{max-width:min(480px,calc(100vw - 32px))}
+.chk.off{opacity:.55;cursor:not-allowed}
+.chk .note{color:#b4232a;font-weight:600;margin-left:6px}
+.dlghead{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 6px;position:sticky;top:0;background:var(--chrome)}
+.dlghead h2{font-family:var(--head);font-size:20px;margin:0;font-weight:600}
+.dlgbody{padding:4px 18px 18px;overflow:auto}
+.dlgfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.dlgfoot button{border:1px solid var(--line)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:15px;line-height:1.35}
+.chk input{width:18px;height:18px;margin-top:1px;accent-color:var(--accent)}
+.hint{margin:4px 0 8px;color:var(--muted)} .hint.small{font-size:13px}
+.det h3{font-family:var(--head);font-size:16px;margin:16px 0 6px;font-weight:600}
+.det p{margin:4px 0;line-height:1.45}
+.det .warn{color:var(--bad)}
+.det table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.det th,.det td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+.det th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+.det td.num{text-align:right;white-space:nowrap}
+.det .calc{font-family:var(--mono);font-size:12.5px}
+.det .tw{overflow-x:auto}
+.det .sum td{font-weight:600;border-bottom:0}
+.det .approx{color:var(--muted)}
+.det tr[data-face]{cursor:pointer} .det tr[data-face]:hover td{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+/* Details nicht modal und links, damit das 3D-Fenster sichtbar und drehbar bleibt */
+dialog#detailsDlg{position:fixed;left:16px;top:16px;margin:0;max-width:min(760px,calc(100vw - 32px));max-height:calc(100vh - 32px);z-index:15;display:none;flex-direction:column}
+dialog#detailsDlg[open]{display:flex}
+dialog#detailsDlg .dlgbody{overflow:auto}
+@media (max-width:1100px){dialog#detailsDlg{max-width:calc(100vw - 32px)}}
+#printArea{display:none}
+@media print{
+  html,body{height:auto;overflow:visible;background:#fff;padding:0}
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block;color:#000;font-family:var(--ui);font-size:10pt}
+  #printArea h1{font-family:var(--head);font-size:16pt;margin:0 0 1mm}
+  #printArea p{margin:0 0 3mm}
+  #printArea .row{display:flex;gap:5mm;align-items:flex-start;margin-bottom:4mm}
+  #printArea figure{margin:0;flex:1;min-width:0;border:0.3mm solid #bbb;padding:2mm;break-inside:avoid}
+  #printArea figure img{display:block;width:100%;height:auto}
+  #printArea figcaption{font-size:9pt;color:#333;margin-top:1mm}
+  #printArea .netfig{text-align:center}
+  #printArea .foot{font-size:8pt;color:#555;margin-top:3mm}
+  #printArea .grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-bottom:4mm}
+  #printArea .grid1{display:grid;grid-template-columns:1fr;gap:5mm;margin-bottom:4mm}
+  #printArea .grid1 figure img{max-height:120mm;width:auto;margin:0 auto}
+  #printArea .namezeile{font-size:9pt;color:#333;margin:0 0 3mm}
+  #printArea .newpage{break-before:page}
+  #printArea .det{font-size:9pt} #printArea .det table{font-size:8.5pt} #printArea .det h3{font-size:11pt}
+  #printArea .det th,#printArea .det td{border-bottom:0.2mm solid #bbb;padding:1mm 2mm}
+}
+@media (prefers-reduced-motion:no-preference){.toast{animation:up .2s ease-out}@keyframes up{from{opacity:0;transform:translate(-50%,6px)}}}
+/* Einbau in Mathe begreifbar (HOWTO-werkzeuge.md §9): Footer der Site einzeilig, Rücklink auf die Themenseite */
+.site-footer{flex:none;color:var(--muted);font-size:11px;line-height:1.5;text-align:center;padding:2px 16px 6px}
+.site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
+.brand small a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@media print{.site-footer{display:none}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="brand"><small><a href="../schwerpunkt/s4-1-grundlagen.html#definition" title="Themenseite 4.1 Grundlagen: Schrägbild und Netz">Mathe begreifbar · 4.1 Grundlagen</a></small><b>Schrägbild-Werkstatt</b></div>
+  <div class="grp" role="group" aria-label="Bearbeiten">
+    <button id="undo">Rückgängig</button>
+    <button id="redo">Wiederholen</button>
+    <button id="clear">Leeren</button>
+    <button id="penErase" class="pen" aria-pressed="false" title="Über einen Strich fahren, um ihn zu löschen (auch mit der Radier-Taste des Stifts)"><b class="eraser"></b>Radierer</button>
+  </div>
+  <div class="grp" role="group" aria-label="Stift">
+    <button id="penEdge" class="pen" aria-pressed="true" title="Sichtbare Kante"><i></i>Kante</button>
+    <button id="penHidden" class="pen" aria-pressed="false" title="Verdeckte Kante (wird gestrichelt)"><i class="dash"></i>Verdeckt</button>
+    <button id="penDepth" class="pen" aria-pressed="false" title="Tiefenlinie: vom Fusspunkt in der Vorderebene unter dem Winkel α zu einer Ecke im Raum. Legt die Tiefe dieser Ecke fest (Länge = Tiefe · q)."><i class="dot"></i>Tiefenlinie</button>
+  </div>
+  <div class="grp dir" role="group" aria-label="Schräge Linie" id="dirGroup">
+    <span class="lbl">Schräge Linie</span>
+    <button id="dirAuto" aria-pressed="true" title="Die Seite entscheidet selbst, ob eine schräge Linie in die Tiefe geht">Auto</button>
+    <button id="dirZ" aria-pressed="false" title="Schräge Linie geht in die Tiefe (unter dem Winkel α, verkürzt)"><i class="dz"></i>Tiefe</button>
+    <button id="dirF" aria-pressed="false" title="Schräge Linie liegt in einer Ebene parallel zur Front (keine Tiefe)"><i class="df"></i>Front</button>
+  </div>
+</div>
+
+<div class="bar">
+  <div class="grp">
+    <button id="rulerBtn" aria-pressed="false" title="Lineal: mit Finger oder Maus verschieben, am Griff oder mit zwei Fingern drehen. Mit dem Stift an der Kante entlang zeichnen; mit der Maus knapp ausserhalb der Kante ansetzen.">Lineal</button>
+    <button id="penOnly" aria-pressed="false" title="Finger und aufgelegte Hand ignorieren">Nur Stift</button>
+    <button id="showRec" aria-pressed="true" title="Erkannte Kanten und Hilfslinien anzeigen">Erkennung</button>
+    <button id="depthGrid" aria-pressed="false" title="An jedem Gitterpunkt ein kurzer Strich unter α, so lang wie eine Tiefeneinheit (q Häuschen)">Tiefenstriche</button>
+  </div>
+  <div class="grp">
+    <label class="lbl" for="task">Übung</label>
+    <select id="task"></select>
+    <select id="example" aria-label="Beispiel laden" title="Beispielkörper aufs Blatt laden"></select>
+    <button id="check" class="primary">Prüfen</button>
+    <button id="tip" aria-pressed="false" title="Zeigt einen Teil der Lösung: Stufe 1 die Vorderfläche (Dreitafel: den Aufriss), Stufe 2 dazu die Tiefenkanten (den Grundriss)">Tipp</button>
+    <button id="solution" aria-pressed="false">Lösung zeigen</button>
+  </div>
+  <div class="grp">
+    <button id="save" title="Zeichnung als Datei speichern">Speichern</button>
+    <button id="load" title="Gespeicherte Zeichnung öffnen">Laden</button>
+    <button id="printAll" title="Auswahl: Dreitafel, Schrägbild, 3D-Modell, Netz, Details, Bastelbogen">Drucken</button>
+    <input type="file" id="fileIn" accept=".json,application/json" hidden>
+  </div>
+</div>
+
+<div class="bar">
+  <div class="grp" role="group" aria-label="Eingabe">
+    <span class="lbl">Eingabe</span>
+    <button id="modeRiss" aria-pressed="false" title="Den Körper in Aufriss, Grundriss und Seitenriss zeichnen">Dreitafel</button>
+    <button id="modeSchraeg" aria-pressed="true" title="Den Körper als Schrägbild zeichnen">Schrägbild</button>
+    <select id="proj" aria-label="Winkel α und Verkürzung q" title="Winkel α und Verkürzung q als zusammengehöriges Paar"></select>
+  </div>
+</div>
+
+<div class="taskline"><span class="t" id="taskText"></span><span id="result" role="status"></span></div>
+
+<main>
+  <div class="panel paper" id="paperPanel">
+    <canvas id="draw" aria-label="Zeichenblatt"></canvas>
+    <span class="cap" id="paperCap">Zeichenblatt</span>
+    <div class="legend" id="legend"></div>
+    <div class="zoom" role="group" aria-label="Zoom">
+      <button id="zoomOut" title="Verkleinern (Strg + Mausrad, zwei Finger)">−</button>
+      <button id="zoomReset" title="Zurück auf 100 %">100 %</button>
+      <button id="zoomIn" title="Vergrössern">+</button>
+    </div>
+  </div>
+  <div class="panel view">
+    <div class="stage">
+      <canvas id="view" aria-label="Drehbares 3D-Modell und Netz"></canvas>
+      <span class="cap">3D-Modell · ziehen zum Drehen</span>
+      <div class="seg" id="seg" hidden>
+        <button id="showTarget" aria-pressed="true">Vorlage</button>
+        <button id="showUser" aria-pressed="false">Meine Zeichnung</button>
+      </div>
+    </div>
+    <div class="ctrl">
+      <label for="unfold">Netz abwickeln <input type="range" id="unfold" min="0" max="100" value="0"></label>
+      <button id="netOutside">Netz von aussen</button>
+      <button id="transp" aria-pressed="false">Durchsichtig</button>
+      <span class="rissbtns" role="group" aria-label="Ansicht wie ein Riss">
+        <button id="viewA" title="Modell von vorne zeigen, durchsichtig wie im Aufriss">Aufriss</button>
+        <button id="viewS" title="Modell von links zeigen, durchsichtig wie im Seitenriss">Seitenriss</button>
+        <button id="viewG" title="Modell von oben zeigen, durchsichtig wie im Grundriss">Grundriss</button>
+      </span>
+      <button id="autoSpin" aria-pressed="false" title="Modell dreht sich laufend um sich selbst und kippt dabei leicht">Dauerdrehen</button>
+      <button id="reset">Zurücksetzen</button>
+      <button id="numbers" aria-pressed="false" title="Nummern der Flächen einblenden (wie in den Details)">Nummern</button>
+      <button id="detailsBtn" title="Masse, Kanten, Flächen, Oberfläche und Volumen mit allen Berechnungen">Details</button>
+    </div>
+  </div>
+</main>
+
+<dialog id="detailsDlg" aria-labelledby="detailsTitle">
+  <div class="dlghead"><h2 id="detailsTitle">Details</h2><button class="x" data-close aria-label="Schliessen">✕</button></div>
+  <div id="detailsBody" class="dlgbody"></div>
+</dialog>
+
+<dialog id="printDlg" aria-labelledby="printTitle">
+  <div class="dlghead"><h2 id="printTitle">Drucken</h2><button class="x" data-close aria-label="Schliessen">✕</button></div>
+  <div class="dlgbody">
+    <p class="hint">Was soll auf den Druck?</p>
+    <label class="chk"><input type="checkbox" id="pRiss"> Dreitafelprojektion</label>
+    <label class="chk"><input type="checkbox" id="pSchraeg"> Schrägbild</label>
+    <label class="chk"><input type="checkbox" id="p3d"> 3D-Modell in der aktuellen Ansicht</label>
+    <label class="chk"><input type="checkbox" id="pNet"> Netz (verkleinert)</label>
+    <label class="chk"><input type="checkbox" id="pDetails"> Details mit allen Berechnungen</label>
+    <label class="chk" id="pBastelRow"><input type="checkbox" id="pBastel"> Bastelbogen auf eigener Seite (1 Häuschen = 1 cm, mit Klebelaschen)<span class="note" id="pBastelNote" hidden></span></label>
+    <p class="hint small">Ist eine Darstellung noch nicht gezeichnet, wird sie aus dem Körper erzeugt.</p>
+    <div class="dlgfoot"><button data-close>Abbrechen</button><button id="doPrint" class="primary">Drucken</button></div>
+  </div>
+</dialog>
+
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Werkzeuge · Schrägbild-Werkstatt</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+
+<script>
+(() => {
+"use strict";
+const G = 28, SNAP = 0.4, EPS = 1e-6;
+const $ = id => document.getElementById(id);
+const dcv = $("draw"), dctx = dcv.getContext("2d");
+const vcv = $("view"), vctx = vcv.getContext("2d");
+const FONT = () => getComputedStyle(document.body).fontFamily;
+let DW = 0, DH = 0, VW = 0, VH = 0;
+
+// Zeichnungen: je Eingabeart eigene Striche und eigener Verlauf
+let inputMode = "schraeg";                       // "schraeg" | "riss"
+const drawings = { schraeg: { strokes: [], history: [], future: [] }, riss: { strokes: [], history: [], future: [] } };
+let strokes = [], history = [], future = [];
+let current = null, activeId = null;
+let penKind = "edge", slantDir = "auto", penOnly = false, showRec = true, depthGrid = false;
+let alphaDeg = 45, q = 0.5;
+let K = null;                                    // Schnittpunkt der Rissachsen (Häuschen)
+let task = null, targetModel = null, userModel = null, showWhich = "target";
+let checkRes = null, showSolution = false;
+let lern = { versuche: 0, tipp: 0, loesung: false, richtig: false };      // Lernspur der aktuellen Übung
+
+// ── KERN:ANFANG — Geometrie, Erkennung, Übungen, Prüfen; geprüft von scripts/verify_schraegbild.js (mit Stubs für Zeichenblatt und DOM)
+// ---------- Vektoren ----------
+const add = (a, b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]];
+const sub = (a, b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+const mul = (a, s) => [a[0]*s, a[1]*s, a[2]*s];
+const dot = (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+const cross = (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+const vlen = a => Math.hypot(a[0], a[1], a[2]);
+const norm = a => mul(a, 1 / (vlen(a) || 1));
+const r05 = v => Math.round(v * 2) / 2;
+const key3 = p => p.map(c => Math.round(c * 2)).join(",");
+const ekey = (a, b) => a < b ? a + "-" + b : b + "-" + a;
+const pkey = (p, r) => [key3(p), key3(r)].sort().join("|");
+const I3 = [[1,0,0],[0,1,0],[0,0,1]];
+const matVec = (M, v) => [dot(M[0], v), dot(M[1], v), dot(M[2], v)];
+const matMul = (A, B) => A.map(r => [0,1,2].map(j => r[0]*B[0][j] + r[1]*B[1][j] + r[2]*B[2][j]));
+function rodrigues(a, t){
+  const c = Math.cos(t), s = Math.sin(t), k = 1 - c, [x, y, z] = a;
+  return [[c + x*x*k, x*y*k - z*s, x*z*k + y*s], [y*x*k + z*s, c + y*y*k, y*z*k - x*s], [z*x*k - y*s, z*y*k + x*s, c + z*z*k]];
+}
+const fmt = v => { const r = Math.round(v * 100) / 100; return Number.isInteger(r) ? String(r) : r.toFixed(2).replace(/0$/, ""); };
+const bmin = V => [0,1,2].map(k => Math.min(...V.map(p => p[k])));
+const bmax = V => [0,1,2].map(k => Math.max(...V.map(p => p[k])));
+
+// ---------- Schrägbild-Projektion ----------
+// Zulässige Paare aus Verzerrungswinkel α und Verkürzungsfaktor q (hier erweitern oder kürzen)
+const PROJ = [
+  { a: 45, q: 0.5,    ql: "½",   label: "α = 45°, q = ½ (Standard, Kabinettprojektion)" },
+  { a: 30, q: 0.5,    ql: "½",   label: "α = 30°, q = ½" },
+  { a: 60, q: 0.5,    ql: "½",   label: "α = 60°, q = ½" },
+  { a: 45, q: 1,      ql: "1",   label: "α = 45°, q = 1 (unverkürzt, Kavalierprojektion)" },
+  { a: 45, q: 0.7071, ql: "½√2", label: "α = 45°, q = ½√2 (Häuschen-Diagonale)" }
+];
+let projIdx = 0;
+const qLabel = () => PROJ[projIdx].ql;
+function dvec(){ const a = alphaDeg * Math.PI / 180; return [q * Math.cos(a), q * Math.sin(a)]; }
+function viewDir(){ const [dx, dy] = dvec(); return [-dx, -dy, 1]; }               // Blickrichtung der Parallelprojektion
+const TOVIEW = { schraeg: () => norm(mul(viewDir(), -1)), A: () => [0, 0, -1], G: () => [0, 1, 0], S: () => [-1, 0, 0] };
+function toCells(p){ const [dx, dy] = dvec(); return [p[0] + p[2]*dx, -(p[1] + p[2]*dy)]; }
+function toPx(p){ const c = toCells(p); return [c[0] * G, c[1] * G]; }
+function fromScreen(s, z){ const [dx, dy] = dvec(); return [s[0] - z*dx, -s[1] - z*dy, z]; }
+function liftToFace(f, s){
+  const [dx, dy] = dvec(), den = f.n[2] - f.n[0]*dx - f.n[1]*dy;
+  if (Math.abs(den) < 1e-9) return null;
+  const z = (f.c - f.n[0]*s[0] + f.n[1]*s[1]) / den;
+  return { P: fromScreen(s, z), depth: z };
+}
+
+// ---------- 2D-Hilfen ----------
+function rdp(pts, eps){
+  if (pts.length < 3) return pts;
+  const a = pts[0], b = pts[pts.length - 1], dx = b[0]-a[0], dy = b[1]-a[1], L = Math.hypot(dx, dy) || 1;
+  let max = 0, idx = 0;
+  for (let i = 1; i < pts.length - 1; i++){
+    const d = Math.abs(dy*pts[i][0] - dx*pts[i][1] + b[0]*a[1] - b[1]*a[0]) / L;
+    if (d > max){ max = d; idx = i; }
+  }
+  return max > eps ? rdp(pts.slice(0, idx + 1), eps).slice(0, -1).concat(rdp(pts.slice(idx), eps)) : [a, b];
+}
+function segParam(p, a, b){ const dx = b[0]-a[0], dy = b[1]-a[1], L2 = dx*dx + dy*dy || 1; return ((p[0]-a[0])*dx + (p[1]-a[1])*dy) / L2; }
+function distSeg(p, a, b){ const t = Math.max(0, Math.min(1, segParam(p, a, b))); return Math.hypot(a[0] + (b[0]-a[0])*t - p[0], a[1] + (b[1]-a[1])*t - p[1]); }
+function distLine(p, a, b){ const d = [b[0]-a[0], b[1]-a[1]], L = Math.hypot(d[0], d[1]) || 1; return Math.abs(d[0]*(p[1]-a[1]) - d[1]*(p[0]-a[0])) / L; }
+function inPoly(p, poly){
+  let ins = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++){
+    const a = poly[i], b = poly[j];
+    if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0]-a[0]) * (p[1]-a[1]) / (b[1]-a[1]) + a[0]) ins = !ins;
+  }
+  return ins;
+}
+function onBoundary(p, poly, tol){ for (let i = 0; i < poly.length; i++) if (distSeg(p, poly[i], poly[(i+1) % poly.length]) < tol) return true; return false; }
+// Fläche in der Ebene: poly2 = äusserer Rand, holes2 = Ränder der Ausschnitte (beide in Ebenenkoordinaten)
+const inPolyH = (p, f) => inPoly(p, f.poly2) && !(f.holes2 || []).some(h => inPoly(p, h));
+const onBoundaryH = (p, f, tol) => onBoundary(p, f.poly2, tol) || (f.holes2 || []).some(h => onBoundary(p, h, tol));
+function interior2(poly, holes){
+  const f = { poly2: poly, holes2: holes || [] }, ok = p => inPolyH(p, f) && !onBoundaryH(p, f, 1e-6);
+  const c = [0, 0]; poly.forEach(p => { c[0] += p[0] / poly.length; c[1] += p[1] / poly.length; });
+  if (ok(c)) return c;
+  for (let i = 1; i < poly.length - 1; i++){
+    const t = [(poly[0][0] + poly[i][0] + poly[i+1][0]) / 3, (poly[0][1] + poly[i][1] + poly[i+1][1]) / 3];
+    if (ok(t)) return t;
+  }
+  // knapp neben einer Randkante (für Ringflächen und sehr schmale Flächen)
+  for (let i = 0; i < poly.length; i++){
+    const a = poly[i], b = poly[(i+1) % poly.length], m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], d = [b[0]-a[0], b[1]-a[1]], L = Math.hypot(d[0], d[1]) || 1;
+    for (const s of [0.05, -0.05, 0.2, -0.2]){ const t = [m[0] - d[1] / L * s, m[1] + d[0] / L * s]; if (ok(t)) return t; }
+  }
+  return c;
+}
+const interiorFace = f => interior2(f.poly2, f.holes2);
+const faceLoops = f => f.holes && f.holes.length ? [f.idx, ...f.holes] : [f.idx];
+function faceEdgeKeys(f){ const out = []; for (const loop of faceLoops(f)) loop.forEach((a, k) => out.push(ekey(a, loop[(k+1) % loop.length]))); return out; }
+const polyArea2 = poly => { let A = 0; for (let m = 0; m < poly.length; m++){ const p = poly[m], r = poly[(m+1) % poly.length]; A += p[0]*r[1] - r[0]*p[1]; } return A / 2; };
+const cross2 = (a, b) => a[0]*b[1] - a[1]*b[0];
+function properCross(p1, p2, p3, p4){
+  const r = [p2[0]-p1[0], p2[1]-p1[1]], s = [p4[0]-p3[0], p4[1]-p3[1]], d = cross2(r, s);
+  if (Math.abs(d) < 1e-9) return false;
+  const w = [p3[0]-p1[0], p3[1]-p1[1]], t = cross2(w, s) / d, u = cross2(w, r) / d;
+  return t > 1e-4 && t < 1 - 1e-4 && u > 1e-4 && u < 1 - 1e-4;
+}
+// A, B: { poly2, holes2 } in derselben Ebene
+function polysOverlap(A, B){
+  const LA = [A.poly2, ...(A.holes2 || [])], LB = [B.poly2, ...(B.holes2 || [])];
+  for (const P of LA) for (const Q of LB)
+    for (let i = 0; i < P.length; i++) for (let j = 0; j < Q.length; j++)
+      if (properCross(P[i], P[(i+1) % P.length], Q[j], Q[(j+1) % Q.length])) return true;
+  const a = interiorFace(A), b = interiorFace(B);
+  return (inPolyH(a, B) && !onBoundaryH(a, B, 1e-4)) || (inPolyH(b, A) && !onBoundaryH(b, A, 1e-4));
+}
+
+// ---------- Körpermodell: Flächen, Orientierung, Sichtbarkeit ----------
+function splitCollinear(V, E){
+  const out = [];
+  for (const e of E){
+    const A = V[e.i], B = V[e.j], d = sub(B, A), L2 = dot(d, d);
+    const mids = [];
+    V.forEach((P, k) => {
+      if (k === e.i || k === e.j) return;
+      const t = dot(sub(P, A), d) / L2;
+      if (t <= 1e-6 || t >= 1 - 1e-6) return;
+      if (vlen(sub(add(A, mul(d, t)), P)) < 1e-6) mids.push([t, k]);
+    });
+    mids.sort((a, b) => a[0] - b[0]);
+    const chain = [e.i, ...mids.map(m => m[1]), e.j];
+    for (let n = 1; n < chain.length; n++) out.push({ ...e, i: chain[n-1], j: chain[n] });
+  }
+  const m = new Map();
+  for (const e of out){
+    const k = ekey(e.i, e.j);
+    if (!m.has(k)) m.set(k, { ...e });
+    else { const o = m.get(k); o.hidden = o.hidden && e.hidden; o.bad = o.bad || e.bad; }
+  }
+  return [...m.values()];
+}
+function planeBasis(n){
+  let u = sub([1,0,0], mul(n, n[0]));
+  if (vlen(u) < 1e-6) u = sub([0,0,1], mul(n, n[2]));
+  u = norm(u);
+  return [u, cross(n, u)];
+}
+function cleanCycle(c){
+  let changed = true;
+  while (changed && c.length > 2){
+    changed = false;
+    for (let i = 0; i < c.length; i++){
+      if (c[(i - 1 + c.length) % c.length] === c[(i + 1) % c.length]){ c.splice(i, 1); c.splice(i % c.length, 1); changed = true; break; }
+    }
+  }
+  return c;
+}
+function findFaces(V, E){
+  const adj = V.map(() => []);
+  E.forEach(e => { adj[e.i].push(e.j); adj[e.j].push(e.i); });
+  const planes = new Map();
+  V.forEach((P, v) => {
+    const nb = adj[v];
+    for (let a = 0; a < nb.length; a++) for (let b = a + 1; b < nb.length; b++){
+      let n = cross(sub(V[nb[a]], P), sub(V[nb[b]], P));
+      if (vlen(n) < 1e-9) continue;
+      n = norm(n);
+      const k = n.findIndex(c => Math.abs(c) > 1e-9);
+      if (n[k] < 0) n = mul(n, -1);
+      const c = dot(n, P), key = n.map(x => x.toFixed(4)).join(",") + "|" + c.toFixed(4);
+      if (!planes.has(key)) planes.set(key, { n, c });
+    }
+  });
+  const faces = [];
+  for (const { n, c } of planes.values()){
+    const inP = V.map(p => Math.abs(dot(n, p) - c) < 1e-6);
+    const pe = E.filter(e => inP[e.i] && inP[e.j]);
+    if (pe.length < 3) continue;
+    const [u, w] = planeBasis(n);
+    const P2 = new Map(), nbs = new Map();
+    for (const e of pe){
+      for (const k of [e.i, e.j]) if (!P2.has(k)){ P2.set(k, [dot(V[k], u), dot(V[k], w)]); nbs.set(k, []); }
+      nbs.get(e.i).push(e.j); nbs.get(e.j).push(e.i);
+    }
+    for (const [k, list] of nbs){
+      const p = P2.get(k);
+      list.sort((a, b) => Math.atan2(P2.get(a)[1]-p[1], P2.get(a)[0]-p[0]) - Math.atan2(P2.get(b)[1]-p[1], P2.get(b)[0]-p[0]));
+    }
+    const used = new Set(), cycles = [];
+    for (const e of pe) for (const [a0, b0] of [[e.i, e.j], [e.j, e.i]]){
+      if (used.has(a0 + ">" + b0)) continue;
+      const cyc = []; let a = a0, b = b0, g = 0;
+      while (!used.has(a + ">" + b) && g++ < 500){
+        used.add(a + ">" + b); cyc.push(a);
+        const list = nbs.get(b), i = list.indexOf(a);
+        const nx = list[(i - 1 + list.length) % list.length];
+        a = b; b = nx;
+      }
+      const A = polyArea2(cyc.map(k => P2.get(k)));
+      if (A <= 1e-6) continue;
+      const idx = cleanCycle(cyc);
+      if (idx.length < 3) continue;
+      cycles.push({ idx, area: A, poly2: idx.map(k => P2.get(k)) });
+    }
+    for (const cy of cycles) faces.push({ idx: cy.idx, holes: [], n, c, u, w, area: cy.area, poly2: cy.poly2, holes2: [], lines: [] });
+    // Ringflächen: ein Rand, der ganz im Innern eines anderen liegt und keine Ecke mit ihm teilt, kann ein Ausschnitt sein
+    for (const O of cycles){
+      const os = new Set(O.idx);
+      const inner = cycles.filter(I => I !== O && I.area < O.area && !I.idx.some(k => os.has(k)) && I.poly2.every(p => inPoly(p, O.poly2)));
+      const maximal = inner.filter(I => !inner.some(J => J !== I && J.area > I.area && I.poly2.every(p => inPoly(p, J.poly2))));
+      if (maximal.length)
+        faces.push({ idx: O.idx, holes: maximal.map(I => I.idx), n, c, u, w, area: O.area - maximal.reduce((s, I) => s + I.area, 0), poly2: O.poly2, holes2: maximal.map(I => I.poly2), lines: [] });
+    }
+  }
+  return faces;
+}
+function orient(V, F){
+  for (const f of F){
+    const p2 = interiorFace(f);
+    const p = add(add(mul(f.u, p2[0]), mul(f.w, p2[1])), mul(f.n, f.c));
+    const o = add(p, mul(f.n, 1e-4)), d = norm(add(f.n, [0.0123, 0.0217, 0.0179]));
+    let hits = 0;
+    for (const g of F){
+      if (g === f) continue;
+      const den = dot(g.n, d); if (Math.abs(den) < 1e-9) continue;
+      const t = (g.c - dot(g.n, o)) / den; if (t <= 1e-7) continue;
+      const X = add(o, mul(d, t));
+      if (inPolyH([dot(X, g.u), dot(X, g.w)], g)) hits++;
+    }
+    if (hits % 2 === 1){ f.n = mul(f.n, -1); f.c = -f.c; f.idx.reverse(); f.poly2.reverse(); (f.holes || []).forEach(h => h.reverse()); (f.holes2 || []).forEach(h => h.reverse()); }
+  }
+}
+// Aus allen ebenen Kantenzyklen die echten Flächen wählen: jede Kante genau zwei Flächen, E − K + F = 2.
+// Scheinflächen (z. B. die Deckfläche unter einem Walmdach oder das Fünfeck um eine Ikosaeder-Ecke) fallen so weg.
+// Eine Fläche mit Ausschnitt zählt in der Polyederformel wie eine Fläche weniger: E − K + F − L = 2 (L = Anzahl Ausschnitte)
+const holesOf = f => (f.holes || []).length;
+function selectFaces(V, E, F){
+  const fk = F.map(faceEdgeKeys);
+  const byEdge = new Map();
+  fk.forEach((ks, fi) => ks.forEach(k => { if (!byEdge.has(k)) byEdge.set(k, []); byEdge.get(k).push(fi); }));
+  const edges = E.map(e => ekey(e.i, e.j));
+  if (edges.every(k => (byEdge.get(k) || []).length === 2) && byEdge.size === edges.length && V.length - edges.length + F.length - F.reduce((s, f) => s + holesOf(f), 0) === 2) return F;
+  if (edges.every(k => (byEdge.get(k) || []).length >= 2) && F.length <= 90){
+    const order = [...F.keys()].sort((a, b) => F[a].area - F[b].area);
+    const cnt = new Map(edges.map(k => [k, 0])), left = new Map(edges.map(k => [k, (byEdge.get(k) || []).length]));
+    const pick = [];
+    let best = null, nodes = 0, H = 0;
+    const dfs = i => {
+      if (best || ++nodes > 200000) return;
+      if (i === order.length){
+        if (edges.every(k => cnt.get(k) === 2) && V.length - edges.length + pick.length - H === 2) best = pick.slice();
+        return;
+      }
+      const fi = order[i], ks = fk[fi];
+      ks.forEach(k => left.set(k, left.get(k) - 1));
+      // aufnehmen
+      if (ks.every(k => cnt.get(k) < 2)){
+        ks.forEach(k => cnt.set(k, cnt.get(k) + 1)); pick.push(fi); H += holesOf(F[fi]);
+        if (ks.every(k => cnt.get(k) + left.get(k) >= 2)) dfs(i + 1);
+        pick.pop(); H -= holesOf(F[fi]); ks.forEach(k => cnt.set(k, cnt.get(k) - 1));
+      }
+      // weglassen
+      if (ks.every(k => cnt.get(k) + left.get(k) >= 2)) dfs(i + 1);
+      ks.forEach(k => left.set(k, left.get(k) + 1));
+    };
+    dfs(0);
+    if (best) return best.sort((a, b) => a - b).map(fi => F[fi]);
+  }
+  // offener oder unvollständiger Körper: Ringkandidaten weg, dann Scheinflächen schrittweise entfernen (grösste zuerst)
+  F = F.filter(f => !holesOf(f));
+  for (let guard = 0; guard < 60; guard++){
+    const c2 = new Map();
+    F.forEach(f => faceEdgeKeys(f).forEach(kk => c2.set(kk, (c2.get(kk) || 0) + 1)));
+    let fake = -1;
+    F.forEach((f, fi) => { if (faceEdgeKeys(f).every(kk => c2.get(kk) > 2) && (fake < 0 || f.area > F[fake].area)) fake = fi; });
+    if (fake < 0) break;
+    F = F.filter((_, fi) => fi !== fake);
+  }
+  return F;
+}
+function finalize(V, E){
+  E = splitCollinear(V, E);
+  E.forEach(e => {
+    const d = sub(V[e.j], V[e.i]).map(c => Math.abs(c) > EPS);
+    e.axis = d[0] && !d[1] && !d[2] ? "x" : !d[0] && d[1] && !d[2] ? "y" : !d[0] && !d[1] && d[2] ? "z" : !d[2] ? "f" : "o";
+  });
+  let F = selectFaces(V, E, findFaces(V, E));
+  orient(V, F);
+  const cnt = new Map();
+  F.forEach(f => faceEdgeKeys(f).forEach(kk => cnt.set(kk, (cnt.get(kk) || 0) + 1)));
+  const closed = F.length >= 4 && E.every(e => cnt.get(ekey(e.i, e.j)) === 2) && [...cnt.values()].every(c => c === 2);
+  const M = { V, E, F, closed, net: undefined, L: [], loose: [], holes: F.reduce((s, f) => s + holesOf(f), 0) };
+  M.area = F.reduce((s, f) => s + f.area, 0);
+  M.volume = closed ? F.reduce((s, f) => s + f.c * f.area, 0) / 3 : null;
+  return M;
+}
+function faceVisible(f){ return dot(f.n, viewDir()) < -1e-9; }
+// Ist ein Punkt vom Betrachter aus durch eine Fläche verdeckt? (Strahl Richtung Betrachter)
+function occluded(M, P, d){
+  const o = add(P, mul(d, 1e-3));
+  for (const g of M.F){
+    const den = dot(g.n, d); if (Math.abs(den) < 1e-9) continue;
+    const t = (g.c - dot(g.n, o)) / den; if (t <= 1e-6) continue;
+    const X = add(o, mul(d, t)), p2 = [dot(X, g.u), dot(X, g.w)];
+    if (inPolyH(p2, g) && !onBoundaryH(p2, g, 1e-6)) return true;
+  }
+  return false;
+}
+// Sichtbare und verdeckte Teilstücke einer Kante (Parameter t von A nach B); d: Richtung zum Betrachter (Vektor oder Funktion des Punktes)
+function edgeParts(M, A, B, d){
+  if (!M.F.length) return [{ t0: 0, t1: 1, hidden: false }];
+  const dir = typeof d === "function" ? d : () => d;
+  const at = t => add(A, mul(sub(B, A), t));
+  const occ = t => { const P = at(t); return occluded(M, P, dir(P)); };
+  const N = 16, ts = [], vals = [];
+  for (let i = 0; i <= N; i++){ const t = (i + 0.5) / (N + 1); ts.push(t); vals.push(occ(t)); }
+  let parts = [], start = 0, cur = vals[0];
+  for (let i = 1; i <= N; i++){
+    if (vals[i] === cur) continue;
+    let a = ts[i-1], b = ts[i];
+    for (let k = 0; k < 14; k++){ const m = (a + b) / 2; if (occ(m) === cur) a = m; else b = m; }
+    parts.push({ t0: start, t1: (a + b) / 2, hidden: cur }); start = (a + b) / 2; cur = vals[i];
+  }
+  parts.push({ t0: start, t1: 1, hidden: cur });
+  // winzige Stücke (kürzer als ein halbes Häuschen oder 2 % der Kante) dem Nachbarn zuschlagen, gleichartige Nachbarn vereinen
+  const minFrac = Math.max(0.02, 0.5 / (vlen(sub(B, A)) || 1));
+  for (let guard = 0; guard < 40 && parts.length > 1; guard++){
+    const i = parts.findIndex(p => p.t1 - p.t0 < minFrac);
+    if (i < 0) break;
+    if (i > 0){ parts[i-1].t1 = parts[i].t1; parts.splice(i, 1); } else { parts[1].t0 = 0; parts.splice(0, 1); }
+    for (let k = parts.length - 1; k > 0; k--) if (parts[k].hidden === parts[k-1].hidden){ parts[k-1].t1 = parts[k].t1; parts.splice(k, 1); }
+  }
+  return parts;
+}
+const hiddenFraction = parts => parts.reduce((s, p) => s + (p.hidden ? p.t1 - p.t0 : 0), 0);
+function edgeHidden(M, A, B, d){ return hiddenFraction(edgeParts(M, A, B, d)) > 0.5; }
+function computeHidden(M){
+  const d = TOVIEW.schraeg();
+  M.E.forEach(e => { e.parts = edgeParts(M, M.V[e.i], M.V[e.j], d); e.hiddenCalc = hiddenFraction(e.parts) > 0.5; });
+}
+// Teilstücke aller Kanten als Strecken (3D) für eine Blickrichtung
+function partSegments(M, d){
+  const out = [];
+  M.E.forEach((e, n) => { const A = M.V[e.i], B = M.V[e.j]; for (const p of edgeParts(M, A, B, d)) out.push({ e: n, a: add(A, mul(sub(B, A), p.t0)), b: add(A, mul(sub(B, A), p.t1)), hidden: p.hidden }); });
+  return out;
+}
+function inFace(f, P, tol){ const p2 = [dot(P, f.u), dot(P, f.w)]; return inPolyH(p2, f) || onBoundaryH(p2, f, tol); }
+function attach3DLines(M, lines){
+  M.L = [];
+  for (const L of lines){
+    const onF = f => Math.abs(dot(f.n, L.a) - f.c) < 1e-6 && Math.abs(dot(f.n, L.b) - f.c) < 1e-6 && inFace(f, L.a, 0.02) && inFace(f, L.b, 0.02);
+    const f = M.F.find(f => faceVisible(f) && onF(f)) || M.F.find(onF);
+    const rec = { a: L.a, b: L.b, f: f ? M.F.indexOf(f) : -1 };
+    M.L.push(rec);
+    if (f) f.lines.push(rec);
+  }
+}
+
+// ---------- Netz: Aufspannbaum über die Flächen, jede Fläche dreht um ihre Klappkante ----------
+function mulberry(a){ return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function netTransforms(M, net, t){
+  const T = new Array(M.F.length);
+  T[net.root] = { R: I3, t: [0, 0, 0] };
+  for (const o of net.order){
+    const A = M.V[o.a], ax = norm(sub(M.V[o.b], A));
+    const Rl = rodrigues(ax, o.theta * t), tl = sub(A, matVec(Rl, A)), P = T[o.p];
+    T[o.f] = { R: matMul(P.R, Rl), t: add(matVec(P.R, tl), P.t) };
+  }
+  return T;
+}
+const applyT = (T, p) => add(matVec(T.R, p), T.t);
+function flatten(M, net){
+  const T = netTransforms(M, net, 1), nr = M.F[net.root].n, [u, w] = planeBasis(nr);
+  const pts3 = [];
+  const loop2 = (fi, loop) => loop.map(v => { const p = applyT(T[fi], M.V[v]); pts3.push(p); return [dot(p, u), dot(p, w)]; });
+  const polys = M.F.map((f, fi) => loop2(fi, f.idx));
+  const holes = M.F.map((f, fi) => (f.holes || []).map(h => loop2(fi, h)));
+  const lines = [];
+  M.F.forEach((f, fi) => f.lines.forEach(L => lines.push([applyT(T[fi], L.a), applyT(T[fi], L.b)].map(p => [dot(p, u), dot(p, w)]))));
+  const mn = bmin(pts3), mx = bmax(pts3);
+  return { polys, holes, lines, u, w, center: mn.map((v, k) => (v + mx[k]) / 2), radius: vlen(sub(mx, mn)) / 2 };
+}
+function buildNet(M){
+  const F = M.F, n = F.length, edgeFaces = new Map();
+  F.forEach((f, fi) => faceLoops(f).forEach(loop => loop.forEach((a, k) => {
+    const b = loop[(k+1) % loop.length], kk = ekey(a, b);
+    if (!edgeFaces.has(kk)) edgeFaces.set(kk, []);
+    edgeFaces.get(kk).push({ fi, a, b });
+  })));
+  const nb = F.map(() => []);
+  for (const [kk, l] of edgeFaces) if (l.length === 2){
+    nb[l[0].fi].push({ g: l[1].fi, a: l[0].a, b: l[0].b, key: kk });
+    nb[l[1].fi].push({ g: l[0].fi, a: l[1].a, b: l[1].b, key: kk });
+  }
+  const roots = [...F.keys()].sort((i, j) => (-F[j].n[1] + F[j].area * 1e-3) - (-F[i].n[1] + F[i].area * 1e-3));
+  let first = null;
+  for (let attempt = 0; attempt < 300; attempt++){
+    const rnd = mulberry(attempt + 1), root = attempt < 120 ? roots[0] : roots[attempt % n];
+    const seen = new Array(n).fill(false), order = [], queue = [root];
+    seen[root] = true;
+    while (queue.length){
+      const p = queue.shift(), list = nb[p].slice();
+      if (attempt) for (let i = list.length - 1; i > 0; i--){ const j = Math.floor(rnd() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+      for (const e of list){
+        if (seen[e.g]) continue;
+        seen[e.g] = true;
+        const ax = norm(sub(M.V[e.b], M.V[e.a])), nF = F[e.g].n, nP = F[p].n;
+        order.push({ f: e.g, p, a: e.a, b: e.b, key: e.key, theta: Math.atan2(dot(ax, cross(nF, nP)), dot(nF, nP)) });
+        queue.push(e.g);
+      }
+    }
+    if (order.length !== n - 1) return null;
+    const net = { root, order };
+    net.flat = flatten(M, net);
+    const P = net.flat.polys.map((p, i) => ({ poly2: p, holes2: net.flat.holes[i] }));
+    let bad = false;
+    for (let i = 0; i < P.length && !bad; i++) for (let j = i + 1; j < P.length && !bad; j++) if (polysOverlap(P[i], P[j])) bad = true;
+    if (!bad) return net;
+    if (!first) first = net;
+  }
+  first.overlap = true;
+  return first;
+}
+const getNet = M => (M.net === undefined ? (M.net = M.closed ? buildNet(M) : null) : M.net);
+
+// ---------- Erkennung im Schrägbild: Striche → 3D-Körper ----------
+let lastRun = null;
+function analyseSchraeg(){
+  const segs = [], lineSegs = [], depthSegs = [];
+  for (const s of strokes){
+    const poly = rdp(s.pts.map(p => [p[0] / G, p[1] / G]), 0.35);
+    if (s.kind === "depth"){ if (poly.length >= 2) depthSegs.push({ a: poly[0], b: poly[poly.length - 1] }); continue; }
+    for (let i = 1; i < poly.length; i++){
+      const a = poly[i-1], b = poly[i];
+      if (Math.hypot(b[0]-a[0], b[1]-a[1]) < 0.3) continue;
+      (s.kind === "line" ? lineSegs : segs).push({ a, b, hidden: s.kind === "hidden", dir: s.dir || "auto", zh: poly.length === 2 && typeof s.zh === "number" ? s.zh : null });
+    }
+  }
+  if (!segs.length) return null;
+  // Endpunkte zu Ecken bündeln: jeder Punkt kommt zur nächsten Ecke innerhalb von SNAP (keine Kettenbildung)
+  const P = [];
+  segs.forEach(s => { s.ia = P.push(s.a) - 1; s.ib = P.push(s.b) - 1; });
+  const acc = [], of = new Array(P.length);
+  P.forEach((p, i) => {
+    let best = -1, bd = SNAP;
+    acc.forEach((a, k) => { const d = Math.hypot(a[0] / a[2] - p[0], a[1] / a[2] - p[1]); if (d < bd){ bd = d; best = k; } });
+    if (best < 0){ best = acc.length; acc.push([0, 0, 0]); }
+    const a = acc[best]; a[0] += p[0]; a[1] += p[1]; a[2]++; of[i] = best;
+  });
+  const VP = acc.map(a => [a[0] / a[2], a[1] / a[2]]);
+  const em = new Map();
+  for (const s of segs){
+    const e = { i: of[s.ia], j: of[s.ib], hidden: s.hidden, dir: s.dir, zh: s.zh, pi: s.a, pj: s.b };
+    if (e.i === e.j) continue;
+    const k = ekey(e.i, e.j);
+    if (!em.has(k)) em.set(k, e);
+    else { const o = em.get(k); o.hidden = o.hidden && e.hidden; if (e.dir !== "auto") o.dir = e.dir; if (o.zh == null && e.zh != null) o.zh = o.i === e.i ? e.zh : -e.zh; }
+  }
+  const merged = mergeCollinear([...em.values()], VP);
+  const E0 = merged.E, VP2 = merged.VP;
+  // Zwei Durchgänge: grosszügige und strenge Winkeltoleranz; es gilt die Lesart, die besser zur Zeichnung passt
+  const solve = pinned => { const A = solveDepth(E0.map(e => ({ ...e })), VP2, 10, pinned), B = solveDepth(E0.map(e => ({ ...e })), VP2, 5, pinned); return B.score < A.score ? B : A; };
+  let { E2, pos } = solve(null);
+  // Tiefenlinien: vom Fusspunkt (in der Vorderebene oder an einer bekannten Ecke) zur Ecke → Tiefe der Ecke ist festgelegt
+  const feet = depthLines(depthSegs, VP2, pos);
+  if (feet.size){ ({ E2, pos } = solve(feet)); }
+  const res = resolveFreeVertices(E2, pos, VP2, feet);
+  pos = attachComponents(E2, res.pos, VP2);
+  lastRun = { VP: VP2, E2, pos, feet };
+  const M = buildUserModel(E2, pos, lineSegs);
+  M.freeSnapped = res.snapped; M.freeOpen = res.open;
+  return M;
+}
+// Tiefenlinie: ein Ende an einer Ecke P, das andere Ende F ist der Fusspunkt. Liegt F an einer anderen Ecke, zählt deren Tiefe,
+// sonst die Tiefe der Vorderebene (kleinste Tiefe des Körpers). Die Länge L der Linie ergibt die Tiefe: z(P) = z(F) + L / q
+function depthLines(depthSegs, VP, pos){
+  const feet = new Map();
+  if (!depthSegs.length) return feet;
+  const aRad = alphaDeg * Math.PI / 180, zFront = Math.min(...pos.map(p => p[2]));
+  const nearV = p => { let best = -1, bd = SNAP * 1.5; VP.forEach((q2, k) => { const d = Math.hypot(q2[0] - p[0], q2[1] - p[1]); if (d < bd){ bd = d; best = k; } }); return best; };
+  for (const s of depthSegs){
+    let va = nearV(s.a), vb = nearV(s.b);
+    if (va < 0 && vb < 0) continue;
+    // Richtung: von F nach P zeigt die Linie unter α (nach hinten) oder entgegen (nach vorne)
+    const pick = (F, P, vP, vF) => {
+      const du = P[0] - F[0], dv = -(P[1] - F[1]), L = Math.hypot(du, dv), sgn = Math.cos(Math.atan2(dv, du) - aRad) >= 0 ? 1 : -1;
+      const zF = vF >= 0 ? pos[vF][2] : zFront;
+      feet.set(vP, r05(zF + sgn * L / q));
+    };
+    if (va >= 0 && vb >= 0){
+      // beide Enden an Ecken: die Ecke mit der grösseren bisherigen Tiefe ist die bestimmte, die andere der Fusspunkt
+      if (pos[va][2] >= pos[vb][2]) pick(s.b, s.a, va, vb); else pick(s.a, s.b, vb, va);
+    } else if (va >= 0) pick(s.b, s.a, va, -1); else pick(s.a, s.b, vb, -1);
+  }
+  return feet;
+}
+// Striche, die an einer Ecke geradlinig ineinander übergehen, sind eine Kante, die in Stücken gezeichnet wurde:
+// entweder hängt an der Ecke sonst nichts (Kante in zwei Zügen gezeichnet), oder die Strichart wechselt dort
+// (sichtbares und verdecktes Stück einer Kante, die hinter einer Ecke des Vordergrunds durchläuft).
+function mergeCollinear(E, VP){
+  VP = VP.map(p => p.slice());
+  const len = e => Math.hypot(VP[e.j][0] - VP[e.i][0], VP[e.j][1] - VP[e.i][1]);
+  for (let guard = 0; guard < 500; guard++){
+    const deg = VP.map(() => []);
+    E.forEach((e, n) => { deg[e.i].push(n); deg[e.j].push(n); });
+    let done = true;
+    for (let v = 0; v < VP.length && done; v++){
+      const es = deg[v];
+      if (es.length < 2) continue;
+      for (let x = 0; x < es.length && done; x++) for (let y = x + 1; y < es.length && done; y++){
+        const e1 = E[es[x]], e2 = E[es[y]], a = e1.i === v ? e1.j : e1.i, b = e2.i === v ? e2.j : e2.i;
+        if (a === b) continue;
+        if (es.length > 2 && e1.hidden === e2.hidden) continue;                 // echte Ecke mit durchlaufender Kante gleicher Art
+        // Richtungen aus den rohen Strichenden (die gemittelte Ecke kann durch das Kantenstück verschoben sein)
+        const q1 = e1.i === v ? [e1.pi, e1.pj] : [e1.pj, e1.pi], q2 = e2.i === v ? [e2.pi, e2.pj] : [e2.pj, e2.pi];
+        const u = [q1[1][0] - q1[0][0], q1[1][1] - q1[0][1]], w = [q2[1][0] - q2[0][0], q2[1][1] - q2[0][1]];
+        const Lu = Math.hypot(u[0], u[1]), Lw = Math.hypot(w[0], w[1]);
+        if (Lu < 1e-9 || Lw < 1e-9) continue;
+        const cosA = (u[0]*w[0] + u[1]*w[1]) / (Lu * Lw);
+        if (cosA > -Math.cos((es.length > 2 ? 4 : 6) * Math.PI / 180)) continue;   // kein gerader Durchlauf
+        if (es.length > 2 && distLine(q1[0], q2[0], q2[1]) > 0.3) continue;         // Stücke liegen nicht auf einer Geraden
+        const l1 = len(e1), l2 = len(e2);
+        const hiddenLen = (e1.hidden ? l1 : 0) + (e2.hidden ? l2 : 0);
+        // Tiefenhinweis in Richtung a → b addieren
+        const z1 = e1.zh == null ? null : (e1.i === a ? e1.zh : -e1.zh), z2 = e2.zh == null ? null : (e2.j === b ? e2.zh : -e2.zh);
+        const m = { i: a, j: b, hidden: hiddenLen > (l1 + l2) / 2, dir: e1.dir !== "auto" ? e1.dir : e2.dir, zh: z1 != null && z2 != null ? z1 + z2 : null,
+                    pi: e1.i === a ? e1.pi : e1.pj, pj: e2.j === b ? e2.pj : e2.pi };
+        E = E.filter(e => e !== e1 && e !== e2); E.push(m);
+        // Lage der Ecke neu aus den verbleibenden Strichenden bestimmen
+        const rest = E.filter(e => e.i === v || e.j === v).map(e => e.i === v ? e.pi : e.pj);
+        if (rest.length) VP[v] = [rest.reduce((s2, q2) => s2 + q2[0], 0) / rest.length, rest.reduce((s2, q2) => s2 + q2[1], 0) / rest.length];
+        done = false;
+      }
+    }
+    if (done) break;
+  }
+  // unbenutzte Ecken entfernen
+  const used = new Map();
+  E.forEach(e => { for (const k of [e.i, e.j]) if (!used.has(k)) used.set(k, used.size); });
+  return { E: E.map(e => ({ ...e, i: used.get(e.i), j: used.get(e.j) })), VP: [...used.keys()].map(k => VP[k]) };
+}
+// Tiefe einer Ecke, die nur an frei schrägen Kanten hängt: in der Nähe der mittleren Nachbartiefe zm diejenige Tiefe,
+// bei der die gezeichnete Ecke am genauesten auf dem Raster liegt (möglichst auf ganzen Häuschen)
+function latticeZ(sp, zm, z0, z1){
+  let best = null;
+  for (let z = Math.min(z0, r05(zm)) - 6; z <= Math.max(z1, r05(zm)) + 6 + 1e-9; z += 0.5){
+    const R = fromScreen(sp, z).map(r05), c = toCells(R), err = Math.hypot(c[0] - sp[0], c[1] - sp[1]);
+    const halves = R.filter(x => Math.abs(x - Math.round(x)) > 1e-9).length;
+    const q2 = err * 6 + halves * 0.3 + Math.abs(z - zm) * 0.05;
+    if (!best || q2 < best.q) best = { q: q2, z };
+  }
+  return best.z;
+}
+function solveDepth(E2, VP, tolDeg, pinned){
+  // 1. Kandidaten je Kante: waagrecht (x), senkrecht (y), Tiefe (z), schräg in der Front (f) oder frei schräg (o)
+  const tol = tolDeg * Math.PI / 180, aRad = alphaDeg * Math.PI / 180;
+  const adiff = (a, b) => { let d = Math.abs(a - b) % (2 * Math.PI); return d > Math.PI ? 2 * Math.PI - d : d; };
+  const opts = E2.map(e => {
+    const A = VP[e.i], B = VP[e.j], du = B[0] - A[0], dv = -(B[1] - A[1]), L = Math.hypot(du, dv), an = Math.atan2(dv, du);
+    const devX = Math.min(adiff(an, 0), adiff(an, Math.PI)), devY = Math.min(adiff(an, Math.PI / 2), adiff(an, -Math.PI / 2));
+    const devZ = Math.min(adiff(an, aRad), adiff(an, aRad + Math.PI));
+    const axis = devX < tol && Math.abs(du) >= 0.25 ? "x" : devY < tol && Math.abs(dv) >= 0.25 ? "y" : null;
+    const sgn = Math.cos(an - aRad) >= 0 ? 1 : -1;
+    if (e.zh != null && !(devZ < 1e-3) && !(axis && Math.min(devX, devY) < 1.5 * Math.PI / 180)) return ["h"];       // gespeicherte Tiefe einer schrägen Raumkante
+    if (e.dir === "z"){ e.dz = sgn * r05(L / q); e.offDir = devZ > 12 * Math.PI / 180; return ["z"]; }
+    if (e.dir === "f") return axis ? [axis] : ["f"];
+    const o = [];
+    if (axis) o.push(axis);
+    if (devZ < tol){ e.dz = sgn * r05(L / q); o.push("z"); }
+    if (!o.length || o.includes("z") || (axis && Math.min(devX, devY) > 4 * Math.PI / 180)) o.push("o");
+    return o;
+  });
+  // 2. Für eine Lesart die Tiefen bestimmen und Widersprüche zählen
+  const adj = VP.map(() => []);
+  E2.forEach((e, n) => { adj[e.i].push(n); adj[e.j].push(n); });
+  function evaluate(kind){
+    const Z = VP.map(() => null);
+    if (pinned && pinned.size){ for (const [v, z] of pinned) Z[v] = z; propagateFrom([...pinned.keys()]); }
+    function propagateFrom(queue){ propagate(queue); }
+    function propagate(queue){
+      while (queue.length){
+        const u = queue.shift();
+        for (const n of adj[u]){
+          const e = E2[n]; if (kind[n] === "o") continue;
+          const w = e.i === u ? e.j : e.i;
+          if (Z[w] === null){ const dz = kind[n] === "z" ? e.dz : kind[n] === "h" ? e.zh : 0; Z[w] = Z[u] + (e.i === u ? dz : -dz); queue.push(w); }
+        }
+      }
+    }
+    for (let guard = 0; guard < 1000; guard++){
+      // Ecken nur mit frei schrägen Kanten: mittlere Tiefe der bekannten Nachbarn annehmen
+      let v = Z.findIndex((z, k) => z === null && adj[k].some(n => kind[n] === "o" && Z[E2[n].i === k ? E2[n].j : E2[n].i] !== null));
+      if (v >= 0){
+        const zs = adj[v].filter(n => kind[n] === "o").map(n => Z[E2[n].i === v ? E2[n].j : E2[n].i]).filter(z => z !== null);
+        const known = Z.filter(z => z !== null);
+        Z[v] = latticeZ(VP[v], zs.reduce((s, z) => s + z, 0) / zs.length, Math.min(...known) - 2, Math.max(...known) + 2);
+        propagate([v]); continue;
+      }
+      v = Z.findIndex((z, k) => z === null && adj[k].some(n => kind[n] !== "o"));
+      if (v < 0) v = Z.findIndex(z => z === null);
+      if (v < 0) break;
+      Z[v] = 0; propagate([v]);
+    }
+    const pos = VP.map((sp, v) => fromScreen(sp, Z[v]).map(r05));
+    const bad = E2.map((e, n) => {
+      if (kind[n] === "o") return false;
+      const d = sub(pos[e.j], pos[e.i]);
+      if (kind[n] === "x") return !(Math.abs(d[1]) < .01 && Math.abs(d[2]) < .01);
+      if (kind[n] === "y") return !(Math.abs(d[0]) < .01 && Math.abs(d[2]) < .01);
+      if (kind[n] === "f") return !(Math.abs(d[2]) < .01);
+      if (kind[n] === "h") return !(Math.abs(d[2] - e.zh) < .01);
+      return !!e.offDir || !(Math.abs(d[0]) < .01 && Math.abs(d[1]) < .01 && Math.abs(d[2] - e.dz) < .01);
+    });
+    let err = 0;
+    pos.forEach((p, v) => { const c = toCells(p); err += Math.hypot(c[0] - VP[v][0], c[1] - VP[v][1]); });
+    const nb = bad.filter(Boolean).length, no = kind.filter(k => k === "o").length;
+    const zs = pos.map(p => p[2]), depth = zs.length ? Math.max(...zs) - Math.min(...zs) : 0;
+    // Widersprüche zählen stark; bei Gleichstand gewinnt die Lesart mit kleinerer Gesamttiefe, dann die mit weniger frei schrägen Kanten
+    return { pos, bad, score: nb * 10 + err * 4 + no * 0.05 + depth * 0.1 };
+  }
+  // 3. Mehrdeutige Kanten umdeuten, solange das Modell dadurch widerspruchsärmer wird
+  let kind = opts.map(o => o[0]), best = evaluate(kind);
+  for (let round = 0; round < 4; round++){
+    let improved = false;
+    opts.forEach((o, n) => {
+      if (o.length < 2) return;
+      for (const alt of o){
+        if (alt === kind[n]) continue;
+        const k2 = kind.slice(); k2[n] = alt;
+        const r = evaluate(k2);
+        if (r.score < best.score - 1e-6){ best = r; kind = k2; improved = true; }
+      }
+    });
+    if (!improved) break;
+  }
+  E2.forEach((e, n) => { e.kind = kind[n]; e.bad = best.bad[n]; });
+  return { E2, pos: best.pos, score: best.score };
+}
+// Zusammenhangskomponenten ohne gemeinsame Kante (z. B. ein Aufsatz mitten auf der Deckfläche) haben zueinander keine
+// ablesbare Tiefe. Jede weitere Komponente wird so in die Tiefe geschoben, dass möglichst viele ihrer Ecken auf Flächen
+// der ersten liegen (Kontakt) und sie auf dem Raster sitzt.
+function attachComponents(E2, pos, VP){
+  const n = VP.length, comp = new Array(n).fill(-1);
+  let nc = 0;
+  for (let v0 = 0; v0 < n; v0++){
+    if (comp[v0] >= 0) continue;
+    const queue = [v0]; comp[v0] = nc;
+    while (queue.length){ const u = queue.shift(); for (const e of E2){ const w = e.i === u ? e.j : e.j === u ? e.i : -1; if (w >= 0 && comp[w] < 0){ comp[w] = nc; queue.push(w); } } }
+    nc++;
+  }
+  if (nc < 2) return pos;
+  const size = Array.from({ length: nc }, (_, k) => comp.filter(c => c === k).length);
+  const main = size.indexOf(Math.max(...size));
+  let P = pos.slice();
+  const placed = new Set([main]);
+  const order = [...Array(nc).keys()].filter(k => k !== main).sort((a, b) => size[b] - size[a]);
+  for (const k of order){
+    const base = buildUserModel(E2.filter(e => placed.has(comp[e.i])).map(e => ({ ...e })), P, []);
+    const verts = [...Array(n).keys()].filter(v => comp[v] === k);
+    const zAll = P.filter((_, v) => placed.has(comp[v])).map(p => p[2]), zlo = Math.min(...zAll) - 3, zhi = Math.max(...zAll) + 3;
+    // Rasterversatz der bereits gelegten Teile (die ganze Zeichnung kann etwas neben dem Raster liegen)
+    const pv = [...Array(n).keys()].filter(v => placed.has(comp[v]));
+    const off = pv.reduce((s2, v) => { const c = toCells(P[v]); return [s2[0] + (c[0] - VP[v][0]) / pv.length, s2[1] + (c[1] - VP[v][1]) / pv.length]; }, [0, 0]);
+    let best = null;
+    for (let dz = -12; dz <= 12 + 1e-9; dz += 0.5){
+      const Q = P.slice();
+      let err = 0, contact = 0, inside = 0;
+      for (const v of verts){
+        const z = pos[v][2] + dz;
+        if (z < zlo || z > zhi) { err += 1; }
+        const R = fromScreen([VP[v][0] + off[0], VP[v][1] + off[1]], z).map(r05), c = toCells(R);
+        err += Math.hypot(c[0] - VP[v][0] - off[0], c[1] - VP[v][1] - off[1]);
+        Q[v] = R;
+        if (base.F.some(f => Math.abs(dot(f.n, R) - f.c) < 1e-6 && inFace(f, R, 1e-6))) contact++;
+      }
+      const q2 = contact - err * 2 - Math.abs(dz) * 0.01;
+      if (!best || q2 > best.q) best = { q: q2, Q };
+    }
+    P = best.Q; placed.add(k);
+  }
+  return P;
+}
+// Ecken, die nur an frei schrägen Kanten hängen (z. B. eine Zeltspitze), haben im Schrägbild keine eindeutige Tiefe.
+// Ohne Tiefenlinie wird die Tiefe so gewählt, dass (1) der Körper geschlossen ist, (2) die Ecke auf dem Raster liegt,
+// möglichst auf ganzen Häuschen, und (3) in einer Übung die Ecke mit einer Ecke der Vorlage zusammenfällt.
+function resolveFreeVertices(E2, pos, VP, feet){
+  const adj = VP.map(() => []);
+  E2.forEach((e, n) => { adj[e.i].push(n); adj[e.j].push(n); });
+  const free = VP.map((_, v) => v).filter(v => adj[v].length && adj[v].every(n => E2[n].kind === "o") && !(feet && feet.has(v)));
+  if (!free.length) return { pos, snapped: 0, open: 0 };
+  const closure = P => {
+    const M = buildUserModel(E2.map(e => ({ ...e })), P, []);
+    const cnt = new Map();
+    M.F.forEach(f => faceEdgeKeys(f).forEach(k => cnt.set(k, (cnt.get(k) || 0) + 1)));
+    let bad = 0;
+    M.E.forEach(e => { if ((cnt.get(ekey(e.i, e.j)) || 0) !== 2) bad++; });
+    return bad + (M.closed ? 0 : 0.5);
+  };
+  const T = task && targetModel, tk = T ? new Set(T.V.map(key3)) : null;
+  const shiftFor = P => T ? bestShift(T.V, P.filter((_, v) => !free.includes(v))) : null;
+  let best = pos, snapped = 0, open = 0;
+  const zs = pos.map(p => p[2]), zmin = Math.min(...zs) - 2, zmax = Math.max(...zs) + 2;
+  for (const v of free){
+    const sh = shiftFor(best);
+    let cand = null, plain = null;
+    for (let z = zmin; z <= zmax + 1e-9; z += 0.5){
+      const raw = fromScreen(VP[v], z), Pv = raw.map(r05), P = best.slice(); P[v] = Pv;
+      const c = toCells(Pv), err = Math.hypot(c[0] - VP[v][0], c[1] - VP[v][1]);
+      const halves = Pv.filter(x => Math.abs(x - Math.round(x)) > 1e-9).length;
+      const onTarget = tk && tk.has(key3(add(Pv, sh)));
+      const q0 = closure(P) * 10 + err * 6 + halves * 0.3 + Math.abs(z - zs[v]) * 0.01, q2 = q0 + (onTarget ? -3 : 0);
+      if (!cand || q2 < cand.q - 1e-9) cand = { q: q2, z, P, onTarget };
+      if (!plain || q0 < plain.q - 1e-9) plain = { q: q0, z };
+    }
+    // «snapped»: nur wenn erst die Vorlage den Ausschlag gab, «open»: Tiefe aus der Zeichnung allein geraten
+    if (cand){ best = cand.P; if (cand.onTarget && plain.z !== cand.z) snapped++; else if (!cand.onTarget) open++; }
+  }
+  return { pos: best, snapped, open };
+}
+function buildUserModel(E2, pos, lineSegs){
+  // gleiche 3D-Punkte zusammenlegen
+  const vmap = new Map(), V3 = [], remap = pos.map(p => { const k = key3(p); if (!vmap.has(k)){ vmap.set(k, V3.length); V3.push(p.map(r05)); } return vmap.get(k); });
+  const E3 = E2.map(e => ({ i: remap[e.i], j: remap[e.j], hidden: e.hidden, bad: !!e.bad })).filter(e => e.i !== e.j);
+  const M = finalize(V3, E3);
+  // Flächenlinien: auf die vorderste passende Fläche legen
+  const pv = M.V.map(p => toCells(p));
+  const visE = M.E.filter(e => !e.hidden), visV = new Set(visE.flatMap(e => [e.i, e.j]));
+  const snapPt = p => {
+    let best = null, bd = SNAP;
+    pv.forEach((q, k) => { if (!visV.has(k)) return; const d = Math.hypot(q[0]-p[0], q[1]-p[1]); if (d < bd){ bd = d; best = q; } });
+    if (best) return best.slice();
+    for (const e of visE){
+      const A = pv[e.i], B = pv[e.j];
+      if (distSeg(p, A, B) < 0.25){ const t = Math.max(0, Math.min(1, segParam(p, A, B))); return [A[0] + (B[0]-A[0])*t, A[1] + (B[1]-A[1])*t]; }
+    }
+    return p;
+  };
+  for (const s of lineSegs){
+    const a = snapPt(s.a), b = snapPt(s.b);
+    let best = null;
+    M.F.forEach((f, fi) => {
+      const la = liftToFace(f, a), lb = liftToFace(f, b);
+      if (!la || !lb) return;
+      if (!inFace(f, la.P, 0.12) || !inFace(f, lb.P, 0.12)) return;
+      const depth = la.depth + lb.depth + (faceVisible(f) ? 0 : 1e6);
+      if (!best || depth < best.depth) best = { fi, A: la.P, B: lb.P, depth };
+    });
+    if (best){
+      const f = M.F[best.fi], tidy = p => { const r = p.map(r05); return sub(r, mul(f.n, dot(f.n, r) - f.c)); };
+      const rec = { a: tidy(best.A), b: tidy(best.B), f: best.fi };
+      if (vlen(sub(rec.a, rec.b)) > EPS){ M.L.push(rec); f.lines.push(rec); }
+    } else M.loose.push([a, b]);
+  }
+  return M;
+}
+
+// ---------- Dreitafelprojektion: Risse → 3D-Körper ----------
+// Aufriss (von vorne): x nach rechts, y nach oben · die Rissachsen kreuzen sich im Punkt K
+// Grundriss (von oben) und Seitenriss (von links): Abstand von der Rissachse = Abstand von der Aufrissebene,
+// die Vorderseite des Körpers liegt also im Grundriss unten und im Seitenriss rechts (d = -z)
+const VIEWS = ["A", "G", "S"];
+const VIEWNAME = { A: "Aufriss", G: "Grundriss", S: "Seitenriss" };
+function panelOf(p){ const [u, v] = p; if (u < K[0] && v < K[1]) return "A"; if (u > K[0] && v < K[1]) return "S"; if (u < K[0] && v > K[1]) return "G"; return null; }
+function cellToView(view, p){ const [u, v] = p; return view === "A" ? [u, K[1] - v] : view === "G" ? [u, v - K[1]] : [u - K[0], K[1] - v]; }
+function viewToCell(view, p){ return view === "A" ? [p[0], K[1] - p[1]] : view === "G" ? [p[0], K[1] + p[1]] : [K[0] + p[0], K[1] - p[1]]; }
+function project(view, P){ return view === "A" ? [P[0], P[1]] : view === "G" ? [P[0], -P[2]] : [-P[2], P[1]]; }
+function normalizeSegs(list){
+  // an allen Endpunkten teilen, Doppelte entfernen
+  const pts = [];
+  list.forEach(s => { pts.push(s.a, s.b); });
+  const out = new Map();
+  for (const s of list){
+    const ts = [0, 1];
+    for (const p of pts){ const t = segParam(p, s.a, s.b); if (t > 1e-6 && t < 1 - 1e-6 && distLine(p, s.a, s.b) < 1e-6) ts.push(t); }
+    ts.sort((x, y) => x - y);
+    for (let i = 1; i < ts.length; i++){
+      if (ts[i] - ts[i-1] < 1e-6) continue;
+      const a = [s.a[0] + (s.b[0]-s.a[0])*ts[i-1], s.a[1] + (s.b[1]-s.a[1])*ts[i-1]].map(r05);
+      const b = [s.a[0] + (s.b[0]-s.a[0])*ts[i], s.a[1] + (s.b[1]-s.a[1])*ts[i]].map(r05);
+      const k = [a.join(","), b.join(",")].sort().join("|");
+      if (!out.has(k)) out.set(k, { a, b, hidden: s.hidden });
+      else out.get(k).hidden = out.get(k).hidden && s.hidden;
+    }
+  }
+  return [...out.values()];
+}
+function rissFromStrokes(list){
+  const V = { A: [], G: [], S: [] }, loose = [];
+  for (const s of list){
+    if (s.kind === "line" || s.kind === "depth") continue;
+    const pts = s.pts.map(p => [r05(p[0] / G), r05(p[1] / G)]);
+    for (let i = 1; i < pts.length; i++){
+      const a = pts[i-1], b = pts[i];
+      if (a[0] === b[0] && a[1] === b[1]) continue;
+      const view = panelOf([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
+      if (!view){ loose.push([a, b]); continue; }
+      V[view].push({ a: cellToView(view, a), b: cellToView(view, b), hidden: s.kind === "hidden" });
+    }
+  }
+  VIEWS.forEach(v => { V[v] = normalizeSegs(V[v]); });
+  V.loose = loose;
+  return V;
+}
+function covered(segs, a, b, tol = 1e-6){
+  const d = [b[0]-a[0], b[1]-a[1]], L2 = d[0]*d[0] + d[1]*d[1];
+  if (L2 < 1e-9) return segs.some(s => distSeg(a, s.a, s.b) < tol);
+  const iv = [];
+  for (const s of segs){
+    if (distLine(s.a, a, b) > tol || distLine(s.b, a, b) > tol) continue;
+    let t0 = segParam(s.a, a, b), t1 = segParam(s.b, a, b);
+    if (t0 > t1) [t0, t1] = [t1, t0];
+    iv.push([t0, t1]);
+  }
+  iv.sort((x, y) => x[0] - y[0]);
+  let reach = 0;
+  for (const [t0, t1] of iv){ if (t0 > reach + 1e-6) break; reach = Math.max(reach, t1); if (reach >= 1 - 1e-6) return true; }
+  return reach >= 1 - 1e-6;
+}
+const onDrawing = (segs, p) => segs.some(s => distSeg(p, s.a, s.b) < 1e-6);
+const isVertex = (segs, p) => segs.some(s => (Math.abs(s.a[0]-p[0]) + Math.abs(s.a[1]-p[1]) < 1e-6) || (Math.abs(s.b[0]-p[0]) + Math.abs(s.b[1]-p[1]) < 1e-6));
+function reconstruct(R){
+  const avail = VIEWS.filter(v => R[v].length);
+  if (avail.length < 2) return null;
+  const uniq = arr => [...new Set(arr.map(v => r05(v)))];
+  const xs = uniq([...R.A.flatMap(s => [s.a[0], s.b[0]]), ...R.G.flatMap(s => [s.a[0], s.b[0]])]);
+  const ys = uniq([...R.A.flatMap(s => [s.a[1], s.b[1]]), ...R.S.flatMap(s => [s.a[1], s.b[1]])]);
+  const zs = uniq([...R.G.flatMap(s => [s.a[1], s.b[1]]), ...R.S.flatMap(s => [s.a[0], s.b[0]])]);
+  // 1. Kandidaten-Ecken: Punkt liegt in allen drei Rissen auf der Zeichnung und ist in mindestens einem Riss eine Ecke
+  let V = [];
+  for (const x of xs) for (const y of ys) for (const d of zs){
+    const P = [x, y, -d];
+    if (!avail.every(v => onDrawing(R[v], project(v, P)))) continue;
+    if (!avail.some(v => isVertex(R[v], project(v, P)))) continue;
+    V.push(P);
+  }
+  if (V.length > 400 || (avail.length < 3 && V.length > 40)) return null;      // aus zwei Rissen nur, wenn es überschaubar bleibt
+  // 2. Kandidaten-Kanten: jede Projektion ist ein Punkt oder vollständig gezeichnet
+  let E = [];
+  for (let i = 0; i < V.length; i++) for (let j = i + 1; j < V.length; j++){
+    const P = V[i], Q = V[j];
+    if (avail.every(v => covered(R[v], project(v, P), project(v, Q)))) E.push({ i, j, hidden: false, bad: false });
+  }
+  // 3. Aufräumen: kürzeste Kanten behalten, Ecken mit weniger als drei Richtungen entfernen
+  const prune = () => {
+    const alive = V.map(() => true);
+    for (let guard = 0; guard < 200; guard++){
+      // Kanten mit innenliegender (lebender) Ecke entfernen – die Teilstücke sind selbst Kanten
+      E = E.filter(e => !V.some((P, k) => {
+        if (!alive[k] || k === e.i || k === e.j) return false;
+        const A = V[e.i], B = V[e.j], d = sub(B, A), t = dot(sub(P, A), d) / dot(d, d);
+        return t > 1e-6 && t < 1 - 1e-6 && vlen(sub(add(A, mul(d, t)), P)) < 1e-6;
+      }));
+      const deg = V.map(() => []);
+      E.forEach((e, n) => { deg[e.i].push(n); deg[e.j].push(n); });
+      let changed = false;
+      for (let k = 0; k < V.length && !changed; k++){
+        if (!alive[k]) continue;
+        const es = deg[k];
+        if (es.length >= 3) continue;
+        alive[k] = false; changed = true;
+        if (es.length === 2){
+          const [e1, e2] = es.map(n => E[n]), o1 = e1.i === k ? e1.j : e1.i, o2 = e2.i === k ? e2.j : e2.i;
+          const c = vlen(cross(sub(V[o1], V[k]), sub(V[o2], V[k])));
+          E = E.filter((_, n) => n !== es[0] && n !== es[1]);
+          if (c < 1e-9) E.push({ i: o1, j: o2, hidden: false, bad: false });     // Ecke lag nur mitten auf einer Kante
+        } else E = E.filter((_, n) => !es.includes(n));
+      }
+      if (!changed) break;
+    }
+    const map = new Map(), V2 = [];
+    V.forEach((P, k) => { if (alive[k] && E.some(e => e.i === k || e.j === k)){ map.set(k, V2.length); V2.push(P); } });
+    E = E.filter(e => map.has(e.i) && map.has(e.j)).map(e => ({ ...e, i: map.get(e.i), j: map.get(e.j) }));
+    const seen = new Set(); E = E.filter(e => { const kk = ekey(e.i, e.j); if (seen.has(kk)) return false; seen.add(kk); return true; });
+    V = V2;
+  };
+  prune();
+  // 4. Flächen bilden; Kanten ohne Fläche und Kanten zwischen zwei Teilen derselben Ebene entfernen
+  const solid = (V0, E0) => {
+    V = V0.map(p => p.slice()); E = E0.map(e => ({ ...e }));
+    prune();
+    let M = null;
+    for (let it = 0; it < 6; it++){
+      M = finalize(V.map(p => p.slice()), E.map(e => ({ ...e })));
+      E = M.E.map(e => ({ i: e.i, j: e.j, hidden: false, bad: false })); V = M.V;
+      const faceOf = new Map();
+      M.F.forEach((f, fi) => f.idx.forEach((a, k) => { const kk = ekey(a, f.idx[(k+1) % f.idx.length]); if (!faceOf.has(kk)) faceOf.set(kk, []); faceOf.get(kk).push(fi); }));
+      const keep = E.filter(e => {
+        const fs = faceOf.get(ekey(e.i, e.j)) || [];
+        if (!fs.length) return false;
+        if (fs.length === 2){ const a = M.F[fs[0]], b = M.F[fs[1]]; if (Math.abs(Math.abs(dot(a.n, b.n)) - 1) < 1e-6 && Math.abs(dot(a.n, b.n) > 0 ? a.c - b.c : a.c + b.c) < 1e-6) return false; }
+        return true;
+      });
+      if (keep.length === E.length) break;
+      E = keep; prune();
+    }
+    return M;
+  };
+  // 5. Passt der Körper zu den gezeichneten Rissen (auch die gestrichelten Linien)? Sonst überzählige Ecken entfernen
+  const score = M => {
+    if (!M || !M.V.length) return 1e9;
+    const MV = modelViews(M, [0, 0, 0]);
+    let sc = M.closed ? 0 : 5;
+    for (const v of avail){
+      R[v].forEach(s => { if (!covered(MV[v], s.a, s.b)) sc += 1; else if (!covered(MV[v].filter(w => w.hidden === s.hidden), s.a, s.b)) sc += 0.5; });
+      MV[v].forEach(s => { if (!covered(R[v], s.a, s.b)) sc += 1; });
+    }
+    return sc;
+  };
+  const baseV = V.map(p => p.slice()), baseE = E.map(e => ({ ...e }));
+  if (!baseV.length) return null;
+  let best = solid(baseV, baseE), bestScore = score(best), cur = { V: baseV, E: baseE };
+  for (let round = 0; round < 3 && bestScore > 0; round++){
+    let pick = null;
+    cur.V.forEach((_, k) => {
+      const V1 = cur.V, E1 = cur.E.filter(e => e.i !== k && e.j !== k);
+      const M = solid(V1, E1), sc = score(M);
+      if (sc < bestScore - 1e-6 && (!pick || sc < pick.sc)) pick = { sc, M, E1 };
+    });
+    if (!pick) break;
+    best = pick.M; bestScore = pick.sc; cur = { V: cur.V, E: pick.E1 };
+  }
+  if (best && best.V.length){
+    // Linien, die der Körper nicht erklärt (Hinweis auf Zeichenfehler)
+    const MV = modelViews(best, [0, 0, 0]);
+    best.unexplained = []; best.styleWrong = []; best.notDrawn = []; best.missingViews = VIEWS.filter(v => !R[v].length);
+    for (const v of VIEWS){
+      R[v].forEach(s => {
+        if (!covered(MV[v], s.a, s.b)) best.unexplained.push({ v, ...s });
+        else if (!covered(MV[v].filter(w => w.hidden === s.hidden), s.a, s.b)) best.styleWrong.push({ v, ...s });
+      });
+      MV[v].forEach(s => { if (!covered(R[v], s.a, s.b)) best.notDrawn.push({ v, ...s }); });
+    }
+  }
+  return best;
+}
+function analyseRiss(){
+  if (!K) return null;
+  const R = rissFromStrokes(strokes);
+  lastRiss = R;
+  const M = reconstruct(R);
+  return M;
+}
+let lastRiss = null;
+// Risse eines Modells: sichtbare Linien durchgezogen, verdeckte gestrichelt
+function modelViews(M, sh){
+  const out = { A: [], G: [], S: [] };
+  for (const v of VIEWS){
+    const d = TOVIEW[v](), vis = [], hid = [];
+    for (const s of partSegments(M, d)){
+      const A = project(v, add(s.a, sh)), B = project(v, add(s.b, sh));
+      if (Math.abs(A[0]-B[0]) + Math.abs(A[1]-B[1]) < 1e-6) continue;
+      (s.hidden ? hid : vis).push({ a: A, b: B, hidden: false });
+    }
+    const vn = normalizeSegs(vis), hn = normalizeSegs(hid.map(s => ({ ...s, hidden: true }))).filter(s => !covered(vn, s.a, s.b));
+    out[v] = vn.concat(hn);
+  }
+  return out;
+}
+
+// ---------- Übungen und Startfigur ----------
+function prism(base, d){
+  const n = base.length, V = [], E = [];
+  base.forEach(([x, y]) => V.push([x, y, 0]));
+  base.forEach(([x, y]) => V.push([x, y, d]));
+  for (let i = 0; i < n; i++){ const j = (i + 1) % n; E.push({ i, j }, { i: n + i, j: n + j }, { i, j: n + i }); }
+  return { V, E };
+}
+function pyramid(a, h){
+  return { V: [[0,0,0],[a,0,0],[a,0,a],[0,0,a],[a/2,h,a/2]], E: [[0,1],[1,2],[2,3],[3,0],[0,4],[1,4],[2,4],[3,4]].map(([i, j]) => ({ i, j })) };
+}
+function fromSegments(list){
+  const V = [], map = new Map(), E = [];
+  const vi = p => { const k = key3(p); if (!map.has(k)){ map.set(k, V.length); V.push(p.slice()); } return map.get(k); };
+  list.forEach(([a, b]) => E.push({ i: vi(a), j: vi(b) }));
+  return { V, E };
+}
+function polyline(pts, closed){ const out = []; for (let i = 1; i < pts.length; i++) out.push([pts[i-1], pts[i]]); if (closed) out.push([pts[pts.length-1], pts[0]]); return out; }
+// Haus (Satteldach) mit angebauter Flachdach-Garage
+function houseGarage(){
+  return fromSegments([
+    ...polyline([[0,0,0],[12,0,0],[12,3,0],[8,3,0],[8,4,0],[4,6,0],[0,4,0]], true),
+    ...polyline([[0,0,8],[8,0,8],[8,4,8],[4,6,8],[0,4,8]], true),
+    [[0,0,0],[0,0,8]], [[0,4,0],[0,4,8]], [[4,6,0],[4,6,8]], [[8,4,0],[8,4,8]], [[8,0,5],[8,0,8]],
+    [[12,0,0],[12,0,5]], [[12,3,0],[12,3,5]], [[8,3,0],[8,3,5]],
+    ...polyline([[8,0,5],[12,0,5],[12,3,5],[8,3,5]], true)
+  ]);
+}
+function houseGarageLines(){
+  const roof = (s, z) => [8 - 4*s, 4 + 2*s, z];
+  return [
+    ...polyline([[1.5,0,0],[1.5,2.5,0],[3,2.5,0],[3,0,0]]),
+    ...polyline([[8.5,0,0],[8.5,2.5,0],[11.5,2.5,0],[11.5,0,0]]),
+    ...polyline([[3.5,4.5,0],[4.5,4.5,0],[4.5,5.5,0],[3.5,5.5,0]], true),
+    ...polyline([roof(0.25,2.5), roof(0.75,2.5), roof(0.75,5), roof(0.25,5)], true)
+  ].map(([a, b]) => ({ a, b }));
+}
+// Werkstück (Vorlage: Raphael Arnold Kohler): Quader mit Stufe hinten, Aufbau oben rechts und zeltförmiger Aussparung
+// vorne unten, die sich zur Vorderfläche und zum Boden öffnet. 23 Ecken, 37 Kanten, 16 Flächen
+function werkstueck(){
+  return fromSegments([
+    [[0,  0,  0],  [5,  3,  4]],
+    [[0,  0,  0],  [6,  0,  2]],
+    [[0,  0,  0],  [4,  2,  0]],
+    [[5,  0,  5],  [5,  0,  6]],
+    [[5,  4,  5],  [5,  4,  6]],
+    [[5,  3,  4],  [6,  0,  2]],
+    [[5,  3,  4],  [12,  0,  0]],
+    [[5,  3,  4],  [4,  2,  0]],
+    [[12,  0,  0],  [4,  2,  0]],
+    [[12,  4,  5],  [12,  4,  6]],
+    [[12,  4,  5],  [12,  6,  5]],
+    [[12,  4,  5],  [9,  4,  5]],
+    [[12,  4,  1],  [12,  4,  0]],
+    [[12,  4,  1],  [12,  6,  1]],
+    [[12,  4,  1],  [9,  4,  1]],
+    [[12,  6,  5],  [9,  6,  5]],
+    [[12,  6,  1],  [9,  6,  1]],
+    [[9,  4,  5],  [9,  6,  5]],
+    [[9,  4,  1],  [9,  6,  1]],
+    [[0,  4,  0],  [0,  4,  5]],
+    [[0,  0,  5],  [0,  4,  5]],
+    [[12,  6,  1],  [12,  6,  5]],
+    [[12,  0,  6],  [12,  4,  6]],
+    [[12,  4,  6],  [5,  4,  6]],
+    [[9,  4,  1],  [9,  4,  5]],
+    [[9,  6,  1],  [9,  6,  5]],
+    [[0,  0,  5],  [5,  0,  5]],
+    [[0,  4,  5],  [5,  4,  5]],
+    [[0,  0,  0],  [0,  0,  5]],
+    [[0,  0,  0],  [0,  4,  0]],
+    [[5,  4,  5],  [5,  0,  5]],
+    [[5,  4,  6],  [5,  0,  6]],
+    [[5,  0,  6],  [12,  0,  6]],
+    [[12,  0,  6],  [12,  0,  0]],
+    [[12,  0,  0],  [12,  4,  0]],
+    [[6,  0,  2],  [12,  0,  0]],
+    [[0,  4,  0],  [12,  4,  0]]
+  ]);
+}
+function werkstueckLines(){ return []; }
+const TASKS = [
+  { id: "frei", name: "Freies Zeichnen" },
+  { id: "quader", name: "1 · Quader", a: 45, q: 0.5, ziel: "Tiefenkanten unter α zeichnen und mit q verkürzen; verdeckte Kanten strichen.",
+    text: "Zeichne einen <b>Quader</b> mit Breite 5, Höhe 3 und Tiefe 4.",
+    build: () => prism([[0,0],[5,0],[5,3],[0,3]], 4) },
+  { id: "keil", name: "2 · Dreiecksprisma", a: 60, q: 0.5, ziel: "Eine schräge Kante in der Vorderfläche von einer Tiefenkante unterscheiden.",
+    text: "Zeichne ein <b>Dreiecksprisma</b>: rechtwinkliges Dreieck mit Katheten 4 (waagrecht) und 3 (senkrecht), Tiefe 3. Liest die Seite die schräge Kante der Vorderfläche als Tiefenkante, zeichne sie mit der Einstellung <b>Front</b>.",
+    build: () => prism([[0,0],[4,0],[0,3]], 3) },
+  { id: "haus", name: "3 · Hausprisma", a: 30, q: 0.5, ziel: "Ein Prisma mit fünfeckiger Grundfläche; anderer Winkel α.",
+    text: "Zeichne ein <b>Hausprisma</b>: Vorderfläche 4 breit, Wand 3 hoch, Giebelspitze 5 hoch in der Mitte, Tiefe 6.",
+    build: () => prism([[0,0],[4,0],[4,3],[2,5],[0,3]], 6) },
+  { id: "lprisma", name: "4 · L-Prisma", a: 45, q: 1, ziel: "Unverkürzte Tiefe (q = 1); einspringende Ecke und verdeckte Kanten.",
+    text: "Zeichne ein <b>L-Prisma</b>: unten 6 breit und 2 hoch, links ein Aufbau 3 breit bis Höhe 4, Tiefe 3.",
+    build: () => prism([[0,0],[6,0],[6,2],[3,2],[3,4],[0,4]], 3) },
+  { id: "pyramide", name: "5 · Quadratische Pyramide", a: 45, q: 0.7071, ziel: "Die Spitze über der Mitte der Grundfläche finden; schräge Raumkanten.",
+    text: "Zeichne eine <b>quadratische Pyramide</b> mit Grundkante 4 und Höhe 5. Die Spitze liegt über der Mitte der Grundfläche. Mit q = ½√2 geht jede Tiefeneinheit genau ½ Häuschen nach rechts und ½ nach oben.",
+    build: () => pyramid(4, 5) },
+  { id: "wuerfel", name: "6 · Würfel mit abgeschnittener Ecke", a: 45, q: 0.5, ziel: "Schnittfläche durch Kantenmitten; drei schräge Kanten, davon eine in der Vorderfläche.",
+    text: "Zeichne einen <b>Würfel</b> mit Kantenlänge 4, bei dem die Ecke vorne rechts oben abgeschnitten ist: Der Schnitt geht durch die Mitten der drei Kanten an dieser Ecke.",
+    build: () => fromSegments([
+      ...polyline([[0,0,0],[4,0,0],[4,2,0],[2,4,0],[0,4,0]], true), ...polyline([[0,0,4],[4,0,4],[4,4,4],[0,4,4]], true),
+      [[0,0,0],[0,0,4]], [[4,0,0],[4,0,4]], [[0,4,0],[0,4,4]], [[4,4,2],[4,4,4]],
+      [[4,2,0],[4,4,2]], [[2,4,0],[4,4,2]]
+    ]) },
+  { id: "hausgarage", name: "7 · Haus mit Garage", a: 45, q: 0.5, ziel: "Zusammengesetzter Körper; Kanten, die nur zum Teil verdeckt sind.",
+    text: "Zeichne das <b>Haus mit Garage</b>: Haus 8 breit, 8 tief, Wände 4 hoch, First 6 hoch in der Mitte. Rechts angebaut eine Garage, 4 breit, 3 hoch, 5 tief, vorne bündig. Achte auf die Kante hinten rechts am Haus: Sie ist unten von der Garage verdeckt und oben sichtbar.",
+    build: houseGarage },
+  { id: "werkstueck", name: "8 · Werkstück", a: 45, q: 0.5, ziel: "Körper, der sich nicht aus Grundkörpern zusammensetzt; Tiefe eines Raumpunkts mit einer Tiefenlinie festlegen.",
+    text: "Zeichne das <b>Werkstück</b>: Quader 12 breit, 4 hoch, 5 tief; rechts, ab 5 von links, reicht er hinten 1 weiter (Tiefe 6). Oben rechts ein Aufbau 3 breit, 2 hoch, 4 tief, 1 hinter der Vorderkante. Vorne unten eine zeltförmige Aussparung: Sie öffnet sich als Dreieck in der Vorderfläche (Spitze 4 von links, 2 hoch) und als Dreieck im Boden (Spitze 6 von links, 2 tief); die Zeltspitze liegt 5 von links, 3 hoch und 4 tief. Die Tiefe der Zeltspitze ist im Schrägbild nicht ablesbar: Zeichne mit dem Stift <b>Tiefenlinie</b> vom Fusspunkt in der Vorderfläche (5 von links, 3 hoch) die Tiefenlinie zur Spitze.",
+    build: werkstueck, lines: werkstueckLines() },
+  { id: "satteldach", name: "9 · Haus mit 45°-Dach", a: 45, q: 0.5, ziel: "Dachschrägen unter 45° sehen im Schrägbild mit α = 45° aus wie Tiefenkanten: Einstellung Front nötig.",
+    text: "Zeichne ein <b>Haus</b>: Vorderfläche 6 breit, Wände 3 hoch, First 6 hoch in der Mitte (Dachschrägen unter 45°), Tiefe 5. Die rechte Dachschräge verläuft im Bild genau wie eine Tiefenkante: Zeichne beide Dachschrägen mit der Einstellung <b>Front</b>.",
+    build: () => prism([[0,0],[6,0],[6,3],[3,6],[0,3]], 5) }
+];
+// Platonische Körper: Kanten verbinden die Ecken mit dem kleinsten Abstand
+function solidFrom(V){
+  let dmin = Infinity;
+  for (let i = 0; i < V.length; i++) for (let j = i + 1; j < V.length; j++) dmin = Math.min(dmin, vlen(sub(V[i], V[j])));
+  const E = [];
+  for (let i = 0; i < V.length; i++) for (let j = i + 1; j < V.length; j++) if (vlen(sub(V[i], V[j])) < dmin * 1.001) E.push({ i, j });
+  const mn = bmin(V);
+  return { V: V.map(p => sub(p, mn)), E };
+}
+const PHI = (1 + Math.sqrt(5)) / 2;
+const signs = n => Array.from({ length: 1 << n }, (_, k) => Array.from({ length: n }, (_, b) => (k >> b) & 1 ? -1 : 1));
+function tetraeder(){ return solidFrom([[0,0,0],[4,4,0],[4,0,4],[0,4,4]]); }
+function wuerfel(){ return solidFrom(signs(3).map(s => s.map(v => 2 * v))); }
+function oktaeder(){ return solidFrom([[3,0,0],[-3,0,0],[0,3,0],[0,-3,0],[0,0,3],[0,0,-3]]); }
+function dodekaeder(){
+  const a = 2.4, V = signs(3).map(s => s.map(v => v * a));
+  signs(2).forEach(([u, w]) => { V.push([0, u * a / PHI, w * a * PHI], [u * a / PHI, w * a * PHI, 0], [u * a * PHI, 0, w * a / PHI]); });
+  return solidFrom(V);
+}
+function ikosaeder(){
+  const a = 2, V = [];
+  signs(2).forEach(([u, w]) => { V.push([0, u * a, w * a * PHI], [u * a, w * a * PHI, 0], [u * a * PHI, 0, w * a]); });
+  return solidFrom(V);
+}
+const EXAMPLES = [
+  { id: "werkstueck", name: "Werkstück", build: werkstueck },
+  { id: "tetraeder", name: "Tetraeder (4 Dreiecke)", build: tetraeder },
+  { id: "wuerfel", name: "Würfel / Hexaeder (6 Quadrate)", build: wuerfel },
+  { id: "oktaeder", name: "Oktaeder (8 Dreiecke)", build: oktaeder },
+  { id: "dodekaeder", name: "Dodekaeder (12 Fünfecke)", build: dodekaeder },
+  { id: "ikosaeder", name: "Ikosaeder (20 Dreiecke)", build: ikosaeder }
+];
+const EXAMPLE = EXAMPLES[0];
+// Exakte Körper zu unveränderten Beispiel-Zeichnungen (Ecken des Dodekaeders und Ikosaeders liegen nicht auf dem Raster)
+const exactFor = new WeakMap();
+let lastExampleName = null;
+const exampleName = () => exactFor.get(strokes) ? lastExampleName : null;
+function translateModel(M, d){
+  return asDrawn(buildTarget({ build: () => ({ V: M.V.map(p => add(p, d)), E: M.E.map(e => ({ i: e.i, j: e.j })) }), lines: (M.L || []).map(l => ({ a: add(l.a, d), b: add(l.b, d) })) }));
+}
+function asDrawn(M){ M.E.forEach(e => { e.hidden = e.hiddenCalc; }); return M; }
+function buildTarget(t){
+  const { V, E } = t.build();
+  const M = finalize(V.map(p => p.slice()), E.map(e => ({ ...e, hidden: false, bad: false })));
+  attach3DLines(M, t.lines || []);
+  computeHidden(M);
+  return M;
+}
+
+// ---------- Platzieren ----------
+function visibleCenter(){ return [pan[0] + DW / zoom / 2, pan[1] + DH / zoom / 2]; }
+function centeredShift(M){
+  // Körper in die Mitte des sichtbaren Blatts legen (Lage auf dem Blatt = Ziel - shift)
+  const vc = visibleCenter();
+  let sh = [0, 0, 0];
+  for (let it = 0; it < 3; it++){
+    const px = M.V.map(p => toPx(sub(p, sh)));
+    const cx = (Math.min(...px.map(p => p[0])) + Math.max(...px.map(p => p[0]))) / 2;
+    const cy = (Math.min(...px.map(p => p[1])) + Math.max(...px.map(p => p[1]))) / 2;
+    sh = [sh[0] + Math.round((cx - vc[0]) / G), sh[1] + Math.round((vc[1] - cy) / G), 0];
+  }
+  return sh;
+}
+function rissOrigin(R){
+  // kleinste x-, y- und z-Werte der eigenen Risse (für die Ausrichtung der Lösung)
+  if (!R) return null;
+  const xs = [...R.A, ...R.G].flatMap(s => [s.a[0], s.b[0]]), ys = [...R.A, ...R.S].flatMap(s => [s.a[1], s.b[1]]);
+  const zs = [...R.G.map(s => [s.a[1], s.b[1]]), ...R.S.map(s => [s.a[0], s.b[0]])].flat();
+  if (!xs.length || !ys.length || !zs.length) return null;
+  return [Math.min(...xs), Math.min(...ys), -Math.max(...zs)];
+}
+function rissShift(M){
+  // Verschiebung, die das Modell in die Rissfelder legt (Modell + shift = Rissposition)
+  if (!K) initK();
+  const o = rissOrigin(lastRiss);
+  const mn = bmin(M.V), size = sub(bmax(M.V), mn);
+  const target = o || [K[0] - 2 - size[0], 1, -1 - size[2]];
+  return sub(target, mn);
+}
+
+// Verschiebung, bei der möglichst viele eigene Ecken auf Ecken der Vorlage fallen
+function bestShift(TV, UV){
+  const tk = new Set(TV.map(key3));
+  const count = sh => UV.reduce((n, u) => n + (tk.has(key3(add(u, sh))) ? 1 : 0), 0);
+  let best = sub(bmin(TV), bmin(UV)), bc = count(best);
+  const seen = new Set();
+  for (const t of TV) for (const u of UV){
+    const sh = sub(t, u), k = key3(sh);
+    if (seen.has(k)) continue; seen.add(k);
+    const c = count(sh);
+    if (c > bc){ bc = c; best = sh; }
+  }
+  return best;
+}
+// ---------- Prüfen ----------
+function check(){
+  if (!task || !targetModel) return;
+  return inputMode === "riss" ? checkRiss() : checkSchraeg();
+}
+// Rohe Striche als Strecken in Häuschen mit Strichart (für die Prüfung von sichtbar/verdeckt)
+function rawSegments(){
+  const out = [];
+  for (const s of strokes){
+    if (s.kind === "line" || s.kind === "depth") continue;
+    const poly = rdp(s.pts.map(p => [p[0] / G, p[1] / G]), 0.35);
+    for (let i = 1; i < poly.length; i++) out.push({ a: poly[i-1], b: poly[i], hidden: s.kind === "hidden" });
+  }
+  return out;
+}
+// Lage einer Ecke in Worten, bezogen auf den umgebenden Quader des Körpers
+function cornerWords(P, M){
+  const mn = bmin(M.V), mx = bmax(M.V), w = [];
+  const pick = (k, lo, hi) => { const s = mx[k] - mn[k]; if (s < 1e-6) return; if (P[k] - mn[k] < s * 0.34) w.push(lo); else if (mx[k] - P[k] < s * 0.34) w.push(hi); };
+  pick(0, "links", "rechts"); pick(1, "unten", "oben"); pick(2, "vorne", "hinten");
+  return w.length ? w.join(" ") : "in der Mitte";
+}
+const AXISWORD = { x: "waagrechte Kante", y: "senkrechte Kante", z: "Tiefenkante", f: "schräge Kante in der Vorderebene", o: "schräge Raumkante" };
+function checkSchraeg(){
+  const U = userModel, T = targetModel, R = $("result");
+  if (!U || !U.V.length){ R.className = "bad"; R.textContent = "Zeichne zuerst den Körper."; return; }
+  computeHidden(T);
+  const sh = bestShift(T.V, U.V);
+  // Vergleich auf dem Blatt: Zielkanten müssen von eigenen Kanten überdeckt sein und umgekehrt (auch stückweise gezeichnete Kanten gelten)
+  const tSegs = T.E.map(e => ({ a: toCells(sub(T.V[e.i], sh)), b: toCells(sub(T.V[e.j], sh)) }));
+  const uSegs = U.E.map(e => ({ a: toCells(U.V[e.i]), b: toCells(U.V[e.j]) }));
+  const missing = T.E.filter((e, n) => !covered(uSegs, tSegs[n].a, tSegs[n].b, 1e-3));
+  const extra = U.E.filter((e, n) => !covered(tSegs, uSegs[n].a, uSegs[n].b, 1e-3));
+  // Strichart: jedes sichtbare oder verdeckte Teilstück einer Zielkante muss mit der passenden Strichart gezeichnet sein
+  const raw = rawSegments(), styleWrong = [];
+  T.E.forEach((e, n) => {
+    if (missing.includes(e)) return;
+    const A = T.V[e.i], B = T.V[e.j];
+    for (const p of e.parts){
+      const a = toCells(sub(add(A, mul(sub(B, A), p.t0)), sh)), b = toCells(sub(add(A, mul(sub(B, A), p.t1)), sh));
+      let ok = 0;
+      for (let k = 1; k <= 5; k++){ const t = k / 6, q2 = [a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t]; if (raw.some(s => s.hidden === p.hidden && distSeg(q2, s.a, s.b) < 0.35)) ok++; }
+      if (ok < 4) styleWrong.push({ a, b, hidden: p.hidden, e });
+    }
+  });
+  const dashWrong = new Set(styleWrong.map(s => s.e)).size;
+  const tL = new Set(T.L.map(l => pkey(l.a, l.b))), uL = new Set(U.L.map(l => pkey(add(l.a, sh), add(l.b, sh))));
+  const lMiss = [...tL].filter(k => !uL.has(k)).length, lExtra = [...uL].filter(k => !tL.has(k)).length + U.loose.length;
+  const conflicts = U.E.filter(e => e.bad).length;
+  checkRes = { sh, missing: missing.map(e => tSegs[T.E.indexOf(e)]), extra: extra.map(e => uSegs[U.E.indexOf(e)]), style: styleWrong };
+  const items = [];
+  const su = sub(bmax(U.V), bmin(U.V)), st = sub(bmax(T.V), bmin(T.V)), names = ["Breite", "Höhe", "Tiefe"];
+  for (let k = 0; k < 3; k++) if (Math.abs(su[k] - st[k]) > 0.01){
+    let s = `${names[k]}: gezeichnet ${fmt(su[k])}, verlangt ${fmt(st[k])}.`;
+    if (k === 2) s += ` Tiefenkanten zeichnest du unter ${alphaDeg}° und verkürzt mit q = ${qLabel()}: ${fmt(st[2])} · ${qLabel()} = ${fmt(st[2] * q)} Häuschen schräg.`;
+    items.push(s);
+  }
+  if (conflicts) items.push(`${conflicts} Kante(n) passen nicht zusammen (rot auf dem Blatt).`);
+  if (missing.length){
+    const e = missing[0], from = cornerWords(T.V[e.i], T), to = cornerWords(T.V[e.j], T);
+    items.push(`${missing.length} Kante(n) fehlen (rot gestrichelt), z. B. die ${AXISWORD[e.axis]} von der Ecke ${from} zur Ecke ${to}.`);
+  }
+  if (extra.length) items.push(`${extra.length} Kante(n) sind zu viel oder liegen falsch (orange).`);
+  if (T.E.some(e => e.axis === "f") && extra.some(e => e.axis !== "f"))
+    items.push("Tipp: Liest die Seite eine schräge Kante der Vorderfläche als Tiefenkante, zeichne sie mit der Einstellung <b>Front</b>.");
+  if (lMiss || lExtra) items.push(`Flächenlinien: ${lMiss} fehlen, ${lExtra} stimmen nicht.`);
+  const notes = [];
+  if (dashWrong) notes.push(`Bei ${dashWrong} Kante(n) stimmt «verdeckt» oder «sichtbar» nicht (violett). Verdeckte Kanten oder Kantenstücke werden gestrichelt.`);
+  if (U.freeSnapped) notes.push(`Die Tiefe von ${U.freeSnapped} Ecke(n) im Raum ist aus dem Schrägbild allein nicht ablesbar; sie wurde aus der Vorlage übernommen. Lege sie selbst fest: mit dem Stift «Tiefenlinie» vom Fusspunkt in der Vorderfläche unter α zur Ecke.`);
+  report(items, `Richtig! Alle ${T.E.length} Kanten${T.L.length ? " und Flächenlinien" : ""} stimmen.`, notes.join(" "));
+}
+function checkRiss(){
+  const R = $("result"), U = lastRiss;
+  if (!U || !VIEWS.some(v => U[v].length)){ R.className = "bad"; R.textContent = "Zeichne zuerst die drei Risse."; return; }
+  const sh = rissShift(targetModel), TV = modelViews(targetModel, sh);
+  const items = [], miss = [], extra = [];
+  let dashWrong = 0;
+  for (const v of VIEWS){
+    const t = TV[v], u = U[v];
+    const m = t.filter(s => !covered(u, s.a, s.b)), x = u.filter(s => !covered(t, s.a, s.b));
+    m.forEach(s => miss.push({ v, ...s })); x.forEach(s => extra.push({ v, ...s }));
+    dashWrong += t.filter(s => covered(u, s.a, s.b) && !covered(u.filter(w => w.hidden === s.hidden), s.a, s.b)).length;
+    if (!u.length) items.push(`${VIEWNAME[v]}: noch leer.`);
+    else if (m.length || x.length) items.push(`${VIEWNAME[v]}: ${m.length} Linie(n) fehlen, ${x.length} zu viel oder falsch.`);
+  }
+  if (U.loose.length) items.push(`${U.loose.length} Linie(n) liegen im leeren Feld unten rechts.`);
+  checkRes = { riss: true, miss, extra };
+  report(items, "Richtig! Alle drei Risse stimmen.",
+    dashWrong ? `Bei ${dashWrong} Linie(n) stimmt «verdeckt» oder «sichtbar» nicht.` : "");
+}
+function report(items, okText, note){
+  const R = $("result");
+  if (!items.length){ lern.richtig = true; R.className = "ok"; R.innerHTML = okText + (lern.tipp ? ` (mit Tipp ${lern.tipp})` : "") + (note ? `<ul><li>Fast perfekt: ${note}</li></ul>` : ""); }
+  else { R.className = "bad"; R.innerHTML = "Noch nicht ganz:<ul>" + items.map(s => `<li>${s}</li>`).join("") + "</ul>"; }
+  drawPaper();
+}
+
+// ── KERN:ENDE
+// ---------- Zeichenblatt ----------
+function sizeCanvas(cv, ctx){
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return [r.width, r.height];
+}
+const COL = { x: "#2563c9", y: "#1b8a4b", z: "#d9822b", f: "#0f8b8d", o: "#7b4bb7", mark: "#c62828", miss: "#c62828", extra: "#e8890c", sol: "rgba(0,145,168,.7)", tip: "rgba(0,145,168,.45)" };
+function line(c, a, b){ c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); }
+function drawGrid(c, x0, y0, x1, y1, lw){
+  c.strokeStyle = "#ccd8e6"; c.lineWidth = lw; c.beginPath();
+  for (let x = Math.floor(x0 / G) * G; x < x1; x += G){ c.moveTo(x, y0); c.lineTo(x, y1); }
+  for (let y = Math.floor(y0 / G) * G; y < y1; y += G){ c.moveTo(x0, y); c.lineTo(x1, y); }
+  c.stroke();
+}
+function drawRissFrame(c, x0, y0, x1, y1, s){
+  // Rissachsen, 45°-Hilfslinie und Beschriftung (s: Massstab für Linienbreiten)
+  const kx = K[0] * G, ky = K[1] * G;
+  c.strokeStyle = "#5b6679"; c.lineWidth = 1.6 * s;
+  line(c, [x0, ky], [x1, ky]); line(c, [kx, y0], [kx, y1]);
+  c.setLineDash([6 * s, 5 * s]); c.strokeStyle = "rgba(91,102,121,.7)"; c.lineWidth = 1.2 * s;
+  const L = Math.max(x1 - kx, y1 - ky);
+  line(c, [kx, ky], [kx + L, ky + L]); c.setLineDash([]);
+  c.fillStyle = "#5b6679"; c.font = `600 ${13 * s}px ${FONT()}`;
+  c.textAlign = "right"; c.fillText("Aufriss · von vorne", kx - 8 * s, ky - 8 * s);
+  c.fillText("Grundriss · von oben", kx - 8 * s, ky + 20 * s);
+  c.textAlign = "left"; c.fillText("Seitenriss · von links", kx + 8 * s, ky - 8 * s);
+}
+function rissStroke(c, a, b, hidden, color, w){
+  c.strokeStyle = color; c.lineWidth = w; c.setLineDash(hidden ? [7, 6] : []); line(c, a, b); c.setLineDash([]);
+}
+function drawPaper(){
+  const c = dctx, dpr = window.devicePixelRatio || 1;
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, DW, DH);
+  c.fillStyle = "#fcfcfa"; c.fillRect(0, 0, DW, DH);
+  c.save(); c.scale(zoom, zoom); c.translate(-pan[0], -pan[1]);
+  const x0 = pan[0], y0 = pan[1], x1 = pan[0] + DW / zoom, y1 = pan[1] + DH / zoom;
+  drawGrid(c, x0, y0, x1, y1, 1 / zoom);
+  if (inputMode === "schraeg" && depthGrid) drawDepthGrid(c, x0, y0, x1, y1, 1 / zoom);
+  if (inputMode === "riss" && K) drawRissFrame(c, x0, y0, x1, y1, 1 / zoom);
+  c.lineCap = "round"; c.lineJoin = "round";
+  // Ordnungslinien der Risse
+  if (inputMode === "riss" && showRec && lastRiss){
+    c.strokeStyle = "rgba(47,79,143,.22)"; c.lineWidth = 1 / zoom; c.setLineDash([2 / zoom, 4 / zoom]);
+    const kx = K[0] * G, ky = K[1] * G, pts = new Set();
+    VIEWS.forEach(v => lastRiss[v].forEach(s => [s.a, s.b].forEach(p => pts.add(v + ":" + p.join(",")))));
+    for (const k of pts){
+      const [v, xy] = k.split(":"), p = xy.split(",").map(Number), cell = viewToCell(v, p), u = cell[0] * G, w = cell[1] * G;
+      if (v === "A"){ line(c, [u, y0], [u, y1]); line(c, [x0, w], [x1, w]); }
+      if (v === "G"){ line(c, [u, ky], [u, y0]); line(c, [x0, w], [kx + (w - ky), w]); line(c, [kx + (w - ky), w], [kx + (w - ky), y0]); }
+      if (v === "S"){ line(c, [x0, w], [x1, w]); line(c, [u, w], [u, ky + (u - kx)]); line(c, [u, ky + (u - kx)], [x0, ky + (u - kx)]); }
+    }
+    c.setLineDash([]);
+  }
+  const all = current ? strokes.concat([current]) : strokes;
+  const recOn = showRec && inputMode === "schraeg" && userModel;
+  for (const s of all){
+    c.strokeStyle = s.kind === "line" ? COL.mark : s.kind === "depth" ? COL.z : "#1b1b1b";
+    c.globalAlpha = recOn && s !== current ? (s.kind === "depth" ? 0.8 : 0.28) : 1;
+    c.lineWidth = s.kind === "depth" ? 1.6 : 2.2; c.setLineDash(s.kind === "hidden" ? [7, 6] : s.kind === "depth" ? [2, 4] : []);
+    c.beginPath(); s.pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.stroke();
+  }
+  c.globalAlpha = 1; c.setLineDash([]);
+  if (recOn){
+    const M = userModel;
+    for (const e of M.E){
+      c.strokeStyle = e.bad ? COL.mark : COL[e.axis]; c.lineWidth = e.bad ? 4 : 2.6;
+      c.setLineDash(e.hidden ? [7, 6] : []);
+      line(c, toPx(M.V[e.i]), toPx(M.V[e.j]));
+    }
+    c.setLineDash([]);
+    c.strokeStyle = COL.mark; c.lineWidth = 2.6;
+    for (const L of M.L) line(c, toPx(L.a), toPx(L.b));
+    c.strokeStyle = "#8a94a0"; c.setLineDash([3, 4]);
+    for (const [a, b] of M.loose) line(c, [a[0]*G, a[1]*G], [b[0]*G, b[1]*G]);
+    c.setLineDash([]); c.fillStyle = "#1e2b45";
+    for (const p of M.V){ const s = toPx(p); c.beginPath(); c.arc(s[0], s[1], 3.2, 0, 7); c.fill(); }
+  }
+  if (inputMode === "riss" && showRec && lastRiss){
+    c.fillStyle = "#1e2b45";
+    VIEWS.forEach(v => lastRiss[v].forEach(s => [s.a, s.b].forEach(p => { const q = viewToCell(v, p); c.beginPath(); c.arc(q[0]*G, q[1]*G, 2.8, 0, 7); c.fill(); })));
+    c.strokeStyle = "#8a94a0"; c.setLineDash([3, 4]); c.lineWidth = 2;
+    lastRiss.loose.forEach(([a, b]) => line(c, [a[0]*G, a[1]*G], [b[0]*G, b[1]*G])); c.setLineDash([]);
+    const px = (v, p) => viewToCell(v, p).map(t => t * G);
+    if (userModel && !task){
+      c.globalAlpha = .75;
+      (userModel.unexplained || []).forEach(s => rissStroke(c, px(s.v, s.a), px(s.v, s.b), false, COL.extra, 5));
+      (userModel.styleWrong || []).forEach(s => rissStroke(c, px(s.v, s.a), px(s.v, s.b), false, COL.o, 4));
+      c.globalAlpha = 1;
+    }
+    // Vorschlag für einen noch leeren Riss (aus den beiden gezeichneten rekonstruiert)
+    if (userModel && (userModel.missingViews || []).length && !(task && showSolution)){
+      const mv = new Set(userModel.missingViews);
+      c.globalAlpha = .55;
+      (userModel.notDrawn || []).filter(s => mv.has(s.v)).forEach(s => rissStroke(c, px(s.v, s.a), px(s.v, s.b), s.hidden, COL.tip, 2.5));
+      c.globalAlpha = 1;
+    }
+  }
+  // Lösung
+  if (task && showSolution && targetModel){
+    if (inputMode === "riss"){
+      const TV = modelViews(targetModel, rissShift(targetModel));
+      VIEWS.forEach(v => TV[v].forEach(s => rissStroke(c, viewToCell(v, s.a).map(t => t * G), viewToCell(v, s.b).map(t => t * G), s.hidden, COL.sol, 3)));
+    } else {
+      const T = targetModel, sh = userModel && userModel.V.length ? bestShift(T.V, userModel.V) : centeredShift(T);
+      computeHidden(T);
+      c.strokeStyle = COL.sol; c.lineWidth = 3;
+      for (const e of T.E){
+        const A = T.V[e.i], B = T.V[e.j];
+        for (const p of e.parts){ c.setLineDash(p.hidden ? [7, 6] : []); line(c, toPx(sub(add(A, mul(sub(B, A), p.t0)), sh)), toPx(sub(add(A, mul(sub(B, A), p.t1)), sh))); }
+      }
+      c.setLineDash([]); c.strokeStyle = "rgba(198,40,40,.6)";
+      for (const L of T.L) line(c, toPx(sub(L.a, sh)), toPx(sub(L.b, sh)));
+    }
+  }
+  // Tipp: Teil der Lösung
+  if (task && tipLevel && targetModel && !showSolution) drawTip(c);
+  // Prüfergebnis
+  if (task && checkRes){
+    const cpx = p => [p[0] * G, p[1] * G];
+    if (checkRes.riss){
+      checkRes.miss.forEach(s => { c.setLineDash([5, 5]); rissStroke(c, viewToCell(s.v, s.a).map(t => t * G), viewToCell(s.v, s.b).map(t => t * G), false, COL.miss, 3); });
+      c.setLineDash([]); c.globalAlpha = .8;
+      checkRes.extra.forEach(s => rissStroke(c, viewToCell(s.v, s.a).map(t => t * G), viewToCell(s.v, s.b).map(t => t * G), false, COL.extra, 5));
+      c.globalAlpha = 1;
+    } else if (userModel){
+      c.strokeStyle = COL.miss; c.lineWidth = 3; c.setLineDash([5, 5]);
+      for (const s of checkRes.missing) line(c, cpx(s.a), cpx(s.b));
+      c.setLineDash([]); c.strokeStyle = COL.extra; c.lineWidth = 5; c.globalAlpha = .8;
+      for (const s of checkRes.extra) line(c, cpx(s.a), cpx(s.b));
+      c.strokeStyle = COL.o; c.lineWidth = 4;
+      for (const s of (checkRes.style || [])) line(c, cpx(s.a), cpx(s.b));
+      c.globalAlpha = 1;
+    }
+  }
+  if (eraserAt && (penKind === "erase" || eraseSnap)){
+    c.strokeStyle = "rgba(30,43,69,.6)"; c.lineWidth = 1.5 / zoom; c.setLineDash([3 / zoom, 3 / zoom]);
+    c.beginPath(); c.arc(eraserAt[0], eraserAt[1], 12 / zoom, 0, 7); c.stroke(); c.setLineDash([]);
+  }
+  drawRuler(c);
+  c.restore();
+  if (inputMode === "schraeg") drawIndicator(c);
+  renderLegend();
+}
+function drawIndicator(c){
+  // Richtungshilfe für den Winkel α
+  const [ddx, ddy] = dvec(), o = [DW - G * 5, G * 2.4];
+  c.strokeStyle = "rgba(217,130,43,.8)"; c.lineWidth = 2.2;
+  line(c, o, [o[0] + G * 1.6, o[1]]);
+  c.setLineDash([4, 3]); line(c, o, [o[0] + ddx * G * 2, o[1] - ddy * G * 2]); c.setLineDash([]);
+  c.beginPath(); c.arc(o[0], o[1], G * 0.7, -alphaDeg * Math.PI / 180, 0); c.stroke();
+  c.fillStyle = "#8a5a1e"; c.font = "13px " + FONT();
+  c.fillText(`α = ${alphaDeg}°`, o[0] + G * 1.8, o[1] - 4);
+  const nice = v => Math.abs(v - 0.5) < 1e-6 ? "½" : Math.abs(v - 0.25) < 1e-6 ? "¼" : Math.abs(v - 1) < 1e-6 ? "1" : fmt(v);
+  c.textAlign = "right";
+  c.fillText(`1 tief = ${qLabel()} Häuschen schräg`, o[0] + G * 3.2, o[1] + 18);
+  c.fillText(`= ${nice(ddx)} nach rechts, ${nice(ddy)} hinauf`, o[0] + G * 3.2, o[1] + 34);
+  c.textAlign = "start";
+}
+// Tiefenstriche: an jedem Gitterpunkt ein dünner Strich unter α mit der Länge einer Tiefeneinheit (q Häuschen)
+function drawDepthGrid(c, x0, y0, x1, y1, s){
+  const [ddx, ddy] = dvec();
+  c.strokeStyle = "rgba(217,130,43,.45)"; c.lineWidth = 1.2 * s; c.beginPath();
+  for (let x = Math.floor(x0 / G) * G; x < x1; x += G) for (let y = Math.floor(y0 / G) * G; y < y1 + G; y += G){ c.moveTo(x, y); c.lineTo(x + ddx * G, y - ddy * G); }
+  c.stroke();
+}
+function renderLegend(){
+  const items = [];
+  if (showRec && inputMode === "schraeg") items.push([COL.x, "Breite"], [COL.y, "Höhe"], [COL.z, "Tiefe"], [COL.f, "schräg in Front"], [COL.o, "schräg im Raum"]);
+  if (inputMode === "schraeg" && strokes.some(s => s.kind === "depth")) items.push([COL.z, "Tiefenlinie (gepunktet)"]);
+  if (showRec && inputMode === "riss"){
+    items.push(["rgba(47,79,143,.5)", "Ordnungslinie"]);
+    if (userModel && (userModel.missingViews || []).length) items.push([COL.tip, "ein möglicher dritter Riss (passt zu den zwei gezeichneten, muss nicht stimmen)"]);
+    if (!task && userModel && (userModel.unexplained || []).length) items.push([COL.extra, "passt zu keiner Kante"]);
+    if (!task && userModel && (userModel.styleWrong || []).length) items.push([COL.o, "sichtbar/verdeckt prüfen"]);
+  }
+  if (task && showSolution) items.push(["#0091a8", "Lösung"]);
+  else if (task && tipLevel) items.push([COL.tip, `Tipp ${tipLevel}`]);
+  if (task && checkRes) items.push([COL.miss, "fehlt"], [COL.extra, "zu viel"], [COL.o, "Strichart prüfen"]);
+  $("legend").innerHTML = items.map(([c, t]) => `<span><i style="border-color:${c}"></i>${t}</span>`).join("");
+  $("legend").hidden = !items.length;
+}
+
+// ---------- Eingabe auf dem Blatt ----------
+let zoom = 1, pan = [0, 0];
+function scr(e){ const r = dcv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+function pos(e){ const s = scr(e); return [s[0] / zoom + pan[0], s[1] / zoom + pan[1]]; }
+function setZoomLabel(){ $("zoomReset").textContent = Math.round(zoom * 100) + " %"; }
+function zoomAt(sx, sy, nz){
+  nz = Math.max(0.4, Math.min(3, nz));
+  const wx = sx / zoom + pan[0], wy = sy / zoom + pan[1];
+  zoom = nz; pan = [wx - sx / zoom, wy - sy / zoom];
+  setZoomLabel(); drawPaper();
+}
+let eraseSnap = null, eraserAt = null;
+function commit(next){ history.push(strokes); if (history.length > 200) history.shift(); future = []; strokes = next; rebuild(); }
+function eraseAt(p){
+  const r = 12 / zoom;
+  const keep = strokes.filter(s => !s.pts.some((a, i) => i > 0 ? distSeg(p, s.pts[i-1], a) < r : Math.hypot(a[0]-p[0], a[1]-p[1]) < r));
+  if (keep.length !== strokes.length){ strokes = keep; rebuild(); }
+}
+function capture(e, el = dcv){ try { el.setPointerCapture(e.pointerId); } catch (_) {} }
+// Risse: Striche werden begradigt und rasten auf halben Häuschen ein
+function straighten(pts){
+  const poly = rdp(pts.map(p => [p[0] / G, p[1] / G]), 0.35).map(p => [r05(p[0]), r05(p[1])]);
+  const out = [];
+  poly.forEach(p => { const l = out[out.length - 1]; if (!l || l[0] !== p[0] || l[1] !== p[1]) out.push(p); });
+  return out.map(p => [p[0] * G, p[1] * G]);
+}
+
+// Lineal
+const ruler = { on: false, placed: false, c: [0, 0], th: 0 };
+const rulerPtrs = new Map();
+let rulerGesture = null;
+const RW = () => G * 1.7, RL = () => Math.min(G * 16, Math.max(G * 6, DW / zoom - G * 1.5));
+const rU = () => [Math.cos(ruler.th), Math.sin(ruler.th)], rN = () => [-Math.sin(ruler.th), Math.cos(ruler.th)];
+function rLocal(p){ const u = rU(), n = rN(), d = [p[0] - ruler.c[0], p[1] - ruler.c[1]]; return [d[0]*u[0] + d[1]*u[1], d[0]*n[0] + d[1]*n[1]]; }
+function rWorld(t, s){ const u = rU(), n = rN(); return [ruler.c[0] + u[0]*t + n[0]*s, ruler.c[1] + u[1]*t + n[1]*s]; }
+const handleT = () => RL() / 2 - G * 0.9;
+function rulerHit(p){
+  const [t, s] = rLocal(p);
+  if (Math.hypot(t - handleT(), s) < G * 0.65) return "handle";
+  if (Math.abs(t) <= RL() / 2 && Math.abs(s) <= RW() / 2) return "body";
+  return null;
+}
+function rulerEdge(p, isPen){
+  const [t, s] = rLocal(p), half = RW() / 2, tol = 16 / zoom;
+  if (Math.abs(t) > RL() / 2 + 12 / zoom) return null;
+  if (isPen ? Math.abs(s) <= half + tol : Math.abs(s) > half && Math.abs(s) <= half + tol) return s < 0 ? -half : half;
+  return null;
+}
+function rulerProject(p, edge){ const t = Math.max(-RL() / 2, Math.min(RL() / 2, rLocal(p)[0])); return rWorld(t, edge); }
+function snapAngle(th){
+  for (const g of [0, Math.PI / 2, -alphaDeg * Math.PI / 180, -Math.PI / 4]){
+    let d = (th - g) % Math.PI; if (d > Math.PI / 2) d -= Math.PI; if (d < -Math.PI / 2) d += Math.PI;
+    if (Math.abs(d) < 3 * Math.PI / 180) return { th: th - d, snapped: true };
+  }
+  return { th, snapped: false };
+}
+function startRulerGesture(){
+  const pts = [...rulerPtrs.values()];
+  rulerGesture = { mode: rulerGesture && rulerGesture.mode === "rotate" && pts.length === 1 ? "rotate" : pts.length === 2 ? "pinch" : "move",
+                   c0: ruler.c.slice(), th0: ruler.th, p0: pts.map(p => p.slice()) };
+}
+function moveRuler(){
+  const g = rulerGesture, pts = [...rulerPtrs.values()];
+  if (!g) return;
+  let th = ruler.th;
+  if (g.mode === "move"){ ruler.c = [g.c0[0] + pts[0][0] - g.p0[0][0], g.c0[1] + pts[0][1] - g.p0[0][1]]; }
+  else if (g.mode === "rotate"){
+    const a0 = Math.atan2(g.p0[0][1] - ruler.c[1], g.p0[0][0] - ruler.c[0]), a1 = Math.atan2(pts[0][1] - ruler.c[1], pts[0][0] - ruler.c[0]);
+    th = g.th0 + a1 - a0;
+  } else if (pts.length === 2){
+    const ang = (a, b) => Math.atan2(b[1] - a[1], b[0] - a[0]);
+    th = g.th0 + ang(pts[0], pts[1]) - ang(g.p0[0], g.p0[1]);
+    ruler.c = [g.c0[0] + (pts[0][0] + pts[1][0] - g.p0[0][0] - g.p0[1][0]) / 2, g.c0[1] + (pts[0][1] + pts[1][1] - g.p0[0][1] - g.p0[1][1]) / 2];
+  }
+  if (g.mode !== "move"){ const r = snapAngle(th); ruler.th = r.th; ruler.snapped = r.snapped; }
+}
+function drawRuler(c){
+  if (!ruler.on) return;
+  const L = RL(), W = RW();
+  c.save();
+  c.translate(ruler.c[0], ruler.c[1]); c.rotate(ruler.th);
+  c.fillStyle = "rgba(236,242,250,.82)"; c.strokeStyle = "rgba(30,43,69,.55)"; c.lineWidth = 1.2;
+  c.beginPath(); c.rect(-L / 2, -W / 2, L, W); c.fill(); c.stroke();
+  c.strokeStyle = "#1e2b45"; c.fillStyle = "#1e2b45"; c.font = "10px " + FONT(); c.textAlign = "center";
+  const x0 = -L / 2 + G * 0.5;
+  for (let k = 0; x0 + k * G / 2 <= L / 2 - G * 0.3; k++){
+    const x = x0 + k * G / 2, major = k % 2 === 0, len = major ? (k % 4 === 0 ? 11 : 8) : 5;
+    c.lineWidth = major ? 1.1 : .8;
+    c.beginPath(); c.moveTo(x, -W / 2); c.lineTo(x, -W / 2 + len); c.moveTo(x, W / 2); c.lineTo(x, W / 2 - len); c.stroke();
+    if (k % 4 === 0) c.fillText(String(k / 2), x, -W / 2 + 21);
+  }
+  const deg = Math.round(((-ruler.th * 180 / Math.PI) % 180 + 180) % 180);
+  c.font = (ruler.snapped ? "600 " : "") + "12px " + FONT();
+  c.fillStyle = ruler.snapped ? "#b5651d" : "#5b6679";
+  c.fillText(`${deg}°${deg === alphaDeg && inputMode === "schraeg" ? " = α" : ""}`, 0, W / 2 - 8);
+  c.textAlign = "left"; c.fillStyle = "#5b6679"; c.font = "9px " + FONT();
+  c.fillText("Häuschen", -L / 2 + 4, W / 2 - 8);
+  const hx = handleT();
+  c.fillStyle = "rgba(47,79,143,.9)"; c.beginPath(); c.arc(hx, 0, G * 0.45, 0, 7); c.fill();
+  c.strokeStyle = "#fff"; c.lineWidth = 1.6; c.beginPath(); c.arc(hx, 0, G * 0.22, -0.3, 4.4); c.stroke();
+  c.restore();
+}
+
+// Fingergesten: zwei Finger zoomen und verschieben; mit «Nur Stift» verschiebt auch ein Finger
+const touches = new Map();
+let pinch = null, panDrag = null;
+function startPinch(){
+  const [a, b] = [...touches.values()];
+  pinch = { z0: zoom, a0: a.slice(), b0: b.slice(), w0: [(a[0] + b[0]) / 2 / zoom + pan[0], (a[1] + b[1]) / 2 / zoom + pan[1]] };
+}
+function abortStroke(){
+  if (eraseSnap){ strokes = eraseSnap; eraseSnap = null; rebuild(); }
+  current = null; activeId = null;
+}
+dcv.addEventListener("pointerdown", e => {
+  const p = pos(e), isPen = e.pointerType === "pen", sp = scr(e);
+  if (ruler.on && activeId === null){
+    const hit = rulerHit(p), fingerJoins = !isPen && rulerPtrs.size === 1;
+    if (hit === "handle" || fingerJoins || (hit === "body" && !isPen && penKind !== "erase")){
+      capture(e); rulerPtrs.set(e.pointerId, p);
+      rulerGesture = hit === "handle" && rulerPtrs.size === 1 ? { mode: "rotate" } : rulerGesture;
+      startRulerGesture(); drawPaper();
+      return;
+    }
+  }
+  if (e.pointerType === "touch"){
+    touches.set(e.pointerId, sp);
+    if (touches.size === 2){
+      if (activeId !== null && touches.has(activeId)) abortStroke();
+      panDrag = null; capture(e); startPinch(); drawPaper(); return;
+    }
+    if (touches.size > 2) return;
+    if (penOnly){ panDrag = { id: e.pointerId, s0: sp, pan0: pan.slice() }; capture(e); return; }
+  }
+  if (e.button === 1){ panDrag = { id: e.pointerId, s0: sp, pan0: pan.slice() }; capture(e); e.preventDefault(); return; }
+  if (penOnly && !isPen) return;
+  if (activeId !== null) return;
+  activeId = e.pointerId; capture(e);
+  if (penKind === "erase" || (e.buttons & 32)){
+    eraseSnap = strokes; current = null; eraserAt = p; eraseAt(eraserAt); drawPaper();
+    return;
+  }
+  const edge = ruler.on ? rulerEdge(p, isPen) : null;
+  current = { kind: penKind, dir: penKind === "line" ? "auto" : slantDir, pts: [edge === null ? p : rulerProject(p, edge)], edge };
+  drawPaper();
+});
+dcv.addEventListener("pointermove", e => {
+  if (rulerPtrs.has(e.pointerId)){ rulerPtrs.set(e.pointerId, pos(e)); moveRuler(); drawPaper(); return; }
+  if (touches.has(e.pointerId)) touches.set(e.pointerId, scr(e));
+  if (pinch && touches.has(e.pointerId) && touches.size >= 2){
+    const [a, b] = [...touches.values()];
+    const d0 = Math.hypot(pinch.b0[0] - pinch.a0[0], pinch.b0[1] - pinch.a0[1]) || 1, d1 = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    zoom = Math.max(0.4, Math.min(3, pinch.z0 * d1 / d0));
+    const m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    pan = [pinch.w0[0] - m[0] / zoom, pinch.w0[1] - m[1] / zoom];
+    setZoomLabel(); drawPaper(); return;
+  }
+  if (panDrag && panDrag.id === e.pointerId){
+    const sp = scr(e);
+    pan = [panDrag.pan0[0] - (sp[0] - panDrag.s0[0]) / zoom, panDrag.pan0[1] - (sp[1] - panDrag.s0[1]) / zoom];
+    drawPaper(); return;
+  }
+  if (penKind === "erase" && activeId === null && e.pointerType !== "touch"){ eraserAt = pos(e); drawPaper(); }
+  if (e.pointerId !== activeId) return;
+  const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+  for (const ev of (evs.length ? evs : [e])){
+    if (eraseSnap) eraseAt(eraserAt = pos(ev));
+    else current.pts.push(current.edge == null ? pos(ev) : rulerProject(pos(ev), current.edge));
+  }
+  drawPaper();
+});
+function endPointer(e){
+  if (rulerPtrs.has(e.pointerId)){
+    rulerPtrs.delete(e.pointerId);
+    if (rulerPtrs.size){ rulerGesture = { mode: "move" }; startRulerGesture(); } else { rulerGesture = null; ruler.snapped = false; }
+    drawPaper();
+  }
+  touches.delete(e.pointerId);
+  if (pinch && touches.size < 2) pinch = null;
+  if (panDrag && panDrag.id === e.pointerId) panDrag = null;
+  if (e.pointerId !== activeId) return;
+  activeId = null;
+  if (eraseSnap){
+    if (eraseSnap !== strokes){ history.push(eraseSnap); future = []; }
+    eraseSnap = null; if (e.pointerType === "touch") eraserAt = null;
+    rebuild(); return;
+  }
+  const s = current; current = null;
+  if (!s || s.pts.length < 2){ drawPaper(); return; }
+  delete s.edge;
+  if (inputMode === "riss"){ s.pts = straighten(s.pts); if (s.pts.length < 2){ drawPaper(); return; } }
+  commit(strokes.concat([s]));
+}
+dcv.addEventListener("pointerup", endPointer);
+dcv.addEventListener("pointercancel", endPointer);
+dcv.addEventListener("pointerleave", () => { if (activeId === null){ eraserAt = null; drawPaper(); } });
+dcv.addEventListener("wheel", e => {
+  e.preventDefault();
+  const sp = scr(e);
+  if (e.ctrlKey || e.metaKey) zoomAt(sp[0], sp[1], zoom * Math.exp(-e.deltaY * 0.01));
+  else { pan = [pan[0] + e.deltaX / zoom, pan[1] + e.deltaY / zoom]; drawPaper(); }
+}, { passive: false });
+
+function rebuild(){
+  const exact = exactFor.get(strokes);
+  if (exact) lastRiss = null;
+  userModel = exact || (strokes.length ? (inputMode === "riss" ? analyseRiss() : analyseSchraeg()) : null);
+  if (!strokes.length) lastRiss = null;
+  checkRes = null;
+  if (task){ $("result").textContent = ""; $("result").className = ""; }
+  $("undo").disabled = !history.length; $("redo").disabled = !future.length; $("clear").disabled = !strokes.length;
+  drawPaper(); renderInfo();
+}
+
+// ---------- 3D-Ansicht ----------
+let yaw = 0.55, pitch = -0.42, spin = true, drag = null, unfoldT = 0, anim = null, transparent = false;
+let rissView = null, orthoK = 0, autoSpin = false, spinPhase = 0;           // gewählter Riss im 3D-Fenster; orthoK: 0 = Perspektive, 1 = Parallelprojektion
+const RISSPOSE = { A: [0, 0], S: [-Math.PI / 2, 0], G: [0, -Math.PI / 2] };
+function displayed(){ return task && showWhich === "target" ? targetModel : userModel; }
+function rotFn(yw, pt){
+  const cy = Math.cos(yw), sy = Math.sin(yw), cp = Math.cos(pt), sp = Math.sin(pt);
+  return p => { const x = p[0]*cy + p[2]*sy, z = -p[0]*sy + p[2]*cy; return [x, p[1]*cp - z*sp, p[1]*sp + z*cp]; };
+}
+const LIGHT = norm([0.45, -0.65, 0.62]);
+// Zeichnet ein Modell in einen Canvas (Bildschirm oder Druck)
+function renderModel(c, W, H, M, o){
+  const rot = rotFn(o.yaw, o.pitch);
+  const net = getNet(M), t = net ? o.t : 0, T = net ? netTransforms(M, net, t) : null;
+  const ap = (fi, p) => T ? applyT(T[fi], p) : p;
+  const mn = bmin(M.V), mx = bmax(M.V), rc = mn.map((v, k) => (v + mx[k]) / 2), rr = Math.max(1, vlen(sub(mx, mn)) / 2);
+  const C = net ? add(rc, mul(sub(net.flat.center, rc), t)) : rc;
+  const R = net ? rr + (Math.max(1, net.flat.radius) - rr) * t : rr;
+  const sc = Math.min(W, H) * 0.4 / R, cam = R * 5 / Math.max(1e-3, 1 - (o.ortho || 0) * 0.999);
+  const P = p => { const r = rot(sub(p, C)), f = cam / (cam + r[2]); return [W/2 + r[0]*sc*f, H/2 - r[1]*sc*f, r[2]]; };
+  // Richtung zum Betrachter im Modellraum: Auge liegt in Blickkoordinaten bei (0 | 0 | −cam)
+  const cy = Math.cos(o.yaw), sy = Math.sin(o.yaw), cp = Math.cos(o.pitch), sp = Math.sin(o.pitch);
+  const toEyePar = [sy*cp, -sp, -cy*cp], eye = add(C, mul(toEyePar, cam));
+  const toEye = (o.ortho || 0) > 0.99 ? toEyePar : p => norm(sub(eye, p));
+  const ink = o.print ? "#111" : "#1e2b45";
+  c.lineCap = "round"; c.lineJoin = "round";
+  if (!M.F.length){
+    const L = M.E.map(e => { const a = P(M.V[e.i]), b = P(M.V[e.j]); return { a, b, z: (a[2] + b[2]) / 2 }; }).sort((u, v) => v.z - u.z);
+    for (const l of L){ const k = Math.max(0, Math.min(1, .5 - l.z / (2*R))); c.globalAlpha = .35 + .65*k; c.strokeStyle = o.print ? "#111" : "#e6ebf0"; c.lineWidth = 1.5 + 2*k; line(c, l.a, l.b); }
+    c.globalAlpha = 1;
+    return;
+  }
+  const items = M.F.map((f, fi) => {
+    const loops = faceLoops(f).map(loop => loop.map(v => P(ap(fi, M.V[v])))), pts = loops[0];
+    const nV = rot(T ? matVec(T[fi].R, f.n) : f.n);
+    const mv = f.idx.reduce((s, v) => add(s, mul(rot(sub(ap(fi, M.V[v]), C)), 1 / f.idx.length)), [0, 0, 0]);
+    // Vorderseite: Normale zeigt zum Auge, das in Blickkoordinaten bei (0 | 0 | −cam) liegt
+    const front = dot(nV, [mv[0], mv[1], mv[2] + cam]) < 0, mid = [0, 0, mv[2]];
+    const c2 = interiorFace(f), cen3 = ap(fi, add(add(mul(f.u, c2[0]), mul(f.w, c2[1])), mul(f.n, f.c)));
+    return { fi, loops, pts, nV, front, z: mid[2], label: P(cen3), lines: f.lines.map(L => [P(ap(fi, L.a)), P(ap(fi, L.b))]) };
+  }).sort((a, b) => b.z - a.z);
+  const tracePath = it => { c.beginPath(); it.loops.forEach(loop => { loop.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); }); };
+  const fill = it => {
+    const hi = o.hi === it.fi;
+    const base = hi ? [255, 214, 120] : net && it.fi === net.root && t > 0 ? [214, 226, 246] : [234, 239, 245];
+    const k = it.front ? 0.58 + 0.42 * Math.max(0, dot(it.nV, LIGHT)) : 0.5;
+    const col = it.front || hi ? base.map(v => Math.round(v * k + 20)) : [150, 158, 170];
+    c.fillStyle = `rgb(${col.join(",")})`;
+    tracePath(it); c.fill("evenodd");
+  };
+  const outline = it => { c.setLineDash([]); tracePath(it); c.stroke(); };
+  const redLines = it => { c.setLineDash([]); c.strokeStyle = "#d32f2f"; c.lineWidth = 2.8; it.lines.forEach(([a, b]) => line(c, a, b)); };
+  const numbers = which => {
+    if (!o.numbers) return;
+    c.font = `600 ${o.print ? 15 : 13}px ${FONT()}`; c.textAlign = "center"; c.textBaseline = "middle";
+    for (const it of items){
+      if (!which(it)) continue;
+      const [x, y] = it.label;
+      c.fillStyle = o.print ? "rgba(255,255,255,.85)" : "rgba(20,25,34,.75)"; c.beginPath(); c.arc(x, y, 10, 0, 7); c.fill();
+      c.fillStyle = o.print ? "#111" : "#ffd678"; c.fillText(String(it.fi + 1), x, y + 0.5);
+    }
+    c.textAlign = "start"; c.textBaseline = "alphabetic";
+  };
+  if (!t && (o.riss || o.transparent || o.print)){
+    // durchsichtig oder Riss: Flächen zart, Kanten mit echter Verdeckung, auch stückweise (sichtbar durchgezogen, verdeckt gestrichelt)
+    c.globalAlpha = o.print ? 0.3 : o.riss ? 0.18 : 0.22; items.forEach(fill); c.globalAlpha = 1;
+    if (o.hi >= 0){ const it = items.find(i => i.fi === o.hi); if (it){ c.globalAlpha = 0.75; fill(it); c.globalAlpha = 1; } }
+    const d = o.riss ? TOVIEW[o.riss]() : toEye;
+    const key = (o.riss || "v") + "|" + M.E.length + "|" + (o.riss ? "" : [o.yaw, o.pitch, o.ortho || 0].map(v => v.toFixed(3)).join(","));
+    if (M._partKey !== key){ M._partSegs = partSegments(M, d); M._partKey = key; }
+    const segs = M._partSegs.map(s => ({ a: P(s.a), b: P(s.b), h: s.hidden }));
+    c.strokeStyle = o.print ? "rgba(0,0,0,.6)" : "rgba(220,228,238,.7)"; c.lineWidth = 1.5; c.setLineDash([6, 5]);
+    segs.filter(s => s.h).forEach(s => line(c, s.a, s.b));
+    c.setLineDash([]); c.strokeStyle = o.print ? "#111" : "#f4f7fb"; c.lineWidth = 2.2;
+    segs.filter(s => !s.h).forEach(s => line(c, s.a, s.b));
+    items.filter(i => i.front).forEach(redLines);
+    numbers(() => true);
+    if (o.riss && !o.print){ c.fillStyle = "#a9b5c4"; c.font = "600 14px " + FONT(); c.fillText(VIEWNAME[o.riss], 12, H - 12); }
+  } else {
+    for (const it of items){
+      c.globalAlpha = 0.97; fill(it); c.globalAlpha = 1;
+      c.strokeStyle = ink; c.lineWidth = 1.7; outline(it);
+      if (it.front) redLines(it);
+    }
+    numbers(it => it.front || t > 0);
+  }
+  c.setLineDash([]);
+}
+function renderView(){
+  vctx.clearRect(0, 0, VW, VH);
+  const M = displayed();
+  if (!M || !M.V.length){
+    vctx.fillStyle = "#a9b5c4"; vctx.font = "15px " + FONT(); vctx.textAlign = "center";
+    let msg = inputMode === "riss" ? "Zeichne links die drei Risse" : "Zeichne links ein Schrägbild";
+    if (inputMode === "riss" && lastRiss){
+      const empty = VIEWS.filter(v => !lastRiss[v].length).map(v => VIEWNAME[v]);
+      if (empty.length === 3) msg = "Zeichne links die drei Risse";
+      else if (empty.length) msg = `Es ${empty.length === 1 ? "fehlt noch der" : "fehlen noch"} ${empty.join(" und ")} (ab zwei Rissen entsteht ein Vorschlag)`;
+      else msg = "Aus den Rissen entsteht noch kein Körper – Linien prüfen (orange)";
+    }
+    vctx.fillText(msg, VW / 2, VH / 2); vctx.textAlign = "start";
+    return;
+  }
+  renderModel(vctx, VW, VH, M, { yaw, pitch, t: unfoldT, transparent, ortho: orthoK, riss: rissView && !anim ? rissView : null, numbers: showNumbers || hiFace >= 0, hi: hiFace });
+}
+function renderInfo(){
+  const M = displayed();
+  $("detailsBtn").disabled = !(M && M.V.length);
+  setNetUi(M && M.V.length ? getNet(M) : null);
+  if ($("detailsDlg").open) fillDetails();
+}
+function setNetUi(net){
+  ["unfold", "netOutside"].forEach(id => $(id).disabled = !net);
+  $("unfold").value = Math.round((net ? unfoldT : 0) * 100);
+}
+function setRissView(v){
+  rissView = v;
+  ["A", "S", "G"].forEach(k => $("view" + k).setAttribute("aria-pressed", k === v));
+}
+vcv.addEventListener("pointerdown", e => { drag = [e.clientX, e.clientY, yaw, pitch]; spin = false; anim = null; if (rissView){ setRissView(null); orthoK = 0; } capture(e, vcv); });
+vcv.addEventListener("pointermove", e => {
+  if (!drag) return;
+  yaw = drag[2] + (e.clientX - drag[0]) * 0.01;
+  pitch = Math.max(-1.57, Math.min(1.57, drag[3] - (e.clientY - drag[1]) * 0.01));
+});
+vcv.addEventListener("pointerup", () => drag = null);
+vcv.addEventListener("pointercancel", () => drag = null);
+$("unfold").addEventListener("input", e => { unfoldT = e.target.value / 100; anim = null; spin = false; if (rissView){ setRissView(null); orthoK = 0; } });
+$("reset").onclick = () => { setAutoSpin(false); setRissView(null); animateTo(0, 0.55, -0.42, 0); spin = true; };
+function setAutoSpin(on){
+  autoSpin = on; $("autoSpin").setAttribute("aria-pressed", on);
+  if (on){ setRissView(null); anim = null; orthoK = 0; spinPhase = Math.asin(Math.max(-1, Math.min(1, (pitch + 0.35) / 0.5))) / 0.4; }
+}
+$("autoSpin").onclick = () => setAutoSpin(!autoSpin);
+["A", "S", "G"].forEach(v => $("view" + v).onclick = () => {
+  if (rissView === v){ setRissView(null); animateTo(0, 0.55, -0.42, 0); spin = true; return; }
+  setAutoSpin(false); setRissView(v); spin = false;
+  animateTo(0, RISSPOSE[v][0], RISSPOSE[v][1], 1);
+});
+$("transp").onclick = () => { transparent = !transparent; $("transp").setAttribute("aria-pressed", transparent); };
+$("netOutside").onclick = () => {
+  const M = displayed(), net = M && getNet(M); if (!net) return;
+  const n = M.F[net.root].n, r = Math.hypot(n[0], n[2]);
+  setAutoSpin(false); setRissView(null);
+  animateTo(1, r < 1e-6 ? 0 : Math.atan2(n[0], -n[2]), Math.atan2(-n[1], r), 0);
+  spin = false;
+};
+function animateTo(t1, y1, p1, o1){
+  const t0 = unfoldT, y0 = yaw, p0 = pitch, q0 = orthoK, q1 = o1 === undefined ? orthoK : o1, start = performance.now(), dur = matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 1300;
+  let dy = y1 - y0; dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+  anim = now => {
+    const k = Math.min(1, (now - start) / dur), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2) / 2;
+    unfoldT = t0 + (t1 - t0) * e; yaw = y0 + dy * e; pitch = p0 + (p1 - p0) * e; orthoK = q0 + (q1 - q0) * e;
+    $("unfold").value = Math.round(unfoldT * 100);
+    if (k >= 1) anim = null;
+  };
+}
+let lastFrame = performance.now();
+(function loop(now){
+  const dt = Math.min(0.1, (now - lastFrame) / 1000); lastFrame = now;
+  if (anim) anim(now);
+  else if (autoSpin && !drag){
+    // Dauerdrehen: gleichmässig um die Hochachse, dazu ein langsames Kippen, damit Ober- und Unterseite sichtbar werden
+    spinPhase += dt;
+    yaw += 0.45 * dt;
+    pitch = -0.35 + 0.5 * Math.sin(spinPhase * 0.4);
+  }
+  else if (spin && unfoldT === 0 && !drag && !matchMedia("(prefers-reduced-motion: reduce)").matches) yaw += 0.005;
+  renderView();
+  requestAnimationFrame(loop);
+})(performance.now());
+
+// ---------- Netz als SVG ----------
+function netSvg(M, maxW, maxH, tabs1, numbers){
+  const net = getNet(M), { polys, holes, lines } = net.flat, tree = new Set(net.order.map(o => o.key));
+  const tabbed = new Set(), tabs = [], folds = [], cuts = [];
+  M.F.forEach((f, fi) => {
+    const loops2 = [polys[fi], ...holes[fi]];
+    faceLoops(f).forEach((loop, li) => loop.forEach((a, k) => {
+      const b = loop[(k+1) % loop.length], kk = ekey(a, b), P = loops2[li][k], Q = loops2[li][(k+1) % loop.length];
+      if (tree.has(kk)){ folds.push([P, Q]); return; }
+      cuts.push([P, Q]);
+      if (!tabs1 || tabbed.has(kk)) return;
+      tabbed.add(kk);
+      const d = [Q[0]-P[0], Q[1]-P[1]], L = Math.hypot(d[0], d[1]), u = [d[0]/L, d[1]/L], out = [u[1], -u[0]];
+      const h = Math.min(0.5, 0.35 * L), ins = Math.min(h, 0.25 * L);
+      tabs.push([P, [P[0] + out[0]*h + u[0]*ins, P[1] + out[1]*h + u[1]*ins], [Q[0] + out[0]*h - u[0]*ins, Q[1] + out[1]*h - u[1]*ins], Q]);
+    }));
+  });
+  const allPts = polys.flat().concat(tabs.flat());
+  const x0 = Math.min(...allPts.map(p => p[0])) - 0.3, x1 = Math.max(...allPts.map(p => p[0])) + 0.3;
+  const y0 = Math.min(...allPts.map(p => p[1])) - 0.3, y1 = Math.max(...allPts.map(p => p[1])) + 0.3;
+  const W = x1 - x0, H = y1 - y0, land = W > H;
+  if (!maxW){ maxW = land ? 267 : 180; maxH = land ? 180 : 267; }
+  const s = Math.min(1, maxW / (W * 10), maxH / (H * 10));
+  const tr = p => [(p[0] - x0).toFixed(3), (y1 - p[1]).toFixed(3)];
+  const pl = (pts, attr) => `<polygon points="${pts.map(p => tr(p).join(",")).join(" ")}" ${attr}/>`;
+  const path = (loops, attr) => `<path d="${loops.map(pts => "M" + pts.map(p => tr(p).join(",")).join("L") + "Z").join("")}" fill-rule="evenodd" ${attr}/>`;
+  const ln = ([a, b], attr) => { const A = tr(a), B = tr(b); return `<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" ${attr}/>`; };
+  const nums = numbers ? M.F.map((f, fi) => { const c = interior2(polys[fi], holes[fi]), t = tr(c), fs = Math.min(0.6, Math.sqrt(Math.abs(f.area)) * 0.35).toFixed(2); return `<text x="${t[0]}" y="${t[1]}" font-size="${fs}" font-family="sans-serif" fill="#7a8494" text-anchor="middle" dominant-baseline="middle">${fi + 1}</text>`; }).join("") : "";
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${(W*10*s).toFixed(1)}mm" height="${(H*10*s).toFixed(1)}mm" viewBox="0 0 ${W.toFixed(3)} ${H.toFixed(3)}">` +
+    tabs.map(t => pl(t, `fill="#e9edf2" stroke="#000" stroke-width="0.02"`)).join("") +
+    polys.map((p, i) => path([p, ...holes[i]], `fill="#fff" stroke="none"`)).join("") +
+    folds.map(f => ln(f, `stroke="#000" stroke-width="0.015" stroke-dasharray="0.12 0.08"`)).join("") +
+    cuts.map(f => ln(f, `stroke="#000" stroke-width="0.03"`)).join("") +
+    lines.map(f => ln(f, `stroke="#c62828" stroke-width="0.04" stroke-linecap="round"`)).join("") + nums + `</svg>`;
+  return { svg, scale: 10 * s, land };
+}
+// ── KERN-ZUSATZ:ANFANG — Details, Drucken, Striche aus einem Modell; im Selbsttest Rechenwege und «Musterzeichnung»
+// ---------- Details mit Berechnungen ----------
+// Länge exakt: ganze/halbe Zahlen direkt, sonst Wurzel mit herausgezogenem Quadrat (√40 = 2√10), bei v² = N/4: k√m / 2
+function rootForm(v){
+  if (Math.abs(v - r05(v)) < 1e-6) return { exact: fmt(v), simp: null, approx: fmt(v), rational: true };
+  const N4 = Math.round(v * v * 4);
+  if (Math.abs(v * v * 4 - N4) > 1e-6) return { exact: fmt(v), simp: null, approx: fmt(v), rational: false, irr: true };
+  const squareOut = N => { let k = 1, m = N; for (let d = 2; d * d <= m; d++) while (m % (d * d) === 0){ m /= d * d; k *= d; } return [k, m]; };
+  let exact, simp = null;
+  if (N4 % 4 === 0){
+    const N = N4 / 4, [k, m] = squareOut(N);
+    exact = `√${N}`; if (k > 1) simp = m === 1 ? String(k) : `${k}√${m}`;
+  } else {
+    const [k, m] = squareOut(N4);
+    exact = `√${fmt(N4 / 4)}`; simp = (k > 1 ? k : "") + (m === 1 ? "" : `√${m}`) + " / 2";
+  }
+  return { exact, simp, approx: fmt(v), rational: false };
+}
+const lenTok = v => { const r = rootForm(v); return r.simp || r.exact; };            // kürzeste exakte Form für Rechenterme
+const lenFull = v => { const r = rootForm(v); return r.rational ? r.exact : (r.simp ? `${r.exact} = ${r.simp}` : r.exact) + ` ≈ ${r.approx}`; };
+const isAxisDir = d => [0, 1, 2].some(k => Math.abs(Math.abs(d[k]) - 1) < 1e-9);
+const axisOfNormal = n => [0, 1, 2].find(k => Math.abs(Math.abs(n[k]) - 1) < 1e-9);
+// Ebenenkoordinaten einer Gitterfläche (Fläche parallel zu einer Koordinatenebene): die beiden übrigen Achsen
+function latticeUV(M, f, loop){
+  const k = axisOfNormal(f.n); if (k === undefined) return null;
+  const ax = [0, 1, 2].filter(a => a !== k);
+  return loop.map(v => [M.V[v][ax[0]], M.V[v][ax[1]]]);
+}
+// Streifenzerlegung eines achsenparallelen Vielecks in Rechtecke (Koordinaten in der Ebene)
+function rectStrips(P){
+  const n = P.length;
+  if (!P.every((p, i) => { const q2 = P[(i+1) % n]; return Math.abs(p[0] - q2[0]) < 1e-9 || Math.abs(p[1] - q2[1]) < 1e-9; })) return null;
+  const us = [...new Set(P.map(p => p[0]))].sort((a, b) => a - b), rects = [];
+  for (let i = 0; i + 1 < us.length; i++){
+    const um = (us[i] + us[i+1]) / 2, ws = [];
+    for (let k = 0; k < n; k++){ const a = P[k], b = P[(k+1) % n]; if (Math.abs(a[1] - b[1]) < 1e-9 && Math.min(a[0], b[0]) < um && Math.max(a[0], b[0]) > um) ws.push(a[1]); }
+    ws.sort((a, b) => a - b);
+    for (let k = 0; k + 1 < ws.length; k += 2) rects.push({ u0: us[i], u1: us[i+1], w0: ws[k], w1: ws[k+1] });
+  }
+  // benachbarte Streifen mit gleichem Querschnitt zusammenlegen
+  for (let guard = 0; guard < 200; guard++){
+    const i = rects.findIndex((r, a) => rects.some((s2, b) => b !== a && Math.abs(r.u1 - s2.u0) < 1e-9 && Math.abs(r.w0 - s2.w0) < 1e-9 && Math.abs(r.w1 - s2.w1) < 1e-9));
+    if (i < 0) break;
+    const r = rects[i], j = rects.findIndex((s2, b) => b !== i && Math.abs(r.u1 - s2.u0) < 1e-9 && Math.abs(r.w0 - s2.w0) < 1e-9 && Math.abs(r.w1 - s2.w1) < 1e-9);
+    r.u1 = rects[j].u1; rects.splice(j, 1);
+  }
+  return rects;
+}
+// Streifenzerlegung eines beliebigen Vielecks in der Ebene in Trapeze (senkrechte Streifen zwischen den x-Werten der Ecken)
+function stripTrapezoids(P){
+  const n = P.length, us = [...new Set(P.map(p => p[0]))].sort((a, b) => a - b), out = [];
+  const cutsAt = x => { const ys = []; for (let k = 0; k < n; k++){ const a = P[k], b = P[(k+1) % n]; if (Math.abs(a[0] - b[0]) < 1e-9) continue; if (Math.min(a[0], b[0]) < x && Math.max(a[0], b[0]) > x) ys.push(a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0])); } return ys.sort((p, q2) => p - q2); };
+  for (let i = 0; i + 1 < us.length; i++){
+    const w = us[i+1] - us[i], eps = w * 1e-4, L = cutsAt(us[i] + eps), R = cutsAt(us[i+1] - eps);
+    if (L.length !== R.length || L.length % 2) return null;
+    for (let k = 0; k + 1 < L.length; k += 2){
+      const hl = L[k+1] - L[k], hr = R[k+1] - R[k];
+      // Höhen an den Streifenrändern exakt (lineare Fortsetzung)
+      const h1 = hl + (hl - hr) * eps / (w - 2 * eps), h2 = hr - (hl - hr) * eps / (w - 2 * eps);
+      out.push({ x0: us[i], x1: us[i+1], w, h1: Math.round(h1 * 1e6) / 1e6, h2: Math.round(h2 * 1e6) / 1e6 });
+    }
+  }
+  return out;
+}
+function shoelaceTerms(P){
+  const n = P.length, terms = [];
+  let sum = 0;
+  for (let i = 0; i < n; i++){ const a = P[i], b = P[(i+1) % n], t = a[0]*b[1] - b[0]*a[1]; sum += t; terms.push(`${fmt(a[0])}·${fmt(b[1])} − ${fmt(b[0])}·${fmt(a[1])}`); }
+  return { terms, sum };
+}
+// Beschreibung und Rechnung einer Fläche: { name, exact, approx } – exact ohne «≈», approx mit gerundeten Werten
+function polyInfo(M, f){
+  const loop = f.idx, P = loop.map(k => M.V[k]), n = P.length, side = i => vlen(sub(P[(i+1) % n], P[i]));
+  const sides = P.map((_, i) => side(i));
+  const dirv = i => norm(sub(P[(i+1) % n], P[i]));
+  const par = (i, j) => Math.abs(Math.abs(dot(dirv(i), dirv(j))) - 1) < 1e-6;
+  const right = i => Math.abs(dot(dirv(i), dirv((i+1) % n))) < 1e-6;
+  const A = f.area + (f.holes || []).reduce((s2, h) => s2 + Math.abs(polyArea2(h.map(k => [dot(M.V[k], f.u), dot(M.V[k], f.w)]))), 0);   // Aussenfläche
+  const eq = (a, b) => Math.abs(a - b) < 1e-6;
+  const allRational = sides.every(x => rootForm(x).rational);
+  let res;
+  if (n === 3){
+    const kinds = [];
+    if (eq(sides[0], sides[1]) && eq(sides[1], sides[2])) kinds.push("gleichseitig");
+    else if (eq(sides[0], sides[1]) || eq(sides[1], sides[2]) || eq(sides[0], sides[2])) kinds.push("gleichschenklig");
+    const ri = [0, 1, 2].find(i => right(i));
+    const iso = [0, 1, 2].find(i => eq(sides[(i+1) % 3], sides[(i+2) % 3]) && !eq(sides[i], sides[(i+1) % 3]));   // Basis i, Schenkel gleich
+    // Grundseite parallel zu einer Achse mit halbzahliger Höhe: ½ · g · h direkt ablesbar
+    const gi = [0, 1, 2].find(i => isAxisDir(dirv(i)) && Math.abs(2 * A / sides[i] - r05(2 * A / sides[i])) < 1e-6);
+    if (ri !== undefined && rootForm(sides[ri]).rational && rootForm(sides[(ri+1) % 3]).rational)
+      res = { name: "Dreieck, rechtwinklig" + (kinds.length ? ", " + kinds[0] : ""), exact: `½ · a · b = ½ · ${fmt(sides[ri])} · ${fmt(sides[(ri+1) % 3])} = ${fmt(A)}` };
+    else if (gi !== undefined)
+      res = { name: "Dreieck" + (kinds.length ? ", " + kinds[0] : ""), exact: `½ · g · h = ½ · ${fmt(sides[gi])} · ${fmt(2 * A / sides[gi])} = ${fmt(A)}` };
+    else if (kinds[0] === "gleichseitig")
+      res = { name: "Dreieck, gleichseitig", exact: `(√3 / 4) · a² = (√3 / 4) · ${fmt(sides[0] * sides[0])}`, approx: `${fmt(Math.sqrt(3) / 4)} · ${fmt(sides[0] * sides[0])} ≈ ${fmt(A)}` };
+    else if (iso !== undefined && rootForm(sides[iso]).rational){
+      const a = sides[iso], bq = sides[(iso+1) % 3] ** 2, hgt = Math.sqrt(bq - a * a / 4);
+      res = { name: "Dreieck, gleichschenklig", exact: `½ · a · h mit h = √(b² − (a/2)²) = √(${fmt(bq)} − ${fmt(a * a / 4)}) = ${lenTok(hgt)}: ½ · ${fmt(a)} · ${lenTok(hgt)}`, approx: `½ · ${fmt(a)} · ${fmt(hgt)} ≈ ${fmt(A)}` };
+    }
+    else if (ri !== undefined)
+      res = { name: "Dreieck, rechtwinklig" + (kinds.length ? ", " + kinds[0] : ""), exact: `½ · a · b = ½ · ${lenTok(sides[ri])} · ${lenTok(sides[(ri+1) % 3])}`, approx: `½ · ${fmt(sides[ri])} · ${fmt(sides[(ri+1) % 3])} ≈ ${fmt(A)}` };
+    else {
+      const [a, b, c] = sides, s2 = (a + b + c) / 2;
+      res = { name: "Dreieck" + (kinds.length ? ", " + kinds[0] : ""),
+        exact: `Heron: s = (a + b + c) / 2, A = √(s · (s − a) · (s − b) · (s − c)) mit a = ${lenTok(a)}, b = ${lenTok(b)}, c = ${lenTok(c)}`,
+        approx: `s ≈ ${fmt(s2)}, A ≈ √(${fmt(s2)} · ${fmt(s2 - a)} · ${fmt(s2 - b)} · ${fmt(s2 - c)}) ≈ ${fmt(A)}` };
+    }
+  } else if (n === 4 && [0,1,2,3].every(i => right(i))){
+    if (eq(sides[0], sides[1])) res = allRational ? { name: "Quadrat", exact: `a² = ${fmt(sides[0])}² = ${fmt(A)}` } : { name: "Quadrat", exact: `a² = (${lenTok(sides[0])})² = ${fmt(A)}` };
+    else res = allRational ? { name: "Rechteck", exact: `a · b = ${fmt(sides[0])} · ${fmt(sides[1])} = ${fmt(A)}` } : { name: "Rechteck", exact: `a · b = ${lenTok(sides[0])} · ${lenTok(sides[1])}`, approx: `${fmt(sides[0])} · ${fmt(sides[1])} ≈ ${fmt(A)}` };
+  } else if (n === 4 && par(0, 2) && par(1, 3)){
+    const h = A / sides[0], hr = rootForm(h);
+    res = { name: eq(sides[0], sides[1]) ? "Rhombus" : "Parallelogramm", exact: `g · h = ${lenTok(sides[0])} · ${lenTok(h)}` + (hr.rational && allRational ? ` = ${fmt(A)}` : ""), approx: hr.rational && allRational ? undefined : `${fmt(sides[0])} · ${fmt(h)} ≈ ${fmt(A)}` };
+  } else if (n === 4 && (par(0, 2) || par(1, 3))){
+    const i = par(0, 2) ? 0 : 1, a = sides[i], c = sides[i + 2], h = 2 * A / (a + c), ok = rootForm(a).rational && rootForm(c).rational && rootForm(h).rational;
+    res = { name: "Trapez", exact: `(a + c) / 2 · h = (${lenTok(a)} + ${lenTok(c)}) / 2 · ${lenTok(h)}` + (ok ? ` = ${fmt(A)}` : ""), approx: ok ? undefined : `(${fmt(a)} + ${fmt(c)}) / 2 · ${fmt(h)} ≈ ${fmt(A)}` };
+  } else {
+    const regular = n >= 5 && sides.every(x => eq(x, sides[0])) && P.every((_, i) => eq(dot(dirv(i), dirv((i+1) % n)), dot(dirv(0), dirv(1))));
+    const names = { 4: "Viereck", 5: "Fünfeck", 6: "Sechseck", 7: "Siebeneck", 8: "Achteck", 9: "Neuneck", 10: "Zehneck" };
+    const nm = names[n] || n + "-Eck";
+    const L2 = latticeUV(M, f, loop), strips = L2 && rectStrips(L2);
+    if (regular)
+      res = { name: "regelmässiges " + nm, exact: `n · a² / (4 · tan(180° / n)) = ${n} · ${fmt(sides[0] * sides[0])} / (4 · tan ${fmt(180 / n)}°)`, approx: `≈ ${fmt(A)}` };
+    else if (strips && strips.length)
+      res = { name: nm + ", achsenparallel", exact: `Zerlegung in Rechtecke: ${strips.map(r => `${fmt(r.u1 - r.u0)} · ${fmt(r.w1 - r.w0)}`).join(" + ")} = ${strips.map(r => fmt((r.u1 - r.u0) * (r.w1 - r.w0))).join(" + ")} = ${fmt(A)}` };
+    else if (L2 && (stripTrapezoids(L2) || stripTrapezoids(L2.map(q2 => [q2[1], q2[0]])))){
+      // Streifen längs der Achse, die die einfacheren Zahlen liefert
+      const axes = ["x", "y", "z"].filter((_, k) => k !== axisOfNormal(f.n));
+      const cands = [[stripTrapezoids(L2), axes[0]], [stripTrapezoids(L2.map(q2 => [q2[1], q2[0]])), axes[1]]].filter(c => c[0]);
+      const ugly = tz => tz.filter(t => Math.abs(t.h1 - r05(t.h1)) > 1e-6 || Math.abs(t.h2 - r05(t.h2)) > 1e-6).length * 10 + tz.length;
+      cands.sort((a, b) => ugly(a[0]) - ugly(b[0]));
+      const [tz, ax] = cands[0];
+      const term = t => Math.abs(t.h1 - t.h2) < 1e-9 ? `${fmt(t.h1)} · ${fmt(t.w)}` : Math.abs(t.h1) < 1e-9 || Math.abs(t.h2) < 1e-9 ? `½ · ${fmt(t.h1 + t.h2)} · ${fmt(t.w)}` : `(${fmt(t.h1)} + ${fmt(t.h2)}) / 2 · ${fmt(t.w)}`;
+      res = { name: nm, exact: `Streifen längs ${ax} zwischen den Ecken, je ein Rechteck, Trapez (h₁ + h₂) / 2 · Breite oder Dreieck: ${tz.map(term).join(" + ")} = ${tz.map(t => fmt((t.h1 + t.h2) / 2 * t.w)).join(" + ")} = ${fmt(A)}` };
+    } else if (L2){
+      const { terms, sum } = shoelaceTerms(L2);
+      res = { name: nm, exact: `Gausssche Trapezformel mit den Ecken (${L2.map(p => fmt(p[0]) + "|" + fmt(p[1])).join("), (")}): A = ½ · |Σ (xᵢ·yᵢ₊₁ − xᵢ₊₁·yᵢ)| = ½ · |${terms.map(t => "(" + t + ")").join(" + ")}| = ½ · ${fmt(Math.abs(sum))} = ${fmt(A)}` };
+    } else
+      res = { name: nm, exact: `Zerlegung in ${n - 2} Dreiecke`, approx: `≈ ${fmt(A)}` };
+  }
+  if (f.holes && f.holes.length){
+    const inner = f.holes.map(h => { const g = { idx: h, holes: [], n: f.n, c: f.c, u: f.u, w: f.w, area: Math.abs(polyArea2(h.map(k => [dot(M.V[k], f.u), dot(M.V[k], f.w)]))) }; return polyInfo(M, g); });
+    const innerA = f.holes.map(h => Math.abs(polyArea2(h.map(k => [dot(M.V[k], f.u), dot(M.V[k], f.w)]))));
+    res = { name: res.name + " mit Ausschnitt (" + inner.map(x => x.name).join(", ") + ")",
+      exact: `aussen − innen: (${res.exact}) − (${inner.map(x => x.exact).join(") − (")}) = ${fmt(A)} − ${innerA.map(fmt).join(" − ")} = ${fmt(f.area)}`, approx: res.approx };
+  }
+  return res;
+}
+// Lage einer Fläche in Worten (nach der nach aussen zeigenden Normalen)
+function faceWhere(f){
+  const n = f.n, names = [["rechts", "links"], ["oben", "unten"], ["hinten", "vorne"]], w = [];
+  [0, 1, 2].forEach(k => { if (Math.abs(n[k]) > 0.999) w.push(names[k][n[k] > 0 ? 0 : 1]); });
+  if (w.length) return w[0];
+  [0, 1, 2].forEach(k => { if (Math.abs(n[k]) > 0.3) w.push(names[k][n[k] > 0 ? 0 : 1]); });
+  return "schräg (zeigt nach " + w.join(" ") + ")";
+}
+// Quaderzerlegung eines achsenparallelen Körpers über die Gitterzellen aller Eckkoordinaten
+function boxDecomposition(M){
+  if (!M.F.every(f => axisOfNormal(f.n) !== undefined)) return null;
+  const cuts = [0, 1, 2].map(k => [...new Set(M.V.map(p => p[k]))].sort((a, b) => a - b));
+  if (cuts.some(c => c.length > 14)) return null;
+  const inside = P => { // Strahlparität in eine schräge Richtung
+    const d = norm([0.3141, 0.2718, 0.9]); let hits = 0;
+    for (const g of M.F){ const den = dot(g.n, d); if (Math.abs(den) < 1e-9) continue; const t = (g.c - dot(g.n, P)) / den; if (t <= 0) continue; const X = add(P, mul(d, t)); if (inPolyH([dot(X, g.u), dot(X, g.w)], g)) hits++; }
+    return hits % 2 === 1;
+  };
+  const [X, Y, Zc] = cuts, nx = X.length - 1, ny = Y.length - 1, nz = Zc.length - 1;
+  const cell = new Uint8Array(nx * ny * nz), id = (i, j, k) => (i * ny + j) * nz + k;
+  for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) for (let k = 0; k < nz; k++)
+    cell[id(i, j, k)] = inside([(X[i] + X[i+1]) / 2, (Y[j] + Y[j+1]) / 2, (Zc[k] + Zc[k+1]) / 2]) ? 1 : 0;
+  const boxes = [];
+  for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) for (let k = 0; k < nz; k++){
+    if (!cell[id(i, j, k)]) continue;
+    let i1 = i; while (i1 + 1 < nx && cell[id(i1 + 1, j, k)]) i1++;
+    let j1 = j; while (j1 + 1 < ny && [...Array(i1 - i + 1).keys()].every(a => cell[id(i + a, j1 + 1, k)])) j1++;
+    let k1 = k; while (k1 + 1 < nz && [...Array(i1 - i + 1).keys()].every(a => [...Array(j1 - j + 1).keys()].every(b => cell[id(i + a, j + b, k1 + 1)]))) k1++;
+    for (let a = i; a <= i1; a++) for (let b = j; b <= j1; b++) for (let c = k; c <= k1; c++) cell[id(a, b, c)] = 0;
+    boxes.push({ x: X[i1 + 1] - X[i], y: Y[j1 + 1] - Y[j], z: Zc[k1 + 1] - Zc[k], at: [X[i], Y[j], Zc[k]] });
+  }
+  return boxes;
+}
+// Prisma: zwei kongruente parallele Flächen, alle anderen Parallelogramme; Pyramide: eine Grundfläche, alle anderen Dreiecke mit gemeinsamer Spitze
+function prismOrPyramid(M){
+  const F = M.F;
+  for (let a = 0; a < F.length; a++){
+    const fa = F[a];
+    if (F.every((f, i) => i === a || f.idx.length === 3)){
+      const apex = F.filter((_, i) => i !== a).map(f => f.idx.filter(v => !fa.idx.includes(v))).flat();
+      if (apex.length && apex.every(v => v === apex[0])){
+        const h = Math.abs(dot(fa.n, M.V[apex[0]]) - fa.c);
+        return { kind: "Pyramide", base: a, h, apex: apex[0] };
+      }
+    }
+    for (let b = a + 1; b < F.length; b++){
+      const fb = F[b];
+      if (fa.idx.length !== fb.idx.length || Math.abs(Math.abs(dot(fa.n, fb.n)) - 1) > 1e-6) continue;
+      if (Math.abs(fa.area - fb.area) > 1e-6) continue;
+      const lateral = F.filter((_, i) => i !== a && i !== b);
+      if (lateral.length !== fa.idx.length || !lateral.every(f => f.idx.length === 4)) continue;
+      const h = Math.abs(dot(fa.n, M.V[fb.idx[0]]) - fa.c);
+      const straight = lateral.every(f => { const d = [0,1,2,3].map(i => norm(sub(M.V[f.idx[(i+1) % 4]], M.V[f.idx[i]]))); return Math.abs(Math.abs(dot(d[0], d[2])) - 1) < 1e-6 && Math.abs(Math.abs(dot(d[1], d[3])) - 1) < 1e-6; });
+      if (straight) return { kind: "Prisma", base: a, top: b, h };
+    }
+  }
+  return null;
+}
+let hiFace = -1, showNumbers = false;
+function detailsHtml(M, forPrint){
+  const s = sub(bmax(M.V), bmin(M.V)), E = M.V.length, Kn = M.E.length, F = M.F.length, Lh = M.holes || 0, o = bmin(M.V);
+  const title = M === targetModel ? titleOf() + " (Vorlage)" : (task ? titleOf() + " (meine Zeichnung)" : (exampleName() || "Eigener Körper"));
+  let h = `<div class="det"><p><b>${esc(title)}</b></p>`;
+  const warn = [];
+  if (!M.closed) warn.push("Der Körper ist nicht geschlossen. Oberfläche, Volumen und Netz sind erst möglich, wenn jede Kante zu genau zwei Flächen gehört.");
+  if (M === userModel && M.E.some(e => e.bad)) warn.push("Rote Kanten auf dem Blatt passen nicht zusammen.");
+  if (M === userModel && inputMode === "schraeg" && M.freeOpen) warn.push(`Die Tiefe von ${M.freeOpen} Ecke(n) im Raum ist aus dem Schrägbild allein nicht ablesbar und wurde so gewählt, dass die Ecke auf dem Raster liegt. Lege sie selbst fest: Stift «Tiefenlinie» vom Fusspunkt in der Vorderebene unter α zur Ecke.`);
+  if (M === userModel && inputMode === "riss"){
+    const u = (M.unexplained || []).length, w = (M.styleWrong || []).length, n = (M.notDrawn || []).length;
+    if (u) warn.push(`${u} gezeichnete Linie(n) passen zu keiner Kante (orange).`);
+    if (w) warn.push(`${w} Linie(n): sichtbar oder verdeckt stimmt nicht (violett).`);
+    if (n) warn.push(`${n} Linie(n) des Körpers fehlen in den Rissen.`);
+  }
+  const net = getNet(M);
+  if (net && net.overlap) warn.push("Das Netz überlappt sich; ein Bastelbogen ist so nicht möglich.");
+  warn.forEach(w => h += `<p class="warn">${w}</p>`);
+  const vcoord = v => `(${sub(M.V[v], o).map(fmt).join(" | ")})`;
+  h += `<h3>Masse und Eulersche Polyederformel</h3><p>Breite ${fmt(s[0])} · Höhe ${fmt(s[1])} · Tiefe ${fmt(s[2])} (umgebender Quader, in Häuschen). Koordinaten unten: (x | y | z) = (nach rechts | nach oben | nach hinten) ab der Ecke links unten vorne.</p>`;
+  h += `<p>Ecken E = ${E}, Kanten K = ${Kn}, Flächen F = ${F}${M.closed ? ` → E − K + F = ${E} − ${Kn} + ${F} = ${E - Kn + F}` : ""}`;
+  if (M.closed && Lh) h += `. ${Lh === 1 ? "Eine Fläche hat einen Ausschnitt" : Lh + " Flächen haben Ausschnitte"}; jeder Ausschnitt zählt wie eine Fläche weniger: E − K + F − ${Lh} = 2`;
+  h += `</p>`;
+  if (!forPrint) h += `<p class="hint small">Flächennummern im 3D-Fenster: Knopf «Nummern». Eine Zeile der Flächentabelle berühren oder antippen hebt die Fläche im 3D-Fenster hervor; das Modell lässt sich dabei weiter drehen.</p>`;
+  const lens = M.E.map(e => vlen(sub(M.V[e.i], M.V[e.j])));
+  const faceSizes = new Set(M.F.map(f => f.idx.length)), deg = new Set(M.V.map((_, k) => M.E.filter(e => e.i === k || e.j === k).length));
+  if (M.closed && Math.max(...lens) - Math.min(...lens) < 1e-6 && faceSizes.size === 1 && deg.size === 1)
+    h += `<p>Regulärer Körper: alle Kanten gleich lang, alle Flächen ${[...faceSizes][0]}-Ecke, an jeder Ecke ${[...deg][0]} Kanten.</p>`;
+  // Ecken
+  h += `<h3>Ecken</h3><p class="calc">${M.V.map((_, v) => `E${v + 1} ${vcoord(v)}`).join(" · ")}</p>`;
+  // Kanten
+  const groups = new Map();
+  lens.forEach((L, n) => { const k = L.toFixed(4); const g = groups.get(k) || { L, c: 0, ex: [] }; g.c++; if (g.ex.length < 3) g.ex.push(`E${M.E[n].i + 1}E${M.E[n].j + 1}`); groups.set(k, g); });
+  const glist = [...groups.values()].sort((a, b) => b.c - a.c || a.L - b.L);
+  h += `<h3>Kanten</h3><div class="tw"><table><tr><th>Anzahl</th><th>Länge</th><th>Beispiele</th></tr>` +
+    glist.map(g => `<tr><td class="num">${g.c}</td><td>${lenFull(g.L)}</td><td class="calc">${g.ex.join(", ")}${g.c > 3 ? ", …" : ""}</td></tr>`).join("") +
+    `<tr class="sum"><td class="num">${Kn}</td><td colspan="2">Gesamtlänge aller Kanten ≈ ${fmt(lens.reduce((a, b) => a + b, 0))}</td></tr></table></div>`;
+  // Flächen
+  h += `<h3>Flächen und Oberfläche</h3><div class="tw"><table><tr><th>Nr.</th><th>Lage</th><th>Form · Ecken</th><th>Rechnung</th><th class="num">Inhalt</th></tr>`;
+  M.F.forEach((f, i) => {
+    const pi = polyInfo(M, f);
+    const ecken = faceLoops(f).map(loop => loop.map(v => "E" + (v + 1)).join(" ")).join(" · Ausschnitt: ");
+    h += `<tr data-face="${i}"><td class="num">${i + 1}</td><td>${faceWhere(f)}</td><td>${pi.name}<br><span class="calc">${ecken}</span></td><td class="calc">${pi.exact}${pi.approx ? `<br><span class="approx">${pi.approx}</span>` : ""}</td><td class="num">${fmt(f.area)}</td></tr>`;
+  });
+  h += `<tr class="sum"><td></td><td colspan="3">Oberfläche O = Summe aller Flächen</td><td class="num">${fmt(M.area)}</td></tr></table></div>`;
+  // Volumen
+  if (M.closed){
+    h += `<h3>Volumen</h3>`;
+    const boxes = boxDecomposition(M), pp = boxes ? null : prismOrPyramid(M);
+    if (boxes && boxes.length){
+      h += `<p>Der Körper ist achsenparallel und lässt sich in Quader zerlegen:</p><div class="tw"><table><tr><th>Quader</th><th>Ecke links unten vorne</th><th>Breite · Höhe · Tiefe</th><th class="num">Volumen</th></tr>`;
+      boxes.forEach((b, i) => h += `<tr><td class="num">${i + 1}</td><td class="calc">(${sub(b.at, o).map(fmt).join(" | ")})</td><td class="calc">${fmt(b.x)} · ${fmt(b.y)} · ${fmt(b.z)}</td><td class="num">${fmt(b.x * b.y * b.z)}</td></tr>`);
+      h += `<tr class="sum"><td></td><td colspan="2">Volumen V = ${boxes.map(b => fmt(b.x * b.y * b.z)).join(" + ")}</td><td class="num">${fmt(boxes.reduce((s2, b) => s2 + b.x * b.y * b.z, 0))}</td></tr></table></div>`;
+    } else if (pp && pp.kind === "Prisma"){
+      const G0 = M.F[pp.base];
+      h += `<p>Der Körper ist ein <b>Prisma</b> mit Grundfläche Nr. ${pp.base + 1} (${polyInfo(M, G0).name}) und Deckfläche Nr. ${pp.top + 1}.</p><p class="calc">V = G · h = ${fmt(G0.area)} · ${lenTok(pp.h)} = ${fmt(G0.area * pp.h)}</p>`;
+    } else if (pp && pp.kind === "Pyramide"){
+      const G0 = M.F[pp.base];
+      h += `<p>Der Körper ist eine <b>Pyramide</b> mit Grundfläche Nr. ${pp.base + 1} (${polyInfo(M, G0).name}) und Spitze E${pp.apex + 1}.</p><p class="calc">V = ⅓ · G · h = ⅓ · ${fmt(G0.area)} · ${lenTok(pp.h)} = ${fmt(G0.area * pp.h / 3)}</p>`;
+    }
+    const Z = M.V.reduce((a, p) => add(a, mul(p, 1 / M.V.length)), [0, 0, 0]);
+    h += `<p>${boxes && boxes.length || pp ? "Kontrolle mit der allgemeinen Methode – " : ""}Zerlegung in Pyramiden: Jede Fläche ist Grundfläche einer Pyramide mit Spitze im Punkt Z (${sub(Z, o).map(fmt).join(" | ")}), dem Mittelwert aller Ecken. V = Σ ⅓ · A · h. Liegt Z bei einer Fläche auf der Aussenseite, zählt die Pyramide negativ («Z aussen»).</p>`;
+    h += `<div class="tw"><table><tr><th>Fläche</th><th class="num">A</th><th class="num">h</th><th class="num">⅓ · A · h</th><th></th></tr>`;
+    let sum = 0;
+    M.F.forEach((f, i) => { const hh = f.c - dot(f.n, Z), v = f.area * hh / 3; sum += v; h += `<tr data-face="${i}"><td class="num">${i + 1}</td><td class="num">${fmt(f.area)}</td><td class="num">${fmt(hh)}</td><td class="num">${fmt(v)}</td><td>${hh < -1e-9 ? "Z aussen" : ""}</td></tr>`; });
+    h += `<tr class="sum"><td></td><td colspan="3">Volumen V</td><td class="num">${fmt(sum)}</td></tr></table></div>`;
+    h += `<p>Verhältnis Oberfläche zu Volumen: O / V = ${fmt(M.area)} / ${fmt(M.volume)} ≈ ${fmt(M.area / M.volume)}</p>`;
+  }
+  return h + `</div>`;
+}
+function fillDetails(){
+  const M = displayed();
+  $("detailsBody").innerHTML = M && M.V.length ? detailsHtml(M) : "<p>Noch kein Körper vorhanden.</p>";
+  $("detailsBody").querySelectorAll("tr[data-face]").forEach(tr => {
+    const i = +tr.dataset.face;
+    tr.addEventListener("pointerenter", () => { hiFace = i; });
+    tr.addEventListener("pointerleave", () => { if (hiFace === i) hiFace = -1; });
+    tr.addEventListener("click", () => { hiFace = hiFace === i ? -1 : i; });
+  });
+}
+$("detailsBtn").onclick = () => { if ($("detailsDlg").open){ $("detailsDlg").close(); return; } fillDetails(); $("detailsDlg").show(); };
+$("detailsDlg").addEventListener("close", () => { hiFace = -1; });
+window.addEventListener("keydown", e => { if (e.key === "Escape" && $("detailsDlg").open) $("detailsDlg").close(); });
+$("numbers").onclick = () => { showNumbers = !showNumbers; $("numbers").setAttribute("aria-pressed", showNumbers); };
+document.querySelectorAll("dialog").forEach(d => {
+  d.addEventListener("click", e => { if (e.target === d || e.target.closest("[data-close]")) d.close(); });
+});
+
+// ---------- Drucken mit Auswahl ----------
+function printArea(){
+  let area = $("printArea");
+  if (!area){ area = document.createElement("div"); area.id = "printArea"; document.body.appendChild(area); }
+  let ps = $("pageStyle");
+  if (!ps){ ps = document.createElement("style"); ps.id = "pageStyle"; document.head.appendChild(ps); }
+  return { area, ps };
+}
+const titleOf = () => task ? task.name.replace(/^\d+ · /, "") : (exampleName() || "Eigener Körper");
+const today = () => new Date().toLocaleDateString("de-CH");
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
+// sauberes Bild einer Zeichnung (ohne Lineal, Erkennungsfarben und Bedienelemente)
+function sheetImage(mode, list){
+  const pts = list.flatMap(s => s.pts);
+  let x0, y0, x1, y1;
+  if (mode === "riss"){
+    initK();
+    const ext = pts.length ? pts : [[K[0]*G, K[1]*G]];
+    x0 = Math.min(...ext.map(p => p[0]), K[0]*G - 4*G); x1 = Math.max(...ext.map(p => p[0]), K[0]*G + 4*G);
+    y0 = Math.min(...ext.map(p => p[1]), K[1]*G - 4*G); y1 = Math.max(...ext.map(p => p[1]), K[1]*G + 4*G);
+  } else {
+    if (!pts.length) return null;
+    x0 = Math.min(...pts.map(p => p[0])); x1 = Math.max(...pts.map(p => p[0]));
+    y0 = Math.min(...pts.map(p => p[1])); y1 = Math.max(...pts.map(p => p[1]));
+  }
+  x0 -= G * 1.5; y0 -= G * 1.5; x1 += G * 1.5; y1 += G * 1.5;
+  const sc = 2, cv = document.createElement("canvas");
+  cv.width = Math.round((x1 - x0) * sc); cv.height = Math.round((y1 - y0) * sc);
+  const c = cv.getContext("2d");
+  c.scale(sc, sc); c.translate(-x0, -y0);
+  c.fillStyle = "#fff"; c.fillRect(x0, y0, x1 - x0, y1 - y0);
+  drawGrid(c, x0, y0, x1, y1, 0.6);
+  if (mode === "riss") drawRissFrame(c, x0, y0, x1, y1, 1);
+  c.lineCap = "round"; c.lineJoin = "round";
+  for (const s2 of list){
+    c.strokeStyle = s2.kind === "line" ? "#c62828" : s2.kind === "depth" ? "#b5651d" : "#111"; c.lineWidth = s2.kind === "depth" ? 1.4 : 2.2; c.setLineDash(s2.kind === "hidden" ? [7, 6] : s2.kind === "depth" ? [2, 4] : []);
+    c.beginPath(); s2.pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.stroke();
+  }
+  return cv.toDataURL("image/png");
+}
+function modelImage(M, numbers){
+  const cv = document.createElement("canvas"); cv.width = 1000; cv.height = 800;
+  const c = cv.getContext("2d");
+  c.fillStyle = "#fff"; c.fillRect(0, 0, 1000, 800);
+  renderModel(c, 1000, 800, M, { yaw, pitch, t: 0, print: true, ortho: orthoK, riss: rissView, numbers });
+  return cv.toDataURL("image/png");
+}
+const PRINTOPTS = ["pRiss", "pSchraeg", "p3d", "pNet", "pDetails", "pBastel"];
+function loadPrintOpts(){
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem("tals-mathe-schraegbild-werkstatt-v1") || "null"); } catch (_) {}
+  const def = { pRiss: true, pSchraeg: true, p3d: true, pNet: false, pDetails: false, pBastel: false };
+  PRINTOPTS.forEach(id => { $(id).checked = saved && id in saved ? saved[id] : def[id]; });
+  // Bastelbogen nur bei überschneidungsfreier Abwicklung
+  const M = displayed(), net = M && M.V.length ? getNet(M) : null;
+  const why = !net ? "Körper nicht geschlossen" : net.overlap ? "Überschneidungen" : "";
+  bastelPref = $("pBastel").checked;
+  $("pBastel").disabled = !!why;
+  if (why) $("pBastel").checked = false;
+  $("pBastelRow").classList.toggle("off", !!why);
+  $("pBastelNote").hidden = !why;
+  $("pBastelNote").textContent = why ? "– " + why : "";
+}
+let bastelPref = false;
+$("printAll").onclick = () => { loadPrintOpts(); $("printDlg").showModal(); };
+$("doPrint").onclick = () => {
+  const opt = Object.fromEntries(PRINTOPTS.map(id => [id, $(id).checked]));
+  try { localStorage.setItem("tals-mathe-schraegbild-werkstatt-v1", JSON.stringify($("pBastel").disabled ? { ...opt, pBastel: bastelPref } : opt)); } catch (_) {}
+  $("printDlg").close();
+  stashMode();
+  const M = displayed();
+  const figs = [];
+  // Zeichnungen: eigene Striche, sonst aus dem Körper erzeugt
+  const drawingFor = mode => {
+    const own = drawings[mode].strokes;
+    if (own.length) return { img: sheetImage(mode, own), gen: false };
+    if (!M || !M.V.length) return null;
+    const saveMode = inputMode; inputMode = mode;
+    const list = mode === "riss" ? (lastRiss = lastRiss && saveMode === "riss" ? lastRiss : null, rissStrokesFrom(M)) : strokesFrom(M, centeredShift(M), true);
+    inputMode = saveMode;
+    return { img: sheetImage(mode, list), gen: true };
+  };
+  if (opt.pRiss){ const d = drawingFor("riss"); if (d) figs.push(`<figure><img src="${d.img}" alt="Dreitafelprojektion"><figcaption>Dreitafelprojektion${d.gen ? " (aus dem Körper erzeugt)" : ""}</figcaption></figure>`); }
+  if (opt.pSchraeg){ const d = drawingFor("schraeg"); if (d) figs.push(`<figure><img src="${d.img}" alt="Schrägbild"><figcaption>Schrägbild, α = ${alphaDeg}°, q = ${qLabel()}${d.gen ? " (aus dem Körper erzeugt)" : ""}</figcaption></figure>`); }
+  if (opt.p3d && M && M.V.length) figs.push(`<figure><img src="${modelImage(M, opt.pDetails || opt.pBastel)}" alt="3D-Modell"><figcaption>3D-Modell${M === targetModel ? " (Vorlage)" : ""} ${rissView ? "als " + VIEWNAME[rissView] : "in der gewählten Ansicht"}, verdeckte Kanten gestrichelt</figcaption></figure>`);
+  const net = M && M.V.length ? getNet(M) : null;
+  if (!figs.length && !(opt.pNet && net) && !(opt.pDetails && M) && !(opt.pBastel && net)){ toast("Es gibt noch nichts zu drucken."); return; }
+  const { area, ps } = printArea();
+  let html = `<h1>${esc(titleOf())}</h1><p>${task ? task.text.replace(/<[^>]+>/g, "") : "Freie Zeichnung"}</p>`;
+  if (task) html += `<p class="namezeile">Name: ______________________ &nbsp; Klasse: ________ &nbsp; Datum: ____________${lern.versuche ? ` &nbsp; · &nbsp; Prüfversuche: ${lern.versuche}${lern.tipp ? `, Tipp ${lern.tipp}` : ""}${lern.loesung ? ", Lösung angesehen" : ""}${lern.richtig ? ", richtig gelöst" : ""}` : ""}</p>`;
+  if (figs.length) html += `<div class="${figs.length === 1 ? "grid1" : "grid2"}">${figs.join("")}</div>`;
+  if (opt.pNet){
+    if (net){ const n = netSvg(M, 180, 110, false, opt.pDetails); html += `<figure class="netfig">${n.svg}<figcaption>Netz · Massstab 1 Häuschen = ${fmt(n.scale)} mm · Faltkanten gestrichelt${net.overlap ? " · Achtung: das Netz überlappt sich" : ""}</figcaption></figure>`; }
+    else if (M) html += `<p>Netz: Der Körper ist nicht geschlossen.</p>`;
+  }
+  if (opt.pDetails && M && M.V.length) html += detailsHtml(M, true);
+  html += `<p class="foot">Mathe begreifbar · Schrägbild-Werkstatt · ${today()}</p>`;
+  if (opt.pBastel && net && !net.overlap){
+    const b = netSvg(M, 180, 255, true, true);
+    html += `<div class="newpage"><p><b>Bastelbogen: ${esc(titleOf())}</b> · Massstab 1 Häuschen = ${fmt(b.scale)} mm · ausschneiden, an den gestrichelten Linien falten, graue Laschen kleben</p>${b.svg}</div>`;
+  }
+  area.innerHTML = html;
+  ps.textContent = "@page{size:A4 portrait;margin:12mm}";
+  const imgs = [...area.querySelectorAll("img")];
+  Promise.all(imgs.map(i => i.complete ? 1 : new Promise(r => { i.onload = r; i.onerror = r; }))).then(() => setTimeout(() => window.print(), 50));
+};
+
+// ---------- Striche aus einem Modell erzeugen ----------
+function strokesFrom(M, sh, clean){
+  computeHidden(M);
+  const out = [], jit = () => clean ? 0 : (Math.random() - .5) * 1.4;
+  const seg = (a, b, kind, dir, zh) => {
+    const A = toPx(sub(a, sh)), B = toPx(sub(b, sh)), pts = [];
+    for (let i = 0; i <= 18; i++){ const t = i / 18; pts.push([A[0] + (B[0]-A[0])*t + jit(), A[1] + (B[1]-A[1])*t + jit()]); }
+    const st = { kind, dir, pts };
+    if (zh != null) st.zh = zh;
+    out.push(st);
+  };
+  // Teilweise verdeckte Kanten werden stückweise gezeichnet. Schräge Raumkanten tragen ihre Tiefe mit, weil sie im Schrägbild allein nicht eindeutig sind
+  M.E.forEach(e => {
+    const A = M.V[e.i], B = M.V[e.j], dz = B[2] - A[2];
+    for (const p of e.parts || [{ t0: 0, t1: 1, hidden: e.hiddenCalc }])
+      seg(add(A, mul(sub(B, A), p.t0)), add(A, mul(sub(B, A), p.t1)), p.hidden ? "hidden" : "edge", e.axis === "f" ? "f" : "auto", e.axis === "o" ? dz * (p.t1 - p.t0) : null);
+  });
+  (M.L || []).forEach(L => seg(L.a, L.b, "line", "auto"));
+  return out;
+}
+function rissStrokesFrom(M){
+  const sh = rissShift(M), TV = modelViews(M, sh), out = [];
+  VIEWS.forEach(v => TV[v].forEach(s => out.push({ kind: s.hidden ? "hidden" : "edge", pts: [viewToCell(v, s.a), viewToCell(v, s.b)].map(p => [p[0] * G, p[1] * G]) })));
+  return out;
+}
+
+// ── KERN-ZUSATZ:ENDE
+// ---------- Speichern und Laden ----------
+function toast(msg){
+  document.querySelectorAll(".toast").forEach(t => t.remove());
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+function stashMode(){ drawings[inputMode] = { strokes, history, future }; }
+function packStrokes(list){ return list.map(s => { const o = { kind: s.kind, dir: s.dir || "auto", pts: s.pts.map(p => [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10]) }; if (typeof s.zh === "number") o.zh = s.zh; return o; }); }
+$("save").onclick = () => {
+  stashMode();
+  const data = { app: "schraegbild-werkstatt", version: 3, savedAt: new Date().toISOString(), inputMode, projIdx, task: task ? task.id : "frei", K, lern,
+    schraeg: packStrokes(drawings.schraeg.strokes), riss: packStrokes(drawings.riss.strokes), ruler: { on: ruler.on, c: ruler.c, th: ruler.th } };
+  // exakte Körper (z. B. Dodekaeder) mitspeichern, solange die Zeichnung unverändert ist
+  const ex = m => { const M = exactFor.get(drawings[m].strokes); return M ? { V: M.V, E: M.E.map(e => [e.i, e.j]), L: (M.L || []).map(l => [l.a, l.b]) } : null; };
+  data.exact = { schraeg: ex("schraeg"), riss: ex("riss") };
+  const d = new Date(), z = n => String(n).padStart(2, "0");
+  const name = `Schraegbild_${task ? task.id + "_" : ""}${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}.json`;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: "application/json" }));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast(`Gespeichert: ${name}`);
+};
+$("load").onclick = () => $("fileIn").click();
+$("fileIn").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  try {
+    const data = JSON.parse(await f.text());
+    if (data.app !== "schraegbild-werkstatt") throw new Error("keine Werkstatt-Datei");
+    if ((data.version || 1) > 3) toast("Die Datei stammt aus einer neueren Fassung der Werkstatt; nicht alles wird übernommen.");
+    const ti = Math.max(0, TASKS.findIndex(t => t.id === data.task));
+    $("task").value = ti; setTask(TASKS[ti], true);
+    setProj(Math.min(PROJ.length - 1, data.projIdx || 0));
+    K = data.K || K;
+    drawings.schraeg = { strokes: data.schraeg || [], history: [], future: [] };
+    drawings.riss = { strokes: data.riss || [], history: [], future: [] };
+    ["schraeg", "riss"].forEach(m => {
+      const x = data.exact && data.exact[m];
+      if (x && x.V && x.E) exactFor.set(drawings[m].strokes, buildTarget({ build: () => ({ V: x.V, E: x.E.map(([i, j]) => ({ i, j })) }), lines: (x.L || []).map(([a, b]) => ({ a, b })) }));
+    });
+    if (data.ruler){ ruler.on = !!data.ruler.on; ruler.c = data.ruler.c || ruler.c; ruler.th = data.ruler.th || 0; ruler.placed = true; $("rulerBtn").setAttribute("aria-pressed", ruler.on); }
+    inputMode = data.inputMode === "riss" ? "riss" : "schraeg";
+    ({ strokes, history, future } = drawings[inputMode]);
+    if (data.lern && typeof data.lern === "object") lern = { versuche: 0, tipp: 0, loesung: false, richtig: false, ...data.lern };
+    applyModeUi(); fitToStrokes(); rebuild();
+    toast(`Geladen: ${f.name}` + (task && lern.versuche ? ` · ${lern.versuche} Prüfversuch(e)${lern.tipp ? `, Tipp ${lern.tipp}` : ""}${lern.richtig ? ", richtig gelöst" : ""}` : ""));
+  } catch (err){ toast("Die Datei konnte nicht gelesen werden. Es muss eine mit «Speichern» erstellte Datei sein."); }
+};
+function solutionPts(){
+  if (!task || !targetModel) return [];
+  if (inputMode === "riss"){ const TV = modelViews(targetModel, rissShift(targetModel)); return VIEWS.flatMap(v => TV[v].flatMap(s => [s.a, s.b].map(q => viewToCell(v, q).map(t => t * G)))); }
+  const T = targetModel, sh = userModel && userModel.V.length ? bestShift(T.V, userModel.V) : centeredShift(T);
+  return T.V.map(p => toPx(sub(p, sh)));
+}
+function fitToStrokes(){
+  const pts = strokes.flatMap(s => s.pts);
+  if (showSolution) pts.push(...solutionPts());
+  else if (task && tipLevel) tipSegments().forEach(s => pts.push(s.a, s.b));
+  if (inputMode === "riss" && K) pts.push([K[0] * G - 2 * G, K[1] * G - 2 * G], [K[0] * G + 2 * G, K[1] * G + 2 * G]);
+  if (!pts.length) return;
+  const x0 = Math.min(...pts.map(p => p[0])), x1 = Math.max(...pts.map(p => p[0])), y0 = Math.min(...pts.map(p => p[1])), y1 = Math.max(...pts.map(p => p[1]));
+  zoom = Math.max(0.4, Math.min(1.5, Math.min(DW / (x1 - x0 + 3 * G), DH / (y1 - y0 + 3 * G))));
+  pan = [(x0 + x1) / 2 - DW / zoom / 2, (y0 + y1) / 2 - DH / zoom / 2];
+  setZoomLabel();
+}
+
+// ---------- Bedienung ----------
+const pens = { penEdge: "edge", penHidden: "hidden", penDepth: "depth", penErase: "erase" };
+function setPen(id){
+  penKind = pens[id];
+  Object.keys(pens).forEach(k => $(k).setAttribute("aria-pressed", k === id));
+  dcv.classList.toggle("erasing", penKind === "erase");
+  if (penKind !== "erase"){ eraserAt = null; drawPaper(); }
+}
+Object.keys(pens).forEach(id => $(id).onclick = () => setPen(id));
+const dirs = { dirAuto: "auto", dirZ: "z", dirF: "f" };
+Object.keys(dirs).forEach(id => $(id).onclick = () => { slantDir = dirs[id]; Object.keys(dirs).forEach(k => $(k).setAttribute("aria-pressed", k === id)); });
+$("undo").onclick = () => { if (!history.length) return; future.push(strokes); strokes = history.pop(); rebuild(); };
+$("redo").onclick = () => { if (!future.length) return; history.push(strokes); strokes = future.pop(); rebuild(); };
+$("clear").onclick = () => { if (strokes.length) commit([]); };
+$("penOnly").onclick = () => { penOnly = !penOnly; $("penOnly").setAttribute("aria-pressed", penOnly); };
+$("showRec").onclick = () => { showRec = !showRec; $("showRec").setAttribute("aria-pressed", showRec); drawPaper(); };
+$("depthGrid").onclick = () => { depthGrid = !depthGrid; $("depthGrid").setAttribute("aria-pressed", depthGrid); drawPaper(); };
+$("zoomIn").onclick = () => zoomAt(DW / 2, DH / 2, zoom * 1.25);
+$("zoomOut").onclick = () => zoomAt(DW / 2, DH / 2, zoom / 1.25);
+$("zoomReset").onclick = () => { zoom = 1; pan = [0, 0]; setZoomLabel(); drawPaper(); };
+$("rulerBtn").onclick = () => {
+  ruler.on = !ruler.on; $("rulerBtn").setAttribute("aria-pressed", ruler.on);
+  if (ruler.on){ const vc = visibleCenter(); ruler.c = [vc[0], vc[1] + DH / zoom * 0.2]; if (!ruler.placed) ruler.th = 0; ruler.placed = true; }
+  drawPaper();
+};
+window.addEventListener("keydown", e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  const k = e.key.toLowerCase();
+  if (k === "z"){ e.preventDefault(); (e.shiftKey ? $("redo") : $("undo")).click(); }
+  else if (k === "y"){ e.preventDefault(); $("redo").click(); }
+  else if (k === "s"){ e.preventDefault(); $("save").click(); }
+});
+PROJ.forEach((p, i) => { const o = document.createElement("option"); o.value = i; o.textContent = p.label; $("proj").appendChild(o); });
+function setProj(i){ projIdx = i; alphaDeg = PROJ[i].a; q = PROJ[i].q; $("proj").value = i; }
+$("proj").onchange = () => { setProj(+$("proj").value); if (targetModel) computeHidden(targetModel); updateTaskText(); rebuild(); };
+
+function initK(){ if (!K){ const vc = visibleCenter(); K = [Math.round(vc[0] / G + DW / zoom / G * 0.08), Math.round(vc[1] / G - DH / zoom / G * 0.02)]; } }
+function applyModeUi(){
+  const riss = inputMode === "riss";
+  $("modeSchraeg").setAttribute("aria-pressed", !riss); $("modeRiss").setAttribute("aria-pressed", riss);
+  $("dirGroup").hidden = riss; $("penDepth").hidden = riss; $("depthGrid").hidden = riss;
+  if (riss && penKind === "depth") setPen("penEdge");
+  $("paperCap").textContent = riss ? "Dreitafelprojektion" : "Schrägbild";
+  checkRes = null;
+  updateTaskText();
+}
+function setInputMode(m){
+  if (m === inputMode) return;
+  stashMode();
+  inputMode = m;
+  if (m === "riss") initK();
+  ({ strokes, history, future } = drawings[m]);
+  if (exactFor.get(strokes) || (showSolution && task)) fitToStrokes();
+  applyModeUi(); unfoldT = 0; rebuild();
+}
+$("modeSchraeg").onclick = () => setInputMode("schraeg");
+$("modeRiss").onclick = () => setInputMode("riss");
+function updateTaskText(){
+  const how = inputMode === "riss"
+    ? "Zeichne <b>Aufriss</b>, <b>Grundriss</b> und <b>Seitenriss</b> in die drei Felder, verdeckte Kanten gestrichelt. Die Ordnungslinien helfen beim Übertragen."
+    : `Zeichne das Schrägbild mit <b>α = ${alphaDeg}°</b> und <b>q = ${qLabel()}</b>, verdeckte Kanten gestrichelt.`;
+  $("taskText").innerHTML = task ? `${task.text} ${how}${task.ziel ? ` <span class="ziel">Ziel: ${task.ziel}</span>` : ""}`
+    : inputMode === "riss"
+      ? "Zeichne frei in drei Rissen: Aufriss oben links, Seitenriss oben rechts, Grundriss unten links. Die Striche werden begradigt. Daraus entsteht der Körper rechts."
+      : "Zeichne frei. Schräge Linien liest die Seite automatisch; mit <b>Tiefe</b> oder <b>Front</b> legst du fest, ob eine schräge Linie in die Tiefe geht oder in der Vorderfläche liegt.";
+}
+TASKS.forEach((t, i) => { const o = document.createElement("option"); o.value = i; o.textContent = t.name; $("task").appendChild(o); });
+$("task").onchange = () => setTask(TASKS[+$("task").value]);
+function setTask(t, keepView){
+  task = t.id === "frei" ? null : t;
+  drawings.schraeg = { strokes: [], history: [], future: [] }; drawings.riss = { strokes: [], history: [], future: [] };
+  ({ strokes, history, future } = drawings[inputMode]);
+  checkRes = null; showSolution = false; unfoldT = 0; anim = null; spin = true; lastRiss = null;
+  tipLevel = 0; lern = { versuche: 0, tipp: 0, loesung: false, richtig: false };
+  $("solution").setAttribute("aria-pressed", "false"); $("tip").textContent = "Tipp"; $("tip").setAttribute("aria-pressed", "false");
+  $("result").textContent = ""; $("result").className = "";
+  if (task){
+    setProj(Math.max(0, PROJ.findIndex(p => p.a === task.a && Math.abs(p.q - task.q) < 1e-3)));
+    targetModel = buildTarget(task); showWhich = "target";
+  } else { targetModel = null; showWhich = "user"; }
+  updateTaskText();
+  $("seg").hidden = !task; $("check").hidden = !task; $("tip").hidden = !task; $("solution").hidden = !task; $("example").hidden = !!task;
+  $("showTarget").setAttribute("aria-pressed", showWhich === "target"); $("showUser").setAttribute("aria-pressed", showWhich === "user");
+  if (!keepView) rebuild();
+}
+$("showTarget").onclick = () => { showWhich = "target"; $("showTarget").setAttribute("aria-pressed", "true"); $("showUser").setAttribute("aria-pressed", "false"); unfoldT = 0; renderInfo(); };
+$("showUser").onclick = () => { showWhich = "user"; $("showTarget").setAttribute("aria-pressed", "false"); $("showUser").setAttribute("aria-pressed", "true"); unfoldT = 0; renderInfo(); };
+$("check").onclick = () => { lern.versuche++; check(); };
+$("solution").onclick = () => { showSolution = !showSolution; $("solution").setAttribute("aria-pressed", showSolution); if (showSolution){ lern.loesung = true; fitToStrokes(); } drawPaper(); };
+// Tipps in Stufen: 1 = Vorderfläche bzw. Aufriss, 2 = dazu die Tiefenkanten bzw. der Grundriss
+let tipLevel = 0;
+function setTip(l){
+  tipLevel = l; lern.tipp = Math.max(lern.tipp, l);
+  $("tip").textContent = l ? `Tipp ${l}/2` : "Tipp"; $("tip").setAttribute("aria-pressed", l > 0);
+  if (l) fitToStrokes();
+  drawPaper();
+}
+$("tip").onclick = () => setTip((tipLevel + 1) % 3);
+function tipSegments(){
+  const T = targetModel, out = [];
+  if (!T) return out;
+  if (inputMode === "riss"){
+    const TV = modelViews(T, rissShift(T));
+    (tipLevel === 1 ? ["A"] : ["A", "G"]).forEach(v => TV[v].forEach(s => out.push({ a: viewToCell(v, s.a).map(t => t * G), b: viewToCell(v, s.b).map(t => t * G), hidden: s.hidden })));
+    return out;
+  }
+  const sh = userModel && userModel.V.length ? bestShift(T.V, userModel.V) : centeredShift(T), zmin = bmin(T.V)[2];
+  computeHidden(T);
+  const atFront = P => Math.abs(P[2] - zmin) < 1e-6;
+  for (const e of T.E){
+    const A = T.V[e.i], B = T.V[e.j];
+    const take = (atFront(A) && atFront(B)) || (tipLevel >= 2 && e.axis === "z" && (atFront(A) || atFront(B)));
+    if (!take) continue;
+    for (const p of e.parts) out.push({ a: toPx(sub(add(A, mul(sub(B, A), p.t0)), sh)), b: toPx(sub(add(A, mul(sub(B, A), p.t1)), sh)), hidden: p.hidden });
+  }
+  return out;
+}
+function drawTip(c){
+  for (const s of tipSegments()) rissStroke(c, s.a, s.b, s.hidden, COL.tip, 3);
+}
+const exOpt = (v, t) => { const o = document.createElement("option"); o.value = v; o.textContent = t; $("example").appendChild(o); };
+exOpt("", "Beispiel laden …");
+EXAMPLES.forEach(x => exOpt(x.id, x.name));
+$("example").onchange = () => { const id = $("example").value; $("example").value = ""; if (id) loadExample(id); };
+function loadExample(id){
+  // Beispiel in beide Darstellungen legen, damit man zwischen Schrägbild und Dreitafel umschalten kann
+  const ex = EXAMPLES.find(x => x.id === id) || EXAMPLE;
+  const M = buildTarget(ex);
+  lastExampleName = ex.name.replace(/ \(.*\)$/, "");
+  stashMode();
+  initK();
+  const sh = centeredShift(M), sStr = strokesFrom(M, sh);
+  exactFor.set(sStr, translateModel(M, mul(sh, -1)));
+  lastRiss = null;
+  const rStr = rissStrokesFrom(M);
+  exactFor.set(rStr, M);
+  for (const [m, st] of [["schraeg", sStr], ["riss", rStr]]){
+    const d = drawings[m];
+    drawings[m] = { strokes: st, history: d.strokes.length ? d.history.concat([d.strokes]) : d.history, future: [] };
+  }
+  ({ strokes, history, future } = drawings[inputMode]);
+  fitToStrokes();
+  unfoldT = 0; spin = true; setRissView(null); orthoK = 0; rebuild();
+}
+
+function resize(){ [DW, DH] = sizeCanvas(dcv, dctx); [VW, VH] = sizeCanvas(vcv, vctx); drawPaper(); }
+new ResizeObserver(resize).observe(document.querySelector("main"));
+resize();
+setProj(0);
+setTask(TASKS[0]);
+applyModeUi();
+
+// Testzugang für die automatische Kontrolle (ohne Wirkung im Betrieb)
+window.__sw = {
+  setTask: i => { $("task").value = i; setTask(TASKS[i]); },
+  solve: () => { if (inputMode === "riss"){ lastRiss = null; strokes = rissStrokesFrom(targetModel); } else strokes = strokesFrom(targetModel, centeredShift(targetModel)); rebuild(); },
+  check, models: () => ({ userModel, targetModel }), setUnfold: v => { unfoldT = v; spin = false; }, setInputMode, example: loadExample,
+  setStrokes: s => { strokes = s; rebuild(); }, getStrokes: () => strokes, last: () => lastRun, riss: () => lastRiss, state: () => ({ zoom, pan, K, inputMode }),
+  toCells, centeredShift, strokesFrom, finalize, edgeParts, partSegments, analyse: () => rebuild(), detailsHtml, getLern: () => lern, setTip, solveDepth, mergeCollinear, depthLines, rissStrokesFrom, modelViews
+};
+})();
+</script>
+</body>
+</html>

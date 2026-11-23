@@ -347,6 +347,7 @@ ZUSATZSEITEN = [
     ('werkzeuge/gesetzetrainer.html', 'WZ', 'Gesetzetrainer', 'thema'),
     ('werkzeuge/systemtrainer.html', 'WZ', 'Systemtrainer', 'thema'),
     ('werkzeuge/parabeltrainer.html', 'WZ', 'Geraden- und Parabeltrainer', 'thema'),
+    ('werkzeuge/schraegbild-werkstatt.html', 'WZ', 'Schrägbild-Werkstatt', 'thema'),
     ('simulationen/boxplot.html', 'SIM', 'Boxplot', 'thema'),
     ('simulationen/standardabweichung.html', 'SIM', 'Standardabweichung', 'thema'),
     # Präsentationen (HOWTO-praesentationen.md)

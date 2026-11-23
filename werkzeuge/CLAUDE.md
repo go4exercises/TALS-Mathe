@@ -88,3 +88,19 @@ meldet, wenn sie auseinanderlaufen.
   jeder Zielpunkt eines Zeichenschritts exakt auf dem Graphen, Formen, Nullstellen und Rückwege (`mkParABC`,
   `mkParRoots`) in `python3` mit `Fraction` nachgerechnet, Schritttexte ohne `undefined`/`NaN`/Dezimalkomma.
   Die Zustandsvariablen `F` und `form` stehen als `let` im Kern; der Test setzt sie über `setze()`.
+- `werkzeuge/schraegbild-werkstatt.html` (seit 24.11.2026): Schrägbild-Werkstatt (SF 4.1), **zweite bewusste Ausnahme
+  vom Trainer-Rahmen** nach HOWTO-werkzeuge §9: extern gebaut, eigenes Aussehen (auch dunkler Modus), Systemschriften,
+  ohne `nav.js` und `style.css`, öffnet in einem neuen Fenster (Baustein in s4.1 `#definition`, Kachel in
+  `werkzeuge.html` unter SF 4 Geometrie). Darum in `EIGENES_SKELETT`. Körper als Schrägbild oder in der
+  Dreitafelprojektion von Hand zeichnen (Stift, Maus, Lineal), Erkennung baut daraus einen 3D-Körper, «Prüfen» vergleicht
+  mit der Vorlage; neun Übungen (`TASKS`), Beispiele mit den fünf platonischen Körpern (`EXAMPLES`), drehbares Modell,
+  Netz, Details mit Oberfläche und Volumen, Druck mit Bastelbogen. Angepasst nur: `lang`, SEO-/FUSS-Marken mit
+  einzeiligem Footer (`.site-footer` mit `var(--muted)`), Rücklink im Kopf (`.brand small a`), Speicher-Schlüssel
+  `tals-mathe-schraegbild-werkstatt-v1` (nur die Häkchen im Druckdialog; Absatz in `rechtliches.html`; Zeichnungen
+  nur als Datei über «Speichern»/«Laden»), KERN-Marken. **Formeln bleiben Klartext** (Details: «½ · a · b», «√(…)»),
+  auf Wunsch des Auftraggebers vom 24.11.2026 — kein MathJax in dieser Datei.
+  Zwei Blöcke für den Selbsttest: `KERN` (Geometrie bis Prüfen) und `KERN-ZUSATZ` (Details, Drucken, Striche aus einem
+  Modell). `scripts/verify_schraegbild.js` lädt beide mit Platzhaltern für DOM und Zeichenblatt: Musterlösung jeder Übung
+  als Handzeichnung (mit Zittern) muss in Schrägbild und Dreitafel «Richtig» ergeben, mit fehlender Kante nicht;
+  Oberfläche und Volumen aller Körper in python3 aus den Flächen und mit der Formel des Körpers, Euler.
+  Braucht das Skript einen weiteren Zustand von ausserhalb der Blöcke, gehört er in die Platzhalter des Tests.
