@@ -9,6 +9,17 @@ in MathJax; Texte aus dem Skript laufen über `mjHTML`. Beschriftungen in den SV
 Das Karoraster des Originals ist entfernt (Wunsch vom 23.11.2026, gilt für jede neue Präsentation).
 Die Fusszeile jeder Folie («Raphael Arnold Kohler · 23.11.2026») ist vom Original übernommen und fest.
 
+- `praesentationen/einheitskreis.html` (seit 23.11.2026), **anders gebaut als die beiden anderen**: keine Folienfolge,
+  sondern acht Themen über eine Auswahlliste oben (`#thema`), je mit Schritten («Schritt weiter», «Alle Schritte»,
+  «Von vorn») und einem Auftrag mit umschaltbarer Lösung unten in der Figur (`AUF`, `LOE`). Themen: Grad und
+  Bogenmass, Sinus und Cosinus, Tangens, Vorzeichen/Wertebereich/Periode, Symmetrien, vom Wert zum Winkel, spezielle
+  Winkel, elementare Gleichungen (sieben Beispiele in `BSP`, Auswahlliste). Keine Titelfolie: Der Rücklink steht in
+  der oberen Leiste (`#top a`). Verlinkt aus g5.4 (`#definition`) und g5.5 (`#grundgleichung`).
+  Rechenkern (`piTeX`, `loesungen`, `exakt`, `UMK`, `BSP`) zwischen den KERN-Marken; Selbsttest
+  `scripts/verify_einheitskreis.js`: Lösungen in python3 durch Abtasten und Halbieren, exakte Werte aus dem TeX-Text
+  zurückgerechnet. In den Auswahllisten (`<option>`) steht Klartext, weil dort kein MathJax möglich ist; die
+  Beispiele tragen darum `t` (Liste) und `tt` (TeX für die Folie). Beschriftungen der Figuren mit `g1` (Klartext),
+  Folientexte mit `gT` (TeX).
 - `praesentationen/rechtwinkliges-dreieck.html` (seit 23.11.2026), 18 Folien: rechtwinkliges Dreieck,
   Thaleskreis, Satz des Pythagoras, Kathetensatz und Höhensatz (je mit Scherungen bewiesen),
   \(\sqrt{n}\) mit dem Höhensatz konstruieren, drei ähnliche Dreiecke, Seitenverhältnisse und

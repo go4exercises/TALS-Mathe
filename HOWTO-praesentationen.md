@@ -88,8 +88,10 @@ Angepasst werden nur die Punkte hier.
   `!` oder `:` verschwindet still: Aus `\;` wird `;`, und das ist gültiges TeX. Der Selbsttest (§6) sucht
   danach.
 - **Fallen im CSS des Originals:**
-  - Regeln wie `.karte svg{height:280px}` gelten auch für die SVGs von MathJax. Auf das gemeinte
-    Element einschränken (`.karte>svg`).
+  - Regeln wie `.karte svg{height:280px}` oder `.fig svg{width:860px;height:640px}` gelten auch für die SVGs von
+    MathJax. Auf das gemeinte Element einschränken (`.karte>svg`, `.fig>svg`).
+  - Text in `<option>` kann MathJax nicht setzen: In Auswahllisten bleibt Klartext (`sin φ`), auf der Folie
+    steht dieselbe Angabe in TeX (Muster `t`/`tt` in `einheitskreis.html`).
   - Ist ein Container `display:flex` mit `gap` (Bedienleiste `.ctl`), wird jede Formel ein eigenes
     Flex-Element mit Abstand. Den Text in ein `<span>` fassen.
 - **Beschriftungen in Figuren** (SVG-`<text>`, Canvas) bleiben Text mit `α`, `²`, `·`, wie in den

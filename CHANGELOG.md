@@ -99,10 +99,12 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
 - **Neue Rubrik Präsentationen** (`praesentationen/`, Übersicht `praesentationen.html`, Menü «Nachschlagen» und
   Startseite): Foliensätze für den Unterricht am Beamer, extern gebaut, mit eigenem Aussehen; jeder Link öffnet ein
   neues Fenster. Anleitung `HOWTO-praesentationen.md`, STYLEGUIDE §6.6.
-- **Das rechtwinklige Dreieck** (18 Folien; aus g5.2a und g5.3) und **Sinussatz und Cosinussatz** (6 Folien; aus
-  g5.3), alle Formeln auf MathJax umgestellt, auch die im Skript erzeugten.
+- **Das rechtwinklige Dreieck** (18 Folien; aus g5.2a und g5.3), **Sinussatz und Cosinussatz** (6 Folien; aus
+  g5.3) und **Einheitskreis** (8 Themen; aus g5.4 und g5.5), alle Formeln auf MathJax umgestellt, auch die im
+  Skript erzeugten; Karoraster entfernt.
 - Selbsttests `scripts/verify_praesentationen.js` (alle Präsentationen: Laufzeit, Formelsatz jedes Zustands) und
-  `scripts/verify_sinussatz-cosinussatz.js` (Rechenkern gegen eine Konstruktion in python3).
+  `scripts/verify_sinussatz-cosinussatz.js` (Rechenkern gegen eine Konstruktion in python3),
+  `scripts/verify_einheitskreis.js` (Umkehrung und exakte Werte gegen python3).
 - `HOWTO-werkzeuge.md` §9: extern gebaute Datei übernehmen (gilt auch für Simulationen).
 
 ### Geändert

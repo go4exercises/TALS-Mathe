@@ -98,10 +98,18 @@ for (const datei of dateien) {
     d.body.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
   }
   sammle('nach allen Schritten');
+  // Auswahllisten (Themenwahl, Beispiele): jede Option wählen und ihre Schritte durchgehen
+  let optionen = 0;
+  for (const sel of d.querySelectorAll('select')) for (const o of [...sel.options]) {
+    sel.value = o.value; optionen++;
+    try { sel.dispatchEvent(new w.Event('change', { bubbles: true })); } catch (e) { melde('Fehler in der Auswahl', e.message); }
+    for (let i = 0; i < 12; i++) d.body.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    sammle(`Auswahl ${sel.id} = ${o.textContent.trim()}`);
+  }
   w.close();
   const n = [...befunde.values()].reduce((s, b) => s + b.n, 0);
   gesamt += n;
-  console.log(`${datei}: ${geprueft.size} Formeln gesetzt, ${knoepfe.length} Knöpfe, ${regler().length} Regler — ${n ? n + ' Befund(e)' : 'keine Befunde'}`);
+  console.log(`${datei}: ${geprueft.size} Formeln gesetzt, ${knoepfe.length} Knöpfe, ${regler().length} Regler, ${optionen} Optionen — ${n ? n + ' Befund(e)' : 'keine Befunde'}`);
   for (const [art, { n, info }] of befunde) console.log(`  [${n}×] ${art}: ${info}`);
 }
 console.log(gesamt ? `BEFUNDE: ${gesamt}` : 'Präsentationen: alles in Ordnung');

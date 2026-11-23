@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Einheitskreis Einstieg</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Foliensatz zum Einheitskreis in acht Themen: Bogenmass, Sinus, Cosinus, Tangens, Vorzeichen, Symmetrien, Umkehrung, spezielle Winkel und elementare Gleichungen.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/praesentationen/einheitskreis.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Einheitskreis — Präsentation: von Bogenmass und Sinus bis zu elementaren Gleichungen">
+<meta property="og:description" content="Foliensatz zum Einheitskreis in acht Themen: Bogenmass, Sinus, Cosinus, Tangens, Vorzeichen, Symmetrien, Umkehrung, spezielle Winkel und elementare Gleichungen.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/praesentationen/einheitskreis.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/praesentationen/einheitskreis.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/praesentationen/einheitskreis.html",
+   "name": "Einheitskreis — Präsentation: von Bogenmass und Sinus bis zu elementaren Gleichungen",
+   "description": "Foliensatz zum Einheitskreis in acht Themen: Bogenmass, Sinus, Cosinus, Tangens, Vorzeichen, Symmetrien, Umkehrung, spezielle Winkel und elementare Gleichungen.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Einheitskreis"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Bogenmass"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Sinus"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Cosinus"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Tangens"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Trigonometrische Gleichungen"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Präsentation"
+    }
+   ],
+   "keywords": "Mathematik, Einheitskreis, Bogenmass, Sinus, Cosinus, Tangens, Trigonometrische Gleichungen, Präsentation",
+   "learningResourceType": "Präsentation",
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<style>
+:root{
+  /* Heft-Look: Papier (ohne Karoraster, 23.11.2026), Tinte, Farbstifte. Eine Folie = eine 1600x900-Buehne, auf den Bildschirm skaliert. */
+  --papier:#fbfaf4; --karo:#d6dde9; --tinte:#1b2845; --grau:#6a7488;
+  --a:#1c6fb8; --b:#d0741a; --h:#2b8a57; --rot:#c23a2b; --c:#6a44a8;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --s:1; color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#2a3247;color:var(--tinte);font-family:var(--sans);display:flex;flex-direction:column;overflow:hidden}
+#deck{flex:1;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none}
+#deck::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fit{position:relative;width:calc(1600px*var(--s));height:calc(900px*var(--s));flex:none}
+.stage{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0;transform:scale(var(--s));
+  background-color:var(--papier);
+  display:grid;grid-template-rows:56px 84px 1fr 44px;padding:0 60px;overflow:hidden}
+.stage>header,.stage>footer{display:flex;justify-content:space-between;align-items:center;font-size:20px;color:var(--grau);letter-spacing:.02em}
+.stage>header .brand{font-weight:700;color:var(--tinte)}
+h1{font-family:var(--serif);font-weight:700;font-size:50px;line-height:1.1;margin:0;align-self:center;text-wrap:balance}
+.body{min-height:0;position:relative}
+.cols{display:grid;grid-template-columns:860px 1fr;gap:40px;height:100%}
+.fig{position:relative}
+.fig>svg{display:block;width:860px;height:640px;touch-action:none}
+.txt{display:flex;flex-direction:column;gap:18px;font-size:27px;line-height:1.3;padding-top:6px}
+.st{opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s;margin:0}
+.st.on{opacity:1;transform:none}
+.st b{font-weight:700}
+.num{display:inline-block;min-width:34px;height:34px;border-radius:50%;background:var(--tinte);color:var(--papier);font-size:20px;font-weight:700;text-align:center;line-height:34px;margin-right:10px;vertical-align:3px}
+.formel{font-family:var(--serif);font-weight:700;font-size:54px;background:#fff;border:3px solid var(--tinte);border-radius:6px;padding:10px 24px;align-self:flex-start;box-shadow:5px 5px 0 var(--karo)}
+.formel.kl{font-size:38px}
+.ctl{margin-top:auto;display:flex;align-items:center;gap:14px;font-size:22px;color:var(--grau);padding-bottom:10px;flex-wrap:wrap}
+.ctl input[type=range]{width:230px;accent-color:var(--tinte)}
+.ctl button,.tog{font:600 22px var(--sans);color:var(--tinte);background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:6px 16px;cursor:pointer}
+.ctl button[aria-pressed=true]{background:var(--tinte);color:#fff}
+.ca{color:var(--a)}.cb{color:var(--b)}.ch{color:var(--h)}.cc{color:var(--c)}.cr{color:var(--rot)}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 4px}
+.fr>span:first-child{border-bottom:2.5px solid currentColor;padding:0 6px 2px}
+.fr>span:last-child{padding:2px 6px 0}
+/* Titelfolie */
+.titel{display:grid;grid-template-columns:1fr 620px;gap:30px;height:100%;align-items:center}
+.titel h2{font-family:var(--serif);font-size:84px;line-height:1.02;margin:0 0 24px;text-wrap:balance}
+.titel p{font-size:30px;margin:0 0 26px;max-width:22em;color:#33415f}
+.titel ol{font-size:27px;margin:0;padding-left:1.2em;line-height:1.5}
+.hint{font-size:21px;color:var(--grau);margin-top:30px}
+kbd{font:600 19px var(--sans);border:1.5px solid var(--grau);border-radius:5px;padding:1px 8px;background:#fff}
+/* Aufgaben */
+.karten{display:grid;grid-template-columns:1fr 1fr;gap:36px;height:100%;padding-bottom:14px}
+.karte{background:#fff;border:2.5px solid var(--tinte);border-radius:8px;padding:18px 26px;display:flex;flex-direction:column;gap:10px;box-shadow:6px 6px 0 var(--karo)}
+.karte h3{font-family:var(--serif);font-size:30px;margin:0;display:flex;justify-content:space-between;align-items:baseline}
+.karte h3 small{font:600 19px var(--sans);color:var(--grau)}
+.karte>svg{width:100%;height:280px;display:block}
+.karte p{font-size:27px;line-height:1.3;margin:0}
+.loes{margin-top:auto;border-top:2px dashed var(--grau);padding-top:10px;font-size:27px;line-height:1.55}
+.loes b{color:var(--h)}
+.karten.k3{grid-template-columns:repeat(3,1fr);gap:24px}
+.k3 .karte{padding:14px 20px;gap:6px}.k3 .karte h3{font-size:27px}
+.k3 .karte>svg{height:auto;aspect-ratio:480/280}
+.k3 .karte p{font-size:23px}.k3 .loes{font-size:23px}
+/* Tabelle Aehnlichkeit */
+table.v{border-collapse:collapse;font-size:24px;font-variant-numeric:tabular-nums;background:#fff;width:100%}
+table.v th,table.v td{border:1.5px solid var(--grau);padding:5px 10px;text-align:right}
+table.v th:first-child,table.v td:first-child{text-align:left;font-weight:600}
+table.v thead th{background:#eef1f6}
+table.v tr.q td{font-weight:700;background:#f3fbf6}
+table.v tr{transition:opacity .5s}
+table.v tr.st,table.v.st{transform:none}
+.defs{display:flex;flex-direction:column;gap:14px}
+.def{font-size:31px;display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:8px 18px}
+.def .w{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700}
+/* Ueberblick */
+.ueb{display:grid;grid-template-columns:1fr 1fr;gap:16px 36px;align-content:start;padding-top:8px}
+.ueb div{background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:12px 22px;font-size:27px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.ueb div span:last-child{font-family:var(--serif);font-weight:700;font-size:34px;white-space:nowrap}
+.ueb .breit{grid-column:1/-1;background:none;border:0;padding:6px 0 0;font:700 30px var(--serif)}
+.formel.k2{font-size:28px;line-height:1.25;padding:6px 18px;display:flex;align-items:center;gap:10px}
+/* SVG */
+svg text{font-family:var(--sans)}
+.tri{fill:#ffffffb0;stroke:var(--tinte);stroke-width:3.5;stroke-linejoin:round}
+.ln{stroke:var(--tinte);stroke-width:3;stroke-linecap:round;fill:none}
+.ln.d{stroke-dasharray:8 7;stroke-width:2}
+.ln.a{stroke:var(--a);stroke-width:6}.ln.b{stroke:var(--b);stroke-width:6}.ln.c{stroke:var(--c);stroke-width:6}.ln.h{stroke:var(--h);stroke-width:4}
+.sq-a{fill:var(--a);fill-opacity:.34;stroke:var(--a);stroke-width:2.5;stroke-linejoin:round}
+.sq-b{fill:var(--b);fill-opacity:.36;stroke:var(--b);stroke-width:2.5;stroke-linejoin:round}
+.sq-h{fill:var(--h);fill-opacity:.36;stroke:var(--h);stroke-width:2.5;stroke-linejoin:round}
+.sq-c{fill:#fff;fill-opacity:.55;stroke:var(--tinte);stroke-width:2.5}
+.t0{fill:var(--c);fill-opacity:.14;stroke:var(--c);stroke-width:3;stroke-linejoin:round}
+.t1{fill:var(--b);fill-opacity:.3;stroke:var(--b);stroke-width:3;stroke-linejoin:round}
+.t2{fill:var(--a);fill-opacity:.3;stroke:var(--a);stroke-width:3;stroke-linejoin:round}
+.ghost{fill:none;stroke:#8f99ab;stroke-width:1.6;stroke-dasharray:6 6}
+.rail{stroke:var(--rot);stroke-width:2.2;stroke-dasharray:11 7;fill:none}
+.ra{fill:none;stroke:var(--rot);stroke-width:2.6}
+.arc{fill:none;stroke:var(--tinte);stroke-width:2.4}
+.arc.ca{stroke:var(--a)}.arc.cb{stroke:var(--b)}
+.pt{fill:var(--tinte)}.pt.drag{fill:var(--rot);stroke:#fff;stroke-width:3;cursor:grab}
+.circ{fill:none;stroke:var(--grau);stroke-width:2.4}
+.lb{font-weight:600;font-size:27px;fill:var(--tinte);text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:var(--papier);stroke-width:5px;stroke-linejoin:round}
+.lb.gr{font-size:36px;font-weight:700}.lb.kl{font-size:22px}
+.lb.fa{fill:var(--a)}.lb.fb{fill:var(--b)}.lb.fh{fill:var(--h)}.lb.fc{fill:var(--c)}.lb.fr{fill:var(--rot)}
+.pop{animation:pop .5s ease-out}
+@keyframes pop{from{opacity:0}to{opacity:1}}
+/* Navigation */
+#bar{flex:none;height:56px;display:flex;align-items:center;justify-content:center;gap:14px;color:#cfd6e4;font-size:15px;padding:0 16px}
+#bar button{font:600 15px var(--sans);color:#fff;background:#3d4864;border:0;border-radius:5px;height:42px;padding:0 16px;cursor:pointer}
+#bar button:focus-visible,.ctl button:focus-visible,.ctl input:focus-visible{outline:3px solid #ffd24d;outline-offset:2px}
+#dots{display:flex;gap:6px}
+#dots button{width:12px;height:12px;padding:0;border-radius:50%;background:#55607c}
+#dots button[aria-current=true]{background:#ffd24d}
+#pos{min-width:150px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.st,.pop{transition:none;animation:none}}
+.txt.eng{gap:12px;font-size:25px}
+.live{font-variant-numeric:tabular-nums;font-weight:600;background:#fff;border:2px dashed var(--grau);border-radius:6px;padding:6px 14px;font-size:22px;line-height:1.35}
+.wahl{display:flex;gap:8px}
+.wahl button{flex:1;font:700 24px var(--sans);padding:6px 0;border:2px solid var(--tinte);background:#fff;color:var(--tinte);border-radius:6px;cursor:pointer}
+.wahl button[aria-pressed=true]{background:var(--tinte);color:#fff}
+.wahl button:focus-visible,.chip:focus-visible{outline:3px solid #ffd24d;outline-offset:2px}
+.geg{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:24px}
+.chip{position:relative;display:inline-block;border:2.5px solid var(--h);color:var(--h);background:#fff;border-radius:6px;padding:2px 12px;font-weight:700;cursor:pointer}
+.chip .pop{display:none;position:absolute;left:-2.5px;top:100%;z-index:5;background:#fff;border:2.5px solid var(--h);border-radius:0 6px 6px 6px;padding:10px 12px 6px;width:260px}
+.chip:hover .pop,.chip:focus-within .pop{display:block}
+.chip input{width:100%;accent-color:var(--h)}
+.rz{font-size:22px;line-height:1.3;background:#fff;border-left:5px solid var(--tinte);padding:5px 12px}
+.rz.st{transform:none}
+.formel .st{display:inline;transform:none}
+.ln.g{stroke:var(--h);stroke-width:6}.ln.kons{stroke:var(--grau);stroke-width:1.8}
+.zirkel{fill:none;stroke:var(--rot);stroke-width:2.4}
+.lb.g0{fill:#8f99ab}
+.f1{fill:var(--b);fill-opacity:.2;stroke:none}.f2{fill:var(--a);fill-opacity:.16;stroke:none}
+.wahl button{font-size:22px}
+.ueb.k div span:last-child{font-size:27px}
+.wg{stroke:none;fill-opacity:.38}.wa{fill:var(--a)}.wb{fill:var(--b)}.wc{fill:var(--c)}.wgn{fill:var(--h);fill-opacity:.45}.wgr{fill:#8f99ab;fill-opacity:.35}
+.ueb div span:last-child .fr{font-size:26px}
+.ax{stroke:#7a8498;stroke-width:1.6}
+.circ.ek{stroke:var(--tinte);stroke-width:3}
+.bogenL{fill:none;stroke:var(--rot);stroke-width:7;stroke-linecap:round}
+.ln.tg{stroke:var(--c);stroke-width:2.6}
+.ln.d2{stroke-dasharray:7 6;opacity:.75}
+.pt.gn{fill:var(--h)}.pt.g{fill:#9aa3b5}
+.lb.li{text-anchor:start;font-size:27px}.lb.li.kl{font-size:22px}
+.q1,.q2,.q3,.q4{fill:#fff;fill-opacity:0}.qa{fill:#ffd24d;fill-opacity:.2}
+table.v td.akt,table.v th.akt{background:#fff3c4}
+table.v.vz td,table.v.vz th,table.v.sp td,table.v.sp th{text-align:center;font-size:25px}
+table.v.vz td:first-child,table.v.sp td:first-child{text-align:left}
+table.v.sp td{padding:1px 6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font:600 20px var(--sans);padding:6px 9px;border:2px solid var(--tinte);background:#fff;color:var(--tinte);border-radius:6px;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--tinte);color:#fff}
+.geg select{font:600 22px var(--sans);padding:5px 8px;border:2px solid var(--tinte);border-radius:6px;background:#fff;color:var(--tinte);max-width:440px}
+.wahl button{font-size:21px}
+.ctl input[type=range]{max-width:200px}
+.formel.k3{font-size:24px;line-height:1.3;padding:5px 16px}
+.fig .unter{position:absolute;left:0;right:0;bottom:0}
+.auftrag{position:absolute;left:0;right:0;bottom:0;font-size:22px;line-height:1.3;background:#fff;border-left:6px solid var(--h);border-radius:0 6px 6px 0;padding:6px 14px;color:var(--tinte)}
+.auftrag b{color:var(--h)}
+.auftrag,.def .auf{display:flex;align-items:center;gap:10px}.auftrag>span,.def .auf>span{flex:1}
+.auftrag button,.def .auf button{font:600 17px var(--sans);flex:none;padding:6px 10px;border:2px solid var(--h);color:var(--h);background:#fff;border-radius:6px;cursor:pointer;vertical-align:middle}
+.auftrag button:focus-visible,.def .auf button:focus-visible{outline:3px solid #ffd24d;outline-offset:2px}
+.def .auf{font-size:20px;line-height:1.25;font-weight:400;max-width:345px}.def .auf b{color:var(--h)}
+table.v.sp td,table.v.sp th{font-size:22px}
+.wahl.kl{display:inline-flex;gap:4px}.wahl.kl button{flex:none;font-size:19px;padding:8px 13px}
+table.v tr.gew td:first-child{box-shadow:inset 5px 0 0 var(--tinte)}
+.def{font-size:26px}.def .w{font-size:26px}
+.slide[hidden]{display:none}
+#top{flex:none;height:54px;display:flex;align-items:center;gap:14px;padding:0 18px;color:#cfd6e4;font:600 17px var(--sans)}
+#top select{font:700 19px var(--sans);padding:6px 10px;border-radius:6px;border:0;background:#fff;color:#1b2845;min-width:420px}
+#top select:focus-visible,#bar button:focus-visible{outline:3px solid #ffd24d;outline-offset:2px}
+#bar button:disabled{opacity:.4;cursor:default}
+/* Formelsatz (MathJax), Footer der Site, Rücklink, schmale Fenster — HOWTO-praesentationen.md §3 */
+body:not(.mj) #deck{visibility:hidden}
+.stage a{color:inherit}
+#top a{margin-left:auto;color:#cfd6e4;font-weight:400;font-size:15px}
+.site-footer{flex:none;color:#9aa3b8;font-size:11px;line-height:1.5;text-align:center;padding:0 16px 6px}
+.site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
+html:fullscreen .site-footer{display:none}
+@media (max-width:700px){#bar{flex-wrap:wrap;height:auto;padding:6px 8px;gap:8px}#top{height:auto;flex-wrap:wrap;padding:6px 10px}#top select{min-width:0;flex:1}}   /* schmal: alles erreichbar */
+</style>
+<script>
+window.MathJax={loader:{load:['[tex]/boldsymbol','[tex]/color']},
+  tex:{packages:{'[+]':['boldsymbol','color']},inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],
+       macros:{B:['\\boldsymbol{#1}',1],                       // fett
+               ca:['{\\color{##1c6fb8}{#1}}',1],cb:['{\\color{##d0741a}{#1}}',1],cc:['{\\color{##6a44a8}{#1}}',1],
+               ch:['{\\color{##2b8a57}{#1}}',1],cr:['{\\color{##c23a2b}{#1}}',1]}},   // Farben wie --a, --b, --c, --h, --rot
+  svg:{fontCache:'local'},options:{enableMenu:false},startup:{typeset:false}};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+</head>
+<body>
+<div id="top"><label for="thema">Thema</label><select id="thema"></select><a href="../grundlagen/g5-4-einheitskreis.html#definition">Der Stoff dazu: 5.4 Einheitskreis</a></div>
+<main id="deck" aria-label="Thema"></main>
+<nav id="bar" aria-label="Schritte">
+  <button id="neu" type="button">Von vorn</button>
+  <button id="prev" type="button">‹ Schritt zurück</button>
+  <span id="pos"></span>
+  <button id="next" type="button">Schritt weiter ›</button>
+  <button id="alle" type="button">Alle Schritte</button>
+  <button id="full" type="button">Vollbild</button>
+</nav>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Präsentationen · Einheitskreis</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script>
+"use strict";
+/* ---------- Geometrie-Helfer ---------- */
+const NS='http://www.w3.org/2000/svg';
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1]], sub=(a,b)=>[a[0]-b[0],a[1]-b[1]], mul=(a,k)=>[a[0]*k,a[1]*k];
+const lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+const len=a=>Math.hypot(a[0],a[1]), unit=a=>mul(a,1/len(a));
+const rot=(p,c,w)=>{const d=sub(p,c),co=Math.cos(w),si=Math.sin(w);return [c[0]+d[0]*co-d[1]*si,c[1]+d[0]*si+d[1]*co]};
+const ease=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+const cen=P=>mul(P.reduce(add,[0,0]),1/P.length);
+function sv(tag,at,txt){const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);if(txt!=null)e.textContent=txt;return e}
+class Fig{
+  constructor(svg,ox,oy,u){this.svg=svg;this.ox=ox;this.oy=oy;this.u=u}
+  clear(){this.svg.replaceChildren()}
+  X(p){return [this.ox+p[0]*this.u,this.oy-p[1]*this.u]}
+  inv(x,y){return [(x-this.ox)/this.u,(this.oy-y)/this.u]}
+  poly(P,cls){const e=sv('polygon',{points:P.map(p=>this.X(p).map(v=>v.toFixed(1)).join(',')).join(' '),class:cls});this.svg.append(e);return e}
+  line(a,b,cls='ln'){const A=this.X(a),B=this.X(b);const e=sv('line',{x1:A[0],y1:A[1],x2:B[0],y2:B[1],class:cls});this.svg.append(e);return e}
+  dot(p,cls='pt',r=6){const P=this.X(p);const e=sv('circle',{cx:P[0],cy:P[1],r,class:cls});this.svg.append(e);return e}
+  circle(m,r,cls='circ'){const P=this.X(m);this.svg.append(sv('circle',{cx:P[0],cy:P[1],r:r*this.u,class:cls}))}
+  text(p,s,cls='lb',dx=0,dy=0){const P=this.X(p);const e=sv('text',{x:P[0]+dx,y:P[1]+dy,class:cls},s);this.svg.append(e);return e}
+  ra(V,P1,P2,s=.28){const d1=mul(unit(sub(P1,V)),s),d2=mul(unit(sub(P2,V)),s);
+    const a=this.X(add(V,d1)),b=this.X(add(add(V,d1),d2)),c=this.X(add(V,d2));
+    this.svg.append(sv('path',{d:`M${a} L${b} L${c}`,class:'ra'}))}
+  arc(V,P1,P2,r,cls='arc'){const a1=Math.atan2(P1[1]-V[1],P1[0]-V[0]),a2=Math.atan2(P2[1]-V[1],P2[0]-V[0]);
+    let d=a2-a1;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+    const s=this.X(add(V,[r*Math.cos(a1),r*Math.sin(a1)])),e=this.X(add(V,[r*Math.cos(a2),r*Math.sin(a2)]));
+    this.svg.append(sv('path',{d:`M${s} A${r*this.u} ${r*this.u} 0 0 ${d>0?0:1} ${e}`,class:cls}));
+    return add(V,mul([Math.cos(a1+d/2),Math.sin(a1+d/2)],r))}
+  arcLabel(V,P1,P2,r,s,cls='lb',k=1.55){const a1=Math.atan2(P1[1]-V[1],P1[0]-V[0]),a2=Math.atan2(P2[1]-V[1],P2[0]-V[0]);
+    let d=a2-a1;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+    this.text(add(V,mul([Math.cos(a1+d/2),Math.sin(a1+d/2)],r*k)),s,cls)}
+}
+/* Formelsatz: \(…\) in Texten, die das Skript erst setzt (Live-Anzeigen, Rechenwege, Aufträge).
+   Vor dem Start von MathJax steht der Text roh da; beim Start wird alles nachgesetzt. */
+let MJ=false;const MJ_EL=new Set();
+function mjHTML(el,html){if(el._mj===html&&el._mjFertig===MJ)return;el._mj=html;el._mjFertig=MJ;MJ_EL.add(el);
+  if(!MJ){el.innerHTML=html;return}
+  el.innerHTML=html.replace(/\\\(([\s\S]+?)\\\)/g,(m,tex)=>{try{return MathJax.tex2svg(tex,{display:false}).outerHTML}catch(e){return tex}})}
+
+/* ---------- Folien ---------- */
+const SL=[];
+const folie=(sec,title,html,n,init)=>SL.push({sec,title,html,n,init});
+const figtxt=(id,txt,ctl='')=>`<div class="cols"><div class="fig"><svg id="${id}" viewBox="0 0 860 640" role="img" aria-label="Figur"></svg></div><div class="txt">${txt}${ctl}</div></div>`;
+const st=(k,html,nr=true)=>`<p class="st" data-step="${k}">${nr?`<span class="num">${k}</span>`:''}${html}</p>`;
+const formel=(k,html,kl='')=>`<div class="formel st ${kl}" data-step="${k}">${html}</div>`;
+const regler=(id,lab,min,max,val,step=.01)=>`<label for="${id}">${lab}</label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}">`;
+function tween(o,key,to,ms,draw){
+  o._r=o._r||{}; cancelAnimationFrame(o._r[key]);
+  const from=o[key]; if(RM||ms<=0||from===to){o[key]=to;draw();return}
+  const t0=performance.now();
+  const fn=now=>{const u=Math.max(0,Math.min(1,(now-t0)/ms));o[key]=from+(to-from)*u;
+    try{draw()}finally{if(u<1)o._r[key]=requestAnimationFrame(fn)}};
+  o._r[key]=requestAnimationFrame(fn);
+}
+
+/* ---------- Zusatz-Zeichenhelfer ---------- */
+Fig.prototype.wedge=function(V,a0,a1,r,cls){let d=a1-a0;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;if(d<0){a0=a0+d;d=-d}
+  const P=this.X(V),s=[P[0]+r*Math.cos(a0),P[1]-r*Math.sin(a0)],e=[P[0]+r*Math.cos(a0+d),P[1]-r*Math.sin(a0+d)];
+  this.svg.append(sv('path',{d:`M${P} L${s} A${r} ${r} 0 0 0 ${e} Z`,class:cls}));return a0+d/2};
+Fig.prototype.bogen=function(V,a0,a1,rU,cls){
+  const s=this.X([V[0]+rU*Math.cos(a0),V[1]+rU*Math.sin(a0)]),e=this.X([V[0]+rU*Math.cos(a1),V[1]+rU*Math.sin(a1)]);
+  this.svg.append(sv('path',{d:`M${s} A${rU*this.u} ${rU*this.u} 0 ${Math.abs(a1-a0)>Math.PI?1:0} ${a1>a0?0:1} ${e}`,class:cls}))};
+Fig.prototype.px=function(V,w,r,s,cls){const P=this.X(V);const e=sv('text',{x:P[0]+r*Math.cos(w),y:P[1]-r*Math.sin(w),class:cls},s);this.svg.append(e);return e};
+const ang=(V,P)=>Math.atan2(P[1]-V[1],P[0]-V[0]);
+const cl01=x=>Math.max(0,Math.min(1,x));
+function ziehbar(svg,fig,S,draw,lim,snap){let on=false;
+  const mv=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse()),P=fig.inv(q.x,q.y);
+    S.C=[Math.max(lim[0],Math.min(lim[1],P[0])),Math.max(lim[2],Math.min(lim[3],P[1]))];if(snap)snap(S.C);draw()};
+  svg.addEventListener('pointerdown',ev=>{on=true;try{svg.setPointerCapture(ev.pointerId)}catch(e){};mv(ev)});
+  svg.addEventListener('pointermove',ev=>{if(on)mv(ev)});
+  svg.addEventListener('pointerup',()=>on=false);svg.addEventListener('pointercancel',()=>on=false)}
+function dreieck(C,c=7){const A=[0,0],B=[c,0],a=len(sub(B,C)),b=len(sub(C,A)),al=Math.atan2(C[1],C[0]),be=Math.atan2(C[1],c-C[0]);
+  return {A,B,C,H:[C[0],0],a,b,c,h:C[1],al,be,ga:Math.PI-al-be}}
+function ecken(fig,T){fig.text(T.A,'A','lb',-22,10);fig.text(T.B,'B','lb',22,10);fig.dot(T.C,'pt drag',12);fig.text(T.C,'C','lb',0,-28)}
+const eng=h=>h.replace('class="txt"','class="txt eng"');
+
+/* ---------- Einheitskreis: gemeinsame Helfer ---------- */
+// ── KERN:ANFANG — Winkel, exakte Werte, Umkehrung, Beispiele; ohne DOM, geprüft von scripts/verify_einheitskreis.js
+const deg=w=>w*180/Math.PI, rad=g=>g*Math.PI/180;
+const f=(x,n=2)=>{const t=x.toFixed(n);return +t===0?t.replace('-',''):t.replace('-','−')};
+const TAU=2*Math.PI, norm=w=>((w%TAU)+TAU)%TAU, Pk=w=>[Math.cos(w),Math.sin(w)], g1=w=>f(deg(w),1)+'°';
+const gT=w=>f(deg(w),1)+'^\\circ';   // Grad in TeX; g1 für die Beschriftung der Figuren
+const ggt=(a,b)=>b?ggt(b,a%b):a;
+function piText(g){ // ganzzahlige Grad -> Vielfaches von pi, falls der Nenner klein ist (Figur)
+  if(g===0)return '0';const t=ggt(g,180),n=g/t,d=180/t;if(d>12)return null;
+  return (n===1?'':n)+'π'+(d===1?'':'/'+d)}
+function piTeX(g){ // dasselbe in TeX
+  if(g===0)return '0';const t=ggt(g,180),n=g/t,d=180/t;if(d>12)return null;
+  const z=(n===1?'':n)+'\\pi';return d===1?z:'\\dfrac{'+z+'}{'+d+'}'}
+function loesungen(fn,v){let tr,a1,a2;
+  if(fn==='sin'){tr=Math.asin(v);a1=norm(tr);a2=norm(Math.PI-tr)}
+  else if(fn==='cos'){tr=Math.acos(v);a1=tr;a2=norm(-tr)}
+  else{tr=Math.atan(v);a1=tr<0?tr+Math.PI:tr;a2=a1+Math.PI}
+  return {tr,a1,a2,eins:fn!=='tan'&&Math.abs(v)>1-1e-9}}
+const UMK={sin:{ort:'\\(y\\)-Achse',linie:'Die <b>Waagrechte</b> auf dieser Höhe',arc:'\\arcsin',zwei:(L,W,b)=>`\\(\\varphi_2 = ${b?'\\pi':'180^\\circ'} - ${L.tr<0?'('+W(L.tr)+')':W(L.tr)} = \\B{${W(L.a2)}}\\) (Spiegelung an der \\(y\\)-Achse)`,per:'360°'},
+ cos:{ort:'\\(x\\)-Achse',linie:'Die <b>Senkrechte</b> an dieser Stelle',arc:'\\arccos',zwei:(L,W,b)=>`\\(\\varphi_2 = ${b?'2\\pi':'360^\\circ'} - ${W(L.tr)} = \\B{${W(L.a2)}}\\) (Spiegelung an der \\(x\\)-Achse)`,per:'360°'},
+ tan:{ort:'rechten Tangente',linie:'Die <b>Gerade durch \\(M\\)</b> und diesen Punkt',arc:'\\arctan',zwei:(L,W,b)=>`\\(\\varphi_2 = ${W(L.a1)} + ${b?'\\pi':'180^\\circ'} = \\B{${W(L.a2)}}\\) (gegenüberliegender Punkt)`,per:'180°'}};
+const EX=[['0','1'],['1','2'],['\\sqrt{2}','2'],['\\sqrt{3}','2'],['1','1']];
+const bruch=(p,neg)=>(neg?'-':'')+(p[1]==='1'?p[0]:'\\dfrac{'+p[0]+'}{'+p[1]+'}');
+function exakt(g){g=((g%360)+360)%360;let ref=g%180;if(ref>90)ref=180-ref;const i=[0,30,45,60,90].indexOf(ref);if(i<0)return null;
+  const s=Math.sin(rad(g)),c=Math.cos(rad(g)),sn=s<-1e-9,cn=c<-1e-9,S=EX[i],C=EX[4-i];
+  const T=i===4?null:[['0','1'],['\\sqrt{3}','3'],['1','1'],['\\sqrt{3}','1'],null][i];
+  return {sin:bruch(S,sn&&S[0]!=='0'),cos:bruch(C,cn&&C[0]!=='0'),tan:T?bruch(T,(sn!==cn)&&T[0]!=='0'):'\\text{nicht definiert}'}}
+const SPEZ=[0,30,45,60,90,120,135,150,180,210,225,240,270,300,315,330,360];
+// Beispiele: t steht in der Auswahlliste (Klartext), tt ist dieselbe Aufgabe in TeX für die Folie
+const BSP=[
+ {t:'2 · sin φ − 1 = 0',tt:'2 \\cdot \\sin\\varphi - 1 = 0',fn:'sin',v:.5,z:L=>['Nach \\(\\sin\\varphi\\) auflösen: \\(\\B{\\sin\\varphi = 0.5}\\)','Taschenrechner: \\(\\varphi_1 = \\arcsin(0.5) = \\B{30^\\circ}\\)','Zweite Lösung über die Symmetrie: \\(\\varphi_2 = 180^\\circ - 30^\\circ = \\B{150^\\circ}\\)','Für \\(0^\\circ \\le \\varphi \\lt 360^\\circ\\): \\(\\B{\\mathbb{L} = \\{30^\\circ;\\ 150^\\circ\\}}\\). Alle Lösungen: je \\(+\\, k \\cdot 360^\\circ\\)']},
+ {t:'5 · cos φ + 3 = 0',tt:'5 \\cdot \\cos\\varphi + 3 = 0',fn:'cos',v:-.6,z:L=>['Nach \\(\\cos\\varphi\\) auflösen: \\(\\B{\\cos\\varphi = -0.6}\\)',`Taschenrechner: \\(\\varphi_1 = \\arccos(-0.6) = \\B{${gT(L.a1)}}\\)`,`Zweite Lösung: \\(\\varphi_2 = 360^\\circ - ${gT(L.a1)} = \\B{${gT(L.a2)}}\\)`,`Für \\(0^\\circ \\le \\varphi \\lt 360^\\circ\\): \\(\\B{\\mathbb{L} = \\{${gT(L.a1)};\\ ${gT(L.a2)}\\}}\\). Alle Lösungen: je \\(+\\, k \\cdot 360^\\circ\\)`]},
+ {t:'tan φ = 1.2',tt:'\\tan\\varphi = 1.2',fn:'tan',v:1.2,z:L=>['Die Gleichung ist schon nach \\(\\tan\\varphi\\) aufgelöst.',`Taschenrechner: \\(\\varphi_1 = \\arctan(1.2) = \\B{${gT(L.a1)}}\\)`,`Zweite Lösung: \\(\\varphi_2 = ${gT(L.a1)} + 180^\\circ = \\B{${gT(L.a2)}}\\)`,`Für \\(0^\\circ \\le \\varphi \\lt 360^\\circ\\): \\(\\B{\\mathbb{L} = \\{${gT(L.a1)};\\ ${gT(L.a2)}\\}}\\). Alle Lösungen: \\(\\varphi_1 + k \\cdot 180^\\circ\\)`]},
+ {t:'sin φ = −0.35',tt:'\\sin\\varphi = -0.35',fn:'sin',v:-.35,z:L=>['Der Wert ist negativ: Die Lösungen liegen im 3. und 4. Quadranten.',`Taschenrechner: \\(\\arcsin(-0.35) = ${gT(L.tr)}\\). Im Bereich \\(0^\\circ\\) bis \\(360^\\circ\\): \\(360^\\circ - ${f(-deg(L.tr),1)}^\\circ = \\B{${gT(L.a1)}}\\)`,`Zweite Lösung: \\(180^\\circ - (${gT(L.tr)}) = \\B{${gT(L.a2)}}\\)`,`Für \\(0^\\circ \\le \\varphi \\lt 360^\\circ\\): \\(\\B{\\mathbb{L} = \\{${gT(L.a2)};\\ ${gT(L.a1)}\\}}\\)`]},
+ {t:'sin φ = 0.5 im Bogenmass, 0 ≤ φ &lt; 2π',tt:'\\sin\\varphi = 0.5 \\text{ im Bogenmass, } 0 \\le \\varphi \\lt 2\\pi',fn:'sin',v:.5,W:w=>f(w,3),z:L=>['Die Gleichung ist schon nach \\(\\sin\\varphi\\) aufgelöst. Gesucht sind die Winkel im <b>Bogenmass</b>.',`Taschenrechner im Modus RAD: \\(\\varphi_1 = \\arcsin(0.5) = ${f(L.a1,3)}\\). Exakt: \\(\\B{\\varphi_1 = \\dfrac{\\pi}{6}}\\) (das sind \\(30^\\circ\\))`,`Zweite Lösung über die Symmetrie: \\(\\varphi_2 = \\pi - \\dfrac{\\pi}{6} = \\B{\\dfrac{5\\pi}{6}} \\approx ${f(L.a2,3)}\\)`,'Für \\(0 \\le \\varphi \\lt 2\\pi\\): \\(\\B{\\mathbb{L} = \\left\\{\\dfrac{\\pi}{6};\\ \\dfrac{5\\pi}{6}\\right\\}}\\). Alle Lösungen: je \\(+\\, k \\cdot 2\\pi\\)']},
+ {t:'sin φ = 0.6, φ spitz: cos φ und tan φ?',tt:'\\sin\\varphi = 0.6,\\ \\varphi \\text{ spitz: } \\cos\\varphi \\text{ und } \\tan\\varphi \\text{?}',typ:'pyth',z:()=>['\\(\\sin^2\\varphi + \\cos^2\\varphi = 1\\), also \\(\\cos^2\\varphi = 1 - 0.6^2 = \\B{0.64}\\)','\\(\\varphi\\) ist spitz, also ist \\(\\cos\\varphi\\) positiv: \\(\\B{\\cos\\varphi = 0.8}\\)','\\(\\tan\\varphi = \\dfrac{\\sin\\varphi}{\\cos\\varphi} = \\dfrac{0.6}{0.8} = \\B{0.75}\\)','Ohne die Angabe «spitz» gäbe es zwei Punkte: \\(\\cos\\varphi = \\pm 0.8\\) und \\(\\tan\\varphi = \\pm 0.75\\)']},
+ {t:'cos(180° − φ) − cos(360° − φ) vereinfachen',tt:'\\cos(180^\\circ - \\varphi) - \\cos(360^\\circ - \\varphi) \\text{ vereinfachen}',typ:'verein',z:()=>['Spiegelung an der \\(y\\)-Achse: \\(\\B{\\cos(180^\\circ - \\varphi) = -\\cos\\varphi}\\)','\\(360^\\circ - \\varphi\\) liegt am selben Ort wie \\(-\\varphi\\). Spiegelung an der \\(x\\)-Achse: \\(\\B{\\cos(360^\\circ - \\varphi) = \\cos\\varphi}\\)','Einsetzen: \\(-\\cos\\varphi - \\cos\\varphi\\)','Ergebnis: \\(\\B{-2 \\cdot \\cos\\varphi}\\)']}];
+// ── KERN:ENDE
+function neuFig(svg,xr){return new Fig(svg,300,325,215)}
+function grundfigur(fig,o={}){const xm=o.xmax||1.62;
+  if(o.quad){[[0,0,'q1'],[-1.38,0,'q2'],[-1.38,-1.38,'q3'],[0,-1.38,'q4']].forEach(([x,y,c])=>{const a=fig.X([x,y+1.38]);fig.svg.append(sv('rect',{x:a[0],y:a[1],width:1.38*fig.u,height:1.38*fig.u,class:c+(o.quad===c?' qa':'')}))})}
+  fig.line([-1.38,0],[xm,0],'ax');fig.line([0,-1.4],[0,1.4],'ax');
+  fig.text([xm,0],'x','lb kl g0',10,-14);fig.text([0,1.4],'y','lb kl g0',16,2);
+  if(!o.ohneKreis)fig.circle([0,0],1,'circ ek');
+  [[1,0,'1',12,18],[-1,0,'−1',-18,18],[0,1,'1',-14,-12],[0,-1,'−1',-20,16]].forEach(([x,y,t,dx,dy])=>fig.text([x,y],t,'lb kl g0',dx,dy));
+  fig.dot([0,0],'pt',4);fig.text([0,0],'M','lb kl g0',-14,16)}
+function bogen0(fig,w,r,cls){if(w<1e-4)return;const s=fig.X([r,0]),e=fig.X([r*Math.cos(w),r*Math.sin(w)]);
+  if(w>=TAU-1e-4){fig.circle([0,0],r,cls);return}
+  fig.svg.append(sv('path',{d:`M${s} A${r*fig.u} ${r*fig.u} 0 ${w>Math.PI?1:0} 0 ${e}`,class:cls}))}
+function sektor0(fig,w,r,cls){if(w<1e-4)return;const m=fig.X([0,0]),s=fig.X([r,0]),e=fig.X([r*Math.cos(w),r*Math.sin(w)]);
+  fig.svg.append(sv('path',{d:`M${m} L${s} A${r*fig.u} ${r*fig.u} 0 ${w>Math.PI?1:0} 0 ${e} Z`,class:cls}))}
+function info(fig,zeilen,x=600,y=52){zeilen.forEach((z,i)=>{if(!z)return;fig.svg.append(sv('text',{x,y:y+i*38,class:'lb li '+(z[1]||'')},z[0]))})}
+function winkelZug(svg,fig,S,draw,vorher){let on=false;
+  const mv=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse()),Pm=fig.inv(q.x,q.y);
+    cancelAnimationFrame((S._r||{}).w);S.w=rad(Math.round(deg(norm(Math.atan2(Pm[1],Pm[0])))));if(vorher)vorher();draw()};
+  svg.addEventListener('pointerdown',ev=>{on=true;try{svg.setPointerCapture(ev.pointerId)}catch(e){};mv(ev)});
+  svg.addEventListener('pointermove',ev=>{if(on)mv(ev)});
+  svg.addEventListener('pointerup',()=>on=false);svg.addEventListener('pointercancel',()=>on=false)}
+function winkelRegler(r,id,S,draw){const sl=r.querySelector('#'+id);sl.addEventListener('input',()=>{cancelAnimationFrame((S._r||{}).w);S.w=rad(+sl.value);draw()});return ()=>{sl.value=Math.round(deg(S.w))}}
+const ctlW=(id,val)=>`<div class="ctl">${regler(id,'Winkel \\(\\varphi\\)',0,360,val,1)}<span>oder Punkt \\(P\\) ziehen</span></div>`;
+const zuW=(S,g,ms,draw)=>tween(S,'w',rad(g),ms,draw);
+
+/* 1 Grad und Bogenmass */
+folie('Einheitskreis','Grad und Bogenmass',eng(figtxt('e1',
+ st(1,'Der Winkel \\(\\varphi\\) schneidet aus dem Einheitskreis (Radius \\(1\\)) einen <b class="cr">Bogen</b> heraus.')+
+ st(2,'<b>Bogenmass</b> = Länge dieses Bogens. Ist der Bogen so lang wie der Radius, misst der Winkel \\(\\B{1\\text{ rad} \\approx 57.3^\\circ}\\).')+
+ st(3,'Der ganze Kreis hat den Umfang \\(2\\pi \\cdot 1\\). Also: \\(\\B{360^\\circ = 2\\pi}\\), \\(180^\\circ = \\pi\\), \\(90^\\circ = \\dfrac{\\pi}{2}\\).')+
+ formel(4,'\\(\\text{Bogen} = \\text{Grad} \\cdot \\dfrac{\\pi}{180}\\) &nbsp; \\(\\text{Grad} = \\text{Bogen} \\cdot \\dfrac{180}{\\pi}\\)','k2')+
+ `<div class="live st" data-step="4" id="lv1"></div>`+
+ st(5,'Taschenrechner: Modus <b>DEG</b> oder <b>RAD</b> passend zur Angabe wählen. \\(\\sin 30^\\circ = 0.5\\), aber \\(\\sin 30 = -0.988\\) (rad).'),
+ ctlW('r1',60))),5,r=>{
+  const svg=r.querySelector('#e1'),fig=neuFig(svg),S={w:rad(60),k:0},sync=winkelRegler(r,'r1',S,()=>draw()),lv=r.querySelector('#lv1');
+  const draw=()=>{const k=S.k,w=S.w,P=Pk(w),g=deg(w);fig.clear();grundfigur(fig);
+    if(k>=2)for(let i=1;i<=6;i++){const a=Pk(i);fig.line(mul(a,.95),mul(a,1.05),'ln h');fig.text(mul(a,1.16),i+'','lb kl fh')}
+    if(k>=3)[[90,'90° = π/2'],[180,'180° = π'],[270,'270° = 3π/2'],[0,'360° = 2π']].forEach(([a,t])=>{const p=Pk(rad(a));fig.text(mul(p,1.0),t,'lb kl',a===0?92:a===180?74:0,a===90?-52:a===270?52:-24)});
+    sektor0(fig,w,.3,'wg wa');bogen0(fig,w,1,'bogenL');fig.line([0,0],P,'ln');fig.line([0,0],[1,0],'ln');
+    fig.dot(P,'pt drag',11);fig.text(mul(P,1.14),'P','lb');
+    const mid=Pk(w/2);fig.text(mul(mid,.42),'φ','lb');fig.text(mul(P,.5),'1','lb kl g0',-14,-8);
+    const pt=Number.isInteger(Math.round(g*1000)/1000)?piText(Math.round(g)):null;
+    info(fig,[['φ = '+f(g,1)+'°'],k>=2?['Bogen = '+f(w,3)+(pt&&pt!=='0'?' = '+pt:''),'fr']:null,k>=2?['(in Radiuslängen)','kl g0']:null]);
+    const ptT=Number.isInteger(Math.round(g*1000)/1000)?piTeX(Math.round(g)):null;mjHTML(lv,`\\(${f(g,1)}^\\circ \\cdot \\pi : 180 = ${f(w,3)}\\text{ rad}${ptT&&ptT!=='0'?' = '+ptT:''}\\)`);sync()};
+  winkelZug(svg,fig,S,draw);draw();
+  return {onStep:(k,p)=>{S.k=k;if(k===1&&p<1){S.w=0;zuW(S,60,1400,draw)}else if(k===2&&p<2)tween(S,'w',1,1200,draw);else if(k===3&&p<3)zuW(S,180,1300,draw);else draw()}}});
+
+/* 2 Sinus und Cosinus konstruieren */
+folie('Einheitskreis','Sinus und Cosinus am Einheitskreis',eng(figtxt('e2',
+ st(1,'Kreis um den Ursprung \\(M\\) mit Radius \\(1\\): der <b>Einheitskreis</b>.')+
+ st(2,'Der Winkel \\(\\varphi\\) dreht von der positiven \\(x\\)-Achse aus im Gegenuhrzeigersinn. Sein freier Schenkel ist ein Strahl.')+
+ st(3,'Der Strahl schneidet den Kreis im Punkt \\(\\B{P}\\).')+
+ st(4,'Das Lot von \\(P\\) auf die \\(x\\)-Achse ergibt ein rechtwinkliges Dreieck mit Hypotenuse \\(1\\).')+
+ st(5,'Gegenkathete : Hypotenuse = \\(y : 1\\). Also <b class="ca">\\(\\sin\\varphi\\) = \\(y\\)-Koordinate von \\(P\\)</b>.')+
+ st(6,'Ankathete : Hypotenuse = \\(x : 1\\). Also <b class="cb">\\(\\cos\\varphi\\) = \\(x\\)-Koordinate von \\(P\\)</b>.')+
+ formel(7,'\\(P = (\\cb{\\cos\\varphi} \\mid \\ca{\\sin\\varphi})\\)','kl')+
+ st(7,'Das ist die Definition für <b>jeden</b> Winkel. \\(P\\) über \\(90^\\circ\\) hinaus ziehen.',false),
+ ctlW('r2',50))),7,r=>{
+  const svg=r.querySelector('#e2'),fig=neuFig(svg),S={w:rad(50),k:0,c:0},sync=winkelRegler(r,'r2',S,()=>draw());
+  const draw=()=>{const k=S.k,w=S.w,P=Pk(w),F=[P[0],0];fig.clear();grundfigur(fig,{ohneKreis:true});
+    if(k>=1)bogen0(fig,TAU*Math.min(1,S.c),1,'circ ek');
+    if(k>=4)fig.poly([[0,0],F,P],'tri');
+    if(k>=2){sektor0(fig,w,.24,'wg wgr');fig.line([0,0],mul(P,1.42),'ln kons');fig.text(mul(Pk(w/2),.36),'φ','lb')}
+    if(k>=4){fig.line(P,F,'ln d');if(Math.abs(P[0])>.08&&Math.abs(P[1])>.08)fig.ra(F,[0,0],P,.07);fig.line([0,0],P,'ln');fig.text(mul(P,.5),'1','lb kl',-12*Math.sign(P[0]||1),-12)}
+    if(k>=5){fig.line(F,P,'ln a');fig.line(P,[0,P[1]],'ln d');fig.dot([0,P[1]],'pt',5);fig.text([P[0],P[1]/2],'sin φ','lb fa',P[0]>=0?48:-48,0)}
+    if(k>=6){fig.line([0,0],F,'ln b');fig.text([P[0]/2,0],'cos φ','lb fb',0,P[1]>=0?24:-22)}
+    if(k>=3){fig.dot(P,'pt drag',11);fig.text(mul(P,1.14),'P','lb')}
+    info(fig,[['φ = '+f(deg(w),0)+'°'],k>=5?['sin φ = '+f(P[1],3),'fa']:null,k>=6?['cos φ = '+f(P[0],3),'fb']:null]);sync()};
+  winkelZug(svg,fig,S,draw);draw();
+  return {onStep:(k,p)=>{S.k=k;if(k===1&&p<1){S.c=0;tween(S,'c',1,1500,draw)}else if(k<1){S.c=0;draw()}else{S.c=1;if(k===2&&p<2){S.w=0;zuW(S,50,1500,draw)}else if(k===7&&p<7)zuW(S,140,1600,draw);else draw()}}}});
+
+/* 3 Tangens */
+folie('Einheitskreis','Tangens an der rechten Tangente',eng(figtxt('e3',
+ st(1,'Tangente an den Einheitskreis im Punkt \\(E(1 \\mid 0)\\): Sie steht senkrecht, rechts vom Kreis.')+
+ st(2,'Die Gerade durch \\(M\\) und \\(P\\) schneidet die Tangente im Punkt <b class="cc">\\(T\\)</b>.')+
+ st(3,'\\(F\\) ist der Lotfusspunkt von \\(P\\). Die Dreiecke \\(MFP\\) und \\(MET\\) sind ähnlich. Also: <b class="cc">\\(\\tan\\varphi\\) = \\(y\\)-Koordinate von \\(T\\)</b>.')+
+ formel(3,'\\(\\tan\\varphi = \\dfrac{\\sin\\varphi}{\\cos\\varphi} = \\dfrac{y_T}{1}\\)','k2')+
+ st(4,'Im 2. und 3. Quadranten wird der Strahl rückwärts verlängert. Darum gilt \\(\\B{\\tan(\\varphi + 180^\\circ) = \\tan\\varphi}\\).')+
+ st(5,'Bei \\(90^\\circ\\) und \\(270^\\circ\\) ist die Gerade parallel zur Tangente. Es gibt kein \\(T\\): <b>\\(\\tan\\) ist dort nicht definiert</b>.'),
+ ctlW('r3',35))),5,r=>{
+  const svg=r.querySelector('#e3'),fig=neuFig(svg),S={w:rad(35),k:0},sync=winkelRegler(r,'r3',S,()=>draw());
+  const draw=()=>{const k=S.k,w=S.w,P=Pk(w),F=[P[0],0],E=[1,0],t=Math.tan(w),undef=Math.abs(P[0])<1e-3,T=[1,t],sicht=!undef&&Math.abs(t)<=1.4;fig.clear();grundfigur(fig,{xmax:1.8});
+    if(k>=1){fig.line([1,-1.4],[1,1.4],'ln tg');fig.dot(E,'pt',5);fig.text(E,'E','lb kl',16,18)}
+    if(k>=3&&sicht){fig.poly([[0,0],E,T],'t0');fig.poly([[0,0],F,P],'t1')}
+    sektor0(fig,w,.2,'wg wgr');
+    if(k>=2&&!undef){const d=unit([1,t]),L=Math.min(1.9,Math.abs(1.4/(d[1]||1e-9)));fig.line(mul(d,-Math.min(L,1.3)),mul(d,Math.min(L,Math.hypot(1,t)+.12)),'ln kons')}
+    if(k>=2&&undef)fig.line([0,-1.4],[0,1.4],'rail');
+    fig.line([0,0],P,'ln');
+    if(k>=3){fig.line(F,P,'ln a');fig.line([0,0],F,'ln b');if(Math.abs(P[0])>.12&&Math.abs(P[0]-1)>.12){fig.dot(F,'pt',4);fig.text(F,'F','lb kl g0',0,P[1]>=0?22:-16)}}
+    if(k>=2&&sicht){fig.line(E,T,'ln c');fig.dot(T,'pt',7);fig.text(T,'T','lb fc',20,t>=0?-12:16);if(k>=3)fig.text([1,t/2],'tan φ','lb fc',52,0)}
+    if(k>=2&&!undef&&!sicht)fig.text([1,t>0?1.3:-1.3],'T liegt ausserhalb','lb kl fc',104,0);
+    fig.dot(P,'pt drag',11);fig.text(mul(P,1.15),'P','lb');
+    info(fig,[['φ = '+f(deg(w),0)+'°'],k>=3?['sin φ = '+f(P[1],3),'fa']:null,k>=3?['cos φ = '+f(P[0],3),'fb']:null,k>=2?[undef?'tan φ nicht definiert':'tan φ = '+f(t,3),'fc']:null],600,40);sync()};
+  winkelZug(svg,fig,S,draw);draw();
+  return {onStep:(k,p)=>{S.k=k;if(k===4&&p<4)zuW(S,215,1700,draw);else if(k===5&&p<5)zuW(S,90,1500,draw);else if(k===2&&p<2)zuW(S,35,900,draw);else draw()}}});
+
+const anz=id=>`<span class="wahl kl" id="${id}" role="group" aria-label="Anzeige">${['sin','cos','tan','alle'].map(x=>`<button type="button" data-a="${x}" aria-pressed="${x==='alle'}">${x}</button>`).join('')}</span>`;
+const ctlWA=(id,val,aid)=>`<div class="ctl">${anz(aid)}${regler(id,'\\(\\varphi\\)',0,360,val,1)}</div>`;
+function anzeige(r,id,S,draw){r.querySelector('#'+id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;b.blur();S.a=b.dataset.a;
+  r.querySelectorAll('#'+id+' button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()})}
+const zeigt=(S,x)=>S.a==='alle'||S.a===x;
+function tanTeil(fig,w,o={}){const t=Math.tan(w),undef=Math.abs(Math.cos(w))<1e-3,E=[1,0];
+  if(!o.ohneTangente)fig.line([1,-1.4],[1,1.4],'ln tg');
+  if(undef)return;const d=unit([1,t]),L=Math.min(1.9,Math.abs(1.4/(d[1]||1e-9)));
+  fig.line(mul(d,-Math.min(L,1.3)),mul(d,Math.min(L,Math.hypot(1,t)+.12)),'ln kons');
+  if(Math.abs(t)<=1.4){fig.line(E,[1,t],'ln c'+(o.d?' d2':''));fig.dot([1,t],'pt',o.d?5:7);if(o.name)fig.text([1,t],o.name,'lb kl fc',o.dx||26,t>=0?-12:16)}
+  else if(o.name&&!o.d)fig.text([1,t>0?1.33:-1.33],o.name+' ausserhalb','lb kl fc',-92,0)}
+const tanText=w=>Math.abs(Math.cos(w))<1e-3?'tan φ nicht definiert':'tan φ = '+f(Math.tan(w),3);
+
+/* 4a Vorzeichen, Wertebereich, Periode */
+const VZ={sin:['+','+','−','−'],cos:['+','−','−','+'],tan:['+','−','+','−']};
+folie('Einheitskreis','Vorzeichen, Wertebereich, Periode',eng(figtxt('e4',
+ `<table class="v vz"><thead><tr><th>Quadrant</th><th>I</th><th>II</th><th>III</th><th>IV</th></tr></thead><tbody>
+ <tr><td class="ca">\\(\\sin\\varphi\\) (\\(y\\))</td>${VZ.sin.map(v=>`<td>${v}</td>`).join('')}</tr><tr><td class="cb">\\(\\cos\\varphi\\) (\\(x\\))</td>${VZ.cos.map(v=>`<td>${v}</td>`).join('')}</tr><tr><td class="cc">\\(\\tan\\varphi\\)</td>${VZ.tan.map(v=>`<td>${v}</td>`).join('')}</tr></tbody></table>`+
+ st(1,'<b>Vorzeichen:</b> \\(\\sin\\varphi\\) ist die \\(y\\)-Koordinate, also oben positiv. \\(\\cos\\varphi\\) ist die \\(x\\)-Koordinate, also rechts positiv. \\(\\tan\\varphi = \\sin\\varphi : \\cos\\varphi\\).')+
+ st(2,'<b>Wertebereich:</b> \\(P\\) liegt auf dem Kreis, darum \\(-1 \\le \\sin\\varphi \\le 1\\) und \\(-1 \\le \\cos\\varphi \\le 1\\). Der Tangens nimmt jeden Wert an.')+
+ st(3,'<b>Periode:</b> Nach \\(360^\\circ\\) liegt \\(P\\) wieder am selben Ort.')+
+ formel(3,'<span>\\(\\sin(\\varphi + 360^\\circ) = \\sin\\varphi\\)<br>\\(\\cos(\\varphi + 360^\\circ) = \\cos\\varphi\\)</span>','k2')+
+ st(4,'Beim Tangens genügen \\(180^\\circ\\): \\(\\B{\\tan(\\varphi + 180^\\circ) = \\tan\\varphi}\\).',false),
+ ctlWA('r4',40,'a4'))),4,r=>{
+  const svg=r.querySelector('#e4'),fig=neuFig(svg),S={w:rad(40),k:0,tour:0,a:'alle'},sync=winkelRegler(r,'r4',S,()=>draw());
+  const draw=()=>{const k=S.k,w=S.w,wn=norm(w),P=Pk(w),F=[P[0],0],q=Math.abs(P[0])<1e-9||Math.abs(P[1])<1e-9?-1:Math.min(3,Math.floor(wn/(Math.PI/2)));fig.clear();grundfigur(fig,{quad:'q'+(q+1),xmax:zeigt(S,'tan')?1.8:1.62});
+    [['I',.62,.62],['II',-.62,.62],['III',-.62,-.62],['IV',.62,-.62]].forEach(([t,x,y],i)=>fig.text([x*1.75,y*1.75],t,'lb gr '+(i===q?'':'g0')));
+    if(k===3&&S.tour>0&&S.tour<TAU-1e-3)bogen0(fig,S.tour,1.1,'bogenL');
+    if(zeigt(S,'tan'))tanTeil(fig,w,{name:'T'});
+    fig.line([0,0],P,'ln');if(zeigt(S,'sin'))fig.line(F,P,'ln a');if(zeigt(S,'cos'))fig.line([0,0],F,'ln b');
+    if(k>=4){const Q=Pk(w+Math.PI);fig.line(mul(P,-1.3),mul(P,1.3),'ln kons');fig.dot(Q,'pt',7);fig.text(mul(Q,1.16),'φ + 180°','lb kl fc')}
+    fig.dot(P,'pt drag',11);fig.text(mul(P,1.15),'P','lb');
+    const t=Math.abs(P[0])<1e-3?null:Math.tan(w),vz=x=>x>1e-9?'positiv':x<-1e-9?'negativ':'null';
+    info(fig,[['φ = '+f(deg(wn),0)+'°'],zeigt(S,'sin')?['sin φ = '+f(P[1],3),'fa']:null,zeigt(S,'cos')?['cos φ = '+f(P[0],3),'fb']:null,zeigt(S,'tan')?[tanText(w),'fc']:null].filter(Boolean),620,40);
+    r.querySelectorAll('.vz tbody tr').forEach((tr,i)=>tr.classList.toggle('gew',S.a===['sin','cos','tan'][i]));
+    r.querySelectorAll('.vz td,.vz th').forEach(c=>c.classList.toggle('akt',q>=0&&c.cellIndex===q+1));sync()};
+  winkelZug(svg,fig,S,draw);anzeige(r,'a4',S,draw);draw();
+  return {onStep:(k,p)=>{S.k=k;S.tour=0;if(k===3&&p<3){const w0=norm(S.w);S.w=w0;S.tour=0;tween(S,'tour',TAU,2600,draw);tween(S,'w',w0+TAU,2600,()=>{draw();if(S.w>=w0+TAU-1e-6)S.w=w0})}else draw()}}});
+
+/* 4b Symmetrien */
+const SYM=[{sin:'\\sin(180^\\circ - \\varphi) = \\sin\\varphi',cos:'\\cos(180^\\circ - \\varphi) = -\\cos\\varphi',tan:'\\tan(180^\\circ - \\varphi) = -\\tan\\varphi'},
+ {sin:'\\sin(-\\varphi) = -\\sin\\varphi',cos:'\\cos(-\\varphi) = \\cos\\varphi',tan:'\\tan(-\\varphi) = -\\tan\\varphi'},
+ {sin:'\\sin(90^\\circ - \\varphi) = \\cos\\varphi',cos:'\\cos(90^\\circ - \\varphi) = \\sin\\varphi',tan:'\\tan(90^\\circ - \\varphi) = 1 : \\tan\\varphi'},
+ {sin:'\\sin^2\\varphi + \\cos^2\\varphi = 1',cos:'\\sin^2\\varphi + \\cos^2\\varphi = 1',tan:'\\tan\\varphi = \\sin\\varphi : \\cos\\varphi'}];
+folie('Einheitskreis','Symmetrien und Beziehungen',eng(figtxt('e5',
+ st(1,'<b>Spiegelung an der \\(y\\)-Achse:</b> Winkel \\(180^\\circ - \\varphi\\)')+`<div class="formel k2 k3 st" data-step="1"><span id="y1"></span></div>`+
+ st(2,'<b>Spiegelung an der \\(x\\)-Achse:</b> Winkel \\(-\\varphi\\) (im Uhrzeigersinn)')+`<div class="formel k2 k3 st" data-step="2"><span id="y2"></span></div>`+
+ st(3,'<b>Spiegelung an der Geraden \\(y = x\\):</b> Winkel \\(90^\\circ - \\varphi\\)')+`<div class="formel k2 k3 st" data-step="3"><span id="y3"></span></div>`+
+ st(4,'<b>Beziehungen</b> im Dreieck mit Hypotenuse \\(1\\):')+`<div class="formel k2 k3 st" data-step="4"><span id="y4"></span></div>`,
+ ctlWA('r5',40,'a5'))),4,r=>{
+  const svg=r.querySelector('#e5'),fig=neuFig(svg),S={w:rad(40),k:0,a:'alle'},sync=winkelRegler(r,'r5',S,()=>draw());
+  const punkt=(w,name)=>{const Q=Pk(w),G=[Q[0],0];fig.line([0,0],Q,'ln kons');if(zeigt(S,'sin'))fig.line(G,Q,'ln a d2');if(zeigt(S,'cos'))fig.line([0,0],G,'ln b d2');
+    if(zeigt(S,'tan'))tanTeil(fig,w,{d:true,ohneTangente:true,name:'T′',dx:30});fig.dot(Q,'pt',7);const dd=norm(w-S.w),nah=Math.min(dd,TAU-dd)<.6;fig.text(mul(Pk(w+(nah?(dd<Math.PI?.2:-.2):0)),nah?1.3:1.2),name,'lb kl fc')};
+  const draw=()=>{const k=S.k,w=S.w,P=Pk(w),F=[P[0],0],T=zeigt(S,'tan');fig.clear();grundfigur(fig,{xmax:T?1.8:1.62});
+    if(k===3)fig.line([-1.05,-1.05],[1.15,1.15],'rail');
+    if(T)tanTeil(fig,w,{name:'T',dx:-22});
+    if(k===1){fig.line(P,[-P[0],P[1]],'rail');punkt(Math.PI-w,'180° − φ')}
+    if(k===2){fig.line(P,[P[0],-P[1]],'rail');punkt(-w,'−φ')}
+    if(k===3){fig.line(P,[P[1],P[0]],'rail');punkt(Math.PI/2-w,'90° − φ')}
+    if(k>=4)fig.poly([[0,0],F,P],'t0');
+    sektor0(fig,norm(w),.2,'wg wgr');fig.line([0,0],P,'ln');if(zeigt(S,'sin'))fig.line(F,P,'ln a');if(zeigt(S,'cos'))fig.line([0,0],F,'ln b');
+    if(k>=4){fig.text(mul(P,.5),'1','lb',-12,-12);if(zeigt(S,'sin'))fig.text([P[0],P[1]/2],'sin φ','lb fa',P[0]>=0?-44:44,0);if(zeigt(S,'cos'))fig.text([P[0]/2,0],'cos φ','lb fb',0,P[1]>=0?24:-22)}
+    fig.dot(P,'pt drag',11);fig.text(mul(P,1.15),'P','lb');
+    const w2=k===1?Math.PI-w:k===2?-w:k===3?Math.PI/2-w:null,nm=k===1?'180° − φ':k===2?'−φ':'90° − φ',Z=[['φ = '+f(deg(norm(w)),0)+'°']];
+    const wert=(fn,x)=>fn==='tan'?(Math.abs(Math.cos(x))<1e-3?'nicht def.':f(Math.tan(x),3)):f(fn==='sin'?Math.sin(x):Math.cos(x),3);
+    [['sin','fa'],['cos','fb'],['tan','fc']].forEach(([fn,c])=>{if(!zeigt(S,fn))return;Z.push([fn+' φ = '+wert(fn,w),c]);if(w2!==null)Z.push([fn+'('+nm+') = '+wert(fn,w2),c+' kl'])});
+    info(fig,Z,T?628:600,36);
+    const TX=s=>'\\('+s+'\\)';SYM.forEach((o,i)=>{const L=S.a==='alle'?(i===3?[TX(o.sin)+' &nbsp;&nbsp; '+TX(o.tan)]:[TX(o.sin)+' &nbsp;&nbsp; '+TX(o.cos),TX(o.tan)]):[TX(o[S.a])];mjHTML(r.querySelector('#y'+(i+1)),L.join('<br>'))});sync()};
+  winkelZug(svg,fig,S,draw);anzeige(r,'a5',S,draw);draw();
+  return {onStep:k=>{S.k=k;draw()}}});
+
+/* 5 Vom Wert zum Winkel */
+function zeichneUmkehr(fig,fn,v,k,W=g1){const L=loesungen(fn,v),P1=Pk(L.a1),P2=Pk(L.a2);fig.clear();grundfigur(fig,{xmax:fn==='tan'?1.8:1.62});
+  if(fn==='tan')fig.line([1,-1.4],[1,1.4],'ln tg');
+  if(k>=2){if(fn==='sin')fig.line([-1.3,v],[1.3,v],'rail');else if(fn==='cos')fig.line([v,-1.3],[v,1.3],'rail');
+    else{const d=unit([1,v]),Lm=Math.min(1.9,Math.abs(1.4/(d[1]||1e-9)));fig.line(mul(d,-Math.min(Lm,1.3)),mul(d,Math.min(Lm,Math.hypot(1,v)+.1)),'rail')}}
+  if(k>=3){sektor0(fig,L.a1,.3,'wg wa');fig.line([0,0],P1,'ln a')}
+  if(k>=4&&!L.eins){bogen0(fig,L.a2,.44,'arc cb');fig.line([0,0],P2,'ln b')}
+  if(k>=1){const s=fn+' φ = '+f(v,2);
+    if(fn==='sin'){fig.dot([0,v],'pt gn',8);fig.text([0,v],s,'lb kl fh',-78,v>=0?-16:18)}
+    else if(fn==='cos'){fig.dot([v,0],'pt gn',8);fig.text([v,0],s,'lb kl fh',0,Math.abs(v)>.8?50:30)}
+    else if(Math.abs(v)<=1.4){fig.dot([1,v],'pt gn',8);fig.text([1,v],s,'lb kl fh',82,0)}else fig.text([1,v>0?1.3:-1.3],s+' (ausserhalb)','lb kl fh',128,0)}
+  if(k>=2){fig.dot(P1,'pt',7);fig.dot(P2,'pt',7)}
+  const hoch=P=>Math.abs(P[1])<.12?-30:0;
+  if(k>=3)fig.text(mul(P1,1.2),'P₁','lb fa',0,hoch(P1));
+  if(k>=4&&!L.eins)fig.text(mul(P2,1.2),'P₂','lb fb',0,hoch(P2));
+  info(fig,[k>=3?['φ₁ = '+W(L.a1),'fa']:null,k>=4&&!L.eins?['φ₂ = '+W(L.a2),'fb']:null],650,fn==='tan'&&v<-.9?400:566);
+  return L}
+folie('Einheitskreis','Vom Wert zurück zum Winkel',eng(figtxt('e6',
+ `<div class="wahl" id="fw">${['sin','cos','tan'].map(x=>`<button type="button" data-f="${x}" aria-pressed="${x==='sin'}">\\(\\${x}\\varphi\\) gegeben</button>`).join('')}</div>`+
+ `<p class="st" data-step="1"><span class="num">1</span><span id="u1"></span></p><p class="st" data-step="2"><span class="num">2</span><span id="u2"></span></p>
+ <p class="st" data-step="3"><span class="num">3</span><span id="u3"></span></p><p class="st" data-step="4"><span class="num">4</span><span id="u4"></span></p>
+ <p class="st" data-step="5"><span class="num">5</span><span id="u5"></span></p>`,
+ `<div class="ctl"><span class="wahl kl" id="u6" role="group" aria-label="Winkelmass"><button type="button" data-u="deg" aria-pressed="true">Grad</button><button type="button" data-u="rad" aria-pressed="false">rad</button></span>${regler('r6','Wert',-1,1,0.6,0.05)}<span id="w6"></span></div>`)),5,r=>{
+  const fig=neuFig(r.querySelector('#e6')),S={fn:'sin',v:.6,k:0,u:'deg'},sl=r.querySelector('#r6'),q=id=>r.querySelector(id);
+  const draw=()=>{const b=S.u==='rad',W=b?w=>f(w,3):gT,L=zeichneUmkehr(fig,S.fn,S.v,S.k,b?w=>f(w,3):g1),U=UMK[S.fn],H=b?'\\pi':'180^\\circ',V=b?'2\\pi':'360^\\circ';mjHTML(q('#w6'),`\\(\\${S.fn}\\varphi = ${f(S.v,2)}\\)`);
+    mjHTML(q('#u1'),`Gegeben ist der Wert, gesucht ist der Winkel. Den Wert <b class="ch">\\(${f(S.v,2)}\\)</b> auf der ${U.ort} abtragen.`);
+    mjHTML(q('#u2'),L.eins?`${U.linie} berührt den Kreis in <b>genau einem Punkt</b>.`:`${U.linie} trifft den Kreis in <b>zwei Punkten</b>.`);
+    mjHTML(q('#u3'),`Der Taschenrechner (Modus ${b?'RAD':'DEG'}, Taste \\(\\${S.fn}^{-1}\\)) liefert einen Winkel: \\(${U.arc}(${f(S.v,2)}) = ${W(L.tr)}\\)`+(L.tr<-1e-9?`. Plus \\(${S.fn==='tan'?H:V}\\): <b class="ca">\\(\\varphi_1 = ${W(L.a1)}\\)</b>.`:`. Also <b class="ca">\\(\\varphi_1 = ${W(L.a1)}\\)</b>.`));
+    mjHTML(q('#u4'),L.eins?'Grenzfall: Beide Punkte fallen zusammen. Es gibt nur <b>einen</b> Winkel pro Umlauf.':'Der zweite Winkel folgt aus der Symmetrie: <span class="cb">'+U.zwei(L,W,b)+'</span>');
+    mjHTML(q('#u5'),`<b>Alle Winkel:</b> `+(S.fn==='tan'?`\\(\\varphi_1 + k \\cdot ${H}\\) (\\(k\\) ganzzahlig)`:L.eins?`\\(\\varphi_1 + k \\cdot ${V}\\) (\\(k\\) ganzzahlig)`:`\\(\\varphi_1 + k \\cdot ${V}\\) und \\(\\varphi_2 + k \\cdot ${V}\\) (\\(k\\) ganzzahlig)`))};
+  q('#u6').addEventListener('click',e=>{const x=e.target.closest('button');if(!x)return;x.blur();S.u=x.dataset.u;r.querySelectorAll('#u6 button').forEach(y=>y.setAttribute('aria-pressed',y===x));draw()});
+  q('#fw').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;b.blur();S.fn=b.dataset.f;r.querySelectorAll('#fw button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    const t=S.fn==='tan';sl.min=t?-3:-1;sl.max=t?3:1;sl.step=t?0.1:0.05;S.v=t?1.2:0.6;sl.value=S.v;draw()});
+  sl.addEventListener('input',()=>{S.v=+sl.value;draw()});draw();
+  return {onStep:k=>{S.k=k;draw()}}});
+
+/* 6 Spezielle Winkel */
+folie('Einheitskreis','Spezielle Winkel',eng(figtxt('e7',
+ `<div class="chips" id="sw">${SPEZ.map(g=>`<button type="button" data-g="${g}">\\(${g}^\\circ\\)</button>`).join('')}</div>`+
+ st(1,'<b>\\(30^\\circ\\) und \\(60^\\circ\\):</b> halbes gleichseitiges Dreieck mit Seite \\(1\\). Katheten \\(\\dfrac{1}{2}\\) und \\(\\dfrac{\\sqrt{3}}{2}\\).')+
+ st(2,'<b>\\(45^\\circ\\):</b> halbes Quadrat. Beide Katheten messen \\(\\dfrac{\\sqrt{2}}{2}\\).')+
+ `<table class="v sp st" data-step="3"><thead><tr><th>\\(\\varphi\\)</th><th>\\(0^\\circ\\)</th><th>\\(30^\\circ\\)</th><th>\\(45^\\circ\\)</th><th>\\(60^\\circ\\)</th><th>\\(90^\\circ\\)</th></tr></thead><tbody>
+ <tr><td>Bogenmass</td><td>\\(0\\)</td><td>\\(\\frac{\\pi}{6}\\)</td><td>\\(\\frac{\\pi}{4}\\)</td><td>\\(\\frac{\\pi}{3}\\)</td><td>\\(\\frac{\\pi}{2}\\)</td></tr>
+ <tr><td class="ca">\\(\\sin\\varphi\\)</td>${EX.map((p,i)=>`<td>\\(\\frac{\\sqrt{${i}}}{2}\\)</td>`).join('')}</tr>
+ <tr><td class="cb">\\(\\cos\\varphi\\)</td>${EX.map((p,i)=>`<td>\\(\\frac{\\sqrt{${4-i}}}{2}\\)</td>`).join('')}</tr>
+ <tr><td class="cc">\\(\\tan\\varphi\\)</td><td>\\(0\\)</td><td>\\(\\frac{\\sqrt{3}}{3}\\)</td><td>\\(1\\)</td><td>\\(\\sqrt{3}\\)</td><td>n. def.</td></tr></tbody></table>`+
+ st(3,'Merkhilfe: unter der Wurzel \\(0\\) bis \\(4\\), also \\(\\frac{\\sqrt{0}}{2} = 0\\), \\(\\frac{\\sqrt{1}}{2} = \\frac{1}{2}\\), \\(\\frac{\\sqrt{4}}{2} = 1\\). \\(\\tan\\varphi = \\sin\\varphi : \\cos\\varphi\\).',false)+
+ st(4,'<b>Übrige Winkel:</b> gleiche Beträge, Vorzeichen aus dem Quadranten.'),
+ `<div class="ctl">${anz('a7')}<span>Winkel anklicken oder \\(P\\) ziehen</span></div>`)),4,r=>{
+  r.querySelector('.fig').insertAdjacentHTML('beforeend','<div class="def unter"><span id="x0"></span><span class="w" id="x1"></span></div>');
+  const svg=r.querySelector('#e7'),fig=neuFig(svg),S={w:rad(30),k:0,a:'alle'},q=id=>r.querySelector(id);
+  const draw=()=>{const k=S.k,w=S.w,P=Pk(w),F=[P[0],0],g=deg(norm(w)),gi=Math.round(g),istG=Math.abs(g-gi)<1e-6,ex=istG?exakt(gi):null;fig.clear();grundfigur(fig,{xmax:zeigt(S,'tan')?1.8:1.62});
+    if(zeigt(S,'tan'))tanTeil(fig,w,{name:'T'});
+    SPEZ.slice(0,16).forEach(a=>{const p=Pk(rad(a));fig.dot(p,'pt g',4)});
+    const ref=istG?(gi%180>90?180-gi%180:gi%180):-1;
+    if(k>=1&&(ref===30||ref===60)&&gi<90){const P2=ref===30?[P[0],-P[1]]:[2*P[0],0];fig.poly([[0,0],P,P2],'t2');fig.line(P,P2,'ln d');fig.line([0,0],P2,'ln d');fig.text(lerp([0,0],P2,.5),'1','lb kl g0',ref===30?-12:0,ref===30?14:22)}
+    if(k>=2&&ref===45&&gi<90){fig.poly([[0,0],F,P,[0,P[1]]],'t2')}
+    fig.poly([[0,0],F,P],'tri');sektor0(fig,norm(w),.2,'wg wgr');
+    fig.line([0,0],P,'ln');if(zeigt(S,'sin'))fig.line(F,P,'ln a');if(zeigt(S,'cos'))fig.line([0,0],F,'ln b');if(Math.abs(P[0])>.05&&Math.abs(P[1])>.05)fig.ra(F,[0,0],P,.07);
+    fig.dot(P,'pt drag',11);fig.text(mul(P,1.15),'P','lb');fig.text(mul(P,.5),'1','lb kl',-12*Math.sign(P[0]||1),-12);
+    info(fig,[['φ = '+f(g,0)+'°'+(istG&&piText(gi)&&gi>0?' = '+piText(gi):'')],zeigt(S,'sin')?['sin φ = '+f(P[1],3),'fa']:null,zeigt(S,'cos')?['cos φ = '+f(P[0],3),'fb']:null,zeigt(S,'tan')?[tanText(w),'fc']:null].filter(Boolean),620,40);
+    mjHTML(q('#x1'),ex?[['sin','ca'],['cos','cb'],['tan','cc']].filter(([fn])=>zeigt(S,fn)).map(([fn,c])=>`<span class="${c}">\\(\\${fn} = ${ex[fn]}\\)</span>`).join(' &nbsp; '):'kein spezieller Winkel');
+    r.querySelectorAll('.sp tbody tr').forEach((tr,i)=>tr.classList.toggle('gew',i>0&&S.a===['sin','cos','tan'][i-1]));
+    r.querySelectorAll('#sw button').forEach(b=>b.setAttribute('aria-pressed',istG&&+b.dataset.g===gi));
+    r.querySelectorAll('.sp td,.sp th').forEach(c=>c.classList.toggle('akt',istG&&[0,30,45,60,90].indexOf(gi)===c.cellIndex-1))};
+  q('#sw').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;b.blur();const z=rad(+b.dataset.g),a=norm(S.w);S.w=a;tween(S,'w',z,Math.max(300,Math.abs(z-a)*450),draw)});
+  winkelZug(svg,fig,S,draw);anzeige(r,'a7',S,draw);draw();
+  return {onStep:(k,p)=>{S.k=k;if(k===1&&p<1)zuW(S,30,700,draw);else if(k===2&&p<2)zuW(S,45,700,draw);else if(k===3&&p<3)zuW(S,60,700,draw);else draw()}}});
+
+/* 7 Gleichungen und Umformungen */
+folie('Einheitskreis','Elementare Gleichungen und Umformungen',eng(figtxt('e8',
+ `<div class="geg"><label for="bsp"><b>Beispiel</b></label><select id="bsp">${BSP.map((b,i)=>`<option value="${i}">${b.t}</option>`).join('')}</select></div>`+
+ `<div class="formel k2" id="b0"></div>`+
+ [1,2,3,4].map(i=>`<p class="st" data-step="${i}"><span class="num">${i}</span><span id="b${i}"></span></p>`).join(''),
+ `<div class="ctl">«Schritt weiter» zeigt den nächsten Lösungsschritt</div>`)),4,r=>{
+  const fig=neuFig(r.querySelector('#e8')),S={i:0,k:0},q=id=>r.querySelector(id),sel=q('#bsp');
+  const draw=()=>{const B=BSP[S.i],k=S.k;let L=null;
+    if(B.fn)L=zeichneUmkehr(fig,B.fn,B.v,k===0?0:k+1>4?4:k+1,B.W||g1);
+    else if(B.typ==='pyth'){fig.clear();grundfigur(fig);const w=Math.asin(.6),P=Pk(w),F=[P[0],0];fig.line([-1.3,.6],[1.3,.6],'rail');fig.poly([[0,0],F,P],'t0');
+      fig.line([0,0],P,'ln');fig.line(F,P,'ln a');fig.text([P[0],.3],'0.6','lb fa',30,0);fig.text(mul(P,.5),'1','lb',-12,-12);
+      if(k>=2){fig.line([0,0],F,'ln b');fig.text([.4,0],'0.8','lb fb',0,24)}else fig.text([.4,0],'cos φ = ?','lb kl fr',0,24);
+      fig.dot(P,'pt',7);fig.text(mul(P,1.15),'P','lb');
+      if(k>=4){const Q=[-P[0],P[1]];fig.line([0,0],Q,'ln kons');fig.line([Q[0],0],Q,'ln a d2');fig.line([0,0],[Q[0],0],'ln b d2');fig.dot(Q,'pt',7);fig.text([-.4,0],'−0.8','lb kl fb',0,24)}}
+    else{fig.clear();grundfigur(fig);const w=rad(40),P=Pk(w);fig.line([0,0],P,'ln');fig.line([0,0],[P[0],0],'ln b');fig.line([P[0],0],P,'ln d');fig.dot(P,'pt',7);fig.text(mul(P,1.15),'φ','lb');fig.text([P[0]/2,0],'cos φ','lb kl fb',0,24);
+      if(k>=1){const Q=Pk(Math.PI-w);fig.line(P,Q,'rail');fig.line([0,0],Q,'ln kons');fig.line([0,0],[Q[0],0],'ln b');fig.line([Q[0],0],Q,'ln d');fig.dot(Q,'pt',7);fig.text(mul(Q,1.2),'180° − φ','lb kl fc');fig.text([Q[0]/2,0],'−cos φ','lb kl fb',0,24)}
+      if(k>=2){const Q=Pk(-w);fig.line(P,Q,'rail');fig.line([0,0],Q,'ln kons');fig.dot(Q,'pt',7);fig.text(mul(Q,1.22),'360° − φ','lb kl fc')}}
+    const Z=B.z(L||{});mjHTML(q('#b0'),'\\('+B.tt+'\\)');[1,2,3,4].forEach(i=>mjHTML(q('#b'+i),Z[i-1]))};
+  sel.addEventListener('change',()=>{S.i=+sel.value;sel.blur();if(SL[cur].el===r)setStep(0);else draw()});draw();
+  return {onStep:k=>{S.k=k;draw()}}});
+
+/* ---------- Aufbau und Steuerung: Themenwahl statt Folienfolge ---------- */
+const LOE=["Bei rund \\(115^\\circ\\). Genau: \\(2 \\cdot 180^\\circ : \\pi \\approx 114.6^\\circ\\).", "\\(\\sin\\varphi = \\cos\\varphi\\) bei \\(45^\\circ\\) und \\(225^\\circ\\). \\(\\sin\\varphi = 0.5\\) bei \\(30^\\circ\\) und \\(150^\\circ\\).", "\\(\\tan\\varphi = 1\\) bei \\(45^\\circ\\) und \\(225^\\circ\\), \\(\\tan\\varphi = -1\\) bei \\(135^\\circ\\) und \\(315^\\circ\\). Kurz vor \\(90^\\circ\\) ist \\(\\tan\\varphi\\) sehr gross positiv, kurz danach sehr gross negativ.", "Im I. und III. Quadranten. Dort ist \\(\\tan\\varphi\\) positiv, im II. und IV. negativ.", "\\(140^\\circ\\), \\(220^\\circ\\) und \\(320^\\circ\\): Spiegelung an der \\(y\\)-Achse, am Ursprung und an der \\(x\\)-Achse.", "\\(\\varphi_2 = 180^\\circ - 30^\\circ = 150^\\circ\\).", "\\(\\sin 210^\\circ = -\\dfrac{1}{2}\\) und \\(\\cos 315^\\circ = \\dfrac{\\sqrt{2}}{2}\\).", null];
+const AUF=["Schätze zuerst: Bei welchem Winkel ist der Bogen \\(2\\) Radien lang? Prüfe mit dem Regler.", "Für welche Winkel ist \\(\\sin\\varphi = \\cos\\varphi\\)? Für welche ist \\(\\sin\\varphi = 0.5\\)?", "Bei welchen Winkeln ist \\(\\tan\\varphi = 1\\), bei welchen \\(-1\\)? Was geschieht kurz vor und kurz nach \\(90^\\circ\\)?", "In welchen Quadranten haben \\(\\sin\\varphi\\) und \\(\\cos\\varphi\\) dasselbe Vorzeichen? Was folgt daraus für \\(\\tan\\varphi\\)?", "Nenne zu \\(\\varphi = 40^\\circ\\) drei weitere Winkel, deren Sinus denselben Betrag hat. Prüfe mit dem Regler.", "\\(\\sin\\varphi = 0.5\\) hat die Lösung \\(\\varphi_1 = 30^\\circ\\). Bestimme \\(\\varphi_2\\) ohne Rechner, dann mit dem Regler prüfen.", "\\(\\sin 210^\\circ\\) und \\(\\cos 315^\\circ\\) zuerst selbst bestimmen.", "Löse jedes Beispiel zuerst im Heft. Vergleiche dann Schritt für Schritt."];
+const deck=document.getElementById('deck'),thema=document.getElementById('thema'),pos=document.getElementById('pos');
+SL.forEach((s,i)=>{
+  const sec=document.createElement('section');sec.className='slide';sec.hidden=i!==0;sec.setAttribute('aria-label',s.title);
+  sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand">Mathe begreifbar</span><span>${s.sec} · ${i+1} von ${SL.length}</span></header>
+  <h1>${s.title}</h1><div class="body">${s.html}</div>
+  <footer><span>Raphael Arnold Kohler</span><span>23.11.2026</span></footer></div></div>`;
+  deck.append(sec);s.el=sec;s.step=0;s.ctl=s.init(sec)||{};
+  {let x0=sec.querySelector('#x0');if(x0)x0.className='auf';else{sec.querySelector('.fig').insertAdjacentHTML('beforeend','<div class="auftrag"></div>');x0=sec.querySelector('.auftrag')}
+   let offen=false;const zeig=z=>{offen=z&&!!LOE[i];mjHTML(x0,'<span>'+(offen?'<b>Lösung:</b> '+LOE[i]:'<b>Auftrag:</b> '+AUF[i])+'</span>'+(LOE[i]?`<button type="button" aria-pressed="${offen}">${offen?'Auftrag':'Lösung'}</button>`:''))};
+   x0.addEventListener('click',e=>{if(e.target.closest('button'))zeig(!offen)});zeig(false);s.auf=zeig}
+  const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'  '+s.title;thema.append(o);
+});
+let cur=0;
+function fit(){const s=Math.min(deck.clientWidth/1600,deck.clientHeight/900);document.documentElement.style.setProperty('--s',s)}
+function ui(){const s=SL[cur];pos.textContent=`Schritt ${s.step} von ${s.n}`;thema.value=cur;
+  document.getElementById('prev').disabled=s.step<=0;document.getElementById('next').disabled=s.step>=s.n}
+function setStep(k){const s=SL[cur],prev=s.step;k=Math.max(0,Math.min(s.n,k));s.step=k;
+  s.el.querySelectorAll('[data-step]').forEach(e=>e.classList.toggle('on',+e.dataset.step<=k));
+  if(s.ctl.onStep)s.ctl.onStep(k,prev);ui()}
+function go(i){i=Math.max(0,Math.min(SL.length-1,i));SL[cur].el.hidden=true;cur=i;SL[cur].el.hidden=false;ui()}
+function fwd(){const s=SL[cur];if(s.step<s.n)setStep(s.step+1)}
+function back(){const s=SL[cur];if(s.step>0)setStep(s.step-1)}
+thema.addEventListener('change',()=>{go(+thema.value);thema.blur()});
+document.getElementById('next').addEventListener('click',fwd);document.getElementById('prev').addEventListener('click',back);
+document.getElementById('neu').addEventListener('click',()=>{setStep(0);SL[cur].auf(false)});
+document.getElementById('alle').addEventListener('click',()=>{const s=SL[cur];for(let k=s.step+1;k<=s.n;k++)setStep(k)});
+document.getElementById('full').addEventListener('click',()=>{try{(document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()).catch(()=>{})}catch(e){}});
+addEventListener('keydown',e=>{if(e.target.matches('input,select'))return;if(e.target.matches('button,a')&&(e.key===' '||e.key==='Enter'))return;
+  if(['ArrowRight',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();fwd()}
+  else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();back()}});
+document.addEventListener('pointerup',e=>{if(e.target.matches&&e.target.matches('input[type=range]'))e.target.blur()});
+addEventListener('resize',fit);fit();ui();
+/* MathJax: statische Formeln setzen, Live-Texte nachsetzen, dann die Folien zeigen */
+{const zeigen=()=>document.body.classList.add('mj');
+  if(window.MathJax&&MathJax.startup&&MathJax.startup.promise){
+    MathJax.startup.promise.then(()=>{MJ=true;MJ_EL.forEach(el=>mjHTML(el,el._mj));return MathJax.typesetPromise([deck])})
+      .catch(e=>console.error(e)).finally(zeigen)}
+  else zeigen();
+  setTimeout(zeigen,4000)}
+</script>
+</body>
+</html>

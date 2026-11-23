@@ -350,6 +350,7 @@ ZUSATZSEITEN = [
     ('simulationen/boxplot.html', 'SIM', 'Boxplot', 'thema'),
     ('simulationen/standardabweichung.html', 'SIM', 'Standardabweichung', 'thema'),
     # Präsentationen (HOWTO-praesentationen.md)
+    ('praesentationen/einheitskreis.html', 'PRÄ', 'Einheitskreis', 'thema'),
     ('praesentationen/rechtwinkliges-dreieck.html', 'PRÄ', 'Das rechtwinklige Dreieck', 'thema'),
     ('praesentationen/sinussatz-cosinussatz.html', 'PRÄ', 'Sinussatz und Cosinussatz', 'thema'),
     ('leitprogramme/quadratische-funktionen.html', '▤',

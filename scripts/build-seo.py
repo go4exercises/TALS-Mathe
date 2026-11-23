@@ -126,6 +126,12 @@ SEITEN = {
    titel='Präsentationen — Foliensätze für den Unterricht',
    beschreibung='Präsentationen zur Mathematik der Berufsmaturität: Foliensätze für den Beamer, Schritt für Schritt mit bewegten Figuren und Aufgaben, verlinkt von den Themenseiten.',
    themen=['Mathematik', 'Präsentation', 'Unterricht', 'Berufsmaturität']),
+ 'praesentationen/einheitskreis.html': dict(
+   ort='Präsentationen · Einheitskreis',
+   typ='article', lrt='Präsentation',
+   titel='Einheitskreis — Präsentation: von Bogenmass und Sinus bis zu elementaren Gleichungen',
+   beschreibung='Foliensatz zum Einheitskreis in acht Themen: Bogenmass, Sinus, Cosinus, Tangens, Vorzeichen, Symmetrien, Umkehrung, spezielle Winkel und elementare Gleichungen.',
+   themen=['Mathematik', 'Einheitskreis', 'Bogenmass', 'Sinus', 'Cosinus', 'Tangens', 'Trigonometrische Gleichungen', 'Präsentation']),
  'praesentationen/rechtwinkliges-dreieck.html': dict(
    ort='Präsentationen · Das rechtwinklige Dreieck',
    typ='article', lrt='Präsentation',
