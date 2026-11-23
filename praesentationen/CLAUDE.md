@@ -6,6 +6,7 @@ Lädt nur, wenn Claude an Dateien in `praesentationen/` arbeitet. Aufbau, Eintra
 Alle sind extern gebaut und mit wenig Eingriff übernommen. Sie haben ihr eigenes Aussehen (Heft-Look,
 Bühne 1600 × 900, eigene Navigationsleiste) und öffnen sich in einem neuen Fenster. Alle Formeln stehen
 in MathJax; Texte aus dem Skript laufen über `mjHTML`. Beschriftungen in den SVG-Figuren sind Text.
+Das Karoraster des Originals ist entfernt (Wunsch vom 23.11.2026, gilt für jede neue Präsentation).
 Die Fusszeile jeder Folie («Raphael Arnold Kohler · 23.11.2026») ist vom Original übernommen und fest.
 
 - `praesentationen/rechtwinkliges-dreieck.html` (seit 23.11.2026), 18 Folien: rechtwinkliges Dreieck,

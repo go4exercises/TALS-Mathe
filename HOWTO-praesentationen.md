@@ -97,6 +97,8 @@ Angepasst werden nur die Punkte hier.
   `\(…\)` geschrieben und für die Figur umgewandelt (Muster `klartext()` in `sinussatz-cosinussatz.html`).
 - **Notation** wie sie der Auftraggeber geliefert hat. Weicht sie von der Themenseite ab, wird das in
   `praesentationen/CLAUDE.md` vermerkt, nicht angeglichen (Entscheid vom 23.11.2026 zu SsW/sSw/SWW).
+- **Kein Karoraster** auf den Folien (Entscheid vom 23.11.2026): Die `background-image`-Zeilen mit dem
+  Raster in `.stage` entfernen, die Papierfarbe bleibt.
 - **Farben** behalten ihre Bedeutung (STYLEGUIDE §5). Getauscht wird nur eine umgedeutete Farbe, etwa
   Rot für einen der beiden Sätze im Überblick.
 - **Rechnung** zwischen `// ── KERN:ANFANG` und `// ── KERN:ENDE`, ohne DOM, sobald die Präsentation
@@ -162,7 +164,7 @@ umstellen.
 - [ ] Präsentation, nicht Simulation oder Werkzeug (§1)
 - [ ] `praesentationen/<name>.html`, `lang="de-CH"`, SEO- und FUSS-Marken, Footer-CSS, `../schriften.css`, kein fremder Host
 - [ ] MathJax-Einstellung mit vorgeladenen Erweiterungen, `mjHTML` für Skript-Texte, Start am Skriptende, keine Formel mehr als HTML
-- [ ] CSS-Fallen: `svg`-Regeln eingeschränkt, Formeln in Flex-Leisten in `<span>`
+- [ ] CSS-Fallen: `svg`-Regeln eingeschränkt, Formeln in Flex-Leisten in `<span>`; Karoraster entfernt
 - [ ] Rücklink mit Anker auf der Titelfolie, Enter auf Links
 - [ ] Lösungen in `python3` nachgerechnet; bei Rechenkern: `KERN`-Marken und eigener Selbsttest im Pre-Flight
 - [ ] Kachel in `praesentationen.html`, `build-seo.py` (zweimal laufen lassen), `build-suchindex.py`
