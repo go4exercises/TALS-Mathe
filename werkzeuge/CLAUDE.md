@@ -90,7 +90,7 @@ meldet, wenn sie auseinanderlaufen.
   Die Zustandsvariablen `F` und `form` stehen als `let` im Kern; der Test setzt sie über `setze()`.
 - `werkzeuge/schraegbild-werkstatt.html` (seit 24.11.2026): Schrägbild-Werkstatt (SF 4.1), **zweite bewusste Ausnahme
   vom Trainer-Rahmen** nach HOWTO-werkzeuge §9: extern gebaut, eigenes Aussehen (auch dunkler Modus), Systemschriften,
-  ohne `nav.js` und `style.css`, öffnet in einem neuen Fenster (Baustein in s4.1 `#definition`, Kachel in
+  ohne `nav.js` und `style.css`, öffnet in einem neuen Fenster (Bausteine in s4.1 `#definition` und s4.2a `#typen`, dort nur Prismen genannt, Kachel in
   `werkzeuge.html` unter SF 4 Geometrie). Darum in `EIGENES_SKELETT`. Körper als Schrägbild oder in der
   Dreitafelprojektion von Hand zeichnen (Stift, Maus, Lineal), Erkennung baut daraus einen 3D-Körper, «Prüfen» vergleicht
   mit der Vorlage; neun Übungen (`TASKS`), Beispiele mit den fünf platonischen Körpern (`EXAMPLES`), drehbares Modell,
