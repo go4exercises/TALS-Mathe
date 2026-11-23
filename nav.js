@@ -188,6 +188,7 @@ function buildNav(cfg) {
   // ── HEADER ──────────────────────────────────────────────────
   const headerHTML = `
 <header class="site-hdr">
+  <a href="https://begreifbar.ch/" class="logo-hub" aria-label="begreifbar.ch" title="begreifbar.ch"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1a17"/><rect x="14" y="16" width="14" height="32" rx="4" fill="#5b8fc9"/><rect x="36" y="16" width="14" height="32" rx="4" fill="#c98028"/></svg></a>
   <a href="${indexHref}" class="logo">
     Mathematik
   </a>

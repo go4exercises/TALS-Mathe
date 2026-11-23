@@ -225,7 +225,6 @@ svg text{font-family:var(--sans)}
 /* Formelsatz (MathJax) und Footer der Site — HOWTO-praesentationen.md §3 */
 body:not(.mj) #deck{visibility:hidden}
 .stage a{color:inherit}
-.brand{display:inline-flex;align-items:center;gap:10px}.hub{display:block;line-height:0}.hub svg{display:block;width:30px;height:30px}   /* Symbol von begreifbar.ch, Rücklink */
 .site-footer{flex:none;color:#9aa3b8;font-size:11px;line-height:1.5;text-align:center;padding:0 16px 6px}
 .site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
 html:fullscreen .site-footer{display:none}
@@ -720,7 +719,7 @@ folie('Rechtwinkliges Dreieck','Überblick',`<div class="ueb">
 const deck=document.getElementById('deck'),dots=document.getElementById('dots'),pos=document.getElementById('pos');
 SL.forEach((s,i)=>{
   const sec=document.createElement('section');sec.className='slide';sec.setAttribute('aria-label','Folie '+(i+1)+': '+(s.title||'Titel'));
-  sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand"><a class="hub" href="https://begreifbar.ch/" aria-label="begreifbar.ch" title="begreifbar.ch"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1a17"/><rect x="14" y="16" width="14" height="32" rx="4" fill="#5b8fc9"/><rect x="36" y="16" width="14" height="32" rx="4" fill="#c98028"/></svg></a>Mathe begreifbar</span><span>${s.sec}</span></header>
+  sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand">Mathe begreifbar</span><span>${s.sec}</span></header>
   <h1>${s.title}</h1><div class="body">${s.html}</div>
   <footer><span>Raphael Arnold Kohler · <a href="https://mathe.begreifbar.ch/">mathe.begreifbar.ch</a></span><span>23.11.2026 · ${i+1} / ${SL.length}</span></footer></div></div>`;
   deck.append(sec);s.el=sec;s.step=0;s.ctl=s.init(sec)||{};

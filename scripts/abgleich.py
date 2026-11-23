@@ -141,6 +141,8 @@ OFFEN = [
          wie='In Physik beide Abschnitte uebernehmen, mit physiklib.js/themen/ statt mathlib.js/grundlagen/, Bereichsfarbe Bernstein; Vorbild dort pruefen (Mathe: werkzeuge/parabeltrainer.html). Danach diesen Eintrag streichen und die Datei hierher uebernehmen.'),
     dict(quelle='Mathe', was='Neue Rubrik Praesentationen (praesentationen/, praesentationen.html, HOWTO-praesentationen.md, STYLEGUIDE 6.6) und Pre-Flight: check_duplicate_ids ignoriert Platzhalter ${...} aus JS-Vorlagen; check_sim_wz kennt praesentationen/; praesentationen/ vom Skelett-Check ausgenommen; Selbsttest verify_praesentationen.js (23.11.2026)',
          wie='Den ID-Check in Physiks preflight.py uebernehmen (eine Zeile, unabhaengig von Praesentationen). Ob Physik die Rubrik will, entscheidet der Auftraggeber; wenn ja: Ordner in check_sim_wz und in der Skelett-Ausnahme, verify_praesentationen.js unveraendert (liest praesentationen/*.html), nav.js und index.html wie in Mathe. Danach diesen Eintrag streichen und die Datei hierher uebernehmen.'),
+    dict(quelle='Mathe', was='Kopfzeile der Site: Symbol von begreifbar.ch (Inline-SVG, dunkles Quadrat mit blauem und bernsteinfarbenem Balken) als Ruecklink auf https://begreifbar.ch/ vor dem Fachnamen, nur das Symbol ist Link (24.11.2026)',
+         wie='In Physiks nav.js vor <a href="${indexHref}" class="logo"> denselben <a class="logo-hub">-Block einfuegen, in style.css die drei Zeilen .logo-hub aus Mathe (vor .logo-pill). SVG aus ~/begreifbar/favicon.svg. Danach diesen Eintrag streichen und die Datei hierher uebernehmen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',
