@@ -45,7 +45,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   Themenseite, zu dem sie gehören (Baustein `🛠 Werkzeug:` / `🧪 Simulation:` in
   `.block-tipp`) — **nicht** am Seitenanfang und **nicht** auf den Kacheln von
   `index.html`. Anleitung: `HOWTO-simulationen.md`, `HOWTO-werkzeuge.md`; der Pre-Flight
-  prüft mit `check_sim_wz`. Alte Adressen leitet `404.html` weiter (Tabelle `WEITERLEITUNGEN`).
+  prüft mit `check_sim_wz`. **Extern gebaute Datei übernehmen** (eigenes Aussehen, sonst Site-Regeln, neues Tab):
+  `HOWTO-werkzeuge.md` §9, gilt auch für Simulationen. Alte Adressen leitet `404.html` weiter (Tabelle `WEITERLEITUNGEN`).
 - **Einzelne Simulationen und Werkzeuge** (Zweck, Themen, Vorwahl, Besonderheiten) stehen in
   `simulationen/CLAUDE.md` und `werkzeuge/CLAUDE.md` (laden, sobald dort gearbeitet wird). Für alle gilt: Rechnung
   zwischen `KERN:ANFANG`/`KERN:ENDE`, Selbsttest `scripts/verify_<name>.js` im Pre-Flight mit Gegenrechnung in

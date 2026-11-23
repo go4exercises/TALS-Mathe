@@ -137,6 +137,8 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
+    dict(quelle='Mathe', was='HOWTO-werkzeuge.md §9 und HOWTO-simulationen.md §9 neu: extern gebaute Datei uebernehmen (eigenes CSS bleibt, sonst Site-Regeln; ohne style.css/nav.js EIGENES_SKELETT und Links mit target=_blank) (23.11.2026)',
+         wie='In Physik beide Abschnitte uebernehmen, mit physiklib.js/themen/ statt mathlib.js/grundlagen/, Bereichsfarbe Bernstein; Vorbild dort pruefen (Mathe: werkzeuge/parabeltrainer.html). Danach diesen Eintrag streichen und die Datei hierher uebernehmen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

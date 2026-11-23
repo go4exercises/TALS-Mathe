@@ -168,3 +168,15 @@ verschoben oder umbenannt:
 - [ ] `build-suchindex.py` `ZUSATZSEITEN` + laufen lassen
 - [ ] Baustein «🧪 Simulation:» im passenden Abschnitt jeder verweisenden Themenseite
 - [ ] Pre-Flight `ALLE CHECKS BESTANDEN`, Render-Check 1280/360 angesehen
+
+## 9 · Extern gebaute Datei übernehmen
+
+Wie bei Werkzeugen: **`HOWTO-werkzeuge.md` §9** gilt unverändert. Die Datei behält ihr Aussehen
+und folgt sonst den Regeln der Site. Ohne `style.css` und `nav.js` öffnet sie sich in einem
+neuen Tab. Zwei Unterschiede:
+
+- Übersicht ist `simulationen.html`, Baustein «🧪 Simulation:», Link «Zur Simulation (neues Fenster) →»,
+  Absatz in `simulationen/CLAUDE.md`.
+- 👁/💡 bleiben Pflicht (§3). Ohne `style.css` greift `anim-hinweise.js` nicht, denn das
+  Aussehen der Hinweise steht in `style.css`. Darum stehen «Worauf achten?» und «Erkenntnis»
+  zu jedem Schritt im Aussehen der Datei, etwa als aufklappbare Zeile.

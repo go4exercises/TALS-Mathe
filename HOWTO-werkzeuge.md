@@ -202,3 +202,91 @@ verschoben oder umbenannt:
 - [ ] `build-suchindex.py` `ZUSATZSEITEN` + laufen lassen
 - [ ] Baustein «🛠 Werkzeug:» im passenden Abschnitt jeder verweisenden Themenseite
 - [ ] Selbsttest, sobald gerechnet wird; Pre-Flight `ALLE CHECKS BESTANDEN`; Render-Check 1280/360
+
+## 9 · Extern gebaute Datei übernehmen
+
+**Gilt seit 23.11.2026, auch für Simulationen** (`HOWTO-simulationen.md` §9 verweist hierher).
+Eine Seite, die ausserhalb des Repos gebaut wurde (Chat, eigene Vorlage), wird so **wenig wie
+möglich** umgebaut. Sie behält ihr eigenes Aussehen, **muss aber den Regeln der Site
+weitgehend folgen**. Vorbild: `werkzeuge/parabeltrainer.html` (Commit `b7f553b1`).
+
+**Was nicht gilt — das Aussehen:**
+
+- kein `../style.css`, kein Trainer-Rahmen (`trainer.css`/`trainer.js`), keine Klassen aus
+  `style.css`. Das eigene `<style>` der Datei bleibt, wie es ist.
+- kein `nav.js` und kein Kopf `.page-titel`/`.pt-bereich`, denn beides braucht `style.css`.
+- Die Datei kommt darum in `EIGENES_SKELETT` in `.claude/skills/preflight/preflight.py`, mit
+  einem Kommentar dazu. Dann entfallen nur die Prüfungen von Skelett, nav und Ressourcen. Alle
+  anderen laufen weiter (Tag-Bilanz, IDs, ß, Dezimalkomma, HTML im LaTeX, fremde Hosts).
+
+**Neues Tab statt Navigation.** Eine Seite ohne `nav.js` hat keinen Weg zurück zur Site. Sie
+öffnet sich darum **in einem neuen Tab**, und die Themenseite bleibt dahinter offen. Das gilt
+für jeden Link auf die Seite, nämlich den Baustein auf der Themenseite und die Kachel in der
+Übersicht:
+
+```html
+<a href="../werkzeuge/<name>.html" target="_blank" rel="noopener">Zum Werkzeug (neues Fenster) →</a>
+<a href="werkzeuge/<name>.html" class="karte" target="_blank" rel="noopener"
+   aria-label="Werkzeug <Titel> (öffnet in neuem Fenster)"></a>
+```
+
+Übernimmt die Datei dagegen `style.css` und `nav.js` (wie `simulationen/standardabweichung.html`),
+ist sie eine gewöhnliche Seite nach §3 und öffnet sich im selben Tab.
+
+**Was gilt — alles andere:**
+
+1. **Zuerst ganz lesen.** Die Datei ist fremder Code. Mit `grep -n 'http'` jede Adresse
+   suchen: Schriften, CDN, Bilder, `fetch`, Analytics, `iframe`. Nichts davon darf bleiben.
+2. **Kein fremder Host** (STYLEGUIDE §5.3.1):
+   - Google Fonts durch `<link rel="stylesheet" href="../schriften.css">` ersetzen.
+     Vorhanden sind Source Sans 3, Source Serif 4, JetBrains Mono und Caveat. Eine andere Familie
+     wird durch die nächstliegende ersetzt (im Parabeltrainer Bricolage Grotesque durch Source Sans 3).
+   - MathJax-CDN durch `../vendor/mathjax/tex-svg.js` ersetzen.
+   - Eine fremde Bibliothek nur lokal unter `vendor/` einbinden, mit Lizenz.
+3. **Gerüst:** `<!DOCTYPE html>`, `<html lang="de-CH">`, `charset`, `viewport`. SEO- und
+   FUSS-Marken wörtlich aus dem Vorbild kopieren (§3, letzter Punkt). Weil `style.css` fehlt,
+   kommen die zwei Zeilen `.site-footer` aus dem Vorbild ins eigene `<style>`.
+4. **Sprache und Notation** wie überall (CLAUDE.md, STYLEGUIDE §2):
+   - Schweizer Hochdeutsch, kein ß.
+   - Dezimalpunkt auch in Live-Anzeigen und Schritttexten. Also kein
+     `toLocaleString('de')`/`'de-DE'` und keine Ausgabe mit `','`.
+   - MathJax-Konfiguration nur mit `\(…\)` und `\[…\]`. Ein `$…$` in der Konfiguration oder im
+     Text wird umgestellt.
+   - Leere Menge als `\{\,\}`.
+   - Begriffe und Variablennamen wie auf den Themenseiten (etwa `b` statt `q`,
+     «Linearfaktorform»). Abweichungen nur auf ausdrücklichen Wunsch des Auftraggebers, und
+     dann mit Angabe in `werkzeuge/CLAUDE.md` bzw. `simulationen/CLAUDE.md`.
+5. **Didaktische Farben behalten ihre Bedeutung** (STYLEGUIDE §5): grün für richtig und Lösung,
+   rot für Fehler, orange für Aufgabe. Die Farbtöne der Datei bleiben. Nur eine
+   *umgedeutete* Farbe wird getauscht, etwa rot für einen Hinweis.
+6. **Rücklink** auf den Abschnitt der Themenseite (mit Anker) als ein Satz im Kopf der Datei,
+   im Aussehen der Datei. `check_sim_wz` prüft den Anker.
+7. **Rechnung zwischen `KERN:ANFANG`/`KERN:ENDE`** und Selbsttest `scripts/verify_<name>.js`
+   mit Gegenrechnung in `python3`, wie in §6. Bei fremder Logik ist der Selbsttest besonders
+   wichtig, denn niemand hier hat die Rechnung geschrieben. Zustand, den der Test setzen muss,
+   steht als `let` im Kern (Muster `setze()` im Parabeltrainer).
+8. **Gespeicherter Stand** nach §3: eigener Schlüssel `tals-mathe-<name>-v1`, `try/catch`,
+   Knopf zum Zurücksetzen, Absatz in `rechtliches.html`. Bringt die Datei einen eigenen
+   Schlüssel mit, wird er umbenannt, solange sie noch nicht veröffentlicht ist.
+9. **Bei 360 px kein seitliches Scrollen.** Fehlt das in der Datei, kommt eine CSS-Zeile ins
+   eigene `<style>`. Mehr wird am Aussehen nicht geändert.
+10. **Eintragen und verlinken** nach §4 und §5 (Übersicht, `build-seo.py`, `build-suchindex.py`,
+    Baustein, Absatz in `werkzeuge/CLAUDE.md`), nur mit `target="_blank"` wie oben. Im Absatz
+    steht ausdrücklich «bewusste Ausnahme vom Trainer-Rahmen» und was angepasst wurde.
+11. **Prüfen** nach §6: Pre-Flight, Selbsttest, Render-Check 1280/360 mit Bildern ansehen.
+
+**Commit:** Die Nachricht zählt auf, was angepasst wurde, und sagt, dass sonst nichts geändert
+wurde. Am einfachsten ist das mit einem `diff` gegen die Originaldatei, die dafür im
+Scratchpad liegt und nicht im Repo.
+
+### Checkliste extern
+
+- [ ] Datei ganz gelesen, jede `http`-Adresse entfernt oder lokal ersetzt
+- [ ] `../schriften.css`, `../vendor/mathjax/tex-svg.js`, Schriftfamilien aus `schriften.css`
+- [ ] `lang="de-CH"`, SEO- und FUSS-Marken wörtlich, `.site-footer` im eigenen `<style>`
+- [ ] kein ß, Dezimalpunkt (auch im JS), `\(…\)`, `\{\,\}`, Notation der Themenseiten oder Abweichung vermerkt
+- [ ] Farbbedeutungen wie auf der Site, Rücklink mit Anker
+- [ ] `KERN`-Marken, `scripts/verify_<name>.js` mit `python3`, im Pre-Flight eingetragen
+- [ ] in `EIGENES_SKELETT` (nur ohne `style.css`/`nav.js`)
+- [ ] alle Links auf die Seite mit `target="_blank" rel="noopener"` und «(neues Fenster)»
+- [ ] §4/§5 erledigt, Absatz in `CLAUDE.md` des Ordners, Pre-Flight und Render-Check bestanden
