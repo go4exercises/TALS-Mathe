@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rechtwinkliges Dreieck Einstieg</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Foliensatz zum rechtwinkligen Dreieck: Thaleskreis, Pythagoras, Kathetensatz und Höhensatz mit Scherungen bewiesen, dazu Sinus, Cosinus und Tangens mit Aufgaben.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/praesentationen/rechtwinkliges-dreieck.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Das rechtwinklige Dreieck — Präsentation: Thaleskreis, Pythagoras, Sinus, Cosinus, Tangens">
+<meta property="og:description" content="Foliensatz zum rechtwinkligen Dreieck: Thaleskreis, Pythagoras, Kathetensatz und Höhensatz mit Scherungen bewiesen, dazu Sinus, Cosinus und Tangens mit Aufgaben.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/praesentationen/rechtwinkliges-dreieck.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/praesentationen/rechtwinkliges-dreieck.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/praesentationen/rechtwinkliges-dreieck.html",
+   "name": "Das rechtwinklige Dreieck — Präsentation: Thaleskreis, Pythagoras, Sinus, Cosinus, Tangens",
+   "description": "Foliensatz zum rechtwinkligen Dreieck: Thaleskreis, Pythagoras, Kathetensatz und Höhensatz mit Scherungen bewiesen, dazu Sinus, Cosinus und Tangens mit Aufgaben.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Rechtwinkliges Dreieck"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Thaleskreis"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Satz des Pythagoras"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Kathetensatz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Höhensatz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Sinus"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Cosinus"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Tangens"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Präsentation"
+    }
+   ],
+   "keywords": "Mathematik, Rechtwinkliges Dreieck, Thaleskreis, Satz des Pythagoras, Kathetensatz, Höhensatz, Sinus, Cosinus, Tangens, Präsentation",
+   "learningResourceType": "Präsentation",
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<style>
+:root{
+  /* Heft-Look: Karopapier, Tinte, Farbstifte. Eine Folie = eine 1600x900-Buehne, auf den Bildschirm skaliert. */
+  --papier:#fbfaf4; --karo:#d6dde9; --tinte:#1b2845; --grau:#6a7488;
+  --a:#1c6fb8; --b:#d0741a; --h:#2b8a57; --rot:#c23a2b; --c:#6a44a8;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --s:1; color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#2a3247;color:var(--tinte);font-family:var(--sans);display:flex;flex-direction:column;overflow:hidden}
+#deck{flex:1;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none}
+#deck::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fit{position:relative;width:calc(1600px*var(--s));height:calc(900px*var(--s));flex:none}
+.stage{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0;transform:scale(var(--s));
+  background-color:var(--papier);
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);
+  background-size:25px 25px;background-position:-1px -1px;
+  display:grid;grid-template-rows:56px 84px 1fr 44px;padding:0 60px;overflow:hidden}
+.stage>header,.stage>footer{display:flex;justify-content:space-between;align-items:center;font-size:20px;color:var(--grau);letter-spacing:.02em}
+.stage>header .brand{font-weight:700;color:var(--tinte)}
+h1{font-family:var(--serif);font-weight:700;font-size:50px;line-height:1.1;margin:0;align-self:center;text-wrap:balance}
+.body{min-height:0;position:relative}
+.cols{display:grid;grid-template-columns:860px 1fr;gap:40px;height:100%}
+.fig{position:relative}
+.fig svg{display:block;width:860px;height:640px;touch-action:none}
+.txt{display:flex;flex-direction:column;gap:18px;font-size:27px;line-height:1.3;padding-top:6px}
+.st{opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s;margin:0}
+.st.on{opacity:1;transform:none}
+.st b{font-weight:700}
+.num{display:inline-block;min-width:34px;height:34px;border-radius:50%;background:var(--tinte);color:var(--papier);font-size:20px;font-weight:700;text-align:center;line-height:34px;margin-right:10px;vertical-align:3px}
+.formel{font-family:var(--serif);font-weight:700;font-size:54px;background:#fff;border:3px solid var(--tinte);border-radius:6px;padding:10px 24px;align-self:flex-start;box-shadow:5px 5px 0 var(--karo)}
+.formel.kl{font-size:38px}
+.ctl{margin-top:auto;display:flex;align-items:center;gap:14px;font-size:22px;color:var(--grau);padding-bottom:10px;flex-wrap:wrap}
+.ctl input[type=range]{width:230px;accent-color:var(--tinte)}
+.ctl button,.tog{font:600 22px var(--sans);color:var(--tinte);background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:6px 16px;cursor:pointer}
+.ctl button[aria-pressed=true]{background:var(--tinte);color:#fff}
+.ca{color:var(--a)}.cb{color:var(--b)}.ch{color:var(--h)}.cc{color:var(--c)}.cr{color:var(--rot)}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 4px}
+.fr>span:first-child{border-bottom:2.5px solid currentColor;padding:0 6px 2px}
+.fr>span:last-child{padding:2px 6px 0}
+/* Titelfolie */
+.titel{display:grid;grid-template-columns:1fr 620px;gap:30px;height:100%;align-items:center}
+.titel h2{font-family:var(--serif);font-size:84px;line-height:1.02;margin:0 0 24px;text-wrap:balance}
+.titel p{font-size:30px;margin:0 0 26px;max-width:22em;color:#33415f}
+.titel ol{font-size:27px;margin:0;padding-left:1.2em;line-height:1.5}
+.hint{font-size:21px;color:var(--grau);margin-top:30px}
+kbd{font:600 19px var(--sans);border:1.5px solid var(--grau);border-radius:5px;padding:1px 8px;background:#fff}
+/* Aufgaben */
+.karten{display:grid;grid-template-columns:1fr 1fr;gap:36px;height:100%;padding-bottom:14px}
+.karte{background:#fff;border:2.5px solid var(--tinte);border-radius:8px;padding:18px 26px;display:flex;flex-direction:column;gap:10px;box-shadow:6px 6px 0 var(--karo)}
+.karte h3{font-family:var(--serif);font-size:30px;margin:0;display:flex;justify-content:space-between;align-items:baseline}
+.karte h3 small{font:600 19px var(--sans);color:var(--grau)}
+.karte>svg{width:100%;height:280px;display:block}
+.karte p{font-size:27px;line-height:1.3;margin:0}
+.loes{margin-top:auto;border-top:2px dashed var(--grau);padding-top:10px;font-size:27px;line-height:1.55}
+.loes b{color:var(--h)}
+.karten.k3{grid-template-columns:repeat(3,1fr);gap:24px}
+.k3 .karte{padding:14px 20px;gap:6px}.k3 .karte h3{font-size:27px}
+.k3 .karte>svg{height:auto;aspect-ratio:480/280}
+.k3 .karte p{font-size:23px}.k3 .loes{font-size:23px}
+/* Tabelle Aehnlichkeit */
+table.v{border-collapse:collapse;font-size:24px;font-variant-numeric:tabular-nums;background:#fff;width:100%}
+table.v th,table.v td{border:1.5px solid var(--grau);padding:5px 10px;text-align:right}
+table.v th:first-child,table.v td:first-child{text-align:left;font-weight:600}
+table.v thead th{background:#eef1f6}
+table.v tr.q td{font-weight:700;background:#f3fbf6}
+table.v tr{transition:opacity .5s}
+table.v tr.st,table.v.st{transform:none}
+.defs{display:flex;flex-direction:column;gap:14px}
+.def{font-size:31px;display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:8px 18px}
+.def .w{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700}
+/* Ueberblick */
+.ueb{display:grid;grid-template-columns:1fr 1fr;gap:16px 36px;align-content:start;padding-top:8px}
+.ueb div{background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:12px 22px;font-size:27px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.ueb div span:last-child{font-family:var(--serif);font-weight:700;font-size:34px;white-space:nowrap}
+.ueb .breit{grid-column:1/-1;background:none;border:0;padding:6px 0 0;font:700 30px var(--serif)}
+.formel.k2{font-size:30px;padding:6px 18px;display:flex;align-items:center;gap:10px}
+/* SVG */
+svg text{font-family:var(--sans)}
+.tri{fill:#ffffffb0;stroke:var(--tinte);stroke-width:3.5;stroke-linejoin:round}
+.ln{stroke:var(--tinte);stroke-width:3;stroke-linecap:round;fill:none}
+.ln.d{stroke-dasharray:8 7;stroke-width:2}
+.ln.a{stroke:var(--a);stroke-width:6}.ln.b{stroke:var(--b);stroke-width:6}.ln.c{stroke:var(--c);stroke-width:6}.ln.h{stroke:var(--h);stroke-width:4}
+.sq-a{fill:var(--a);fill-opacity:.34;stroke:var(--a);stroke-width:2.5;stroke-linejoin:round}
+.sq-b{fill:var(--b);fill-opacity:.36;stroke:var(--b);stroke-width:2.5;stroke-linejoin:round}
+.sq-h{fill:var(--h);fill-opacity:.36;stroke:var(--h);stroke-width:2.5;stroke-linejoin:round}
+.sq-c{fill:#fff;fill-opacity:.55;stroke:var(--tinte);stroke-width:2.5}
+.t0{fill:var(--c);fill-opacity:.14;stroke:var(--c);stroke-width:3;stroke-linejoin:round}
+.t1{fill:var(--b);fill-opacity:.3;stroke:var(--b);stroke-width:3;stroke-linejoin:round}
+.t2{fill:var(--a);fill-opacity:.3;stroke:var(--a);stroke-width:3;stroke-linejoin:round}
+.ghost{fill:none;stroke:#8f99ab;stroke-width:1.6;stroke-dasharray:6 6}
+.rail{stroke:var(--rot);stroke-width:2.2;stroke-dasharray:11 7;fill:none}
+.ra{fill:none;stroke:var(--rot);stroke-width:2.6}
+.arc{fill:none;stroke:var(--tinte);stroke-width:2.4}
+.arc.ca{stroke:var(--a)}.arc.cb{stroke:var(--b)}
+.pt{fill:var(--tinte)}.pt.drag{fill:var(--rot);stroke:#fff;stroke-width:3;cursor:grab}
+.circ{fill:none;stroke:var(--grau);stroke-width:2.4}
+.lb{font-weight:600;font-size:27px;fill:var(--tinte);text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:var(--papier);stroke-width:5px;stroke-linejoin:round}
+.lb.gr{font-size:36px;font-weight:700}.lb.kl{font-size:22px}
+.lb.fa{fill:var(--a)}.lb.fb{fill:var(--b)}.lb.fh{fill:var(--h)}.lb.fc{fill:var(--c)}.lb.fr{fill:var(--rot)}
+.pop{animation:pop .5s ease-out}
+@keyframes pop{from{opacity:0}to{opacity:1}}
+/* Navigation */
+#bar{flex:none;height:46px;display:flex;align-items:center;justify-content:center;gap:14px;color:#cfd6e4;font-size:15px;padding:0 16px}
+#bar button{font:600 15px var(--sans);color:#fff;background:#3d4864;border:0;border-radius:5px;height:30px;padding:0 14px;cursor:pointer}
+#bar button:focus-visible,.ctl button:focus-visible,.ctl input:focus-visible{outline:3px solid #ffd24d;outline-offset:2px}
+#dots{display:flex;gap:6px}
+#dots button{width:12px;height:12px;padding:0;border-radius:50%;background:#55607c}
+#dots button[aria-current=true]{background:#ffd24d}
+#pos{min-width:150px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.st,.pop{transition:none;animation:none}}
+/* Formelsatz (MathJax) und Footer der Site — HOWTO-praesentationen.md §3 */
+body:not(.mj) #deck{visibility:hidden}
+.stage a{color:inherit}
+.site-footer{flex:none;color:#9aa3b8;font-size:11px;line-height:1.5;text-align:center;padding:0 16px 6px}
+.site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
+html:fullscreen .site-footer{display:none}
+@media (max-width:700px){#bar{flex-wrap:wrap;height:auto;padding:6px 8px;gap:8px}#dots{display:none}}   /* schmal: Knöpfe erreichbar */
+</style>
+<script>
+window.MathJax={loader:{load:['[tex]/boldsymbol','[tex]/color']},
+  tex:{packages:{'[+]':['boldsymbol','color']},inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],
+       macros:{B:['\\boldsymbol{#1}',1],                       // fett
+               ca:['{\\color{##1c6fb8}{#1}}',1],cb:['{\\color{##d0741a}{#1}}',1],cc:['{\\color{##6a44a8}{#1}}',1],
+               ch:['{\\color{##2b8a57}{#1}}',1],cr:['{\\color{##c23a2b}{#1}}',1]}},   // Farben wie --a, --b, --c, --h, --rot
+  svg:{fontCache:'local'},options:{enableMenu:false},startup:{typeset:false}};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+</head>
+<body>
+<main id="deck" tabindex="0" aria-label="Folien"></main>
+<nav id="bar" aria-label="Navigation">
+  <button id="prev" type="button" aria-label="Zurück">‹ Zurück</button>
+  <span id="pos"></span>
+  <div id="dots"></div>
+  <button id="next" type="button" aria-label="Weiter">Weiter ›</button>
+  <button id="full" type="button">Vollbild</button>
+</nav>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Präsentationen · Das rechtwinklige Dreieck</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script>
+"use strict";
+/* ---------- Geometrie-Helfer ---------- */
+const NS='http://www.w3.org/2000/svg';
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1]], sub=(a,b)=>[a[0]-b[0],a[1]-b[1]], mul=(a,k)=>[a[0]*k,a[1]*k];
+const lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+const len=a=>Math.hypot(a[0],a[1]), unit=a=>mul(a,1/len(a));
+const rot=(p,c,w)=>{const d=sub(p,c),co=Math.cos(w),si=Math.sin(w);return [c[0]+d[0]*co-d[1]*si,c[1]+d[0]*si+d[1]*co]};
+const ease=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+const cen=P=>mul(P.reduce(add,[0,0]),1/P.length);
+const deg=w=>w*180/Math.PI, rad=g=>g*Math.PI/180;
+const f=(x,n=2)=>x.toFixed(n);
+function sv(tag,at,txt){const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);if(txt!=null)e.textContent=txt;return e}
+class Fig{
+  constructor(svg,ox,oy,u){this.svg=svg;this.ox=ox;this.oy=oy;this.u=u}
+  clear(){this.svg.replaceChildren()}
+  X(p){return [this.ox+p[0]*this.u,this.oy-p[1]*this.u]}
+  inv(x,y){return [(x-this.ox)/this.u,(this.oy-y)/this.u]}
+  poly(P,cls){const e=sv('polygon',{points:P.map(p=>this.X(p).map(v=>v.toFixed(1)).join(',')).join(' '),class:cls});this.svg.append(e);return e}
+  line(a,b,cls='ln'){const A=this.X(a),B=this.X(b);const e=sv('line',{x1:A[0],y1:A[1],x2:B[0],y2:B[1],class:cls});this.svg.append(e);return e}
+  dot(p,cls='pt',r=6){const P=this.X(p);const e=sv('circle',{cx:P[0],cy:P[1],r,class:cls});this.svg.append(e);return e}
+  circle(m,r,cls='circ'){const P=this.X(m);this.svg.append(sv('circle',{cx:P[0],cy:P[1],r:r*this.u,class:cls}))}
+  text(p,s,cls='lb',dx=0,dy=0){const P=this.X(p);const e=sv('text',{x:P[0]+dx,y:P[1]+dy,class:cls},s);this.svg.append(e);return e}
+  ra(V,P1,P2,s=.28){const d1=mul(unit(sub(P1,V)),s),d2=mul(unit(sub(P2,V)),s);
+    const a=this.X(add(V,d1)),b=this.X(add(add(V,d1),d2)),c=this.X(add(V,d2));
+    this.svg.append(sv('path',{d:`M${a} L${b} L${c}`,class:'ra'}))}
+  arc(V,P1,P2,r,cls='arc'){const a1=Math.atan2(P1[1]-V[1],P1[0]-V[0]),a2=Math.atan2(P2[1]-V[1],P2[0]-V[0]);
+    let d=a2-a1;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+    const s=this.X(add(V,[r*Math.cos(a1),r*Math.sin(a1)])),e=this.X(add(V,[r*Math.cos(a2),r*Math.sin(a2)]));
+    this.svg.append(sv('path',{d:`M${s} A${r*this.u} ${r*this.u} 0 0 ${d>0?0:1} ${e}`,class:cls}));
+    return add(V,mul([Math.cos(a1+d/2),Math.sin(a1+d/2)],r))}
+  arcLabel(V,P1,P2,r,s,cls='lb',k=1.55){const a1=Math.atan2(P1[1]-V[1],P1[0]-V[0]),a2=Math.atan2(P2[1]-V[1],P2[0]-V[0]);
+    let d=a2-a1;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+    this.text(add(V,mul([Math.cos(a1+d/2),Math.sin(a1+d/2)],r*k)),s,cls)}
+}
+/* Formelsatz: \(…\) in Texten, die das Skript erst setzt (Live-Anzeigen, Werte der Regler).
+   Vor dem Start von MathJax steht der Text roh da; beim Start wird alles nachgesetzt. */
+let MJ=false;const MJ_EL=new Set();
+function mjHTML(el,html){if(el._mj===html&&el._mjFertig===MJ)return;el._mj=html;el._mjFertig=MJ;MJ_EL.add(el);
+  if(!MJ){el.innerHTML=html;return}
+  el.innerHTML=html.replace(/\\\(([\s\S]+?)\\\)/g,(m,tex)=>{try{return MathJax.tex2svg(tex,{display:false}).outerHTML}catch(e){return tex}})}
+const E=t=>'<b>\\(\\B{'+t+'}\\)</b>';   // Ergebnis einer Aufgabe
+
+/* ---------- Scherungsketten ---------- */
+// Quadrat -> Scherung -> Drehung 90 Grad -> Scherung (Euklid)
+function kette(S0,S1,ctr,sgn,S3,t){
+  if(t<=1) return S0.map((P,i)=>lerp(P,S1[i],ease(t)));
+  if(t<=2) return S1.map(P=>rot(P,ctr,sgn*Math.PI/2*ease(t-1)));
+  const S2=S1.map(P=>rot(P,ctr,sgn*Math.PI/2));
+  return S2.map((P,i)=>lerp(P,S3[i],ease(t-2)));
+}
+function euklidGeo(q,c=5){const p=c-q,h=Math.sqrt(p*q),A=[0,0],B=[c,0],C=[q,h],H=[q,0];
+  return {c,p,q,h,A,B,C,H,
+    a:{S0:[C,B,[c+h,p],[q+h,h+p]],S1:[A,B,[c+h,p],[h,p]],ctr:B,sgn:1,S3:[[c,-c],B,H,[q,-c]]},
+    b:{S0:[C,A,[-h,q],[q-h,h+q]],S1:[B,A,[-h,q],[c-h,q]],ctr:A,sgn:-1,S3:[[0,-c],A,H,[q,-c]]}}}
+function hoeheGeo(q,c=5){const p=c-q,h=Math.sqrt(p*q),A=[0,0],B=[c,0],C=[q,h],H=[q,0];
+  return {c,p,q,h,A,B,C,H,S:[[H,C,[q+h,h],[q+h,0]],[H,C,[q+h,h-q],[q+h,-q]],[H,B,[c+h,-q],[q+h,-q]],[H,B,[c,-q],[q,-q]]]}}
+function hoeheForm(g,t){t=Math.max(0,Math.min(3,t));const i=Math.min(2,Math.floor(t)),u=ease(t-i);return g.S[i].map((P,k)=>lerp(P,g.S[i+1][k],u))}
+
+function zeichneEuklid(fig,q,ap,bp,mode){
+  const g=euklidGeo(q),{A,B,C,H,c,h,p}=g;
+  fig.clear();
+  fig.poly([A,B,[c,-c],[0,-c]],'sq-c');
+  fig.text([c/2,-c+.45],'c²','lb gr');
+  if(ap>0)fig.poly(g.a.S0,'ghost'); if(bp>0)fig.poly(g.b.S0,'ghost');
+  if(ap>2||bp>2)fig.line(H,[q,-c],'ln d');
+  if(ap>0&&ap<1)fig.line(A,g.a.S0[3],'rail');
+  if(bp>0&&bp<1)fig.line(B,g.b.S0[3],'rail');
+  if((ap>2&&ap<3)||(bp>2&&bp<3))fig.line(C,[q,-c],'rail');
+  const Pa=kette(g.a.S0,g.a.S1,g.a.ctr,g.a.sgn,g.a.S3,ap), Pb=kette(g.b.S0,g.b.S1,g.b.ctr,g.b.sgn,g.b.S3,bp);
+  fig.poly(Pb,'sq-b'); fig.poly(Pa,'sq-a');
+  fig.poly([A,B,C],'tri'); fig.ra(C,A,B,.3);
+  if(mode==='kath'){fig.line(C,H,'ln d');fig.text([q/2,.26],'q','lb kl fb');fig.text([q+p/2,.26],'p','lb kl fa');}
+  fig.text(cen(Pa),(mode==='kath'&&ap>=3)?'p · c':'a²','lb gr fa');
+  fig.text(cen(Pb),(mode==='kath'&&bp>=3)?'q · c':'b²','lb gr fb');
+  const na=unit([h,p]),nb=unit([-h,q]);
+  fig.text(add(lerp(C,B,.5),mul(na,-.3)),'a','lb fa'); fig.text(add(lerp(C,A,.5),mul(nb,-.3)),'b','lb fb');
+  if(mode!=='kath')fig.text([c/2,.26],'c','lb');
+  fig.text(A,'A','lb kl',-16,16); fig.text(B,'B','lb kl',16,16); fig.text(C,'C','lb kl',0,-20);
+}
+function zeichneHoehe(fig,q,t){
+  const g=hoeheGeo(q),{A,B,C,H,c,h,p}=g;
+  fig.clear();
+  fig.poly(g.S[3],'ghost');
+  const a0=fig.X([0,0]),a1=fig.X([q,-q]);
+  fig.svg.append(sv('path',{d:`M${a0} A${q*fig.u} ${q*fig.u} 0 0 0 ${a1}`,class:'ghost'}));
+  if(t>0)fig.poly(g.S[0],'ghost');
+  if(t>0&&t<1)fig.line([q+h,h],[q+h,-q],'rail');
+  if(t>1&&t<2)fig.line(C,[c+h,-q],'rail');
+  if(t>2&&t<3)fig.line([q,-q],[c+h,-q],'rail');
+  fig.poly([A,B,C],'tri');
+  const P=hoeheForm(g,t); fig.poly(P,'sq-h');
+  fig.line(C,H,'ln h'); fig.ra(C,A,B,.26); fig.ra(H,B,C,.22);
+  fig.text(cen(P),t>=3?'p · q':'h²','lb gr fh');
+  fig.text([q-.2,h/2],'h','lb fh'); fig.text([q/2,.22],'q','lb kl fb'); fig.text([q+p/2,.22],'p','lb kl fa');
+  if(t>=3){fig.text([q-.2,-q/2],'q','lb kl fb');fig.text([q+p/2,-q-.24],'p','lb kl fa');}
+  fig.text(A,'A','lb kl',-16,14); fig.text(B,'B','lb kl',18,-12); fig.text(C,'C','lb kl',0,-20); fig.text(H,'H','lb kl',-16,18);
+}
+
+/* ---------- Skizzen fuer Aufgaben ---------- */
+let SKW=700;
+function skizzeHyp(svg,p,q,L){ // Hypotenuse unten, C oben; L: Beschriftungen
+  const c=p+q,h=Math.sqrt(p*q),u=Math.min((SKW-200)/c,175/h,L.bogen?350/c:1e9),fig=new Fig(svg,(SKW-c*u)/2,212,u);
+  const A=[0,0],B=[c,0],C=[q,h],H=[q,0];
+  const cl=(s,k)=>'lb '+(s.includes('?')?'fr':k);
+  if(L.bogen){const s0=fig.X(B),e0=fig.X(A);svg.append(sv('path',{d:`M${s0} A${c/2*u} ${c/2*u} 0 0 0 ${e0}`,class:'circ'}))}
+  fig.poly([A,B,C],'tri'); fig.ra(C,A,B,18/u);
+  if(L.al){const r=40/u;fig.arc(A,B,C,r);fig.arcLabel(A,B,C,r,L.al,cl(L.al,''),2.3)}
+  if(L.be){const r=40/u;fig.arc(B,C,A,r);fig.arcLabel(B,C,A,r,L.be,cl(L.be,''),2.5)}
+  if(L.h||L.p||L.q){fig.line(C,H,'ln h');fig.ra(H,B,C,16/u)}
+  const seite=(P,Q,n,s,k)=>{if(!s)return;const M=lerp(P,Q,.5),X=fig.X(M),w=s.length*6.6+12;
+    svg.append(sv('text',{x:X[0]+n[0]*(w*Math.abs(n[0])+16*Math.abs(n[1])+4),y:X[1]-n[1]*(18+6*Math.abs(n[1])),class:cl(s,k)},s))};
+  const io=L.bogen?-1:1;
+  seite(C,B,mul(unit([h,p]),io),L.a,'fa'); seite(C,A,mul(unit([-h,q]),io),L.b,'fb');
+  if(L.c)fig.text([c/2,0],L.c,cl(L.c,''),0,(L.p||L.q)?54:26);
+  if(L.h&&L.h.trim()){const li=q>=p?-1:1;fig.text([q,h*.3],L.h,cl(L.h,'fh'),li*(16+L.h.length*6.6),0)}
+  if(L.p)fig.text([q+p/2,0],L.p,'lb kl '+(L.p.includes('?')?'fr':'fa'),0,24);
+  if(L.q)fig.text([q/2,0],L.q,'lb kl '+(L.q.includes('?')?'fr':'fb'),0,24);
+  fig.text(A,'A','lb kl',-18,0); fig.text(B,'B','lb kl',18,0); fig.text(C,'C','lb kl',0,-18);
+}
+function skizzeTrig(svg,gk,ak,L){ // rechter Winkel bei C unten rechts, alpha bei A
+  const u=Math.min((SKW-220)/ak,185/gk),fig=new Fig(svg,(SKW-ak*u)/2+20,222,u),A=[0,0],C=[ak,0],B=[ak,gk];
+  const cl=(s,k)=>'lb '+(s.includes('?')?'fr':k);
+  fig.poly([A,C,B],'tri'); fig.ra(C,A,B,18/u);
+  const r=Math.min(64/u,ak*.3),al=L.al||'α',aussen=!!L.al||deg(Math.atan2(gk,ak))<30;
+  if(L.noal){fig.text(A,'A','lb kl',-18,4)} else {fig.arc(A,C,B,r,'arc');
+  if(aussen)fig.text(A,al,cl(al,''),-(18+al.length*6.6),0); else {fig.arcLabel(A,C,B,r,al,'lb',.62);fig.text(A,'A','lb kl',-18,4)}}
+  if(L.gk)fig.text([ak,gk/2],L.gk,cl(L.gk,'fa'),16+L.gk.length*6.6,0);
+  if(L.ak)fig.text([ak/2,0],L.ak,cl(L.ak,'fb'),0,26);
+  if(L.h){const n=unit([-gk,ak]),X=fig.X(lerp(A,B,.5));svg.append(sv('text',{x:X[0]+n[0]*(L.h.length*6.6+14),y:X[1]-n[1]*24,class:cl(L.h,'fc')},L.h))}
+  fig.text(C,'C','lb kl',16,16); fig.text(B,'B','lb kl',14,-14);
+}
+
+/* ---------- Folien ---------- */
+const SL=[];
+const folie=(sec,title,html,n,init)=>SL.push({sec,title,html,n,init});
+const figtxt=(id,txt,ctl='')=>`<div class="cols"><div class="fig"><svg id="${id}" viewBox="0 0 860 640" role="img" aria-label="Figur"></svg></div><div class="txt">${txt}${ctl}</div></div>`;
+const st=(k,html,nr=true)=>`<p class="st" data-step="${k}">${nr?`<span class="num">${k}</span>`:''}${html}</p>`;
+const formel=(k,html,kl='')=>`<div class="formel st ${kl}" data-step="${k}">${html}</div>`;
+const regler=(id,lab,min,max,val,step=.01)=>`<label for="${id}">${lab}</label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}">`;
+function tween(o,key,to,ms,draw){
+  o._r=o._r||{}; cancelAnimationFrame(o._r[key]);
+  const from=o[key]; if(RM||ms<=0||from===to){o[key]=to;draw();return}
+  const t0=performance.now();
+  const fn=now=>{const u=Math.max(0,Math.min(1,(now-t0)/ms));o[key]=from+(to-from)*u;
+    try{draw()}finally{if(u<1)o._r[key]=requestAnimationFrame(fn)}};
+  o._r[key]=requestAnimationFrame(fn);
+}
+
+/* 1 Titel */
+folie('Geometrie','',`<div class="titel"><div>
+<h2>Das rechtwinklige Dreieck</h2>
+<p>Vom Thaleskreis über die Satzgruppe des Pythagoras zu Sinus, Cosinus und Tangens.</p>
+<ol><li>Rechtwinkliges Dreieck und Thaleskreis</li><li>Pythagoras, Kathetensatz, Höhensatz: Beweise mit Scherungen</li><li>Winkelfunktionen als konstante Seitenverhältnisse</li></ol>
+<p class="hint">Weiter mit <kbd>→</kbd> oder <kbd>Leertaste</kbd>, zurück mit <kbd>←</kbd></p>
+<p class="hint">Der Stoff dazu steht in <a href="../grundlagen/g5-2a-dreiecke.html#pythagoras">5.2a Dreiecke</a> und <a href="../grundlagen/g5-3-trigonometrische-berechnungen.html#recht-dreieck">5.3 Trigonometrische Berechnungen</a>.</p></div>
+<svg id="f0" viewBox="0 0 620 680" role="img" aria-label="Pythagoras-Figur"></svg></div>`,0,r=>{
+  zeichneEuklid(new Fig(r.querySelector('#f0'),200,355,56),3.2,0,0,'pyth');return {}});
+
+/* 2 Begriffe */
+folie('Rechtwinkliges Dreieck','Was ist ein rechtwinkliges Dreieck?',figtxt('f1',
+ st(1,'Ein Winkel misst genau <b class="cr">\\(90^\\circ\\)</b>. Hier liegt er bei \\(C\\).')+
+ st(2,'Die <b class="cc">Hypotenuse \\(c\\)</b> liegt dem rechten Winkel gegenüber. Sie ist die längste Seite.')+
+ st(3,'Die <b class="ca">Katheten \\(a\\)</b> und <b class="cb">\\(b\\)</b> schliessen den rechten Winkel ein.')+
+ st(4,'Die <b class="ch">Höhe \\(h\\)</b> teilt \\(c\\) in die Abschnitte <b class="ca">\\(p\\)</b> (bei \\(a\\)) und <b class="cb">\\(q\\)</b> (bei \\(b\\)).')+
+ st(5,'Die beiden spitzen Winkel ergänzen sich: \\(\\B{\\alpha + \\beta = 90^\\circ}\\).')),5,r=>{
+  const fig=new Fig(r.querySelector('#f1'),430,520,120),A=[-3,0],B=[3,0],C=[3*Math.cos(rad(112)),3*Math.sin(rad(112))],H=[C[0],0];
+  const draw=k=>{fig.clear();fig.poly([A,B,C],'tri');
+    if(k>=2)fig.line(A,B,'ln c'); if(k>=3){fig.line(C,B,'ln a');fig.line(C,A,'ln b')}
+    if(k>=4){fig.line(C,H,'ln h');fig.ra(H,B,C,.2);fig.text([C[0]+.2,C[1]/2],'h','lb fh');
+      fig.text(lerp(A,H,.5),'q','lb fb',0,26);fig.text(lerp(H,B,.5),'p','lb fa',0,26)}
+    if(k>=1)fig.ra(C,A,B,.32);
+    if(k>=2)fig.text([0,0],k>=4?'c = p + q':'Hypotenuse c','lb fc',k>=4?150:0,k>=4?64:30);
+    if(k>=3){fig.text(lerp(C,B,.5),'Kathete a','lb fa',70,-22);fig.text(lerp(C,A,.5),'Kathete b','lb fb',-78,-18)}
+    if(k>=5){fig.arc(A,B,C,.6);fig.arcLabel(A,B,C,.6,'α','lb',.62);fig.arc(B,C,A,.75);fig.arcLabel(B,C,A,.75,'β','lb',.66)}
+    fig.text(A,'A','lb',-22,6);fig.text(B,'B','lb',22,6);fig.text(C,'C','lb',-6,-24)};
+  draw(0);return {onStep:draw}});
+
+/* 3 Thales */
+folie('Rechtwinkliges Dreieck','Der Thaleskreis',figtxt('f2',
+ st(1,'\\(C\\) wandert auf dem Halbkreis über \\(AB\\). Der Winkel <b class="cr">\\(\\gamma\\)</b> bei \\(C\\) bleibt <b>\\(90^\\circ\\)</b>.')+
+ st(2,'Warum? \\(MA = MB = MC = r\\). Es entstehen zwei <b>gleichschenklige</b> Dreiecke.')+
+ st(3,'Winkelsumme im Dreieck \\(ABC\\): \\(2\\alpha + 2\\beta = 180^\\circ\\). Also \\(\\B{\\gamma = \\alpha + \\beta = 90^\\circ}\\).')+
+ st(4,'Probe: \\(C\\) frei ziehen. Innerhalb des Kreises ist \\(\\gamma\\) grösser, ausserhalb kleiner als \\(90^\\circ\\).')+
+ formel(3,'\\(\\gamma = 90^\\circ\\)','kl'),
+ `<div class="ctl"><span>Punkt \\(C\\) mit der Maus oder dem Finger ziehen</span></div>`),4,r=>{
+  const svg=r.querySelector('#f2'),fig=new Fig(svg,430,530,125),A=[-3,0],B=[3,0],M=[0,0];
+  const S={th:rad(62),C:null,k:0};
+  const draw=()=>{const k=S.k,C=(k>=4&&S.C)?S.C:[3*Math.cos(S.th),3*Math.sin(S.th)];fig.clear();
+    const s=fig.X(B),e=fig.X(A);svg.append(sv('path',{d:`M${s} A${3*fig.u} ${3*fig.u} 0 0 0 ${e}`,class:'circ'}));
+    fig.poly([A,B,C],'tri');
+    if(k>=2&&k<4){fig.line(M,C,'ln h');fig.text(lerp(M,C,.5),'r','lb fh',16,0);fig.text([-1.5,0],'r','lb fh',0,24);fig.text([1.5,0],'r','lb fh',0,24);
+      fig.arc(A,B,C,.55,'arc ca');fig.arcLabel(A,B,C,.55,'α','lb fa',.6);fig.arc(C,A,M,.55,'arc ca');fig.arcLabel(C,A,M,.55,'α','lb fa',1.5);
+      fig.arc(B,C,A,.55,'arc cb');fig.arcLabel(B,C,A,.55,'β','lb fb',.6);fig.arc(C,M,B,.55,'arc cb');fig.arcLabel(C,M,B,.55,'β','lb fb',1.5)}
+    const g=deg(Math.acos(Math.max(-1,Math.min(1,(sub(A,C)[0]*sub(B,C)[0]+sub(A,C)[1]*sub(B,C)[1])/(len(sub(A,C))*len(sub(B,C)))))));
+    if(Math.abs(g-90)<.05&&k<2)fig.ra(C,A,B,.3);
+    if(k>=1)fig.text(add(C,[0,.42]),'γ = '+f(g,1)+'°','lb gr fr');
+    fig.dot(M);fig.text(M,'M','lb kl',0,24);fig.text(A,'A','lb',-22,4);fig.text(B,'B','lb',22,4);
+    fig.dot(C,'pt drag',13);fig.text(C,'C','lb kl',-26,-6)};
+  let dragging=false;
+  const mv=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());
+    const P=fig.inv(q.x,q.y);
+    if(S.k>=4){S.C=[Math.max(-3.3,Math.min(3.3,P[0])),Math.max(.25,Math.min(4,P[1]))]}
+    else S.th=Math.max(rad(12),Math.min(rad(168),Math.atan2(Math.max(.01,P[1]),P[0])));
+    draw()};
+  svg.addEventListener('pointerdown',ev=>{dragging=true;try{svg.setPointerCapture(ev.pointerId)}catch(e){};cancelAnimationFrame(S._a);mv(ev)});
+  svg.addEventListener('pointermove',ev=>{if(dragging)mv(ev)});
+  svg.addEventListener('pointerup',()=>dragging=false);svg.addEventListener('pointercancel',()=>dragging=false);
+  const sweep=()=>{if(RM)return;const t0=performance.now(),th0=S.th;
+    const fn=now=>{const u=Math.min(1,(now-t0)/5200);S.th=th0+rad(52)*Math.sin(u*2*Math.PI)*(1-.25*u);draw();if(u<1)S._a=requestAnimationFrame(fn)};
+    S._a=requestAnimationFrame(fn)};
+  draw();
+  return {onStep:(k,prev)=>{S.k=k;cancelAnimationFrame(S._a);if(k===4&&!S.C)S.C=[.6,1.7];draw();if(k===1&&prev<1)sweep()}}});
+
+aufgaben('Rechtwinkliges Dreieck','Thaleskreis anwenden',[
+ {tag:'Grundaufgabe',text:'\\(C\\) liegt auf dem Halbkreis über \\(AB\\). Der Winkel bei \\(A\\) misst \\(\\alpha = 35^\\circ\\). Wie gross ist der Winkel \\(\\beta\\) bei \\(B\\)?',
+  fig:s=>skizzeHyp(s,10*Math.sin(rad(35))**2,10*Math.cos(rad(35))**2,{bogen:1,al:'35°',be:'β = ?'}),
+  sol:'Thaleskreis: \\(\\gamma = 90^\\circ\\)<br>\\(\\beta = 90^\\circ - 35^\\circ =\\) '+E('55^\\circ')},
+ {tag:'Anwendung',text:'Ein halbkreisförmiger Bogen überspannt eine \\(10\\text{ m}\\) breite Halle. Von einem Punkt \\(C\\) am Bogen führen zwei Streben zu den Fusspunkten \\(A\\) und \\(B\\). Die Strebe \\(AC\\) ist \\(6\\text{ m}\\) lang. Wie lang ist die Strebe \\(BC\\)?',
+  fig:s=>skizzeHyp(s,6.4,3.6,{bogen:1,b:'6 m',a:'BC = ?',c:'10 m'}),
+  sol:'Thaleskreis: rechter Winkel bei \\(C\\)<br>\\(BC^2 = 10^2 - 6^2 = 64\\text{ m}^2\\), also '+E('BC = 8\\text{ m}')}]);
+
+/* 4 Pythagoras */
+folie('Satzgruppe des Pythagoras','Satz des Pythagoras',figtxt('f3',
+ st(1,'<b>Scherung:</b> Die Quadrate über den Katheten werden zu Parallelogrammen. Grundseite und Höhe bleiben, also auch die Fläche.')+
+ st(2,'<b>Drehung</b> um \\(90^\\circ\\) um \\(A\\) und um \\(B\\). Die Fläche bleibt gleich.')+
+ st(3,'<b>Scherung</b> nach unten: Zwei Rechtecke füllen das Quadrat über der Hypotenuse.')+
+ formel(4,'\\(\\ca{a^2} + \\cb{b^2} = c^2\\)')+
+ st(4,'Gilt nur im rechtwinkligen Dreieck. \\(c\\) ist immer die Hypotenuse.',false),
+ `<div class="ctl">${regler('r3','Dreieck verändern',1.3,3.7,3.2)}</div>`),4,r=>{
+  const fig=new Fig(r.querySelector('#f3'),295,340,55),S={t:0,q:3.2},sl=r.querySelector('#r3');
+  const draw=()=>zeichneEuklid(fig,S.q,S.t,S.t,'pyth');
+  sl.addEventListener('input',()=>{S.q=+sl.value;draw()});draw();
+  return {onStep:k=>tween(S,'t',Math.min(3,k),1700,draw)}});
+
+/* 5 Aufgaben Pythagoras */
+function aufgaben(sec,title,T){const W=T.length>2?480:700;
+  folie(sec,title,`<div class="karten ${T.length>2?'k3':''}">${T.map((t,i)=>`<div class="karte"><h3>${t.name||'Aufgabe '+(i+1)}<small>${t.tag||''}</small></h3>
+  <svg viewBox="0 0 ${W} 280" role="img" aria-label="Skizze"></svg><p>${t.text}</p>
+  <div class="loes st" data-step="${i+1}">${t.sol}</div></div>`).join('')}</div>`,T.length,r=>{
+    r.querySelectorAll('svg').forEach((sk,i)=>{SKW=W;T[i].fig(sk)});SKW=700;return {}});
+}
+aufgaben('Satzgruppe des Pythagoras','Pythagoras anwenden',[
+ {text:'Ein rechtwinkliges Dreieck hat die Katheten \\(a = 6\\text{ cm}\\) und \\(b = 8\\text{ cm}\\). Wie lang ist die Hypotenuse \\(c\\)?',
+  fig:s=>skizzeHyp(s,3.6,6.4,{a:'6 cm',b:'8 cm',c:'c = ?'}),
+  sol:'\\(c^2 = a^2 + b^2 = 6^2 + 8^2 = 100\\text{ cm}^2\\)<br>'+E('c = 10\\text{ cm}')},
+ {text:'Die Hypotenuse misst \\(c = 13\\text{ cm}\\), eine Kathete \\(a = 5\\text{ cm}\\). Wie lang ist die andere Kathete \\(b\\)?',
+  fig:s=>skizzeHyp(s,25/13,144/13,{a:'5 cm',b:'b = ?',c:'13 cm'}),
+  sol:'\\(b^2 = c^2 - a^2 = 13^2 - 5^2 = 144\\text{ cm}^2\\)<br>'+E('b = 12\\text{ cm}')},
+ {name:'Aufgabe 3',tag:'Anwendung',text:'Eine \\(6.5\\text{ m}\\) lange Leiter steht am Boden \\(2.5\\text{ m}\\) von der Hauswand entfernt. In welcher Höhe berührt sie die Wand?',
+  fig:s=>skizzeTrig(s,6,2.5,{gk:'h = ?',ak:'2.5 m',h:'6.5 m',noal:1}),
+  sol:'\\(h^2 = 6.5^2 - 2.5^2 = 36\\text{ m}^2\\)<br>'+E('h = 6\\text{ m}')}]);
+
+/* 6 Kathetensatz */
+folie('Satzgruppe des Pythagoras','Kathetensatz',figtxt('f5',
+ st(1,'<b>Scherung:</b> Die Ecke \\(C\\) gleitet auf der Geraden \\(AC\\) nach \\(A\\). Die Seite bei \\(B\\) bleibt fest.')+
+ st(2,'<b>Drehung</b> um \\(B\\) um \\(90^\\circ\\): Die Seite \\(AB\\) steht jetzt senkrecht unter \\(B\\) und hat die Länge \\(c\\).')+
+ st(3,'<b>Scherung:</b> \\(C\\) gleitet senkrecht nach \\(H\\). Es entsteht ein Rechteck mit den Seiten \\(p\\) und \\(c\\).')+
+ formel(4,'\\(\\ca{a^2 = p \\cdot c}\\)','kl')+
+ st(5,'Auf der anderen Seite läuft es genauso ab.')+
+ formel(5,'\\(\\cb{b^2 = q \\cdot c}\\)','kl')+
+ st(6,'Zusammen: \\(a^2 + b^2 = p \\cdot c + q \\cdot c = (p + q) \\cdot c = \\B{c^2}\\)',false),
+ `<div class="ctl">${regler('r5','Dreieck verändern',1.3,3.7,3.2)}</div>`),6,r=>{
+  const fig=new Fig(r.querySelector('#f5'),295,340,55),S={a:0,b:0,q:3.2},sl=r.querySelector('#r5');
+  const draw=()=>zeichneEuklid(fig,S.q,S.a,S.b,'kath');
+  sl.addEventListener('input',()=>{S.q=+sl.value;draw()});draw();
+  return {onStep:(k,prev)=>{tween(S,'a',Math.min(3,k),1700,draw);const tb=k>=5?3:0;if(S.b!==tb)tween(S,'b',tb,k>=5?4200:600,draw)}}});
+
+aufgaben('Satzgruppe des Pythagoras','Kathetensatz anwenden',[
+ {text:'Gegeben sind \\(c = 10\\text{ cm}\\) und der Hypotenusenabschnitt \\(p = 3.6\\text{ cm}\\). Wie lang ist die Kathete \\(a\\)?',
+  fig:s=>skizzeHyp(s,3.6,6.4,{a:'a = ?',c:'c = 10 cm',p:'p = 3.6 cm',h:' '}),
+  sol:'\\(a^2 = p \\cdot c = 3.6 \\cdot 10 = 36\\text{ cm}^2\\)<br>'+E('a = 6\\text{ cm}')},
+ {text:'Gegeben sind \\(a = 12\\text{ cm}\\) und \\(c = 20\\text{ cm}\\). Wie lang sind die Hypotenusenabschnitte \\(p\\) und \\(q\\)?',
+  fig:s=>skizzeHyp(s,7.2,12.8,{a:'12 cm',c:'c = 20 cm',p:'p = ?',q:'q = ?',h:' '}),
+  sol:'\\(p = \\dfrac{a^2}{c} = \\dfrac{144}{20} =\\) '+E('7.2\\text{ cm}')+'<br>\\(q = c - p =\\) '+E('12.8\\text{ cm}')},
+ {name:'Aufgabe 3',tag:'Anwendung',text:'Ein Dach hat am First einen rechten Winkel. Das Haus ist \\(12.5\\text{ m}\\) breit. Der First liegt waagrecht gemessen \\(4.5\\text{ m}\\) von der rechten Hauswand entfernt. Wie lang ist die rechte Dachseite \\(a\\)?',
+  fig:s=>skizzeHyp(s,4.5,8,{a:'a = ?',c:'12.5 m',p:'4.5 m',h:' '}),
+  sol:'\\(a^2 = p \\cdot c = 4.5 \\cdot 12.5 = 56.25\\text{ m}^2\\)<br>'+E('a = 7.5\\text{ m}')}]);
+
+/* 8 Hoehensatz */
+folie('Satzgruppe des Pythagoras','Höhensatz',figtxt('f7',
+ st(1,'<b>Scherung:</b> Die rechte Quadratseite gleitet um \\(q\\) nach unten. Das Steigungsdreieck der schrägen Seite (\\(h\\) nach rechts, \\(q\\) nach unten) ist das um \\(90^\\circ\\) gedrehte Dreieck \\(AHC\\). Die schräge Seite steht also senkrecht auf \\(AC\\) und liegt auf der Geraden \\(CB\\).')+
+ st(2,'<b>Scherung</b> entlang \\(CB\\): Die Ecke \\(C\\) gleitet nach \\(B\\).')+
+ st(3,'<b>Scherung</b> parallel zu \\(AB\\): Es entsteht ein Rechteck mit den Seiten \\(p\\) und \\(q\\).')+
+ formel(4,'\\(\\ch{h^2 = p \\cdot q}\\)'),
+ `<div class="ctl">${regler('r7','Dreieck verändern',1.3,3.7,3.2)}</div>`),4,r=>{
+  const fig=new Fig(r.querySelector('#f7'),70,262,88),S={t:0,q:3.2},sl=r.querySelector('#r7');
+  const draw=()=>zeichneHoehe(fig,S.q,S.t);
+  sl.addEventListener('input',()=>{S.q=+sl.value;draw()});draw();
+  return {onStep:k=>tween(S,'t',Math.min(3,k),1700,draw)}});
+
+aufgaben('Satzgruppe des Pythagoras','Höhensatz anwenden',[
+ {text:'Die Höhe teilt die Hypotenuse in \\(p = 4\\text{ cm}\\) und \\(q = 9\\text{ cm}\\). Wie lang ist die Höhe \\(h\\)?',
+  fig:s=>skizzeHyp(s,4,9,{h:'h = ?',p:'p = 4 cm',q:'q = 9 cm'}),
+  sol:'\\(h^2 = p \\cdot q = 4 \\cdot 9 = 36\\text{ cm}^2\\)<br>'+E('h = 6\\text{ cm}')},
+ {text:'Gegeben sind \\(h = 12\\text{ cm}\\) und \\(p = 9\\text{ cm}\\). Wie lang sind \\(q\\) und die Hypotenuse \\(c\\)?',
+  fig:s=>skizzeHyp(s,9,16,{h:'12 cm',p:'p = 9 cm',q:'q = ?'}),
+  sol:'\\(q = \\dfrac{h^2}{p} = \\dfrac{144}{9} =\\) '+E('16\\text{ cm}')+'<br>\\(c = p + q =\\) '+E('25\\text{ cm}')},
+ {name:'Aufgabe 3',tag:'Anwendung',text:'Ein Tunnel hat einen halbkreisförmigen Querschnitt mit \\(10\\text{ m}\\) Durchmesser. Wie hoch ist der Tunnel \\(2\\text{ m}\\) vom rechten Rand entfernt?',
+  fig:s=>skizzeHyp(s,2,8,{bogen:1,h:'h = ?',p:'2 m',q:'8 m'}),
+  sol:'Thaleskreis: rechter Winkel bei \\(C\\)<br>\\(h^2 = p \\cdot q = 2 \\cdot 8 = 16\\text{ m}^2\\), '+E('h = 4\\text{ m}')}]);
+
+/* Wurzel konstruieren */
+folie('Satzgruppe des Pythagoras','Beispiel: <span id="wt"></span> konstruieren',figtxt('fw',
+ st(1,'<span id="w1"></span>')+
+ st(2,'<span id="w2"></span>')+
+ st(3,'<span id="w3"></span>')+
+ st(4,'Die Senkrechte in \\(H\\) schneidet den Halbkreis in \\(C\\). Das Dreieck \\(ABC\\) ist rechtwinklig.')+
+ formel(5,'<span id="w5"></span>','kl'),
+ `<div class="ctl">${regler('rw','Zahl unter der Wurzel',2,8,5,1)}</div>`),5,r=>{
+  const svg=r.querySelector('#fw'),fig=new Fig(svg,70,540,80),S={t:0,n:5},sl=r.querySelector('#rw');
+  const draw=()=>{const n=S.n,c=n+1,t=S.t,A=[0,0],B=[c,0],H=[n,0],M=[c/2,0],h=Math.sqrt(n),C=[n,h];fig.clear();
+    const t1=ease(Math.min(1,t)),t2=ease(Math.min(1,Math.max(0,t-1))),t3=ease(Math.min(1,Math.max(0,t-2)));
+    mjHTML(r.querySelector('#wt'),`\\(\\sqrt{${n}}\\)`);
+    mjHTML(r.querySelector('#w1'),`Idee: \\(h^2 = p \\cdot q\\). Mit \\(p = 1\\) und \\(q = ${n}\\) wird \\(h^2 = ${n}\\).`);
+    mjHTML(r.querySelector('#w2'),`Strecke \\(AB = ${n} + 1 = ${c}\\) Einheiten zeichnen. \\(H\\) teilt sie in \\(q = ${n}\\) und \\(p = 1\\).`);
+    mjHTML(r.querySelector('#w3'),`Thaleskreis über \\(AB\\): Mittelpunkt \\(M\\), Radius \\(${c/2}\\).`);
+    mjHTML(r.querySelector('#w5'),`\\(\\ch{h = \\sqrt{${n}} \\approx ${f(h)}}\\)`);
+    if(t1>0){const E=[c*t1,0];for(let i=0;i<=c*t1+1e-9;i++)fig.line([i,-.09],[i,.09],'ln');
+      fig.line(A,[Math.min(n,E[0]),0],'ln b');if(E[0]>n)fig.line(H,E,'ln a');
+      fig.dot(A);fig.text(A,'A','lb',-22,4);
+      if(t1>=1){fig.dot(B);fig.text(B,'B','lb',22,4);fig.dot(H);fig.text(H,'H','lb kl',0,56);
+        fig.text([n/2,0],'q = '+n,'lb fb',0,30);fig.text([n+.5,0],'p = 1','lb fa',0,30)}}
+    if(t2>0){fig.dot(M);fig.text(M,'M','lb kl',0,-20);const w=Math.PI*(1-t2),P=fig.X([c/2+c/2*Math.cos(w),c/2*Math.sin(w)]),s0=fig.X(A);
+      svg.append(sv('path',{d:`M${s0} A${c/2*fig.u} ${c/2*fig.u} 0 0 1 ${P}`,class:'circ'}));
+      if(t2<1)fig.line(M,[c/2+c/2*Math.cos(w),c/2*Math.sin(w)],'ln d')}
+    if(t3>0){fig.line(H,[n,h*t3],'ln h');fig.ra(H,B,C,.2);
+      if(t3>=1){fig.line(A,C,'ln d');fig.line(C,B,'ln d');fig.ra(C,A,B,.24);fig.dot(C);fig.text(C,'C','lb',0,-24);
+        fig.text([n,h/2],'h = √'+n,'lb gr fh',-78,0)}}};
+  sl.addEventListener('input',()=>{S.n=+sl.value;draw()});draw();
+  return {onStep:k=>tween(S,'t',Math.max(0,Math.min(3,k-1)),1500,draw)}});
+
+/* Drei aehnliche Dreiecke */
+folie('Satzgruppe des Pythagoras','Drei ähnliche Dreiecke',figtxt('fa',
+ st(1,'Die Höhe \\(h\\) zerlegt das Dreieck in zwei <b>Teildreiecke</b>.')+
+ st(2,'Kopien gleich hinlegen: das grosse umklappen und drehen, das rechte Teildreieck drehen. Oben bleibt die Ausgangslage stehen.')+
+ st(3,'Jedes hat die Winkel <b class="ca">\\(\\alpha\\)</b>, <b class="cb">\\(\\beta\\)</b> und \\(90^\\circ\\). Die drei Dreiecke sind <b>ähnlich</b>.')+
+ `<div class="formel k2 st" data-step="4">\\(\\dfrac{h}{q} = \\dfrac{p}{h} \\;\\Rightarrow\\; \\ch{h^2 = p \\cdot q}\\)</div>
+ <div class="formel k2 st" data-step="4">\\(\\dfrac{a}{c} = \\dfrac{p}{a} \\;\\Rightarrow\\; \\ca{a^2 = p \\cdot c}\\)</div>
+ <div class="formel k2 st" data-step="4">\\(\\dfrac{b}{c} = \\dfrac{q}{b} \\;\\Rightarrow\\; \\cb{b^2 = q \\cdot c}\\)</div>`),4,r=>{
+  const fig=new Fig(r.querySelector('#fa'),44,590,74),S={s:0,k:0};
+  const c=5,q=3.2,p=1.8,h=2.4,O=[2.6,3.95],A=O,B=add(O,[c,0]),C=add(O,[q,h]),H=add(O,[q,0]),al=Math.atan2(h,q);
+  const far={a:'fa',b:'fb',c:'fc',h:'fh',p:'fa',q:'fb'};
+  const pose=s=>{const e=ease(s),e1=ease(Math.min(1,s/.45)),e2=ease(Math.max(0,(s-.45)/.55));
+    const d1=sub([4.7,0],A),d2=sub([8.3,0],C),d0=sub([0,0],A),Cf=lerp(C,[C[0],2*O[1]-C[1]],e1);
+    return [[A,Cf,B].map(P=>add(rot(P,A,al*e2),mul(d0,e2))),[A,H,C].map(P=>add(P,mul(d1,e))),[C,H,B].map(P=>add(rot(P,C,Math.PI/2*e),mul(d2,e)))]};
+  const draw=()=>{const k=S.k,s=S.s,T=pose(s);fig.clear();
+    if(k<1)fig.poly([A,B,C],'tri');else{fig.poly([A,H,C],'t1');fig.poly([H,B,C],'t2')}
+    fig.line(C,H,'ln h');fig.ra(C,A,B,.26);fig.ra(H,B,C,.2);
+    if(k>=3){fig.arc(A,H,C,.62,'arc ca');fig.arcLabel(A,H,C,.62,'α','lb kl fa',.62);fig.arc(B,C,H,.5,'arc cb');fig.arcLabel(B,C,H,.5,'β','lb kl fb',1.6);
+      fig.arc(C,A,H,.75,'arc cb');fig.arcLabel(C,A,H,.75,'β','lb kl fb',1.32);fig.arc(C,H,B,.6,'arc ca');fig.arcLabel(C,H,B,.6,'α','lb kl fa',1.45)}
+    {fig.text(lerp(C,B,.5),'a','lb fa',18,-14);fig.text(lerp(A,C,.5),'b','lb fb',-18,-14);fig.text([O[0]+c/2,O[1]],'c','lb fc',-70,50);
+      fig.text([O[0]+q,O[1]+h/2],'h','lb fh',-16,0);fig.text([O[0]+q/2,O[1]],'q','lb kl fb',0,22);fig.text([O[0]+q+p/2,O[1]],'p','lb kl fa',0,22);
+      fig.text(A,'A','lb kl',-18,4);fig.text(B,'B','lb kl',18,4);fig.text(C,'C','lb kl',0,-20);fig.text(H,'H','lb kl',0,22)}
+    if(s>0){fig.poly(T[0],'t0');fig.poly(T[1],'t1');fig.poly(T[2],'t2')}
+    if(s>=1){[['b','a','c'],['q','h','b'],['h','p','a']].forEach((N,i)=>{const [V0,V1,V2]=T[i];
+        fig.text(lerp(V0,V1,.5),N[0],'lb '+far[N[0]],0,24);fig.text(lerp(V1,V2,.5),N[1],'lb '+far[N[1]],20,0);fig.text(lerp(V0,V2,.5),N[2],'lb '+far[N[2]],-16,-16);
+        fig.ra(V1,V0,V2,.22);
+        if(k>=3){const ra=.62,rb=.5;fig.arc(V0,V1,V2,ra,'arc ca');fig.arcLabel(V0,V1,V2,ra,'α','lb kl fa',.62);
+          fig.arc(V2,V0,V1,rb,'arc cb');fig.arcLabel(V2,V0,V1,rb,'β','lb kl fb',1.55)}})}};
+  draw();
+  return {onStep:k=>{S.k=k;tween(S,'s',k>=2?1:0,2800,draw);draw()}}});
+
+/* 10 Aehnlichkeit */
+folie('Trigonometrie','Gleicher Winkel, gleiche Seitenverhältnisse',figtxt('f9',
+ st(1,'Gleicher Winkel \\(\\alpha\\), verschiedene Grösse: Die drei Dreiecke sind <b>ähnlich</b>.')+
+ st(2,'Wir messen die Seiten der drei Dreiecke.')+`<table class="v st" data-step="2"><thead><tr><th></th><th>①</th><th>②</th><th>③</th></tr></thead><tbody id="tb9"></tbody></table>`+
+ st(3,'Die Seitenverhältnisse sind in allen drei Dreiecken <b>gleich</b>.')+
+ st(4,'\\(\\alpha\\) verändern: Die Verhältnisse hängen <b>nur vom Winkel</b> ab.'),
+ `<div class="ctl">${regler('r9','Winkel \\(\\alpha\\)',15,75,35,1)}<span id="w9"></span></div>`),4,r=>{
+  const fig=new Fig(r.querySelector('#f9'),70,596,62),S={al:35,g:0,k:0},sl=r.querySelector('#r9'),tb=r.querySelector('#tb9'),w=r.querySelector('#w9');
+  const HH=[4,6.5,9],A=[0,0];
+  const rows=[['<span class="ca">GK</span> in cm',2,(g,a,h)=>f(g)],['<span class="cb">AK</span> in cm',2,(g,a,h)=>f(a)],['<span class="cc">H</span> in cm',2,(g,a,h)=>f(h)],
+              ['\\(\\text{GK} : \\text{H}\\)',3,(g,a,h)=>f(g/h,3)],['\\(\\text{AK} : \\text{H}\\)',3,(g,a,h)=>f(a/h,3)],['\\(\\text{GK} : \\text{AK}\\)',3,(g,a,h)=>f(g/a,3)]];
+  tb.innerHTML=rows.map((R,i)=>`<tr class="st ${i>2?'q':''}"><td>${R[0]}</td>${HH.map(()=>'<td></td>').join('')}</tr>`).join('');   // einmal, MathJax setzt die Kopfzellen
+  const draw=()=>{const al=rad(S.al),co=Math.cos(al),si=Math.sin(al);fig.clear();
+    fig.line(A,[9.6*co,9.6*si],'ln d');fig.line(A,[9.6*co+.6,0],'ln d');
+    const hs=[HH[0],HH[0]+(HH[1]-HH[0])*S.g,HH[0]+(HH[2]-HH[0])*S.g];
+    for(let i=2;i>=0;i--){if(i>0&&S.g<=0)continue;const C=[hs[i]*co,0],B=[hs[i]*co,hs[i]*si];
+      fig.poly([A,C,B],'tri');fig.line(C,B,'ln a');fig.line(A,C,'ln b');fig.line(A,B,'ln c');fig.ra(C,A,B,.26);
+      fig.text(B,'①②③'[i],'lb gr',18,-22)}
+    fig.arc(A,[1,0],[co,si],1.5);fig.arcLabel(A,[1,0],[co,si],1.5,'α','lb',.66);
+    const C=[hs[0]*co,0],B=[hs[0]*co,hs[0]*si];
+    if(S.g<=0){fig.text([C[0],B[1]/2],'Gegenkathete (GK)','lb fa',124,0);fig.text([C[0]/2,0],'Ankathete (AK)','lb fb',0,26);fig.text(lerp(A,B,.5),'Hypotenuse (H)','lb fc',-28,-40)}
+    fig.text(A,'A','lb kl',-20,8);
+    mjHTML(w,`\\(\\alpha = ${S.al}^\\circ\\)`);
+    [...tb.rows].forEach((tr,i)=>{const R=rows[i];tr.classList.toggle('on',S.k>=R[1]);HH.forEach((h,j)=>{tr.cells[j+1].textContent=R[2](h*si,h*co,h)})})};
+  sl.addEventListener('input',()=>{S.al=+sl.value;draw()});draw();
+  return {onStep:k=>{S.k=k;tween(S,'g',k>=1?1:0,1600,draw);draw()}}});
+
+/* 11 Definition */
+folie('Trigonometrie','Sinus, Cosinus, Tangens',figtxt('f10',
+ st(1,'Vom Winkel <b id="wn"></b> aus gesehen: <b class="ca">Gegenkathete</b> (gegenüber), <b class="cb">Ankathete</b> (am Winkel), <b class="cc">Hypotenuse</b>.')+
+ `<div class="defs">
+ <div class="def st" data-step="2"><span id="d1"></span><span class="w" id="vs"></span></div>
+ <div class="def st" data-step="3"><span id="d2"></span><span class="w" id="vc"></span></div>
+ <div class="def st" data-step="4"><span id="d3"></span><span class="w" id="vt"></span></div></div>`+
+ st(5,'Winkel gesucht: Umkehren mit <b>\\(\\arcsin\\), \\(\\arccos\\), \\(\\arctan\\)</b> (Taschenrechner: \\(\\sin^{-1}\\), \\(\\cos^{-1}\\), \\(\\tan^{-1}\\)). Den Taschenrechner auf <b>Grad (DEG)</b> stellen.',false),
+ `<div class="ctl">${regler('r10','Winkel \\(\\alpha\\)',15,75,35,1)}<button type="button" id="b10" aria-pressed="false">Von \\(\\beta\\) aus gesehen</button></div>`),5,r=>{
+  const fig=new Fig(r.querySelector('#f10'),90,590,66),S={al:35,beta:false,k:0},sl=r.querySelector('#r10'),bt=r.querySelector('#b10');
+  const draw=()=>{const al=rad(S.al),Hh=8.6,A=[0,0],C=[Hh*Math.cos(al),0],B=[C[0],Hh*Math.sin(al)];fig.clear();
+    fig.poly([A,C,B],'tri');const k=S.k;
+    const gk=S.beta?[A,C]:[C,B],ak=S.beta?[C,B]:[A,C];
+    if(k>=1){fig.line(gk[0],gk[1],'ln a');fig.line(ak[0],ak[1],'ln b');fig.line(A,B,'ln c')}
+    fig.ra(C,A,B,.28);
+    if(!S.beta){fig.arc(A,C,B,1.5,'arc');fig.arcLabel(A,C,B,1.5,'α','lb gr',.62)}
+    else{fig.arc(B,C,A,1.3,'arc');fig.arcLabel(B,C,A,1.3,'β','lb gr',.6)}
+    if(k>=1){fig.text([C[0],B[1]/2],S.beta?'Ankathete':'Gegenkathete',S.beta?'lb fb':'lb fa',S.beta?70:90,0);
+      fig.text([C[0]/2,0],S.beta?'Gegenkathete':'Ankathete',S.beta?'lb fa':'lb fb',0,28);fig.text(lerp(A,B,.5),'Hypotenuse','lb fc',-86,-24)}
+    fig.text(A,'A','lb kl',-20,8);fig.text(C,'C','lb kl',18,18);fig.text(B,'B','lb kl',16,-16);
+    const w=S.beta?Math.PI/2-al:al, nm=S.beta?'\\beta':'\\alpha';
+    const GK='\\ca{\\text{Gegenkathete}}',AK='\\cb{\\text{Ankathete}}',HY='\\cc{\\text{Hypotenuse}}';
+    mjHTML(r.querySelector('#wn'),`\\(${nm} = ${f(deg(w),0)}^\\circ\\)`);
+    mjHTML(r.querySelector('#d1'),`\\(\\sin ${nm} = \\dfrac{${GK}}{${HY}}\\)`);mjHTML(r.querySelector('#d2'),`\\(\\cos ${nm} = \\dfrac{${AK}}{${HY}}\\)`);mjHTML(r.querySelector('#d3'),`\\(\\tan ${nm} = \\dfrac{${GK}}{${AK}}\\)`);
+    mjHTML(r.querySelector('#vs'),`\\(= ${f(Math.sin(w),3)}\\)`);mjHTML(r.querySelector('#vc'),`\\(= ${f(Math.cos(w),3)}\\)`);mjHTML(r.querySelector('#vt'),`\\(= ${f(Math.tan(w),3)}\\)`)};
+  sl.addEventListener('input',()=>{S.al=+sl.value;draw()});
+  bt.addEventListener('click',()=>{S.beta=!S.beta;bt.setAttribute('aria-pressed',S.beta);draw()});draw();
+  return {onStep:k=>{S.k=k;draw()}}});
+
+/* 12-14 Trig-Aufgaben */
+aufgaben('Trigonometrie','Sinus',[
+ {tag:'Funktionswert',text:'Im rechtwinkligen Dreieck misst die Gegenkathete von \\(\\alpha\\) \\(3\\text{ cm}\\), die Hypotenuse \\(5\\text{ cm}\\). Wie gross ist \\(\\sin\\alpha\\)?',
+  fig:s=>skizzeTrig(s,3,4,{gk:'3 cm',h:'5 cm'}),sol:'\\(\\sin\\alpha = \\dfrac{\\text{GK}}{\\text{H}} = \\dfrac{3\\text{ cm}}{5\\text{ cm}} =\\) '+E('0.6')},
+ {tag:'Winkel',text:'Die Gegenkathete von \\(\\alpha\\) misst \\(4.5\\text{ cm}\\), die Hypotenuse \\(9\\text{ cm}\\). Wie gross ist der Winkel \\(\\alpha\\)?',
+  fig:s=>skizzeTrig(s,4.5,Math.sqrt(81-20.25),{gk:'4.5 cm',h:'9 cm',al:'α = ?'}),sol:'\\(\\sin\\alpha = \\dfrac{4.5}{9} = 0.5\\)<br>\\(\\alpha = \\arcsin(0.5) =\\) '+E('30^\\circ')},
+ {name:'Aufgabe 3',tag:'Anwendung',text:'Eine \\(5\\text{ m}\\) lange Leiter lehnt unter einem Winkel von \\(70^\\circ\\) zum Boden an einer Wand. In welcher Höhe berührt sie die Wand?',
+  fig:s=>skizzeTrig(s,5*Math.sin(rad(70)),5*Math.cos(rad(70)),{gk:'h = ?',h:'5 m',al:'70°'}),sol:'\\(\\sin 70^\\circ = \\dfrac{h}{5\\text{ m}}\\)<br>\\(h = 5\\text{ m} \\cdot \\sin 70^\\circ \\approx\\) '+E('4.70\\text{ m}')}]);
+aufgaben('Trigonometrie','Cosinus',[
+ {tag:'Funktionswert',text:'Die Ankathete von \\(\\alpha\\) misst \\(12\\text{ cm}\\), die Hypotenuse \\(13\\text{ cm}\\). Wie gross ist \\(\\cos\\alpha\\)?',
+  fig:s=>skizzeTrig(s,5,12,{ak:'12 cm',h:'13 cm'}),sol:'\\(\\cos\\alpha = \\dfrac{\\text{AK}}{\\text{H}} = \\dfrac{12\\text{ cm}}{13\\text{ cm}} \\approx\\) '+E('0.923')},
+ {tag:'Winkel',text:'Die Ankathete von \\(\\alpha\\) misst \\(5\\text{ cm}\\), die Hypotenuse \\(8\\text{ cm}\\). Wie gross ist der Winkel \\(\\alpha\\)?',
+  fig:s=>skizzeTrig(s,Math.sqrt(39),5,{ak:'5 cm',h:'8 cm',al:'α = ?'}),sol:'\\(\\cos\\alpha = \\dfrac{5}{8} = 0.625\\)<br>\\(\\alpha = \\arccos(0.625) \\approx\\) '+E('51.3^\\circ')},
+ {name:'Aufgabe 3',tag:'Anwendung',text:'Eine Seilbahn fährt auf einem \\(800\\text{ m}\\) langen, geraden Seil mit \\(25^\\circ\\) Steigungswinkel. Wie gross ist die horizontale Distanz \\(x\\) zwischen Tal- und Bergstation?',
+  fig:s=>skizzeTrig(s,800*Math.sin(rad(25)),800*Math.cos(rad(25)),{ak:'x = ?',h:'800 m',al:'25°'}),sol:'\\(\\cos 25^\\circ = \\dfrac{x}{800\\text{ m}}\\)<br>\\(x = 800\\text{ m} \\cdot \\cos 25^\\circ \\approx\\) '+E('725\\text{ m}')}]);
+aufgaben('Trigonometrie','Tangens',[
+ {tag:'Funktionswert',text:'Die Gegenkathete von \\(\\alpha\\) misst \\(7\\text{ cm}\\), die Ankathete \\(24\\text{ cm}\\). Wie gross ist \\(\\tan\\alpha\\)?',
+  fig:s=>skizzeTrig(s,7,24,{gk:'7 cm',ak:'24 cm'}),sol:'\\(\\tan\\alpha = \\dfrac{\\text{GK}}{\\text{AK}} = \\dfrac{7\\text{ cm}}{24\\text{ cm}} \\approx\\) '+E('0.292')},
+ {tag:'Winkel',text:'Eine Rampe überwindet \\(1.2\\text{ m}\\) Höhe auf \\(5\\text{ m}\\) horizontaler Länge. Wie gross ist der Steigungswinkel \\(\\alpha\\)?',
+  fig:s=>skizzeTrig(s,1.2,5,{gk:'1.2 m',ak:'5 m',al:'α = ?'}),sol:'\\(\\tan\\alpha = \\dfrac{1.2}{5} = 0.24\\)<br>\\(\\alpha = \\arctan(0.24) \\approx\\) '+E('13.5^\\circ')},
+ {name:'Aufgabe 3',tag:'Anwendung',text:'Die Sonne steht \\(32^\\circ\\) über dem Horizont. Ein Baum wirft auf ebenem Boden einen \\(12\\text{ m}\\) langen Schatten. Wie hoch ist der Baum?',
+  fig:s=>skizzeTrig(s,12*Math.tan(rad(32)),12,{gk:'h = ?',ak:'12 m',al:'32°'}),sol:'\\(\\tan 32^\\circ = \\dfrac{h}{12\\text{ m}}\\)<br>\\(h = 12\\text{ m} \\cdot \\tan 32^\\circ \\approx\\) '+E('7.50\\text{ m}')}]);
+
+/* 15 Ueberblick */
+folie('Rechtwinkliges Dreieck','Überblick',`<div class="ueb">
+<div class="breit">Satzgruppe des Pythagoras</div>
+<div><span>Thaleskreis: \\(C\\) auf dem Halbkreis über \\(AB\\)</span><span class="cr">\\(\\gamma = 90^\\circ\\)</span></div>
+<div><span>Satz des Pythagoras</span><span>\\(a^2 + b^2 = c^2\\)</span></div>
+<div><span>Kathetensatz</span><span>\\(a^2 = p \\cdot c, \\quad b^2 = q \\cdot c\\)</span></div>
+<div><span>Höhensatz</span><span class="ch">\\(h^2 = p \\cdot q\\)</span></div>
+<div class="breit">Winkelfunktionen: Seitenverhältnisse, die nur vom Winkel abhängen</div>
+<div><span>Sinus</span><span>\\(\\sin\\alpha = \\dfrac{\\text{GK}}{\\text{H}}\\)</span></div>
+<div><span>Cosinus</span><span>\\(\\cos\\alpha = \\dfrac{\\text{AK}}{\\text{H}}\\)</span></div>
+<div><span>Tangens</span><span>\\(\\tan\\alpha = \\dfrac{\\text{GK}}{\\text{AK}}\\)</span></div>
+<div><span>Winkel gesucht</span><span>\\(\\alpha = \\arcsin \\dfrac{\\text{GK}}{\\text{H}}\\)</span></div>
+</div>`,0,()=>({}));
+
+/* ---------- Aufbau und Steuerung ---------- */
+const deck=document.getElementById('deck'),dots=document.getElementById('dots'),pos=document.getElementById('pos');
+SL.forEach((s,i)=>{
+  const sec=document.createElement('section');sec.className='slide';sec.setAttribute('aria-label','Folie '+(i+1)+': '+(s.title||'Titel'));
+  sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand">Mathe begreifbar</span><span>${s.sec}</span></header>
+  <h1>${s.title}</h1><div class="body">${s.html}</div>
+  <footer><span>Raphael Arnold Kohler</span><span>23.11.2026 · ${i+1} / ${SL.length}</span></footer></div></div>`;
+  deck.append(sec);s.el=sec;s.step=0;s.ctl=s.init(sec)||{};
+  const d=document.createElement('button');d.type='button';d.setAttribute('aria-label','Folie '+(i+1));d.addEventListener('click',()=>go(i));dots.append(d);
+});
+let cur=0;
+function fit(){const s=Math.min(deck.clientWidth/1600,deck.clientHeight/900);document.documentElement.style.setProperty('--s',s);deck.scrollTo({left:cur*deck.clientWidth,behavior:'instant'})}
+function ui(){const s=SL[cur];pos.textContent=`Folie ${cur+1} / ${SL.length}`+(s.n?` · Schritt ${s.step} / ${s.n}`:'');
+  [...dots.children].forEach((d,i)=>d.setAttribute('aria-current',i===cur))}
+function setStep(k){const s=SL[cur],prev=s.step;s.step=k;
+  s.el.querySelectorAll('[data-step]').forEach(e=>e.classList.toggle('on',+e.dataset.step<=k));
+  if(s.ctl.onStep)s.ctl.onStep(k,prev);ui()}
+let sperre=0;
+function go(i){i=Math.max(0,Math.min(SL.length-1,i));cur=i;sperre=Date.now()+1200;deck.scrollTo({left:i*deck.clientWidth,behavior:RM?'instant':'smooth'});ui()}
+function fwd(){const s=SL[cur];if(s.step<s.n)setStep(s.step+1);else go(cur+1)}
+function back(){const s=SL[cur];if(s.step>0)setStep(s.step-1);else go(cur-1)}
+let st0;deck.addEventListener('scroll',()=>{clearTimeout(st0);st0=setTimeout(()=>{if(Date.now()<sperre)return;const i=Math.round(deck.scrollLeft/deck.clientWidth);if(i!==cur){cur=i;ui()}},90)});
+document.getElementById('next').addEventListener('click',fwd);document.getElementById('prev').addEventListener('click',back);
+document.getElementById('full').addEventListener('click',()=>{try{(document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()).catch(()=>{})}catch(e){}});
+addEventListener('keydown',e=>{if(e.target.matches('input'))return;if(e.target.matches('button,a')&&(e.key===' '||e.key==='Enter'))return;
+  if(['ArrowRight',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();fwd()}
+  else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();back()}
+  else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(SL.length-1)}});
+document.addEventListener('pointerup',e=>{if(e.target.matches&&e.target.matches('input[type=range]'))e.target.blur()});
+addEventListener('resize',fit);fit();ui();
+/* MathJax: statische Formeln setzen, Live-Texte nachsetzen, dann die Folien zeigen */
+{const zeigen=()=>document.body.classList.add('mj');
+  if(window.MathJax&&MathJax.startup&&MathJax.startup.promise){
+    MathJax.startup.promise.then(()=>{MJ=true;MJ_EL.forEach(el=>mjHTML(el,el._mj));return MathJax.typesetPromise([deck])})
+      .catch(e=>console.error(e)).finally(zeigen)}
+  else zeigen();
+  setTimeout(zeigen,4000)}
+</script>
+</body>
+</html>

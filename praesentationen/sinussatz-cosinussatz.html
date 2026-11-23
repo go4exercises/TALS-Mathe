@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sinussatz und Cosinussatz</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Foliensatz zum allgemeinen Dreieck: Sinussatz und Cosinussatz mit der Höhe herleiten und für SSS, SWS, WSW, SWW, SsW und sSw den passenden Satz mit Rechenweg wählen.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/praesentationen/sinussatz-cosinussatz.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Sinussatz und Cosinussatz — Präsentation: herleiten und den passenden Satz wählen">
+<meta property="og:description" content="Foliensatz zum allgemeinen Dreieck: Sinussatz und Cosinussatz mit der Höhe herleiten und für SSS, SWS, WSW, SWW, SsW und sSw den passenden Satz mit Rechenweg wählen.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/praesentationen/sinussatz-cosinussatz.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/praesentationen/sinussatz-cosinussatz.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/praesentationen/sinussatz-cosinussatz.html",
+   "name": "Sinussatz und Cosinussatz — Präsentation: herleiten und den passenden Satz wählen",
+   "description": "Foliensatz zum allgemeinen Dreieck: Sinussatz und Cosinussatz mit der Höhe herleiten und für SSS, SWS, WSW, SWW, SsW und sSw den passenden Satz mit Rechenweg wählen.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Sinussatz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Cosinussatz"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Allgemeines Dreieck"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Trigonometrie"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Präsentation"
+    }
+   ],
+   "keywords": "Mathematik, Sinussatz, Cosinussatz, Allgemeines Dreieck, Trigonometrie, Präsentation",
+   "learningResourceType": "Präsentation",
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="../schriften.css">
+<style>
+:root{
+  /* Heft-Look: Karopapier, Tinte, Farbstifte. Eine Folie = eine 1600x900-Buehne, auf den Bildschirm skaliert. */
+  --papier:#fbfaf4; --karo:#d6dde9; --tinte:#1b2845; --grau:#6a7488;
+  --a:#1c6fb8; --b:#d0741a; --h:#2b8a57; --rot:#c23a2b; --c:#6a44a8;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --s:1; color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#2a3247;color:var(--tinte);font-family:var(--sans);display:flex;flex-direction:column;overflow:hidden}
+#deck{flex:1;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none}
+#deck::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fit{position:relative;width:calc(1600px*var(--s));height:calc(900px*var(--s));flex:none}
+.stage{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0;transform:scale(var(--s));
+  background-color:var(--papier);
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);
+  background-size:25px 25px;background-position:-1px -1px;
+  display:grid;grid-template-rows:56px 84px 1fr 44px;padding:0 60px;overflow:hidden}
+.stage>header,.stage>footer{display:flex;justify-content:space-between;align-items:center;font-size:20px;color:var(--grau);letter-spacing:.02em}
+.stage>header .brand{font-weight:700;color:var(--tinte)}
+h1{font-family:var(--serif);font-weight:700;font-size:50px;line-height:1.1;margin:0;align-self:center;text-wrap:balance}
+.body{min-height:0;position:relative}
+.cols{display:grid;grid-template-columns:860px 1fr;gap:40px;height:100%}
+.fig{position:relative}
+.fig svg{display:block;width:860px;height:640px;touch-action:none}
+.txt{display:flex;flex-direction:column;gap:18px;font-size:27px;line-height:1.3;padding-top:6px}
+.st{opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s;margin:0}
+.st.on{opacity:1;transform:none}
+.st b{font-weight:700}
+.num{display:inline-block;min-width:34px;height:34px;border-radius:50%;background:var(--tinte);color:var(--papier);font-size:20px;font-weight:700;text-align:center;line-height:34px;margin-right:10px;vertical-align:3px}
+.formel{font-family:var(--serif);font-weight:700;font-size:54px;background:#fff;border:3px solid var(--tinte);border-radius:6px;padding:10px 24px;align-self:flex-start;box-shadow:5px 5px 0 var(--karo)}
+.formel.kl{font-size:38px}
+.ctl{margin-top:auto;display:flex;align-items:center;gap:14px;font-size:22px;color:var(--grau);padding-bottom:10px;flex-wrap:wrap}
+.ctl input[type=range]{width:230px;accent-color:var(--tinte)}
+.ctl button,.tog{font:600 22px var(--sans);color:var(--tinte);background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:6px 16px;cursor:pointer}
+.ctl button[aria-pressed=true]{background:var(--tinte);color:#fff}
+.ca{color:var(--a)}.cb{color:var(--b)}.ch{color:var(--h)}.cc{color:var(--c)}.cr{color:var(--rot)}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 4px}
+.fr>span:first-child{border-bottom:2.5px solid currentColor;padding:0 6px 2px}
+.fr>span:last-child{padding:2px 6px 0}
+/* Titelfolie */
+.titel{display:grid;grid-template-columns:1fr 620px;gap:30px;height:100%;align-items:center}
+.titel h2{font-family:var(--serif);font-size:84px;line-height:1.02;margin:0 0 24px;text-wrap:balance}
+.titel p{font-size:30px;margin:0 0 26px;max-width:22em;color:#33415f}
+.titel ol{font-size:27px;margin:0;padding-left:1.2em;line-height:1.5}
+.hint{font-size:21px;color:var(--grau);margin-top:30px}
+kbd{font:600 19px var(--sans);border:1.5px solid var(--grau);border-radius:5px;padding:1px 8px;background:#fff}
+/* Aufgaben */
+.karten{display:grid;grid-template-columns:1fr 1fr;gap:36px;height:100%;padding-bottom:14px}
+.karte{background:#fff;border:2.5px solid var(--tinte);border-radius:8px;padding:18px 26px;display:flex;flex-direction:column;gap:10px;box-shadow:6px 6px 0 var(--karo)}
+.karte h3{font-family:var(--serif);font-size:30px;margin:0;display:flex;justify-content:space-between;align-items:baseline}
+.karte h3 small{font:600 19px var(--sans);color:var(--grau)}
+.karte>svg{width:100%;height:280px;display:block}
+.karte p{font-size:27px;line-height:1.3;margin:0}
+.loes{margin-top:auto;border-top:2px dashed var(--grau);padding-top:10px;font-size:27px;line-height:1.55}
+.loes b{color:var(--h)}
+.karten.k3{grid-template-columns:repeat(3,1fr);gap:24px}
+.k3 .karte{padding:14px 20px;gap:6px}.k3 .karte h3{font-size:27px}
+.k3 .karte>svg{height:auto;aspect-ratio:480/280}
+.k3 .karte p{font-size:23px}.k3 .loes{font-size:23px}
+/* Tabelle Aehnlichkeit */
+table.v{border-collapse:collapse;font-size:24px;font-variant-numeric:tabular-nums;background:#fff;width:100%}
+table.v th,table.v td{border:1.5px solid var(--grau);padding:5px 10px;text-align:right}
+table.v th:first-child,table.v td:first-child{text-align:left;font-weight:600}
+table.v thead th{background:#eef1f6}
+table.v tr.q td{font-weight:700;background:#f3fbf6}
+table.v tr{transition:opacity .5s}
+table.v tr.st,table.v.st{transform:none}
+.defs{display:flex;flex-direction:column;gap:14px}
+.def{font-size:31px;display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:8px 18px}
+.def .w{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700}
+/* Ueberblick */
+.ueb{display:grid;grid-template-columns:1fr 1fr;gap:16px 36px;align-content:start;padding-top:8px}
+.ueb div{background:#fff;border:2px solid var(--tinte);border-radius:6px;padding:12px 22px;font-size:27px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.ueb div span:last-child{font-family:var(--serif);font-weight:700;font-size:34px;white-space:nowrap}
+.ueb .breit{grid-column:1/-1;background:none;border:0;padding:6px 0 0;font:700 30px var(--serif)}
+.formel.k2{font-size:30px;padding:6px 18px;display:flex;align-items:center;gap:10px}
+/* SVG */
+svg text{font-family:var(--sans)}
+.tri{fill:#ffffffb0;stroke:var(--tinte);stroke-width:3.5;stroke-linejoin:round}
+.ln{stroke:var(--tinte);stroke-width:3;stroke-linecap:round;fill:none}
+.ln.d{stroke-dasharray:8 7;stroke-width:2}
+.ln.a{stroke:var(--a);stroke-width:6}.ln.b{stroke:var(--b);stroke-width:6}.ln.c{stroke:var(--c);stroke-width:6}.ln.h{stroke:var(--h);stroke-width:4}
+.sq-a{fill:var(--a);fill-opacity:.34;stroke:var(--a);stroke-width:2.5;stroke-linejoin:round}
+.sq-b{fill:var(--b);fill-opacity:.36;stroke:var(--b);stroke-width:2.5;stroke-linejoin:round}
+.sq-h{fill:var(--h);fill-opacity:.36;stroke:var(--h);stroke-width:2.5;stroke-linejoin:round}
+.sq-c{fill:#fff;fill-opacity:.55;stroke:var(--tinte);stroke-width:2.5}
+.t0{fill:var(--c);fill-opacity:.14;stroke:var(--c);stroke-width:3;stroke-linejoin:round}
+.t1{fill:var(--b);fill-opacity:.3;stroke:var(--b);stroke-width:3;stroke-linejoin:round}
+.t2{fill:var(--a);fill-opacity:.3;stroke:var(--a);stroke-width:3;stroke-linejoin:round}
+.ghost{fill:none;stroke:#8f99ab;stroke-width:1.6;stroke-dasharray:6 6}
+.rail{stroke:var(--rot);stroke-width:2.2;stroke-dasharray:11 7;fill:none}
+.ra{fill:none;stroke:var(--rot);stroke-width:2.6}
+.arc{fill:none;stroke:var(--tinte);stroke-width:2.4}
+.arc.ca{stroke:var(--a)}.arc.cb{stroke:var(--b)}
+.pt{fill:var(--tinte)}.pt.drag{fill:var(--rot);stroke:#fff;stroke-width:3;cursor:grab}
+.circ{fill:none;stroke:var(--grau);stroke-width:2.4}
+.lb{font-weight:600;font-size:27px;fill:var(--tinte);text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:var(--papier);stroke-width:5px;stroke-linejoin:round}
+.lb.gr{font-size:36px;font-weight:700}.lb.kl{font-size:22px}
+.lb.fa{fill:var(--a)}.lb.fb{fill:var(--b)}.lb.fh{fill:var(--h)}.lb.fc{fill:var(--c)}.lb.fr{fill:var(--rot)}
+.pop{animation:pop .5s ease-out}
+@keyframes pop{from{opacity:0}to{opacity:1}}
+/* Navigation */
+#bar{flex:none;height:46px;display:flex;align-items:center;justify-content:center;gap:14px;color:#cfd6e4;font-size:15px;padding:0 16px}
+#bar button{font:600 15px var(--sans);color:#fff;background:#3d4864;border:0;border-radius:5px;height:30px;padding:0 14px;cursor:pointer}
+#bar button:focus-visible,.ctl button:focus-visible,.ctl input:focus-visible{outline:3px solid #ffd24d;outline-offset:2px}
+#dots{display:flex;gap:6px}
+#dots button{width:12px;height:12px;padding:0;border-radius:50%;background:#55607c}
+#dots button[aria-current=true]{background:#ffd24d}
+#pos{min-width:150px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.st,.pop{transition:none;animation:none}}
+.txt.eng{gap:12px;font-size:25px}
+.live{font-variant-numeric:tabular-nums;font-weight:600;background:#fff;border:2px dashed var(--grau);border-radius:6px;padding:6px 14px;font-size:22px;line-height:1.35}
+.wahl{display:flex;gap:8px}
+.wahl button{flex:1;font:700 24px var(--sans);padding:6px 0;border:2px solid var(--tinte);background:#fff;color:var(--tinte);border-radius:6px;cursor:pointer}
+.wahl button[aria-pressed=true]{background:var(--tinte);color:#fff}
+.wahl button:focus-visible,.chip:focus-visible{outline:3px solid #ffd24d;outline-offset:2px}
+.geg{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:24px}
+.chip{position:relative;display:inline-block;border:2.5px solid var(--h);color:var(--h);background:#fff;border-radius:6px;padding:2px 12px;font-weight:700;cursor:pointer}
+.chip .pop{display:none;position:absolute;left:-2.5px;top:100%;z-index:5;background:#fff;border:2.5px solid var(--h);border-radius:0 6px 6px 6px;padding:10px 12px 6px;width:260px}
+.chip:hover .pop,.chip:focus-within .pop{display:block}
+.chip input{width:100%;accent-color:var(--h)}
+.rz{font-size:22px;line-height:1.3;background:#fff;border-left:5px solid var(--tinte);padding:5px 12px}
+.rz.st{transform:none}
+.formel .st{display:inline;transform:none}
+.ln.g{stroke:var(--h);stroke-width:6}.ln.kons{stroke:var(--grau);stroke-width:1.8}
+.zirkel{fill:none;stroke:var(--rot);stroke-width:2.4}
+.lb.g0{fill:#8f99ab}
+.f1{fill:var(--b);fill-opacity:.2;stroke:none}.f2{fill:var(--a);fill-opacity:.16;stroke:none}
+.wahl button{font-size:22px}
+.ueb.k div span:last-child{font-size:27px}
+.wg{stroke:none;fill-opacity:.38}.wa{fill:var(--a)}.wb{fill:var(--b)}.wc{fill:var(--c)}.wgn{fill:var(--h);fill-opacity:.45}.wgr{fill:#8f99ab;fill-opacity:.35}
+.ueb div span:last-child .fr{font-size:26px}
+/* Formelsatz (MathJax) und Footer der Site — HOWTO-praesentationen.md §3 */
+body:not(.mj) #deck{visibility:hidden}
+.stage a{color:inherit}
+.site-footer{flex:none;color:#9aa3b8;font-size:11px;line-height:1.5;text-align:center;padding:0 16px 6px}
+.site-footer p{display:inline;margin:0 .45em}.site-footer a{color:inherit}
+html:fullscreen .site-footer{display:none}
+@media (max-width:700px){#bar{flex-wrap:wrap;height:auto;padding:6px 8px;gap:8px}#dots{display:none}}   /* schmal: Knöpfe erreichbar */
+</style>
+<script>
+window.MathJax={loader:{load:['[tex]/boldsymbol']},
+  tex:{packages:{'[+]':['boldsymbol']},inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],
+       macros:{B:['\\boldsymbol{#1}',1]}},
+  svg:{fontCache:'local'},options:{enableMenu:false},startup:{typeset:false}};
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+</head>
+<body>
+<main id="deck" tabindex="0" aria-label="Folien"></main>
+<nav id="bar" aria-label="Navigation">
+  <button id="prev" type="button" aria-label="Zurück">‹ Zurück</button>
+  <span id="pos"></span>
+  <div id="dots"></div>
+  <button id="next" type="button" aria-label="Weiter">Weiter ›</button>
+  <button id="full" type="button">Vollbild</button>
+</nav>
+<!-- FUSS:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences · RLP-BM 2030</p>
+  <p>Präsentationen · Sinussatz und Cosinussatz</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 2.0 · Stand 10. Oktober 2026</p>
+</footer>
+<!-- FUSS:ENDE -->
+<script>
+"use strict";
+/* ---------- Geometrie-Helfer ---------- */
+const NS='http://www.w3.org/2000/svg';
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1]], sub=(a,b)=>[a[0]-b[0],a[1]-b[1]], mul=(a,k)=>[a[0]*k,a[1]*k];
+const lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+const len=a=>Math.hypot(a[0],a[1]), unit=a=>mul(a,1/len(a));
+const rot=(p,c,w)=>{const d=sub(p,c),co=Math.cos(w),si=Math.sin(w);return [c[0]+d[0]*co-d[1]*si,c[1]+d[0]*si+d[1]*co]};
+const ease=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+const cen=P=>mul(P.reduce(add,[0,0]),1/P.length);
+function sv(tag,at,txt){const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);if(txt!=null)e.textContent=txt;return e}
+class Fig{
+  constructor(svg,ox,oy,u){this.svg=svg;this.ox=ox;this.oy=oy;this.u=u}
+  clear(){this.svg.replaceChildren()}
+  X(p){return [this.ox+p[0]*this.u,this.oy-p[1]*this.u]}
+  inv(x,y){return [(x-this.ox)/this.u,(this.oy-y)/this.u]}
+  poly(P,cls){const e=sv('polygon',{points:P.map(p=>this.X(p).map(v=>v.toFixed(1)).join(',')).join(' '),class:cls});this.svg.append(e);return e}
+  line(a,b,cls='ln'){const A=this.X(a),B=this.X(b);const e=sv('line',{x1:A[0],y1:A[1],x2:B[0],y2:B[1],class:cls});this.svg.append(e);return e}
+  dot(p,cls='pt',r=6){const P=this.X(p);const e=sv('circle',{cx:P[0],cy:P[1],r,class:cls});this.svg.append(e);return e}
+  circle(m,r,cls='circ'){const P=this.X(m);this.svg.append(sv('circle',{cx:P[0],cy:P[1],r:r*this.u,class:cls}))}
+  text(p,s,cls='lb',dx=0,dy=0){const P=this.X(p);const e=sv('text',{x:P[0]+dx,y:P[1]+dy,class:cls},s);this.svg.append(e);return e}
+  ra(V,P1,P2,s=.28){const d1=mul(unit(sub(P1,V)),s),d2=mul(unit(sub(P2,V)),s);
+    const a=this.X(add(V,d1)),b=this.X(add(add(V,d1),d2)),c=this.X(add(V,d2));
+    this.svg.append(sv('path',{d:`M${a} L${b} L${c}`,class:'ra'}))}
+  arc(V,P1,P2,r,cls='arc'){const a1=Math.atan2(P1[1]-V[1],P1[0]-V[0]),a2=Math.atan2(P2[1]-V[1],P2[0]-V[0]);
+    let d=a2-a1;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+    const s=this.X(add(V,[r*Math.cos(a1),r*Math.sin(a1)])),e=this.X(add(V,[r*Math.cos(a2),r*Math.sin(a2)]));
+    this.svg.append(sv('path',{d:`M${s} A${r*this.u} ${r*this.u} 0 0 ${d>0?0:1} ${e}`,class:cls}));
+    return add(V,mul([Math.cos(a1+d/2),Math.sin(a1+d/2)],r))}
+  arcLabel(V,P1,P2,r,s,cls='lb',k=1.55){const a1=Math.atan2(P1[1]-V[1],P1[0]-V[0]),a2=Math.atan2(P2[1]-V[1],P2[0]-V[0]);
+    let d=a2-a1;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+    this.text(add(V,mul([Math.cos(a1+d/2),Math.sin(a1+d/2)],r*k)),s,cls)}
+}
+/* Formelsatz: \(…\) in Texten, die das Skript erst setzt (Live-Anzeigen, Rechnungen).
+   Vor dem Start von MathJax steht der Text roh da; beim Start wird alles nachgesetzt. */
+let MJ=false;const MJ_EL=new Set();
+function mjHTML(el,html){el._mj=html;MJ_EL.add(el);
+  if(!MJ){el.innerHTML=html;return}
+  el.innerHTML=html.replace(/\\\(([\s\S]+?)\\\)/g,(m,tex)=>{try{return MathJax.tex2svg(tex,{display:false}).outerHTML}catch(e){return tex}})}
+
+/* ---------- Folien ---------- */
+const SL=[];
+const folie=(sec,title,html,n,init)=>SL.push({sec,title,html,n,init});
+const figtxt=(id,txt,ctl='')=>`<div class="cols"><div class="fig"><svg id="${id}" viewBox="0 0 860 640" role="img" aria-label="Figur"></svg></div><div class="txt">${txt}${ctl}</div></div>`;
+const st=(k,html,nr=true)=>`<p class="st" data-step="${k}">${nr?`<span class="num">${k}</span>`:''}${html}</p>`;
+const formel=(k,html,kl='')=>`<div class="formel st ${kl}" data-step="${k}">${html}</div>`;
+const regler=(id,lab,min,max,val,step=.01)=>`<label for="${id}">${lab}</label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}">`;
+function tween(o,key,to,ms,draw){
+  o._r=o._r||{}; cancelAnimationFrame(o._r[key]);
+  const from=o[key]; if(RM||ms<=0||from===to){o[key]=to;draw();return}
+  const t0=performance.now();
+  const fn=now=>{const u=Math.max(0,Math.min(1,(now-t0)/ms));o[key]=from+(to-from)*u;
+    try{draw()}finally{if(u<1)o._r[key]=requestAnimationFrame(fn)}};
+  o._r[key]=requestAnimationFrame(fn);
+}
+
+/* ---------- Zusatz-Zeichenhelfer ---------- */
+Fig.prototype.wedge=function(V,a0,a1,r,cls){let d=a1-a0;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;if(d<0){a0=a0+d;d=-d}
+  const P=this.X(V),s=[P[0]+r*Math.cos(a0),P[1]-r*Math.sin(a0)],e=[P[0]+r*Math.cos(a0+d),P[1]-r*Math.sin(a0+d)];
+  this.svg.append(sv('path',{d:`M${P} L${s} A${r} ${r} 0 0 0 ${e} Z`,class:cls}));return a0+d/2};
+Fig.prototype.bogen=function(V,a0,a1,rU,cls){
+  const s=this.X([V[0]+rU*Math.cos(a0),V[1]+rU*Math.sin(a0)]),e=this.X([V[0]+rU*Math.cos(a1),V[1]+rU*Math.sin(a1)]);
+  this.svg.append(sv('path',{d:`M${s} A${rU*this.u} ${rU*this.u} 0 ${Math.abs(a1-a0)>Math.PI?1:0} ${a1>a0?0:1} ${e}`,class:cls}))};
+Fig.prototype.px=function(V,w,r,s,cls){const P=this.X(V);const e=sv('text',{x:P[0]+r*Math.cos(w),y:P[1]-r*Math.sin(w),class:cls},s);this.svg.append(e);return e};
+const ang=(V,P)=>Math.atan2(P[1]-V[1],P[0]-V[0]);
+const cl01=x=>Math.max(0,Math.min(1,x));
+function ziehbar(svg,fig,S,draw,lim,snap){let on=false;
+  const mv=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse()),P=fig.inv(q.x,q.y);
+    S.C=[Math.max(lim[0],Math.min(lim[1],P[0])),Math.max(lim[2],Math.min(lim[3],P[1]))];if(snap)snap(S.C);draw()};
+  svg.addEventListener('pointerdown',ev=>{on=true;try{svg.setPointerCapture(ev.pointerId)}catch(e){};mv(ev)});
+  svg.addEventListener('pointermove',ev=>{if(on)mv(ev)});
+  svg.addEventListener('pointerup',()=>on=false);svg.addEventListener('pointercancel',()=>on=false)}
+function dreieck(C,c=7){const A=[0,0],B=[c,0],a=len(sub(B,C)),b=len(sub(C,A)),al=Math.atan2(C[1],C[0]),be=Math.atan2(C[1],c-C[0]);
+  return {A,B,C,H:[C[0],0],a,b,c,h:C[1],al,be,ga:Math.PI-al-be}}
+function ecken(fig,T){fig.text(T.A,'A','lb',-22,10);fig.text(T.B,'B','lb',22,10);fig.dot(T.C,'pt drag',12);fig.text(T.C,'C','lb',0,-28)}
+const eng=h=>h.replace('class="txt"','class="txt eng"');
+
+/* 1 Titel */
+folie('Trigonometrie','',`<div class="titel"><div>
+<h2>Sinussatz und Cosinussatz</h2>
+<p>Das allgemeine Dreieck berechnen: zwei Sätze, eine Frage zur Auswahl.</p>
+<ol><li>Vom rechtwinkligen zum allgemeinen Dreieck</li><li>Herleitung des Sinussatzes</li><li>Herleitung des Cosinussatzes</li><li>Welcher Satz führt zum Ziel?</li></ol>
+<p class="hint">Weiter mit <kbd>→</kbd> oder <kbd>Leertaste</kbd>, zurück mit <kbd>←</kbd></p>
+<p class="hint">Der Stoff dazu steht in <a href="../grundlagen/g5-3-trigonometrische-berechnungen.html#schief-dreieck">5.3 Trigonometrische Berechnungen</a>.</p></div>
+<svg id="g0" viewBox="0 0 620 680" role="img" aria-label="Allgemeines Dreieck"></svg></div>`,0,r=>{
+  const fig=new Fig(r.querySelector('#g0'),60,470,72),T=dreieck([2.6,3.7]);
+  fig.poly([T.A,T.B,T.C],'tri');fig.wedge(T.A,0,T.al,52,'wg wa');fig.wedge(T.B,Math.PI-T.be,Math.PI,52,'wg wb');fig.wedge(T.C,ang(T.C,T.A),ang(T.C,T.B),46,'wg wc');
+  fig.line(T.C,T.B,'ln a');fig.line(T.A,T.C,'ln b');fig.line(T.A,T.B,'ln c');
+  fig.text(lerp(T.C,T.B,.5),'a','lb gr fa',24,-14);fig.text(lerp(T.A,T.C,.5),'b','lb gr fb',-24,-14);fig.text(lerp(T.A,T.B,.5),'c','lb gr fc',0,32);
+  fig.px(T.A,T.al/2,80,'α','lb fa');fig.px(T.B,Math.PI-T.be/2,80,'β','lb fb');fig.px(T.C,(ang(T.C,T.A)+ang(T.C,T.B))/2,72,'γ','lb fc');return {}});
+
+/* 2 Allgemeines Dreieck */
+folie('Allgemeines Dreieck','Vom rechtwinkligen zum allgemeinen Dreieck',figtxt('g1',
+ st(1,'<b class="ca">\\(a\\)</b> liegt <b class="ca">\\(\\alpha\\)</b> gegenüber, <b class="cb">\\(b\\)</b> liegt <b class="cb">\\(\\beta\\)</b> gegenüber, <b class="cc">\\(c\\)</b> liegt <b class="cc">\\(\\gamma\\)</b> gegenüber. Das sind drei <b>Seiten-Winkel-Paare</b>.')+
+ st(2,'Es gibt keinen rechten Winkel. Sinus, Cosinus, Tangens und Pythagoras gelten nicht direkt.')+
+ st(3,'Idee: Eine <b class="ch">Höhe</b> zerlegt das Dreieck in zwei rechtwinklige Dreiecke.'),
+ `<div class="ctl"><span>Punkt \\(C\\) mit der Maus oder dem Finger ziehen</span></div>`),3,r=>{
+  const svg=r.querySelector('#g1'),fig=new Fig(svg,95,540,95),S={C:[2.6,3.6],k:0};
+  const draw=()=>{const T=dreieck(S.C),{A,B,C,H}=T,k=S.k;fig.clear();
+    if(k>=3){fig.poly([A,H,C],'t1');fig.poly([H,B,C],'t2')}else fig.poly([A,B,C],'tri');
+    if(k>=1){fig.wedge(A,0,T.al,50,'wg wa');fig.wedge(B,Math.PI-T.be,Math.PI,50,'wg wb');fig.wedge(C,ang(C,A),ang(C,B),44,'wg wc');
+      fig.line(C,B,'ln a');fig.line(A,C,'ln b');fig.line(A,B,'ln c');
+      fig.px(A,T.al/2,76,'α','lb fa');fig.px(B,Math.PI-T.be/2,76,'β','lb fb');fig.px(C,(ang(C,A)+ang(C,B))/2,70,'γ','lb fc');
+      fig.text(lerp(C,B,.5),'a','lb gr fa',24,-14);fig.text(lerp(A,C,.5),'b','lb gr fb',-24,-14);fig.text(lerp(A,B,.5),'c','lb gr fc',0,32)}
+    if(k>=3){fig.line(C,H,'ln h');fig.ra(H,B,C,.2);fig.text([C[0],C[1]*.45],'h','lb fh',18,0)}
+    ecken(fig,T)};
+  ziehbar(svg,fig,S,draw,[1,6,1.4,4.6]);draw();return {onStep:k=>{S.k=k;draw()}}});
+
+/* 3 Sinussatz */
+folie('Sinussatz','Herleitung des Sinussatzes',eng(figtxt('g2',
+ st(1,'Höhe <b class="ch">\\(h\\)</b> auf \\(c\\): zwei rechtwinklige Dreiecke.')+
+ st(2,'Links: \\(\\sin\\alpha = \\dfrac{h}{b}\\), also \\(\\B{h = b \\cdot \\sin\\alpha}\\)')+
+ st(3,'Rechts: \\(\\sin\\beta = \\dfrac{h}{a}\\), also \\(\\B{h = a \\cdot \\sin\\beta}\\)')+
+ st(4,'Gleichsetzen: \\(\\B{a \\cdot \\sin\\beta = b \\cdot \\sin\\alpha}\\), umstellen:')+
+ st(5,'Eine andere Höhe liefert dasselbe für \\(c\\) und \\(\\gamma\\).')+
+ `<div class="formel kl st" data-step="4">\\(\\dfrac{a}{\\sin\\alpha} = \\dfrac{b}{\\sin\\beta}\\)<span class="st" data-step="5">\\(\\;= \\dfrac{c}{\\sin\\gamma}\\)</span></div>`+
+ `<div class="live st" data-step="5" id="lv2"></div>`+
+ st(6,'Gemeinsamer Wert: <b>Umkreisdurchmesser \\(2r\\)</b>. Gilt auch für stumpfe Winkel.'),
+ `<div class="ctl"><span>Punkt \\(C\\) ziehen: Die drei Quotienten bleiben gleich.</span></div>`)),6,r=>{
+  const svg=r.querySelector('#g2'),fig=new Fig(svg,150,405,70),S={C:[2.6,3.6],k:0},lv=r.querySelector('#lv2');
+  const draw=()=>{const T=dreieck(S.C),{A,B,C,H}=T,k=S.k;fig.clear();
+    if(k>=6){const oy=(C[0]*C[0]+C[1]*C[1]-T.c*C[0])/(2*C[1]),O=[T.c/2,oy],rr=len(sub(A,O));fig.circle(O,rr);fig.dot(O);fig.line(O,B,'ln d');fig.text(lerp(O,B,.5),'r','lb kl',0,-16)}
+    fig.poly([A,B,C],'tri');
+    if(k>=2){fig.poly([A,H,C],'t1');fig.wedge(A,0,T.al,46,'wg wa');fig.px(A,T.al/2,70,'α','lb fa')}
+    if(k>=3){fig.poly([H,B,C],'t2');fig.wedge(B,Math.PI-T.be,Math.PI,46,'wg wb');fig.px(B,Math.PI-T.be/2,70,'β','lb fb')}
+    if(k>=5){fig.wedge(C,ang(C,A),ang(C,B),40,'wg wc');fig.px(C,(ang(C,A)+ang(C,B))/2,64,'γ','lb fc')}
+    if(k>=1){fig.line(C,H,'ln h');fig.ra(H,B,C,.24);fig.text([C[0],C[1]*.45],'h','lb fh',18,0)}
+    fig.text(lerp(C,B,.5),'a','lb gr fa',24,-14);fig.text(lerp(A,C,.5),'b','lb gr fb',-24,-14);fig.text(lerp(A,B,.5),'c','lb gr fc',0,30);
+    ecken(fig,T);
+    mjHTML(lv,[[T.a,T.al],[T.b,T.be],[T.c,T.ga]].map(([s,w])=>`\\(${f(s)} : \\sin ${f(deg(w),1)}^\\circ = ${f(s/Math.sin(w))}\\)`).join('<br>'))};
+  ziehbar(svg,fig,S,draw,[1.2,5.8,2.4,4.4]);draw();return {onStep:k=>{S.k=k;draw()}}});
+
+/* 4 Cosinussatz */
+folie('Cosinussatz','Herleitung des Cosinussatzes',eng(figtxt('g3',
+ st(1,'Die Höhe <b class="ch">\\(h\\)</b> teilt \\(c\\) in \\(x\\) und \\(c - x\\).')+
+ st(2,'Links, Pythagoras: \\(\\B{h^2 = b^2 - x^2}\\)')+
+ st(3,'Rechts, Pythagoras: \\(\\B{a^2 = h^2 + (c - x)^2}\\)')+
+ st(4,'Einsetzen: \\(a^2 = b^2 - x^2 + c^2 - 2cx + x^2 = \\B{b^2 + c^2 - 2c \\cdot x}\\)')+
+ st(5,'Links gilt \\(\\cos\\alpha = \\dfrac{x}{b}\\), also \\(\\B{x = b \\cdot \\cos\\alpha}\\).')+
+ formel(5,'\\(a^2 = b^2 + c^2 - 2bc \\cdot \\cos\\alpha\\)','kl')+
+ st(5,'Ebenso: \\(b^2 = a^2 + c^2 - 2ac \\cdot \\cos\\beta\\) und \\(c^2 = a^2 + b^2 - 2ab \\cdot \\cos\\gamma\\)',false)+
+ `<div class="live st" data-step="5" id="lv3"></div>`+
+ st(6,'\\(C\\) über \\(A\\) ziehen: Bei \\(\\alpha = 90^\\circ\\) ist \\(\\cos\\alpha = 0\\), und es bleibt der <b>Satz des Pythagoras</b>.'),
+ `<div class="ctl"><span>Punkt \\(C\\) ziehen</span></div>`)),6,r=>{
+  const svg=r.querySelector('#g3'),fig=new Fig(svg,95,540,95),S={C:[2.4,3.6],k:0},lv=r.querySelector('#lv3');
+  const draw=()=>{const T=dreieck(S.C),{A,B,C,H}=T,k=S.k;fig.clear();
+    fig.poly([A,B,C],'tri');
+    if(k>=2)fig.poly([A,H,C],'t1'); if(k>=3)fig.poly([H,B,C],'t2');
+    fig.wedge(A,0,T.al,46,'wg wa');fig.px(A,T.al/2,72,'α','lb fa');
+    if(k>=1){fig.line(C,H,'ln h');if(C[0]>.25)fig.ra(H,B,C,.2);fig.text([C[0],C[1]*.45],'h','lb fh',18,0);
+      if(C[0]>.5)fig.text([C[0]/2,0],'x','lb',0,28);fig.text([(C[0]+T.c)/2,0],'c − x','lb',0,28)}
+    else fig.text(lerp(A,B,.5),'c','lb gr fc',0,30);
+    fig.text(lerp(C,B,.5),'a','lb gr fa',24,-14);fig.text(lerp(A,C,.5),'b','lb gr fb',-24,-14);
+    if(Math.abs(deg(T.al)-90)<.01)fig.ra(A,B,C,.3);
+    ecken(fig,T);
+    mjHTML(lv,`\\(\\alpha = ${f(deg(T.al),1)}^\\circ\\), &nbsp; \\(a^2 = ${f(T.a*T.a)}\\)<br>\\(b^2 + c^2 - 2bc \\cdot \\cos\\alpha = ${f(T.b*T.b)} + ${f(T.c*T.c)} - ${f(2*T.b*T.c*Math.cos(T.al))} = ${f(T.b*T.b+T.c*T.c-2*T.b*T.c*Math.cos(T.al))}\\)`)};
+  ziehbar(svg,fig,S,draw,[0,6,1.6,4.6],C=>{if(C[0]<.15)C[0]=0});draw();return {onStep:k=>{S.k=k;draw()}}});
+
+/* 5 Welcher Satz? */
+// ── KERN:ANFANG — Fälle, Lösen, Rechenweg; ohne DOM, geprüft von scripts/verify_sinussatz-cosinussatz.js
+const deg=w=>w*180/Math.PI, rad=g=>g*Math.PI/180;
+const f=(x,n=2)=>x.toFixed(n);
+const FALL={
+ SSS:{geg:[['a',7,3,12],['b',6,3,12],['c',8,3,12]],gibt:['al','be','ga'],
+  ent:'<b class="cr">Nein.</b> Kein Winkel ist bekannt. <b>Cosinussatz</b> für den Winkel gegenüber der längsten Seite, danach gibt es ein Paar: weiter mit dem <b>Sinussatz</b>.',
+  kon:'\\(c\\) zeichnen · Kreis um \\(A\\) mit Radius \\(b\\) · Kreis um \\(B\\) mit Radius \\(a\\) · Schnittpunkt \\(C\\)'},
+ SWS:{geg:[['b',6,3,12],['c',8,3,12],['al',50,20,140]],gibt:['a','be','ga'],
+  ent:'<b class="cr">Nein.</b> \\(\\alpha\\) liegt zwischen den Seiten, die Gegenseite \\(a\\) fehlt. <b>Cosinussatz</b> für \\(a\\), danach gibt es ein Paar: weiter mit dem <b>Sinussatz</b>.',
+  kon:'\\(c\\) zeichnen · Winkel \\(\\alpha\\) bei \\(A\\) antragen · \\(b\\) auf dem Schenkel abtragen: Punkt \\(C\\)'},
+ WSW:{geg:[['c',8,3,12],['al',50,20,120],['be',60,20,120]],gibt:['ga','a','b'],
+  ent:'<b>Noch nicht.</b> Aber \\(\\gamma\\) folgt aus der Winkelsumme. Dann ist \\(c\\) mit \\(\\gamma\\) ein <b class="ch">Paar</b>: <b>Sinussatz</b>.',
+  kon:'\\(c\\) zeichnen · Winkel \\(\\alpha\\) bei \\(A\\) antragen · Winkel \\(\\beta\\) bei \\(B\\) antragen · Schnittpunkt \\(C\\)'},
+ SWW:{geg:[['a',7,3,12],['al',60,20,120],['be',45,20,120]],gibt:['b','ga','c'],
+  ent:'<b class="ch">Ja:</b> \\(a\\) und \\(\\alpha\\) liegen einander gegenüber. Also <b>Sinussatz</b>.',
+  kon:'\\(\\gamma = 180^\\circ - \\alpha - \\beta\\) berechnen · \\(a\\) zeichnen · \\(\\beta\\) bei \\(B\\) und \\(\\gamma\\) bei \\(C\\) antragen · Schnittpunkt \\(A\\)'},
+ SsW:{geg:[['a',8,3,12],['b',6,3,12],['al',50,20,140]],gibt:['be','ga','c'],
+  ent:'<b class="ch">Ja:</b> \\(a\\) und \\(\\alpha\\) liegen einander gegenüber. Also <b>Sinussatz</b>.',
+  kon:'\\(b\\) zeichnen · Winkel \\(\\alpha\\) bei \\(A\\) antragen · Kreis um \\(C\\) mit Radius \\(a\\) schneidet den Schenkel in \\(B\\)'},
+ sSw:{geg:[['a',5,3,12],['b',7,3,12],['al',40,20,80]],gibt:['be','ga','c'],
+  ent:'<b class="ch">Ja:</b> \\(a\\) und \\(\\alpha\\) liegen einander gegenüber, also <b>Sinussatz</b>. Aber \\(\\alpha\\) liegt der <b>kleineren</b> Seite gegenüber: Es gibt <b>zwei Lösungen</b>.',
+  kon:'\\(b\\) zeichnen · Winkel \\(\\alpha\\) bei \\(A\\) antragen · Kreis um \\(C\\) mit Radius \\(a\\) schneidet den Schenkel zweimal: \\(B_1\\) und \\(B_2\\)'}};
+const NAME={a:'a',b:'b',c:'c',al:'α',be:'β',ga:'γ'};
+const NAMET={a:'a',b:'b',c:'c',al:'\\alpha',be:'\\beta',ga:'\\gamma'};
+// Meldungen stehen mit \(…\); klartext() macht daraus die Beschriftung der Figur (SVG-Text)
+const klartext=s=>s.replace(/\\\(|\\\)/g,'').replace(/\\alpha/g,'α').replace(/\\beta/g,'β').replace(/\\gamma/g,'γ')
+  .replace(/\\ge\b/g,'≥').replace(/\^\\circ/g,'°').replace(/\\lt\b/g,'<');
+function loese(fl,v){const D=Math.PI/180;
+  if(fl==='SSS'){const {a,b,c}=v;if(a+b<=c||a+c<=b||b+c<=a)return {ok:false,msg:'Kein Dreieck: Zwei Seiten zusammen müssen länger sein als die dritte.'};
+    const al=Math.acos((b*b+c*c-a*a)/(2*b*c)),be=Math.acos((a*a+c*c-b*b)/(2*a*c));return {ok:true,a,b,c,al,be,ga:Math.PI-al-be}}
+  if(fl==='SWS'){const {b,c}=v,al=v.al*D,a=Math.sqrt(b*b+c*c-2*b*c*Math.cos(al)),be=Math.acos((a*a+c*c-b*b)/(2*a*c));return {ok:true,a,b,c,al,be,ga:Math.PI-al-be}}
+  if(fl==='WSW'){const c=v.c,al=v.al*D,be=v.be*D,ga=Math.PI-al-be;if(v.al+v.be>=170)return {ok:false,msg:'Kein Dreieck: \\(\\alpha + \\beta\\) muss deutlich kleiner als \\(180^\\circ\\) sein.'};
+    return {ok:true,c,al,be,ga,a:c*Math.sin(al)/Math.sin(ga),b:c*Math.sin(be)/Math.sin(ga)}}
+  if(fl==='SWW'){const a=v.a,al=v.al*D,be=v.be*D,ga=Math.PI-al-be;if(v.al+v.be>=170)return {ok:false,msg:'Kein Dreieck: \\(\\alpha + \\beta\\) muss deutlich kleiner als \\(180^\\circ\\) sein.'};
+    return {ok:true,a,al,be,ga,b:a*Math.sin(be)/Math.sin(al),c:a*Math.sin(ga)/Math.sin(al)}}
+  if(fl==='sSw'){const {a,b}=v,al=v.al*D,d=b*Math.sin(al);
+    if(a>=b)return {ok:false,msg:'Hier ist \\(a \\ge b\\): Das ist der Fall SsW mit einer Lösung.'};
+    if(a<d-1e-9)return {ok:false,msg:'Kein Dreieck: Der Kreis um \\(C\\) erreicht den Schenkel nicht.'};
+    if(Math.abs(a-d)<1e-9)return {ok:false,msg:'Genau eine Lösung: Der Kreis berührt den Schenkel, \\(\\beta = 90^\\circ\\).'};
+    const be=Math.asin(Math.min(1,d/a)),ga=Math.PI-al-be,be2=Math.PI-be,ga2=Math.PI-al-be2;
+    return {ok:true,a,b,al,be,ga,c:a*Math.sin(ga)/Math.sin(al),be2,ga2,c2:a*Math.sin(ga2)/Math.sin(al)}}
+  const {a,b}=v,al=v.al*D;if(a<=b)return {ok:false,msg:'SsW verlangt: Der Winkel liegt der grösseren Seite gegenüber, also \\(a > b\\).'};
+  const be=Math.asin(b*Math.sin(al)/a),ga=Math.PI-al-be;return {ok:true,a,b,al,be,ga,c:a*Math.sin(ga)/Math.sin(al)}}
+function punkte(fl,R){
+  if(fl==='SWW')return {B:[0,0],C:[R.a,0],A:[R.c*Math.cos(R.be),R.c*Math.sin(R.be)]};
+  if(fl==='SsW'||fl==='sSw')return {A:[0,0],C:[R.b,0],B:[R.c*Math.cos(R.al),R.c*Math.sin(R.al)]};
+  return {A:[0,0],B:[R.c,0],C:[R.b*Math.cos(R.al),R.b*Math.sin(R.al)]}}
+const SN={a:'α',b:'β',c:'γ'},SNT={a:'\\alpha',b:'\\beta',c:'\\gamma'},WK={a:'al',b:'be',c:'ga'};
+// Rechenweg als Text mit \(…\); \B{…} ist \boldsymbol (Makro in der MathJax-Einstellung)
+function rechnung(fl,v,R){const g=x=>f(x,2),w=x=>f(deg(x),1)+'^\\circ',pf='\\;\\Rightarrow\\;',T=s=>'\\('+s+'\\)';
+  if(!R.ok)return {Z:[R.msg,'',''],gibt:[]};
+  const num=x=>x in v?String(v[x]):g(R[x]), wn=x=>WK[x] in v?v[WK[x]]+'^\\circ':w(R[WK[x]]);
+  // Sinussatz in der Ausgangslage: Gesuchtes im Zaehler des ersten Bruchs, rechts das bekannte Paar
+  const sinW=(x,y)=>T(`\\dfrac{\\sin ${SNT[x]}}{${x}} = \\dfrac{\\sin ${SNT[y]}}{${y}}${pf}\\sin ${SNT[x]} = \\dfrac{${num(x)} \\cdot \\sin ${wn(y)}}{${num(y)}}${pf}\\B{${SNT[x]} = ${w(R[WK[x]])}}`);
+  const sinS=(x,y)=>T(`\\dfrac{${x}}{\\sin ${SNT[x]}} = \\dfrac{${y}}{\\sin ${SNT[y]}}${pf}${x} = \\dfrac{${num(y)} \\cdot \\sin ${wn(x)}}{\\sin ${wn(y)}} = \\B{${g(R[x])}\\text{ cm}}`);
+  const rest=(x,y,z)=>T(`${SNT[x]} = 180^\\circ - ${SNT[y]} - ${SNT[z]} = 180^\\circ - ${wn(y)} - ${wn(z)} = \\B{${w(R[WK[x]])}}`);
+  if(fl==='SSS'){const o=['a','b','c'].sort((p,q)=>v[q]-v[p]),x=o[0],[y,z]=['a','b','c'].filter(t=>t!==x);
+    return {gibt:[WK[x],WK[y],WK[z]],Z:[T(`\\cos ${SNT[x]} = \\dfrac{${y}^2 + ${z}^2 - ${x}^2}{2${y}${z}} = \\dfrac{${v[y]*v[y]} + ${v[z]*v[z]} - ${v[x]*v[x]}}{2 \\cdot ${v[y]} \\cdot ${v[z]}}${pf}\\B{${SNT[x]} = ${w(R[WK[x]])}}`),
+      sinW(y,x)+' (spitz, weil '+T(SNT[x])+' der grösste Winkel ist)',rest(z,x,y)]}}
+  if(fl==='SWS'){const t=v.b<=v.c?'b':'c',u=t==='b'?'c':'b';
+    return {gibt:['a',WK[t],WK[u]],Z:[T(`a^2 = b^2 + c^2 - 2bc \\cdot \\cos\\alpha = ${v.b*v.b} + ${v.c*v.c} - 2 \\cdot ${v.b} \\cdot ${v.c} \\cdot \\cos ${v.al}^\\circ${pf}\\B{a = ${g(R.a)}\\text{ cm}}`),
+      sinW(t,'a')+' (spitz, weil '+T(t)+' nicht die längste Seite ist)',rest(u,'a',t)]}}
+  if(fl==='WSW')return {gibt:['ga','a','b'],Z:[rest('c','a','b')+'. Jetzt bilden '+T('c')+' und '+T('\\gamma')+' ein Paar.',sinS('a','c'),sinS('b','c')]};
+  if(fl==='SWW')return {gibt:['b','ga','c'],Z:[sinS('b','a'),rest('c','a','b'),sinS('c','a')]};
+  if(fl==='SsW')return {gibt:['be','ga','c'],Z:[sinW('b','a')+' (spitz, weil '+T('b \\lt a')+')',rest('c','a','b'),sinS('c','a')]};
+  return {gibt:['be','ga','c'],Z:[T(`\\dfrac{\\sin\\beta}{b} = \\dfrac{\\sin\\alpha}{a}${pf}\\sin\\beta = \\dfrac{${v.b} \\cdot \\sin ${v.al}^\\circ}{${v.a}}${pf}\\B{\\beta_1 = ${w(R.be)}}`)+' oder '+T(`\\B{\\beta_2 = 180^\\circ - \\beta_1 = ${w(R.be2)}}`),
+    T(`\\gamma_1 = 180^\\circ - \\alpha - \\beta_1 = \\B{${w(R.ga)}}`)+' &nbsp; '+T(`\\gamma_2 = 180^\\circ - \\alpha - \\beta_2 = \\B{${w(R.ga2)}}`),
+    T(`\\dfrac{c}{\\sin\\gamma} = \\dfrac{a}{\\sin\\alpha}${pf}\\B{c_1 = ${g(R.c)}\\text{ cm}}`)+' &nbsp; '+T(`\\B{c_2 = ${g(R.c2)}\\text{ cm}}`)]}}
+// ── KERN:ENDE
+
+folie('Sinussatz oder Cosinussatz','Welcher Satz führt zum Ziel?',eng(figtxt('g4',
+ `<div class="wahl" id="wahl">${Object.keys(FALL).map(k=>`<button type="button" data-f="${k}" aria-pressed="false">${k}</button>`).join('')}</div>
+ <div class="geg" id="geg"></div>`+
+ `<p class="st" data-step="1"><span class="num">1</span><b>Gibt es ein Seiten-Winkel-Paar?</b> <span id="ent"></span></p>`+
+ `<p class="st" data-step="2"><span class="num">2</span><b>Konstruktion:</b> <span id="kon"></span></p>`+
+ `<div class="rz st" data-step="3" id="z0"></div><div class="rz st" data-step="4" id="z1"></div><div class="rz st" data-step="5" id="z2"></div>`,
+ `<div class="ctl"><button type="button" id="pk">Konstruktion ▶</button><button type="button" id="pr">Rechnung ▶</button><span>Werte ändern: Maus auf eine grüne Angabe</span></div>`)),5,r=>{
+  const svg=r.querySelector('#g4'),fig=new Fig(svg,0,0,1),S={fl:'SSS',v:{},kt:0,k:0};
+  const q=id=>r.querySelector(id);
+  const setFall=fl=>{S.fl=fl;S.v={};FALL[fl].geg.forEach(g=>S.v[g[0]]=g[1]);S.kt=0;
+    r.querySelectorAll('#wahl button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===fl));
+    q('#geg').innerHTML='Gegeben: '+FALL[fl].geg.map(g=>`<span class="chip" tabindex="0"><span data-o="${g[0]}"></span><span class="pop"><input type="range" id="s_${g[0]}" aria-label="${NAME[g[0]]}" data-k="${g[0]}" min="${g[2]}" max="${g[3]}" step="1" value="${g[1]}"></span></span>`).join('');
+    mjHTML(q('#ent'),FALL[fl].ent);mjHTML(q('#kon'),FALL[fl].kon);texte()};
+  const istW=k=>k.length>1;
+  const texte=()=>{const R=loese(S.fl,S.v),Q=rechnung(S.fl,S.v,R),Z=Q.Z;S.R=R;S.gibt=Q.gibt;
+    r.querySelectorAll('[data-o]').forEach(e=>{const k=e.dataset.o;mjHTML(e,'\\('+NAMET[k]+' = '+S.v[k]+(istW(k)?'^\\circ':'\\text{ cm}')+'\\)')});
+    [0,1,2].forEach(i=>{mjHTML(q('#z'+i),Z[i]);q('#z'+i).style.visibility=Z[i]?'':'hidden'})};
+  const draw=()=>{const fl=S.fl,R=S.R,F=FALL[fl],geg=F.geg.map(g=>g[0]),k=S.k;fig.clear();
+    if(!R.ok){fig.ox=430;fig.oy=320;fig.u=1;svg.append(sv('text',{x:430,y:300,class:'lb fr'},klartext(R.msg).split(': ')[0]));svg.append(sv('text',{x:430,y:340,class:'lb'},klartext(R.msg).split(': ')[1]||''));return}
+    const P=punkte(fl,R),V=[P.A,P.B,P.C],xs=V.map(p=>p[0]),ys=V.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+    fig.u=Math.min(600/(x1-x0),400/(y1-y0),62);fig.ox=430-(x0+x1)/2*fig.u;fig.oy=320+(y0+y1)/2*fig.u;
+    const {A,B,C}=P,Z=cen(V),u=fig.u,fertig=k<2||S.kt>=3,p=[0,1,2].map(i=>ease(cl01(S.kt-i)));
+    const seite={a:[B,C],b:[C,A],c:[A,B]},ecke={al:[A,B,C],be:[B,C,A],ga:[C,A,B]};
+    const gez=x=>S.gibt.includes(x)&&k>=3+S.gibt.indexOf(x);
+    const strahl=(Vx,w,L,pp)=>fig.line(Vx,[Vx[0]+L*pp*Math.cos(w),Vx[1]+L*pp*Math.sin(w)],'ln kons');
+    const zirkel=(Vx,rr,wm,pp)=>{fig.bogen(Vx,wm-.4,wm-.4+.8*pp,rr,'zirkel');if(pp<1)fig.line(Vx,[Vx[0]+rr*Math.cos(wm-.4+.8*pp),Vx[1]+rr*Math.sin(wm-.4+.8*pp)],'ln d')};
+    if(fl==='sSw'){const al=R.al,B2=[R.c2*Math.cos(al),R.c2*Math.sin(al)],E=[R.c*1.16*Math.cos(al),R.c*1.16*Math.sin(al)],n=[-Math.sin(al),Math.cos(al)];
+      const w1=ang(C,B);let d=ang(C,B2)-w1;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;const sg=d>=0?1:-1,a0=w1-sg*.22,a1=w1+d+sg*.22;
+      const tx=(Q,dx,dy,t,c)=>{const X=fig.X(Q);svg.append(sv('text',{x:X[0]+dx,y:X[1]+dy,class:'lb '+c},t))};
+      if(k>=2){fig.line(A,lerp(A,C,p[0]),'ln g');if(p[1]>0){fig.wedge(A,0,al*p[1],44,'wg wgn');fig.line(A,lerp(A,E,p[1]),'ln kons')}
+        if(p[2]>0){const ww=a0+(a1-a0)*p[2];fig.bogen(C,a0,ww,R.a,'zirkel');if(p[2]<1)fig.line(C,[C[0]+R.a*Math.cos(ww),C[1]+R.a*Math.sin(ww)],'ln d')}}
+      if(k>=2&&p[0]>=1)tx(lerp(A,C,.5),0,28,`b = ${S.v.b}`,'fh');
+      if(!fertig)return;
+      fig.poly([A,B2,C],'f1');fig.poly([B2,B,C],'f2');if(k<2)fig.line(A,E,'ln d');
+      fig.line(A,B,k<2?'ln d':'ln');fig.line(A,C,'ln g');fig.line(C,B,'ln g');fig.line(C,B2,'ln g');fig.wedge(A,0,al,44,'wg wgn');
+      fig.arc(B,A,C,34/u,'arc');fig.arc(B2,A,C,30/u,'arc');
+      if(k<2)tx(lerp(A,C,.5),0,28,`b = ${S.v.b}`,'fh');
+      tx(lerp(C,B,.5),20+String(S.v.a).length*6+24,0,`a = ${S.v.a}`,'fh');tx(lerp(C,B2,.5),-(20+String(S.v.a).length*6+22),8,`a = ${S.v.a}`,'fh');
+      {const X=fig.X(A);svg.append(sv('text',{x:X[0]+Math.cos(al/2)*96,y:X[1]-Math.sin(al/2)*96,class:'lb kl fh'},`α = ${S.v.al}°`))}
+      const t1=gez('be')?`β₁ = ${f(deg(R.be),1)}°`:'β₁',t2=gez('be')?`β₂ = ${f(deg(R.be2),1)}°`:'β₂',cb=gez('be')?'':'g0';
+      tx(B,n[0]*30+Math.cos(al)*40,-n[1]*30-Math.sin(al)*40+0,'B₁','');tx(B2,n[0]*30,-n[1]*30,'B₂','');
+      tx(B,Math.cos(al)*14+70,-Math.sin(al)*14+34,t1,'kl '+cb);tx(B2,n[0]*30+n[0]*38-50,-n[1]*30-n[1]*26,t2,'kl '+cb);
+      const cc=gez('c')?'':'g0';tx(lerp(A,B2,.45),n[0]*52-26,-n[1]*40,gez('c')?`c₂ = ${f(R.c2)}`:'c₂',cc);tx(lerp(B2,B,.5),n[0]*52-26,-n[1]*40,gez('c')?`c₁ = ${f(R.c)}`:'c₁',cc);
+      fig.dot(A);fig.dot(C);fig.dot(B);fig.dot(B2);tx(A,-24,10,'A','');tx(C,22,14,'C','');return}
+    if(k>=2){ // Konstruktion in drei Phasen
+      if(fl==='SSS'){fig.line(A,lerp(A,B,p[0]),'ln g');if(p[1]>0)zirkel(A,R.b,ang(A,C),p[1]);if(p[2]>0)zirkel(B,R.a,ang(B,C),p[2])}
+      if(fl==='SWS'){fig.line(A,lerp(A,B,p[0]),'ln g');if(p[1]>0){fig.wedge(A,0,R.al*p[1],44,'wg wgn');strahl(A,R.al,R.b*1.25,p[1])}if(p[2]>0)zirkel(A,R.b,R.al,p[2])}
+      if(fl==='WSW'){fig.line(A,lerp(A,B,p[0]),'ln g');if(p[1]>0){fig.wedge(A,0,R.al*p[1],44,'wg wgn');strahl(A,R.al,R.b*1.15,p[1])}
+        if(p[2]>0){fig.wedge(B,Math.PI,Math.PI-R.be*p[2],44,'wg wgn');strahl(B,Math.PI-R.be,R.a*1.15,p[2])}}
+      if(fl==='SWW'){fig.line(B,lerp(B,C,p[0]),'ln g');if(p[1]>0){fig.wedge(B,0,R.be*p[1],44,'wg wgn');strahl(B,R.be,R.c*1.15,p[1])}
+        if(p[2]>0){fig.wedge(C,Math.PI,Math.PI-R.ga*p[2],44,'wg wgr');strahl(C,Math.PI-R.ga,R.b*1.15,p[2])}}
+      if(fl==='SsW'){fig.line(A,lerp(A,C,p[0]),'ln g');if(p[1]>0){fig.wedge(A,0,R.al*p[1],44,'wg wgn');strahl(A,R.al,R.c*1.2,p[1])}if(p[2]>0)zirkel(C,R.a,ang(C,B),p[2])}
+    }
+    if(fertig){
+      for(const s in seite){const [P1,P2]=seite[s],g=geg.includes(s);fig.line(P1,P2,g?'ln g':(k<2?'ln d':'ln'))}
+      for(const e in ecke){const [Vx,P1,P2]=ecke[e];if(geg.includes(e))fig.wedge(Vx,ang(Vx,P1),ang(Vx,P2),44,'wg wgn');else fig.arc(Vx,P1,P2,34/u,'arc')}
+    }
+    if(fertig||k>=2){
+      for(const s in seite){const [P1,P2]=seite[s],g=geg.includes(s),M=lerp(P1,P2,.5),n=unit(sub(M,Z));
+        if(!fertig&&!g)continue; if(!fertig&&g&&!((fl==='SWW'&&s==='a')||(fl==='SsW'&&s==='b')||(s==='c'&&fl!=='SWW'&&fl!=='SsW')||(p[2]>=1)))continue;
+        const t=g?`${s} = ${S.v[s]}`:(gez(s)?`${s} = ${f(R[s])}`:s),X=fig.X(M);
+        svg.append(sv('text',{x:X[0]+n[0]*(22+t.length*5.5),y:X[1]-n[1]*26,class:'lb '+(g?'fh':(gez(s)?'':'g0'))},t))}
+      if(fertig)for(const e in ecke){const [Vx,P1,P2]=ecke[e],g=geg.includes(e),w=R[e],d=unit(add(unit(sub(P1,Vx)),unit(sub(P2,Vx))));
+        const t=g?`${NAME[e]} = ${S.v[e]}°`:(gez(e)?`${NAME[e]} = ${f(deg(w),1)}°`:NAME[e]),rl=Math.max(72,Math.min(150,(14+t.length*6)/Math.tan(w/2))),X=fig.X(Vx);
+        svg.append(sv('text',{x:X[0]+d[0]*rl,y:X[1]-d[1]*rl,class:'lb kl '+(g?'fh':(gez(e)?'':'g0'))},t))}
+    }
+    if(fertig)[['A',A],['B',B],['C',C]].forEach(([n,Q])=>{const d=unit(sub(Q,Z)),X=fig.X(Q);fig.dot(Q);svg.append(sv('text',{x:X[0]+d[0]*26,y:X[1]-d[1]*26,class:'lb'},n))});
+  };
+  const meins=()=>SL[cur]&&SL[cur].el===r;
+  let seq=[];const stopp=()=>{seq.forEach(clearTimeout);seq=[]};
+  q('#wahl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;stopp();setFall(b.dataset.f);b.blur();if(meins())setStep(0);else draw()});
+  q('#geg').addEventListener('input',e=>{const i=e.target;if(!i.dataset.k)return;S.v[i.dataset.k]=+i.value;texte();if(S.k>=2){cancelAnimationFrame((S._r||{}).kt);S.kt=3}draw()});
+  q('#pk').addEventListener('click',e=>{e.target.blur();stopp();if(!meins())return;if(S.k<2)setStep(2);else{S.kt=0;tween(S,'kt',3,4500,draw)}});
+  q('#pr').addEventListener('click',e=>{e.target.blur();stopp();if(!meins())return;cancelAnimationFrame((S._r||{}).kt);S.kt=3;setStep(2);S.kt=3;cancelAnimationFrame((S._r||{}).kt);draw();
+    [3,4,5].forEach((k,i)=>seq.push(setTimeout(()=>{if(meins())setStep(k)},700+i*1300)))});
+  setFall('SSS');draw();
+  return {onStep:(k,prev)=>{S.k=k;if(k>=2&&prev<2){S.kt=0;tween(S,'kt',3,4500,draw)}else if(k<2){cancelAnimationFrame((S._r||{}).kt);S.kt=0;draw()}else draw()}}});
+
+/* 6 Ueberblick */
+folie('Sinussatz oder Cosinussatz','Überblick',`<div class="ueb k">
+<div class="breit">Die zwei Sätze</div>
+<div><span>Sinussatz</span><span>\\(\\dfrac{a}{\\sin\\alpha} = \\dfrac{b}{\\sin\\beta} = \\dfrac{c}{\\sin\\gamma}\\)</span></div>
+<div><span>Cosinussatz</span><span>\\(a^2 = b^2 + c^2 - 2bc \\cdot \\cos\\alpha\\)</span></div>
+<div class="breit">Die Frage: Gibt es ein Seiten-Winkel-Paar? Wenn ja: Sinussatz.</div>
+<div><span><b>SSS</b> drei Seiten</span><span><span class="ca">Cosinussatz</span>, dann <span class="ch">Sinussatz</span></span></div>
+<div><span><b>SWS</b> zwei Seiten, Zwischenwinkel</span><span><span class="ca">Cosinussatz</span>, dann <span class="ch">Sinussatz</span></span></div>
+<div><span><b>WSW</b> eine Seite, zwei Winkel daran</span><span>\\(\\gamma = 180^\\circ - \\alpha - \\beta\\), dann <span class="ch">Sinussatz</span></span></div>
+<div><span><b>SWW</b> eine Seite, Gegenwinkel und ein weiterer</span><span class="ch">Sinussatz</span></div>
+<div><span><b>SsW</b> Gegenwinkel der grösseren Seite</span><span class="ch">Sinussatz</span></div>
+<div><span><b>sSw</b> Gegenwinkel der kleineren Seite</span><span><span class="ch">Sinussatz</span>, zwei Lösungen</span></div>
+</div>`,0,()=>({}));
+
+/* ---------- Aufbau und Steuerung ---------- */
+const deck=document.getElementById('deck'),dots=document.getElementById('dots'),pos=document.getElementById('pos');
+SL.forEach((s,i)=>{
+  const sec=document.createElement('section');sec.className='slide';sec.setAttribute('aria-label','Folie '+(i+1)+': '+(s.title||'Titel'));
+  sec.innerHTML=`<div class="fit"><div class="stage"><header><span class="brand">Mathe begreifbar</span><span>${s.sec}</span></header>
+  <h1>${s.title}</h1><div class="body">${s.html}</div>
+  <footer><span>Raphael Arnold Kohler</span><span>23.11.2026 · ${i+1} / ${SL.length}</span></footer></div></div>`;
+  deck.append(sec);s.el=sec;s.step=0;s.ctl=s.init(sec)||{};
+  const d=document.createElement('button');d.type='button';d.setAttribute('aria-label','Folie '+(i+1));d.addEventListener('click',()=>go(i));dots.append(d);
+});
+let cur=0;
+function fit(){const s=Math.min(deck.clientWidth/1600,deck.clientHeight/900);document.documentElement.style.setProperty('--s',s);deck.scrollTo({left:cur*deck.clientWidth,behavior:'instant'})}
+function ui(){const s=SL[cur];pos.textContent=`Folie ${cur+1} / ${SL.length}`+(s.n?` · Schritt ${s.step} / ${s.n}`:'');
+  [...dots.children].forEach((d,i)=>d.setAttribute('aria-current',i===cur))}
+function setStep(k){const s=SL[cur],prev=s.step;s.step=k;
+  s.el.querySelectorAll('[data-step]').forEach(e=>e.classList.toggle('on',+e.dataset.step<=k));
+  if(s.ctl.onStep)s.ctl.onStep(k,prev);ui()}
+let sperre=0;
+function go(i){i=Math.max(0,Math.min(SL.length-1,i));cur=i;sperre=Date.now()+1200;deck.scrollTo({left:i*deck.clientWidth,behavior:RM?'instant':'smooth'});ui()}
+function fwd(){const s=SL[cur];if(s.step<s.n)setStep(s.step+1);else go(cur+1)}
+function back(){const s=SL[cur];if(s.step>0)setStep(s.step-1);else go(cur-1)}
+let st0;deck.addEventListener('scroll',()=>{clearTimeout(st0);st0=setTimeout(()=>{if(Date.now()<sperre)return;const i=Math.round(deck.scrollLeft/deck.clientWidth);if(i!==cur){cur=i;ui()}},90)});
+document.getElementById('next').addEventListener('click',fwd);document.getElementById('prev').addEventListener('click',back);
+document.getElementById('full').addEventListener('click',()=>{try{(document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()).catch(()=>{})}catch(e){}});
+addEventListener('keydown',e=>{if(e.target.matches('input'))return;if(e.target.matches('button,a')&&(e.key===' '||e.key==='Enter'))return;
+  if(['ArrowRight',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();fwd()}
+  else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();back()}
+  else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(SL.length-1)}});
+document.addEventListener('pointerup',e=>{if(e.target.matches&&e.target.matches('input[type=range]'))e.target.blur()});
+addEventListener('resize',fit);fit();ui();
+/* MathJax: statische Formeln setzen, Live-Texte nachsetzen, dann die Folien zeigen */
+{const zeigen=()=>document.body.classList.add('mj');
+  if(window.MathJax&&MathJax.startup&&MathJax.startup.promise){
+    MathJax.startup.promise.then(()=>{MJ=true;MJ_EL.forEach(el=>mjHTML(el,el._mj));return MathJax.typesetPromise([deck])})
+      .catch(e=>console.error(e)).finally(zeigen)}
+  else zeigen();
+  setTimeout(zeigen,4000)}
+</script>
+</body>
+</html>

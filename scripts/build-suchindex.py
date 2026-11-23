@@ -337,6 +337,7 @@ ZUSATZSEITEN = [
     ('leitprogramme.html', '▤', 'Leitprogramme', 'thema'),
     ('simulationen.html', 'SIM', 'Simulationen', 'thema'),
     ('werkzeuge.html', 'WZ', 'Werkzeuge', 'thema'),
+    ('praesentationen.html', 'PRÄ', 'Präsentationen', 'thema'),
     # Simulationen und Werkzeuge selbst (HOWTO-simulationen.md / HOWTO-werkzeuge.md)
     ('werkzeuge/notationstrainer.html', 'WZ', 'Notationstrainer', 'thema'),
     ('werkzeuge/strategietrainer.html', 'WZ', 'Strategietrainer', 'thema'),
@@ -348,6 +349,9 @@ ZUSATZSEITEN = [
     ('werkzeuge/parabeltrainer.html', 'WZ', 'Geraden- und Parabeltrainer', 'thema'),
     ('simulationen/boxplot.html', 'SIM', 'Boxplot', 'thema'),
     ('simulationen/standardabweichung.html', 'SIM', 'Standardabweichung', 'thema'),
+    # Präsentationen (HOWTO-praesentationen.md)
+    ('praesentationen/rechtwinkliges-dreieck.html', 'PRÄ', 'Das rechtwinklige Dreieck', 'thema'),
+    ('praesentationen/sinussatz-cosinussatz.html', 'PRÄ', 'Sinussatz und Cosinussatz', 'thema'),
     ('leitprogramme/quadratische-funktionen.html', '▤',
      'Leitprogramm Quadratische Funktionen', 'thema'),
     ('leitprogramme/lineare-funktionen.html', '▤',

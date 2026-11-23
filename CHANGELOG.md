@@ -92,6 +92,26 @@ Version 1.0 (2. August bis 10. Oktober 2026, unten mit ihrem Datum), vor allem:
 
 ---
 
+## [2.0] — 23. November 2026 · Präsentationen
+
+### Hinzugefügt
+
+- **Neue Rubrik Präsentationen** (`praesentationen/`, Übersicht `praesentationen.html`, Menü «Nachschlagen» und
+  Startseite): Foliensätze für den Unterricht am Beamer, extern gebaut, mit eigenem Aussehen; jeder Link öffnet ein
+  neues Fenster. Anleitung `HOWTO-praesentationen.md`, STYLEGUIDE §6.6.
+- **Das rechtwinklige Dreieck** (18 Folien; aus g5.2a und g5.3) und **Sinussatz und Cosinussatz** (6 Folien; aus
+  g5.3), alle Formeln auf MathJax umgestellt, auch die im Skript erzeugten.
+- Selbsttests `scripts/verify_praesentationen.js` (alle Präsentationen: Laufzeit, Formelsatz jedes Zustands) und
+  `scripts/verify_sinussatz-cosinussatz.js` (Rechenkern gegen eine Konstruktion in python3).
+- `HOWTO-werkzeuge.md` §9: extern gebaute Datei übernehmen (gilt auch für Simulationen).
+
+### Geändert
+
+- Pre-Flight: Platzhalter `${…}` aus JS-Vorlagen zählen nicht mehr als doppelte IDs; `check_sim_wz` kennt
+  `praesentationen/`.
+
+---
+
 ## [2.0] — 11./12. Oktober 2026 · Leitprogramme Gleichungen und Gleichungssysteme, Trainer-Rahmen
 
 ### Hinzugefügt

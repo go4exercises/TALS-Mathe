@@ -37,7 +37,7 @@ div/details-Bilanz · doppelte HTML-`id` · kein `ß` · Dezimalkomma in Body-Ma
 - **check_todo_schwester** — liest `TODO-schwesterprojekt.md` im Schwesterrepo
   (Physik liest Mathes; Physik führt keine solche Datei, in Mathe schweigt der
   Check) und meldet offene Einträge unter «## Offen» als `[WARN]`. Schreibt nie.
-- **check_sim_wz** — Seiten in `simulationen/` und `werkzeuge/`: fehlt die Kachel in
+- **check_sim_wz** — Seiten in `simulationen/`, `werkzeuge/` und `praesentationen/`: fehlt die Kachel in
   der Übersicht, zeigt ein Rücklink-Anker ins Leere oder verlinkt eine Themenseite
   eine Datei, die es nicht gibt, ist das ein **[FEHLER]**; verlinkt keine Themenseite
   auf die Seite (und steht sie nicht unter «Ausserhalb der Lerngebiete»), ein `[WARN]`.

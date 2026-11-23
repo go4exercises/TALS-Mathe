@@ -10,14 +10,15 @@ Zwei Stufen:
    - verify_js_runtime.js     (JS-Laufzeit in jsdom; braucht node_modules/jsdom)
    - verify_strategietrainer.js, verify_rechentrainer.js, verify_einheitskreistrainer.js,
      verify_termtrainer.js, verify_gesetzetrainer.js, verify_systemtrainer.js, verify_standardabweichung.js,
-     verify_boxplot.js (Selbsttests der Werkzeuge und Simulationen)
+     verify_boxplot.js (Selbsttests der Werkzeuge und Simulationen), verify_praesentationen.js,
+     verify_sinussatz-cosinussatz.js (Praesentationen)
    - build-suchindex.py --check (Suchindex aktuell? veraltet = WARN, kein Blocker)
    - build-seo.py --check      (Metadaten/Footer/sitemap aktuell? veraltet = WARN, Footer ausserhalb der Marken = FEHLER)
    - check_identifier_collisions.py (Symbol-Kollisionen mit mathlib/nav; ohne npm)
    - abgleich.py --check      (Drift gegen das Schwesterrepo; WARN, kein Blocker)
    - check_todo_schwester (offene Eintraege in TODO-schwesterprojekt.md des
      Schwesterrepos; nur gelesen, WARN)
-   - check_sim_wz (simulationen/ und werkzeuge/: Uebersicht, Verweise, Ruecklink-Anker)
+   - check_sim_wz (simulationen/, werkzeuge/, praesentationen/: Uebersicht, Verweise, Ruecklink-Anker)
    Fehlt ein npm-Modul, wird der betreffende Tiefen-Check sauber als WARN übersprungen.
 
 MUSS vom Repo-Wurzelverzeichnis aufgerufen werden (wegen scripts/ und node_modules/).
@@ -75,7 +76,8 @@ def check_tag_balance(text, fname, rep):
 
 
 def check_duplicate_ids(text, fname, rep):
-    ids = re.findall(r'\bid="([^"]+)"', text)
+    # Platzhalter in JS-Vorlagen (id="${id}") sind keine IDs im Dokument
+    ids = [i for i in re.findall(r'\bid="([^"]+)"', text) if "${" not in i]
     seen = {}
     for i in ids:
         seen[i] = seen.get(i, 0) + 1
@@ -201,7 +203,8 @@ def run_light(path, rep):
     # Skelett-, nav- und Ressourcen-Checks nicht — die allgemeinen oben schon.
     # clips/ und leitprogramme/ sind eigene Dokumente mit eigenem <style>:
     # kein page-wrap, keine nav.js, und ihre Klassen stehen nicht in style.css.
-    if {"clips", "leitprogramme"} & set(path.parts) or path.name in EIGENES_SKELETT:
+    # praesentationen/ ebenso: Foliensaetze mit eigenem Aussehen, ohne style.css und nav.js.
+    if {"clips", "leitprogramme", "praesentationen"} & set(path.parts) or path.name in EIGENES_SKELETT:
         return
 
     check_skeleton(text, fname, rep)
@@ -334,8 +337,10 @@ def run_deep(file_args, rep):
             elif not m:
                 rep.warn("verify_js_runtime.js", "Summenzeile nicht erkannt")
 
-    # Selbsttests der Werkzeuge (werkzeuge/*.html), je ein scripts/verify_<name>.js
-    for name in ("strategietrainer", "rechentrainer", "einheitskreistrainer", "termtrainer", "gesetzetrainer", "systemtrainer", "parabeltrainer", "standardabweichung", "boxplot"):
+    # Selbsttests der Werkzeuge (werkzeuge/*.html), je ein scripts/verify_<name>.js;
+    # verify_praesentationen.js prueft alle Praesentationen (Laufzeit, Formelsatz der Skript-Texte)
+    for name in ("strategietrainer", "rechentrainer", "einheitskreistrainer", "termtrainer", "gesetzetrainer", "systemtrainer", "parabeltrainer", "standardabweichung", "boxplot",
+                 "praesentationen", "sinussatz-cosinussatz"):
         et = scripts / f"verify_{name}.js"
         if not et.is_file():
             continue
@@ -387,7 +392,7 @@ def run_deep(file_args, rep):
 
 
 def check_sim_wz(wurzel, rep):
-    """Simulationen und Werkzeuge: eigene Seiten in simulationen/ und werkzeuge/.
+    """Simulationen, Werkzeuge, Praesentationen: eigene Seiten in simulationen/, werkzeuge/, praesentationen/.
 
     Sie haengen an drei Stellen zusammen, und keine faellt von selbst auf, wenn
     sie fehlt: die Kachel in der Uebersicht (simulationen.html / werkzeuge.html),
@@ -398,7 +403,7 @@ def check_sim_wz(wurzel, rep):
       [FEHLER] Themenseite verlinkt eine Simulation/ein Werkzeug, das es nicht gibt
       [WARN]   keine Themenseite verlinkt die Seite — ausser die Uebersicht fuehrt
                sie unter <h2 id="ausserhalb">
-    HOWTO-simulationen.md, HOWTO-werkzeuge.md.
+    HOWTO-simulationen.md, HOWTO-werkzeuge.md, HOWTO-praesentationen.md.
     """
     wurzel = Path(wurzel)
     themenordner = [d for d in ("themen", "grundlagen", "schwerpunkt") if (wurzel / d).is_dir()]
@@ -413,7 +418,7 @@ def check_sim_wz(wurzel, rep):
                               if pfad.is_file() else None)
         return ids_cache[rel] is not None and anker in ids_cache[rel]
 
-    for art in ("simulationen", "werkzeuge"):
+    for art in ("simulationen", "werkzeuge", "praesentationen"):
         ordner = wurzel / art
         uebersicht = wurzel / f"{art}.html"
         seiten = sorted(ordner.glob("*.html")) if ordner.is_dir() else []

@@ -128,7 +128,8 @@ function buildNav(cfg) {
   // zu und wird erst per Klick geöffnet.
   const refAktiv = (cfg.id === 'glossar' || cfg.id === 'formeln' ||
                     cfg.id === 'clips' || cfg.id === 'leitprogramme' ||
-                    cfg.id === 'simulationen' || cfg.id === 'werkzeuge');
+                    cfg.id === 'simulationen' || cfg.id === 'werkzeuge' ||
+                    cfg.id === 'praesentationen');
   const spOffen  = (cfg.bereich === 'schwerpunkt');
   const glOffen  = (cfg.bereich === 'grundlagen');
 
@@ -208,7 +209,7 @@ function buildNav(cfg) {
       </div>
     </div>
     <div class="dropdown">
-      <button class="nav-btn${(cfg.id==='glossar'||cfg.id==='formeln'||cfg.id==='clips'||cfg.id==='simulationen'||cfg.id==='werkzeuge') ? ' aktiv':''}" onclick="toggleDD('dd-ref')">
+      <button class="nav-btn${(cfg.id==='glossar'||cfg.id==='formeln'||cfg.id==='clips'||cfg.id==='simulationen'||cfg.id==='werkzeuge'||cfg.id==='praesentationen') ? ' aktiv':''}" onclick="toggleDD('dd-ref')">
         Nachschlagen ▾
       </button>
       <div class="dd-menu" id="dd-ref">
@@ -231,6 +232,9 @@ function buildNav(cfg) {
           </a>
           <a href="${prefix}werkzeuge.html" class="${cfg.id==='werkzeuge'?'dd-aktiv':''}">
             <span class="dd-nr">WZ</span><span class="dd-tit">Werkzeuge</span>
+          </a>
+          <a href="${prefix}praesentationen.html" class="${cfg.id==='praesentationen'?'dd-aktiv':''}">
+            <span class="dd-nr">PRÄ</span><span class="dd-tit">Präsentationen</span>
           </a>
         </div>
         <div class="dd-gruppe">
@@ -291,6 +295,7 @@ function buildNav(cfg) {
       <a href="${prefix}leitprogramme.html" class="${cfg.id==='leitprogramme'?'mn-aktiv':''}">▤ · Leitprogramme</a>
       <a href="${prefix}simulationen.html" class="${cfg.id==='simulationen'?'mn-aktiv':''}">SIM · Simulationen</a>
       <a href="${prefix}werkzeuge.html" class="${cfg.id==='werkzeuge'?'mn-aktiv':''}">WZ · Werkzeuge</a>
+      <a href="${prefix}praesentationen.html" class="${cfg.id==='praesentationen'?'mn-aktiv':''}">PRÄ · Präsentationen</a>
       <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">PDF · SBFI-Formelsammlung</a>
     </div>
   </details>

@@ -120,6 +120,24 @@ SEITEN = {
    titel='Werkzeuge — Mathematik üben und rechnen',
    beschreibung='Werkzeuge zur Mathematik der Berufsmaturität: Trainer und Rechner für eigene Aufgaben oder Daten, mit Rückmeldung und verlinkt von den Themenseiten.',
    themen=['Mathematik', 'Werkzeug', 'Übungen', 'Berufsmaturität']),
+ 'praesentationen.html': dict(
+   ort='Nachschlagen · Präsentationen',
+   typ='article', lrt='Präsentation',
+   titel='Präsentationen — Foliensätze für den Unterricht',
+   beschreibung='Präsentationen zur Mathematik der Berufsmaturität: Foliensätze für den Beamer, Schritt für Schritt mit bewegten Figuren und Aufgaben, verlinkt von den Themenseiten.',
+   themen=['Mathematik', 'Präsentation', 'Unterricht', 'Berufsmaturität']),
+ 'praesentationen/rechtwinkliges-dreieck.html': dict(
+   ort='Präsentationen · Das rechtwinklige Dreieck',
+   typ='article', lrt='Präsentation',
+   titel='Das rechtwinklige Dreieck — Präsentation: Thaleskreis, Pythagoras, Sinus, Cosinus, Tangens',
+   beschreibung='Foliensatz zum rechtwinkligen Dreieck: Thaleskreis, Pythagoras, Kathetensatz und Höhensatz mit Scherungen bewiesen, dazu Sinus, Cosinus und Tangens mit Aufgaben.',
+   themen=['Mathematik', 'Rechtwinkliges Dreieck', 'Thaleskreis', 'Satz des Pythagoras', 'Kathetensatz', 'Höhensatz', 'Sinus', 'Cosinus', 'Tangens', 'Präsentation']),
+ 'praesentationen/sinussatz-cosinussatz.html': dict(
+   ort='Präsentationen · Sinussatz und Cosinussatz',
+   typ='article', lrt='Präsentation',
+   titel='Sinussatz und Cosinussatz — Präsentation: herleiten und den passenden Satz wählen',
+   beschreibung='Foliensatz zum allgemeinen Dreieck: Sinussatz und Cosinussatz mit der Höhe herleiten und für SSS, SWS, WSW, SWW, SsW und sSw den passenden Satz mit Rechenweg wählen.',
+   themen=['Mathematik', 'Sinussatz', 'Cosinussatz', 'Allgemeines Dreieck', 'Trigonometrie', 'Präsentation']),
  'werkzeuge/notationstrainer.html': dict(
    ort='Werkzeuge · Notationstrainer',
    typ='article', lrt=['Werkzeug', 'Lernkartei'],

@@ -139,6 +139,8 @@ BAUSTELLE = {
 OFFEN = [
     dict(quelle='Mathe', was='HOWTO-werkzeuge.md §9 und HOWTO-simulationen.md §9 neu: extern gebaute Datei uebernehmen (eigenes CSS bleibt, sonst Site-Regeln; ohne style.css/nav.js EIGENES_SKELETT und Links mit target=_blank) (23.11.2026)',
          wie='In Physik beide Abschnitte uebernehmen, mit physiklib.js/themen/ statt mathlib.js/grundlagen/, Bereichsfarbe Bernstein; Vorbild dort pruefen (Mathe: werkzeuge/parabeltrainer.html). Danach diesen Eintrag streichen und die Datei hierher uebernehmen.'),
+    dict(quelle='Mathe', was='Neue Rubrik Praesentationen (praesentationen/, praesentationen.html, HOWTO-praesentationen.md, STYLEGUIDE 6.6) und Pre-Flight: check_duplicate_ids ignoriert Platzhalter ${...} aus JS-Vorlagen; check_sim_wz kennt praesentationen/; praesentationen/ vom Skelett-Check ausgenommen; Selbsttest verify_praesentationen.js (23.11.2026)',
+         wie='Den ID-Check in Physiks preflight.py uebernehmen (eine Zeile, unabhaengig von Praesentationen). Ob Physik die Rubrik will, entscheidet der Auftraggeber; wenn ja: Ordner in check_sim_wz und in der Skelett-Ausnahme, verify_praesentationen.js unveraendert (liest praesentationen/*.html), nav.js und index.html wie in Mathe. Danach diesen Eintrag streichen und die Datei hierher uebernehmen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

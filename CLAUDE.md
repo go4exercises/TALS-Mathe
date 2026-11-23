@@ -37,7 +37,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `minicheck.js` (Mini-Check-Akkordeon), `anim-hinweise.js` (👁/💡-Rollover, Pflicht bei
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
 - `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html`,
-  `simulationen.html`, `werkzeuge.html` — sechs Nachschlag-Seiten im Repo-Root.
+  `simulationen.html`, `werkzeuge.html`, `praesentationen.html` — sieben Nachschlag-Seiten im Repo-Root.
 - `simulationen/` und `werkzeuge/` — eigene Seiten neben den Themenseiten, seit 10.10.2026
   streng getrennt: **Simulation** = ein Modell beobachten und seine Grössen verändern,
   **Werkzeug** = eigene Aufgaben oder Daten eingeben bzw. üben (Trainer, Rechner). Je eine
@@ -47,6 +47,12 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `index.html`. Anleitung: `HOWTO-simulationen.md`, `HOWTO-werkzeuge.md`; der Pre-Flight
   prüft mit `check_sim_wz`. **Extern gebaute Datei übernehmen** (eigenes Aussehen, sonst Site-Regeln, neues Tab):
   `HOWTO-werkzeuge.md` §9, gilt auch für Simulationen. Alte Adressen leitet `404.html` weiter (Tabelle `WEITERLEITUNGEN`).
+- `praesentationen/` — seit 23.11.2026 dritte Rubrik neben Simulationen und Werkzeugen: **Foliensätze für den
+  Unterricht am Beamer** (16:9, am Handy nicht lesbar), extern gebaut, mit eigenem Aussehen, ohne `style.css` und
+  `nav.js`; jeder Link darauf öffnet ein neues Fenster. Übersicht `praesentationen.html`, Baustein `📽 Präsentation:`.
+  Alle Formeln in MathJax, auch die im Skript erzeugten (`mjHTML`). Selbsttest `scripts/verify_praesentationen.js`
+  für alle (Laufzeit, Formelsatz jedes Zustands), ein eigener für jede Präsentation, die rechnet. Anleitung:
+  `HOWTO-praesentationen.md`, einzelne Präsentationen in `praesentationen/CLAUDE.md`.
 - **Einzelne Simulationen und Werkzeuge** (Zweck, Themen, Vorwahl, Besonderheiten) stehen in
   `simulationen/CLAUDE.md` und `werkzeuge/CLAUDE.md` (laden, sobald dort gearbeitet wird). Für alle gilt: Rechnung
   zwischen `KERN:ANFANG`/`KERN:ENDE`, Selbsttest `scripts/verify_<name>.js` im Pre-Flight mit Gegenrechnung in

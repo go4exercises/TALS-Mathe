@@ -1311,23 +1311,26 @@ Hier nur, was für beide nicht verhandelbar ist.
   „Aufgabe/Übung": Sie sagt, was in der Prüfung zählt. Sie kommt aus der Musterlösung —
   steht dort keine Aufteilung, wird keine erfunden.
 
-## 6.6 Simulationen und Werkzeuge (verbindlich seit 10.10.2026)
+## 6.6 Simulationen, Werkzeuge und Präsentationen (verbindlich seit 10.10.2026, Präsentationen seit 23.11.2026)
 
-Eigene Seiten neben den Themenseiten, in zwei getrennten Ordnern. Wie Leitprogramme sind sie
+Eigene Seiten neben den Themenseiten, in drei getrennten Ordnern. Wie Leitprogramme sind sie
 **keine Themenseiten** und folgen nicht dem Skelett aus §6.1.
 
 | | was man tut | Ordner | Übersicht | Anleitung |
 |---|---|---|---|---|
 | **Simulation** | ein Modell beobachten und seine Grössen verändern | `simulationen/` | `simulationen.html` | `HOWTO-simulationen.md` |
 | **Werkzeug** | eigene Aufgaben oder Daten eingeben, üben (Trainer, Rechner) | `werkzeuge/` | `werkzeuge.html` | `HOWTO-werkzeuge.md` |
+| **Präsentation** | die Lehrperson führt am Beamer Folie für Folie durch ein Thema | `praesentationen/` | `praesentationen.html` | `HOWTO-praesentationen.md` |
 
 - **Abgrenzung zur Animation (§2.10):** eigene Seite nur, wenn sie mehr als einen Bildschirm
   braucht, eine eigene Abfolge hat oder auch ohne die Themenseite benutzt wird.
 - **Simulation oder Werkzeug:** Gibt man eigene Daten oder Aufgaben ein → Werkzeug.
 - **Verlinkt im Abschnitt**, zu dem sie gehören, mit dem Baustein `.block-tipp` und dem Titel
-  «🧪 Simulation: …» bzw. «🛠 Werkzeug: …» — nicht am Seitenanfang, nicht auf den Kacheln
+  «🧪 Simulation: …», «🛠 Werkzeug: …» bzw. «📽 Präsentation: …» — nicht am Seitenanfang, nicht auf den Kacheln
   von `index.html`. Die Seite verweist umgekehrt per Anker auf diesen Abschnitt.
 - Dateinamen ohne Nummer; alte Adressen leitet `404.html` weiter (Tabelle `WEITERLEITUNGEN`).
+- **Präsentationen** behalten ihr eigenes Aussehen (kein `style.css`, kein `nav.js`) und öffnen sich darum
+  immer in einem neuen Fenster; sonst gelten die Regeln der Site (`HOWTO-praesentationen.md`).
 
 ## 7. Footer-Konvention
 
